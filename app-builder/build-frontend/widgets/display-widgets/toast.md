@@ -28,7 +28,7 @@ You can choose where the Toast appears on the screen. There are 6 options: eithe
 
 <div align="center"><figure><img src="../../../../.gitbook/assets/Toast_widget.png" alt="" width="96"><figcaption><p>Toast widget <br>in build mode</p></figcaption></figure></div>
 
-When adding the toast widget to the app UI builder, it will look like a small message icon. The icon disappears on the deployed app or in test mode, so the location of the widget doesn't matter.&#x20;
+When adding the toast widget to the app Frontend Builder, it will look like a small message icon. The icon disappears on the deployed app or in test mode, so the location of the widget doesn't matter.&#x20;
 
 To set the toast message, drag an output onto the widget. The only action that can be performed is "call message".
 

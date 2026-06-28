@@ -4,7 +4,7 @@ This module is designed to simulate various events to test and validate workflow
 
 The different available functions offer ways to respond to specific events. To learn more about event handlers, see [Callbacks](/broken/pages/64Rg3QELPGYbulaZ30Fx#callbacks).
 
-To access the events simulator, unfold `Simulation` > `Events` in the functionality panel.
+To access the events simulator, unfold `Simulation` > `Events` in the Function Explorer.
 
 ## Instance management
 

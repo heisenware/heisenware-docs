@@ -48,7 +48,7 @@ Now, we will create the user interface for data entry and build the backend logi
 
 ### Build the User Interface
 
-First, in the UI Builder, add the widgets for your form.
+First, in the Frontend Builder, add the widgets for your form.
 
 {% stepper %}
 {% step %}
@@ -163,7 +163,7 @@ Now, return to the Backend Builder to connect the template to your existing logi
 
 {% stepper %}
 {% step %}
-From the Functionality Panel, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` function onto the canvas.
+From the Function Explorer, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` function onto the canvas.
 {% endstep %}
 
 {% step %}
@@ -187,7 +187,7 @@ Return to the Backend Builder to add the final piece of logic to your flow.
 
 {% stepper %}
 {% step %}
-From the Functionality Panel, find your internal mailer instance and drag its `send` function onto the canvas.
+From the Function Explorer, find your internal mailer instance and drag its `send` function onto the canvas.
 {% endstep %}
 
 {% step %}

@@ -43,7 +43,7 @@ The final memory function, after taking a photo in test mode, must look like in 
 {% step %}
 ### Configure the writeBufferToFile function
 
-Find the [writeBufferToFile](../../app-builder/build-backend/function-explorer/connectors/file-i-o.md#writebuffertofile) function inside your file connector agent that should have appeared in the functionality panel and drag it onto the canvas.&#x20;
+Find the [writeBufferToFile](../../app-builder/build-backend/function-explorer/connectors/file-i-o.md#writebuffertofile) function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.&#x20;
 
 Connect the path modifier with the `filePath` input and the buffer modifier with the `buffer` input.
 

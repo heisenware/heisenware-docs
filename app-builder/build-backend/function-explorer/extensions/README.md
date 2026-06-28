@@ -5,21 +5,21 @@ Extensions allow you to expand the platform's capabilities using **Docker** cont
 There are two categories of extensions:
 
 1. **Official extensions (Heisenware made)**: Ready-to-use, managed modules maintained by us.
-2. **Custom extensions (user-made)**: Your Docker images containing custom algorithms, drivers, or logic (also referred to as [Docker custom code adapters](../../../../account/hosting-and-architecture.md#docker-custom-code-adapter)).
+2. **Custom Extensions (user-made)**: Your Docker images containing custom algorithms, drivers, or logic (built by wrapping your code into a [Code Adapter](../../../../account/hosting-and-architecture.md#docker-custom-code-adapter)).
 
 ## Official extensions
 
 These are pre-built modules provided by Heisenware to add advanced capabilities without any coding. Currently, we offer the following official extensions:
 
-* [**Industrial blockchain**](industrial-blockchain.md): For immutable data logging and audit trails.
-* [**RAG AI**](rag-ai/): Retrieval-Augmented Generation for context-aware AI assistants.
-* [**Process simulations**](process-simulations.md): Simulates energy consumption, production and machine data, and silo fill levels.
+- [**Industrial blockchain**](industrial-blockchain.md): For immutable data logging and audit trails.
+- [**RAG AI**](rag-ai/): Retrieval-Augmented Generation for context-aware AI assistants.
+- [**Process simulations**](process-simulations.md): Simulates energy consumption, production and machine data, and silo fill levels.
 
 Once installed, these extensions run alongside the standard platform functionality. They appear as new blocks in your functionality library and can be used immediately in your flows.
 
 <div align="left"><figure><img src="../../../../.gitbook/assets/heisenware_extentions_looped.gif" alt="" width="485"><figcaption><p>Adding extensions to the App Builder</p></figcaption></figure></div>
 
-## Custom extensions
+## Custom Extensions
 
 This is a powerful feature that allows you to extend the Heisenware platform to your specific needs.
 

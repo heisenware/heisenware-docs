@@ -97,8 +97,8 @@ $sum($)
 ### Visualize live data
 
 1. Upload your logo or any other image to the [resources](/broken/pages/XylIfG5wjJjfNvDi8xWH).
-2. Drag and drop the image onto the [UI builder](../../app-builder/build-frontend/).
-3. Pick a [circular gauge](../../app-builder/build-frontend/widgets/display-widgets/circular-gauge.md) from the display widgets and click in the UI builder to place it.
+2. Drag and drop the image onto the [Frontend Builder](../../app-builder/build-frontend/).
+3. Pick a [circular gauge](../../app-builder/build-frontend/widgets/display-widgets/circular-gauge.md) from the display widgets and click in the Frontend Builder to place it.
 4. Configure start and end value (0 to 500) and the color sections of the circular gauge.
 5. Connect the modifier of the combine function to the circular gauge with drag and drop. Make sure to select the circular gauge first.
 6. Start the test mode and see the data coming.
