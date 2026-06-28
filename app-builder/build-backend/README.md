@@ -14,7 +14,7 @@ The backend operates on a few fundamental rules:
 
 To build and manage this logic, you use three primary tools located in the App Builder:
 
-* [**Backend Builder**](./#flow-builder): The central canvas where you drag, drop, and wire [Functions](functions.md) together.
+* [**Backend Builder**](./#backend-builder): The central canvas where you drag, drop, and wire [Functions](functions.md) together.
 * [**Function Explorer**](function-explorer/): The searchable panel on the left where you find all available Functions.
 * [**File Explorer**](file-explorer.md): The searchable panel on the left where you can load and manage files (CSVs, PDFs, etc.) that your logic (but also your UI) needs to read or where it can write to.
 
@@ -28,7 +28,7 @@ To build your logic, you interact with [Functions](functions.md) directly on the
 
 ### Adding Functions
 
-* **From the library**: Drag Functions from the [functions library](function-explorer/) in the left panel.
+* **From the Explorer**: Drag Functions from the [Function Explorer](function-explorer/) in the left panel.
 * **Quick access**: Use the toolbar for common utilities like `echo`, `memory`, `trigger`, or `combine`.
 
 <figure><img src="../../.gitbook/assets/memory_flow_builder_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
@@ -59,7 +59,7 @@ As your application grows, use grouping to keep the canvas clean. To group, sele
 <figure><img src="../../.gitbook/assets/gruppieren_functions_2_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
 {% hint style="success" %}
-&#x20;Sections have no impact on how the logic executes when using production apps.
+Sections have no impact on how the logic executes when using production apps.
 {% endhint %}
 
 ### **Annotations (documentation of your backend logic)**
@@ -127,4 +127,3 @@ This enables advanced backend debugging.
 {% hint style="danger" %}
 This setting should typically remain off. It is intended for support cases when working directly with the Heisenware technical team.
 {% endhint %}
-
