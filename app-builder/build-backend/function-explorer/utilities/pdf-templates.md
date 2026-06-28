@@ -27,8 +27,6 @@ showEmptyVariables: true
 
 ### Output
 
-The function provides the finished, populated PDF document as a Base64 encoded string. While designing your logic, the function output itself will show a preview of the rendered PDF with your template's layout. The output can be used to store in a database, visualize in a media view widget, send in an email or in any other way you like.
-
 The function provides the finished, populated PDF document as a Base64 encoded string. While designing your logic, the function block itself will show a preview of the rendered PDF with your template's layout. The output can be used to store the document in a [database](../storage/relational-database.md), visualize it in the [media view widget](../../../build-frontend/widgets/display-widgets/media-view.md), send it as an [email](../connectors/email.md) attachment, or process it further in any other way your application requires.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2025-02-20 at 16.10.48.png" alt=""><figcaption><p>A simple example of a fillTemplate function</p></figcaption></figure>
