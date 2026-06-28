@@ -50,9 +50,9 @@ What infrastructure is available in your local network?
 * Docker runtime
 * LXC runtime
 
-### Native agent&#x20;
+### Native Agent&#x20;
 
-You can use the native binary. It runs as a highly efficient system service directly on your OS without requiring Docker. Continue to the [native agent setup documentation](../../app-builder/build-backend/function-explorer/agents/native-agent.md) for the next steps.
+You can use the native binary. It runs as a highly efficient system service directly on your OS without requiring Docker. Continue to the [Native Agent setup documentation](../../app-builder/build-backend/function-explorer/agents/native-agent.md) for the next steps.
 
 ### Docker agent&#x20;
 

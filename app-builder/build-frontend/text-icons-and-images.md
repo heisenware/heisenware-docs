@@ -25,8 +25,8 @@ Use icons as visual cues or navigation shortcuts.
 
 Use images for machine photos, company logos, or other visual elements.
 
-* **Upload**: First, upload your image file to the [internal file server](../build-backend/file-explorer.md) (the resources panel on the left).
-* **Place**: Drag the file from the resources panel and drop it onto the UI canvas.
+* **Upload**: First, upload your image file to the [internal file server](../build-backend/file-explorer.md) (the File Explorer on the left).
+* **Place**: Drag the file from the File Explorer and drop it onto the UI canvas.
 
 {% hint style="success" %}
 **Dynamic use**: Beyond the UI, uploaded images can also be used as inputs for your backend logic.

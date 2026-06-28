@@ -131,7 +131,7 @@ First, we need to create the visual layout in the Template Editor.
 
 {% stepper %}
 {% step %}
-Upload the `acceptance_report.pdf` file to the [File server via the Resources panel](../../app-builder/build-backend/file-explorer.md).
+Upload the `acceptance_report.pdf` file to the [File server via the File Explorer](../../app-builder/build-backend/file-explorer.md).
 {% endstep %}
 
 {% step %}
@@ -143,7 +143,7 @@ Create a new template and name it `AcceptanceReport`.
 {% endstep %}
 
 {% step %}
-From the Resources Panel, drag the `acceptance_report.pdf` file onto the page canvas. This sets it as the static background.
+From the File Explorer, drag the `acceptance_report.pdf` file onto the page canvas. This sets it as the static background.
 {% endstep %}
 
 {% step %}

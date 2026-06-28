@@ -13,9 +13,9 @@ Agents are secure, industrial-grade bridges that run as system services (daemons
 
 Depending on your local infrastructure and edge hardware setup, Heisenware offers three distinct types of agents to bridge your local networks with the cloud workspace.
 
-### Native agent
+### Native Agent
 
-The [Native agent](native-agent.md) is a fully installable package that registers itself directly as a background service on the host operating system (a Windows Service or Linux Daemon). It is managed natively by the OS to guarantee 24/7 background availability, automatic start-up upon reboots, and compatibility across Windows, macOS, Linux, and ARM64 industrial PCs.
+The [Native Agent](native-agent.md) is a fully installable package that registers itself directly as a background service on the host operating system (a Windows Service or Linux Daemon). It is managed natively by the OS to guarantee 24/7 background availability, automatic start-up upon reboots, and compatibility across Windows, macOS, Linux, and ARM64 industrial PCs.
 
 ### Docker agent
 

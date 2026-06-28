@@ -3,9 +3,9 @@
 Members are the developers and admins who build and manage apps in a Heisenware account. Navigate to the Members panel to manage your team.
 
 {% hint style="success" %}
-#### Members vs. App Users
+#### Members vs. Users
 
-Members build the apps. App users are the end-users who use your published applications. To manage permissions for your end-users, see the [access and users management](access-and-user-management.md) page.
+Members build the apps. Users are the end-users who use your published applications. To manage permissions for your end-users, see the [access and users management](access-and-user-management.md) page.
 {% endhint %}
 
 To manage members, navigate to the Members panel. Here you can:

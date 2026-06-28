@@ -50,7 +50,7 @@ Add a blank page for each page of your source document using the Add Page icon (
 {% step %}
 #### Set background
 
-Drag each page file from the Resources panel onto the corresponding blank page. This sets the file as a static background.
+Drag each page file from the File Explorer onto the corresponding blank page. This sets the file as a static background.
 {% endstep %}
 
 {% step %}

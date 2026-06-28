@@ -3,9 +3,9 @@
 Heisenware provides granular control over who can access your apps. Each application can have distinct security settings, even if they reside within the same workspace.
 
 {% hint style="info" %}
-#### App Users vs. Member
+#### Users vs. Member
 
-This article covers the end-users of your created apps. For managing your development team (the people building and managing the apps), refer to [members](members.md).
+This article covers the end-users of your created apps. For managing your development team (the people building and managing the apps), refer to [Members](members.md).
 {% endhint %}
 
 ## Access Modes
@@ -48,7 +48,7 @@ While you can change these settings at any time, doing so will instantly affect 
 
 ## User Management
 
-The App Users card within each app provides a real-time view of who is accessing your software.
+The Users card within each app provides a real-time view of who is accessing your software.
 
 * **Anonymized Sessions**: For apps without registration (public or master password only), the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
 

@@ -25,7 +25,7 @@ The Files section on the left panel provides access to your Heisenware account's
 
 ## Uploading Files
 
-1. Click the upload icon (<i class="fa-cloud-arrow-up">:cloud-arrow-up:</i>) at the top of the Resources section.
+1. Click the upload icon (<i class="fa-cloud-arrow-up">:cloud-arrow-up:</i>) at the top of the File Explorer.
 2. Drag and drop a file or click to select one from your computer.
 3. Click Upload. The file is now ready to be used by your functions.
 

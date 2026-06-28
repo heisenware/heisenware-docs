@@ -30,7 +30,7 @@ Security is baked in: When you download the agent from your Heisenware account, 
 
 #### Docker Agent
 
-This is much like the native agent but packed into a Docker container. Docker technology is especially useful for vendors that offer edge-connectivity hardware (such as Siemens, WAGO, Hilscher, Welotec, Weidmüller, etc.).
+This is much like the Native Agent but packed into a Docker container. Docker technology is especially useful for vendors that offer edge-connectivity hardware (such as Siemens, WAGO, Hilscher, Welotec, Weidmüller, etc.).
 
 We offer our Docker-based agent for all relevant architectures (amd64, arm64, arm/v7). You can get started safely and quickly by providing the necessary credentials as environmental variables to the container. [See here](../app-builder/build-backend/function-explorer/agents/#docker-agent) for all the details.
 
