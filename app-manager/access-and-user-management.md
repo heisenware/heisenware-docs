@@ -52,7 +52,7 @@ The Users card within each app provides a real-time view of who is accessing you
 
 * **Anonymized Sessions**: For apps without registration (public or master password only), the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
 
-<figure><img src="../.gitbook/assets/image (451).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
 
 * **Registered Profiles**: For apps requiring registration, the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
 

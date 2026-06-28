@@ -61,7 +61,7 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 2: Wrap a value in an object</strong> </summary>
+<summary><strong>Example 2: Wrap a value in an object</strong></summary>
 
 Takes the incoming value (`$`) and wraps it inside a JSON object with a key named `temp_sensor_1`.
 
@@ -89,7 +89,7 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 3: Implicit function usage</strong> </summary>
+<summary><strong>Example 3: Implicit function usage</strong></summary>
 
 Trims whitespace and converts a raw string to uppercase without explicitly naming the input variable.
 
@@ -117,7 +117,7 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 4: Filtering an array</strong> </summary>
+<summary><strong>Example 4: Filtering an array</strong></summary>
 
 Returns only the objects from a list that meet a specific status condition.
 
@@ -154,7 +154,7 @@ This modifier allows you to use any standard JavaScript expression that evaluate
 
 <details>
 
-<summary><strong>Example 1: Conditional status (Ternary)</strong> </summary>
+<summary><strong>Example 1: Conditional status (Ternary)</strong></summary>
 
 Determines a status string based on a numeric threshold.
 
@@ -176,9 +176,7 @@ Return of the modifier:
 "Critical"
 ```
 
-<figure><img src="../../.gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
-
-
+<figure><img src="../../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 

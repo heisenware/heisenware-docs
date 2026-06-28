@@ -62,11 +62,8 @@ Parameters
 * `bucket`: The name of the bucket to write to.
 * `measurement`: The name of the measurement (e.g., "temperature", "production\_line").
 * `data`: The value to record. Can be a number, string, boolean, or an object (e.g., `{ temp: 45, status: "ok" }`).
-*   `tags`: An optional object of key-value pairs to tag the data.
-
-    * _Advanced Control:_ You can force the object storage behavior by passing `objectStorageType: 'fields'` or `objectStorageType: 'json'` in the tags. This control flag is intercepted and stripped before saving to the database.
-
-
+* `tags`: An optional object of key-value pairs to tag the data.
+  * _Advanced Control:_ You can force the object storage behavior by passing `objectStorageType: 'fields'` or `objectStorageType: 'json'` in the tags. This control flag is intercepted and stripped before saving to the database.
 
 <div align="left"><figure><img src="../../../../.gitbook/assets/image (4).png" alt="" width="375"><figcaption><p>Measurement vs. Tags vs. Fields</p></figcaption></figure></div>
 
@@ -164,7 +161,7 @@ Our system automatically moves data through "buckets" as it ages, reducing its r
 
 Data flows automatically through a series of stages. You only write to the start of the pipeline; the system handles the rest.
 
-<img src="../../../../.gitbook/assets/image (3).png" alt="" data-size="original">&#x20;
+![](<../../../../.gitbook/assets/image (1).png>)
 
 | **Bucket Name** | **Resolution (Granularity)** | **Retention (How long it stays)** | **Used For**                                   |
 | --------------- | ---------------------------- | --------------------------------- | ---------------------------------------------- |

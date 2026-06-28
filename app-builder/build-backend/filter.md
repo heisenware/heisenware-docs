@@ -53,11 +53,9 @@ Filter content:
 x.temperature > 90
 ```
 
-Return of the filter: `true`&#x20;
+Return of the filter: `true`
 
 <figure><img src="../../.gitbook/assets/image (506).png" alt=""><figcaption></figcaption></figure>
-
-
 
 ### Example 2: Industrial error detection
 
@@ -75,9 +73,9 @@ Filter content:
 x.includes('Error')
 ```
 
-Return of the filter: `true`&#x20;
+Return of the filter: `true`
 
-<figure><img src="../../.gitbook/assets/image (508).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (507).png" alt=""><figcaption></figcaption></figure>
 
 ### Example 3: Validating array data
 
@@ -95,7 +93,7 @@ Filter content:
 x.length > 0
 ```
 
-Return of the filter: `false`&#x20;
+Return of the filter: `false`
 
 <figure><img src="../../.gitbook/assets/image (509).png" alt=""><figcaption></figcaption></figure>
 

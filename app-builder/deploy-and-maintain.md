@@ -16,10 +16,10 @@ Before you deploy, you can use Test Mode to verify your logic and UI directly in
 
 A versioning tag is a snapshot of your app's entire state, including all backend logic, UI elements, and data bindings.
 
-<figure><img src="../.gitbook/assets/image (522).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (521).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
-**What is NOT in a tag?**&#x20;
+**What is NOT in a tag?**
 
 Tags do not store external files (from the file server), database table data, or global themes.
 {% endhint %}
