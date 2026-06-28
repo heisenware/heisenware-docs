@@ -1,7 +1,6 @@
 ---
 description: >-
-  Learn how to create, deploy and use Agents (previously called Edge
-  Connectors).
+  Learn how to create, deploy and use Agents.
 ---
 
 # Agents
