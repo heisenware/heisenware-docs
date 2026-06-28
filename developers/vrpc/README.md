@@ -6,14 +6,18 @@ VRPC is the engine behind Heisenware. All communication including frontend-backe
 
 Welcome to VRPC! This document will introduce you to the core concepts of the VRPC framework, its philosophy, and its main components. By the end, you'll have a solid understanding of how VRPC works and how it can help you build powerful, distributed systems with ease.
 
+{% hint style="info" %}
+For the ultimate reference, please visit the [VRPC Website (vrpc.io)](https://vrpc.io)
+{% endhint %}
+
 We licensed VRPC with the most flexible open-source licence MIT. Feel free to do with it whatever is useful for you. Its available for different programming languages:
 
-* Node.js: [https://github.com/heisenware/vrpc-js](https://github.com/heisenware/vrpc-js)
-* C++: [https://github.com/heisenware/vrpc-hpp](https://github.com/heisenware/vrpc-hpp)
-* Arduino: [https://github.com/heisenware/vrpc-arduino](https://github.com/heisenware/vrpc-arduino)
-* React: [https://github.com/heisenware/vrpc-react](https://github.com/heisenware/vrpc-react)
-* Python: [https://github.com/heisenware/vrpc-py](https://github.com/heisenware/vrpc-py)
-* R: [https://github.com/heisenware/vrpc-r](https://github.com/heisenware/vrpc-r)
+- Node.js: [https://github.com/heisenware/vrpc-js](https://github.com/heisenware/vrpc-js)
+- C++: [https://github.com/heisenware/vrpc-hpp](https://github.com/heisenware/vrpc-hpp)
+- Arduino: [https://github.com/heisenware/vrpc-arduino](https://github.com/heisenware/vrpc-arduino)
+- React: [https://github.com/heisenware/vrpc-react](https://github.com/heisenware/vrpc-react)
+- Python: [https://github.com/heisenware/vrpc-py](https://github.com/heisenware/vrpc-py)
+- R: [https://github.com/heisenware/vrpc-r](https://github.com/heisenware/vrpc-r)
 
 Usage is designed for programmers with sound knowledge in the respective programming language. Maturity, feature completeness and support follows the order of the above list.
 
@@ -39,11 +43,11 @@ The **Adapter** is the heart of VRPC. It's the component that works directly wit
 
 An **Agent** is a server-side process that hosts your adapted code. You run an Agent on the machine where your code lives. The Agent's job is to:
 
-* Connect to a central message broker.
-* Tell the network which classes and instances it has available.
-* Listen for incoming RPC requests from clients.
-* Use the `VrpcAdapter` to execute the requested method on the correct instance.
-* Send the result (or any errors) back to the client.
+- Connect to a central message broker.
+- Tell the network which classes and instances it has available.
+- Listen for incoming RPC requests from clients.
+- Use the `VrpcAdapter` to execute the requested method on the correct instance.
+- Send the result (or any errors) back to the client.
 
 ### VrpcClient
 
@@ -66,10 +70,10 @@ This makes remote interaction feel completely natural and local.
 
 The final piece of the puzzle is the **MQTT Broker**. VRPC uses MQTT as its communication backbone. The broker is a central server that acts like a post office for messages.
 
-* Agents and Clients both connect to the broker.
-* They **do not need to know each other's IP addresses**.
-* Agents publish information about the classes they have, and clients subscribe to this information.
-* When a client makes an RPC call, the message goes to the broker, which then routes it to the correct agent.
+- Agents and Clients both connect to the broker.
+- They **do not need to know each other's IP addresses**.
+- Agents publish information about the classes they have, and clients subscribe to this information.
+- When a client makes an RPC call, the message goes to the broker, which then routes it to the correct agent.
 
 This decoupled architecture makes the system incredibly flexible and scalable. You can add or remove agents anywhere on the network, and as long as they connect to the same broker, clients will be able to discover and use them automatically.
 
@@ -118,6 +122,3 @@ You use the proxy just like a local object: `result = await proxy.some_method(42
 {% endstepper %}
 
 Behind the scenes, VRPC handles all the networking, serialization, and message routing required to make this simple interaction possible.
-
-
-
