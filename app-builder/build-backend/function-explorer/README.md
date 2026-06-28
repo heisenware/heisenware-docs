@@ -28,7 +28,7 @@ For isolated local networks or systems without internet access, you must use a n
 There are two categories of extensions:
 
 * **Official extensions**: Ready-to-use, managed modules maintained by Heisenware.
-* **Custom extensions**: Your very own Docker images containing custom algorithms or logic (also known as custom code adapters).
+* **Custom Extensions**: Your very own Docker images containing custom algorithms or logic (also known as custom Code Adapters).
 
 ### Smart onboarding
 

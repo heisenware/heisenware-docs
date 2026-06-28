@@ -8,7 +8,7 @@ This widget is perfect for dashboards, monitoring screens, and any interface whe
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 
@@ -44,7 +44,7 @@ Each item in the `Status Mappings` array links a specific value to a color and a
 
 ## Monitoring the status of a function
 
-The status lamp can also be used to monitor the status of a function in the logic board.&#x20;
+The status lamp can also be used to monitor the status of a function in the Backend Builder.&#x20;
 
 This is particularly useful when handling many integrations and data connections, to have an easy way to monitor whether these are active.
 

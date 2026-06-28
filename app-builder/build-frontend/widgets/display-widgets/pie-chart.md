@@ -8,7 +8,7 @@ You can configure it as a standard pie or a doughnut chart and customize its lab
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

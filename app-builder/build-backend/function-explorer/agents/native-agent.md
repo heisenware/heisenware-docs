@@ -42,7 +42,7 @@ Move the package to the target machine, unzip, and run the installer.
 {% step %}
 #### Automatic discovery
 
-Once installed, the service starts immediately. The Agent and its selected connectors will appear in your library. You can now drag these functions onto the Flow Builder canvas. When using the production apps, they will execute locally on the computer the Agent is running (edge device).
+Once installed, the service starts immediately. The Agent and its selected connectors will appear in your library. You can now drag these functions onto the Backend Builder canvas. When using the production apps, they will execute locally on the computer the Agent is running (edge device).
 {% endstep %}
 {% endstepper %}
 

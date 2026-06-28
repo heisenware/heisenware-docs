@@ -17,7 +17,7 @@ description: 28 Aug 2025
 * [Modbus](../app-builder/build-backend/function-explorer/connectors/modbus.md) connector
 * Conditional (runtime) [form](../app-builder/build-frontend/widgets/input-widgets/form.md) fields
 * On-the fly [relational data](../app-builder/build-backend/function-explorer/storage/relational-database.md) extraction across multiple tables
-* [Deregistration of App Users](/broken/pages/UFNcaTF4yaGQSJv34EFm#user-management) possible from the App Manager
+* [Deregistration of Users](/broken/pages/UFNcaTF4yaGQSJv34EFm#user-management) possible from the App Manager
 * [SAP Digital Manufacturing ](../app-builder/build-backend/function-explorer/connectors/sap-digital-manufacturing.md)connector
 
 ## Fixes

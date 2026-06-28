@@ -39,7 +39,7 @@ Because the URL is consistent, you can easily embed any Heisenware app into anot
 
 ### Responsive Experience
 
-The [UI Builder](../app-builder/build-frontend/) allows you to design for five different screen sizes (XS to XL).
+The [Frontend Builder](../app-builder/build-frontend/) allows you to design for five different screen sizes (XS to XL).
 
 * **Automatic Scaling**: If a user opens the app on a device size you haven't specifically designed, Heisenware will scale the closest available layout to fit the screen.
 * **Optimization**: For the best user experience, we recommend checking your layout in all five previews before deployment to ensure a "pixel-perfect" fit for phones, tablets, and desktops.

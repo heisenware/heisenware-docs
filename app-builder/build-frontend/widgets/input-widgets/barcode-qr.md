@@ -10,7 +10,7 @@ When activated, it opens a full-screen camera view. Once a barcode is detected, 
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Input
 

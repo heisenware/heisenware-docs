@@ -65,7 +65,7 @@ For a detailed guide on this process, please refer to the [smart onboarding sect
 
 ## Integrate Custom Code via VRPC
 
-To integrate your code, you must implement a [code adapter](../account/hosting-and-architecture.md#custom-code-adapters) around your existing functions. This standardizes the interface so Heisenware can communicate with your code.
+To integrate your code, you must write a [Code Adapter](../account/hosting-and-architecture.md#custom-code-adapters) around your existing functions (which can then be loaded as a Custom Extension).
 
 * **Supported Languages**: Arduino, C++, Node.js, Python, R, and React.
 * **Use Cases**: Integrating legacy systems, running complex algorithms, or using specialized software libraries.

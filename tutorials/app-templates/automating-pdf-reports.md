@@ -21,7 +21,7 @@ Once you have the PDF, you have two options:
 
 First, we need a place to store the submitted reports. We'll use the `defineTable` function to create a table in the internal PostgreSQL database.
 
-In the Flow Builder, place the `defineTable` function on the canvas and configure its inputs as shown below.
+In the Backend Builder, place the `defineTable` function on the canvas and configure its inputs as shown below.
 
 ```yaml
 #name
@@ -48,7 +48,7 @@ Now, we will create the user interface for data entry and build the backend logi
 
 ### Build the User Interface
 
-First, in the UI Builder, add the widgets for your form.
+First, in the Frontend Builder, add the widgets for your form.
 
 {% stepper %}
 {% step %}
@@ -68,7 +68,7 @@ Drag a [Button](../../app-builder/build-frontend/widgets/trigger-widgets/button.
 
 ### Construct the Submission Logic
 
-Next, switch to the Flow Builder to define what happens when the user clicks the `Submit` button.
+Next, switch to the Backend Builder to define what happens when the user clicks the `Submit` button.
 
 {% stepper %}
 {% step %}
@@ -131,7 +131,7 @@ First, we need to create the visual layout in the Template Editor.
 
 {% stepper %}
 {% step %}
-Upload the `acceptance_report.pdf` file to the [File server via the Resources panel](../../app-builder/build-backend/file-explorer.md).
+Upload the `acceptance_report.pdf` file to the [File server via the File Explorer](../../app-builder/build-backend/file-explorer.md).
 {% endstep %}
 
 {% step %}
@@ -143,7 +143,7 @@ Create a new template and name it `AcceptanceReport`.
 {% endstep %}
 
 {% step %}
-From the Resources Panel, drag the `acceptance_report.pdf` file onto the page canvas. This sets it as the static background.
+From the File Explorer, drag the `acceptance_report.pdf` file onto the page canvas. This sets it as the static background.
 {% endstep %}
 
 {% step %}
@@ -159,11 +159,11 @@ Configure each placeholder with the correct Variable Name in its settings. Optio
 
 ### Construct the PDF Generation Logic
 
-Now, return to the Flow Builder to connect the template to your existing logic.
+Now, return to the Backend Builder to connect the template to your existing logic.
 
 {% stepper %}
 {% step %}
-From the Functionality Panel, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` function onto the canvas.
+From the Function Explorer, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` function onto the canvas.
 {% endstep %}
 
 {% step %}
@@ -183,11 +183,11 @@ Our flow is now complete up to the point of generating the PDF. The final step w
 
 The final step in our workflow is to automatically email the generated PDF report. We will use the `send` function from the [internal mailer](../../app-builder/build-backend/function-explorer/connectors/email.md) and configure it to send an email automatically whenever a new report is created.
 
-Return to the Flow Builder to add the final piece of logic to your flow.
+Return to the Backend Builder to add the final piece of logic to your flow.
 
 {% stepper %}
 {% step %}
-From the Functionality Panel, find your internal mailer instance and drag its `send` function onto the canvas.
+From the Function Explorer, find your internal mailer instance and drag its `send` function onto the canvas.
 {% endstep %}
 
 {% step %}

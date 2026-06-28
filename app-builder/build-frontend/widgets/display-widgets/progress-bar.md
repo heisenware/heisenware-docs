@@ -8,7 +8,7 @@ It's an ideal component for showing loading states, task completion, or any valu
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

@@ -4,7 +4,7 @@ The button widget is a fundamental element in any user interface. Its primary fu
 
 ## Data Bindings
 
-Connect the widget to your application logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application logic by dragging the corresponding items from the Backend Builder.
 
 ### Widget to logic
 

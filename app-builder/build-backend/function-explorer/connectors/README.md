@@ -16,7 +16,7 @@ If the target system is on a private, isolated network with no inbound internet 
 
 In this scenario, you must use an Edge Agent (available as a native binary or Docker container).
 
-* **Customized Native Agent**: You can compile a native agent directly inside the App Builder. You decide exactly which connectors and credentials you want to include in the package.
+* **Customized Native Agent**: You can compile a Native Agent directly inside the App Builder. You decide exactly which connectors and credentials you want to include in the package.
 * **Deployment**: Once you have built your custom binary, you install it on a target system within the local network.
 * **Visibility in library**: Once the agent is online, it automatically appears in your [library](../). Inside the visual Agent representation, you will find the specific connector classes you selected during the build process.
 * **Edge execution**: Using functions from this agent-specific category ensures that the logic is executed directly at the edge, allowing you to integrate local devices seamlessly.

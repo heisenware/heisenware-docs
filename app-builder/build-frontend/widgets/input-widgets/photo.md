@@ -12,7 +12,7 @@ Captured photos can be stored as physical files on the server or as Base64-encod
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Input
 

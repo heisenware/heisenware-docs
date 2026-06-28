@@ -8,7 +8,7 @@ description: 15 April 2025
 
 ## Features
 
-* Re-design of the logic board to utilize a flow-based visualization using nodes and edges
+* Re-design of the Backend Builder to utilize a flow-based visualization using nodes and edges
 * Support for IPhone specific (.heic) format when uploading images
 * Clickable text inside Kanban and Datagrid widgets
 * Re-worked production app scaling to render even better on various devices/screens

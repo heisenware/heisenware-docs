@@ -23,11 +23,11 @@ Right-click any widget to open a menu for quick actions and data settings. Besid
 
 ## Data binding
 
-Widgets come to life when linked to your Flow Builder. We call these connection points properties.
+Widgets come to life when linked to your Backend Builder. We call these connection points properties.
 
 ### How to link
 
-1. Select the widget in the UI Builder (optional).
+1. Select the widget in the Frontend Builder (optional).
 2. Drag a part of a [function](../../build-backend/functions.md) (input, trigger, output, or modifier) and drop it onto the widget.
 3. Pick a widget property appearing inside the function block.
 

@@ -38,7 +38,7 @@ Your tenant is hosted on-premise or in your private cloud. Is your data source a
 Does Heisenware offer a [standard connector](../../app-builder/build-backend/function-explorer/connectors/) for your specific data source?
 
 * _Yes, a standard connector exists._ <i class="fa-arrow-right">:arrow-right:</i> Continue with choosing your [agent setup](connectivity-setup-guide.md#choose-your-edge-agent-setup).
-* _No, I need to connect a custom source._ <i class="fa-arrow-right">:arrow-right:</i> As an advanced user, you can use our [code adapter](../../account/hosting-and-architecture.md#custom-code-adapters) or build a [custom extension](https://docs.heisenware.com/app-builder/build-backend/functions-library/extensions#custom-extensions). These features allow you to wrap custom code and expose it as visual function blocks to the platform. Alternatively, please contact our support team to discuss your specific requirements.
+* _No, I need to connect a custom source._ <i class="fa-arrow-right">:arrow-right:</i> As an advanced user, you can use our [Code Adapter](../../account/hosting-and-architecture.md#custom-code-adapters) or build a [Custom Extension](https://docs.heisenware.com/app-builder/build-backend/functions-library/extensions#custom-extensions). These features allow you to wrap custom code and expose it as visual function blocks to the platform. Alternatively, please contact our support team to discuss your specific requirements.
 
 ## Choose your edge agent setup
 
@@ -50,9 +50,9 @@ What infrastructure is available in your local network?
 * Docker runtime
 * LXC runtime
 
-### Native agent&#x20;
+### Native Agent&#x20;
 
-You can use the native binary. It runs as a highly efficient system service directly on your OS without requiring Docker. Continue to the [native agent setup documentation](../../app-builder/build-backend/function-explorer/agents/native-agent.md) for the next steps.
+You can use the native binary. It runs as a highly efficient system service directly on your OS without requiring Docker. Continue to the [Native Agent setup documentation](../../app-builder/build-backend/function-explorer/agents/native-agent.md) for the next steps.
 
 ### Docker agent&#x20;
 

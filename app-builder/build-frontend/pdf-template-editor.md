@@ -50,7 +50,7 @@ Add a blank page for each page of your source document using the Add Page icon (
 {% step %}
 #### Set background
 
-Drag each page file from the Resources panel onto the corresponding blank page. This sets the file as a static background.
+Drag each page file from the File Explorer onto the corresponding blank page. This sets the file as a static background.
 {% endstep %}
 
 {% step %}
@@ -114,7 +114,7 @@ If you no longer need a PDF template, you can permanently remove it and its asso
 4. Select Remove.
 
 {% hint style="danger" %}
-This action is irreversible. Deleting an instance removes it completey. Any logic in your Flow Builder referencing this template will break.
+This action is irreversible. Deleting an instance removes it completey. Any logic in your Backend Builder referencing this template will break.
 {% endhint %}
 
 <figure><img src="../../.gitbook/assets/deleting_template_looped.gif" alt=""><figcaption></figcaption></figure>

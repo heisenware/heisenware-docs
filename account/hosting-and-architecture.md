@@ -30,23 +30,23 @@ Security is baked in: When you download the agent from your Heisenware account, 
 
 #### Docker Agent
 
-This is much like the native agent but packed into a Docker container. Docker technology is especially useful for vendors that offer edge-connectivity hardware (such as Siemens, WAGO, Hilscher, Welotec, Weidmüller, etc.).
+This is much like the Native Agent but packed into a Docker container. Docker technology is especially useful for vendors that offer edge-connectivity hardware (such as Siemens, WAGO, Hilscher, Welotec, Weidmüller, etc.).
 
 We offer our Docker-based agent for all relevant architectures (amd64, arm64, arm/v7). You can get started safely and quickly by providing the necessary credentials as environmental variables to the container. [See here](../app-builder/build-backend/function-explorer/agents/#docker-agent) for all the details.
 
-### Custom code adapters
+### Code Adapters (Custom Extensions)
 
-While standard agents ship with pre-made code for industrial protocols, code adapters allow you to wrap your custom source code and expose it as visual building blocks ([functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of it as a Heisenware-specific wrapper for your algorithms.
+While standard agents ship with pre-made code for industrial protocols, Code Adapters allow you to wrap your custom source code and expose it as visual building blocks ([functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of it as a Heisenware-specific wrapper for your algorithms.
 
-Like the agents, code adapters are available as both a native application and a containerized version (which we call [custom extensions](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-extensions) inside the platform).
+Like the agents, Code Adapters are available as both a native application and a containerized version (which we call [Custom Extensions](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-extensions) inside the platform).
 
-#### **Native custom code adapter**
+#### **Native custom Code Adapter**
 
-The native code adapter allows you to integrate custom code running natively on your OS. It relies on programming language-specific versions of our powerful [VRPC library](https://docs.heisenware.com/developers/vrpc).
+The native Code Adapter allows you to integrate custom code running natively on your OS. It relies on programming language-specific versions of our powerful [VRPC library](https://docs.heisenware.com/developers/vrpc).
 
-#### **Docker custom code adapter**
+#### **Docker Code Adapter**
 
-We provide a starter project that lets you build a Docker image containing your custom code. This Docker image is treated as a [custom extension](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-made). Once built, you have two flexible options for where to execute the container:
+We provide a starter project that lets you build a Docker image containing your custom code. This Docker image is treated as a [Custom Extension](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-made). Once built, you have two flexible options for where to execute the container:
 
 1. **Inside the platform (Cloud)**: You load your image as an extension. The platform takes care of its lifecycle (hosting, restarting) and automatically persists files into the central `shared` folder. Your code effectively runs as part of the Heisenware cloud.
 2. **Outside the platform (Edge)**: This is useful for bridging a private/local network. You run the container on your hardware using environment variables to secure the connection. Your code can interact with local devices, but you can still control everything seamlessly from within the cloud platform.

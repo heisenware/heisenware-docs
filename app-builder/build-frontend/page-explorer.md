@@ -23,7 +23,7 @@ You can manage the structure of your app via the pages panel. Click on the navig
 * **Change order**: To change the order of pages and how they appear in the app's main menu, refer to the [navigation settings](page-explorer.md#main-navigation-menu).
 
 {% hint style="info" %}
-If you need more vertical space, refer to page height settings as part of the [UI Builder toolbar](./#the-toolbar).
+If you need more vertical space, refer to page height settings as part of the [Frontend Builder toolbar](./#the-toolbar).
 {% endhint %}
 
 ## In-app navigation

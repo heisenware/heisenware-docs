@@ -20,7 +20,7 @@ You can find the following input widgets in the toolbar. Each has its own specif
 
 ## Connecting to backend logic (data binding)
 
-Input widgets send and receive data via the Flow Builder.
+Input widgets send and receive data via the Backend Builder.
 
 ### How to link
 

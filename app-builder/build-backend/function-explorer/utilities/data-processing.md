@@ -491,5 +491,5 @@ A function with an input and output only, and no trigger. The function outputs i
 <figure><img src="../../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-The main Flow Builder Toolbar holds a shortcut to the Memory function, as it is useful in many cases.
+The main Backend Builder Toolbar holds a shortcut to the Memory function, as it is useful in many cases.
 {% endhint %}

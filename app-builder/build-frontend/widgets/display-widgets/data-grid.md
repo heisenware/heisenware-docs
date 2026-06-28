@@ -8,7 +8,7 @@ It supports a wide range of data shaping operations, various editing modes, and 
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Input
 
