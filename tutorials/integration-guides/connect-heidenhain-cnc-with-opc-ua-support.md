@@ -96,7 +96,7 @@ This is a very complex and sensitive process, fortunately you have to do this on
 
 <figure><img src="../../.gitbook/assets/Screenshot (16).png" alt=""><figcaption></figcaption></figure>
 
-Drag the "create" function of the Heidenhain module to a section of the logic board.
+Drag the "create" function of the Heidenhain module to a section of the Backend Builder.
 
 <figure><img src="../../.gitbook/assets/Screenshot (21).png" alt=""><figcaption></figcaption></figure>
 

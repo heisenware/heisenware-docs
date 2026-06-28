@@ -8,7 +8,7 @@ The Card widgets really shines when you have placed other widgets on top and for
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

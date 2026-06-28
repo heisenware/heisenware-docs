@@ -8,7 +8,7 @@ It's a highly versatile component for any application that needs to display loca
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

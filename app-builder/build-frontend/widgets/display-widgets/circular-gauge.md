@@ -8,7 +8,7 @@ The gauge's appearance and behavior are fully customizable through the App Build
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

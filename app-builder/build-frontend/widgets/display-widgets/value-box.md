@@ -10,7 +10,7 @@ This widget is perfect for debugging as well, as the connected value is shown wi
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Input
 

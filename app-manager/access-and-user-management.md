@@ -63,5 +63,5 @@ The App Users card within each app provides a real-time view of who is accessing
 {% hint style="success" %}
 ### Leveraging user data in logic
 
-Once a user is authenticated, their information is automatically available in the Flow Builder via the `$USER` system variable. You can use this variable to personalize the UI (e.g., "Welcome, \[Name]"), filter database queries so users only see their own data, or log exactly who performed a specific action in your backend.
+Once a user is authenticated, their information is automatically available in the Backend Builder via the `$USER` system variable. You can use this variable to personalize the UI (e.g., "Welcome, \[Name]"), filter database queries so users only see their own data, or log exactly who performed a specific action in your backend.
 {% endhint %}

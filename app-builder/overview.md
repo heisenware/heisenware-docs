@@ -22,7 +22,7 @@ Heisenware uses a highly integrated development process. Rather than working in 
 Using the [Backend Builder](build-backend/) you create event-driven sequences by dragging selected functions from the Explorer onto the canvas.
 
 * **Functions**: The atomic building blocks of an app. These include standard utility blocks, industrial drivers, and custom code adapters (Node.js, Python, or C++).
-* **Global scope**: Logic in the Flow Builder is persistent. It runs independently of the active UI page, making it the central hub for continuous data processing or system monitoring.
+* **Global scope**: Logic in the Backend Builder is persistent. It runs independently of the active UI page, making it the central hub for continuous data processing or system monitoring.
 * **Agents**: Secure bridges for isolated networks. You configure Native or Docker Agents to tunnel data from local systems directly into your application logic.
 
 ### Build frontend

@@ -8,7 +8,7 @@ This widget is ideal for project management, task tracking, and any process-orie
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Input
 

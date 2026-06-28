@@ -24,7 +24,7 @@ Simply drag the `delete` function onto the board and insert the name of the inst
 
 ### Reacting to a manually triggered event
 
-The `onManualTrigger` function catches a manual trigger of the `triggerManually` function in the same instance and outputs the payload, which is a UNIX timestamp in this case. To try this, simply drag both functions onto the logic board and trigger the `triggerManually` function to generate the necessary event.
+The `onManualTrigger` function catches a manual trigger of the `triggerManually` function in the same instance and outputs the payload, which is a UNIX timestamp in this case. To try this, simply drag both functions onto the Backend Builder and trigger the `triggerManually` function to generate the necessary event.
 
 <figure><img src="../../../../.gitbook/assets/image (33).png" alt=""><figcaption><p>After triggering the second function, the first outputs the timestamp</p></figcaption></figure>
 

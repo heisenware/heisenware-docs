@@ -21,7 +21,7 @@ Once you have the PDF, you have two options:
 
 First, we need a place to store the submitted reports. We'll use the `defineTable` function to create a table in the internal PostgreSQL database.
 
-In the Flow Builder, place the `defineTable` function on the canvas and configure its inputs as shown below.
+In the Backend Builder, place the `defineTable` function on the canvas and configure its inputs as shown below.
 
 ```yaml
 #name
@@ -68,7 +68,7 @@ Drag a [Button](../../app-builder/build-frontend/widgets/trigger-widgets/button.
 
 ### Construct the Submission Logic
 
-Next, switch to the Flow Builder to define what happens when the user clicks the `Submit` button.
+Next, switch to the Backend Builder to define what happens when the user clicks the `Submit` button.
 
 {% stepper %}
 {% step %}
@@ -159,7 +159,7 @@ Configure each placeholder with the correct Variable Name in its settings. Optio
 
 ### Construct the PDF Generation Logic
 
-Now, return to the Flow Builder to connect the template to your existing logic.
+Now, return to the Backend Builder to connect the template to your existing logic.
 
 {% stepper %}
 {% step %}
@@ -183,7 +183,7 @@ Our flow is now complete up to the point of generating the PDF. The final step w
 
 The final step in our workflow is to automatically email the generated PDF report. We will use the `send` function from the [internal mailer](../../app-builder/build-backend/function-explorer/connectors/email.md) and configure it to send an email automatically whenever a new report is created.
 
-Return to the Flow Builder to add the final piece of logic to your flow.
+Return to the Backend Builder to add the final piece of logic to your flow.
 
 {% stepper %}
 {% step %}

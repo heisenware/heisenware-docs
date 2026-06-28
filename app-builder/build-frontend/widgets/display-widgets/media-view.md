@@ -8,7 +8,7 @@ It can intelligently handle different data formats, such as Base64 strings, file
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

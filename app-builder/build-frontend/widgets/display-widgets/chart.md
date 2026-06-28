@@ -10,7 +10,7 @@ You can configure multiple panes and axes, define complex data series, and contr
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

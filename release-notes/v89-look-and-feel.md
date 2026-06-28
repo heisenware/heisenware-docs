@@ -13,10 +13,10 @@ description: 7 Dec 2025
   * Very many changes to overall UI/UX improving usability
   * Context aware popup menu for widget settings
   * Context aware popup menu for input configurations
-  * WASD / QE control on the Flow Builder
+  * WASD / QE control on the Backend Builder
 * New Card detail view in [Data Grid](../app-builder/build-frontend/widgets/display-widgets/data-grid.md)
 * New App Builder wide [settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6) menu to individualize behavior
-* Possibility to add [annotations](/broken/pages/9vKr7mso7EW9dCDhxV7Y#annotation) anywhere in the Flow Builder
+* Possibility to add [annotations](/broken/pages/9vKr7mso7EW9dCDhxV7Y#annotation) anywhere in the Backend Builder
 * Possibility to create invitation links from within an app (see [Users](../app-builder/build-backend/function-explorer/utilities/users.md) class)
 * Professional installer tools for [Native Agents](../app-builder/build-backend/function-explorer/agents/)
 * New [Cron](../app-builder/build-backend/function-explorer/utilities/cron.md) class allowing to schedule tasks

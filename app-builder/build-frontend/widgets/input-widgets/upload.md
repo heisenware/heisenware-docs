@@ -10,7 +10,7 @@ The widget includes features like file type restriction, multi-file selection, a
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Input
 

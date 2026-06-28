@@ -8,7 +8,7 @@ You can configure its appearance as a line, bar, area, or win-loss chart, and cu
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 

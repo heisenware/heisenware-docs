@@ -8,7 +8,7 @@ This widget is perfect for dashboards, reports, and any interface where you need
 
 ## Data Binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Flow Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
 
 ### Output
 
