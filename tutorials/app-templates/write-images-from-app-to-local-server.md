@@ -2,7 +2,7 @@
 description: >-
   This tutorial explains how to share images taken inside an app with a local
   server or PC using the photo widget, an agent and the writeBufferToFile
-  function.
+  Function.
 ---
 
 # Write images from app to local server
@@ -23,7 +23,7 @@ Pick the [photo widget](../../app-builder/build-frontend/widgets/input-widgets/p
 {% step %}
 ### Prepare the photo data
 
-Use a memory function to get images from the photo widget by connecting the photo widget with the memory functions input. Also, add two [JSONata modifiers](/broken/pages/eybgxpp69PNrUW2fHZ4X#jsonata-modifier) to the memory to extract the base64 buffer string and prepare the path and file name.
+Use a memory Function to get images from the photo widget by connecting the photo widget with the memory Functions input. Also, add two [JSONata modifiers](/broken/pages/eybgxpp69PNrUW2fHZ4X#jsonata-modifier) to the memory to extract the base64 buffer string and prepare the path and file name.
 
 These are the JSONata snippets to use in your modifiers. Replace the path from the example with the path on your server where you want to store the images. All backslashes must be doubled to be working with JSONata syntax.
 
@@ -35,15 +35,15 @@ These are the JSONata snippets to use in your modifiers. Replace the path from t
 base64
 ```
 
-The final memory function, after taking a photo in test mode, must look like in the screenshot below.
+The final memory Function, after taking a photo in test mode, must look like in the screenshot below.
 
 <figure><img src="../../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
-### Configure the writeBufferToFile function
+### Configure the writeBufferToFile Function
 
-Find the [writeBufferToFile](../../app-builder/build-backend/function-explorer/connectors/file-i-o.md#writebuffertofile) function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.&#x20;
+Find the [writeBufferToFile](../../app-builder/build-backend/function-explorer/connectors/file-i-o.md#writebuffertofile) Function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.&#x20;
 
 Connect the path modifier with the `filePath` input and the buffer modifier with the `buffer` input.
 
@@ -53,6 +53,6 @@ Connect the path modifier with the `filePath` input and the buffer modifier with
 {% step %}
 ### Configure a trigger
 
-Configure the writeBufferToFile function trigger as needed. For example, you could use the `on input change` trigger.
+Configure the writeBufferToFile Function trigger as needed. For example, you could use the `on input change` trigger.
 {% endstep %}
 {% endstepper %}

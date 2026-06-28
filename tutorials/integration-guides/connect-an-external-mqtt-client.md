@@ -40,18 +40,18 @@ Publish some test data on a topic from your external client to Heisenware. This 
 Your Heisenware tenant includes a default internal MQTT client.
 
 * Open the App Builder for your app.
-* Use the [`onJsonMessage`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#onjsonmessage) (or [`onStringMessage`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#onstringmessage)) function belonging to the internal client.
-* Enter the topic you are publishing on into the function.
-* Trigger the function manually. You are now subscribed.&#x20;
+* Use the [`onJsonMessage`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#onjsonmessage) (or [`onStringMessage`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#onstringmessage)) Function belonging to the internal client.
+* Enter the topic you are publishing on into the Function.
+* Trigger the Function manually. You are now subscribed.&#x20;
 * Enable [Test Mode](../../app-builder/deploy-and-maintain.md#app-testing-test-mode) to see incoming data appear inside the event handler.
 {% endstep %}
 
 {% step %}
 #### Work with the Incoming Data (Optional)
 
-To process the data, we recommend connecting the event handler to a [memory](https://docs.heisenware.com/app-builder/backend/functionality/utilities/data-processing#memory) function.
+To process the data, we recommend connecting the event handler to a [memory](https://docs.heisenware.com/app-builder/backend/functionality/utilities/data-processing#memory) Function.
 
-* The memory makes the incoming data available as a regular function output.
+* The memory makes the incoming data available as a regular Function output.
 * From here, you can modify, store, forward, or visualize the data as needed.
 
 <figure><img src="../../.gitbook/assets/image (501).png" alt=""><figcaption></figcaption></figure>
@@ -68,7 +68,7 @@ You must complete the Initial Setup (steps 1–3 above) before proceeding.
 {% step %}
 #### Publish Data to the Internal Broker
 
-Use the [`publishJson`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#publishjson) or [`publishString`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#publishstring) function in the App Builder to publish data to a specific topic.
+Use the [`publishJson`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#publishjson) or [`publishString`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#publishstring) Function in the App Builder to publish data to a specific topic.
 
 You can manually fill the message input box or use dynamic data.
 

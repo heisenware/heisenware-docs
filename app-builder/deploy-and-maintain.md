@@ -8,7 +8,7 @@ Before you deploy, you can use Test Mode to verify your logic and UI directly in
 
 * **How to start**: Click the Test button in the top toolbar.
 * **Behavior**: The app will start polling data from connected sources or writing to databases. Form inputs become clickable, and buttons will trigger their connected flows.
-* **Manual triggers**: Even in Test Mode, you can still manually click triggers on function blocks in the Backend Builder to force-start a sequence.
+* **Manual triggers**: Even in Test Mode, you can still manually click triggers on Function blocks in the Backend Builder to force-start a sequence.
 
 <div align="center"><figure><img src="../.gitbook/assets/deploy_bottom.png" alt=""><figcaption><p>TEST button</p></figcaption></figure></div>
 

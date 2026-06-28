@@ -29,9 +29,9 @@ Download the `data-grid-crud.hwt` template file to your local machine.
 
 Because the template handles the logic and data bindings, you only need to define your target table (e.g., a `maintenanceTasks` table) and ensure your database is accessible.
 
-1. Select each function and update the table name parameter to match your specific table.
+1. Select each Function and update the table name parameter to match your specific table.
 2. Verify your database connection. If using an external SQL database, ensure the connection is active.
-3. If you are starting from scratch and do not have an existing table, you can execute the [`defineTable`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#definetable) and [`addRows`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrows) functions once to initialize the schema and write the initial records.
+3. If you are starting from scratch and do not have an existing table, you can execute the [`defineTable`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#definetable) and [`addRows`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrows) Functions once to initialize the schema and write the initial records.
 {% endstep %}
 {% endstepper %}
 
@@ -41,9 +41,9 @@ While the template is plug-and-play, understanding the underlying wiring is nece
 
 <figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
-* **Data population:** The data output of the [`getTableData`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#gettabledata) function binds directly to the data property of the data grid widget to populate the UI.
-* **Data grid interactions:** Users interact exclusively with the data grid UI. The grid's native `onInsert`, `onUpdate`, and `onDelete` events bind directly to the inputs of the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow), [`updateRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#updaterow), and [`deleteRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#deleterow) functions.
-* **User feedback:** [Modifiers](../../app-builder/build-backend/modifier.md) trigger on the execution of the CRUD functions and pass adjustable strings to a [toast widget](../../app-builder/build-frontend/widgets/display-widgets/toast.md) to display immediate confirmation or error messages to the operator.
+* **Data population:** The data output of the [`getTableData`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#gettabledata) Function binds directly to the data property of the data grid widget to populate the UI.
+* **Data grid interactions:** Users interact exclusively with the data grid UI. The grid's native `onInsert`, `onUpdate`, and `onDelete` events bind directly to the inputs of the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow), [`updateRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#updaterow), and [`deleteRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#deleterow) Functions.
+* **User feedback:** [Modifiers](../../app-builder/build-backend/modifier.md) trigger on the execution of the CRUD Functions and pass adjustable strings to a [toast widget](../../app-builder/build-frontend/widgets/display-widgets/toast.md) to display immediate confirmation or error messages to the operator.
 
 ## Reference Videos
 

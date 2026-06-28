@@ -4,7 +4,7 @@ The `Relational Database` class provides a consistent way to interact with SQL d
 
 ### Quick start: The internal PostgreSQL instance
 
-Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use.  Simply select `internal-postgres` in your function's instance field to start creating tables and managing data.
+Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use.  Simply select `internal-postgres` in your Function's instance field to start creating tables and managing data.
 
 <p align="center"><img src="../../../../.gitbook/assets/image (50).png" alt=""></p>
 
@@ -485,10 +485,10 @@ Example
 BEFORE: Row in 'settings' table:
 
 ```json
-{ 
-  id: 1, 
-  name: 'Config A', 
-  settings: { theme: 'dark', notifications: true } 
+{
+  id: 1,
+  name: 'Config A',
+  settings: { theme: 'dark', notifications: true }
 }
 ```
 
@@ -508,10 +508,10 @@ settings: {
 AFTER: The row is now:
 
 ```json
-{ 
-  id: 1, 
-  name: 'Config A', 
-  settings: { notifications: false, timezone: 'UTC' } 
+{
+  id: 1,
+  name: 'Config A',
+  settings: { notifications: false, timezone: 'UTC' }
 }
 ```
 
@@ -530,10 +530,10 @@ Example
 BEFORE: Row in 'settings' table:&#x20;
 
 ```json
-{ 
-  id: 1, 
-  name: 'Config A', 
-  settings: { theme: 'dark', notifications: true } 
+{
+  id: 1,
+  name: 'Config A',
+  settings: { theme: 'dark', notifications: true }
 }
 ```
 
@@ -553,10 +553,10 @@ settings: {
 AFTER: The row is now:&#x20;
 
 ```json
-{ 
-  id: 1, 
-  name: 'Config A', 
-  settings: { theme: 'dark', notifications: false, timezone: 'UTC' } 
+{
+  id: 1,
+  name: 'Config A',
+  settings: { theme: 'dark', notifications: false, timezone: 'UTC' }
 }
 ```
 

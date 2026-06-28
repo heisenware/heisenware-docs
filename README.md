@@ -32,7 +32,7 @@ Heisenware is not just a drag-and-drop interface. It is a visual programming env
 Standard no-code platforms often act as "black boxes" by abstracting complexity so heavily that you hit a wall when you need custom logic. Heisenware operates transparently.
 
 - **Visual, yet code-capable:** You build logic visually using the Flow builder, but you retain direct access to developer tools like JavaScript expressions for data transformation and YAML for configuration.
-- **No "no-code cliff"**: When pre-built functions aren't enough, you don't hack workarounds. You extend the platform by wrapping your code (Node.js, Python, C++) into extensions that become native functions.
+- **No "no-code cliff"**: When pre-built Functions aren't enough, you don't hack workarounds. You extend the platform by wrapping your code (Node.js, Python, C++) into extensions that become native Functions.
 
 ### Object-oriented scalability
 
@@ -55,13 +55,13 @@ Industrial systems are asynchronous. Sensors spike, users click, and machines st
 We solve the "OT vs. IT" network gap by treating local hardware as a first-class citizen of the cloud platform.
 
 - **The bridge**: Through Native Agents and Docker agents, we securely bridge local, private networks (OT/Shopfloor) to the cloud without VPNs.
-- **Local execution**: You can push backend logic (connectors) to run _locally_ on the edge device. The platform treats these remote functions the same as cloud functions.
+- **Local execution**: You can push backend logic (connectors) to run _locally_ on the edge device. The platform treats these remote Functions the same as cloud Functions.
 
 ### Unified data binding
 
 We eliminate the "glue code" typically needed to connect a frontend to a backend.
 
-- **Direct linking**: In the App Builder, you connect a backend function's output directly to a frontend widget's property.
+- **Direct linking**: In the App Builder, you connect a backend Function's output directly to a frontend widget's property.
 - **Reactive UI**: When backend data changes (e.g., a new sensor reading), the bound UI widget automatically re-renders to reflect the new state.
 
 <figure><img src=".gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
@@ -77,23 +77,23 @@ A quick-reference list of specific terms and concepts used across the Heisenware
 | **App**                                    | A standalone, Progressive Web App (PWA) software application built, tested, and deployed entirely within Heisenware.                                                                                                  |
 | **App Builder**                            | The comprehensive visual development environment where Members design, build, test, and deploy applications.                                                                                                          |
 | **App Manager**                            | The central administrative dashboard for managing accounts, workspaces, apps, members, and inbound integrations.                                                                                                      |
-| **Backend Builder**                        | The infinite canvas within the App Builder where developers create event-driven business logic by wiring together functions into reactive flows.                                                                      |
+| **Backend Builder**                        | The infinite canvas within the App Builder where developers create event-driven business logic by wiring together Functions into reactive flows.                                                                      |
 | **Code Adapter**                           | Developer-written code (using Node.js, Python, C++, etc.) that wraps existing software libraries or algorithms so they can be integrated into Heisenware as Custom Extensions.                                        |
 | **Custom Extension**                       | A containerized module (typically built via a Code Adapter) loaded into the platform to expand native functionality with custom, proprietary backend tools.                                                           |
 | **Deployment**                             | The process of publishing a specific version of an app, transitioning it from the App Builder environment to a live state accessible to Users.                                                                        |
 | **Domain**                                 | The unique identifier combining your account and workspace (e.g., `acme.default`) used for internal routing and API integrations.                                                                                     |
-| **Event**                                  | A specific trigger—such as a user click, a data update, or a schedule interval—that initiates the execution of a function flow in the backend.                                                                        |
+| **Event**                                  | A specific trigger—such as a user click, a data update, or a schedule interval—that initiates the execution of a Function flow in the backend.                                                                        |
 | **File Explorer**                          | The panel in the App Builder used to upload, store, and manage static assets and files (e.g., images, CSVs, PDF templates) for use in your applications.                                                              |
-| **Filter**                                 | A function extension that evaluates a boolean JavaScript expression to act as a logical gate, conditionally halting or allowing the continuation of a data flow.                                                      |
-| **Flow**                                   | A reactive, event-driven sequence of connected functions executing business logic in the Backend Builder.                                                                                                             |
+| **Filter**                                 | A Function extension that evaluates a boolean JavaScript expression to act as a logical gate, conditionally halting or allowing the continuation of a data flow.                                                      |
+| **Flow**                                   | A reactive, event-driven sequence of connected Functions executing business logic in the Backend Builder.                                                                                                             |
 | **Frontend Builder**                       | The page-specific visual design canvas within the App Builder where developers compose responsive user interfaces using widgets and static elements.                                                                  |
 | **Function**                               | An atomic, visual building block in the Backend Builder representing executable code that performs specific tasks (e.g., database queries, API calls, hardware control).                                              |
-| **Function Explorer**                      | The structural repository panel in the App Builder containing all available functions, organized by categories like Connectors, Storage, Utilities, and Extensions.                                                   |
+| **Function Explorer**                      | The structural repository panel in the App Builder containing all available Functions, organized by categories like Connectors, Storage, Utilities, and Extensions.                                                   |
 | **Integration**                            | A configured, authorized entry point allowing external systems, MQTT clients, or VRPC clients to securely send data to a Heisenware workspace.                                                                        |
 | **JavaScript Expression**                  | Standard JavaScript logic evaluated on-the-fly within Modifiers or Filters to perform calculations, condition checks, or array manipulations.                                                                         |
 | **JSONata**                                | A lightweight query and transformation language natively supported in Heisenware for efficiently restructuring JSON data payloads.                                                                                    |
 | **Member**                                 | A developer, engineer, or administrator with access to the Heisenware platform to build and manage applications (strictly distinct from a User).                                                                      |
-| **Modifier**                               | A function extension that transforms or reshapes data on-the-fly as it passes from one function to the next within a flow.                                                                                            |
+| **Modifier**                               | A Function extension that transforms or reshapes data on-the-fly as it passes from one Function to the next within a flow.                                                                                            |
 | **Page Explorer**                          | The panel in the App Builder used to structure an application's hierarchy by creating, duplicating, and organizing pages and subpages.                                                                                |
 | **Property**                               | A configurable setting of a UI widget that determines its behavior, data binding, or visual appearance.                                                                                                               |
 | **PWA (Progressive Web App)**              | A modern web application standard that provides a native app-like experience (installable, responsive, offline-capable) directly from any web browser.                                                                |
@@ -102,4 +102,4 @@ A quick-reference list of specific terms and concepts used across the Heisenware
 | **VRPC (Variadic Remote Procedure Call)** | The open-source, asynchronous communication protocol over MQTT that powers all distributed data exchange and remote function calls within the Heisenware ecosystem.                                                   |
 | **Widget**                                 | An interactive or display-oriented visual component (e.g., a chart, button, or form) placed in the Frontend Builder to construct the user interface.                                                                  |
 | **Workspace**                              | A dedicated sub-container within an Account used to securely isolate related apps, databases, files, and members from one another.                                                                                    |
-| **YAML**                                   | A human-readable data serialization language used extensively in the Backend Builder for quickly configuring static function inputs and data structures.                                                              |
+| **YAML**                                   | A human-readable data serialization language used extensively in the Backend Builder for quickly configuring static Function inputs and data structures.                                                              |

@@ -1,10 +1,10 @@
 # Modifier
 
-Modifiers transform data on the fly within a flow. They allow you to apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before passing it to the next function, a database, the frontend, or a subsequent extension (such as another modifier or filter).
+Modifiers transform data on the fly within a flow. They allow you to apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before passing it to the next Function, a database, the frontend, or a subsequent extension (such as another modifier or filter).
 
-Modifiers are part of the function extensions. To add a modifier to your function:
+Modifiers are part of the Function extensions. To add a modifier to your Function:
 
-1. Click the `+` icon on the right side of any function output, filter, or existing modifier.
+1. Click the `+` icon on the right side of any Function output, filter, or existing modifier.
 2. Select modifier from the list.
 3. A new modifier box will appear where you can write your JavaScript logic.
 
@@ -89,7 +89,7 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 3: Implicit function usage</strong></summary>
+<summary><strong>Example 3: Implicit Function usage</strong></summary>
 
 Trims whitespace and converts a raw string to uppercase without explicitly naming the input variable.
 
@@ -184,7 +184,7 @@ Return of the modifier:
 
 <summary><strong>Example 2: Array mapping and enrichment</strong></summary>
 
-Iterates through an array of objects to add a new property or modify existing ones using the `.map()` function.
+Iterates through an array of objects to add a new property or modify existing ones using the `.map()` Function.
 
 Data:
 
@@ -285,11 +285,11 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 5: Processing multiple inputs (using <code>combine</code> function)</strong></summary>
+<summary><strong>Example 5: Processing multiple inputs (using <code>combine</code> Function)</strong></summary>
 
-When using the `combine` function, the IIFE pattern allows you to cleanly handle multiple input sources stored in the `x` array.
+When using the `combine` Function, the IIFE pattern allows you to cleanly handle multiple input sources stored in the `x` array.
 
-Data (combined by the combine function):
+Data (combined by the combine Function):
 
 ```json
 [
@@ -304,9 +304,9 @@ Modifier content:
 (() => {
   const users = x[0]
   const assets = x[1]
-  return { 
-    assigned_users: users, 
-    active_assets: assets 
+  return {
+    assigned_users: users,
+    active_assets: assets
   }
 })()
 ```
@@ -314,9 +314,9 @@ Modifier content:
 Return of the modifier:
 
 ```json
-{ 
-  "assigned_users": [ { "name": "User1" } ], 
-  "active_assets": [ { "asset": "CNC" } ] 
+{
+  "assigned_users": [ { "name": "User1" } ],
+  "active_assets": [ { "asset": "CNC" } ]
 }
 ```
 
@@ -452,7 +452,7 @@ Modifier content:
 x.map(y => ({
    ...y,
    occurredDuringShift: Interval.fromDateTimes(
-      DateTime.fromISO(y.shiftStart), 
+      DateTime.fromISO(y.shiftStart),
       DateTime.fromISO(y.shiftEnd)
    ).contains(DateTime.fromISO(y.eventTime))
 }))
@@ -501,9 +501,9 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 7: Round robin (using <code>combine</code> function)</strong></summary>
+<summary><strong>Example 7: Round robin (using <code>combine</code> Function)</strong></summary>
 
-Sometime you want to extract items of an array in a round-robin fashion. For that you can use a `combine` function in which you link back the modifier's output to the second argument:
+Sometime you want to extract items of an array in a round-robin fashion. For that you can use a `combine` Function in which you link back the modifier's output to the second argument:
 
 <figure><img src="../../.gitbook/assets/image (503).png" alt=""><figcaption></figcaption></figure>
 
@@ -547,12 +547,12 @@ To optimize results, copy this article as context for the AI. Use the Copy butto
 Alternatively to using the full article, copy and paste this prompt into your AI to ensure it understands the Heisenware environment and specific variable references.
 
 ```
-I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Modifier" to transform data on the fly between functions. 
+I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Modifier" to transform data on the fly between Functions.
 
 Context:
 * Heisenware uses modifiers to transform data in real-time as it flows through a node-based system.
 * If I use JSONata, the input data is referenced as $.
-* In JSONata, functions can use empty parentheses () to automatically process the incoming data.
+* In JSONata, Functions can use empty parentheses () to automatically process the incoming data.
 * If I use JavaScript, the input data is referenced as x.
 * For JavaScript, I can use the Luxon library via the DateTime object.
 * I need a concise expression that returns the transformed value.

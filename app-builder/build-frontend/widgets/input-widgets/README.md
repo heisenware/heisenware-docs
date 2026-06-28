@@ -26,13 +26,13 @@ Input widgets send and receive data via the Backend Builder.
 
 You link widgets by dragging the logic to the UI:
 
-1. Drag a part of a function (input, output, or modifier) and drop it onto the widget.
-2. A menu will appear on the function block; pick the specific widget property you want to link.
+1. Drag a part of a Function (input, output, or modifier) and drop it onto the widget.
+2. A menu will appear on the Function block; pick the specific widget property you want to link.
 
 ### Interaction types
 
-* **To function input**: The widget sends user-entered data (e.g., `formData`) to a function.
-* **From function output / from modifier:** A function sends data back to the widget to update its state. For example, you can link a function's output to a form's `clear` property. When the flow reaches that output, the form is instantly reset.
+* **To Function input**: The widget sends user-entered data (e.g., `formData`) to a Function.
+* **From Function output / from modifier:** A Function sends data back to the widget to update its state. For example, you can link a Function's output to a form's `clear` property. When the flow reaches that output, the form is instantly reset.
 
 ## Automatic data isolation (multi-tenancy)
 

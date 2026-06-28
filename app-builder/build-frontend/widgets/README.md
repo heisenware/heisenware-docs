@@ -28,15 +28,15 @@ Widgets come to life when linked to your Backend Builder. We call these connecti
 ### How to link
 
 1. Select the widget in the Frontend Builder (optional).
-2. Drag a part of a [function](../../build-backend/functions.md) (input, trigger, output, or modifier) and drop it onto the widget.
-3. Pick a widget property appearing inside the function block.
+2. Drag a part of a [Function](../../build-backend/functions.md) (input, trigger, output, or modifier) and drop it onto the widget.
+3. Pick a widget property appearing inside the Function block.
 
 <figure><img src="../../../.gitbook/assets/Data Binding Basics.gif" alt=""><figcaption><p>Data binding basics</p></figcaption></figure>
 
-To unlink, click the `x` next to the property in the linked function, or use the widget context menu to `unlink all`.
+To unlink, click the `x` next to the property in the linked Function, or use the widget context menu to `unlink all`.
 
 ### Connection directions
 
-* **To input**: The widget sends data into a function.
+* **To input**: The widget sends data into a Function.
 * **To trigger**: A user action starts a function flow.
-* **From output**: A function sends data to a widget property to visualize a value or change a visual property.
+* **From output**: A Function sends data to a widget property to visualize a value or change a visual property.

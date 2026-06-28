@@ -233,10 +233,10 @@ Example 1: Unsecured, Anonymous Connection
 This requires no PKI setup and no user identity.
 
 ```yaml
-# (In create function)
+# (In `create` Function)
 # (No arguments)
 
-# (In connect function)
+# (In `connect` Function)
 # endpointUrl
 opc.tcp://my-server.com:4840
 ```
@@ -246,12 +246,12 @@ Example 2: Secure, Anonymous Connection
 This requires the PKI setup (createCertificates and addServerCertificate) but no user identity.
 
 ```yaml
-# (In create function)
+# (In `create` Function)
 # options
 securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 
-# (In connect function)
+# (In `connect` Function)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 ```
@@ -261,12 +261,12 @@ Example 3: Secure Connection with Username/Password
 This requires the PKI setup for a secure channel, plus username/password credentials for user authentication.
 
 ```yaml
-# (In create function)
+# (In `create` Function)
 # options
 securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 
-# (In connect function)
+# (In `connect` Function)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 # userIdentity
@@ -279,12 +279,12 @@ Example 4: Secure Connection with a User Certificate
 This is the most secure method, using certificates for both channel security and user authentication.
 
 ```yaml
-# (In create function)
+# (In `create` Function)
 # options
 securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 
-# (In connect function)
+# (In `connect` Function)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 # userIdentity

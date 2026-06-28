@@ -13,7 +13,7 @@ description: Jan 24, 2024
 * Proper section duplication
 * Page and Subpage duplication
 * Reverse proxy now manages all CORS issues by intercepting the respective HTTP headers
-* It is now possible to delay execution of a function by a configurable time (most important for one-by-one processing of API calls)
+* It is now possible to delay execution of a Function by a configurable time (most important for one-by-one processing of API calls)
 
 ## Fixes
 

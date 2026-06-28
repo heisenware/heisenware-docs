@@ -1,21 +1,21 @@
 # Function Explorer
 
-The Function Explorer is the structural repository in the left panel that holds all tools required to build your application logic. It organizes available functions into logical categories and hierarchies (such as classes and instances), and allows you to drag and drop them directly onto the Backend Builder canvas.
+The Function Explorer is the structural repository in the left panel that holds all tools required to build your application logic. It organizes available Functions into logical categories and hierarchies (such as classes and instances), and allows you to drag and drop them directly onto the Backend Builder canvas.
 
 <div align="left"><figure><img src="../../../.gitbook/assets/image (529).png" alt=""><figcaption></figcaption></figure></div>
 
 ## Categories
 
-By default, the library organizes functions into three primary categories:
+By default, the library organizes Functions into three primary categories:
 
-* [**Connectors**](connectors/): A set of integration functions for standard protocols (MQTT, OPC UA, HTTP) and API blocks used to interface with external hardware and software systems. Connectors require a direct network connection or internet accessibility for the systems you intend to connect.
+* [**Connectors**](connectors/): A set of integration Functions for standard protocols (MQTT, OPC UA, HTTP) and API blocks used to interface with external hardware and software systems. Connectors require a direct network connection or internet accessibility for the systems you intend to connect.
 * [**Storage**](storage/): This is your hub for data persistence. It provides direct access to built-in relational (PostgreSQL) and time-series (InfluxDB) databases, and it is also the place where you connect and manage your own external databases.
 * [**Utilities**](utilities/): Mathematical operations, logic gates, and data transformation blocks used to refine data flows.
-* Custom: All custom made functionality is organized here.
+* Custom: All custom made Functionality is organized here.
 
 ## Extending functionality
 
-If your requirements exceed the default set of functions, you can expand the library through agents, extensions, or custom code.
+If your requirements exceed the default set of Functions, you can expand the library through agents, extensions, or custom code.
 
 ### Agents
 
@@ -23,7 +23,7 @@ For isolated local networks or systems without internet access, you must use a n
 
 ### Extensions
 
-[Extensions](./#extensions) allow you to expand the platform's capabilities using container technology. An extension is a standard Docker image that Heisenware executes and exposes as visual functions within your library.
+[Extensions](./#extensions) allow you to expand the platform's capabilities using container technology. An extension is a standard Docker image that Heisenware executes and exposes as visual Functions within your library.
 
 There are two categories of extensions:
 
@@ -52,7 +52,7 @@ Access the app where you wish to use the integration.
 {% step %}
 #### Start onboarding
 
-Click the onboarding icon (<i class="fa-screencast">:screencast:</i>) in the functions library panel.
+Click the onboarding icon (<i class="fa-screencast">:screencast:</i>) in the Functions library panel.
 {% endstep %}
 
 {% step %}

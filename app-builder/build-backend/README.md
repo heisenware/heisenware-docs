@@ -1,6 +1,6 @@
 # Build Backend
 
-In the backend, you define the intelligence and connectivity of your application. You build logic visually on a global canvas by connecting functional blocks, allowing for real-time data processing and seamless integration with external systems.
+In the backend, you define the intelligence and connectivity of your application. You build logic visually on a global canvas by connecting Functional blocks, allowing for real-time data processing and seamless integration with external systems.
 
 ## How the backend works
 
@@ -14,37 +14,37 @@ The backend operates on a few fundamental rules:
 
 To build and manage this logic, you use three primary tools located in the App Builder:
 
-* [**Backend Builder**](./#flow-builder): The central canvas where you drag, drop, and wire [functions](functions.md) together.
-* [**Function Explorer**](function-explorer/): The searchable panel on the left where you find all available functions.
+* [**Backend Builder**](./#flow-builder): The central canvas where you drag, drop, and wire [Functions](functions.md) together.
+* [**Function Explorer**](function-explorer/): The searchable panel on the left where you find all available Functions.
 * [**File Explorer**](file-explorer.md): The searchable panel on the left where you can load and manage files (CSVs, PDFs, etc.) that your logic (but also your UI) needs to read or where it can write to.
 
 ## Backend Builder
 
-The Backend Builder is your visual engineering environment. It provides an endless canvas where you build application backend logic by dragging, dropping, and connecting functions.
+The Backend Builder is your visual engineering environment. It provides an endless canvas where you build application backend logic by dragging, dropping, and connecting Functions.
 
-Unlike traditional programming that relies on variables, the Backend Builder uses a data-driven architecture. Data flows directly from one function's output to another's input, creating reactive, event-driven sequences (flows).
+Unlike traditional programming that relies on variables, the Backend Builder uses a data-driven architecture. Data flows directly from one Function's output to another's input, creating reactive, event-driven sequences (flows).
 
-To build your logic, you interact with [functions](functions.md) directly on the canvas using the following core actions:
+To build your logic, you interact with [Functions](functions.md) directly on the canvas using the following core actions:
 
-### Adding functions
+### Adding Functions
 
-* **From the library**: Drag functions from the [functions library](function-explorer/) in the left panel.
+* **From the library**: Drag Functions from the [functions library](function-explorer/) in the left panel.
 * **Quick access**: Use the toolbar for common utilities like `echo`, `memory`, `trigger`, or `combine`.
 
 <figure><img src="../../.gitbook/assets/memory_flow_builder_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
-### Sequencing functions
+### Sequencing Functions
 
-You create flows by drawing wires between functions. Click on the output of a function (or its [modifier](modifier.md)) from which you want to transfer data or events, and drag it to the part of the next function you intend to receive it.
+You create flows by drawing wires between Functions. Click on the output of a Function (or its [modifier](modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
 
-* **Output to trigger**: Drag a connection to the trigger box of the next function if you want the completion of the first function to execute the second without handing over data.
+* **Output to trigger**: Drag a connection to the trigger box of the next Function if you want the completion of the first Function to execute the second without handing over data.
 * **Output to input**: Drag a connection to an input port to hand over specific data.
-* **Reactive inputs**: An input on the second function can be internally connected to its own trigger. This ensures the function executes automatically whenever that input value is updated or changed.
+* **Reactive inputs**: An input on the second Function can be internally connected to its own trigger. This ensures the Function executes automatically whenever that input value is updated or changed.
 
 #### Logic behavior
 
-* **Event-driven**: Once a function completes, it passes data through the wire to immediately start the next step.
-* **Flexible routing**: One output can drive multiple functions, and inputs can receive data from many sources across the canvas or UI.
+* **Event-driven**: Once a Function completes, it passes data through the wire to immediately start the next step.
+* **Flexible routing**: One output can drive multiple Functions, and inputs can receive data from many sources across the canvas or UI.
 
 {% hint style="success" %}
 #### **Session** isolation
@@ -54,7 +54,7 @@ Functions and flows execute in an isolated manner for each user session. This en
 
 ### **Grouping (sections)**
 
-As your application grows, use grouping to keep the canvas clean. To group, select multiple functions and click the group icon in the toolbar to create a named container. This is a visual aid that can be collapsed to save space.
+As your application grows, use grouping to keep the canvas clean. To group, select multiple Functions and click the group icon in the toolbar to create a named container. This is a visual aid that can be collapsed to save space.
 
 <figure><img src="../../.gitbook/assets/gruppieren_functions_2_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
@@ -79,7 +79,7 @@ You can customize these controls (like mouse wheel behavior) in the [App Builder
 
 ### Search and replace
 
-To make bulk configuration changes, select at least two functions to activate the Search and replace tool in the toolbar. This allows you to find a specific string within the selected functions (such as a device's IP address) and replace it with a new value across all of them at once.
+To make bulk configuration changes, select at least two Functions to activate the Search and replace tool in the toolbar. This allows you to find a specific string within the selected Functions (such as a device's IP address) and replace it with a new value across all of them at once.
 
 {% hint style="warning" %}
 Search and replace currently only supports strings without spaces.
@@ -103,7 +103,7 @@ This defines the navigation logic of the canvas. You can choose between two prim
 #### Grid and Snapping
 
 * **Grid Size**: Defines the size of the canvas grid.
-* **Snap to Grid**: When enabled, function blocks will align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
+* **Snap to Grid**: When enabled, Function blocks will align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
 
 #### Navigation (WASD)
 
@@ -115,7 +115,7 @@ For users who prefer keyboard navigation, you can fine-tune your movement:
 
 #### Default Modifier Type
 
-Every time you add a [modifier](modifier.md) to a function, Heisenware defaults to a specific type. You can choose which one appears first:
+Every time you add a [modifier](modifier.md) to a Function, Heisenware defaults to a specific type. You can choose which one appears first:
 
 * **JSONata**: Ideal for data transformation and querying.
 * **JavaScript**: Use this if you prefer writing standard JS logic for your modifiers.

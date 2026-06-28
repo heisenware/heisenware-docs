@@ -10,13 +10,13 @@ Connect the widget to your application logic by dragging the corresponding items
 
 This describes the events the button sends to your backend logic.
 
-<table><thead><tr><th width="171.7139892578125">Property</th><th width="177.5711669921875">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>onClick</code></td><td><code>Event</code> / <code>String</code></td><td>Fires when the user clicks the button. Connect it to a function trigger to start a process, or connect it to a function input to pass the button text to your logic.</td></tr></tbody></table>
+<table><thead><tr><th width="171.7139892578125">Property</th><th width="177.5711669921875">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>onClick</code></td><td><code>Event</code> / <code>String</code></td><td>Fires when the user clicks the button. Connect it to a Function trigger to start a process, or connect it to a Function input to pass the button text to your logic.</td></tr></tbody></table>
 
 ### Logic to widget
 
 This describes the properties you can control from your backend logic.
 
-<table><thead><tr><th width="140.42822265625">Property</th><th width="126.8575439453125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>disable</code></td><td><code>Boolean</code></td><td>When <code>true</code>, disables the button and prevents clicks.</td></tr><tr><td><code>enable</code></td><td><code>Boolean</code></td><td>When <code>true</code>, enables the button. Use this to re-enable a button that was set to <code>initially disabled</code> in its <a href="button.md#configuration">settings</a>.</td></tr><tr><td><code>toggle</code></td><td><code>Boolean</code></td><td>Toggles the button state between enabled and disabled based on a <code>true</code> or <code>false</code> input.</td></tr><tr><td><code>done</code></td><td><code>Any</code></td><td>Connect the output of a long-running function to this property to show a loading indicator on the button. The indicator disappears when the function provides an output.</td></tr></tbody></table>
+<table><thead><tr><th width="140.42822265625">Property</th><th width="126.8575439453125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>disable</code></td><td><code>Boolean</code></td><td>When <code>true</code>, disables the button and prevents clicks.</td></tr><tr><td><code>enable</code></td><td><code>Boolean</code></td><td>When <code>true</code>, enables the button. Use this to re-enable a button that was set to <code>initially disabled</code> in its <a href="button.md#configuration">settings</a>.</td></tr><tr><td><code>toggle</code></td><td><code>Boolean</code></td><td>Toggles the button state between enabled and disabled based on a <code>true</code> or <code>false</code> input.</td></tr><tr><td><code>done</code></td><td><code>Any</code></td><td>Connect the output of a long-running function to this property to show a loading indicator on the button. The indicator disappears when the Function provides an output.</td></tr></tbody></table>
 
 ## Configuration
 

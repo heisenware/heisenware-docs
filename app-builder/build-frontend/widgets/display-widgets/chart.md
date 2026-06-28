@@ -142,7 +142,7 @@ Assume you have two separate arrays of data, each containing objects with a `dat
 {% step %}
 #### Combine the arrays
 
-Use a [combine](../../../build-backend/function-explorer/utilities/data-processing.md#combine) function to merge your two separate data arrays into a single array.
+Use a [combine](../../../build-backend/function-explorer/utilities/data-processing.md#combine) Function to merge your two separate data arrays into a single array.
 {% endstep %}
 
 {% step %}

@@ -42,13 +42,13 @@ Each item in the `Status Mappings` array links a specific value to a color and a
 | **Color**      | The color the lamp will display when its input value matches.                                             | String (Color) | `color`      |
 | **Hover Text** | Optional text that will appear in a tooltip when a user hovers over the lamp.                             | String         | `hoverText`  |
 
-## Monitoring the status of a function
+## Monitoring the status of a Function
 
-The status lamp can also be used to monitor the status of a function in the Backend Builder.&#x20;
+The status lamp can also be used to monitor the status of a Function in the Backend Builder.&#x20;
 
 This is particularly useful when handling many integrations and data connections, to have an easy way to monitor whether these are active.
 
-To link a function status to the status lamp, simply drag the status indicator to the left of the function onto the widget.
+To link a Function status to the status lamp, simply drag the status indicator to the left of the Function onto the widget.
 
 <figure><img src="../../../../.gitbook/assets/Link_function_to_status.gif" alt=""><figcaption></figcaption></figure>
 

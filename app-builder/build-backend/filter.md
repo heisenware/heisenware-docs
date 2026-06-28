@@ -2,9 +2,9 @@
 
 The filter acts as a conditional gate for your flow, allowing you to branch logic based on specific conditions. It is the primary method for implementing `if/else` scenarios within Heisenware.
 
-Filters are part of the function extensions. To add a filter to your function:
+Filters are part of the Function extensions. To add a filter to your Function:
 
-1. Click the `+` icon on the right side of any function output, modifier, or existing filter.
+1. Click the `+` icon on the right side of any Function output, modifier, or existing filter.
 2. Select filter from the list.
 3. A new filter box will appear where you can write your JavaScript logic.
 
@@ -22,7 +22,7 @@ If the result is `true`, the data is passed on to the next modifier following th
 
 ### **Branching logic**
 
-The `true` and `false` states of the filter can be used to trigger separate logic paths. For example, you can use the `true` state to trigger another function.
+The `true` and `false` states of the filter can be used to trigger separate logic paths. For example, you can use the `true` state to trigger another Function.
 
 <figure><img src="../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
 

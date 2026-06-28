@@ -1,6 +1,6 @@
 # Extensions
 
-Extensions allow you to expand the platform's capabilities using **Docker** container technology. Fundamentally, an extension is a standard Docker image that the Heisenware platform loads, executes, and exposes as visual functions within the App Builder.
+Extensions allow you to expand the platform's capabilities using **Docker** container technology. Fundamentally, an extension is a standard Docker image that the Heisenware platform loads, executes, and exposes as visual Functions within the App Builder.
 
 There are two categories of extensions:
 

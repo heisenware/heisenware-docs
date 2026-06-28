@@ -11,7 +11,7 @@ description: Dec 21, 2023
 * Added “Artificial Intelligence” Agent, providing a conversational chat interface and an initial RAG AI implementation
 * Largely extended App Builders’s linkage highlighting. Highlighting in general works in all directions and across backend and frontend. Input items can now receive data from multiple (and even mixed) sources.
 * Data updates are now visible via animated item logos of the corresponding executors.
-* Low-Code functions can be commented
+* Low-Code Functions can be commented
 * Better UX support for large input objects
 * Automatic full-app snapshotting (backup) for each new deployed version
 

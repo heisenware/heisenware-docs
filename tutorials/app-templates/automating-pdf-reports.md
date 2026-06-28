@@ -19,9 +19,9 @@ Once you have the PDF, you have two options:
 
 ## Step 1: Create the Database Table
 
-First, we need a place to store the submitted reports. We'll use the `defineTable` function to create a table in the internal PostgreSQL database.
+First, we need a place to store the submitted reports. We'll use the `defineTable` Function to create a table in the internal PostgreSQL database.
 
-In the Backend Builder, place the `defineTable` function on the canvas and configure its inputs as shown below.
+In the Backend Builder, place the `defineTable` Function on the canvas and configure its inputs as shown below.
 
 ```yaml
 #name
@@ -38,7 +38,7 @@ signature: text
 The 'id', 'createdAt', and 'updatedAt' fields are added automatically.
 {% endhint %}
 
-After configuring the function, you must trigger it once to execute the logic and create the table in your database.
+After configuring the Function, you must trigger it once to execute the logic and create the table in your database.
 
 <figure><img src="../../.gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
 
@@ -76,7 +76,7 @@ Prepare the Signature Data
 
 The `Signature` widget outputs a raw Base64 string, but our database expects an object. We need to format it correctly.
 
-* Drag a [Memory function](/broken/pages/sQCEwgV7THJdwOrrJ2fB) onto the canvas and connect the output of the Signature widget to its input.
+* Drag a [Memory Function](/broken/pages/sQCEwgV7THJdwOrrJ2fB) onto the canvas and connect the output of the Signature widget to its input.
 * Add a [JavaScript Modifier](/broken/pages/i9IfQGI7JsZoIlPbpDlt) after the `Memory`. Use the following expression in it. This wraps the signature string in an object with the key `signature`, matching our database column.
 
 ```javascript
@@ -94,7 +94,7 @@ Now we'll merge the main form data with our newly created signature object.
 * Drag the [`mergeObjects`](../../app-builder/build-backend/function-explorer/utilities/data-processing.md#merging-objects) function onto the canvas.
 * Connect the Form widget to the first input of `mergeObjects`.
 * Connect the signature modifier to the second input of `mergeObjects`.
-* Connect both inputs to the trigger of `mergeObjects` to trigger the function `on input update`.
+* Connect both inputs to the trigger of `mergeObjects` to trigger the Function `on input update`.
 
 <figure><img src="../../.gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -102,10 +102,10 @@ Now we'll merge the main form data with our newly created signature object.
 {% step %}
 Save to the Database & Trigger the Flow
 
-* Drag the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow) function onto the canvas.
+* Drag the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow) Function onto the canvas.
 * Set its `table` input to `acceptanceReports`.
-* Connect the output of the `mergeObjects` function to the `data` input of `addRow`.
-* Finally, connect the Submit Button to the trigger of the `addRow` functions trigger. This makes the button start the entire save process.
+* Connect the output of the `mergeObjects` Function to the `data` input of `addRow`.
+* Finally, connect the Submit Button to the trigger of the `addRow` Functions trigger. This makes the button start the entire save process.
 
 <figure><img src="../../.gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -114,7 +114,7 @@ Save to the Database & Trigger the Flow
 Clear the Form After Submission:
 
 * To provide a good user experience, we'll clear the form after a successful submission.
-* Connect the output of the `addRow` function to the Form widget.
+* Connect the output of the `addRow` Function to the Form widget.
 * Set the command to `call clear`. This will empty the form for the next entry after the data has been saved.
 
 <figure><img src="../../.gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
@@ -163,15 +163,15 @@ Now, return to the Backend Builder to connect the template to your existing logi
 
 {% stepper %}
 {% step %}
-From the Function Explorer, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` function onto the canvas.
+From the Function Explorer, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` Function onto the canvas.
 {% endstep %}
 
 {% step %}
-Connect the output of the `mergeObjects` function (from Step 2) to the `Values` input of `fillTemplate`. This provides the data for the placeholders.
+Connect the output of the `mergeObjects` Function (from Step 2) to the `Values` input of `fillTemplate`. This provides the data for the placeholders.
 {% endstep %}
 
 {% step %}
-Connect the output of the `addRow` function to the trigger of the `fillTemplate` function. This ensures the PDF is only generated _after_ the data has been successfully saved to the database.
+Connect the output of the `addRow` Function to the trigger of the `fillTemplate` Function. This ensures the PDF is only generated _after_ the data has been successfully saved to the database.
 {% endstep %}
 {% endstepper %}
 
@@ -181,13 +181,13 @@ Our flow is now complete up to the point of generating the PDF. The final step w
 
 ## Step 4: Send the Report via Email
 
-The final step in our workflow is to automatically email the generated PDF report. We will use the `send` function from the [internal mailer](../../app-builder/build-backend/function-explorer/connectors/email.md) and configure it to send an email automatically whenever a new report is created.
+The final step in our workflow is to automatically email the generated PDF report. We will use the `send` Function from the [internal mailer](../../app-builder/build-backend/function-explorer/connectors/email.md) and configure it to send an email automatically whenever a new report is created.
 
 Return to the Backend Builder to add the final piece of logic to your flow.
 
 {% stepper %}
 {% step %}
-From the Function Explorer, find your internal mailer instance and drag its `send` function onto the canvas.
+From the Function Explorer, find your internal mailer instance and drag its `send` Function onto the canvas.
 {% endstep %}
 
 {% step %}
@@ -206,9 +206,9 @@ A new report has been submitted for review. Please see attached PDF.
 {% step %}
 Format the Attachment Data
 
-The `send` function's `attachment` input requires a specific object format. We can create this directly on the `fillTemplate` function's output using a built-in Modifier.
+The `send` Function's `attachment` input requires a specific object format. We can create this directly on the `fillTemplate` Function's output using a built-in Modifier.
 
-* Add a JSONata Modifier to the `fillTemplate` function.
+* Add a JSONata Modifier to the `fillTemplate` Function.
 * In the Modifier's settings, enter the following JSONata expression. This wraps the raw Base64 output (`$`) with a filename and encoding:
 
 ```
@@ -223,13 +223,13 @@ The `send` function's `attachment` input requires a specific object format. We c
 {% step %}
 Connect the PDF and Set the Trigger
 
-* Connect the Modifier (from the `fillTemplate` function) to the `attachment` input of the `send` function.
-* Now, connect the attachment input to the trigger of the `send` function.
+* Connect the Modifier (from the `fillTemplate` Function) to the `attachment` input of the `send` Function.
+* Now, connect the attachment input to the trigger of the `send` Function.
 * Set the trigger to `on input change`.
 {% endstep %}
 {% endstepper %}
 
-This creates a simple and powerful data-driven workflow. Whenever a new PDF is generated by the `fillTemplate` function, its output is passed to the `attachment` input, and this change automatically triggers the `send` function.
+This creates a simple and powerful data-driven workflow. Whenever a new PDF is generated by the `fillTemplate` Function, its output is passed to the `attachment` input, and this change automatically triggers the `send` Function.
 
 <figure><img src="../../.gitbook/assets/image (83).png" alt=""><figcaption></figcaption></figure>
 

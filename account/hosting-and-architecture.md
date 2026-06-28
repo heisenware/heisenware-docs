@@ -36,7 +36,7 @@ We offer our Docker-based agent for all relevant architectures (amd64, arm64, ar
 
 ### Code Adapters (Custom Extensions)
 
-While standard agents ship with pre-made code for industrial protocols, Code Adapters allow you to wrap your custom source code and expose it as visual building blocks ([functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of it as a Heisenware-specific wrapper for your algorithms.
+While standard agents ship with pre-made code for industrial protocols, Code Adapters allow you to wrap your custom source code and expose it as visual building blocks ([Functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of it as a Heisenware-specific wrapper for your algorithms.
 
 Like the agents, Code Adapters are available as both a native application and a containerized version (which we call [Custom Extensions](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-extensions) inside the platform).
 
