@@ -15,14 +15,14 @@ All Functions follow the same anatomy. Each part of it is represented by a color
 
 There are four main types of Functions, defined by how they handle context (state).
 
-<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static Functions</strong></td><td><p>Standalone utilities that process data without needing context.</p><p></p><p><em>(e.g., <code>mergeObjects</code>, <code>mapRange</code>, <code>echo</code>)</em></p></td></tr><tr><td><strong>Member Functions</strong></td><td>Actions linked to a specific Instance you have created. They use the unique connection settings stored in that instance.<br><br>(e.g., <code>read</code>, <code>write</code>, <code>publish</code>)</td></tr><tr><td><strong>Constructor Functions</strong></td><td><p>Are called <em><code>create</code></em> and used to configure and initialize a new instance.<br></p><p><em>(<code>create</code>)</em></p></td></tr><tr><td><strong>Destructor Functions</strong></td><td>Are called <em><code>delete</code></em> and used to remove an instance and free up system resources.</td></tr></tbody></table>
+<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static Functions</strong></td><td><p>Standalone utilities that process data without needing context.</p><p><em>(e.g., <code>mergeObjects</code>, <code>mapRange</code>, <code>echo</code>)</em></p></td></tr><tr><td><strong>Member Functions</strong></td><td>Actions linked to a specific Instance you have created. They use the unique connection settings stored in that instance.<br><br>(e.g., <code>read</code>, <code>write</code>, <code>publish</code>)</td></tr><tr><td><strong>Constructor Functions</strong></td><td>Are called <em><code>create</code></em> and used to configure and initialize a new instance.</td></tr><tr><td><strong>Destructor Functions</strong></td><td>Are called <em><code>delete</code></em> and used to remove an instance and free up system resources.</td></tr></tbody></table>
 
 {% hint style="info" %}
 **💡 Concept example: The OPC UA Client Class**
 
 * **Class:** The generic blueprint for OPC UA Client.
-* **`create` Function:** You use the `create` Function to configure a connection (IP, port, security), resulting in an instance named `myMachine`.
-* **Member Functions:** You use the `connect` and `read` Functions belonging to `myMachine` to get data. It works because it knows which server to talk to based on the instance.
+* **Create a specific instance:** You use the `create` Function to configure a connection (IP, port, security), resulting in an instance named `myMachine`.
+* **Member functions:** You use the `connect` and `read` Functions belonging to `myMachine` to get data. It works because it knows which server to talk to based on the instance.
 {% endhint %}
 
 ## Working with Functions on the canvas
@@ -34,7 +34,7 @@ There are four main types of Functions, defined by how they handle context (stat
 * **Configure**: Click a Function to open its configuration. You can use YAML for static data or binding for dynamic data from other Functions or UI widgets.
 * Documentation: Click the info icon (<i class="fa-info">:info:</i>) next to a Function's name to open its specific documentation panel.
 * **Comment**: Right-click a Function and select comment to add context for your team.
-* **Delete**: Select the Function and press delete on your keyboard or click the trash icon (<i class="fa-trash">:trash:</i>).&#x20;
+* **Delete**: Select the Function and press delete on your keyboard or click the trash icon (<i class="fa-trash">:trash:</i>).
 
 {% hint style="warning" %}
 Deleting a Function permanently removes its configurations and all connected wires. This action cannot be undone.
@@ -158,7 +158,7 @@ The Trigger determines _when_ a Function runs.
 
 * **Data-driven**: Link an Output, Modifier, or Filter to a Trigger to run `on change`, `on update`, or `on true`.
 * **UI events**: Link a widget event (like a [button](../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the Trigger.
-* **App lifecycle**: Right-click the Trigger to set execution  `on App Start` (once) or `on App Stop`.
+* **App lifecycle**: Right-click the Trigger to set execution `on App Start` (once) or `on App Stop`.
 * **Periodically**: Right-click the Trigger to set a recurring execution interval.
 * **Page load**: Drag a [page](../build-frontend/page-explorer.md) onto the Trigger to execute the Function when that page loads.
 * **Manual (during development)**: Click the Trigger icon inside the Trigger to execute the Function during development.
@@ -259,7 +259,7 @@ This reveals the "path" to the underlying code, consisting of up to three boxes:
 You can edit this address to your liking. If you switch back to the regular (short) view, your changes are kept.
 
 {% hint style="info" %}
-**💡 Use Case: Swapping Agents**&#x20;
+**💡 Use Case: Swapping Agents**
 
 This feature is essential when moving logic between environments (e.g., from a test device to a production machine).
 

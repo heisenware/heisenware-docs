@@ -37,14 +37,14 @@ To build your logic, you interact with [Functions](functions.md) directly on the
 
 You create flows by drawing wires between Functions. Click on the output of a Function (or its [Modifier](modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
 
-* **Output to trigger**: Drag a connection to the Trigger of the next Function if you want the completion of the first Function to execute the second without handing over data.
-* **Output to input**: Drag a connection to an input port to hand over specific data.
-* **Reactive inputs**: An input on the second Function can be internally connected to its own trigger. This ensures the Function executes automatically whenever that input value is updated or changed.
+* **Output to Trigger**: Drag a connection to the Trigger of the next Function if you want the completion of the first Function to execute the second without handing over data.
+* **Output to Input**: Drag a connection to an input port to hand over specific data.
+* **Reactive Inputs**: An input on the second Function can be internally connected to its own trigger. This ensures the Function executes automatically whenever that input value is updated or changed.
 
 #### Logic behavior
 
 * **Event-driven**: Once a Function completes, it passes data through the wire to immediately start the next step.
-* **Flexible routing**: One output can drive multiple Functions, and Inputs  can receive data from many sources across the canvas or UI.
+* **Flexible routing**: One output can drive multiple Functions, and Inputs can receive data from many sources across the canvas or UI.
 
 {% hint style="success" %}
 #### **Session** isolation
