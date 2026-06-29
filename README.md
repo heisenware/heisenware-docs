@@ -31,7 +31,7 @@ Heisenware is not just a drag-and-drop interface. It is a visual programming env
 
 Standard no-code platforms often act as "black boxes" by abstracting complexity so heavily that you hit a wall when you need custom logic. Heisenware operates transparently.
 
-- **Visual, yet code-capable:** You build logic visually using the Flow builder, but you retain direct access to developer tools like JavaScript expressions for data transformation and YAML for configuration.
+- **Visual, yet code-capable:** You build logic visually using the Backend Builder, but you retain direct access to developer tools like JavaScript expressions for data transformation and YAML for configuration.
 - **No "no-code cliff"**: When pre-built Functions aren't enough, you don't hack workarounds. You extend the platform by wrapping your code (Node.js, Python, C++) into extensions that become native Functions.
 
 ### Object-oriented scalability
@@ -61,7 +61,7 @@ We solve the "OT vs. IT" network gap by treating local hardware as a first-class
 
 We eliminate the "glue code" typically needed to connect a frontend to a backend.
 
-- **Direct linking**: In the App Builder, you connect a backend Function's output directly to a frontend widget's property.
+- **Direct linking**: In the App Builder, you connect a backend Function's Output directly to a frontend widget's property.
 - **Reactive UI**: When backend data changes (e.g., a new sensor reading), the bound UI widget automatically re-renders to reflect the new state.
 
 <figure><img src=".gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
@@ -102,4 +102,4 @@ A quick-reference list of specific terms and concepts used across the Heisenware
 | **VRPC (Variadic Remote Procedure Call)** | The open-source, asynchronous communication protocol over MQTT that powers all distributed data exchange and remote function calls within the Heisenware ecosystem.                                                   |
 | **Widget**                                 | An interactive or display-oriented visual component (e.g., a chart, button, or form) placed in the Frontend Builder to construct the user interface.                                                                  |
 | **Workspace**                              | A dedicated sub-container within an Account used to securely isolate related apps, databases, files, and members from one another.                                                                                    |
-| **YAML**                                   | A human-readable data serialization language used extensively in the Backend Builder for quickly configuring static Function inputs and data structures.                                                              |
+| **YAML**                                   | A human-readable data serialization language used extensively in the Backend Builder for quickly configuring static Function Inputs and data structures.                                                              |

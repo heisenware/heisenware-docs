@@ -42,7 +42,7 @@ While the template is plug-and-play, understanding the underlying wiring is nece
 <figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
 * **Data population:** The data output of the [`getTableData`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#gettabledata) Function binds directly to the data property of the data grid widget to populate the UI.
-* **Data grid interactions:** Users interact exclusively with the data grid UI. The grid's native `onInsert`, `onUpdate`, and `onDelete` events bind directly to the inputs of the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow), [`updateRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#updaterow), and [`deleteRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#deleterow) Functions.
+* **Data grid interactions:** Users interact exclusively with the data grid UI. The grid's native `onInsert`, `onUpdate`, and `onDelete` events bind directly to the Inputs  of the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow), [`updateRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#updaterow), and [`deleteRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#deleterow) Functions.
 * **User feedback:** [Modifiers](../../app-builder/build-backend/modifier.md) trigger on the execution of the CRUD Functions and pass adjustable strings to a [toast widget](../../app-builder/build-frontend/widgets/display-widgets/toast.md) to display immediate confirmation or error messages to the operator.
 
 ## Reference Videos

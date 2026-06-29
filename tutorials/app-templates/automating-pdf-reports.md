@@ -21,7 +21,7 @@ Once you have the PDF, you have two options:
 
 First, we need a place to store the submitted reports. We'll use the `defineTable` Function to create a table in the internal PostgreSQL database.
 
-In the Backend Builder, place the `defineTable` Function on the canvas and configure its inputs as shown below.
+In the Backend Builder, place the `defineTable` Function on the canvas and configure its Inputs  as shown below.
 
 ```yaml
 #name
@@ -93,8 +93,8 @@ Now we'll merge the main form data with our newly created signature object.
 
 * Drag the [`mergeObjects`](../../app-builder/build-backend/function-explorer/utilities/data-processing.md#merging-objects) function onto the canvas.
 * Connect the Form widget to the first input of `mergeObjects`.
-* Connect the signature modifier to the second input of `mergeObjects`.
-* Connect both inputs to the trigger of `mergeObjects` to trigger the Function `on input update`.
+* Connect the signature Modifier to the second input of `mergeObjects`.
+* Connect both Inputs  to the Trigger of `mergeObjects` to trigger the Function `on input update`.
 
 <figure><img src="../../.gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -105,7 +105,7 @@ Save to the Database & Trigger the Flow
 * Drag the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow) Function onto the canvas.
 * Set its `table` input to `acceptanceReports`.
 * Connect the output of the `mergeObjects` Function to the `data` input of `addRow`.
-* Finally, connect the Submit Button to the trigger of the `addRow` Functions trigger. This makes the button start the entire save process.
+* Finally, connect the Submit Button to the Trigger of the `addRow` Functions trigger. This makes the button start the entire save process.
 
 <figure><img src="../../.gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -171,7 +171,7 @@ Connect the output of the `mergeObjects` Function (from Step 2) to the `Values` 
 {% endstep %}
 
 {% step %}
-Connect the output of the `addRow` Function to the trigger of the `fillTemplate` Function. This ensures the PDF is only generated _after_ the data has been successfully saved to the database.
+Connect the output of the `addRow` Function to the Trigger of the `fillTemplate` Function. This ensures the PDF is only generated _after_ the data has been successfully saved to the database.
 {% endstep %}
 {% endstepper %}
 
@@ -191,7 +191,7 @@ From the Function Explorer, find your internal mailer instance and drag its `sen
 {% endstep %}
 
 {% step %}
-Configure the static inputs for the email
+Configure the static Inputs  for the email
 
 ```yaml
 #address
@@ -206,7 +206,7 @@ A new report has been submitted for review. Please see attached PDF.
 {% step %}
 Format the Attachment Data
 
-The `send` Function's `attachment` input requires a specific object format. We can create this directly on the `fillTemplate` Function's output using a built-in Modifier.
+The `send` Function's `attachment` input requires a specific object format. We can create this directly on the `fillTemplate` Function's Output using a built-in Modifier.
 
 * Add a JSONata Modifier to the `fillTemplate` Function.
 * In the Modifier's settings, enter the following JSONata expression. This wraps the raw Base64 output (`$`) with a filename and encoding:
@@ -224,8 +224,8 @@ The `send` Function's `attachment` input requires a specific object format. We c
 Connect the PDF and Set the Trigger
 
 * Connect the Modifier (from the `fillTemplate` Function) to the `attachment` input of the `send` Function.
-* Now, connect the attachment input to the trigger of the `send` Function.
-* Set the trigger to `on input change`.
+* Now, connect the attachment input to the Trigger of the `send` Function.
+* Set the Trigger to `on input change`.
 {% endstep %}
 {% endstepper %}
 

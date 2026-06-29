@@ -19,16 +19,16 @@ Trigger widgets connect to your logic by linking an event (like a click) to a Fu
 
 You link widgets by dragging the logic to the UI:
 
-1. Drag a trigger from a Function and drop it onto the widget.
+1. Drag a Trigger from a Function and drop it onto the widget.
 2. A menu will appear on the Function block; pick the specific widget event, usually `onClick`, to complete the link. For buttons, there is only one property, so the selection is automatic.
 
 ### Two-way interaction
 
-* **To Function trigger**: Clicking the button starts the connected logic flow.
-* **From Function output / from modifier**: A Function sends data back to the button. For example, you can link a Function's output to a button's `done` property to show a loading animation inside the button until that part of your flow is executed.
+* **To Function Trigger**: Clicking the button starts the connected logic flow.
+* **From Function Output / from modifier**: A Function sends data back to the button. For example, you can link a Function's Output to a button's `done` property to show a loading animation inside the button until that part of your flow is executed.
 
 {% hint style="success" %}
 **Auto-triggering on input**
 
-&#x20;You can trigger a Function automatically when a user enters data. To do this, connect the Function input with the Function trigger. In such a case, no extra event (like a click) by the user.
+&#x20;You can trigger a Function automatically when a user enters data. To do this, connect the Function Input with the Function Trigger. In such a case, no extra event (like a click) by the user.
 {% endhint %}

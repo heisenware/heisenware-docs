@@ -37,7 +37,7 @@ The [Frontend Builder](build-frontend/) is a canvas on which you design your UI 
 
 The core strength of the App Builder is the ability to connect virtually any element to any other via data binding. This creates a bidirectional flow between the app's interface and the logic.
 
-* **Connect anything to everything**: You can link a button to a Function trigger, bind an input field to a Function's input parameters, or use a Function's output to visualize data, toggle a button's state, or update a gauge's value.
+* **Connect anything to everything**: You can link a button to a Function Trigger, bind an input field to a Function's Input parameters, or use a Function's Output to visualize data, toggle a button's state, or update a gauge's value.
 * **Property and event binding**: Beyond just data values, you can bind to widget properties like scale, visibility, or color, allowing the backend logic to drive the UI's appearance dynamically.
 * **Reactive synchronization**: The system eliminates manual glue code. The interface and logic remain in sync in real time as data flows through the application.
 

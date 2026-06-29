@@ -31,8 +31,8 @@ You link widgets by dragging the logic to the UI:
 
 ### Interaction types
 
-* **To Function input**: The widget sends user-entered data (e.g., `formData`) to a Function.
-* **From Function output / from modifier:** A Function sends data back to the widget to update its state. For example, you can link a Function's output to a form's `clear` property. When the flow reaches that output, the form is instantly reset.
+* **To Function Input**: The widget sends user-entered data (e.g., `formData`) to a Function.
+* **From Function Output / from modifier:** A Function sends data back to the widget to update its state. For example, you can link a Function's Output to a form's `clear` property. When the flow reaches that output, the form is instantly reset.
 
 ## Automatic data isolation (multi-tenancy)
 

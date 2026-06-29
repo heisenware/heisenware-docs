@@ -16,7 +16,7 @@ Connect the widget to your application's logic by dragging the corresponding ite
 
 ### Output
 
-_(Drag an output or modifier element onto the widget)_
+_(Drag an output or Modifier element onto the widget)_
 
 | **Property** | **Type**            | **Description**                                                                                                             |
 | ------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------- |

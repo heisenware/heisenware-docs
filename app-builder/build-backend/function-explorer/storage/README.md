@@ -13,7 +13,7 @@ For structured data like user profiles, orders, or inventory, we use the [relati
 
 For high-frequency data like sensor readings or machine telemetry, we use the [time series database](timeseries-database.md) class.
 
-* **Internal (managed)**: Use the [recorder](../../recorder.md) right in your flow to store millions of data points with zero configuration and the `internal-influxdb` to read and query that data.
+* **Internal (managed)**: Use the [Recorder](../../recorder.md) right in your flow to store millions of data points with zero configuration and the `internal-influxdb` to read and query that data.
 * **External (connect)**: Use the `create` Function to point the logic toward your own InfluxDB server.
 
 ## In-memory storage

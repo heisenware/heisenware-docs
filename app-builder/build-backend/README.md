@@ -22,7 +22,7 @@ To build and manage this logic, you use three primary tools located in the App B
 
 The Backend Builder is your visual engineering environment. It provides an endless canvas where you build application backend logic by dragging, dropping, and connecting Functions.
 
-Unlike traditional programming that relies on variables, the Backend Builder uses a data-driven architecture. Data flows directly from one Function's output to another's input, creating reactive, event-driven sequences (flows).
+Unlike traditional programming that relies on variables, the Backend Builder uses a data-driven architecture. Data flows directly from one Function's Output to another's input, creating reactive, event-driven sequences (flows).
 
 To build your logic, you interact with [Functions](functions.md) directly on the canvas using the following core actions:
 
@@ -35,16 +35,16 @@ To build your logic, you interact with [Functions](functions.md) directly on the
 
 ### Sequencing Functions
 
-You create flows by drawing wires between Functions. Click on the output of a Function (or its [modifier](modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
+You create flows by drawing wires between Functions. Click on the output of a Function (or its [Modifier](modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
 
-* **Output to trigger**: Drag a connection to the trigger box of the next Function if you want the completion of the first Function to execute the second without handing over data.
+* **Output to trigger**: Drag a connection to the Trigger of the next Function if you want the completion of the first Function to execute the second without handing over data.
 * **Output to input**: Drag a connection to an input port to hand over specific data.
 * **Reactive inputs**: An input on the second Function can be internally connected to its own trigger. This ensures the Function executes automatically whenever that input value is updated or changed.
 
 #### Logic behavior
 
 * **Event-driven**: Once a Function completes, it passes data through the wire to immediately start the next step.
-* **Flexible routing**: One output can drive multiple Functions, and inputs can receive data from many sources across the canvas or UI.
+* **Flexible routing**: One output can drive multiple Functions, and Inputs  can receive data from many sources across the canvas or UI.
 
 {% hint style="success" %}
 #### **Session** isolation
@@ -115,7 +115,7 @@ For users who prefer keyboard navigation, you can fine-tune your movement:
 
 #### Default Modifier Type
 
-Every time you add a [modifier](modifier.md) to a Function, Heisenware defaults to a specific type. You can choose which one appears first:
+Every time you add a [Modifier](modifier.md) to a Function, Heisenware defaults to a specific type. You can choose which one appears first:
 
 * **JSONata**: Ideal for data transformation and querying.
 * **JavaScript**: Use this if you prefer writing standard JS logic for your modifiers.

@@ -29,5 +29,5 @@ Use images for machine photos, company logos, or other visual elements.
 * **Place**: Drag the file from the File Explorer and drop it onto the UI canvas.
 
 {% hint style="success" %}
-**Dynamic use**: Beyond the UI, uploaded images can also be used as inputs for your backend logic.
+**Dynamic use**: Beyond the UI, uploaded images can also be used as Inputs  for your backend logic.
 {% endhint %}

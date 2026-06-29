@@ -23,7 +23,7 @@ _Drag an input element onto the widget_
 
 ### Output
 
-_Drag an output or modifier element onto the widget_
+_Drag an output or Modifier element onto the widget_
 
 | Property        | Type                | Description                                                                                                                                                                  |
 | --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

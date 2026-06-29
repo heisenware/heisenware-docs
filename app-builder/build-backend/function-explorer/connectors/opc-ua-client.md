@@ -65,7 +65,7 @@ Running `createCertificates` generates a standard folder structure named `pki`. 
 Establishing a secure certificate-based connection is the most common point of failure in OPC UA. An error almost always means there is a broken link in the chain of trust. This guide covers the most common pitfalls.
 
 {% hint style="warning" %}
-If you created an instance before and failed to connect using an un-secure connection, you have to re-create this instance in order to switch to a secure connection now (as security settings are part of the `create` function). For that right-click the existing instance (should be green if alive) and click `REMOVE` . It should turn yellow (indicating it is not yet available). Now, changes to the `create` function input will be applied when you trigger it again.
+If you created an instance before and failed to connect using an un-secure connection, you have to re-create this instance in order to switch to a secure connection now (as security settings are part of the `create` function). For that right-click the existing instance (should be green if alive) and click `REMOVE` . It should turn yellow (indicating it is not yet available). Now, changes to the `create` Function Input will be applied when you trigger it again.
 {% endhint %}
 
 #### Pitfall 1: Server Rejects the Client Certificate

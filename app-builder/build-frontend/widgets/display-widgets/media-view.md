@@ -27,7 +27,7 @@ The `data` property is highly flexible and can interpret several formats to rend
 * **Media Server Path:** A direct string path to a file on the media server (e.g., `/shared/runtime-files/image.png`).
 * **URL:** A direct public URL to an image or PDF file.
 
-<figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-27 at 15.26.29.png" alt=""><figcaption><p>A Function with an image connected to the Media View. The modifier retrieves the content of the output array.</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-27 at 15.26.29.png" alt=""><figcaption><p>A Function with an image connected to the Media View. The Modifier retrieves the content of the output array.</p></figcaption></figure>
 
 <figure><img src="../../../../.gitbook/assets/image (431).png" alt=""><figcaption><p>Dragging a file from the media server into memory and using it as is also works</p></figcaption></figure>
 

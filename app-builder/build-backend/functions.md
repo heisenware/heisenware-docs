@@ -15,7 +15,7 @@ All Functions follow the same anatomy. Each part of it is represented by a color
 
 There are four main types of Functions, defined by how they handle context (state).
 
-<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static Functions</strong></td><td><p>Standalone utilities that process data without needing context.</p><p></p><p><em>(e.g., <code>mergeObjects</code>, <code>mapRange</code>, <code>echo</code>)</em></p></td></tr><tr><td><strong>Member Functions</strong></td><td>Actions linked to a specific Instance you have created. They use the unique connection settings stored in that instance.<br><br>(e.g., <code>read</code>, <code>write</code>, <code>publish</code>)</td></tr><tr><td><strong>`create` Function</strong></td><td><p>Constructors used to configure and initialize a new instance.<br></p><p><em>(<code>create</code>)</em></p></td></tr><tr><td><strong>Delete Function</strong></td><td>Destructors used to remove an instance and free up system resources.<br><br>(<em><code>delete</code></em>)</td></tr></tbody></table>
+<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static Functions</strong></td><td><p>Standalone utilities that process data without needing context.</p><p></p><p><em>(e.g., <code>mergeObjects</code>, <code>mapRange</code>, <code>echo</code>)</em></p></td></tr><tr><td><strong>Member Functions</strong></td><td>Actions linked to a specific Instance you have created. They use the unique connection settings stored in that instance.<br><br>(e.g., <code>read</code>, <code>write</code>, <code>publish</code>)</td></tr><tr><td><strong>Constructor Functions</strong></td><td><p>Are called <em><code>create</code></em> and used to configure and initialize a new instance.<br></p><p><em>(<code>create</code>)</em></p></td></tr><tr><td><strong>Destructor Functions</strong></td><td>Are called <em><code>delete</code></em> and used to remove an instance and free up system resources.</td></tr></tbody></table>
 
 {% hint style="info" %}
 **💡 Concept example: The OPC UA Client Class**
@@ -29,8 +29,8 @@ There are four main types of Functions, defined by how they handle context (stat
 
 * **Add**: Drag a Function from the [Function Explorer](https://docs.heisenware.com/app-builder/build-backend/functions-library) in the left panel onto the canvas.
 * **Sequence**: Create a flow by drawing a wire.
-  * **To input**: Passes data (arguments) to the next function.
-  * **To trigger**: Uses the completion of one Function to start the next (no data transfer).
+  * **To Input**: Passes data (arguments) to the next function.
+  * **To Trigger**: Uses the completion of one Function to start the next (no data transfer).
 * **Configure**: Click a Function to open its configuration. You can use YAML for static data or binding for dynamic data from other Functions or UI widgets.
 * Documentation: Click the info icon (<i class="fa-info">:info:</i>) next to a Function's name to open its specific documentation panel.
 * **Comment**: Right-click a Function and select comment to add context for your team.
@@ -54,9 +54,9 @@ Each Function has a colored status indicator next to its name. Hover over the in
 
 Inputs determine how a Function behaves. You can provide data via three sources:
 
-1. **Static data**: Fixed values typed directly into the input box (configured via YAML) or set via a web form (opened with a click on the blue arrow icon inside the input box).
-2. **Dynamic logic**: Data passed from the output, [modifier](modifier.md), or [filter](filter.md) of a previous Function.
-3. **UI binding**: Live data from a [widget](../build-frontend/widgets/) (e.g., a text field value).
+1. **Static data**: Fixed values typed directly into the Function Input (configured via YAML) or set via a web form (opened with a click on the blue arrow icon inside the Function Input).
+2. **Dynamic logic**: Data passed from the Output, [Modifier](modifier.md), or [Filter](filter.md) of a previous Function.
+3. **UI binding**: Live data from a [Widget](../build-frontend/widgets/) (e.g., a text field value).
 
 <figure><img src="../../.gitbook/assets/randminteger_function.png" alt=""><figcaption><p>Function with object input in YAML format</p></figcaption></figure>
 
@@ -141,27 +141,27 @@ Essential for large blocks of text, code, or templates.
 </details>
 
 {% hint style="info" %}
-Right-click an input box to switch between YAML and HTML view, or to set an input as a Secret (masking the value).
+Right-click an Function Input to switch between YAML and HTML view, or to set an input as a Secret (masking the value).
 {% endhint %}
 
 ### Special inputs: Callbacks
 
-Functions with a `on` prefix (e.g., `onMessage`) use callback inputs. These listen for external events (like an incoming MQTT message) and provide that data via a specific output nested inside the input box.
+Functions with a `on` prefix (e.g., `onMessage`) use callbacks. These listen for external events (like an incoming MQTT message) and provide that data via a specific output nested inside the Function Input.
 
 <figure><img src="../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A Function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
 
 ## Triggers & execution logic
 
-The trigger determines _when_ a Function runs.
+The Trigger determines _when_ a Function runs.
 
 ### Trigger sources
 
-* **Data-driven**: Link an output, modifier, or filter to a trigger to run `on hange`, `on pdate`, or `on true`.
-* **UI events**: Link a widget event (like a [button](../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the trigger.
-* **App lifecycle**: Right-click the trigger box to set execution  `on App Start` (once) or `on App Stop`.
-* **Periodically**: Right-click the trigger box to set a recurring execution interval.
-* **Page load**: Drag a [page](../build-frontend/page-explorer.md) onto the trigger box to execute the Function when that page loads.
-* **Manual (during development)**: Click the trigger icon inside the trigger box to execute the Function during development.
+* **Data-driven**: Link an Output, Modifier, or Filter to a Trigger to run `on change`, `on update`, or `on true`.
+* **UI events**: Link a widget event (like a [button](../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the Trigger.
+* **App lifecycle**: Right-click the Trigger to set execution  `on App Start` (once) or `on App Stop`.
+* **Periodically**: Right-click the Trigger to set a recurring execution interval.
+* **Page load**: Drag a [page](../build-frontend/page-explorer.md) onto the Trigger to execute the Function when that page loads.
+* **Manual (during development)**: Click the Trigger icon inside the Trigger to execute the Function during development.
 
 <figure><img src="../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a Function</p></figcaption></figure>
 
@@ -171,7 +171,7 @@ The trigger determines _when_ a Function runs.
 
 To process an array item-by-item (like a `for` loop):
 
-1. Right-click the trigger.
+1. Right-click the Trigger.
 2. Select `Process one by one`.
 3. Choose the input containing the array. The trigger will change to a dotted line, indicating it will run once for every item in the list.
 
@@ -181,7 +181,7 @@ To process an array item-by-item (like a `for` loop):
 
 A common use case for sequential processing is merging a single element into each sub-array of a larger array.
 
-The image below illustrates a `combine` Function where the trigger is configured to Process One By One on its first input (`On arg 1`). As a result, the Function executes for each sub-array, and the singular element from the second input is merged into both.
+The image below illustrates a `combine` Function where the Trigger is configured to Process One By One on its first input (`On arg 1`). As a result, the Function executes for each sub-array, and the singular element from the second input is merged into both.
 
 <figure><img src="../../.gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
 
@@ -220,7 +220,7 @@ You can link an output directly to the frontend to drive the user interface:
 
 ## Function extensions
 
-Extensions are tools attached directly to a Function's output. They allow you to [modify](modifier.md), [filter](filter.md), [record](recorder.md), or [handle errors](error-handler.md) on the fly without adding separate Function blocks.
+Extensions are tools attached directly to a Function's Output. They allow you to [modify](modifier.md), [Filter](filter.md), [record](recorder.md), or [handle errors](error-handler.md) on the fly without adding separate Function blocks.
 
 <div align="center"><figure><img src="../../.gitbook/assets/function_extentions.png" alt=""><figcaption><p>One function with three extensions</p></figcaption></figure></div>
 
@@ -236,8 +236,8 @@ Extensions are tools attached directly to a Function's output. They allow you to
 
 Functions communicate bidirectionally with the frontend widgets via data binding.
 
-* **Input binding**: Link a widget property (e.g., `formData`) to a Function input.
-* **Trigger binding**: Link a user action (e.g., `on Button click`) to a Function trigger.
+* **Input binding**: Link a widget property (e.g., `formData`) to a Function Input.
+* **Trigger binding**: Link a user action (e.g., `on Button click`) to a Function Trigger.
 * **Output binding**: Link a Function result to a widget property (e.g., `data`) to update the UI.
 
 ## Advanced addressing

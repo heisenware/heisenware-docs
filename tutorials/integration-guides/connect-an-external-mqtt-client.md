@@ -51,7 +51,7 @@ Your Heisenware tenant includes a default internal MQTT client.
 
 To process the data, we recommend connecting the event handler to a [memory](https://docs.heisenware.com/app-builder/backend/functionality/utilities/data-processing#memory) Function.
 
-* The memory makes the incoming data available as a regular Function output.
+* The memory makes the incoming data available as a regular Function Output.
 * From here, you can modify, store, forward, or visualize the data as needed.
 
 <figure><img src="../../.gitbook/assets/image (501).png" alt=""><figcaption></figcaption></figure>
@@ -73,7 +73,7 @@ Use the [`publishJson`](../../app-builder/build-backend/function-explorer/connec
 You can manually fill the message input box or use dynamic data.
 
 {% hint style="info" %}
-The [Data Simulation](../../app-builder/build-backend/function-explorer/utilities/data-simulation.md) class is a great way to create dynamic data for testing. You can prepare this simulated data using a [modifier](/broken/pages/eybgxpp69PNrUW2fHZ4X#modifier) before publishing.
+The [Data Simulation](../../app-builder/build-backend/function-explorer/utilities/data-simulation.md) class is a great way to create dynamic data for testing. You can prepare this simulated data using a [Modifier](/broken/pages/eybgxpp69PNrUW2fHZ4X#modifier) before publishing.
 {% endhint %}
 {% endstep %}
 

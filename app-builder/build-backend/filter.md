@@ -1,38 +1,38 @@
 # Filter
 
-The filter acts as a conditional gate for your flow, allowing you to branch logic based on specific conditions. It is the primary method for implementing `if/else` scenarios within Heisenware.
+The Filter acts as a conditional gate for your flow, allowing you to branch logic based on specific conditions. It is the primary method for implementing `if/else` scenarios within Heisenware.
 
-Filters are part of the Function extensions. To add a filter to your Function:
+Filters are part of the Function extensions. To add a Filter to your Function:
 
-1. Click the `+` icon on the right side of any Function output, modifier, or existing filter.
-2. Select filter from the list.
-3. A new filter box will appear where you can write your JavaScript logic.
+1. Click the `+` icon on the right side of any Function Output, Modifier, or existing filter.
+2. Select Filter from the list.
+3. A new Filter box will appear where you can write your JavaScript logic.
 
 <figure><img src="../../.gitbook/assets/image (505).png" alt=""><figcaption></figcaption></figure>
 
 ## When to use
 
-A filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The input value from the preceding output is available as the reserved variable `x`.
+A Filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The input value from the preceding output is available as the reserved variable `x`.
 
 ### **Logical gate**
 
-If the result is `true`, the data is passed on to the next modifier following that filter; if `false`, the data flow is halted at this point.
+If the result is `true`, the data is passed on to the next Modifier following that filter; if `false`, the data flow is halted at this point.
 
 <div align="center"><figure><img src="../../.gitbook/assets/image (295).png" alt=""><figcaption></figcaption></figure></div>
 
 ### **Branching logic**
 
-The `true` and `false` states of the filter can be used to trigger separate logic paths. For example, you can use the `true` state to trigger another Function.
+The `true` and `false` states of the Filter can be used to trigger separate logic paths. For example, you can use the `true` state to trigger another Function.
 
 <figure><img src="../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
-A filter condition that evaluates to a "falsy" value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow. This is the only way to interrupt a flow and is essential when building complex backend logic.
+A Filter condition that evaluates to a "falsy" value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow. This is the only way to interrupt a flow and is essential when building complex backend logic.
 {% endhint %}
 
-## JS filter examples
+## JS Filter examples
 
-Unlike [modifiers](modifier.md), filters strictly require an expression that evaluates to a boolean state (`true` or `false`).
+Unlike [modifiers](modifier.md), Filters strictly require an expression that evaluates to a boolean state (`true` or `false`).
 
 ### Example 1: Threshold monitoring
 
@@ -99,7 +99,7 @@ Return of the filter: `false`
 
 ## Using AI for filters
 
-You can use AI chatbots like ChatGPT, Claude, or Gemini to generate complex filter logic. Since filters use standard JavaScript, you can provide the AI with the context of your data structure to get an immediate result.
+You can use AI chatbots like ChatGPT, Claude, or Gemini to generate complex Filter logic. Since Filters use standard JavaScript, you can provide the AI with the context of your data structure to get an immediate result.
 
 To optimize results, copy this article as context for the AI. Use the Copy button at the top of the page or the direct Open in ChatGPT or Open in Claude buttons located in the top navigation bar.
 
@@ -111,7 +111,7 @@ Copy and paste this prompt into your AI to ensure it understands the Heisenware 
 I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Filter" expression.
 
 Context:
-* Heisenware filters evaluate a JavaScript expression.
+* Heisenware Filters evaluate a JavaScript expression.
 * The expression must return true or false.
 * The input data is referenced as x.
 * I need a concise expression that halts the flow if a condition is not met.

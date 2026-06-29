@@ -45,14 +45,14 @@ The final memory Function, after taking a photo in test mode, must look like in 
 
 Find the [writeBufferToFile](../../app-builder/build-backend/function-explorer/connectors/file-i-o.md#writebuffertofile) Function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.&#x20;
 
-Connect the path modifier with the `filePath` input and the buffer modifier with the `buffer` input.
+Connect the path Modifier with the `filePath` input and the buffer Modifier with the `buffer` input.
 
 <figure><img src="../../.gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
-### Configure a trigger
+### Configure a Trigger
 
-Configure the writeBufferToFile Function trigger as needed. For example, you could use the `on input change` trigger.
+Configure the writeBufferToFile Function Trigger as needed. For example, you could use the `on input change` trigger.
 {% endstep %}
 {% endstepper %}

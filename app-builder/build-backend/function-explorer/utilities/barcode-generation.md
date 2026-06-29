@@ -56,4 +56,4 @@ rotate: R
 
 Output
 
-The function outputs a base64 encoded string representing the generated barcode image. For example: `iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACt...`
+The Function Outputs a base64 encoded string representing the generated barcode image. For example: `iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACt...`

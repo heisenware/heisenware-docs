@@ -486,7 +486,7 @@ Encodes a string into its base64 string representation.
 
 ### memory
 
-A function with an input and output only, and no trigger. The function outputs its input value upon any input update.
+A function with an input and output only, and no trigger. The Function Outputs its input value upon any input update.
 
 <figure><img src="../../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt=""><figcaption></figcaption></figure>
 

@@ -59,7 +59,7 @@ opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
 ns=2;i=10846
 ```
 
-8. Add a JSONata modifier to the Function and extract the value with:
+8. Add a JSONata Modifier to the Function and extract the value with:
 
 ```
 value.value
@@ -74,21 +74,21 @@ Alternatively to step 7 and 8, you can also use the [readVariableValue](../../ap
 ### Combine data points
 
 1. Drag and drop the combine Function on to the canvas.
-2. Connect the modifier of the `get` Function with argument 1 of the combine Function and the modifier of the readNode Function with argument 2 of the combine Function.
+2. Connect the Modifier of the `get` Function with argument 1 of the combine Function and the Modifier of the readNode Function with argument 2 of the combine Function.
 3. Trigger the combine Function
-4. Add a JSONata modifier to the Function and enter the sum Function:
+4. Add a JSONata Modifier to the Function and enter the sum Function:
 
 ```
 $sum($)
 ```
 
-5. Set the readNode trigger  and the `get` Function trigger to `every 10s`.
-6. Set the combine trigger to `on input change` by drag and drop of each of the Functions arguments (or just one of them) on the trigger.
+5. Set the readNode trigger  and the `get` Function Trigger to `every 10s`.
+6. Set the combine trigger to `on input change` by drag and drop of each of the Functions arguments (or just one of them) on the Trigger.
 7. Test your logic using the [test mode](/broken/pages/eFPI0X9VZcFlensbHWF5). Wait at least 10 seconds to see data.
 
 ### Record historic data
 
-1. Add a [recorder](your-first-heisenware-app.md#record-historic-data) to the modifier behind the combine Function.
+1. Add a [Recorder](your-first-heisenware-app.md#record-historic-data) to the Modifier behind the combine Function.
 2. Call the recorded data point `demo_data` or use any other name you like.&#x20;
 3. Start the test mode for a minute or so to record some data.
 
@@ -100,12 +100,12 @@ $sum($)
 2. Drag and drop the image onto the [Frontend Builder](../../app-builder/build-frontend/).
 3. Pick a [circular gauge](../../app-builder/build-frontend/widgets/display-widgets/circular-gauge.md) from the display widgets and click in the Frontend Builder to place it.
 4. Configure start and end value (0 to 500) and the color sections of the circular gauge.
-5. Connect the modifier of the combine Function to the circular gauge with drag and drop. Make sure to select the circular gauge first.
+5. Connect the Modifier of the combine Function to the circular gauge with drag and drop. Make sure to select the circular gauge first.
 6. Start the test mode and see the data coming.
 
 ### Visualize recorded data
 
-1. Click on the database icon of the recorder to auto generate the [InfluxDB `read` Function](/broken/pages/WbN12C0jrmgbmfoePmC2#read-function).
+1. Click on the database icon of the Recorder to auto generate the [InfluxDB `read` Function](/broken/pages/WbN12C0jrmgbmfoePmC2#read-function).
 2. Within the `read` Function, change the `tail` value to 10.&#x20;
 3. Trigger the `read` Function.
 4. Create a [new page](../../app-builder/build-frontend/page-explorer.md#add-and-delete) with right-click in the pages panel on the first page and a click on `New Page`.
@@ -115,7 +115,7 @@ $sum($)
 8. Connect the output of the `read` Function (array) to the chart with drag and drop. Make sure to select the circular gauge first.
 9. Resize and configure the chart.
 10. Add a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) and configure it.
-11. Connect `read` Function trigger and button.
+11. Connect `read` Function Trigger and button.
 12. Test your logic using the test mode.
 
 ### Adjust all screens

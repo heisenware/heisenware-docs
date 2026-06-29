@@ -60,5 +60,5 @@ You can turn any [button](widgets/trigger-widgets/button.md) or [icon](text-icon
 
 Page switching can also be triggered automatically by your backend logic.
 
-* **How to link**: Drag a page from the pages panel onto a function's output.
+* **How to link**: Drag a page from the pages panel onto a Function's Output.
 * **Use case**: If a function detects an error or a successful form submission, the backend can "push" the user to an error or success page automatically.

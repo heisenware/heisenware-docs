@@ -148,7 +148,7 @@ Use a [combine](../../../build-backend/function-explorer/utilities/data-processi
 {% step %}
 #### Transform with a modifier
 
-Add a JavaScript [modifier](/broken/pages/eybgxpp69PNrUW2fHZ4X#modifier) to the output of the combine function. Use the following code to merge the two datasets based on their timestamps. This script creates a new list of objects containing `date`, `value1` (from the first array), and `value2` (from the second array).
+Add a JavaScript [Modifier](/broken/pages/eybgxpp69PNrUW2fHZ4X#modifier) to the output of the combine function. Use the following code to merge the two datasets based on their timestamps. This script creates a new list of objects containing `date`, `value1` (from the first array), and `value2` (from the second array).
 
 ```js
 // 'x' represents the input array containing your two datasets
@@ -172,7 +172,7 @@ If your data uses different field names (e.g., `timestamp` instead of `date`), p
 
 #### The required data structure
 
-After the modifier, your data will look like the example below. Notice that some values are `null`. This is normal and happens when a timestamp exists in one dataset but not the other (e.g., the sensors recorded data at slightly different milliseconds).
+After the Modifier, your data will look like the example below. Notice that some values are `null`. This is normal and happens when a timestamp exists in one dataset but not the other (e.g., the sensors recorded data at slightly different milliseconds).
 
 ```json
 [
@@ -186,7 +186,7 @@ After the modifier, your data will look like the example below. Notice that some
 
 Once your data is transformed:
 
-1. Connect the modifier output to the Chart widget.
+1. Connect the Modifier output to the Chart widget.
 2. Enable the "Ignore Empty Values" setting for Series 1. This ensures the chart skips over the `null` points instead of breaking the line.
 3. Add a Series 2, bind it to `value2`, and also enable "Ignore Empty Values".
 

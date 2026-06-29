@@ -10,7 +10,7 @@ Connect the widget to your application logic by dragging the corresponding items
 
 This describes the events the button sends to your backend logic.
 
-<table><thead><tr><th width="171.7139892578125">Property</th><th width="177.5711669921875">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>onClick</code></td><td><code>Event</code> / <code>String</code></td><td>Fires when the user clicks the button. Connect it to a Function trigger to start a process, or connect it to a Function input to pass the button text to your logic.</td></tr></tbody></table>
+<table><thead><tr><th width="171.7139892578125">Property</th><th width="177.5711669921875">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>onClick</code></td><td><code>Event</code> / <code>String</code></td><td>Fires when the user clicks the button. Connect it to a Function Trigger to start a process, or connect it to a Function Input to pass the button text to your logic.</td></tr></tbody></table>
 
 ### Logic to widget
 

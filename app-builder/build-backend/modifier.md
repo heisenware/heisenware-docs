@@ -1,14 +1,14 @@
 # Modifier
 
-Modifiers transform data on the fly within a flow. They allow you to apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before passing it to the next Function, a database, the frontend, or a subsequent extension (such as another modifier or filter).
+Modifiers transform data on the fly within a flow. They allow you to apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before passing it to the next Function, a database, the frontend, or a subsequent extension (such as another Modifier or filter).
 
-Modifiers are part of the Function extensions. To add a modifier to your Function:
+Modifiers are part of the Function extensions. To add a Modifier to your Function:
 
-1. Click the `+` icon on the right side of any Function output, filter, or existing modifier.
-2. Select modifier from the list.
-3. A new modifier box will appear where you can write your JavaScript logic.
+1. Click the `+` icon on the right side of any Function Output, filter, or existing modifier.
+2. Select Modifier from the list.
+3. A new Modifier box will appear where you can write your JavaScript logic.
 
-A modifier uses either JSONata or a JavaScript expression. You can switch between types by right-clicking the modifier and selecting JSONata or Expression and adjust the default inside the [App Builder settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6).
+A Modifier uses either JSONata or a JavaScript expression. You can switch between types by right-clicking the Modifier and selecting JSONata or Expression and adjust the default inside the [App Builder settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6).
 
 <figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
@@ -21,7 +21,7 @@ A modifier uses either JSONata or a JavaScript expression. You can switch betwee
 JSONata is a query and transformation language designed for JSON data. It is the preferred method for structural changes, filtering, and simple math. For a complete guide, refer to the [official JSONata documentation](https://docs.jsonata.org/overview.html).
 
 * **Reference**: Use the `$` sign to refer to the value from the preceding output.
-* **Implicit arguments**: In Heisenware, JSONata modifiers automatically process the incoming data if the parentheses are left empty. For example, `$uppercase()` is equivalent to `$uppercase($)`.
+* **Implicit arguments**: In Heisenware, JSONata Modifiers automatically process the incoming data if the parentheses are left empty. For example, `$uppercase()` is equivalent to `$uppercase($)`.
 
 ### JSONata examples
 
@@ -148,7 +148,7 @@ Return of the modifier:
 
 ## **JavaScript expressions**
 
-This modifier allows you to use any standard JavaScript expression that evaluates to a new value. Reference the reserved variable `x` to access the preceding data output. For more information, refer to the MDN documentation for [JavaScript Expressions and Operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators).
+This Modifier allows you to use any standard JavaScript expression that evaluates to a new value. Reference the reserved variable `x` to access the preceding data output. For more information, refer to the MDN documentation for [JavaScript Expressions and Operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators).
 
 ### JavaScript expression examples
 
@@ -222,7 +222,7 @@ Return of the modifier:
 
 <summary><strong>Example 3: Multi-step logic (IIFE)</strong></summary>
 
-While modifiers only support expressions, you can use the Immediately Invoked Function Expression (IIFE) pattern for more elaborate logic involving temporary variables.
+While Modifiers only support expressions, you can use the Immediately Invoked Function Expression (IIFE) pattern for more elaborate logic involving temporary variables.
 
 Data:
 
@@ -334,7 +334,7 @@ Heisenware provides built-in support for the [Luxon](https://moment.github.io/lu
 `Duration` and `Interval` are only available from version v91
 {% endhint %}
 
-Here are some common modifier patterns:
+Here are some common Modifier patterns:
 
 #### 1. Calculating Future/Past Dates (Addition & Subtraction)
 
@@ -550,7 +550,7 @@ Alternatively to using the full article, copy and paste this prompt into your AI
 I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Modifier" to transform data on the fly between Functions.
 
 Context:
-* Heisenware uses modifiers to transform data in real-time as it flows through a node-based system.
+* Heisenware uses Modifiers to transform data in real-time as it flows through a node-based system.
 * If I use JSONata, the input data is referenced as $.
 * In JSONata, Functions can use empty parentheses () to automatically process the incoming data.
 * If I use JavaScript, the input data is referenced as x.
