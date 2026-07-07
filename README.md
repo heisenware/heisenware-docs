@@ -1,3 +1,27 @@
+---
+description: >-
+  Overview of the Heisenware platform, architecture, core concepts, and key
+  terminology.
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Heisenware Product Docs
 
 **Heisenware is an industrial application platform.** You build software visually and deploy it to production without writing boilerplate or setting up infrastructure. Underneath sits a full distributed architecture, so your apps scale from a single machine to a whole plant. When you need to go deeper, you keep direct access to the code and configuration.
@@ -8,14 +32,14 @@ Heisenware is divided into three core components that cover the entire applicati
 
 <table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td><strong>APP MANAGER</strong></td><td>Admin dashboard to create and manage apps, members, and integrations.</td><td><a href="https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/app-manager">App Manager</a></td><td><a href=".gitbook/assets/App Manager in Browser preview.png">App Manager in Browser preview.png</a></td></tr><tr><td><strong>APP BUILDER</strong></td><td>Visual programming interface to build and test custom software applications.</td><td><a href="https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/app-builder">App Builder</a></td><td><a href=".gitbook/assets/658shots_so.png">658shots_so.png</a></td></tr><tr><td><strong>PRODUCTION APPS</strong></td><td>The live, end-user-facing applications created and run with Heisenware.</td><td><a href="https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/production-apps">Production Apps</a></td><td><a href=".gitbook/assets/tracking.jpg">tracking.jpg</a></td></tr></tbody></table>
 
-### Hosting & architecture
+## Hosting and architecture
 
-The [Heisenware architecture](account/hosting-and-architecture.md) consists of the central platform and optional agents. Each account (tenant) runs in isolation and supports two deployment modes:
+The [Heisenware architecture](account/hosting-and-architecture.md) consists of the central platform and optional Agents. Each account (tenant) runs in isolation and supports two deployment modes:
 
-* **Cloud deployment**: The recommended way to use Heisenware. Your apps are hosted by us on Hetzner Online GmbH in Germany.
-* **On-premises deployment**: You run the entire platform as a Docker application on your own local servers or private cloud.
+* **Cloud deployment**: The recommended way to use Heisenware. Your apps are hosted by us on [Hetzner](https://www.hetzner.com/) in Germany.
+* **On-premises deployment**: You run the entire platform as a Docker application on your own local servers or private cloud.&#x20;
 
-Regardless of the deployment mode, you can use [Agents](app-builder/build-backend/function-explorer/agents/) to bridge separated networks. For example, if you host the platform in a corporate data center (IT) and need to access machines in a secured shopfloor network (OT), an agent acts as the secure tunnel.
+Regardless of the deployment mode, you can use Agents to bridge separated networks. For example, if you host the platform in a corporate data center (IT) and need to access machines in a secured shopfloor network (OT), an Agent acts as the secure tunnel.
 
 ### See it in action
 
