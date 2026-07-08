@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Heisenware Docs](README.md)
+* [Welcome](README.md)
 * [Release Notes](release-notes/README.md)
   * [v92 — Hotel](release-notes/v92-hotel.md)
   * [v91 — Worth It](release-notes/v91-worth-it.md)
