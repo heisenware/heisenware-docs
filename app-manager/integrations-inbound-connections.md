@@ -8,7 +8,7 @@ The Integrations panel provides a centralized overview of all inbound data conne
 
 Heisenware supports three primary methods for connecting external data:
 
-### Heisenware Native or Docker Agent
+### Native or Docker Agent
 
 [Agents](../app-builder/build-backend/function-explorer/agents/) are used for securely bridging data from private networks (on-premises servers, local databases) to the cloud.
 
