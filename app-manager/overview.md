@@ -1,10 +1,8 @@
 # Overview
 
-The App Manager is the administrative center of your Heisenware account. It's where you create new Apps, monitor account usage, and manage your Members.
+The App Manager is the administrative center of your Heisenware account. It's where you create new Apps, monitor Account usage, and manage your Members.
 
 <figure><img src="../.gitbook/assets/image (447).png" alt=""><figcaption></figcaption></figure>
-
-## Key features
 
 The App Manager is divided into four primary functional areas:
 
