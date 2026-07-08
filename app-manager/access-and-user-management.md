@@ -5,7 +5,7 @@ Heisenware provides granular control over who can access your Apps. Each App can
 {% hint style="info" %}
 #### Users vs. Members
 
-This article covers the Users of your Apps. For managing your Members, the people who build and manage your Apps, see [Members](members.md).
+This article covers the end-users of your Apps. For managing your Members, the people who build and manage your Apps, see [Members](members.md).
 {% endhint %}
 
 ## Access modes
