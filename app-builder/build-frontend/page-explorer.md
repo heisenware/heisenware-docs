@@ -4,25 +4,25 @@ Pages are the individual screens that organize your App's functionality. Heisenw
 
 Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
 
-<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p>Page explorer</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
 ## Managing your App structure
 
 ### Page types
 
 * **Pages**: Your top-level screens. By default, they appear in the App's main navigation menu.
-* **Subpages**: Nested under a Page. They do not appear in the main menu automatically and are typically used for detail views, settings, or pop-up style content that you link to manually.
+* **Subpages**: Nested under a Page. They do not appear in the main menu automatically, and are typically used for detail views, settings, or pop-up style content that you link to manually.
 
 ### Creating and deleting Pages
 
 * **Add/duplicate**: Right-click any Page in the panel to create a new Page, a Subpage, or to duplicate an existing Page.
 * **Delete**: Right-click any Page and click delete. The first Page in your App cannot be deleted.
 
+<figure><img src="../../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
 ### Reordering Pages
 
 Click a Page's number and drag it into a new position. The new order is reflected in the App's navigation menu.
-
-<figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 ### Per-Page settings
 
@@ -41,14 +41,15 @@ The App menu is the navigation Users see across all Pages and Subpages. To confi
 ### Menu types
 
 * **None**: No navigation menu.
-* **Bottom tabs**: A fixed tab bar at the bottom of the screen.
-* **Menu drawer**: A classic burger menu. You can set its position (top or left) and its behavior (push or overlap).
-* **Top bar**: Displays only the `App Bar Title` at the top with no menu Icons.
-* **Top bar and bottom tabs**: Combines both for a standard mobile App feel.
+* **Top Bar**: A bar at the top showing the `App Bar Title` and menu Icons.
+* **Top Bar and Bottom Tabs**: Combines a top bar with a fixed tab bar at the bottom, for a standard mobile App feel.
+* **Bottom Tabs Only**: A fixed tab bar at the bottom of the screen.
+* **Expandable Menu Drawer**: A classic burger menu that opens and closes.
+* **Fixed Left Menu**: A permanent side menu on the left.
 
 ### Per-screen menu type
 
-You can choose a different menu type for each activated screen size. For example, phones can use bottom tabs while a large monitor uses a burger menu. Switch to the screen size you want to configure in the Frontend Builder, then set the menu type in the App menu settings.
+Enable **Different navigation menus per screen** in the App menu settings to give each activated screen size its own menu type. Fixed Left Menu is often a good choice for large screens, while Bottom Tabs Only or Expandable Menu Drawer works well on smaller screens. Switch to the screen size you want to configure in the Frontend Builder, then set the menu type.
 
 <figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
 
