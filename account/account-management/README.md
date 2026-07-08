@@ -26,6 +26,6 @@ The URL format above applies to Accounts hosted on the Heisenware cloud. If your
 
 To permanently delete your Heisenware Account and all associated data, submit a deletion request to our [support team](mailto:support@heisenware.com).
 
-### Managing Members
+## Managing Members
 
 Members are the developers and admins who build and manage Apps in your Account. To invite, manage, or remove Members, see the [Members](../../app-manager/members.md) article.
