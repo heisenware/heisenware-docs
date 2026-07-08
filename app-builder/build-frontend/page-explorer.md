@@ -4,7 +4,7 @@ Pages are the individual screens that organize your App's functionality. Heisenw
 
 Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
 
-<figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 211358.png" alt=""><figcaption></figcaption></figure>
 
 ## Managing your App structure
 
@@ -17,8 +17,6 @@ Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arr
 
 * **Add/duplicate**: Right-click any Page in the panel to create a new Page, a Subpage, or to duplicate an existing Page.
 * **Delete**: Right-click any Page and click delete. The first Page in your App cannot be deleted.
-
-<figure><img src="../../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
 
 ### Reordering Pages
 
@@ -47,11 +45,13 @@ The App menu is the navigation Users see across all Pages and Subpages. To confi
 * **Expandable Menu Drawer**: A classic burger menu that opens and closes.
 * **Fixed Left Menu**: A permanent side menu on the left.
 
+<figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 212421.png" alt=""><figcaption></figcaption></figure>
+
 ### Per-screen menu type
 
 Enable **Different navigation menus per screen** in the App menu settings to give each activated screen size its own menu type. Fixed Left Menu is often a good choice for large screens, while Bottom Tabs Only or Expandable Menu Drawer works well on smaller screens. Switch to the screen size you want to configure in the Frontend Builder, then set the menu type.
 
-<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (20).png" alt=""><figcaption><p>Different menu per screen</p></figcaption></figure>
 
 ## Other ways to switch Pages
 
@@ -68,6 +68,8 @@ Page switching can also be triggered automatically by your backend logic.
 
 * **How to link**: Drag a Page from the Page Explorer onto a Function's Output.
 * **Use case**: If a Function detects an error or a successful form submission, the backend pushes the User to an error or success Page automatically.
+
+<figure><img src="../../.gitbook/assets/image (32).png" alt=""><figcaption><p>Switch page link</p></figcaption></figure>
 
 {% hint style="info" %}
 If you need more vertical space on a Page, use the page height setting in the [Frontend Builder Toolbar](./#the-toolbar).

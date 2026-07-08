@@ -20,16 +20,16 @@ The Frontend Builder is where you turn backend logic into a functional, user-fac
 
 You can build Apps for any screen size and switch the preview during the build process to make sure your layout works on everything from a smartphone to a large desktop monitor.
 
-### The toolbar
+### The Toolbar
 
-The toolbar is your primary toolkit for composing the interface. It holds buttons and icons to:
+The Toolbar is your primary toolkit for composing the interface. It holds buttons and icons to:
 
 * Add a text box, icon, or Widget (input, trigger, display).
 * Switch the screen preview.
 * Extend page height (enable scrolling) and scale the view.
 * Edit or delete the selected Widget. These icons (pen and trash) are only active when a Widget or UI element is selected.
 
-<figure><img src="../../.gitbook/assets/image (515).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (27).png" alt=""><figcaption></figcaption></figure>
 
 ### Placing and moving elements
 
