@@ -1,4 +1,4 @@
-# Integrations
+# Inbound Integrations
 
 The Integrations panel provides a centralized overview of all inbound data connections from external systems. Every external system that sends data to Heisenware, whether it's an IoT sensor, a custom Python script, or a Heisenware Agent, is tracked here.
 
