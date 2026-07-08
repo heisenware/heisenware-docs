@@ -4,25 +4,25 @@ Pages are the individual screens that organize your App's functionality. Heisenw
 
 Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
 
-<figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p>Page explorer</p></figcaption></figure>
 
 ## Managing your App structure
 
 ### Page types
 
 * **Pages**: Your top-level screens. By default, they appear in the App's main navigation menu.
-* **Subpages**: Nested under a Page. They do not appear in the main menu automatically, and are typically used for detail views, settings, or pop-up style content that you link to manually.
+* **Subpages**: Nested under a Page. They do not appear in the main menu automatically and are typically used for detail views, settings, or pop-up style content that you link to manually.
 
 ### Creating and deleting Pages
 
 * **Add/duplicate**: Right-click any Page in the panel to create a new Page, a Subpage, or to duplicate an existing Page.
 * **Delete**: Right-click any Page and click delete. The first Page in your App cannot be deleted.
 
-<figure><img src="../../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
-
 ### Reordering Pages
 
 Click a Page's number and drag it into a new position. The new order is reflected in the App's navigation menu.
+
+<figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 ### Per-Page settings
 
