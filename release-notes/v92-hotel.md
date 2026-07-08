@@ -10,7 +10,7 @@ description: Unreleased (upcoming)
 
 * Final release of the new subflow feature
 * Explicit re-scanning of data connected to a widget
-* **Complete overhaul of the** [**Page Explorer**](../app-builder/build-frontend/page-explorer.md) **UX**. The App's navigation menu now lives inside the Page Explorer itself, next to the Pages that feed it. Each Page has its own quick settings (name, Icon, App Bar Title) via a small pencil, and menu types can now differ per screen size, so phones can use Bottom Tabs while a large monitor uses a Fixed Left Menu.
+* **Complete overhaul of the** [**Page Explorer**](../app-builder/build-frontend/page-explorer.md) **UX**. The App's navigation menu editor now lives inside the Page Explorer itself, next to the Pages that feed it. Each Page has its own quick settings (name, Icon, App Bar Title) via a small pencil, and menu types can now differ per screen size, so phones can use Bottom Tabs while a large monitor uses a Fixed Left Menu.
 * Extensions (Modifiers, Filters, Recorders and Error Handlers) are own nodes now
 * Implemented anti-node-collision (snowplow) feature in the Backend Builder
 * First version of an auto-formatting for backend logic
