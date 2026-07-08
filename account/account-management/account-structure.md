@@ -10,7 +10,7 @@ Within this Workspace, you can build an unlimited number of Apps. All Apps built
 
 * **Databases**: A [Timeseries Database](../../app-builder/build-backend/function-explorer/storage/timeseries-database.md) (InfluxDB) for high-frequency sensor data, and a [Relational Database](../../app-builder/build-backend/function-explorer/storage/relational-database.md) (PostgreSQL) for structured data.
 * [**File Explorer**](../../app-builder/build-backend/file-explorer.md): For storing and managing files used in your Apps.
-* [**Inbound Integrations**](../../app-manager/integrations-inbound-connections.md): Shared connections to external systems.
+* [**Inbound Integrations**](../../app-manager/inbound-integrations.md): Shared connections to external systems.
 
 This structure is illustrated below:
 
