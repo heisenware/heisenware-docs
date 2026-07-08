@@ -1,64 +1,73 @@
 # Page Explorer
 
-Pages are the individual views or screens that organize your application's functionality. Heisenware uses a hierarchy of pages and sub-pages to keep your app structured and easy to navigate.
+Pages are the individual screens that organize your App's functionality. Heisenware uses a hierarchy of Pages and Subpages to keep your App structured and easy to navigate. The Page Explorer is also where you configure the App's navigation menu.
 
-## Managing your app structure
-
-You can manage the structure of your app via the pages panel. Click on the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel to open it.
-
-### Page types
-
-* **Pages**: These are your top-level screens. By default, they are automatically added to the app’s main navigation menu.
-* **Subpages**: These are nested under a main page. They do not show up in the main navigation menu automatically. They are typically used for detail views, settings, or pop-up style content that you want to link to manually.
+Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
 
 <figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
-### Creating, deleting, and organizing pages
+## Managing your App structure
 
-* **Add/Duplicate**: Right-click any page in the panel to create a new page, a subpage, or to duplicate an existing page to save time.
-* **Delete**: Right-click any page in the panel and click delete. Note that the first page in your app cannot be deleted.
+### Page types
+
+* **Pages**: Your top-level screens. By default, they appear in the App's main navigation menu.
+* **Subpages**: Nested under a Page. They do not appear in the main menu automatically, and are typically used for detail views, settings, or pop-up style content that you link to manually.
+
+### Creating and deleting Pages
+
+* **Add/duplicate**: Right-click any Page in the panel to create a new Page, a Subpage, or to duplicate an existing Page.
+* **Delete**: Right-click any Page and click delete. The first Page in your App cannot be deleted.
 
 <figure><img src="../../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
 
-* **Change order**: To change the order of pages and how they appear in the app's main menu, refer to the [navigation settings](page-explorer.md#main-navigation-menu).
+### Reordering Pages
 
-{% hint style="info" %}
-If you need more vertical space, refer to page height settings as part of the [Frontend Builder toolbar](./#the-toolbar).
-{% endhint %}
+Click a Page's number and drag it into a new position. The new order is reflected in the App's navigation menu.
 
-## In-app navigation
+### Per-Page settings
 
-The app has a navigation menu that users can click. However, page switches can also be triggered by logic and clicks on widgets. By default, apps just have bottom tabs.
+Click the small pencil icon inside a Page's representation to open its settings. Here you can set:
 
-<figure><img src="../../.gitbook/assets/image (57).png" alt="Default navigation: Bottom tabs"><figcaption><p>Default navigation: Bottom tabs</p></figcaption></figure>
+* The Page name shown in the menu
+* The menu Icon
+* The `App Bar Title` shown at the top of the screen
 
-### Main navigation menu
+Subpages automatically inherit the `App Bar Title` from their parent Page, so Users always know which section they are in.
 
-This is the standard menu that appears across all pages and subpages.
+## App menu
 
-* **Configuration**: Click the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) in the top bar to open the settings.
-* **Menu types**: You can choose between:
-  * **None**: No navigation menu.
-  * **Bottom tabs**: (Default) A fixed tab bar at the bottom of the screen.
-  * **Menu drawer**: A classic "burger" menu. You can set its position (top or left) and its behavior (push or overlap).
-  * **Top bar**: Displays only the `App Bar Title` at the top with no menu icons.
-  * **Top bar and bottom tabs**: Combines both for a standard mobile app feel.
-* **The "App Bar" behavior**: Subpages automatically inherit the same `App Bar Title` as their parent page, ensuring the user knows which section they are currently in.
-* **Customization**: In the settings, you can hide specific pages from the menu, edit their display labels, or assign them unique icons.
-* **Page order**: Use the arrow icons (<i class="fa-arrow-up-arrow-down">:arrow-up-arrow-down:</i>) in the routes menu to reorder pages and define how they appear in the navigation.
+The App menu is the navigation Users see across all Pages and Subpages. To configure it, click the pencil icon next to the `PAGES` label at the top of the Page Explorer.
+
+### Menu types
+
+* **None**: No navigation menu.
+* **Bottom tabs**: A fixed tab bar at the bottom of the screen.
+* **Menu drawer**: A classic burger menu. You can set its position (top or left) and its behavior (push or overlap).
+* **Top bar**: Displays only the `App Bar Title` at the top with no menu Icons.
+* **Top bar and bottom tabs**: Combines both for a standard mobile App feel.
+
+### Per-screen menu type
+
+You can choose a different menu type for each activated screen size. For example, phones can use bottom tabs while a large monitor uses a burger menu. Switch to the screen size you want to configure in the Frontend Builder, then set the menu type in the App menu settings.
 
 <figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
 
+## Other ways to switch Pages
+
 ### Widget links
 
-You can turn any [button](widgets/trigger-widgets/button.md) or [icon](text-icons-and-images.md) into a page switch trigger.
+You can turn any [Button](widgets/trigger-widgets/button.md) or [Icon](text-icons-and-images.md) into a Page switch trigger.
 
-* **How to link**: Simply drag a page from the pages panel and drop it directly onto a button or icon on your UI canvas.
-* **Use case**: This is the primary way to let users open subpages (e.g., clicking a "Machine Details" button to open that specific detail view) or navigate in apps without a main menu.
+* **How to link**: Drag a Page from the Page Explorer and drop it directly onto a Button or Icon on your UI Canvas.
+* **Use case**: The primary way to let Users open Subpages (e.g., a "Machine Details" Button opening the corresponding detail view) or to navigate in Apps that have no main menu.
 
 ### Logic-driven navigation
 
 Page switching can also be triggered automatically by your backend logic.
 
-* **How to link**: Drag a page from the pages panel onto a Function's Output.
-* **Use case**: If a function detects an error or a successful form submission, the backend can "push" the user to an error or success page automatically.
+* **How to link**: Drag a Page from the Page Explorer onto a Function's Output.
+* **Use case**: If a Function detects an error or a successful form submission, the backend pushes the User to an error or success Page automatically.
+
+{% hint style="info" %}
+If you need more vertical space on a Page, use the page height setting in the [Frontend Builder Toolbar](./#the-toolbar).
+{% endhint %}
