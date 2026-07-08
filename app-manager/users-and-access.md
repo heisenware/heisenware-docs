@@ -29,18 +29,18 @@ While you can change these settings at any time, doing so will instantly affect 
 * **Details**: You must define a master password in the settings.
 * **Session**: Authentication is stored in the browser's local storage. Users are only prompted to re-enter the password if they use a different device, an incognito window, or clear their browser data.
 
-#### Individual registration
+### Individual registration
 
 * **Option**: _Users have to sign up_
 * **Details**: Heisenware manages user accounts automatically. Users can register with an email/password or their Google account.
 * **Session**: Like the master password, login state is persistent in local storage. Users remain logged in until they manually log out or clear their browser cache.
 
-#### Dual authentication
+### Dual authentication
 
 * **Option**: _Users have to sign up and provide a master password_
 * **Details**: Combines the previous two methods. Users must have a personal account and know the shared master password to gain entry.
 
-#### Private whitelist
+### Private whitelist
 
 * **Option**: _Only previously invited users can log in_
 * **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
@@ -56,15 +56,21 @@ The Users card within each App provides a real-time view of who is accessing you
 You can also manage Users from within an App using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md).
 {% endhint %}
 
-* **Anonymized Sessions**: For Apps using Public Access or Shared Security, the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
+### Anonymized sessions
+
+For Apps using Public Access or Shared Security, the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
 
 <figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
 
-* **Registered Profiles**: For Apps using Individual Registration or Dual Authentication, the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
+### Registered profiles
+
+For Apps using Individual Registration or Dual Authentication, the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
 
 <figure><img src="../.gitbook/assets/image (452).png" alt=""><figcaption></figcaption></figure>
 
-* **Deleting Users**: You can manually remove Users, both registered accounts and anonymous sessions, directly from the list by clicking the trash icon. Deleting a User removes their record and terminates their current session.
+### Deleting Users
+
+You can manually remove Users, both registered accounts and anonymous sessions, directly from the list by clicking the trash icon. Deleting a User removes their record and terminates their current session.
 
 {% hint style="info" %}
 ### Leveraging User data in logic
