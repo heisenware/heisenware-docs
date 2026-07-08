@@ -58,13 +58,13 @@ You can also manage Users from within an App using the [`users` class](../app-bu
 
 ### Anonymized sessions
 
-For Apps using Public Access or Shared Security, the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
+For Apps using [Public Access](#public-access) or [Shared Security](#shared-security), the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
 
 <figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
 
 ### Registered profiles
 
-For Apps using Individual Registration or Dual Authentication, the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
+For Apps using [Individual Registration](#individual-registration) or [Dual Authentication](#dual-authentication), the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
 
 <figure><img src="../.gitbook/assets/image (452).png" alt=""><figcaption></figcaption></figure>
 
