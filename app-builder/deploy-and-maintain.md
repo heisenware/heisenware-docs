@@ -1,4 +1,4 @@
-# Deploy and Maintain
+# Deploy & Maintain
 
 [Building logic](build-backend/) and [designing the UI](build-frontend/) is only half the battle. Heisenware also gives you tools to test your work in real time, save snapshots of your progress, and deploy your [Apps to production](../production-apps/production-apps-overview.md).
 
@@ -16,7 +16,7 @@ Before you deploy, use Test Mode to verify your logic and UI directly inside the
 
 A Tag is a snapshot of your App's entire state, including all backend logic, UI elements, and data bindings.
 
-<figure><img src="../.gitbook/assets/image (521).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (521).png" alt=""><figcaption><p>Tag icon in the App Builder</p></figcaption></figure>
 
 {% hint style="warning" %}
 #### What is not in a Tag?
