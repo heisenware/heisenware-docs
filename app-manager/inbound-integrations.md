@@ -72,4 +72,4 @@ To integrate your code, you must write a [Code Adapter](../account/hosting-and-a
 #### Technical implementation
 
 For details, examples, and adapter setup, visit our [VRPC developer section](../developers/vrpc/).
-{% endhint %}****
+{% endhint %}
