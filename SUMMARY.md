@@ -23,7 +23,7 @@
 ## App Manager
 
 * [Overview](app-manager/overview.md)
-* [Access and User Management](app-manager/access-and-user-management.md)
+* [Users and Access](app-manager/access-and-user-management.md)
 * [Inbound Integrations](app-manager/inbound-integrations.md)
 * [Members](app-manager/members.md)
 
