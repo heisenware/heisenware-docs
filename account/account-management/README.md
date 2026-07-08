@@ -17,7 +17,9 @@ A Heisenware Account is the top-level container for your organization's Members 
 2. Log in with your credentials.
 
 {% hint style="info" %}
-#### Note on self-hosting
+#### Note on URLs
+
+Heisenware can also be made available under your own domain (full white-label) on request. [Contact us](mailto:support@heisenware.com) to discuss.
 
 The URL format above applies to Accounts hosted on the Heisenware cloud. If your organization [self-hosts](../hosting-and-architecture.md#self-hosted-on-premises) its own instance of Heisenware, the login URL may be different. Contact your internal administrator for the correct address.
 {% endhint %}
