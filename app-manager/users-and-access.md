@@ -70,4 +70,13 @@ You can also manage Users from within an App using the [`users` class](../app-bu
 ### Leveraging User data in logic
 
 Once a User is authenticated, their information is automatically available in the Backend Builder via the `$USER` system variable. You can use this variable to personalize the UI (e.g., "Welcome, \[Name]"), filter database queries so Users only see their own data, or log exactly who performed a specific action in your backend.
+
+For example, if a table stores each row's owner in an `email` field, a `getTableData` Function can filter for the logged-in User's own rows:
+
+```yaml
+# name
+orders
+# options
+filter: ['email', '=', $USER]
+```
 {% endhint %}
