@@ -11,7 +11,7 @@ The App Manager is divided into four primary functional areas:
 * [**App Management**](overview.md#app-management): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your Users](access-and-user-management.md).
 * [**Dashboard**](overview.md#dashboard): A real-time summary of account-wide performance and User metrics.
 * [**Members**](members.md): The interface for inviting and managing your Members.
-* [**Integrations (Inbound Connections)**](integrations-inbound-connections.md): Monitoring and authorizing data from [Agents](../app-builder/build-backend/function-explorer/agents/README.md), MQTT, and VRPC clients.
+* [**Inbound Integrations**](inbound-integrations.md): Monitoring and authorizing data from [Agents](../app-builder/build-backend/function-explorer/agents/), MQTT, and [VRPC](../developers/vrpc/) clients.
 
 ## App management
 
