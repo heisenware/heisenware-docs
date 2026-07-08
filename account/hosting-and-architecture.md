@@ -1,18 +1,18 @@
-# Hosting & Architecture
+# Hosting and Architecture
 
-Heisenware is designed to be flexible. Whether you need a hassle-free cloud setup or strict data sovereignty on your servers, we support the deployment model that fits your IT strategy.
+Heisenware is designed to be flexible. Whether you need a hassle-free cloud setup or strict data sovereignty on your own servers, we support the deployment model that fits your IT strategy.
 
 ## Managed cloud (SaaS)
 
-This is the standard, recommended deployment for most customers. It allows you to focus entirely on building apps and optimizing processes, while we handle maintenance tasks like updates, security patching, and backups.
+This is the standard, recommended deployment for most customers. It lets you focus entirely on building Apps and optimizing processes, while we handle maintenance tasks like updates, security patching, and backups.
 
-* **Provider**: We rely on [Hetzner Online GmbH](https://www.hetzner.com/), a leading high-performance cloud provider.
+* **Provider**: We rely on [Hetzner](https://www.hetzner.com/), a leading high-performance cloud provider.
 * **Location**: All data and servers are hosted exclusively in Germany (EU).
 * **Compliance**: Fully GDPR (DSGVO) compliant.
 
 ### Cloud architecture
 
-In this scenario, all essential components of the platform run in the cloud. Once you build and deploy an app, it becomes accessible from any place on the planet that provides an internet connection. The apps themselves are Progressive web apps (PWAs) that run on any operating system and device without feeling different from "native" apps.
+In this scenario, all essential components of the platform run in the cloud. Once you build and deploy an App, it becomes accessible from anywhere with an internet connection. Apps themselves are Progressive Web Apps (PWAs) that run on any operating system and device without feeling different from native apps.
 
 <figure><img src="../.gitbook/assets/image (487).png" alt=""><figcaption><p>Simplified architecture of the Heisenware ecosystem when used as a cloud deployment.</p></figcaption></figure>
 
@@ -20,62 +20,62 @@ In this scenario, all essential components of the platform run in the cloud. Onc
 
 While the platform runs in the cloud, your machines usually reside in a local, protected network (OT). To bridge this gap securely, Heisenware uses Agents.
 
-The agent is a piece of software running on your local hardware that establishes a secure tunnel to the cloud platform. It allows you to utilize various industrial protocols (like S7, Modbus, OPC UA, MQTT) to connect your devices _from within_ your local network.
+An Agent is a piece of software running on your local hardware that establishes a secure tunnel to the cloud platform. It lets you use industrial protocols like S7, Modbus, OPC UA, and MQTT to connect your devices from within your local network.
 
 #### Native Agent
 
-The Native Agent is a single binary executable (Linux/MacOS) or a Windows `.exe` that can be started with one click. It must run on local hardware that can reach the device required to be connected.
+The Native Agent is a single binary executable (Linux/macOS) or a Windows `.exe` that can be started with one click. It must run on local hardware that can reach the device you want to connect.
 
-Security is baked in: When you download the agent from your Heisenware account, it is indeed freshly compiled (!) only for you, with your very personal set of credentials embedded directly into the binary. This means an agent downloaded by another Heisenware user is inherently incompatible with your account. [See here](../app-builder/build-backend/function-explorer/agents/#native-agent) to understand how to use the Native Agent.
+Security is built in. When you download the Agent from your Heisenware Account, it is compiled fresh, just for you, with your own credentials embedded directly into the binary. An Agent downloaded from a different Account will not work with yours. [See here](../app-builder/build-backend/function-explorer/agents/#native-agent) for details on using the Native Agent.
 
 #### Docker Agent
 
-This is much like the Native Agent but packed into a Docker container. Docker technology is especially useful for vendors that offer edge-connectivity hardware (such as Siemens, WAGO, Hilscher, Welotec, Weidmüller, etc.).
+This is much like the Native Agent but packed into a Docker container. Docker is especially useful for vendors that offer edge-connectivity hardware, such as Siemens, WAGO, Hilscher, Welotec, or Weidmüller.
 
-We offer our Docker-based agent for all relevant architectures (amd64, arm64, arm/v7). You can get started safely and quickly by providing the necessary credentials as environmental variables to the container. [See here](../app-builder/build-backend/function-explorer/agents/#docker-agent) for all the details.
+We offer our Docker-based Agent for all relevant architectures (amd64, arm64, arm/v7). Get started quickly by passing the necessary credentials as environment variables to the container. [See here](../app-builder/build-backend/function-explorer/agents/#docker-agent) for details.
 
 ### Code Adapters (Custom Extensions)
 
-While standard agents ship with pre-made code for industrial protocols, Code Adapters allow you to wrap your custom source code and expose it as visual building blocks ([Functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of it as a Heisenware-specific wrapper for your algorithms.
+While standard Agents ship with pre-made code for industrial protocols, Code Adapters let you wrap your own source code and expose it as visual building blocks ([Functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of it as a Heisenware-specific wrapper for your algorithms.
 
-Like the agents, Code Adapters are available as both a native application and a containerized version (which we call [Custom Extensions](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-extensions) inside the platform).
+Like Agents, Code Adapters are available as both a native application and a containerized version, which we call [Custom Extensions](../app-builder/build-backend/function-explorer/extensions/README.md#custom-extensions) inside the platform.
 
-#### **Native custom Code Adapter**
+#### Native Code Adapter
 
-The native Code Adapter allows you to integrate custom code running natively on your OS. It relies on programming language-specific versions of our powerful [VRPC library](https://docs.heisenware.com/developers/vrpc).
+The Native Code Adapter lets you integrate custom code running natively on your OS. It relies on programming language-specific versions of our [VRPC library](../developers/vrpc/).
 
-#### **Docker Code Adapter**
+#### Docker Code Adapter
 
-We provide a starter project that lets you build a Docker image containing your custom code. This Docker image is treated as a [Custom Extension](https://docs.heisenware.com/app-builder/build-backend/functionality/extensions#custom-made). Once built, you have two flexible options for where to execute the container:
+We provide a starter project that lets you build a Docker image containing your custom code. This Docker image is treated as a [Custom Extension](../app-builder/build-backend/function-explorer/extensions/README.md#custom-extensions) once built. From there, you have two options for where to run the container:
 
-1. **Inside the platform (Cloud)**: You load your image as an extension. The platform takes care of its lifecycle (hosting, restarting) and automatically persists files into the central `shared` folder. Your code effectively runs as part of the Heisenware cloud.
-2. **Outside the platform (Edge)**: This is useful for bridging a private/local network. You run the container on your hardware using environment variables to secure the connection. Your code can interact with local devices, but you can still control everything seamlessly from within the cloud platform.
+1. **Inside the platform (cloud)**: You load your image as an extension. The platform handles its lifecycle (hosting, restarting) and automatically persists files into the central `shared` folder. Your code effectively runs as part of the Heisenware cloud.
+2. **Outside the platform (edge)**: Useful for bridging a private or local network. You run the container on your own hardware, using environment variables to secure the connection. Your code can interact with local devices, while you still control everything from within the cloud platform.
 
-## Self-hosted / On-premise
+## Self-hosted (on-premises)
 
-For organizations with strict internal compliance requirements or "air-gapped" networks, Heisenware can be deployed directly on your infrastructure (private cloud or Industrial PC).
+For organizations with strict internal compliance requirements or air-gapped networks, Heisenware can be deployed directly on your infrastructure, whether that's a private cloud or an industrial PC.
 
-### On-premise architecture
+### On-premises architecture
 
-In an on-premise deployment, the entire platform runs on your local servers. It is essentially moving every cloud component one level down into your infrastructure.
+In an on-premises deployment, the entire platform runs on your local servers. It is essentially moving every cloud component one level down into your infrastructure.
 
-* **Direct connectivity**: The platform can directly connect to local devices without the need for agents.
-* **Network segmentation**: In large shop-floor setups with segmented networks, you can still use [Edge Agents](../app-builder/build-backend/function-explorer/agents/) (native or Docker) to securely bridge lower-level subnets.
+* **Direct connectivity**: The platform can connect directly to local devices, with no Agent required.
+* **Network segmentation**: In large shop-floor setups with segmented networks, you can still use [Agents](../app-builder/build-backend/function-explorer/agents/) (Native or Docker) to securely bridge lower-level subnets.
 
 <figure><img src="../.gitbook/assets/image (488).png" alt=""><figcaption></figcaption></figure>
 
-### Requirements & considerations
+### Requirements and considerations
 
-This option provides full control over data and infrastructure but comes with significant responsibility. It is designed for organizations with expert IT teams comfortable with:
+This option gives you full control over data and infrastructure, but comes with significant responsibility. It's designed for organizations with expert IT teams comfortable with:
 
-* Server and container orchestration (specifically Docker).
+* Server and container orchestration, specifically Docker.
 * Managing application resources, scaling, and database backups.
-* Implementing own network security (VPNs, firewalls).
+* Implementing their own network security (VPNs, firewalls).
 
 {% hint style="info" %}
-When self-hosting, you are the platform operator. Improper configuration can lead to data loss or security vulnerabilities. If your team does not have dedicated IT resources, we strongly recommend the Managed Cloud option.
+When self-hosting, you are the platform operator. Improper configuration can lead to data loss or security vulnerabilities. If your team doesn't have dedicated IT resources, we strongly recommend the Managed Cloud option.
 {% endhint %}
 
 #### Getting started
 
-If you have an Enterprise license and are ready to deploy, please refer to our [technical guide](../tutorials/on-premise-installation.md).
+If you have an Enterprise license and are ready to deploy, see our [technical guide](../tutorials/on-premise-installation.md).
