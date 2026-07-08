@@ -4,12 +4,14 @@ The App Manager is the administrative center of your Heisenware account. It's wh
 
 <figure><img src="../.gitbook/assets/image (447).png" alt=""><figcaption></figcaption></figure>
 
+## Key features
+
 The App Manager is divided into four primary functional areas:
 
 * [**App Management**](overview.md#app-management): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your Users](access-and-user-management.md).
 * [**Dashboard**](overview.md#dashboard): A real-time summary of account-wide performance and User metrics.
 * [**Members**](members.md): The interface for inviting and managing your Members.
-* [**Inbound Integrations**](inbound-integrations.md): Monitoring and authorizing data from [Agents](../app-builder/build-backend/function-explorer/agents/), MQTT, and [VRPC](../developers/vrpc/) clients.
+* [**Inbound Integrations**](integrations-inbound-connections.md): Monitoring and authorizing data from [Agents](../app-builder/build-backend/function-explorer/agents/README.md), MQTT, and VRPC clients.
 
 ## App management
 
@@ -29,7 +31,7 @@ Click the plus icon in the top bar to create a new App container.
 {% step %}
 #### Configure
 
-Enter a name and description, upload an icon, and define your initial [access and user management](access-and-user-management.md) settings.
+Enter a name and description, upload an icon, and define your initial [Users and Access](access-and-user-management.md) settings.
 
 <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -83,4 +85,4 @@ To take an App offline, use the Action Switch on the card to toggle between Run 
 
 ## Dashboard
 
-The Dashboard panel provides a real-time summary of your account's performance, including usage stats like total App views and unique Users across all Apps.
+The Dashboard panel provides a real-time summary of your Account's performance, including usage stats like total App views and unique Users across all Apps.
