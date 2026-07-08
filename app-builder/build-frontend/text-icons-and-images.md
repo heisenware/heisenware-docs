@@ -11,7 +11,7 @@ Use Text Boxes for titles, labels, and detailed instructions.
 
 <figure><img src="../../.gitbook/assets/image (518).png" alt=""><figcaption></figcaption></figure>
 
-## Icon
+## Icons
 
 Use Icons as visual cues or navigation shortcuts.
 
