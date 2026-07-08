@@ -4,7 +4,7 @@ Pages are the individual screens that organize your App's functionality. Heisenw
 
 Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
 
-<figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 211358.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 ## Managing your App structure
 
