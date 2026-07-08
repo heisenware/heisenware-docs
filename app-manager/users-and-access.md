@@ -5,7 +5,7 @@ Heisenware provides granular control over who can access your Apps. Each App can
 {% hint style="info" %}
 #### Users vs. Members
 
-This article covers the end-users of your Apps. For managing your Members, the people who build and manage your Apps, see [Members](members.md).
+This article covers the Users of your Apps. For managing your Members, the people who build and manage your Apps, see [Members](members.md).
 {% endhint %}
 
 ## Access modes
@@ -50,6 +50,12 @@ While you can change these settings at any time, doing so will instantly affect 
 
 The Users card within each App provides a real-time view of who is accessing your software.
 
+{% hint style="info" %}
+#### Managing Users programmatically
+
+You can also manage Users from within an App using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md).
+{% endhint %}
+
 * **Anonymized Sessions**: For Apps using Public Access or Shared Security, the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
 
 <figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
@@ -60,7 +66,7 @@ The Users card within each App provides a real-time view of who is accessing you
 
 * **Deleting Users**: You can manually remove Users, both registered accounts and anonymous sessions, directly from the list by clicking the trash icon. Deleting a User removes their record and terminates their current session.
 
-{% hint style="success" %}
+{% hint style="info" %}
 ### Leveraging User data in logic
 
 Once a User is authenticated, their information is automatically available in the Backend Builder via the `$USER` system variable. You can use this variable to personalize the UI (e.g., "Welcome, \[Name]"), filter database queries so Users only see their own data, or log exactly who performed a specific action in your backend.
