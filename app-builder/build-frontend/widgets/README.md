@@ -1,6 +1,6 @@
 # Widgets
 
-Widgets are the functional building blocks of your App's UI. While static elements provide context, widgets are what actually interact with your backend logic. They [display live data](display-widgets/), [capture user input](input-widgets/), and [trigger](trigger-widgets/) functions and flows.
+Widgets are the interactive building blocks of your App's UI. Static elements set the context; widgets do the work with your backend logic, [displaying live data](display-widgets/), [capturing user input](input-widgets/), and [triggering](trigger-widgets/) functions and flows.
 
 ## Configuration
 
@@ -23,12 +23,12 @@ Right-click any widget to open a menu for quick actions and data settings. Besid
 
 ## Data binding
 
-Widgets come to life when linked to the [Backend Builder](../../build-backend/). We call these connection points properties.
+A widget comes to life once you link it to the [Backend Builder](../../build-backend/) through its properties, the connection points that carry data in and out.
 
 ### How to link
 
 1. Select the widget in the [Frontend Builder](../../build-frontend/) (optional).
-2. Drag a part of a [function](../../build-backend/functions.md) (an input, trigger, output, or [modifier](../../build-backend/modifier.md)) and drop it onto the widget.
+2. Drag a [function](../../build-backend/functions.md) part (an input, trigger, or output) or a [modifier](../../build-backend/modifier.md) and drop it onto the widget.
 3. Pick a widget property appearing inside the function block.
 
 <figure><img src="../../../.gitbook/assets/Data Binding Basics.gif" alt=""><figcaption><p>Data binding basics</p></figcaption></figure>
