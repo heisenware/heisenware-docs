@@ -1,9 +1,9 @@
 # PDF Template Editor
 
-The PDF Template Editor provides a visual workflow for designing dynamic documents. You create a template by placing dynamic placeholders onto an uploaded PDF background.
+The PDF Template Editor gives you a visual workflow for designing dynamic documents. You build a template by placing dynamic placeholders onto an uploaded PDF background.
 
 {% hint style="info" %}
-The Template Editor works exclusively with the [PDF Templates class](../build-backend/function-explorer/utilities/pdf-templates.md). When you create a template, an instance is automatically generated within this class, containing the `fillTemplate` function required to populate your document with data.
+The editor works exclusively with the [PDF Templates class](../build-backend/function-explorer/utilities/pdf-templates.md). Each template you create becomes an instance in this class, carrying the `fillTemplate` function that populates your document with data.
 
 To see the complete process in action, follow our [step-by-step guide](../../tutorials/app-templates/automating-pdf-reports.md).
 {% endhint %}
@@ -26,7 +26,7 @@ Enter a unique name for your template and choose a standard page size (`A4`, `A5
 {% step %}
 #### Generate instance
 
-Click Create Template. This automatically generates the corresponding instance in your Function Explorer.
+Click Create Template. Heisenware generates the corresponding instance in your Function Explorer.
 {% endstep %}
 {% endstepper %}
 
@@ -56,14 +56,14 @@ Drag each page file from the File Explorer onto the corresponding blank page. Th
 {% step %}
 #### Organize
 
-Right-click a page to open the context menu. Here you can move pages up or down, or manage the layering (Bring to Front / Send to Back).
+Right-click a page to open the context menu, where you move pages up or down or manage the layering (Bring to Front / Send to Back).
 {% endstep %}
 {% endstepper %}
 
 {% hint style="danger" %}
 #### Deleting a page is permanent
 
-It removes the page, its background, and all placeholders on it. It is not currently possible to simply replace the background of an existing page.
+It removes the page, its background, and all placeholders on it. You cannot currently replace the background of an existing page.
 {% endhint %}
 
 ### Placing and configuring placeholders
@@ -100,13 +100,13 @@ The variable name you enter (e.g., `invoiceNumber`) must exactly match the key i
 
 ## Populating the template
 
-To bring your PDF to life, use the [`fillTemplate`](../build-backend/function-explorer/utilities/pdf-templates.md#filltemplate) function within your backend logic. This function is the engine: it takes a data object (like a JSON object from a database), merges the values into your visual placeholders, and outputs the finished PDF document. For detailed input and output specifications, see the [PDF Templates class documentation](../build-backend/function-explorer/utilities/pdf-templates.md).
+To bring your PDF to life, call the [`fillTemplate`](../build-backend/function-explorer/utilities/pdf-templates.md#filltemplate) function in your backend logic. It is the engine: it takes a data object (say, a JSON object from a database), merges the values into your placeholders, and outputs the finished PDF. For detailed input and output specifications, see the [PDF Templates class documentation](../build-backend/function-explorer/utilities/pdf-templates.md).
 
 To see these concepts in action, follow our step-by-step guide on [automating PDF reports](../../tutorials/app-templates/automating-pdf-reports.md).
 
 ## Deleting a template
 
-If you no longer need a PDF template, you can permanently remove it and its associated function:
+To permanently remove a PDF template and its associated function:
 
 1. Navigate to the [Function Explorer](../build-backend/function-explorer/).
 2. Open the PDF Templates class.
