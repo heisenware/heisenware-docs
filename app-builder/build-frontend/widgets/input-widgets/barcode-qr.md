@@ -2,7 +2,7 @@
 
 The barcode / QR widget uses the device's camera to scan and decode a wide variety of barcode formats, including QR codes and traditional product barcodes.
 
-When activated, it opens a full-screen camera view. Once a barcode is detected, the widget automatically captures its value and closes the scanner, providing a seamless experience for data entry and product identification tasks.
+It opens a full-screen camera view, then captures the decoded value and closes the scanner the moment it detects a barcode, keeping data entry and product identification fast.
 
 <figure><img src="../../../../.gitbook/assets/create_barcod_QR_looped.gif" alt=""><figcaption></figcaption></figure>
 
@@ -10,7 +10,7 @@ When activated, it opens a full-screen camera view. Once a barcode is detected, 
 
 ## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the [Backend Builder](../../../build-backend/).
+Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
 
 ### Input
 
@@ -28,7 +28,7 @@ Connect the widget to your application's logic by dragging the corresponding ite
 
 ### Settings
 
-The barcode scanner is launched by a button, whose appearance you customize with standard button properties. Set these in the widget's settings panel; some can also be driven dynamically through [data binding](./#configuration-and-data-binding). Common properties include:
+A button launches the barcode scanner. Customize its appearance with standard button properties, set in the widget's settings panel; some can also be driven dynamically through [data binding](./#configuration-and-data-binding). Common properties include:
 
 * **`scanMode`**: Whether to scan a single or multiple barcodes while the camera is active.
 * **`text`**: The text displayed on the button (e.g., "Scan Barcode").
