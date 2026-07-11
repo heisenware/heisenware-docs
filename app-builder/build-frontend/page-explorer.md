@@ -49,7 +49,7 @@ The App menu is the navigation users see across all pages and subpages. To confi
 
 ### Per-screen menu type
 
-Enable **Different navigation menus per screen** in the App menu settings to give each activated screen size its own menu type. Fixed left menu is often a good choice for large screens, while Bottom tabs only or Expandable menu drawer works well on smaller screens. Switch to the screen size you want to configure in the [Frontend Builder](./), then set the menu type.
+Enable **different navigation menus per screen** in the App menu settings to give each activated screen size its menu type. Fixed left menu is often a good choice for large screens, while Bottom tabs only or Expandable menu drawer works well on smaller screens. Switch to the screen size you want to configure in the [Frontend Builder](./), then set the menu type.
 
 <figure><img src="../../.gitbook/assets/image (20).png" alt=""><figcaption><p>Different menu per screen</p></figcaption></figure>
 

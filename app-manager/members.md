@@ -5,7 +5,7 @@ Members are the developers and admins who build and manage Apps in a Heisenware 
 {% hint style="info" %}
 #### Members vs. users
 
-Members build the Apps. Users are the people who use your published Apps. To manage permissions for your users, see [Users and access](access-and-user-management.md).
+Members build the Apps. Users are the people who use your published Apps. To manage permissions for your users, see [Users and access](users-and-access.md).
 {% endhint %}
 
 To manage members, navigate to the Members panel. Here you can:

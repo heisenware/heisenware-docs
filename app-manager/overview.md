@@ -31,7 +31,7 @@ Click the plus icon in the top bar to create a new App container.
 {% step %}
 #### Configure
 
-Enter a name and description, upload an icon, and define your initial [Users and access](access-and-user-management.md) settings.
+Enter a name and description, upload an icon, and define your initial [users and access](users-and-access.md) settings.
 
 <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}

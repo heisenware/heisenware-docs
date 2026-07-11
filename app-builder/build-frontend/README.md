@@ -1,4 +1,4 @@
-# Build Frontend
+# Build frontend
 
 The UI is what Users of your Apps see and interact with. It can range from simple data visualizations and dashboards to interactive Apps for user input, file management, and more.
 
@@ -58,7 +58,7 @@ Right-click any element to open a menu for quick layout actions and layer manage
 
 ### Screen preview and responsive behavior
 
-[Production Apps](../../production-apps/production-apps-overview.md) are inherently responsive and adapt automatically to different screen sizes. To control exactly how your App behaves on different hardware, use these tools in the toolbar:
+[Production Apps](https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/production-apps) are inherently responsive and adapt automatically to different screen sizes. To control exactly how your App behaves on different hardware, use these tools in the toolbar:
 
 * **Switching previews**: Click the screens icon (<i class="fa-laptop-mobile">:laptop-mobile:</i>) and then click a device icon to switch to the corresponding UI editor and adapt your layout.
 
