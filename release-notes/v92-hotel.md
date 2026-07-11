@@ -1,5 +1,5 @@
 ---
-description: Unreleased (upcoming)
+description: 12 July 2026
 ---
 
 # v92 — Hotel
