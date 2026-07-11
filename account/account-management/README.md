@@ -1,33 +1,29 @@
----
-description: Get to know Heisenware Accounts and their structure.
----
+# Account management
 
-# Account Management
+A Heisenware account is the top-level container for your organization's members and workspaces. All work happens within an account.
 
-A Heisenware Account is the top-level container for your organization's Members and Workspaces. All work happens within an Account.
+## Create a new account
 
-## Create a new Account
+1. Go to the [Heisenware sign-up page](https://heisenware.cloud/manager/authentication/sign-up).
+2. Follow the on-screen instructions to choose an account name and sign up with your email or Google account.
 
-1. Go to the [Heisenware Sign-up page](https://heisenware.cloud/manager/authentication/sign-up).
-2. Follow the on-screen instructions to choose an Account name and sign up with your email or Google account.
+## Log in to an existing account
 
-## Log in to an existing Account
-
-1. Navigate to your Account's unique URL, which follows the format: `[your-account-name].heisenware.cloud`
+1. Go to your account's unique URL, which follows the format `[your-account-name].heisenware.cloud`.
 2. Log in with your credentials.
 
 {% hint style="info" %}
 #### Note on URLs
 
-Heisenware can also be made available under your own domain (full white-label) on request. [Contact us](mailto:support@heisenware.com) to discuss.
+On request, we can also make Heisenware available under your own domain (full white-label). [Contact us](mailto:support@heisenware.com) to discuss.
 
-The URL format above applies to Accounts hosted on the Heisenware cloud. If your organization [self-hosts](../hosting-and-architecture.md#self-hosted-on-premises) its own instance of Heisenware, the login URL may be different. Contact your internal administrator for the correct address.
+The URL format above applies to accounts on the Heisenware cloud. If your organization [self-hosts](../hosting-and-architecture.md#self-hosted-on-premises) its own instance, the login URL may differ. Ask your internal administrator for the correct address.
 {% endhint %}
 
-## Deleting your Account
+## Deleting your account
 
-To permanently delete your Heisenware Account and all associated data, submit a deletion request to our [support team](mailto:support@heisenware.com).
+To permanently delete your Heisenware account and all associated data, send a deletion request to our [support team](mailto:support@heisenware.com).
 
-## Managing Members
+## Managing members
 
-Members are the developers and admins who build and manage Apps in your Account. To invite, manage, or remove Members, see the [Members](../../app-manager/members.md) article.
+Members are the developers and admins who build and manage Apps in your account. To invite, manage, or remove members, see the [Members](../../app-manager/members.md) article.
