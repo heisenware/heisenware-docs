@@ -59,14 +59,14 @@ Paste these credentials into your external client's configuration.
 
 ### Method 2: Smart onboarding
 
-The preferred, passwordless method. The external client initiates a request, which you simply approve within the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/build-backend/function-explorer/).
+The preferred, passwordless method. The external client initiates a request, which you simply approve within the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/build-backend/function-explorer/#smart-onboarding).
 
 ## Integrate custom code via VRPC
 
-To integrate your code, you must write a [Code Adapter](../account/hosting-and-architecture.md#custom-code-adapters) around your existing Functions, which can then be loaded as a Custom Extension.
+To integrate your code, you must write a [Code Adapter](../account/hosting-and-architecture.md#custom-code-adapters) around your existing functions, which can then be loaded as a Custom Extension.
 
-* **Supported Languages**: Arduino (ESP32), C++, Node.js, and Python.
-* **Use Cases**: Integrating legacy systems, running complex algorithms, or using specialized software libraries.
+* **Supported languages**: Arduino (ESP32), C++, Node.js, and Python.
+* **Use cases**: Integrating legacy systems, running complex algorithms, or using specialized software libraries.
 
 {% hint style="info" %}
 #### Technical implementation
