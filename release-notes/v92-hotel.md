@@ -18,7 +18,6 @@ description: 12 July 2026
 * **Event flow spotlight**: Added a visual spotlight effect to backend functions to clearly trace active event paths during live execution.
 * **Visual data truncation**: Implemented automatic visual data truncation for large data payloads to maintain optimal frontend UI responsiveness.
 * **Data Visualizer (beta)**: Introduced the Data Visualizer tool to let members inspect connected database tables and data entries directly without building an App.
-*
 * [**Timeline**](../app-builder/build-frontend/widgets/display-widgets/timeline.md) **widget**: Introduced a new timeline widget to display chronological data series.
 * [**Iframe**](../app-builder/build-frontend/widgets/display-widgets/iframe.md) **widget**: Introduced a new iframe widget to cleanly embed external web content.
 * [**Data list**](../app-builder/build-frontend/widgets/display-widgets/data-list.md) **spacing**: Added custom vertical spacing options to the data list widget configuration.
