@@ -1,36 +1,22 @@
+---
 description: >-
   Overview of the Heisenware platform, architecture, core concepts, and key
   terminology.
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: true
-  metadata:
-    visible: true
-  tags:
-    visible: true
-  actions:
-    visible: true
+---
 
 # Welcome
 
+## Welcome
+
 **Heisenware is an industrial application platform.** You build software visually and deploy it to production without writing boilerplate or setting up infrastructure. Underneath sits a full distributed architecture, so your Apps scale from a single machine to a whole plant. When you need to go deeper, you keep direct access to the code and configuration.
 
-## The platform at a glance
+### The platform at a glance
 
 Heisenware is divided into three core components that cover the entire application lifecycle:
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td><strong>App Manager</strong></td><td>Admin dashboard to create and manage Apps, members, and integrations.</td><td><a href="app-manager/overview.md">App Manager</a></td><td><a href=".gitbook/assets/App Manager in Browser preview.png">App Manager in Browser preview.png</a></td></tr><tr><td><strong>App Builder</strong></td><td>Visual programming interface to build and test custom software applications.</td><td><a href="app-builder/overview.md">App Builder</a></td><td><a href=".gitbook/assets/658shots_so.png">658shots_so.png</a></td></tr><tr><td><strong>Production Apps</strong></td><td>The live, end-user-facing Apps created and run with Heisenware.</td><td><a href="production-apps/overview.md">Production Apps</a></td><td><a href=".gitbook/assets/tracking.jpg">tracking.jpg</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td><strong>App Manager</strong></td><td>Admin dashboard to create and manage Apps, members, and integrations.</td><td><a href="app-manager/overview.md">overview.md</a></td><td><a href=".gitbook/assets/App Manager in Browser preview.png">App Manager in Browser preview.png</a></td></tr><tr><td><strong>App Builder</strong></td><td>Visual programming interface to build and test custom software applications.</td><td><a href="app-builder/overview.md">overview.md</a></td><td><a href=".gitbook/assets/658shots_so.png">658shots_so.png</a></td></tr><tr><td><strong>Production Apps</strong></td><td>The live, end-user-facing Apps created and run with Heisenware.</td><td><a href="production-apps/overview.md">overview.md</a></td><td><a href=".gitbook/assets/tracking.jpg">tracking.jpg</a></td></tr></tbody></table>
 
-## Hosting and architecture
+### Hosting and architecture
 
 The Heisenware architecture consists of the central platform and optional Agents. Each account (tenant) runs in isolation and supports two deployment modes:
 
@@ -39,24 +25,24 @@ The Heisenware architecture consists of the central platform and optional Agents
 
 Regardless of the deployment mode, you can use Agents to bridge separated networks. For example, if you host the platform in a corporate data center (IT) and need to access machines in a secured shopfloor network (OT), an Agent acts as the secure tunnel.
 
-## See it in action
+### See it in action
 
 See how to build and operate industrial apps in Heisenware.
 
 {% embed url="https://www.youtube.com/watch?v=MM4teGtbB7k" %}
 
-## Engineering philosophy and core concepts
+### Engineering philosophy and core concepts
 
 Heisenware is a visual programming environment. To use it well, you need to understand a few engineering concepts that the platform keeps visible and under your control.
 
-### Transparency and flexibility
+#### Transparency and flexibility
 
 Heisenware keeps the underlying complexity visible and reachable. When you need custom logic, it is there.
 
 * **Visual with full code access**: You build logic visually in the Backend Builder and keep direct access to developer tools like JavaScript expressions for data transformation and YAML for configuration.
 * **Extensible**: When the built-in functions are not enough, you wrap your code (Node.js, Python, C++) into extensions that become native functions.
 
-### Object-oriented scalability
+#### Object-oriented scalability
 
 Heisenware uses an object-oriented model. You build logic once and instantiate it across an entire fleet of devices.
 
@@ -64,7 +50,7 @@ Heisenware uses an object-oriented model. You build logic once and instantiate i
 * **Instances (the asset)**: Living, stateful copies of a class. You don't write code for machine A. You create an instance of the OPC UA client, name it `opcua-machine-a`, and configure it with the machine's IP and credentials.
 * **Stateful context**: Member functions know their context, e.g. which server to use, without passing global variables.
 
-### Native event-driven architecture
+#### Native event-driven architecture
 
 Industrial systems are asynchronous. Sensors spike, users click, and machines stop at unpredictable times. Heisenware Apps are natively event-driven.
 
@@ -72,14 +58,14 @@ Industrial systems are asynchronous. Sensors spike, users click, and machines st
 * **Event sources**: Triggers can be user interactions (UI events), data changes (e.g., a PLC tag update), or system lifecycle events.
 * **Non-blocking**: This ensures your UI remains responsive while backend logic handles complex tasks asynchronously.
 
-### Distributed connectivity
+#### Distributed connectivity
 
 We solve the "OT vs. IT" network gap by treating local hardware as a first-class citizen of the cloud platform.
 
 * **The bridge**: Through Native Agents and Docker Agents, we securely bridge local, private networks (OT/shopfloor) to the cloud without VPNs.
 * **Local execution**: You can push backend logic (connectors) to run locally on the edge device. The platform treats these remote functions the same as cloud functions.
 
-### Unified data binding
+#### Unified data binding
 
 We eliminate the "glue code" typically needed to connect a frontend to a backend.
 
@@ -88,7 +74,7 @@ We eliminate the "glue code" typically needed to connect a frontend to a backend
 
 <figure><img src=".gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
 
-## Glossary
+### Glossary
 
 A quick-reference list of specific terms and concepts used across the Heisenware platform.
 
