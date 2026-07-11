@@ -1,11 +1,11 @@
-# Users and Access
+# Users and access
 
-Heisenware provides granular control over who can access your Apps. Each App can have distinct security settings, even if they reside within the same Workspace.
+Heisenware provides granular control over who can access your Apps. Each App can have distinct security settings, even if they reside within the same workspace.
 
 {% hint style="info" %}
-#### Users vs. Members
+#### Users vs. members
 
-This article covers the Users of your Apps. For managing your Members, the people who build and manage your Apps, see [Members](members.md).
+This article covers the users of your Apps. For managing your members, the people who build and manage your Apps, see [Members](members.md).
 {% endhint %}
 
 ## Access modes
@@ -15,7 +15,7 @@ In the Apps panel, you can choose from five distinct access options to match you
 <figure><img src="../.gitbook/assets/image (524).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
-While you can change these settings at any time, doing so will instantly affect all active sessions. Frequent changes may confuse your Users.
+While you can change these settings at any time, doing so will instantly affect all active sessions. Frequent changes may confuse your users.
 {% endhint %}
 
 ### Public access
@@ -44,40 +44,40 @@ While you can change these settings at any time, doing so will instantly affect 
 
 * **Option**: _Only previously invited users can log in_
 * **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
-* **Programmatic Invite:** Using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md) in the backend, you can also invite Users programmatically from another App.
+* **Programmatic invite:** Using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md) in the backend, you can also invite users programmatically from another App.
 
 ## User management
 
 The Users card within each App provides a real-time view of who is accessing your software.
 
 {% hint style="info" %}
-#### Managing Users programmatically
+#### Managing users programmatically
 
-You can also manage Users from within an App using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md).
+You can also manage users from within an App using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md).
 {% endhint %}
 
 ### Anonymized sessions
 
-For Apps using [Public Access](#public-access) or [Shared Security](#shared-security), the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
+For Apps using [Public access](#public-access) or [Shared security](#shared-security), the table displays anonymized strings, IP addresses, and session data to help you track unique device usage.
 
 <figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
 
 ### Registered profiles
 
-For Apps using [Individual Registration](#individual-registration) or [Dual Authentication](#dual-authentication), the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
+For Apps using [Individual registration](#individual-registration) or [Dual authentication](#dual-authentication), the table displays names and usernames (email addresses). Users who log in from different devices with the same email are correctly recognized as the same individual.
 
 <figure><img src="../.gitbook/assets/image (452).png" alt=""><figcaption></figcaption></figure>
 
-### Deleting Users
+### Deleting users
 
-You can manually remove Users, both registered accounts and anonymous sessions, directly from the list by clicking the trash icon. Deleting a User removes their record and terminates their current session.
+You can manually remove users, both registered accounts and anonymous sessions, directly from the list by clicking the trash icon. Deleting a user removes their record and terminates their current session.
 
 {% hint style="info" %}
-### Leveraging User data in logic
+#### Leveraging user data in logic
 
-Once a User is authenticated, their information is automatically available in the Backend Builder via the `$USER` system variable. You can use this variable to personalize the UI (e.g., "Welcome, \[Name]"), filter database queries so Users only see their own data, or log exactly who performed a specific action in your backend.
+Once a user is authenticated, their information is automatically available in the Backend Builder via the `$USER` system variable. You can use this variable to personalize the UI (e.g., "Welcome, \[Name]"), filter database queries so users only see their own data, or log exactly who performed a specific action in your backend.
 
-For example, if a table stores each row's owner in an `email` field, a `getTableData` Function can filter for the logged-in User's own rows:
+For example, if a table stores each row's owner in an `email` field, a `getTableData` function can filter for the logged-in user's own rows:
 
 ```yaml
 # name
