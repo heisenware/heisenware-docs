@@ -1,6 +1,6 @@
 # Circular gauge
 
-The circular gauge shows a value on a circular scale, a strong choice for dashboards displaying measurements, progress, or key performance indicators. You customize its appearance and behavior fully in the App Builder.
+The circular gauge shows a value on a circular scale, a strong choice for dashboards displaying measurements, progress, or key performance indicators.
 
 <div align="center"><figure><img src="../../../../.gitbook/assets/circularGauge.png" alt="" width="281"><figcaption></figcaption></figure></div>
 
