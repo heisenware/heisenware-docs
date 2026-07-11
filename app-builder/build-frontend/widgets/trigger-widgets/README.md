@@ -1,33 +1,35 @@
 # Trigger widgets
 
-Trigger widgets are interactive UI elements that capture direct user actions and initiate processes in your backend logic.
+Trigger widgets capture a direct user action, like a click, and kick off logic in your backend.
 
 ## Available trigger widgets
 
-* [**Button**](/app-builder/build-frontend/widgets/trigger-widgets/button.md): The standard, highly configurable button. Use it to capture clicks and start your function sequences.
+* [**Button**](button.md): The standard, highly configurable button. Use it to capture clicks and start your function sequences.
 
 {% hint style="info" %}
 #### Icons as trigger widgets
-While the button is the only official widget in this category, you can also use [icons](/app-builder/build-frontend/text-icons-and-images.md) as triggers. They follow the same data binding rules as the button.
+
+The button is the only official widget in this category, but you can also use [icons](../../text-icons-and-images.md#icons) as triggers. They follow the same data binding rules as the button.
 {% endhint %}
 
 ## Connecting to backend logic (data binding)
 
-Trigger widgets connect to your logic by linking an event (like a click) to a [function](/app-builder/build-backend/functions.md).
+Trigger widgets link an event, like a click, to a [function](../../../build-backend/functions.md).
 
 ### How to link
 
-Link widgets by dragging the logic to the UI:
+Link a widget by dragging the logic onto it:
 
-1. Drag a trigger from a function and drop it onto the widget.
-2. A menu appears on the function block; pick the specific widget event, usually `onClick`, to complete the link. For buttons, there is only one event, so the selection is automatic.
+1. Drag a trigger from a function onto the widget.
+2. On the function block, pick the widget event, usually `onClick`, to complete the link. A button has only one event, so the selection happens automatically.
 
 ### Two-way interaction
 
-* **To function trigger**: Clicking the button starts the connected logic [flow](/app-builder/build-backend.md).
-* **From function output or modifier**: A function sends data back to the button. For example, you can link a function's output to a button's `done` property to show a loading animation inside the button until that part of your flow finishes.
+* **To a function trigger**: Clicking the button starts the connected flow.
+* **From a function output or a modifier**: A function or modifier sends data back to the button. Link a function's output to a button's `done` property, for example, to show a loading animation on the button until that part of the flow finishes.
 
 {% hint style="info" %}
 #### Auto-triggering on input
-Fire a function automatically when a user enters data, with no click or other event required. To do this, connect the function's input to its trigger.
+
+You can fire a function automatically when a user enters data, with no click required. Connect the function's input to its trigger.
 {% endhint %}
