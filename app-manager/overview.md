@@ -1,17 +1,17 @@
 # Overview
 
-The App Manager is the administrative center of your Heisenware account. It's where you create new Apps, monitor account usage, and manage your members.
+The App Manager is the administrative center of your Heisenware account. Here you create new Apps, monitor account usage, and manage your members.
 
 <figure><img src="../.gitbook/assets/image (447).png" alt=""><figcaption></figcaption></figure>
 
 ## Key features
 
-The App Manager is divided into four primary functional areas:
+The App Manager has four main areas:
 
-* [**Apps**](overview.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
+* [**Apps**](overview.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](access-and-user-management.md).
 * [**Dashboard**](overview.md#dashboard): A real-time summary of account-wide performance and user metrics.
 * [**Members**](members.md): The interface for inviting and managing your members.
-* [**Inbound Integrations**](integrations-inbound-connections.md): Monitoring and authorizing data from [Agents](../app-builder/build-backend/function-explorer/agents/), MQTT, and VRPC clients.
+* [**Integrations (inbound)**](integrations-inbound-connections.md): Monitor and authorize data from [Agents](../app-builder/build-backend/function-explorer/agents/README.md), MQTT, and VRPC clients.
 
 ## Apps
 
@@ -31,7 +31,7 @@ Click the plus icon in the top bar to create a new App container.
 {% step %}
 #### Configure
 
-Enter a name and description, upload an icon, and define your initial [users and access](users-and-access.md) settings.
+Enter a name and description, upload an icon, and define your initial [Users and access](access-and-user-management.md) settings.
 
 <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -58,7 +58,7 @@ The total number of Apps you can create depends on your plan. [Contact us](mailt
 
 ### App status and control
 
-Each App card displays its current availability:
+Each App card shows its current availability:
 
 * <mark style="background-color:green;">**RUNNING**</mark>: The App is live and reachable via its URL.
 * <mark style="background-color:orange;">**EXITED**</mark>: The App has been manually stopped.
@@ -79,7 +79,7 @@ There is no undo. Save a [tag](../app-builder/deploy-and-maintain.md#versioning-
 
 ### Distribution
 
-Apps are distributed via a unique URL or a QR code. Both are found directly on the App card in the Apps panel.
+Each App is distributed via a unique URL or QR code, both found directly on the App card in the Apps panel.
 
 <figure><img src="../.gitbook/assets/Distribution.png" alt=""><figcaption></figcaption></figure>
 
@@ -91,4 +91,4 @@ To take an App offline, use the action switch on the card to toggle between Run 
 
 ## Dashboard
 
-The Dashboard panel provides a real-time summary of your account's performance, including usage stats like total App views and unique users across all Apps.
+The Dashboard panel gives you a real-time summary of your account's performance, including usage stats like total App views and unique users across all Apps.
