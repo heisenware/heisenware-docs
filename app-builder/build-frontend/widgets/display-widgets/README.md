@@ -39,7 +39,7 @@ Display widgets get their data from your functions and flows.
 
 ### How to link
 
-You link a widget by dragging the logic onto it:
+Link a widget by dragging the logic onto it:
 
 1. Drag a [function's](../../../build-backend/functions.md) output, or a [modifier](../../../build-backend/modifier.md), onto the widget.
 2. On the function block, pick the widget property you want to feed (e.g., `value` or `data`).
