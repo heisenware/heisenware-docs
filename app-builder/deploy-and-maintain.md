@@ -1,14 +1,14 @@
 # Deploy and maintain
 
-[Building logic](build-backend/) and [designing the UI](build-frontend/) is only half the battle. Heisenware also gives you tools to test your work in real time, save snapshots of your progress, and deploy your [Apps to production](../production-apps/production-apps-overview.md).
+[Building logic](build-backend/) and [designing the UI](build-frontend/) is only half the job. Heisenware also lets you test your work in real time, snapshot your progress, and deploy your [Apps to production](../production-apps/production-apps-overview.md).
 
 ## App testing (test mode)
 
-Before you deploy, use test mode to verify your logic and UI directly inside the App Builder. When active, the UI preview becomes fully interactive and all backend logic goes live.
+Before you deploy, test mode verifies your logic and UI directly inside the App Builder. Turn it on and the UI preview becomes fully interactive while all backend logic runs live.
 
 * **How to start**: Click the Test button in the Top Bar.
 * **Behavior**: The App starts polling data from connected sources or writing to databases. Form inputs become clickable, and buttons trigger their connected flows.
-* **Manual triggers**: Even in test mode, you can still manually click triggers on function blocks in the [Backend Builder](build-backend/) to force-start a sequence.
+* **Manual triggers**: Even in test mode, click a trigger on any function block in the [Backend Builder](build-backend/) to force-start a sequence.
 
 <div align="center"><figure><img src="../.gitbook/assets/deploy_bottom.png" alt=""><figcaption><p>TEST button</p></figcaption></figure></div>
 
@@ -56,7 +56,7 @@ Deployment makes your App available to your users. To push your latest changes l
 * **Distribution**: Click the version number in the Top Bar after a successful deploy to find your unique App URL for sharing.
 
 {% hint style="warning" %}
-Avoid frequent deployments in live production environments. Users are prompted to reload the App every time a new version is pushed.
+Avoid frequent deployments in live production environments. Every new version prompts users to reload the App.
 {% endhint %}
 
 <figure><img src="../.gitbook/assets/deploy_a_app_looped.gif" alt=""><figcaption></figcaption></figure>
