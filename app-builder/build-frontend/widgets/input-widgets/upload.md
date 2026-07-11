@@ -1,16 +1,12 @@
 # Upload
 
-The upload widget provides a full interface for file and photo uploads. Users can select one or multiple files, which can be stored either as physical files on the server or as Base64-encoded buffers within your data.
+The upload widget handles file and photo uploads. Users pick one or more files, and you store each as a physical file on the server or as a Base64-encoded buffer in your data. It also offers file-type restriction, multi-file selection, and thumbnail previews.
 
-The widget includes features like file type restriction, multi-file selection, and thumbnail previews.
-
-<figure><img src="../../../../.gitbook/assets/Upload_bottom_looped.gif" alt=""><figcaption></figcaption></figure>
-
-<figure><img src="../../../../.gitbook/assets/upload_bottom.png" alt=""><figcaption><p>A full and an empty upload widget</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/upload_bottom.png" alt=""><figcaption><p>Uupload widget</p></figcaption></figure>
 
 ## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the [Backend Builder](../../../build-backend/).
+Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
 
 ### Input
 
@@ -56,7 +52,7 @@ The structure of the file objects in the `files` array depends on the configured
 
 ### Settings
 
-Set these properties in the widget's settings panel to control the behavior and appearance of the upload widget. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
+Set these in the widget's settings panel to control the upload widget's behavior and appearance. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
 
 | **Label**                   | **Description**                                                                                         | **Type** | **Property**      |
 | --------------------------- | ------------------------------------------------------------------------------------------------------- | -------- | ----------------- |
@@ -75,11 +71,11 @@ When only the `Photo` category is selected (see the dedicated [Photo](photo.md) 
 
 ### Button configuration
 
-The file selection is triggered by a button. You can customize its appearance using standard button properties. Common properties include:
+A button triggers the file selection. Customize its appearance with standard button properties, such as:
 
 * **`text`**: The text displayed on the button (e.g., "Upload File").
 * **`icon`**: The icon displayed on the button (e.g., "upload").
 * **`type`**: The button's style type (`normal`, `default`, `success`, `danger`).
 * **`stylingMode`**: The visual style of the button (`text`, `outlined`, `contained`).
 
-These properties are configured within a `button` object.
+You configure these within a `button` object.
