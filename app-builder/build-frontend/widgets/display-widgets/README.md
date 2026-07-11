@@ -1,48 +1,47 @@
-# Display Widgets
+# Display widgets
 
-Display widgets are used to visualize data for your end-users. They take data from your functions and present it in various forms, such as charts, gauges, maps, and tables. These widgets are the key to creating rich, data-driven dashboards and user interfaces.
+Display widgets visualize data for your end-users. They take data from your [functions](/app-builder/build-backend/functions.md) and present it in various forms, such as charts, gauges, maps, and tables. These widgets are the key to creating rich, data-driven dashboards and user interfaces.
 
 {% hint style="info" %}
-#### Categorization by main usage
-
-We categorize widgets based on their primary purpose. However, some widgets are versatile; for example, a [form](../input-widgets/form.md) (an [input widget](../input-widgets/)) can display data, while a [data grid](data-grid.md) (a [display widget](./)) can be used for data input. Always check the specific properties of a widget to see its full range of capabilities.
+#### Widget versatility
+We categorize [widgets](/app-builder/build-frontend/widgets.md) based on their primary purpose. However, some widgets are versatile; for example, a [form](/app-builder/build-frontend/widgets/input-widgets/form.md) (an [input widget](/app-builder/build-frontend/widgets/input-widgets.md)) can display data, while a [data grid](/app-builder/build-frontend/widgets/display-widgets/data-grid.md) (a display widget) can accept user inputs. Always check the specific properties of a widget to see its full range of capabilities.
 {% endhint %}
 
 ## Available display widgets
 
-Each display widget has its own detailed documentation page.
-
-* [**Card**](card.md): A container element you can use for structure and group backgrounds.
-* [**Chart**](chart.md): A component for creating line, bar, area, or scatter charts.
-* [**Chat**](chat.md): Allows for building conversational interfaces in [RAG](../../../build-backend/function-explorer/extensions/rag-ai/) use cases.
-* [**Circular Gauge**](circular-gauge.md): Visualizes a primary value and a secondary sub-value in a circular form.
-* [**Data Grid**](data-grid.md): A powerful component for displaying and interacting with database tables.
-* [**Data List**](data-list.md): Displays a collection of items in a simple, scrollable list view.
-* [**Data Tiles**](data-tiles.md): Displays a collection of items in a responsive, tiled view.
-* [**Kanban Board**](kanban.md): An interactive board for visualizing items across different stages of a process.
-* [**Linear Gauge**](linear-gauge.md): Visualizes a primary value and a secondary sub-value in a linear bar form.
-* [**Map**](map.md): Marks geographic data points on an interactive map.
-* [**Media View**](media-view.md): Allows the dynamic display of media, such as images, videos, or PDFs.
-* [**Pie Chart**](pie-chart.md): A classic chart for visualizing proportions.
-* [**Progress Bar**](progress-bar.md): Visualizes the progress of a process as a percentage or absolute value.
-* [**Sankey**](sankey.md): Visualizes the flow and distribution of data between two sets of values.
-* [**Sparkline**](sparkline.md): A small, simple line chart without axes, ideal for inline data trends.
-* [**Status Lamp**](status-lamp.md): Displays a mappable status as a colored light.
-* [**Toast**](toast.md): A time-limited notification message that appears briefly to the user.
-* [**Value Box**](value-box.md): A flexible box for displaying a key data point or arbitrary information.
+* [**Card**](/app-builder/build-frontend/widgets/display-widgets/card.md): A decorative container element for structure and group backgrounds.
+* [**Chart**](/app-builder/build-frontend/widgets/display-widgets/chart.md): A component for creating line, bar, area, or scatter charts.
+* [**Chat**](/app-builder/build-frontend/widgets/display-widgets/chat.md): Reusable conversational interfaces for Retrieval-Augmented Generation ([RAG AI](/app-builder/build-backend/function-explorer/extensions/rag-ai.md)) use cases.
+* [**Circular gauge**](/app-builder/build-frontend/widgets/display-widgets/circular-gauge.md): Visualizes a primary value and a secondary sub-value in a circular form.
+* [**Data grid**](/app-builder/build-frontend/widgets/display-widgets/data-grid.md): A powerful component for displaying and interacting with database tables.
+* [**Data list**](/app-builder/build-frontend/widgets/display-widgets/data-list.md): Displays a collection of items in a simple, scrollable list view.
+* [**Data tiles**](/app-builder/build-frontend/widgets/display-widgets/data-tiles.md): Displays a collection of items in a responsive, tiled view.
+* [**Iframe**](/app-builder/build-frontend/widgets/display-widgets/iframe.md): Embeds external web pages or applications directly into your interface.
+* [**Kanban**](/app-builder/build-frontend/widgets/display-widgets/kanban.md): An interactive board for visualizing items across different stages of a process.
+* [**Linear gauge**](/app-builder/build-frontend/widgets/display-widgets/linear-gauge.md): Visualizes a primary value and a secondary sub-value in a linear bar form.
+* [**Map**](/app-builder/build-frontend/widgets/display-widgets/map.md): Marks geographic data points on an interactive map.
+* [**Media view**](/app-builder/build-frontend/widgets/display-widgets/media-view.md): Displays media dynamically, such as images, videos, or PDFs.
+* [**Pie chart**](/app-builder/build-frontend/widgets/display-widgets/pie-chart.md): A classic chart for visualizing proportions.
+* [**Progress bar**](/app-builder/build-frontend/widgets/display-widgets/progress-bar.md): Visualizes process progress as a percentage or absolute value.
+* [**Sankey**](/app-builder/build-frontend/widgets/display-widgets/sankey.md): Visualizes the flow and distribution of data between two sets of values.
+* [**Sparkline**](/app-builder/build-frontend/widgets/display-widgets/sparkline.md): A small, simple line chart without axes, ideal for inline data trends.
+* [**Status lamp**](/app-builder/build-frontend/widgets/display-widgets/status-lamp.md): Displays a mappable status as a colored light.
+* [**Timeline**](/app-builder/build-frontend/widgets/display-widgets/timeline.md): Displays events in chronological order.
+* [**Toast**](/app-builder/build-frontend/widgets/display-widgets/toast.md): A time-limited notification message that appears briefly to the user.
+* [**Value box**](/app-builder/build-frontend/widgets/display-widgets/value-box.md): A flexible box for displaying a key data point or arbitrary information.
 
 ## Connecting to logic (data binding)
 
-Display widgets receive their data from your Functions.
+Display widgets receive data from your functions.
 
 ### How to link
 
-You link widgets by dragging the logic to the UI:
+Link widgets by dragging your logic to the UI:
 
-1. Drag an output or [Modifier](../../../build-backend/modifier.md) of a [Function](../../../build-backend/functions.md) and drop it onto the widget.
-2. A menu will appear on the Function block; pick the specific widget property you want to link (e.g., `value` or `data`).
+1. Drag an output or [modifier](/app-builder/build-backend/modifier.md) of a function from the [Backend Builder](/app-builder/build-backend.md) and drop it onto the widget.
+2. Select the specific widget property you want to link (e.g., `value` or `data`) from the pop-up menu on the function block.
 
 ### Interaction types
 
-* **From Function Output / from modifier**: A Function sends a primary value (like a time series) to the widget's `data` property.
-* **To Function Input**: Certain display widgets, such as the data grid, support input as well. In these cases, you can connect the widget to a Function Input. It will then behave like an input widget, sending selected rows or edited cells back to your logic.
+* **From function output or modifier**: A function sends a primary value (like a time series) to the widget's `data` property.
+* **To function input**: Certain display widgets, such as the data grid, support input operations. Connect the widget to a function input to send selected rows or edited cells back to your logic.
