@@ -1,19 +1,19 @@
-# Inbound Integrations
+# Integrations (inbound)
 
-The Integrations panel provides a centralized overview of all inbound data connections from external systems. Every external system that sends data to Heisenware, whether it's an IoT sensor, a custom Python script, or a Heisenware Agent, is tracked here.
+The Integrations panel gives you a central overview of every inbound data connection from external systems. Whatever sends data to Heisenware, an IoT sensor, a custom Python script, or a Heisenware Agent, shows up here.
 
 <figure><img src="../.gitbook/assets/Integrations.png" alt=""><figcaption><p>Integrations panel</p></figcaption></figure>
 
 ## Integration types
 
-Heisenware supports three primary methods for connecting external data:
+Heisenware connects external data three ways:
 
 ### Native or Docker Agent
 
-[Agents](../app-builder/build-backend/function-explorer/agents/) are used for securely bridging data from private networks (on-premises servers, local databases) to the cloud.
+[Agents](../app-builder/build-backend/function-explorer/agents/) securely bridge data from private networks (on-premises servers, local databases) to the cloud.
 
-* **Setup**: Native Agents are created and deployed directly within the App Builder. Docker Agents can be downloaded and deployed via Docker.
-* **Management**: Once deployed, the Agent entry is automatically generated in the Integrations panel for monitoring. No manual credentials are required.
+* **Setup**: You create and deploy Native Agents directly in the App Builder. You download and deploy Docker Agents via Docker.
+* **Management**: Once deployed, an Agent entry appears in the Integrations panel for monitoring. No manual credentials required.
 
 ### MQTT client
 
@@ -21,15 +21,15 @@ The standard choice for general IoT use cases. Use this for sensors or devices t
 
 ### [VRPC](../developers/vrpc/) client
 
-An advanced method used to connect custom code and proprietary libraries. This is the most powerful option for specialized software integrations.
+An advanced method for connecting custom code and proprietary libraries, the most powerful option for specialized software integrations.
 
 ## Connecting MQTT and VRPC clients
 
-While Agents connect automatically, MQTT and VRPC clients require authorization via one of two methods:
+Agents connect automatically, but MQTT and VRPC clients need authorization one of two ways:
 
 ### Method 1: Manual credential creation
 
-Use this method when you want to pre-configure your external client with a fixed username and password.
+Use this method to pre-configure your external client with a fixed username and password.
 
 {% stepper %}
 {% step %}
@@ -47,7 +47,7 @@ Select if you need an MQTT or VRPC client.
 {% step %}
 #### Edit/copy credentials
 
-Copy the automatically created credentials or edit them according to your needs.
+Copy the generated credentials or edit them to your needs.
 {% endstep %}
 
 {% step %}
@@ -59,11 +59,11 @@ Paste these credentials into your external client's configuration.
 
 ### Method 2: Smart onboarding
 
-The preferred, passwordless method. The external client initiates a request, which you simply approve within the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/build-backend/function-explorer/#smart-onboarding).
+The preferred, passwordless method. The external client sends a request, and you approve it in the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/build-backend/function-explorer/#smart-onboarding).
 
 ## Integrate custom code via VRPC
 
-To integrate your code, you must write a [Code Adapter](../account/hosting-and-architecture.md#custom-code-adapters) around your existing functions, which can then be loaded as a Custom Extension.
+To integrate your code, write a [Code Adapter](../account/hosting-and-architecture.md#custom-code-adapters) around your existing functions, then load it as a Custom Extension.
 
 * **Supported languages**: Arduino (ESP32), C++, Node.js, and Python.
 * **Use cases**: Integrating legacy systems, running complex algorithms, or using specialized software libraries.
