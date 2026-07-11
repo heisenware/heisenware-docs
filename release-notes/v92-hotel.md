@@ -6,30 +6,32 @@ description: Unreleased (upcoming)
 
 <div align="left"><figure><img src="../.gitbook/assets/image (527).png" alt="" width="375"><figcaption></figcaption></figure></div>
 
-## Features
+## v92 – Hotel
 
-* Final release of the new subflow feature
-* Explicit re-scanning of data connected to a widget
-* **Complete overhaul of the** [**Page Explorer**](../app-builder/build-frontend/page-explorer.md) **UX**. The App's navigation menu editor now lives inside the Page Explorer itself, next to the Pages that feed it. Each Page has its own quick settings (name, Icon, App Bar Title) via a small pencil, and menu types can now differ per screen size, so phones can use Bottom Tabs while a large monitor uses a Fixed Left Menu.
-* Extensions (Modifiers, Filters, Recorders and Error Handlers) are own nodes now
-* Implemented anti-node-collision (snowplow) feature in the Backend Builder
-* First version of an auto-formatting for backend logic
-* Spotlight effect on backend functions, showing clearly the flow of events
-* Automatic visual data truncation for huge payloads, improving responsiveness of the UI
-* New Database Visualizer informing about connected tables and their data
-* New in-app menu widget offering a fixed size drawer
-* New Timeline widget
-* New Iframe widget
-* Custom vertical spacing for DataList widget
-* Improved Chart widget's zoom and pan capabilities
-* Upgraded internal MQTT broker and configured for more resilience
-* Full-fledged, all-app, client-caching for super-fast browser reloads
-* New Heidenhain DNC Agent
-* New Insys compatible LXC container of our Connector
+### Features
 
-## Fixes
+* **Finalized** [**subflows**](../app-builder/build-backend/subflows.md): Completed the core subflows feature within the Backend Builder.
+* **Explicit data schema re-scanning**: Added an explicit data re-scan option for bound [widgets](../app-builder/build-frontend/widgets/). A widget, such as a data grid, checks if its underlying data structure or keys have changed or been added, and then automatically updates its properties and visual layout to match.
+* **Overhauled** [**Page Explorer**](../app-builder/build-frontend/page-explorer.md): Integrated the navigation menu editor directly into the Page Explorer panel. You can configure quick settings like name, icon, and app bar title via a small edit icon next to each page. Menu layout types can now vary based on screen size, using configurations like **Bottom tabs only** for mobile screens or **Fixed left menu** for large desktop monitors.
+* **Independent extension nodes**: Converted extensions—including modifiers, filters, recorders, and error handlers—into distinct visual nodes on the canvas.
+* **Anti-node-collision ("snowplow")**: Implemented an automated node-separation behavior in the Backend Builder to prevent overlapping logic blocks.
+* **Backend auto-formatting**: Introduced the initial layout auto-formatting tool for backend flows.
+* **Event flow spotlight**: Added a visual spotlight effect to backend functions to clearly trace active event paths during live execution.
+* **Visual data truncation**: Implemented automatic visual data truncation for large data payloads to maintain optimal frontend UI responsiveness.
+* **Data Visualizer**: Introduced the Data Visualizer tool to let members inspect connected database tables and data entries directly without building an App.
+* **Menu drawer widget**: Added a new navigation menu widget providing a fixed-size drawer component.
+* **Timeline widget**: Introduced a new timeline widget to display chronological data series.
+* **Iframe widget**: Introduced a new iframe widget to cleanly embed external web content.
+* **Data list spacing**: Added custom vertical spacing options to the data list widget configuration.
+* **Enhanced chart interaction**: Improved the zoom and pan responsiveness of the chart widget.
+* **Upgraded MQTT broker**: Updated and optimized the internal MQTT broker configuration to increase overall message resilience.
+* **Application-wide client caching**: Implemented comprehensive client-side caching to drastically reduce browser reload times for deployed Apps.
+* **Heidenhain DNC Agent**: Released a native Heidenhain DNC Agent to facilitate direct edge connectivity with supported CNC systems.
+* **Insys LXC Agent**: Released an Insys-compatible LXC Agent container variant of the local connector system.
 
-* Issue with showing the correct backend state directly after account creation
-* Persisting of alias names
-* Fixed sometimes broken highlighting of widges
-* Scaling issue of production apps when browser window spans multiple monitors
+### Fixes
+
+* **Initial backend state**: Fixed a synchronization issue where the correct backend state failed to display immediately after account creation.
+* **Alias persistence**: Resolved a bug where custom alias names failed to save or persist correctly.
+* **Widget highlighting**: Fixed intermittent visual bugs that broke selection and hover highlighting for widgets on the canvas.
+* **Multi-monitor scaling**: Resolved a layout scaling defect in deployed Apps when a browser window spans multiple monitors.

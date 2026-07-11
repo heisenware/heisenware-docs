@@ -14,8 +14,8 @@ Link this widget to your logic by dragging items from the [Backend Builder](../.
 
 ### Output
 
-| **Property** | **Type** | **Description**                              |
-| ------------ | -------- | -------------------------------------------- |
+| **Property** | **Type** | **Description**                                |
+| ------------ | -------- | ---------------------------------------------- |
 | **`data`**   | `Array`  | An array of data objects to plot on the chart. |
 
 #### Automatic configuration
@@ -47,40 +47,40 @@ These properties control the overall behavior and appearance of the chart canvas
 
 Configure the vertical (or horizontal, if rotated) axes of your chart. You can define multiple axes across different panes.
 
-| **Label**          | **Description**                                                                    | **Type**       | **Property**      |
-| ------------------ | ---------------------------------------------------------------------------------- | -------------- | ----------------- |
-| **Title**          | The text title displayed for the axis.                                             | String         | `title`           |
-| **Position**       | The axis position relative to the chart (`left`, `right`, `top`, `bottom`).        | String         | `position`        |
-| **Axis width**     | The thickness of the axis line in pixels.                                          | Integer        | `width`           |
-| **Color**          | The color of the axis line.                                                        | String (Color) | `color`           |
-| **Start value**    | A fixed starting value for the axis, overriding the automatic range.               | Number         | `fixedStartValue` |
-| **End value**      | A fixed ending value for the axis, overriding the automatic range.                 | Number         | `fixedEndValue`   |
-| **Visible**        | Toggles the visibility of the entire axis.                                         | Boolean        | `visible`         |
-| **End on tick**    | If `true`, ensures the axis ends on a major tick mark.                             | Boolean        | `endOnTick`       |
-| **Inverted**       | If `true`, inverts the direction of the axis values.                               | Boolean        | `inverted`        |
-| **Label**          | An object holding settings for the axis labels (see below).                        | Object         | `label`           |
-| **Constant lines** | An array of constant lines to display on the axis.                                 | Array          | `constantLines`   |
-| **Grid and ticks** | An object holding settings for the axis grid lines and tick marks.                 | Object         | `grid`            |
+| **Label**          | **Description**                                                             | **Type**       | **Property**      |
+| ------------------ | --------------------------------------------------------------------------- | -------------- | ----------------- |
+| **Title**          | The text title displayed for the axis.                                      | String         | `title`           |
+| **Position**       | The axis position relative to the chart (`left`, `right`, `top`, `bottom`). | String         | `position`        |
+| **Axis width**     | The thickness of the axis line in pixels.                                   | Integer        | `width`           |
+| **Color**          | The color of the axis line.                                                 | String (Color) | `color`           |
+| **Start value**    | A fixed starting value for the axis, overriding the automatic range.        | Number         | `fixedStartValue` |
+| **End value**      | A fixed ending value for the axis, overriding the automatic range.          | Number         | `fixedEndValue`   |
+| **Visible**        | Toggles the visibility of the entire axis.                                  | Boolean        | `visible`         |
+| **End on tick**    | If `true`, ensures the axis ends on a major tick mark.                      | Boolean        | `endOnTick`       |
+| **Inverted**       | If `true`, inverts the direction of the axis values.                        | Boolean        | `inverted`        |
+| **Label**          | An object holding settings for the axis labels (see below).                 | Object         | `label`           |
+| **Constant lines** | An array of constant lines to display on the axis.                          | Array          | `constantLines`   |
+| **Grid and ticks** | An object holding settings for the axis grid lines and tick marks.          | Object         | `grid`            |
 
 ### Argument axis settings
 
 Configure the horizontal (or vertical, if rotated) axis, which represents the argument, the independent variable of your data.
 
-| **Label**                | **Description**                                                                | **Type**       | **Property**           |
-| ------------------------ | ------------------------------------------------------------------------------ | -------------- | ---------------------- |
-| **Title**                | The text title displayed for the axis.                                         | String         | `titleX`               |
-| **Argument type**        | The data type of the argument field (`numeric`, `datetime`, `string`).         | String         | `argumentTypeX`        |
-| **Axis width**           | The thickness of the axis line in pixels.                                      | Integer        | `widthX`               |
-| **Color**                | The color of the axis line.                                                    | String (Color) | `colorX`               |
-| **Visible**              | Toggles the visibility of the entire axis.                                     | Boolean        | `visibleX`             |
-| **End on tick**          | If `true`, ensures the axis ends on a major tick mark.                         | Boolean        | `endOnTickX`           |
-| **Inverted**             | If `true`, inverts the direction of the axis values.                           | Boolean        | `invertedX`            |
-| **Tick interval unit**   | For date-time axes, sets the unit for tick intervals (e.g. `days`, `months`).  | String         | `intervalUnitX`        |
-| **Tick interval**        | The number of units between each major tick mark.                              | Integer        | `intervalX`            |
-| **Aggregation unit**     | The unit by which to group data for aggregation (e.g. `days`, `months`).       | String         | `aggregationUnitX`     |
-| **Aggregation interval** | The number of units in each aggregation group.                                 | Integer        | `aggregationIntervalX` |
-| **Label**                | An object holding settings for the axis labels.                                | Object         | `labelX`               |
-| **Grid and ticks**       | An object holding settings for the axis grid lines and tick marks.             | Object         | `gridX`                |
+| **Label**                | **Description**                                                               | **Type**       | **Property**           |
+| ------------------------ | ----------------------------------------------------------------------------- | -------------- | ---------------------- |
+| **Title**                | The text title displayed for the axis.                                        | String         | `titleX`               |
+| **Argument type**        | The data type of the argument field (`numeric`, `datetime`, `string`).        | String         | `argumentTypeX`        |
+| **Axis width**           | The thickness of the axis line in pixels.                                     | Integer        | `widthX`               |
+| **Color**                | The color of the axis line.                                                   | String (Color) | `colorX`               |
+| **Visible**              | Toggles the visibility of the entire axis.                                    | Boolean        | `visibleX`             |
+| **End on tick**          | If `true`, ensures the axis ends on a major tick mark.                        | Boolean        | `endOnTickX`           |
+| **Inverted**             | If `true`, inverts the direction of the axis values.                          | Boolean        | `invertedX`            |
+| **Tick interval unit**   | For date-time axes, sets the unit for tick intervals (e.g. `days`, `months`). | String         | `intervalUnitX`        |
+| **Tick interval**        | The number of units between each major tick mark.                             | Integer        | `intervalX`            |
+| **Aggregation unit**     | The unit by which to group data for aggregation (e.g. `days`, `months`).      | String         | `aggregationUnitX`     |
+| **Aggregation interval** | The number of units in each aggregation group.                                | Integer        | `aggregationIntervalX` |
+| **Label**                | An object holding settings for the axis labels.                               | Object         | `labelX`               |
+| **Grid and ticks**       | An object holding settings for the axis grid lines and tick marks.            | Object         | `gridX`                |
 
 ### Legend settings
 
@@ -101,30 +101,30 @@ Configure the chart's legend, which identifies the different data series.
 
 Map your data to the chart's series here.
 
-| **Label**          | **Description**                                                                    | **Type** | **Property**    |
-| ------------------ | ---------------------------------------------------------------------------------- | -------- | --------------- |
-| **Argument field** | The field from your data source that provides the arguments (X-axis values).       | String   | `argumentField` |
-| **Series data**    | An array of series objects, each defining a set of data to plot.                   | Array    | `seriesData`    |
+| **Label**          | **Description**                                                              | **Type** | **Property**    |
+| ------------------ | ---------------------------------------------------------------------------- | -------- | --------------- |
+| **Argument field** | The field from your data source that provides the arguments (X-axis values). | String   | `argumentField` |
+| **Series data**    | An array of series objects, each defining a set of data to plot.             | Array    | `seriesData`    |
 
 #### Series properties
 
 Each object in the `seriesData` array can have these properties:
 
-| **Label**             | **Description**                                                                    | **Type**       | **Property**       |
-| --------------------- | ---------------------------------------------------------------------------------- | -------------- | ------------------ |
-| **Pane**              | The pane on which to display this series.                                           | String         | `pane`             |
-| **Series name**       | The series name, shown in the legend and tooltips.                                  | String         | `name`             |
-| **Value field**       | The field from your data source that provides the values (Y-axis values).          | String         | `valueField`       |
-| **Series type**       | The visual representation of the series (e.g. `line`, `bar`, `area`).               | String         | `type`             |
-| **Value axis**        | The value axis to associate this series with.                                       | String         | `axis`             |
-| **Aggregation**       | The aggregation method to apply to data points (`avg`, `min`, `max`, `sum`).        | String         | `aggregation`      |
-| **Data points**       | The symbol marking data points on the series line (e.g. `circle`, `square`).        | String         | `pointSymbol`      |
-| **Custom color**      | A specific color for this series, overriding the chart palette.                     | String (Color) | `color`            |
-| **Tag field**         | A field whose value appears in the tooltip for each data point.                     | String         | `tagField`         |
-| **Ignore empty points** | Lets the chart ignore empty values in a data series.                             | Boolean        | `ignoreEmptyPoints` |
-| **Range value 1**     | For `rangearea` and `rangebar` types, the field for the start of the range.         | String         | `rangeValue1Field` |
-| **Range value 2**     | For `rangearea` and `rangebar` types, the field for the end of the range.           | String         | `rangeValue2Field` |
-| **Size field**        | For `bubble` charts, the field that sets each bubble's size.                        | String         | `sizeField`        |
+| **Label**               | **Description**                                                              | **Type**       | **Property**        |
+| ----------------------- | ---------------------------------------------------------------------------- | -------------- | ------------------- |
+| **Pane**                | The pane on which to display this series.                                    | String         | `pane`              |
+| **Series name**         | The series name, shown in the legend and tooltips.                           | String         | `name`              |
+| **Value field**         | The field from your data source that provides the values (Y-axis values).    | String         | `valueField`        |
+| **Series type**         | The visual representation of the series (e.g. `line`, `bar`, `area`).        | String         | `type`              |
+| **Value axis**          | The value axis to associate this series with.                                | String         | `axis`              |
+| **Aggregation**         | The aggregation method to apply to data points (`avg`, `min`, `max`, `sum`). | String         | `aggregation`       |
+| **Data points**         | The symbol marking data points on the series line (e.g. `circle`, `square`). | String         | `pointSymbol`       |
+| **Custom color**        | A specific color for this series, overriding the chart palette.              | String (Color) | `color`             |
+| **Tag field**           | A field whose value appears in the tooltip for each data point.              | String         | `tagField`          |
+| **Ignore empty points** | Lets the chart ignore empty values in a data series.                         | Boolean        | `ignoreEmptyPoints` |
+| **Range value 1**       | For `rangearea` and `rangebar` types, the field for the start of the range.  | String         | `rangeValue1Field`  |
+| **Range value 2**       | For `rangearea` and `rangebar` types, the field for the end of the range.    | String         | `rangeValue2Field`  |
+| **Size field**          | For `bubble` charts, the field that sets each bubble's size.                 | String         | `sizeField`         |
 
 ## Tips and tricks
 
@@ -146,7 +146,7 @@ Use a [combine](../../../build-backend/function-explorer/utilities/data-processi
 {% step %}
 #### Transform with a modifier
 
-Add a JavaScript [modifier](../../../build-backend/modifier.md) to the output of the combine function. The code below merges the two datasets by timestamp, producing a new list of objects with `date`, `value1` (from the first array), and `value2` (from the second).
+Add a JavaScript [modifier](../../../build-backend/extension-nodes/modifier.md) to the output of the combine function. The code below merges the two datasets by timestamp, producing a new list of objects with `date`, `value1` (from the first array), and `value2` (from the second).
 
 ```js
 // 'x' represents the input array containing your two datasets

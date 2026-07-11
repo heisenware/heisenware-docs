@@ -1,4 +1,4 @@
-# Timeseries Database
+# Timeseries database
 
 {% hint style="info" %}
 This article already reflects v91 which is not yet released to the public. Some features may not be existing with your current version.
@@ -21,7 +21,7 @@ Heisenware provides a pre-initialized InfluxDB instance called `internal-influx`
 {% hint style="info" %}
 #### **Direct data recording with the recorder**
 
-For the fastest way to log data, you can use the [Recorder](../../recorder.md) extension. Simply click the `+` icon on any Function's Output or Modifier and select the Recorder. By default, it is configured to log data directly into the `internal-influx` instance on the fly, without needing extra function blocks in your flow.
+For the fastest way to log data, you can use the [Recorder](../../extension-nodes/recorder.md) extension. Simply click the `+` icon on any Function's Output or Modifier and select the Recorder. By default, it is configured to log data directly into the `internal-influx` instance on the fly, without needing extra function blocks in your flow.
 {% endhint %}
 
 ## Connecting an external database

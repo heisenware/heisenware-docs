@@ -12,7 +12,7 @@ description: 16 Mar 2026
 * New multi-fields feature for [Timeseries Database](../app-builder/build-backend/function-explorer/storage/timeseries-database.md)
 * App Builder performance tuning, especially when reloading the browser page
 * Slimmed-down [Docker agent](../app-builder/build-backend/function-explorer/agents/docker-agent.md) capable of running on resource-limited edge devices and IoT gateways
-* New `Duration` and `Interval` objects for [Javascript Modifier](../app-builder/build-backend/modifier.md#javascript-expressions)
+* New `Duration` and `Interval` objects for [Javascript Modifier](../app-builder/build-backend/extension-nodes/modifier.md#javascript-expressions)
 
 ## Fixes
 

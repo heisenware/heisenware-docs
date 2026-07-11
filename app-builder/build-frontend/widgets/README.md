@@ -27,8 +27,8 @@ A widget comes to life once you link it to the [Backend Builder](../../build-bac
 
 ### How to link
 
-1. Select the widget in the [Frontend Builder](../../build-frontend/) (optional).
-2. Drag a [function](../../build-backend/functions.md) part (an input, trigger, or output) or a [modifier](../../build-backend/modifier.md) and drop it onto the widget.
+1. Select the widget in the [Frontend Builder](../) (optional).
+2. Drag a [function](../../build-backend/functions.md) part (an input, trigger, or output) or a [modifier](../../build-backend/extension-nodes/modifier.md) and drop it onto the widget.
 3. Pick a widget property appearing inside the function block.
 
 <figure><img src="../../../.gitbook/assets/Data Binding Basics.gif" alt=""><figcaption><p>Data binding basics</p></figcaption></figure>

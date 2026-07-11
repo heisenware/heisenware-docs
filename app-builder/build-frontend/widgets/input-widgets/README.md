@@ -26,7 +26,7 @@ Input widgets exchange data with your logic through the Backend Builder.
 
 Link a widget by dragging the logic onto it:
 
-1. Drag a [function](../../../build-backend/functions.md) part (an input or output) or a [modifier](../../../build-backend/modifier.md) onto the widget.
+1. Drag a [function](../../../build-backend/functions.md) part (an input or output) or a [modifier](../../../build-backend/extension-nodes/modifier.md) onto the widget.
 2. On the function block, pick the widget property you want to link.
 
 ### Interaction types

@@ -9,7 +9,7 @@ All Functions follow the same anatomy. Each part of it is represented by a color
 * [**Input(s)**](functions.md#inputs-and-data-configuration): Arguments the Function needs to work (e.g., a number to calculate or a string to send). If a Function does not require an input, the box is not shown.
 * [**Trigger**](functions.md#triggers-and-execution-logic): The signal that tells the Function to execute (e.g., a button click or a data change).
 * [**Output**](functions.md#outputs-and-chaining): The result of the operation also available for the next step in your flow.
-* [**Extensions**](functions.md#function-extensions) **(optional)**: Add-ons to [filter](filter.md), [record](recorder.md), or [modify](modifier.md) data on the fly.
+* [**Extensions**](functions.md#function-extensions) **(optional)**: Add-ons to [filter](extension-nodes/filter.md), [record](extension-nodes/recorder.md), or [modify](extension-nodes/modifier.md) data on the fly.
 
 ### Types of Functions
 
@@ -55,7 +55,7 @@ Each Function has a colored status indicator next to its name. Hover over the in
 Inputs determine how a Function behaves. You can provide data via three sources:
 
 1. **Static data**: Fixed values typed directly into the Function Input (configured via YAML) or set via a web form (opened with a click on the blue arrow icon inside the Function Input).
-2. **Dynamic logic**: Data passed from the Output, [Modifier](modifier.md), or [Filter](filter.md) of a previous Function.
+2. **Dynamic logic**: Data passed from the Output, [Modifier](extension-nodes/modifier.md), or [Filter](extension-nodes/filter.md) of a previous Function.
 3. **UI binding**: Live data from a [Widget](../build-frontend/widgets/) (e.g., a text field value).
 
 <figure><img src="../../.gitbook/assets/randminteger_function.png" alt=""><figcaption><p>Function with object input in YAML format</p></figcaption></figure>
@@ -220,7 +220,7 @@ You can link an output directly to the frontend to drive the user interface:
 
 ## Function extensions
 
-Extensions are tools attached directly to a Function's Output. They allow you to [modify](modifier.md), [Filter](filter.md), [record](recorder.md), or [handle errors](error-handler.md) on the fly without adding separate Function blocks.
+Extensions are tools attached directly to a Function's Output. They allow you to [modify](extension-nodes/modifier.md), [Filter](extension-nodes/filter.md), [record](extension-nodes/recorder.md), or [handle errors](extension-nodes/error-handler.md) on the fly without adding separate Function blocks.
 
 <div align="center"><figure><img src="../../.gitbook/assets/function_extentions.png" alt=""><figcaption><p>One function with three extensions</p></figcaption></figure></div>
 

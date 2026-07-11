@@ -4,4 +4,4 @@ The Error Handler allows you to gracefully manage potential errors thrown by a F
 
 This enables you to build a safe, separate logic path to handle error conditions, such as logging the error details to a database or displaying a user-friendly error message on the UI.
 
-<figure><img src="../../.gitbook/assets/image (28).png" alt=""><figcaption><p>Error simulator Function with captured error message and JSONata modification.</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (28).png" alt=""><figcaption><p>Error simulator Function with captured error message and JSONata modification.</p></figcaption></figure>

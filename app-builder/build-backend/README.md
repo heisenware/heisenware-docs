@@ -1,4 +1,4 @@
-# Build Backend
+# Build backend
 
 In the backend, you define the intelligence and connectivity of your application. You build logic visually on a global canvas by connecting Functional blocks, allowing for real-time data processing and seamless integration with external systems.
 
@@ -35,7 +35,7 @@ To build your logic, you interact with [Functions](functions.md) directly on the
 
 ### Sequencing Functions
 
-You create flows by drawing wires between Functions. Click on the output of a Function (or its [Modifier](modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
+You create flows by drawing wires between Functions. Click on the output of a Function (or its [Modifier](extension-nodes/modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
 
 * **Output to Trigger**: Drag a connection to the Trigger of the next Function if you want the completion of the first Function to execute the second without handing over data.
 * **Output to Input**: Drag a connection to an input port to hand over specific data.
@@ -115,7 +115,7 @@ For users who prefer keyboard navigation, you can fine-tune your movement:
 
 #### Default Modifier Type
 
-Every time you add a [Modifier](modifier.md) to a Function, Heisenware defaults to a specific type. You can choose which one appears first:
+Every time you add a [Modifier](extension-nodes/modifier.md) to a Function, Heisenware defaults to a specific type. You can choose which one appears first:
 
 * **JSONata**: Ideal for data transformation and querying.
 * **JavaScript**: Use this if you prefer writing standard JS logic for your modifiers.

@@ -8,7 +8,7 @@ Filters are part of the Function extensions. To add a Filter to your Function:
 2. Select Filter from the list.
 3. A new Filter box will appear where you can write your JavaScript logic.
 
-<figure><img src="../../.gitbook/assets/image (505).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (505).png" alt=""><figcaption></figcaption></figure>
 
 ## When to use
 
@@ -18,13 +18,13 @@ A Filter evaluates a JavaScript expression that must return a boolean value (`tr
 
 If the result is `true`, the data is passed on to the next Modifier following that filter; if `false`, the data flow is halted at this point.
 
-<div align="center"><figure><img src="../../.gitbook/assets/image (295).png" alt=""><figcaption></figcaption></figure></div>
+<div align="center"><figure><img src="../../../.gitbook/assets/image (295).png" alt=""><figcaption></figcaption></figure></div>
 
 ### **Branching logic**
 
 The `true` and `false` states of the Filter can be used to trigger separate logic paths. For example, you can use the `true` state to trigger another Function.
 
-<figure><img src="../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
 A Filter condition that evaluates to a "falsy" value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow. This is the only way to interrupt a flow and is essential when building complex backend logic.
@@ -55,7 +55,7 @@ x.temperature > 90
 
 Return of the filter: `true`
 
-<figure><img src="../../.gitbook/assets/image (506).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (506).png" alt=""><figcaption></figcaption></figure>
 
 ### Example 2: Industrial error detection
 
@@ -75,7 +75,7 @@ x.includes('Error')
 
 Return of the filter: `true`
 
-<figure><img src="../../.gitbook/assets/image (507).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (507).png" alt=""><figcaption></figcaption></figure>
 
 ### Example 3: Validating array data
 
@@ -95,7 +95,7 @@ x.length > 0
 
 Return of the filter: `false`
 
-<figure><img src="../../.gitbook/assets/image (509).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (509).png" alt=""><figcaption></figcaption></figure>
 
 ## Using AI for filters
 

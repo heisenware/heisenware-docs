@@ -10,7 +10,7 @@ Modifiers are part of the Function extensions. To add a Modifier to your Functio
 
 A Modifier uses either JSONata or a JavaScript expression. You can switch between types by right-clicking the Modifier and selecting JSONata or Expression and adjust the default inside the [App Builder settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6).
 
-<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="success" %}
 **Need help writing modifiers?** Read about how to best [use AI for writing modifiers](modifier.md#using-ai-for-modifiers) to generate JSONata or JavaScript logic instantly using your favorite chatbot.
@@ -55,7 +55,7 @@ Return of the modifier:
 77
 ```
 
-<figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -83,7 +83,7 @@ Return of the modifier:
 { "temp_sensor_1": 25.4 }
 ```
 
-<figure><img src="../../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -111,7 +111,7 @@ Return of the modifier:
 "MAINTENANCE_REQUIRED"
 ```
 
-<figure><img src="../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -142,7 +142,7 @@ Return of the modifier:
 { "id": "B2", "status": "ERROR" }
 ```
 
-<figure><img src="../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -176,7 +176,7 @@ Return of the modifier:
 "Critical"
 ```
 
-<figure><img src="../../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -214,7 +214,7 @@ Return of the modifier:
 ]
 ```
 
-<figure><img src="../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -247,7 +247,7 @@ Return of the modifier:
 522
 ```
 
-<figure><img src="../../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -279,7 +279,7 @@ Return of the modifier:
 [ { "a": 1, "b": 1, "d": "cool" }, { "a": 2, "b": 2, "d": "cool" } ]
 ```
 
-<figure><img src="../../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -320,7 +320,7 @@ Return of the modifier:
 }
 ```
 
-<figure><img src="../../.gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -365,7 +365,7 @@ Return of the modifier:
 ]
 ```
 
-<figure><img src="../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
 
 #### 2. Calculating Downtime (Time Differences)
 
@@ -505,7 +505,7 @@ Return of the modifier:
 
 Sometime you want to extract items of an array in a round-robin fashion. For that you can use a `combine` Function in which you link back the modifier's output to the second argument:
 
-<figure><img src="../../.gitbook/assets/image (503).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (503).png" alt=""><figcaption></figcaption></figure>
 
 Data:
 
