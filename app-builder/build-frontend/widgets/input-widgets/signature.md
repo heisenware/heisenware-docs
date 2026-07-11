@@ -1,16 +1,14 @@
 # Signature
 
-The signature widget provides a canvas for capturing handwritten signatures. It can be displayed either as an inline pad or as a popup window launched by a button.
+The signature widget provides a canvas for capturing handwritten signatures. It appears either as an inline pad or as a popup window that a button opens.
 
-This widget is ideal for forms and documents that require user authorization, such as contracts, agreements, or delivery confirmations. The captured signature is saved as a PNG image.
-
-<figure><img src="../../../../.gitbook/assets/create_signature_looped.gif" alt=""><figcaption></figcaption></figure>
+It suits forms and documents that need user authorization, such as contracts, agreements, or delivery confirmations. Heisenware saves the captured signature as a PNG image.
 
 <figure><img src="../../../../.gitbook/assets/Signature.gif" alt=""><figcaption></figcaption></figure>
 
 ## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the [Backend Builder](../../../build-backend/).
+Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
 
 ### Input
 
@@ -20,7 +18,7 @@ Connect the widget to your application's logic by dragging the corresponding ite
 
 ## Configuration
 
-Set these properties in the widget's settings panel to control the appearance and text of the signature pad. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
+Set these in the widget's settings panel to control the signature pad's appearance and text. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
 
 | **Label**        | **Description**                                                                                                                                                | **Type**       | **Property**  |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------- |
