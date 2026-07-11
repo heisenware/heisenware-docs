@@ -72,7 +72,7 @@ Click the red Delete App button to remove an App.
 {% hint style="danger" %}
 #### Deleting an App is irreversible
 
-There is no undo. Save a [tag](../app-builder/deploy-and-maintain.md#versioning-tags-snapshots) (`.hwt` file) from the App Builder before deleting if you want to preserve your work.
+There is no undo. Save a [tag](../app-builder/deploy-and-maintain.md#tags-snapshots) (`.hwt` file) from the App Builder before deleting if you want to preserve your work.
 {% endhint %}
 
 <figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
