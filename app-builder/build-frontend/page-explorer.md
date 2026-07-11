@@ -20,17 +20,17 @@ Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arr
 
 ### Reordering pages
 
-Click a page's number and drag it into a new position. The new order is reflected in the App's navigation menu.
+Click a page's number and drag it into a new position. The new order carries over to the App's navigation menu.
 
 ### Per-page settings
 
-Click the small pencil icon inside a page's representation to open its settings. Here you can set:
+Click the small pencil icon inside a page's representation to open its settings, where you set:
 
 * The page name shown in the menu
 * The menu icon
 * The app bar title shown at the top of the screen
 
-Subpages automatically inherit the app bar title from their parent page, so users always know which section they are in.
+Subpages inherit the app bar title from their parent page, so users always know which section they are in.
 
 ## App menu
 
@@ -49,7 +49,7 @@ The App menu is the navigation users see across all pages and subpages. To confi
 
 ### Per-screen menu type
 
-Enable **different navigation menus per screen** in the App menu settings to give each activated screen size its menu type. Fixed left menu is often a good choice for large screens, while Bottom tabs only or Expandable menu drawer works well on smaller screens. Switch to the screen size you want to configure in the [Frontend Builder](./), then set the menu type.
+Enable **Different navigation menus per screen** in the App menu settings to give each activated screen size its own menu type. Fixed left menu is often a good choice for large screens, while Bottom tabs only or Expandable menu drawer works well on smaller screens. Switch to the screen size you want to configure in the [Frontend Builder](./), then set the menu type.
 
 <figure><img src="../../.gitbook/assets/image (20).png" alt=""><figcaption><p>Different menu per screen</p></figcaption></figure>
 
@@ -57,14 +57,14 @@ Enable **different navigation menus per screen** in the App menu settings to giv
 
 ### Widget links
 
-You can turn any [button](widgets/trigger-widgets/button.md) or [icon](text-icons-and-images.md) into a page switch trigger.
+Turn any [button](widgets/trigger-widgets/button.md) or [icon](text-icons-and-images.md) into a page-switch trigger.
 
 * **How to link**: Drag a page from the Page Explorer and drop it directly onto a button or icon on your UI canvas.
 * **Use case**: The primary way to let users open subpages (e.g., a "Machine Details" button opening the corresponding detail view) or to navigate in Apps that have no main menu.
 
 ### Logic-driven navigation
 
-Page switching can also be triggered automatically by your backend logic.
+Your backend logic can also switch pages on its own.
 
 * **How to link**: Drag a page from the Page Explorer onto a function's output.
 * **Use case**: If a function detects an error or a successful form submission, the backend pushes the user to an error or success page automatically.
@@ -72,5 +72,5 @@ Page switching can also be triggered automatically by your backend logic.
 <figure><img src="../../.gitbook/assets/image (32).png" alt=""><figcaption><p>Switch page link</p></figcaption></figure>
 
 {% hint style="info" %}
-If you need more vertical space on a page, use the page height setting in the [Frontend Builder toolbar](./#the-toolbar).
+Need more vertical space on a page? Use the page height setting in the [Frontend Builder toolbar](./#the-toolbar).
 {% endhint %}
