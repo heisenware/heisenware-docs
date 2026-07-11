@@ -1,13 +1,13 @@
 # Text, icons and images
 
-You can use text, icons, and images to add visual design, branding, and instructional information to your interface. These are static elements, meaning they are typically non-interactive, though you can turn icons into navigation links.
+Text, icons, and images add visual design, branding, and instructions to your interface. They are static, non-interactive elements, though you can turn an icon into a navigation link.
 
 ## Text box
 
 Use text boxes for titles, labels, and detailed instructions.
 
 * **Add**: Click the text box icon in the Frontend Builder toolbar and click the canvas to place it.
-* **Edit**: Double-click the text box to open the text editor. You can type, format your text, and insert static tables.
+* **Edit**: Double-click the text box to open the text editor, where you type, format text, and insert static tables.
 
 <figure><img src="../../.gitbook/assets/image (518).png" alt=""><figcaption></figcaption></figure>
 
@@ -16,8 +16,8 @@ Use text boxes for titles, labels, and detailed instructions.
 Use icons as visual cues or navigation shortcuts.
 
 * **Add**: Click the icon button in the Frontend Builder toolbar, pick an icon from the library, and click the canvas to place it.
-* **Style**: Double-click the icon to open its settings. You can switch styles (solid, regular, light, thin, duotone), change the color, and apply a background.
-* **Navigation**: You can turn an icon into a button. Drag a page from the Page Explorer and drop it directly onto the icon.
+* **Style**: Double-click the icon to open its settings, where you switch styles (solid, regular, light, thin, duotone), change the color, and apply a background.
+* **Navigation**: Turn an icon into a button by dragging a page from the Page Explorer directly onto it.
 
 <figure><img src="../../.gitbook/assets/image (519).png" alt=""><figcaption></figcaption></figure>
 
@@ -33,5 +33,5 @@ Use images for machine photos, company logos, or other visual elements.
 {% hint style="info" %}
 #### Dynamic use
 
-Beyond the UI, uploaded images can also be used as inputs for your backend logic.
+Beyond the UI, your backend logic can also take an uploaded image as an input.
 {% endhint %}
