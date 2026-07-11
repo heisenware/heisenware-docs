@@ -1,171 +1,171 @@
-# Data Grid
+# Data grid
 
-The **DataGrid** is a powerful and feature-rich widget for displaying and managing tabular data. It provides a flexible and interactive interface for users to view, sort, filter, group, edit, and export large datasets efficiently.
+The data grid is a powerful, feature-rich widget for displaying and managing tabular data. It gives users a flexible, interactive interface to view, sort, filter, group, edit, and export large datasets efficiently.
 
-It supports a wide range of data shaping operations, various editing modes, and advanced features like master-detail views and automatic column configuration.
+It supports a wide range of data-shaping operations, several editing modes, and advanced features like master-detail views and automatic column configuration.
 
-<figure><img src="../../../../.gitbook/assets/image (383).png" alt=""><figcaption><p>Screenshot of a fully featured data grid including sorting, filtering, grouping, editing, exporting and master-detail view.</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (383).png" alt=""><figcaption><p>A fully featured data grid with sorting, filtering, grouping, editing, exporting, and a master-detail view.</p></figcaption></figure>
 
-## Data Binding
+## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
 
 ### Input
 
 | **Property**            | **Type**             | **Description**                                                                                                                                                               |
 | ----------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`onChange`**          | `Object`             | Fired when a row is successfully updated. The payload is the complete, updated data object for that row.                                                                      |
-| **`onInsert`**          | `Object`             | Fired when a new row is successfully added. The payload is the data object for the new row.                                                                                   |
-| **`onDelete`**          | `Object` or `String` | Fired when a row is deleted. The payload is the key of the deleted row.                                                                                                       |
-| **`onSelectionChange`** | `Object` or `Array`  | Fired when the row selection changes. The payload is the selected row's data object or an array of objects if multi-selection is enabled.                                     |
-| **`onRowClick`**        | `Object`             | Fired when a user clicks on any part of a row.                                                                                                                                |
-| **`onLinkClick`**       | `Object`             | Fired when a user clicks on a cell that has been configured as clickable. The payload includes the row data and an `__origin__` property indicating which column was clicked. |
+| **`onChange`**          | `Object`             | Fires when a row is updated. The payload is the complete, updated data object for that row.                                                                                   |
+| **`onInsert`**          | `Object`             | Fires when a new row is added. The payload is the data object for the new row.                                                                                                |
+| **`onDelete`**          | `Object` or `String` | Fires when a row is deleted. The payload is the key of the deleted row.                                                                                                       |
+| **`onSelectionChange`** | `Object` or `Array`  | Fires when the row selection changes. The payload is the selected row's data object, or an array of objects if multi-selection is enabled.                                    |
+| **`onRowClick`**        | `Object`             | Fires when a user clicks any part of a row.                                                                                                                                   |
+| **`onLinkClick`**       | `Object`             | Fires when a user clicks a cell configured as clickable. The payload includes the row data and an `__origin__` property indicating which column was clicked.                  |
 
 ### Output
 
 | **Property**       | **Type**  | **Description**                                                                                                                                          |
 | ------------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`rowFilter`**    | `Object`  | Applies a filter to the grid's rows. The object keys should match the `dataField` of the columns to be filtered, and the values are the filter criteria. |
-| **`headerFilter`** | `Object`  | Applies a filter from the column header. The object keys should match the `dataField` of the columns, and the values are the filter criteria.            |
-| **`isLoading`**    | `Boolean` | When `true`, displays a loading indicator, useful for showing progress during data fetching.                                                             |
+| **`rowFilter`**    | `Object`  | Applies a filter to the grid's rows. The object keys match the `dataField` of the columns to filter, and the values are the filter criteria.             |
+| **`headerFilter`** | `Object`  | Applies a filter from the column header. The object keys match the `dataField` of the columns, and the values are the filter criteria.                   |
+| **`isLoading`**    | `Boolean` | When `true`, shows a loading indicator, useful for signaling progress during data fetching.                                                              |
 
-#### Automatic Configuration
+#### Automatic configuration
 
-If you provide data to the widget without pre-defining any columns in the **Data Settings**, the widget will automatically inspect the first 100 data records. It will generate a column for each field, infer the data type (`text`, `number`, `dateTime`, `media`, etc.), and apply default settings. These automatically generated columns will then appear in the configuration panel for you to customize further.
+Feed data to the widget without defining any columns in the data settings, and it inspects the first 100 records. It generates a column for each field, infers the data type (`text`, `number`, `dateTime`, `media`, and so on), and applies default settings. The generated columns then appear in the configuration panel, ready for you to customize further.
 
-<figure><img src="../../../../.gitbook/assets/image (386).png" alt=""><figcaption><p>Default view as generated by dragging random person data.</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (386).png" alt=""><figcaption><p>Default view generated by dragging in random person data.</p></figcaption></figure>
 
 ## Configuration
 
-### Grid Settings
+### Grid settings
 
-These properties control the overall appearance, behavior, and features of the grid.
+These properties control the grid's overall appearance, behavior, and features.
 
 #### Appearance
 
 | **Label**                 | **Description**                                                                                     | **Type** | **Property**            |
 | ------------------------- | --------------------------------------------------------------------------------------------------- | -------- | ----------------------- |
-| **Paging Mode**           | `Infinite Scrolling` loads data as the user scrolls. `Paged View` uses traditional page navigation. | String   | `pagingMode`            |
-| **Show Borders**          | Toggles the visibility of the outer border of the grid.                                             | Boolean  | `showBorders`           |
-| **Show Headers**          | Toggles the visibility of the column headers.                                                       | Boolean  | `showColumnHeaders`     |
-| **Show Vertical Lines**   | Toggles the visibility of vertical lines between columns.                                           | Boolean  | `showColumnLines`       |
-| **Show Horizontal Lines** | Toggles the visibility of horizontal lines between rows.                                            | Boolean  | `showRowLines`          |
-| **Alternate Row Color**   | If `true`, applies a different background color to alternating rows.                                | Boolean  | `rowAlternationEnabled` |
-| **Column Auto Width**     | If `true`, automatically adjusts column widths to fit their content.                                | Boolean  | `columnAutoWidth`       |
+| **Paging mode**           | `Infinite Scrolling` loads data as the user scrolls. `Paged View` uses traditional page navigation. | String   | `pagingMode`            |
+| **Show borders**          | Toggles the grid's outer border.                                                                    | Boolean  | `showBorders`           |
+| **Show headers**          | Toggles the column headers.                                                                         | Boolean  | `showColumnHeaders`     |
+| **Show vertical lines**   | Toggles the vertical lines between columns.                                                         | Boolean  | `showColumnLines`       |
+| **Show horizontal lines** | Toggles the horizontal lines between rows.                                                          | Boolean  | `showRowLines`          |
+| **Alternate row color**   | If `true`, gives alternating rows a different background color.                                     | Boolean  | `rowAlternationEnabled` |
+| **Column auto width**     | If `true`, adjusts column widths to fit their content.                                              | Boolean  | `columnAutoWidth`       |
 
-#### Data Display
+#### Data display
 
 | **Label**                         | **Description**                                                                          | **Type** | **Property**            |
 | --------------------------------- | ---------------------------------------------------------------------------------------- | -------- | ----------------------- |
-| **Selection Mode**                | Allows `single` or `multiple` row selection.                                             | String   | `selectionMode`         |
-| **Allow Column Reordering**       | Allows users to drag and drop column headers to reorder them.                            | Boolean  | `allowColumnReordering` |
-| **Allow Column Resizing**         | Allows users to resize columns by dragging the edge of the header.                       | Boolean  | `allowColumnResizing`   |
-| **Allow Column Pinning**          | Allows users to "pin" or "fix" columns to the left or right side of the grid.            | Boolean  | `allowColumnFixing`     |
-| **Allow Column Choosing**         | Adds a column chooser button, allowing users to show or hide columns.                    | Boolean  | `allowColumnChoosing`   |
-| **Allow Multiple Column Sorting** | Allows users to sort the grid by multiple columns (e.g., sort by Country, then by City). | Boolean  | `allowMultipleSorting`  |
-| **Allow Grouping**                | Allows users to drag column headers to a group panel to group data by that column.       | Boolean  | `allowGrouping`         |
-| **Allow Searching**               | Adds a global search box to filter all data in the grid.                                 | Boolean  | `allowSearching`        |
-| **Allow Row Filtering**           | Adds a filter row below the headers for per-column filtering.                            | Boolean  | `allowRowFiltering`     |
-| **Allow Header Filtering**        | Adds a filter icon to each column header for more advanced filtering options.            | Boolean  | `allowHeaderFiltering`  |
-| **Allow Filter Building**         | Provides a powerful UI for creating complex filter criteria.                             | Boolean  | `allowFilterBuilding`   |
-| **Show Item Count**               | Displays a total count of items in the grid's summary area.                              | Boolean  | `showItemCount`         |
+| **Selection mode**                | Allows `single` or `multiple` row selection.                                             | String   | `selectionMode`         |
+| **Allow column reordering**       | Lets users drag and drop column headers to reorder them.                                 | Boolean  | `allowColumnReordering` |
+| **Allow column resizing**         | Lets users resize columns by dragging the edge of the header.                            | Boolean  | `allowColumnResizing`   |
+| **Allow column pinning**          | Lets users pin columns to the left or right side of the grid.                            | Boolean  | `allowColumnFixing`     |
+| **Allow column choosing**         | Adds a column chooser button so users can show or hide columns.                          | Boolean  | `allowColumnChoosing`   |
+| **Allow multiple column sorting** | Lets users sort by multiple columns (e.g. by country, then by city).                     | Boolean  | `allowMultipleSorting`  |
+| **Allow grouping**                | Lets users drag column headers to a group panel to group data by that column.            | Boolean  | `allowGrouping`         |
+| **Allow searching**               | Adds a global search box to filter all data in the grid.                                 | Boolean  | `allowSearching`        |
+| **Allow row filtering**           | Adds a filter row below the headers for per-column filtering.                            | Boolean  | `allowRowFiltering`     |
+| **Allow header filtering**        | Adds a filter icon to each column header for more advanced filtering.                    | Boolean  | `allowHeaderFiltering`  |
+| **Allow filter building**         | Provides a UI for creating complex filter criteria.                                      | Boolean  | `allowFilterBuilding`   |
+| **Show item count**               | Shows a total count of items in the grid's summary area.                                 | Boolean  | `showItemCount`         |
 
-#### Data Editing
+#### Data editing
 
 | **Label**                   | **Description**                                                                      | **Type** | **Property**          |
 | --------------------------- | ------------------------------------------------------------------------------------ | -------- | --------------------- |
 | **Mode**                    | The editing mode: `cell`, `row`, `form`, or `popup`.                                 | String   | `mode`                |
-| **Allow Adding**            | Allows users to add new rows to the grid.                                            | Boolean  | `allowAdding`         |
-| **Allow Updating**          | Allows users to edit existing rows.                                                  | Boolean  | `allowUpdating`       |
-| **Allow Deleting**          | Allows users to delete rows.                                                         | Boolean  | `allowDeleting`       |
-| **Show All Fields On Edit** | If `true`, the editing form will show all fields, even those not visible as columns. | Boolean  | `showAllFieldsOnEdit` |
+| **Allow adding**            | Lets users add new rows to the grid.                                                 | Boolean  | `allowAdding`         |
+| **Allow updating**          | Lets users edit existing rows.                                                       | Boolean  | `allowUpdating`       |
+| **Allow deleting**          | Lets users delete rows.                                                              | Boolean  | `allowDeleting`       |
+| **Show all fields on edit** | If `true`, the editing form shows all fields, even those not visible as columns.     | Boolean  | `showAllFieldsOnEdit` |
 
-#### Data Export
+#### Data export
 
 | **Label**                       | **Description**                                                                                | **Type** | **Property**              |
 | ------------------------------- | ---------------------------------------------------------------------------------------------- | -------- | ------------------------- |
-| **Allow PDF Export**            | Adds a button to export the grid data to a PDF file.                                           | Boolean  | `allowPdfExport`          |
-| **Allow Excel Export**          | Adds a button to export the grid data to an Excel file (.xlsx).                                | Boolean  | `allowExcelExport`        |
-| **Allow CSV Export**            | Adds a button to export the grid data to a CSV file.                                           | Boolean  | `allowCsvExport`          |
-| **Allow Export Data Selection** | If `true`, allows users to export only the selected rows.                                      | Boolean  | `allowExportSelectedData` |
-| **Hint text**                   | A prefix for the export button text (e.g., "Export as"). The file type is added automatically. | String   | `exportHint`              |
+| **Allow PDF export**            | Adds a button to export the grid data to a PDF file.                                           | Boolean  | `allowPdfExport`          |
+| **Allow Excel export**          | Adds a button to export the grid data to an Excel file (.xlsx).                                | Boolean  | `allowExcelExport`        |
+| **Allow CSV export**            | Adds a button to export the grid data to a CSV file.                                           | Boolean  | `allowCsvExport`          |
+| **Allow export data selection** | If `true`, lets users export only the selected rows.                                           | Boolean  | `allowExportSelectedData` |
+| **Hint text**                   | A prefix for the export button text (e.g. "Export as"). The file type is added automatically.  | String   | `exportHint`              |
 
-### Data Settings
+### Data settings
 
-This is where you define the columns that make up your grid.
+Define the columns that make up your grid here.
 
 | **Label**         | **Description**                                                                                                 | **Type** | **Property** |
 | ----------------- | --------------------------------------------------------------------------------------------------------------- | -------- | ------------ |
-| **Data Field**    | The field from your data source that this column is bound to.                                                   | String   | `dataField`  |
-| **Column Name**   | The user-friendly text displayed in the column header.                                                          | String   | `caption`    |
-| **Visibility**    | Controls how the column is displayed: `Visible`, `Detail` (only in master-detail view), `Hidden`, or `Removed`. | String   | `visibility` |
-| **Editing**       | Controls the editing state of the column: `Optional`, `Required`, `Disabled`, or `Hidden` in edit forms.        | String   | `editing`    |
-| **Editor Widget** | The editor to use when this column is being edited.                                                             | String   | `widget`     |
+| **Data field**    | The field from your data source that this column binds to.                                                      | String   | `dataField`  |
+| **Column name**   | The friendly text shown in the column header.                                                                   | String   | `caption`    |
+| **Visibility**    | How the column displays: `Visible`, `Detail` (only in master-detail view), `Hidden`, or `Removed`.              | String   | `visibility` |
+| **Editing**       | The column's editing state in edit forms: `Optional`, `Required`, `Disabled`, or `Hidden`.                      | String   | `editing`    |
+| **Editor widget** | The editor to use when this column is edited.                                                                   | String   | `widget`     |
 
-#### Editor Widget Options
+#### Editor widget options
 
-Each `widget` type has its own set of specific configuration options.
+Each `widget` type has its own configuration options.
 
 **Text (`text`)**
 
 | **Label**        | **Description**                                                                             | **Type** | **Property**  |
 | ---------------- | ------------------------------------------------------------------------------------------- | -------- | ------------- |
-| **Is Clickable** | If `true`, makes the text in this cell a clickable link that fires the `onLinkClick` event. | Boolean  | `isClickable` |
+| **Is clickable** | If `true`, makes the cell text a clickable link that fires the `onLinkClick` event.         | Boolean  | `isClickable` |
 
-**Number (`number`) / Slider (`slider`)**
+**Number (`number`) / slider (`slider`)**
 
 | **Label**                | **Description**                                                                          | **Type** | **Property**        |
 | ------------------------ | ---------------------------------------------------------------------------------------- | -------- | ------------------- |
 | **Minimum**              | The minimum allowed value.                                                               | Number   | `min`               |
 | **Maximum**              | The maximum allowed value.                                                               | Number   | `max`               |
-| **Default Value**        | The initial value of the editor.                                                         | Number   | `defaultValue`      |
+| **Default value**        | The initial value of the editor.                                                         | Number   | `defaultValue`      |
 | **Precision**            | (`number` only) The number of decimal places to allow.                                   | Number   | `precision`         |
-| **Currency**             | (`number` only) A currency symbol or code to display (e.g., $, €, EUR).                  | String   | `currency`          |
-| **Handle Large Numbers** | (`number` only) Formats large numbers with abbreviations (e.g., 1,200,000 becomes 1.2M). | Boolean  | `handleLargeNumber` |
+| **Currency**             | (`number` only) A currency symbol or code to display (e.g. $, €, EUR).                   | String   | `currency`          |
+| **Handle large numbers** | (`number` only) Formats large numbers with abbreviations (e.g. 1,200,000 becomes 1.2M).  | Boolean  | `handleLargeNumber` |
 
-**Dropdown (`dropdown`) / Tags (`tags`)**
+**Dropdown (`dropdown`) / tags (`tags`)**
 
 | **Label**            | **Description**                                                                                       | **Type** | **Property**   |
 | -------------------- | ----------------------------------------------------------------------------------------------------- | -------- | -------------- |
-| **Discover Options** | If `true`, automatically populates the dropdown options from the unique values in this column's data. | Boolean  | `discover`     |
+| **Discover options** | If `true`, populates the dropdown options from the unique values in this column's data.               | Boolean  | `discover`     |
 | **Options**          | A comma-separated list of predefined options.                                                         | String   | `options`      |
-| **Default Value**    | The initial selected value.                                                                           | String   | `defaultValue` |
+| **Default value**    | The initial selected value.                                                                           | String   | `defaultValue` |
 
 **Switch (`switch`)**
 
 | **Label**             | **Description**                        | **Type** | **Property**      |
 | --------------------- | -------------------------------------- | -------- | ----------------- |
-| **Switched On Text**  | Text displayed when the switch is ON.  | String   | `switchedOnText`  |
-| **Switched Off Text** | Text displayed when the switch is OFF. | String   | `switchedOffText` |
+| **Switched on text**  | Text displayed when the switch is ON.  | String   | `switchedOnText`  |
+| **Switched off text** | Text displayed when the switch is OFF. | String   | `switchedOffText` |
 
-**Date/Time (`dateTime`)**
+**Date/time (`dateTime`)**
 
 | **Label**              | **Description**                                                            | **Type** | **Property**        |
 | ---------------------- | -------------------------------------------------------------------------- | -------- | ------------------- |
-| **Date Type**          | The type of picker to display: `Date Only`, `Time Only`, or `Date & Time`. | String   | `dateType`          |
-| **Format Description** | Choose between a `Preset` format or an `Explicit`, custom format.          | String   | `formatDescription` |
+| **Date type**          | The type of picker to display: `Date Only`, `Time Only`, or `Date & Time`. | String   | `dateType`          |
+| **Format description** | Choose a `Preset` format or an `Explicit`, custom one.                     | String   | `formatDescription` |
 
 **Media (`media`)**
 
 | **Label**              | **Description**                                                                 | **Type** | **Property**       |
 | ---------------------- | ------------------------------------------------------------------------------- | -------- | ------------------ |
-| **Media Type**         | The type of media to display (`png`, `jpeg`, `svg`, `pdf`).                     | String   | `mediaType`        |
-| **Is Central Element** | If `true`, the media is displayed as a large, central element in the edit form. | Boolean  | `isCentralElement` |
-| **Thumbnail Size**     | The height (in pixels) of the media thumbnail displayed in the grid cell.       | Integer  | `thumbnailSize`    |
+| **Media type**         | The type of media to display (`png`, `jpeg`, `svg`, `pdf`).                     | String   | `mediaType`        |
+| **Is central element** | If `true`, displays the media as a large, central element in the edit form.     | Boolean  | `isCentralElement` |
+| **Thumbnail size**     | The height (in pixels) of the media thumbnail shown in the grid cell.           | Integer  | `thumbnailSize`    |
 
-## Video Demo
+## Video demo
 
 {% embed url="https://www.youtube.com/watch?v=m76VLWgqNaw" %}
 
-## Tips and Tricks
+## Tips and tricks
 
-### Performance with Large Datasets
+### Performance with large datasets
 
-* **Virtual Scrolling:** The DataGrid is optimized for performance out-of-the-box. By default, it uses **Infinite Scrolling** (`virtual` paging mode), which renders only the rows currently visible in the viewport. This allows the grid to handle hundreds of thousands of rows smoothly without any noticeable lag.
-* **Data Shaping on the Server:** While the DataGrid's client-side filtering, sorting, and grouping are highly efficient, for extremely large datasets (millions of rows), consider performing these operations on your database server. You can connect the DataGrid to a backend that supports these operations and let it handle the heavy lifting.
+* **Virtual scrolling**: The data grid is optimized out of the box. By default it uses infinite scrolling (`virtual` paging mode), rendering only the rows currently in the viewport, so it handles hundreds of thousands of rows smoothly with no noticeable lag.
+* **Data shaping on the server**: Client-side filtering, sorting, and grouping are efficient, but for extremely large datasets (millions of rows), do these operations on your database server instead. Connect the data grid to a backend that supports them and let it do the heavy lifting.
 
-### User Experience and Layout
+### User experience and layout
 
-* **Master-Detail View:** To avoid cluttering your main grid with too many columns, use the **Master-Detail** feature. Set a column's **Visibility** to `Detail` to hide it from the main grid. It will then be displayed in an expandable detail section for each row, providing a clean and organized way to show additional information.
-* **Column Management:** Empower your users by enabling features like **Allow Column Choosing**, **Allow Column Reordering**, and **Allow Column Resizing**. This allows them to create a personalized view of the data that best suits their needs.
-* **Editing Modes:** Choose the editing mode that best fits your use case. `Cell` mode is quick for minor changes, while `Popup` or `Form` mode provides a more structured editing experience for complex data entry.
+* **Master-detail view**: To keep your main grid from getting cluttered with columns, use the master-detail feature. Set a column's visibility to `Detail` to hide it from the main grid; it then appears in an expandable detail section for each row, a clean way to show extra information.
+* **Column management**: Give users control by enabling allow column choosing, allow column reordering, and allow column resizing, so they can build a personalized view that fits their needs.
+* **Editing modes**: Pick the editing mode that fits your use case. `Cell` mode is quick for minor changes, while `Popup` or `Form` mode gives a more structured experience for complex data entry.
