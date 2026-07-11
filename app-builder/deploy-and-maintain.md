@@ -1,45 +1,45 @@
-# Deploy & Maintain
+# Deploy and maintain
 
 [Building logic](build-backend/) and [designing the UI](build-frontend/) is only half the battle. Heisenware also gives you tools to test your work in real time, save snapshots of your progress, and deploy your [Apps to production](../production-apps/production-apps-overview.md).
 
-## App testing (Test Mode)
+## App testing (test mode)
 
-Before you deploy, use Test Mode to verify your logic and UI directly inside the App Builder. When active, the UI preview becomes fully interactive and all backend logic goes live.
+Before you deploy, use test mode to verify your logic and UI directly inside the App Builder. When active, the UI preview becomes fully interactive and all backend logic goes live.
 
-* **How to start**: Click the Test button in the top toolbar.
-* **Behavior**: The App starts polling data from connected sources or writing to databases. Form inputs become clickable, and buttons trigger their connected Flows.
-* **Manual triggers**: Even in Test Mode, you can still manually click triggers on Function blocks in the [Backend Builder](build-backend/) to force-start a sequence.
+* **How to start**: Click the Test button in the Top Bar.
+* **Behavior**: The App starts polling data from connected sources or writing to databases. Form inputs become clickable, and buttons trigger their connected flows.
+* **Manual triggers**: Even in test mode, you can still manually click triggers on function blocks in the [Backend Builder](build-backend/) to force-start a sequence.
 
 <div align="center"><figure><img src="../.gitbook/assets/deploy_bottom.png" alt=""><figcaption><p>TEST button</p></figcaption></figure></div>
 
 ## Tags (snapshots)
 
-A Tag is a snapshot of your App's entire state, including all backend logic, UI elements, and data bindings.
+A tag is a snapshot of your App's entire state, including all backend logic, UI elements, and data bindings.
 
 <figure><img src="../.gitbook/assets/image (521).png" alt=""><figcaption><p>Tag icon in the App Builder</p></figcaption></figure>
 
 {% hint style="warning" %}
-#### What is not in a Tag?
+#### What is not in a tag?
 
 Tags do not store external files (from the [File Explorer](build-backend/file-explorer.md)), database table data, or global themes.
 {% endhint %}
 
-### Why use Tags?
+### Why use tags?
 
 * **Undo/restore**: Create a save point before trying a risky logic change.
-* **Templates**: Export a Tag as a `.hwt` file to use it as a starting point for a new App.
-* **Sharing**: Share your App configuration with other Heisenware Accounts.
+* **Templates**: Export a tag as a `.hwt` file to use it as a starting point for a new App.
+* **Sharing**: Share your App configuration with other Heisenware accounts.
 
-### Managing Tags
+### Managing tags
 
-* **Manual creation**: Click the Tag icon and give your snapshot a name.
-* **Auto-Tags**: Heisenware automatically creates a Tag every time you deploy an App.
-* **Import/export**: Use the Download and Import icons in the Tag history to move `.hwt` files between your computer and the platform.
+* **Manual creation**: Click the tag icon and give your snapshot a name.
+* **Auto-tags**: Heisenware automatically creates a tag every time you deploy an App.
+* **Import/export**: Use the Download and Import icons in the tag history to move `.hwt` files between your computer and the platform.
 
 {% hint style="info" %}
 #### Recommendation
 
-Before importing, create a new Tag of your current App state. This gives you a rollback point if the imported Tag isn't what you expected.
+Before importing, create a new tag of your current App state. This gives you a rollback point if the imported tag isn't what you expected.
 {% endhint %}
 
 ### Video demo
@@ -48,12 +48,12 @@ Before importing, create a new Tag of your current App state. This gives you a r
 
 ## Deployment
 
-Deployment makes your App available to your Users. To push your latest changes live, click DEPLOY in the upper-right corner.
+Deployment makes your App available to your users. To push your latest changes live, click DEPLOY in the Top Bar.
 
 <div align="center"><figure><img src="../.gitbook/assets/deploy_bottom.png" alt=""><figcaption><p>DEPLOY button</p></figcaption></figure></div>
 
 * **Downtime**: Depending on the App's complexity, it may be offline for 10 to 30 seconds during a fresh deployment.
-* **Distribution**: Click the version number after a successful deploy to find your unique App URL for sharing.
+* **Distribution**: Click the version number in the Top Bar after a successful deploy to find your unique App URL for sharing.
 
 {% hint style="warning" %}
 Avoid frequent deployments in live production environments. Users are prompted to reload the App every time a new version is pushed.
