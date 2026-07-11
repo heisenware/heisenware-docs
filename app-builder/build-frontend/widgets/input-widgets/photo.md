@@ -1,18 +1,12 @@
 # Photo
 
-{% hint style="info" %}
-Since [v88 — Almost forever](../../../../release-notes/v88-almost-forever.md), the [upload widget](upload.md) can take photos too, at a much higher resolution than this widget. The photo widget is still the better fit when smaller images are fine, when webcams need to work, or when you require a specific aspect ratio.
-{% endhint %}
-
-The photo widget lets users capture images directly from their device's camera. It provides a full-screen camera interface with control over aspect ratio and orientation, ideal for applications that need photo capture in the field.
-
-Captured photos can be stored as physical files on the server or as Base64-encoded buffers. The widget also includes a preview list of all taken photos.
+The photo widget lets users capture images with their device camera. Its full-screen camera interface gives control over aspect ratio and orientation, ideal for photo capture in the field. It stores each photo as a physical file on the server or as a Base64-encoded buffer, and shows a preview list of everything taken.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot from 2025-08-11 13-45-19.png" alt=""><figcaption><p>Default view with one photo taken</p></figcaption></figure>
 
 ## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the [Backend Builder](../../../build-backend/).
+Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
 
 ### Input
 
@@ -48,7 +42,7 @@ The structure of the photo objects in the `images` array depends on the configur
 
 ## Configuration
 
-Set these properties in the widget's settings panel to control the camera and photo management. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
+Set these in the widget's settings panel to control the camera and photo management. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
 
 ### Settings
 
@@ -62,7 +56,7 @@ Set these properties in the widget's settings panel to control the camera and ph
 
 ### Button configuration
 
-A button triggers the camera interface. You customize its appearance with standard button properties. Common properties include:
+A button triggers the camera interface. Customize its appearance with standard button properties, such as:
 
 * **`text`**: The text displayed on the button (e.g., "Take Photo").
 * **`icon`**: The icon displayed on the button (e.g., "camera").
