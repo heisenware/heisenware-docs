@@ -24,7 +24,7 @@
 
 * [Overview](app-manager/overview.md)
 * [Users and access](app-manager/users-and-access.md)
-* [Inbound integrations](app-manager/inbound-integrations.md)
+* [Integrations (inbound)](app-manager/inbound-integrations.md)
 * [Members](app-manager/members.md)
 
 ## App Builder
