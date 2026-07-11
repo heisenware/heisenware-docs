@@ -1,30 +1,30 @@
 # Photo
 
-{% hint style="success" %}
-Since [v88 - Almost Forever](../../../../release-notes/v88-almost-forever.md), you can use the [Upload](upload.md) to take photos as well and with much higher resolution than with this widget. The widget here is still useful when: smaller images aren't an issue, webcams should work as well, requirements dictate a specific aspect ratio.
+{% hint style="info" %}
+Since [v88 — Almost forever](../../../../release-notes/v88-almost-forever.md), the [upload widget](upload.md) can take photos too, at a much higher resolution than this widget. The photo widget is still the better fit when smaller images are fine, when webcams need to work, or when you require a specific aspect ratio.
 {% endhint %}
 
-The **Photo** widget allows users to capture images directly from their device's camera. It provides a full-screen camera interface with options to control aspect ratio and orientation, making it ideal for applications that require photo capture in the field.
+The photo widget lets users capture images directly from their device's camera. It provides a full-screen camera interface with control over aspect ratio and orientation, ideal for applications that need photo capture in the field.
 
-Captured photos can be stored as physical files on the server or as Base64-encoded buffers. The widget also includes a preview list for all taken photos.
+Captured photos can be stored as physical files on the server or as Base64-encoded buffers. The widget also includes a preview list of all taken photos.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot from 2025-08-11 13-45-19.png" alt=""><figcaption><p>Default view with one photo taken</p></figcaption></figure>
 
-## Data Binding
+## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+Connect the widget to your application's logic by dragging the corresponding items from the [Backend Builder](../../../build-backend/).
 
 ### Input
 
 | **Property** | **Type** | **Description**                                                                                                                                                             |
 | ------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`images`** | `Array`  | Fired whenever a new photo is taken and saved, or when a photo is deleted. The payload is an array of photo objects. See the **File Object Structure** section for details. |
+| **`images`** | `Array`  | Fired whenever a new photo is taken and saved, or when a photo is deleted. The payload is an array of photo objects. See the **File object structure** section for details. |
 
-#### File Object Structure
+#### File object structure
 
-The structure of the photo objects in the `images` array depends on the configured **Storage Type**.
+The structure of the photo objects in the `images` array depends on the configured storage type.
 
-**If `Storage Type` is `File`:**
+**If `storageType` is `File`:**
 
 ```json
 {
@@ -33,10 +33,9 @@ The structure of the photo objects in the `images` array depends on the configur
   "type": "image/jpeg",
   "path": "/shared/runtime-files/a1b2c3d4e5.jpeg"
 }
-
 ```
 
-**If `Storage Type` is `Buffer`:**
+**If `storageType` is `Buffer`:**
 
 ```json
 {
@@ -45,26 +44,25 @@ The structure of the photo objects in the `images` array depends on the configur
   "type": "image/jpeg",
   "base64": "iVBORw0KGgoAAAANSUhEUgA..."
 }
-
 ```
 
 ## Configuration
 
-### Settings
+Set these properties in the widget's settings panel to control the camera and photo management. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
 
-These properties control the behavior and appearance of the camera and photo management.
+### Settings
 
 | **Label**                    | **Description**                                                                                          | **Type** | **Property**      |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ----------------- |
-| **Storage Type**             | Determines how the captured photo is stored: as a physical `File` on the server or as a Base64 `Buffer`. | String   | `storageType`     |
-| **Aspect Ratio**             | Sets the aspect ratio of the camera view. `Cover` fills the screen.                                      | String   | `aspectRatio`     |
+| **Storage type**             | Determines how the captured photo is stored: as a physical `File` on the server or as a Base64 `Buffer`. | String   | `storageType`     |
+| **Aspect ratio**             | Sets the aspect ratio of the camera view. `Cover` fills the screen.                                      | String   | `aspectRatio`     |
 | **Orientation**              | Sets the camera orientation to `Portrait` or `Landscape`.                                                | String   | `orientation`     |
-| **Maximum Number Of Photos** | The total number of photos that can be captured with the widget.                                         | Integer  | `maxPhotos`       |
-| **Thumbnail Size**           | Sets the height (in pixels) of the preview thumbnails.                                                   | Number   | `thumbnailHeight` |
+| **Maximum number of photos** | The total number of photos that can be captured with the widget.                                         | Integer  | `maxPhotos`       |
+| **Thumbnail size**           | Sets the height (in pixels) of the preview thumbnails.                                                   | Number   | `thumbnailHeight` |
 
-### Button Configuration
+### Button configuration
 
-A button triggers the camera interface. You can customize its appearance using standard button properties. Common properties include:
+A button triggers the camera interface. You customize its appearance with standard button properties. Common properties include:
 
 * **`text`**: The text displayed on the button (e.g., "Take Photo").
 * **`icon`**: The icon displayed on the button (e.g., "camera").
