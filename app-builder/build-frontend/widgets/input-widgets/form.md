@@ -1,20 +1,16 @@
 # Form
 
-The form widget lets you build dynamic, data-driven forms with a wide variety of input types.
-
-You can configure the form's layout, create complex field groups, and connect it to your backend logic to handle data submission, validation, and dynamic updates in real time.
-
-<figure><img src="../../../../.gitbook/assets/add_form_widget_looped.gif" alt=""><figcaption></figcaption></figure>
+The form widget lets you build dynamic, data-driven forms with a wide variety of input types. Configure the layout, create complex field groups, and connect it to your backend logic to handle submission, validation, and live updates.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2025-05-20 at 15.42.53.png" alt="" width="332"><figcaption><p>A form with different editor types</p></figcaption></figure>
 
 ## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the [Backend Builder](../../../build-backend/).
+Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
 
 ### Input
 
-_Drag an input element onto the widget_
+_Drag a function input onto the widget._
 
 | Property               | Type     | Description                                                                                                     |
 | ---------------------- | -------- | --------------------------------------------------------------------------------------------------------------- |
@@ -23,7 +19,7 @@ _Drag an input element onto the widget_
 
 ### Output
 
-_Drag an output or modifier element onto the widget_
+_Drag a function output or a modifier onto the widget._
 
 | Property        | Type                | Description                                                                                                                                                                  |
 | --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -37,10 +33,10 @@ _Drag an output or modifier element onto the widget_
 
 #### Autofilling the form (`autoFill`)
 
-To pre-fill or automatically fill the form, you need to provide a JSON object to the `autoFill` property. The structure of this object must mirror the structure of your form's configuration.
+To pre-fill the form, pass a JSON object to the `autoFill` property. Its structure must mirror your form's configuration.
 
 * **Keys**: The keys in your JSON object must match the `dataField` names you defined for each field in the configuration.
-* **Nesting**: If you are using form groups and have assigned a `dataField` to a group, your JSON object should be nested accordingly. The group's `dataField` becomes a key for a nested object that contains the fields within that group.
+* **Nesting**: If you use form groups and gave a group a `dataField`, nest your JSON object to match. The group's `dataField` becomes a key for a nested object holding that group's fields.
 
 **Example:**
 
@@ -55,7 +51,7 @@ Let's say you have a form with two groups, `personalInfo` and `addressInfo`.
   * Field `dataField`: `street`
   * Field `dataField`: `city`
 
-The JSON object you would pass to `autoFill` or `formData` should look like this:
+The JSON object you pass to `autoFill` or `formData` looks like this:
 
 ```json
 {
@@ -70,11 +66,11 @@ The JSON object you would pass to `autoFill` or `formData` should look like this
 }
 ```
 
-If your form doesn't use groups with `dataField`s, the object would be flat: `{ "firstName": "John", "lastName": "Doe" }`.
+If your form uses no groups with `dataField`s, the object stays flat: `{ "firstName": "John", "lastName": "Doe" }`.
 
 #### Setting options at runtime (`options`)
 
-To dynamically populate a `select`, `tags`, or `radioGroup` editor, you provide a JSON object to the `options` property.
+To populate a `select`, `tags`, or `radioGroup` editor at runtime, pass a JSON object to the `options` property.
 
 * **Keys**: The keys of this object must match the `dataField` of the specific editor you want to update.
 * **Values**: The value for each key must be an array of options.
@@ -93,7 +89,7 @@ Imagine a form with a `state` selector and a `productTags` tag box.
 * Field `dataField`: `state` (a `select` editor)
 * Field `dataField`: `productTags` (a `tags` editor)
 
-The JSON object you would pass to the `options` property to populate both would be:
+The JSON object you pass to the `options` property to populate both:
 
 ```json
 {
@@ -164,17 +160,17 @@ The other style settings are automatically set on all screens at once for consis
 
 ### Data settings
 
-This is where you define the structure and content of your form, including all the fields, groups, and tabs.
+Define the structure and content of your form here: the fields, groups, and tabs.
 
 **Form groups**
 
-You can organize your form into one or more groups. If you define multiple groups, you can optionally display them as tabs.
+Organize your form into one or more groups. With multiple groups, you can optionally show them as tabs.
 
 | Label                | Description                                                                                                       | Type   | Property    |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------- | ------ | ----------- |
-| **Group field name** | A unique name for the group. When data is submitted, all fields within this group will be nested under this name. | String | `dataField` |
+| **Group field name** | A unique name for the group. On submit, every field in this group nests under this name. | String | `dataField` |
 | **Group label**      | A visible title displayed above the group of fields.                                                              | String | `label`     |
-| **Tab label**        | If multiple groups share the same `tabView` label, they will be rendered as tabs within a tab panel.              | String | `tabView`   |
+| **Tab label**        | Groups that share a `tabView` label render as tabs within a tab panel.              | String | `tabView`   |
 | **Fields**           | An array of field objects that belong to this group.                                                              | Array  | `fields`    |
 
 **Form fields**
@@ -183,7 +179,7 @@ Each item in the `fields` array defines an input editor in your form.
 
 | Label           | Description                                                                                   | Type    | Property     |
 | --------------- | --------------------------------------------------------------------------------------------- | ------- | ------------ |
-| **Field name**  | A unique name for the field. This is used as the key in the form's data object. **Required**. | String  | `dataField`  |
+| **Field name**  | A unique name for the field, used as the key in the form's data object. **Required**. | String  | `dataField`  |
 | **Label**       | The text label displayed for the field editor.                                                | String  | `label`      |
 | **Help text**   | Additional hint text displayed to guide the user.                                             | String  | `helpText`   |
 | **Column span** | The number of columns the field should occupy within the form layout.                         | Integer | `colSpan`    |
@@ -194,7 +190,7 @@ Each item in the `fields` array defines an input editor in your form.
 
 #### Editor types and options
 
-The `editor` property determines the input control the user will see. There are 16 different types available:
+The `editor` property sets the input control the user sees. Thirteen types are available:
 
 <table><thead><tr><th width="267">Editor type</th><th>Data type</th></tr></thead><tbody><tr><td>Text box</td><td>string</td></tr><tr><td>Select box</td><td>string</td></tr><tr><td>Number box</td><td>number</td></tr><tr><td>Check box</td><td>bool</td></tr><tr><td>Password</td><td>string</td></tr><tr><td>Tag box</td><td>array</td></tr><tr><td>Date/time select</td><td>date</td></tr><tr><td>Color select</td><td>number (hexadecimal)</td></tr><tr><td>Location select</td><td>geojson</td></tr><tr><td>Radio group</td><td>string</td></tr><tr><td>Text area</td><td>string</td></tr><tr><td>Slider</td><td>number</td></tr><tr><td>Switch</td><td>bool</td></tr></tbody></table>
 
