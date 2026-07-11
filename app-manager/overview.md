@@ -8,7 +8,7 @@ The App Manager is the administrative center of your Heisenware account. Here yo
 
 The App Manager has four main areas:
 
-* [**Apps**](overview.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](access-and-user-management.md).
+* [**Apps**](overview.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
 * [**Dashboard**](overview.md#dashboard): A real-time summary of account-wide performance and user metrics.
 * [**Members**](members.md): The interface for inviting and managing your members.
 * [**Integrations (inbound)**](integrations-inbound-connections.md): Monitor and authorize data from [Agents](../app-builder/build-backend/function-explorer/agents/README.md), MQTT, and VRPC clients.
@@ -31,7 +31,7 @@ Click the plus icon in the top bar to create a new App container.
 {% step %}
 #### Configure
 
-Enter a name and description, upload an icon, and define your initial [Users and access](access-and-user-management.md) settings.
+Enter a name and description, upload an icon, and define your initial [Users and access](users-and-access.md) settings.
 
 <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
