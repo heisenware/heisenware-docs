@@ -41,10 +41,10 @@ Display widgets get their data from your functions and flows.
 
 You link a widget by dragging the logic onto it:
 
-1. Drag an output or [modifier](../../../build-backend/modifier.md) of a [function](../../../build-backend/functions.md) onto the widget.
+1. Drag a [function's](../../../build-backend/functions.md) output, or a [modifier](../../../build-backend/modifier.md), onto the widget.
 2. On the function block, pick the widget property you want to feed (e.g., `value` or `data`).
 
 ### Interaction types
 
-* **From function output or modifier**: A function sends a value, such as a time series, to the widget's `data` property.
+* **From a function output or a modifier**: A function or modifier sends a value, such as a time series, to the widget's `data` property.
 * **To function input**: Some display widgets, like the data grid, also accept input. Connect one to a function input and it behaves like an input widget, sending selected rows or edited cells back to your logic.
