@@ -1,14 +1,14 @@
 # Members
 
-Members are the developers and admins who build and manage Apps in a Heisenware account. Navigate to the Members panel to manage your team.
+Members are the developers and admins who build and manage Apps in a Heisenware account. Open the Members panel to manage your team.
 
 {% hint style="info" %}
 #### Members vs. users
 
-Members build the Apps. Users are the people who use your published Apps. To manage permissions for your users, see [Users and access](users-and-access.md).
+Members build the Apps. Users are the people who use your published Apps. To manage permissions for your users, see [Users and access](access-and-user-management.md).
 {% endhint %}
 
-To manage members, navigate to the Members panel. Here you can:
+In the Members panel you can:
 
 * **Invite**: Enter an email address in the top-right box and click Invite.
 * **Verify**: If a member didn't receive their invite email, click the resend icon (<i class="fa-arrow-rotate-right">:arrow-rotate-right:</i>).
