@@ -1,10 +1,10 @@
 # Theme Editor
 
-The Theme Editor lets you customize the visual appearance and color scheme of each App individually. This ensures your App aligns with your corporate branding or specific design requirements.
+The Theme Editor lets you set the visual appearance and color scheme of each App individually, so every App matches your corporate branding or specific design requirements.
 
 ## How to apply a theme
 
-Follow these steps to customize your App's theme:
+To set your App's theme:
 
 {% stepper %}
 {% step %}
@@ -46,7 +46,7 @@ Heisenware's theming engine is built on the DevExtreme framework. For advanced d
 
 ## How theming affects widgets
 
-Most [widgets](widgets/) include color settings that interact directly with the App's theme. By default, a widget's color is set to `Automatic`.
+Most [widgets](widgets/) carry color settings that respond directly to the App's theme. By default, a widget's color is `Automatic`.
 
 * **Automatic**: The widget inherits its colors from the global App theme. If you change the theme later, the widget updates automatically.
 * **Manual override**: If you set a specific color for a widget (for example, making a specific button solid red), that setting overrides the theme. This specific color remains fixed even if the global theme changes.
