@@ -1,27 +1,27 @@
 # Docker Agent
 
-The Docker Agent provides the same core functionality as the Native Agent but is designed for containerized environments. It is the ideal choice for edge gateways or servers where you already manage your infrastructure using Docker.
+The Docker Agent provides the same functionality as the [Native Agent](native-agent.md) but runs in an isolated Docker container. It is the right choice for edge gateways or servers where you already manage your infrastructure with Docker.
 
-### Key Differences
+## Key differences
 
-* **Containerized execution**: It runs within an isolated Docker container rather than directly on the host operating system.
-* **Environment configuration**: Unlike the Native Agent, credentials are not "baked in." You must provide them via environmental variables during startup.
-* **Hardware & network access**: To reach local networks, USB devices, or persist data, you use standard Docker features (like host networking or volume mounting).
-* **Platform independent**: It runs on any platform that supports Docker, providing a consistent deployment model across different hardware.
+* **Containerized execution**: Runs in an isolated Docker container instead of directly on the host operating system.
+* **Environment configuration**: Credentials are not built into an installer. You provide them as environment variables at startup.
+* **Hardware and network access**: To reach local networks, USB devices, or persist data, use standard Docker features like host networking or volume mounting.
+* **Platform independent**: Runs on any platform that supports Docker.
 
-### Where to get it?
+## Where to get it
 
-Our Docker agent is available as a publicly downloadable image:
+The Docker Agent is available as a publicly downloadable image:
 
 ```
 heisenware/docker-agent:<version>
 ```
 
-You can find a list of all available versions on [Docker Hub](https://hub.docker.com/r/heisenware/docker-agent).
+Find all available versions on [Docker Hub](https://hub.docker.com/r/heisenware/docker-agent).
 
-### How to use it
+## How to use it
 
-Setting up the Docker Agent is straightforward. You simply need to configure the following environment variables when running the container:
+Configure the following environment variables when running the container:
 
 ```bash
 docker run -it \
@@ -33,13 +33,13 @@ docker run -it \
 heisenware/docker-agent:v91-slim
 ```
 
-#### **Retrieving Credentials**
+### Retrieving credentials
 
-To get your `HW_USERNAME` and `HW_PASSWORD`, you must first add a [VRPC Integration](https://docs.heisenware.com/app-manager/overview-and-dashboard/integrations-external-clients#connecting-mqtt-and-vrpc-clients) in the App Manager.
+To get `HW_USERNAME` and `HW_PASSWORD`, first add a [VRPC integration](../../../app-manager/integrations-inbound-connections.md#vrpc-client) in the App Manager.
 
-**Example**
+### Example
 
-For an account named `my-company`, an integration with the username `agentRunner`, and the password `secret`, the command would look like this:
+For an account named `my-company`, an integration with the username `agentRunner`, and the password `secret`:
 
 ```bash
 docker run -it \
@@ -51,10 +51,14 @@ docker run -it \
 heisenware/docker-agent:v91-slim
 ```
 
-Once the connection is successfully established, your console will show a confirmation screen (see below) indicating the agent is online and connected to the workspace.
+Once the connection is established, the console shows a confirmation screen indicating the Agent is online and connected to the workspace.
 
-<figure><img src="../../../../.gitbook/assets/image (489).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (489).png" alt=""><figcaption></figcaption></figure>
 
-### Persisting Data
+## Persisting data
 
-To ensure your data and configurations (such as created instances) persist across container restarts or updates, you must mount the `/shared` volume to a persistent location on your host machine.
+To keep your data and configurations (such as created instances) across container restarts or updates, mount the `/shared` volume to a persistent location on your host machine:
+
+```bash
+-v /path/on/host:/shared
+```
