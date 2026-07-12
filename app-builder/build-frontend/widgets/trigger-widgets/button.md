@@ -1,33 +1,51 @@
 # Button
 
-The button widget is a fundamental element in any user interface. It captures user clicks to trigger your backend logic. You can also dynamically change a button's appearance to provide visual feedback.
+The button widget captures a user click and triggers your backend logic. You can also drive its appearance and state from logic to give the user visual feedback.
 
 ## Data binding
 
-Connect the widget to your application logic by dragging the corresponding items from the [Backend Builder](/app-builder/build-backend.md).
+### Function trigger to button
 
-### Widget to logic
+Connect a function's trigger to the button so a click starts the function. Only the click is sent, no data. You can also connect `onClick` to a function input to pass the button's text into your logic.
 
-The events the button sends to your backend logic.
+| Property  | Description                                                                                                                                | Type            |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `onClick` | Fires when the user clicks the button. Connect it to a function trigger to start a process, or to a function input to pass the button text. | event or string |
 
-<table><thead><tr><th width="171.7139892578125">Property</th><th width="177.5711669921875">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>onClick</code></td><td><code>Event</code> / <code>String</code></td><td>Fires when the user clicks the button. Connect it to a [function](/app-builder/build-backend/functions.md) trigger to start a process, or to a function input to pass the button text to your logic.</td></tr></tbody></table>
+### Function output to widget
 
-### Logic to widget
+State and appearance you drive from backend logic. The button's visual properties (`text`, `icon`, `fontSize`, `iconSize`, `type`, `stylingMode`, `hint`) are also bindable, so you can restyle it at runtime.
 
-The properties you can control from your backend logic.
-
-<table><thead><tr><th width="140.42822265625">Property</th><th width="126.8575439453125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>disable</code></td><td><code>Boolean</code></td><td>When <code>true</code>, disables the button and prevents clicks.</td></tr><tr><td><code>enable</code></td><td><code>Boolean</code></td><td>When <code>true</code>, enables the button. Use this to re-enable a button initialized as disabled in its <a href="#configuration">settings</a>.</td></tr><tr><td><code>toggle</code></td><td><code>Boolean</code></td><td>Toggles the button between enabled and disabled based on a <code>true</code> or <code>false</code> input.</td></tr><tr><td><code>done</code></td><td><code>Any</code></td><td>Connect the output of a long-running function to this property to display a loading indicator on the button. The indicator disappears when the function provides an output.</td></tr></tbody></table>
+| Property  | Description                                                                                                                | Type    |
+| --------- | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `disable` | When `true`, disables the button and prevents clicks.                                                                     | boolean |
+| `enable`  | When `true`, enables the button. Use this to re-enable a button that starts disabled in its [settings](#configuration).   | boolean |
+| `toggle`  | Enables or disables the button based on a `true` or `false` input.                                                        | boolean |
+| `done`    | Connect a long-running function's output here to show a loading indicator on the button. It clears when the function returns an output. | any |
 
 ## Configuration
 
 Double-click a button in the UI preview, or select it and click the edit icon, to open its settings.
 
-<table><thead><tr><th width="165.57177734375">Setting</th><th width="387.42822265625">Description</th><th>Property</th></tr></thead><tbody><tr><td>Text</td><td>The text label displayed on the button.</td><td><code>text</code></td></tr><tr><td>Icon</td><td>Adds an icon to the left of the text.</td><td><code>icon</code></td></tr><tr><td>Text size</td><td>Changes the size of the text.</td><td><code>textSize</code></td></tr><tr><td>Icon size</td><td>Changes the size of the icon.</td><td><code>iconSize</code></td></tr><tr><td>Type</td><td>Sets the button color scheme based on the app theme. Options include <code>default</code>, <code>normal</code>, <code>success</code>, <code>danger</code>, <code>back</code>, and <code>transparent</code>.</td><td><code>type</code></td></tr><tr><td>Styling mode</td><td>Adjusts the visual style of the button. Options include <code>text</code>, <code>contained</code>, and <code>outlined</code>.</td><td><code>style</code></td></tr><tr><td>Hover text</td><td>Adds a tooltip that appears when the user hovers over the button.</td><td><code>hoverText</code></td></tr><tr><td>Initially disabled</td><td>If <code>true</code>, disables the button when the App first loads.</td><td><code>initiallyDisabled</code></td></tr><tr><td>Requires confirmation</td><td>If <code>true</code>, opens a confirmation popup on click. You can adjust the title and text of the dialog, and the user answers yes or no.</td><td></td></tr></tbody></table>
+| Property               | Label                 | Description                                                                                          | Type    |
+| ---------------------- | --------------------- | --------------------------------------------------------------------------------------------------- | ------- |
+| `text`                 | Text                  | The text label on the button.                                                                       | string  |
+| `icon`                 | Icon                  | Adds an icon to the left of the text.                                                                | string  |
+| `fontSize`             | Text size             | The size of the text.                                                                                | integer |
+| `iconSize`             | Icon size             | The size of the icon.                                                                                | integer |
+| `type`                 | Type                  | The button color scheme, based on the App theme (`default`, `normal`, `success`, `danger`, `back`, `transparent`). | string |
+| `stylingMode`          | Styling mode          | The visual style (`text`, `contained`, `outlined`).                                                 | string  |
+| `hint`                 | Hover text            | A tooltip shown when the user hovers over the button.                                               | string  |
+| `disabled`             | Initially disabled    | If `true`, the button starts disabled when the App loads.                                            | boolean |
+| `requiresConfirmation` | Requires confirmation | If `true`, a click opens a confirmation dialog before the button acts.                               | boolean |
+| `confirmationTitle`    | Confirmation title    | The title of the confirmation dialog.                                                               | string  |
+| `confirmationText`     | Confirmation text     | The message in the confirmation dialog.                                                             | string  |
+| `reload`               | Reload                | If `true`, clicking the button reloads the App.                                                     | boolean |
 
 {% hint style="info" %}
 #### Making specific UI areas clickable
 
-Use transparent buttons to collect clicks in specific areas of your interface and pass information to your logic – this is useful for building interactive visual maps.
+Use transparent buttons to collect clicks on specific areas of your interface and pass information to your logic, handy for building interactive visual maps.
 
-For example, upload an image of your shopfloor and place a transparent button over a specific machine. Set the button text to the machine ID. Because the button type is transparent, the text stays hidden. When a user clicks the machine on the image, the button passes the machine ID to your logic via the `onClick` event. You can use this ID to perform further actions, such as navigating to a detail page and filtering the data for that specific machine.
+For example, upload an image of your shopfloor and place a transparent button over a machine. Set the button text to the machine ID. Because the type is `transparent`, the text stays hidden. When a user clicks the machine, the button passes the ID to your logic via `onClick`. You can then act on it, such as navigating to a detail page filtered for that machine.
 {% endhint %}
