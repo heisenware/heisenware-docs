@@ -1,77 +1,23 @@
 # Function Explorer
 
-The Function Explorer is the structural repository in the left panel that holds all tools required to build your application logic. It organizes available Functions into logical categories and hierarchies (such as classes and instances), and allows you to drag and drop them directly onto the Backend Builder canvas.
+The Function Explorer is the panel on the left that holds all functions available to your App. It organizes them into categories and hierarchies (classes and instances) and lets you drag them directly onto the Backend Builder canvas.
 
 <figure><img src="../../../.gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
 
 ## Categories
 
-By default, the library organizes Functions into three primary categories:
+* [**Connectors**](connectors/): Integration functions for industrial protocols and external systems. Connectors in this category require the target system to be reachable over the network or internet.
+* [**Storage**](storage/): The relational database and timeseries database classes to connect to databases, including the built-in internal PostgreSQL and InfluxDB. Also holds lightweight stores like the data store and circular buffer.
+* [**Utilities**](utilities/): Data processing, timers, cron jobs, barcode generation, PDF processing, and more.
+* **Custom**: Your own building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
 
-* [**Connectors**](connectors/): A set of integration Functions for standard protocols (MQTT, OPC UA, HTTP) and API blocks used to interface with external hardware and software systems. Connectors require a direct network connection or internet accessibility for the systems you intend to connect.
-* [**Storage**](storage/): This is your hub for data persistence. It provides direct access to built-in relational (PostgreSQL) and time-series (InfluxDB) databases, and it is also the place where you connect and manage your own external databases.
-* [**Utilities**](utilities/): Mathematical operations, logic gates, and data transformation blocks used to refine data flows.
-* Custom: All custom made Functionality is organized here.
+In addition to the categories, every installed and started [Agent](../agents/) appears as its own entry, listed by its name and holding the connector classes selected when building it.
 
-## Extending functionality
+## Toolbar
 
-If your requirements exceed the default set of Functions, you can expand the library through agents, extensions, or custom code.
+The icons at the top of the panel extend your function library:
 
-### Agents
-
-For isolated local networks or systems without internet access, you must use a native or Docker [agent](../agents/). Once an agent is installed and started, the agent itself and any connectors built within it appear automatically in the library. These agents act as secure bridges, allowing you to interact with on-premise hardware as if it were natively connected.
-
-### Extensions
-
-[Extensions](function-explorer.md#extensions) allow you to expand the platform's capabilities using container technology. An extension is a standard Docker image that Heisenware executes and exposes as visual Functions within your library.
-
-There are two categories of extensions:
-
-* **Official extensions**: Ready-to-use, managed modules maintained by Heisenware.
-* **Custom Extensions**: Your very own Docker images containing custom algorithms or logic (also known as custom Code Adapters).
-
-### Smart onboarding
-
-Smart onboarding is a secure mechanism for connecting external clients, such as IoT devices, to your account without manual credential exchange. The process is similar to pairing a Bluetooth device.
-
-To onboard a source, follow these 5 steps:
-
-{% stepper %}
-{% step %}
-#### Initiate request
-
-Start a connection request from your external source.
-{% endstep %}
-
-{% step %}
-#### Open App Builder
-
-Access the app where you wish to use the integration.
-{% endstep %}
-
-{% step %}
-#### Start onboarding
-
-Click the onboarding icon (<i class="fa-screencast">:screencast:</i>) in the Functions library panel.
-{% endstep %}
-
-{% step %}
-#### Select source
-
-Choose the trusted source you wish to onboard from the appearing list.
-{% endstep %}
-
-{% step %}
-#### Stop process
-
-Click the onboarding icon again to close the pairing window.
-{% endstep %}
-{% endstepper %}
-
-{% hint style="warning" %}
-**Security note:** Only onboard sources you trust. If no source appears while onboarding is active, verify that the connection request from the external device is configured correctly.
-{% endhint %}
-
-<figure><img src="../../../.gitbook/assets/sych_looped.gif" alt=""><figcaption></figcaption></figure>
-
-Once an external source is successfully onboarded, the new integration is automatically listed in the [integrations panel](../../../app-manager/integrations-inbound-connections.md) within the App Manager. From there, it is globally available to be used across different applications.
+* **Create Agent** (<i class="fa-cloud">:cloud:</i>): Build and download a new [Agent](../agents/).
+* **Install extension** (<i class="fa-puzzle-piece">:puzzle-piece:</i>): Add official or Custom [Extensions](extensions/) to your library.
+* **Smart onboarding** (<i class="fa-screencast">:screencast:</i>): Pair external clients, such as IoT devices, with your account. See [smart onboarding](connectors/#smart-onboarding).
+* **Collapse** (<i class="fa-chevrons-up">:chevrons-up:</i>): Collapse all open entries.
