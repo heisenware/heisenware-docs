@@ -1,68 +1,76 @@
 # Functions
 
-Functions are the core building blocks for application logic in Heisenware. They are visual representations of actual code that allow you to fetch data, process information, manage databases, and control devices.
+Functions are the core building blocks of your App logic. They are visual representations of actual code that fetch data, process information, manage databases, and control devices.
 
-All Functions follow the same anatomy. Each part of it is represented by a colored box with a unique icon inside.
+All functions follow the same anatomy. Each part is represented by a colored box with a unique icon inside.
 
-<figure><img src="../../../.gitbook/assets/image (502).png" alt=""><figcaption><p>A Function merging two (or more) objects</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (502).png" alt=""><figcaption><p>A function merging two (or more) objects</p></figcaption></figure>
 
-* [**Input(s)**](./#inputs-and-data-configuration): Arguments the Function needs to work (e.g., a number to calculate or a string to send). If a Function does not require an input, the box is not shown.
-* [**Trigger**](./#triggers-and-execution-logic): The signal that tells the Function to execute (e.g., a button click or a data change).
-* [**Output**](./#outputs-and-chaining): The result of the operation also available for the next step in your flow.
-* [**Extensions**](./#function-extensions) **(optional)**: Add-ons to [filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), or [modify](../extension-nodes/modifier.md) data on the fly.
+* [**Input(s)**](./#inputs-and-data-configuration): Arguments the function needs to work (e.g., a number to calculate or a string to send). If a function does not require an input, the box is not shown.
+* [**Trigger**](./#triggers-and-execution-logic): The signal that tells the function to execute (e.g., a button click or a data change).
+* [**Output**](./#outputs-and-chaining): The result of the operation, also available for the next step in your flow.
+* [**Extension nodes**](../extension-nodes/) **(optional)**: Separate nodes at the output that [filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), or [modify](../extension-nodes/modifier.md) data on the fly.
 
-### Types of Functions
+## Function categories
 
-There are four main types of Functions, defined by how they handle context (state).
+All available functions live in the [Function Explorer](function-explorer.md), the panel on the left where you browse them by category. Each category has its own reference section:
 
-<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static Functions</strong></td><td><p>Standalone utilities that process data without needing context.</p><p><em>(e.g., <code>mergeObjects</code>, <code>mapRange</code>, <code>echo</code>)</em></p></td></tr><tr><td><strong>Member Functions</strong></td><td>Actions linked to a specific Instance you have created. They use the unique connection settings stored in that instance.<br><br>(e.g., <code>read</code>, <code>write</code>, <code>publish</code>)</td></tr><tr><td><strong>Constructor Functions</strong></td><td>Are called <em><code>create</code></em> and used to configure and initialize a new instance.</td></tr><tr><td><strong>Destructor Functions</strong></td><td>Are called <em><code>delete</code></em> and used to remove an instance and free up system resources.</td></tr></tbody></table>
+* [**Connectors**](connectors/): Integration functions for industrial protocols and external systems, from MQTT and OPC UA to Siemens S7 and SAP Digital Manufacturing.
+* [**Storage**](storage/): Built-in relational (PostgreSQL) and time-series (InfluxDB) databases, plus lightweight stores like the data store and circular buffer.
+* [**Utilities**](utilities/): Data processing, timers, cron jobs, barcode generation, PDF processing, and more.
+* [**Extensions**](extensions/): Docker-based modules that extend the platform, such as RAG AI or process simulations.
+* **Custom**: Your own building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
+
+## Types of functions
+
+There are four main types of functions, defined by how they handle context (state).
+
+<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static functions</strong></td><td><p>Standalone utilities that process data without needing context.</p><p><em>(e.g., <code>mergeObjects</code>, <code>mapRange</code>, <code>echo</code>)</em></p></td></tr><tr><td><strong>Member functions</strong></td><td>Actions linked to a specific instance you have created. They use the unique connection settings stored in that instance.<br><br>(e.g., <code>read</code>, <code>write</code>, <code>publish</code>)</td></tr><tr><td><strong>Constructor functions</strong></td><td>Are called <em><code>create</code></em> and configure and initialize a new instance.</td></tr><tr><td><strong>Destructor functions</strong></td><td>Are called <em><code>delete</code></em> and remove an instance to free up system resources.</td></tr></tbody></table>
 
 {% hint style="info" %}
-**💡 Concept example: The OPC UA Client Class**
+#### Concept example: the OPC UA client
 
-* **Class:** The generic blueprint for OPC UA Client.
-* **Create a specific instance:** You use the `create` Function to configure a connection (IP, port, security), resulting in an instance named `myMachine`.
-* **Member functions:** You use the `connect` and `read` Functions belonging to `myMachine` to get data. It works because it knows which server to talk to based on the instance.
+* **Class**: The generic blueprint for the OPC UA client.
+* **Create a specific instance**: Use the `create` function to configure a connection (IP, port, security), resulting in an instance named `myMachine`.
+* **Member functions**: Use the `connect` and `read` functions belonging to `myMachine` to get data. This works because the instance knows which server to talk to.
 {% endhint %}
 
-## Working with Functions on the canvas
+## Working with functions on the canvas
 
-* **Add**: Drag a Function from the [Function Explorer](https://docs.heisenware.com/app-builder/build-backend/functions-library) in the left panel onto the canvas.
-* **Sequence**: Create a flow by drawing a wire.
-  * **To Input**: Passes data (arguments) to the next function.
-  * **To Trigger**: Uses the completion of one Function to start the next (no data transfer).
-* **Configure**: Click a Function to open its configuration. You can use YAML for static data or binding for dynamic data from other Functions or UI widgets.
-* Documentation: Click the info icon (<i class="fa-info">:info:</i>) next to a Function's name to open its specific documentation panel.
-* **Comment**: Right-click a Function and select comment to add context for your team.
-* **Delete**: Select the Function and press delete on your keyboard or click the trash icon (<i class="fa-trash">:trash:</i>).
+* **Add**: Drag a function from the [Function Explorer](function-explorer.md) onto the canvas.
+* **Sequence**: Create a flow by drawing a wire, see [sequencing functions](../README.md#sequencing-functions).
+* **Configure**: Click a function to open its configuration. Use YAML for static data or binding for dynamic data from other functions or UI widgets.
+* **Documentation**: Click the info icon (<i class="fa-info">:info:</i>) next to a function's name to open its documentation panel.
+* **Comment**: Right-click a function and select comment to add context for your team.
+* **Delete**: Select the function and press delete on your keyboard or click the trash icon (<i class="fa-trash">:trash:</i>).
 
-{% hint style="warning" %}
-Deleting a Function permanently removes its configurations and all connected wires. This action cannot be undone.
+{% hint style="danger" %}
+Deleting a function permanently removes its configuration and all connected wires. This action cannot be undone.
 {% endhint %}
 
-### Status Indicators
+### Status indicators
 
-Each Function has a colored status indicator next to its name. Hover over the indicator for details.
+Each function has a colored status indicator next to its name. Hover over the indicator for details.
 
 * 🟢 **Green**: Ready / OK.
 * 🔵 **Blue**: Execution is slow (> 2 seconds).
-* 🟡 **Yellow**: Object/Instance does not exist yet.
+* 🟡 **Yellow**: Instance does not exist yet.
 * 🔴 **Red**: Error or exception occurred.
 * ⚪ **Gray**: Function is offline/unavailable.
 
-## Inputs & data configuration
+## Inputs and data configuration
 
-Inputs determine how a Function behaves. You can provide data via three sources:
+Inputs determine how a function behaves. Provide data via three sources:
 
-1. **Static data**: Fixed values typed directly into the Function Input (configured via YAML) or set via a web form (opened with a click on the blue arrow icon inside the Function Input).
-2. **Dynamic logic**: Data passed from the Output, [Modifier](../extension-nodes/modifier.md), or [Filter](../extension-nodes/filter.md) of a previous Function.
-3. **UI binding**: Live data from a [Widget](../../build-frontend/widgets/) (e.g., a text field value).
+1. **Static data**: Fixed values typed directly into the function input (configured via YAML) or set via a web form (opened with a click on the blue arrow icon inside the function input).
+2. **Dynamic logic**: Data passed from the output, [modifier](../extension-nodes/modifier.md), or [filter](../extension-nodes/filter.md) of a previous function.
+3. **UI binding**: Live data from a [widget](../../build-frontend/widgets/) (e.g., a text field value).
 
 <figure><img src="../../../.gitbook/assets/randminteger_function.png" alt=""><figcaption><p>Function with object input in YAML format</p></figcaption></figure>
 
 ### YAML input
 
-We use YAML for configuration because it is human-readable and handles complex data structures easily.
+Heisenware uses YAML for configuration because it is human-readable and handles complex data structures easily.
 
 <details>
 
@@ -127,7 +135,7 @@ Essential for large blocks of text, code, or templates.
       ^RFW,A^FD {{assetId}}^FS
       ^XZ
     ```
-*   **Folded style (`>`)**: Use the greater-than symbol to convert single newlines into spaces. This is great for writing long paragraphs that you want to be read as a single line of text. Blank lines will be kept as newlines.
+*   **Folded style (`>`)**: Use the greater-than symbol to convert single newlines into spaces. This is great for writing long paragraphs that should be read as a single line of text. Blank lines are kept as newlines.
 
     ```yaml
     description: >
@@ -141,39 +149,39 @@ Essential for large blocks of text, code, or templates.
 </details>
 
 {% hint style="info" %}
-Right-click an Function Input to switch between YAML and HTML view, or to set an input as a Secret (masking the value).
+Right-click a function input to switch between YAML and HTML view, or to set an input as a secret (masking the value).
 {% endhint %}
 
-### Special inputs: Callbacks
+### Special inputs: callbacks
 
-Functions with a `on` prefix (e.g., `onMessage`) use callbacks. These listen for external events (like an incoming MQTT message) and provide that data via a specific output nested inside the Function Input.
+Functions with an `on` prefix (e.g., `onMessage`) use callbacks. They listen for external events (like an incoming MQTT message) and provide that data via a specific output nested inside the function input.
 
-<figure><img src="../../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A Function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
 
-## Triggers & execution logic
+## Triggers and execution logic
 
-The Trigger determines _when_ a Function runs.
+The trigger determines _when_ a function runs.
 
 ### Trigger sources
 
-* **Data-driven**: Link an Output, Modifier, or Filter to a Trigger to run `on change`, `on update`, or `on true`.
-* **UI events**: Link a widget event (like a [button](../../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the Trigger.
-* **App lifecycle**: Right-click the Trigger to set execution `on App Start` (once) or `on App Stop`.
-* **Periodically**: Right-click the Trigger to set a recurring execution interval.
-* **Page load**: Drag a [page](../../build-frontend/page-explorer.md) onto the Trigger to execute the Function when that page loads.
-* **Manual (during development)**: Click the Trigger icon inside the Trigger to execute the Function during development.
+* **Data-driven**: Link an output, modifier, or filter to a trigger to run `on change`, `on update`, or `on true`.
+* **UI events**: Link a widget event (like a [button](../../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the trigger.
+* **App lifecycle**: Right-click the trigger to set execution `on App Start` (once) or `on App Stop`.
+* **Periodically**: Right-click the trigger to set a recurring execution interval.
+* **Page load**: Drag a [page](../../build-frontend/page-explorer.md) onto the trigger to execute the function when that page loads.
+* **Manual (during development)**: Click the trigger icon inside the trigger to execute the function during development.
 
-<figure><img src="../../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a Function</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a function</p></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption><p>Use a button click to execute a Function</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption><p>Use a button click to execute a function</p></figcaption></figure>
 
 ### Sequential processing of arrays (looping)
 
-To process an array item-by-item (like a `for` loop):
+To process an array item by item (like a `for` loop):
 
-1. Right-click the Trigger.
+1. Right-click the trigger.
 2. Select `Process one by one`.
-3. Choose the input containing the array. The trigger will change to a dotted line, indicating it will run once for every item in the list.
+3. Choose the input containing the array. The trigger changes to a dotted line, indicating it runs once for every item in the list.
 
 <details>
 
@@ -181,7 +189,7 @@ To process an array item-by-item (like a `for` loop):
 
 A common use case for sequential processing is merging a single element into each sub-array of a larger array.
 
-The image below illustrates a `combine` Function where the Trigger is configured to Process One By One on its first input (`On arg 1`). As a result, the Function executes for each sub-array, and the singular element from the second input is merged into both.
+The image below shows a `combine` function where the trigger is configured to process one by one on its first input (`On arg 1`). As a result, the function executes for each sub-array, and the singular element from the second input is merged into both.
 
 <figure><img src="../../../.gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
 
@@ -189,81 +197,77 @@ The image below illustrates a `combine` Function where the Trigger is configured
 
 ### Delayed execution
 
-You can add a delay (0.1s to 2.0s) to any trigger to manage timing, such as waiting for a UI animation to finish before fetching data.
+Add a delay (0.1s to 2.0s) to any trigger to manage timing, such as waiting for a UI animation to finish before fetching data.
 
-## Outputs & chaining
+## Outputs and chaining
 
-The output returns the result of the Function's execution. It is the primary way to pass data and control logic in your application.
+The output returns the result of the function's execution. It is the primary way to pass data and control logic in your App.
 
 ### Return data types
 
-Depending on the Function, the output can be:
+Depending on the function, the output can be:
 
 * **Standard data**: JSON objects, strings, numbers, or arrays.
 * **Binary content**: Files or images (e.g., for PDF generation or camera captures).
 * **Success flags**: A simple `true`/`false` boolean indicating if an operation (like a database write) succeeded.
 
-### Backend logic (Flows)
+### Backend logic (flows)
 
-You can link an output to another Function to create a chain of logic:
+Link an output to another function to create a chain of logic:
 
-* **Pass data**: Connect Output → Input. The result of Function A becomes the argument for Function B.
-* **Control flow**: Connect Output → Trigger. Function B will only execute once Function A completes successfully.
+* **Pass data**: Connect output → input. The result of function A becomes the argument for function B.
+* **Control flow**: Connect output → trigger. Function B only executes once function A completes successfully.
 
 ### UI interaction
 
-You can link an output directly to the frontend to drive the user interface:
+Link an output directly to the frontend to drive the user interface:
 
-* **Visualize**: Connect to a widget (e.g., a [Chart](../../build-frontend/widgets/display-widgets/chart.md) or [Value Box](../../build-frontend/widgets/display-widgets/value-box.md)) to display the data.
-* **Control**: Connect to a widget (e.g., a [Button](../../build-frontend/widgets/trigger-widgets/button.md)) and select the specific property you want to control (e.g., `disabled` or `toggle`) to dynamically change its behavior.
+* **Visualize**: Connect to a widget (e.g., a [chart](../../build-frontend/widgets/display-widgets/chart.md) or [value box](../../build-frontend/widgets/display-widgets/value-box.md)) to display the data.
+* **Control**: Connect to a widget (e.g., a [button](../../build-frontend/widgets/trigger-widgets/button.md)) and select the property you want to control (e.g., `disabled` or `toggle`) to dynamically change its behavior.
 * **Navigate**: Connect to a `Page Switch` trigger to automatically change screens based on logic.
 
-## Function extensions
+## Extension nodes
 
-Extensions are tools attached directly to a Function's Output. They allow you to [modify](../extension-nodes/modifier.md), [Filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), or [handle errors](../extension-nodes/error-handler.md) on the fly without adding separate Function blocks.
+[Extension nodes](../extension-nodes/) process data directly at a function's output, without adding separate function blocks: [modifiers](../extension-nodes/modifier.md) transform data, [filters](../extension-nodes/filter.md) gate it, [recorders](../extension-nodes/recorder.md) store it, and [error handlers](../extension-nodes/error-handler.md) catch exceptions.
 
-<div align="center"><figure><img src="../../../.gitbook/assets/function_extentions.png" alt=""><figcaption><p>One function with three extensions</p></figcaption></figure></div>
+<div align="center"><figure><img src="../../../.gitbook/assets/function_extentions.png" alt=""><figcaption><p>One function with three extension nodes</p></figcaption></figure></div>
 
-### Working with extensions
+* **Add**: Click the + icon on an output and select the desired type. You can add multiple parallel extension nodes to the same output.
+* **Chain**: Add an extension node to the output of _another_ extension node to create a multi-step pipeline (e.g., filter data, then modify it).
+* **Delete**: Right-click an extension node and select Delete.
 
-* **Add**: Click the + icon on an output and select the desired type. You can add multiple parallel extensions to the same output.
-* **Chain**: You can add an extension to the output of _another_ extension to create a multi-step pipeline (e.g., filter data then modify it).
-* **Delete**: Right-click an extension and select Delete.
-
-<div align="center"><figure><img src="../../../.gitbook/assets/modifer_add_looped.gif" alt=""><figcaption><p>Adding extensions</p></figcaption></figure></div>
+<div align="center"><figure><img src="../../../.gitbook/assets/modifer_add_looped.gif" alt=""><figcaption><p>Adding extension nodes</p></figcaption></figure></div>
 
 ## Data binding (connecting to UI)
 
-Functions communicate bidirectionally with the frontend widgets via data binding.
+Functions communicate bidirectionally with frontend widgets via data binding.
 
-* **Input binding**: Link a widget property (e.g., `formData`) to a Function Input.
-* **Trigger binding**: Link a user action (e.g., `on Button click`) to a Function Trigger.
-* **Output binding**: Link a Function result to a widget property (e.g., `data`) to update the UI.
+* **Input binding**: Link a widget property (e.g., `formData`) to a function input.
+* **Trigger binding**: Link a user action (e.g., `on Button click`) to a function trigger.
+* **Output binding**: Link a function result to a widget property (e.g., `data`) to update the UI.
 
 ## Advanced addressing
 
-Any Function inherently addresses the corresponding backend code using a specific structure. To view or edit this, right-click the Function name and select `Use Dynamic Address`.
+Every function addresses its underlying backend code using a specific structure. To view or edit it, right-click the function name and select `Use Dynamic Address`.
 
-<figure><img src="../../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right click the Function name and choose e.g. <code>Use Dynamic Address</code></p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right-click the function name and choose e.g. <code>Use Dynamic Address</code></p></figcaption></figure>
 
 This reveals the "path" to the underlying code, consisting of up to three boxes:
 
 `<Agent/Service> <Class> [Instance]`
 
-* **Box 1 (Agent/Service):** The program executing the Function. This can be a generic internal service (e.g., "Utility Functions") or a specific Edge Agent running on a machine.
-* **Box 2 (Class)**: The actual name of the underlying code class in the programming language (e.g., `Busylight`, `Barcode`, `OpcuaClient`).
-* **Box 3 (Instance)**: The specific instance name (e.g., `server1`). This box only appears for member Functions. Static Functions (like `generateBarcode`) do not belong to an instance, so this box is hidden.
+* **Box 1 (agent/service)**: The program executing the function. This can be a generic internal service (e.g., "Utility Functions") or a specific Agent running on a machine.
+* **Box 2 (class)**: The name of the underlying code class (e.g., `Busylight`, `Barcode`, `OpcuaClient`).
+* **Box 3 (instance)**: The specific instance name (e.g., `server1`). This box only appears for member functions. Static functions (like `generateBarcode`) do not belong to an instance, so this box is hidden.
 
-<figure><img src="../../../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static Function and a member Function</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static function and a member function</p></figcaption></figure>
 
-You can edit this address to your liking. If you switch back to the regular (short) view, your changes are kept.
+Edit this address as needed. If you switch back to the regular (short) view, your changes are kept.
 
 {% hint style="info" %}
-**💡 Use Case: Swapping Agents**
+#### Use case: swapping Agents
 
-This feature is essential when moving logic between environments (e.g., from a test device to a production machine).
+When moving logic between environments (e.g., from a test device to a production machine), update the Agent name (box 1) to match the new Agent instead of rewiring your flow.
 
-Instead of rewiring your flow, simply update the Agent name (Box 1) to match the new Edge Agent.
-
-You can even use [search-and-replace](/broken/pages/9vKr7mso7EW9dCDhxV7Y#search-and-replace) to update the agent name across multiple Functions at once. This works even on addresses that are not explicitly set to "Dynamic" view.
+You can even use [search and replace](../README.md#search-and-replace) to update the Agent name across multiple functions at once. This works even on addresses that are not explicitly set to the dynamic view.
 {% endhint %}
