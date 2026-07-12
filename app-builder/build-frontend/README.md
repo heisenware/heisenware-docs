@@ -4,6 +4,7 @@ The UI is what users of your Apps see and interact with. It ranges from simple d
 
 {% hint style="info" %}
 #### Optional user interface
+
 The UI is optional. You can build headless Apps that use pure backend logic, like a data bridge between a PLC and a SQL database, running silently with no visual frontend.
 {% endhint %}
 
@@ -24,6 +25,7 @@ Build Apps for any screen size and switch the preview as you go to verify that y
 ### The toolbar
 
 The toolbar serves as your main kit for composing the interface. It holds buttons and icons to:
+
 * Add a text box, icon, or widget.
 * Switch the screen preview.
 * Extend page height to enable scrolling and scale the view.
@@ -34,6 +36,7 @@ The toolbar serves as your main kit for composing the interface. It holds button
 ### Placing and moving elements
 
 Add an element by selecting it from the toolbar and clicking anywhere on the canvas. Once placed, you can:
+
 * **Move**: Drag the element to a new position on the canvas.
 * **Resize or rotate**: Use the grab markers on the corners and edges to change the element's dimensions or orientation.
 * **Open settings**: Double-click the widget, or select it and click the pen icon in the toolbar.
@@ -45,19 +48,22 @@ Add an element by selecting it from the toolbar and clicking anywhere on the can
 
 {% hint style="warning" %}
 #### Screen-specific layout saving
+
 Heisenware saves changes to an element's position or size per device size. Always check other screen previews to ensure the layout stays clean across all hardware.
 {% endhint %}
 
 ### Context menu tools
 
 Right-click any element to open a menu for quick layout actions and layer management.
-* *Order*: Adjust the stacking of overlapping elements to control which item appears in the foreground or background.
-* *Full width*: Instantly stretches the element to fill the entire horizontal space of your current screen preview.
-* *Toggle tile view*: Switches the element into a tiled display mode.
+
+* _Order_: Adjust the stacking of overlapping elements to control which item appears in the foreground or background.
+* _Full width_: Instantly stretches the element to fill the entire horizontal space of your current screen preview.
+* _Toggle tile view_: Switches the element into a tiled display mode.
 
 ### Screen preview and responsive behavior
 
-Production Apps are responsive by nature and adapt to different screen sizes automatically. Control exactly how your App behaves on different hardware using these toolbar tools:
+[Heisenware Apps](https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/production-apps) are responsive by nature and adapt to different screen sizes automatically. Control exactly how your App behaves on different hardware using these toolbar tools:
+
 * **Switching previews**: Click the screens icon (<i class="fa-laptop-mobile">:laptop-mobile:</i>) and click a device icon to switch to the corresponding UI editor and adapt your layout.
 
 <figure><img src="../../.gitbook/assets/image (516).png" alt=""><figcaption></figcaption></figure>
@@ -72,6 +78,7 @@ Production Apps are responsive by nature and adapt to different screen sizes aut
 
 {% hint style="info" %}
 #### Mobile-first workflow best practices
+
 By default, Heisenware inherits changes upward: changes configured on a smaller screen propagate to larger ones.
 
 1. **Start with phone**: Design your layout for the phone first to ensure your basic structure is solid.
