@@ -1,8 +1,16 @@
 # Recorder
 
-The Recorder captures a Function's Output and stores it as time-series data in the [internal InfluxDB](../functions/storage/timeseries-database.md). This allows you to store a data stream, visualize it within your applications, or analyze it as required. It records data during both build-time (in test mode) and the app's runtime.
+The recorder captures a function's output and stores it as timeseries data in the [internal InfluxDB](../functions/storage/timeseries-database.md). Use it to record a data stream, visualize it in your Apps, or analyze it later. It records during build-time (in test mode) and during the App's runtime.
 
-The Recorder has two settings:
+## Settings
 
-* **Measurement Name**: You must provide a unique name for the measurement in the recorder's text box.
-* **Retention Policy**: Right-click the circle icon (which defaults to 'F' for Forever) to set how long the recorded data should be stored. Options range from one hour to a year, or forever.
+* **Measurement name**: Fill the Data Point Name box with a unique name. You need this name to find and read the recorded data.
+* **Recording type**: Right-click the recorder to select how long the data is stored: 1 hour (H, default), 1 day (D), 1 week (W), 1 month (M), 1 year (Y), or downsampled (DS) for long-term storage in downsampled form.
+
+{% hint style="info" %}
+If the [Industrial Blockchain](../functions/extensions/industrial-blockchain.md) extension is available in your account, an additional Blockchain (BC) recording type appears. It stores the data in the blockchain instead of InfluxDB.
+{% endhint %}
+
+## Reading recorded data
+
+Click the letter icon inside the recorder to generate a matching readout function directly on the canvas. Depending on the recording type, this is the `read` or `readDownsampled` function of the internal InfluxDB (or the blockchain `read` function), preconfigured with your measurement name.
