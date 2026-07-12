@@ -1,27 +1,31 @@
 # Modifier
 
-Modifiers transform data on the fly within a flow. They allow you to apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before passing it to the next Function, a database, the frontend, or a subsequent extension (such as another Modifier or filter).
+Modifiers transform data on the fly within a flow. Apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before it reaches the next function, a database, the frontend, or a subsequent extension node (such as another modifier or a filter).
 
-Modifiers are part of the Function extensions. To add a Modifier to your Function:
+To add a modifier:
 
-1. Click the `+` icon on the right side of any Function Output, filter, or existing modifier.
+1. Click the + icon on the right side of a function output, filter, or existing modifier.
 2. Select Modifier from the list.
-3. A new Modifier box will appear where you can write your JavaScript logic.
+3. Click the new modifier box (Click to edit...) to open the code editor and write your expression.
 
-A Modifier uses either JSONata or a JavaScript expression. You can switch between types by right-clicking the Modifier and selecting JSONata or Expression and adjust the default inside the [App Builder settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6).
+A modifier uses either JSONata or a JavaScript expression. Switch between types by right-clicking the modifier and selecting Jsonata or Expression. Adjust the default type in the [App Builder settings](../../overview.md#app-builder-settings).
+
+Click the modifier icon on the left to evaluate the modifier manually during development. The last result appears below the expression. Right-click also lets you add a comment to the modifier or delete it.
 
 <figure><img src="../../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
-{% hint style="success" %}
-**Need help writing modifiers?** Read about how to best [use AI for writing modifiers](modifier.md#using-ai-for-modifiers) to generate JSONata or JavaScript logic instantly using your favorite chatbot.
+{% hint style="info" %}
+#### Need help writing modifiers?
+
+Read how to [use AI for modifiers](modifier.md#using-ai-for-modifiers) to generate JSONata or JavaScript logic with your favorite chatbot.
 {% endhint %}
 
-## **JSONata**
+## JSONata
 
-JSONata is a query and transformation language designed for JSON data. It is the preferred method for structural changes, filtering, and simple math. For a complete guide, refer to the [official JSONata documentation](https://docs.jsonata.org/overview.html).
+JSONata is a query and transformation language designed for JSON data. It is the preferred method for structural changes, filtering, and simple math. For a complete guide, see the [official JSONata documentation](https://docs.jsonata.org/overview.html).
 
 * **Reference**: Use the `$` sign to refer to the value from the preceding output.
-* **Implicit arguments**: In Heisenware, JSONata Modifiers automatically process the incoming data if the parentheses are left empty. For example, `$uppercase()` is equivalent to `$uppercase($)`.
+* **Implicit arguments**: JSONata modifiers automatically process the incoming data if the parentheses are left empty. For example, `$uppercase()` is equivalent to `$uppercase($)`.
 
 ### JSONata examples
 
@@ -89,7 +93,7 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 3: Implicit Function usage</strong></summary>
+<summary><strong>Example 3: Implicit function usage</strong></summary>
 
 Trims whitespace and converts a raw string to uppercase without explicitly naming the input variable.
 
@@ -146,15 +150,15 @@ Return of the modifier:
 
 </details>
 
-## **JavaScript expressions**
+## JavaScript expressions
 
-This Modifier allows you to use any standard JavaScript expression that evaluates to a new value. Reference the reserved variable `x` to access the preceding data output. For more information, refer to the MDN documentation for [JavaScript Expressions and Operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators).
+This modifier type accepts any standard JavaScript expression that evaluates to a new value. Reference the reserved variable `x` to access the preceding data output. For more information, see the MDN documentation on [JavaScript expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators).
 
 ### JavaScript expression examples
 
 <details>
 
-<summary><strong>Example 1: Conditional status (Ternary)</strong></summary>
+<summary><strong>Example 1: Conditional status (ternary)</strong></summary>
 
 Determines a status string based on a numeric threshold.
 
@@ -184,7 +188,7 @@ Return of the modifier:
 
 <summary><strong>Example 2: Array mapping and enrichment</strong></summary>
 
-Iterates through an array of objects to add a new property or modify existing ones using the `.map()` Function.
+Iterates through an array of objects to add a new property or modify existing ones using `.map()`.
 
 Data:
 
@@ -222,7 +226,7 @@ Return of the modifier:
 
 <summary><strong>Example 3: Multi-step logic (IIFE)</strong></summary>
 
-While Modifiers only support expressions, you can use the Immediately Invoked Function Expression (IIFE) pattern for more elaborate logic involving temporary variables.
+Modifiers only support expressions. For more elaborate logic involving temporary variables, use the Immediately Invoked Function Expression (IIFE) pattern.
 
 Data:
 
@@ -285,11 +289,11 @@ Return of the modifier:
 
 <details>
 
-<summary><strong>Example 5: Processing multiple inputs (using <code>combine</code> Function)</strong></summary>
+<summary><strong>Example 5: Processing multiple inputs (using <code>combine</code>)</strong></summary>
 
-When using the `combine` Function, the IIFE pattern allows you to cleanly handle multiple input sources stored in the `x` array.
+When using the `combine` function, the IIFE pattern cleanly handles multiple input sources stored in the `x` array.
 
-Data (combined by the combine Function):
+Data (combined by the `combine` function):
 
 ```json
 [
@@ -328,15 +332,15 @@ Return of the modifier:
 
 <summary><strong>Example 6: Date calculations (using Luxon)</strong></summary>
 
-Heisenware provides built-in support for the [Luxon](https://moment.github.io/luxon/) library via the `DateTime` , `Duration` and `Interval` object for complex time-series operations.
+Heisenware provides built-in support for the [Luxon](https://moment.github.io/luxon/) library via the `DateTime`, `Duration`, and `Interval` objects for complex date and time operations.
 
 {% hint style="warning" %}
-`Duration` and `Interval` are only available from version v91
+`Duration` and `Interval` are only available from version v91.
 {% endhint %}
 
-Here are some common Modifier patterns:
+Here are some common modifier patterns:
 
-#### 1. Calculating Future/Past Dates (Addition & Subtraction)
+#### 1. Calculating future or past dates (addition and subtraction)
 
 Data:
 
@@ -367,7 +371,7 @@ Return of the modifier:
 
 <figure><img src="../../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
 
-#### 2. Calculating Downtime (Time Differences)
+#### 2. Calculating downtime (time differences)
 
 Find the exact duration between two timestamps, such as a machine fault start and end time.
 
@@ -400,7 +404,7 @@ Return of the modifier:
 
 ***
 
-#### 3. Formatting Decimal Labor Hours
+#### 3. Formatting decimal labor hours
 
 Convert raw decimal hours from timesheets or logs into standard `HH:mm` timecode using the `Duration` object.
 
@@ -433,7 +437,7 @@ Return of the modifier:
 
 ***
 
-#### 4. Validating Events Against Shifts (Intervals)
+#### 4. Validating events against shifts (intervals)
 
 Check if a specific event (like a sensor trigger) occurred within a defined time window or shift using the `Interval` object.
 
@@ -469,7 +473,7 @@ Return of the modifier:
 
 ***
 
-#### 5. Converting UTC Sensor Data to Local Time
+#### 5. Converting UTC sensor data to local time
 
 IoT devices typically send data in UTC. Convert this to a readable local format for UI dashboards.
 
@@ -495,15 +499,16 @@ Return of the modifier:
 ```json
 [
   { "sensorId": "Temp-01", "utcTimestamp": "2026-03-12T07:43:50Z", "localFormatted": "12. Mar 2026, 08:43:50" }
+]
 ```
 
 </details>
 
 <details>
 
-<summary><strong>Example 7: Round robin (using <code>combine</code> Function)</strong></summary>
+<summary><strong>Example 7: Round robin (using <code>combine</code>)</strong></summary>
 
-Sometime you want to extract items of an array in a round-robin fashion. For that you can use a `combine` Function in which you link back the modifier's output to the second argument:
+Sometimes you want to extract items of an array in a round-robin fashion. Use a `combine` function in which you link the modifier's output back to the second argument:
 
 <figure><img src="../../../.gitbook/assets/image (503).png" alt=""><figcaption></figcaption></figure>
 
@@ -538,13 +543,13 @@ a // fourth time
 
 ## Using AI for modifiers
 
-You can use AI chatbots (ChatGPT, Claude, Gemini) to generate or optimize your modifiers. This is particularly helpful for complex data transformations where you need to reshape large JSON objects on the fly within the Heisenware visual programming environment.
+Use AI chatbots (ChatGPT, Claude, Gemini) to generate or optimize your modifiers. This helps especially with complex transformations where you need to reshape large JSON objects on the fly.
 
-To optimize results, copy this article as context for the AI. Use the Copy button at the top of the page or the direct Open in ChatGPT / Open in Claude buttons located in the top navigation bar.
+For best results, copy this article as context for the AI. Use the Copy button at the top of the page or the Open in ChatGPT / Open in Claude buttons in the top navigation bar.
 
 #### Recommended AI prompt
 
-Alternatively to using the full article, copy and paste this prompt into your AI to ensure it understands the Heisenware environment and specific variable references.
+Alternatively, copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
 
 ```
 I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Modifier" to transform data on the fly between Functions.
