@@ -552,16 +552,21 @@ For best results, copy this article as context for the AI. Use the Copy button a
 Alternatively, copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
 
 ```
-I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Modifier" to transform data on the fly between Functions.
+I am working in Heisenware, a node-based visual programming tool for industrial applications. I need a "Modifier" expression that transforms data on the fly between functions.
 
-Context:
-* Heisenware uses Modifiers to transform data in real-time as it flows through a node-based system.
-* If I use JSONata, the input data is referenced as $.
-* In JSONata, Functions can use empty parentheses () to automatically process the incoming data.
-* If I use JavaScript, the input data is referenced as x.
-* For JavaScript, I can use the Luxon library via the DateTime object.
-* I need a concise expression that returns the transformed value.
+Full documentation: https://docs.heisenware.com/app-builder/build-backend/extension-nodes/modifier.md
 
-My Task:
-[Describe your data transformation here, e.g., "I have an array of PLC sensor objects and I need to extract the 'temp_c' property from each to calculate an average OEE value."]
+Rules:
+* A modifier is a single expression that returns the transformed value. No statements or variable declarations.
+* JSONata: the input data is referenced as $. Functions with empty parentheses () automatically process the incoming data, e.g. $uppercase().
+* JavaScript: the input data is referenced as x. For multi-step logic with temporary variables, use an IIFE: (() => { ... })().
+* JavaScript dates: use the Luxon library via the DateTime, Duration, and Interval objects.
+* Unless I say otherwise, pick the simpler of JSONata or JavaScript for the task and tell me which type to select.
+* Reply with the expression only, no explanation, no markdown fences.
+
+My input data (sample):
+[Paste a sample of the data arriving at the modifier here.]
+
+My task:
+[Describe your transformation, e.g., "Extract temp_c from each object in the array and calculate the average."]
 ```
