@@ -1,26 +1,22 @@
 # Sankey
 
-The **SankeyChart** widget is designed to visualize flow or process data. It uses nodes to represent stages or entities and links to show the flow and quantity (weight) between them. This makes it an excellent tool for analyzing energy flows, user journeys, supply chains, or any process where you need to understand distribution and magnitude.
-
-It provides a clear and intuitive representation of complex process data.
+The sankey widget visualizes flow or process data across multiple operational stages. It uses nodes to represent entities and connecting links to illustrate distribution paths and quantities in your Apps.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2025-02-21 at 14.46.22.png" alt="" width="563"><figcaption></figcaption></figure>
 
-## Data Binding
+## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+### Function output or modifier to widget
 
-### Output
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `data` | An array of data objects, where each object defines an individual link in the process flow. | array |
 
-| **Property** | **Type** | **Description**                                                                                                         |
-| ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| **`data`**   | `Array`  | An array of data objects, where each object defines a link in the flow. See the **Data Structure** section for details. |
+### Data structure
 
-#### Data Structure
+To render a Sankey chart, the bound `data` array must provide objects where each item represents a single connection in the flow. The widget requires a source node, a target node, and a numeric weight value to map the distribution profile.
 
-To render a Sankey chart, you must provide an array of objects where each object represents a single link or connection in the flow. The widget needs to know the source of the flow, the target, and the weight (or quantity) of that flow. You specify which fields in your data correspond to these roles in the configuration.
-
-For example, if you configure `Source Key` as `"from"`, `Target Key` as `"to"`, and `Weight Key` as `"amount"`, your data should look like this:
+For example, if you configure the `source` (Source key) as `"from"`, `target` (Target key) as `"to"`, and `weight` (Weight key) as `"amount"`, the array data payload should follow this structure:
 
 ```json
 [
@@ -28,18 +24,17 @@ For example, if you configure `Source Key` as `"from"`, `Target Key` as `"to"`, 
   { "from": "Power Plant", "to": "Electricity Grid", "amount": 80 },
   { "from": "Power Plant", "to": "Heat Loss", "amount": 20 }
 ]
-
 ```
 
 ## Configuration
 
-### Settings
+Set the widget's defaults in the settings panel.
 
-These properties control the title and the mapping of your data fields to the chart's structure.
+### General settings
 
-| **Label**      | **Description**                                                                              | **Type** | **Property** |
-| -------------- | -------------------------------------------------------------------------------------------- | -------- | ------------ |
-| **Title**      | The title displayed at the top of the Sankey chart.                                          | String   | `title`      |
-| **Source Key** | The name of the field in your data objects that represents the source node of a link.        | String   | `source`     |
-| **Target Key** | The name of the field in your data objects that represents the target node of a link.        | String   | `target`     |
-| **Weight Key** | The name of the field in your data objects that represents the weight or quantity of a link. | String   | `weight`     |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `title` | Title | The text string displayed as a header at the top of the chart canvas. | string |
+| `source` | Source key | The name of the data object field that represents the origin node of a flow link. | string |
+| `target` | Target key | The name of the data object field that represents the destination node of a flow link. | string |
+| `weight` | Weight key | The name of the data object field that represents the numerical volume or quantity of a flow link. | string |
