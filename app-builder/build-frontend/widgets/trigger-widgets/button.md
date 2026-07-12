@@ -1,51 +1,58 @@
 # Button
 
-The button widget captures a user click and triggers your backend logic. You can also drive its appearance and state from logic to give the user visual feedback.
+The button widget captures a user click to trigger backend logic. You can also drive its appearance and operational state from your logic to provide live visual feedback.
 
 ## Data binding
 
-### Function trigger to button
+### Widget to function trigger
 
-Connect a function's trigger to the button so a click starts the function. Only the click is sent, no data. You can also connect `onClick` to a function input to pass the button's text into your logic.
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `onClick` | Fires when a user clicks the button to start a backend process. Sends a pure trigger with no accompanying data payload. | trigger |
 
-| Property  | Description                                                                                                                                 | Type            |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `onClick` | Fires when the user clicks the button. Connect it to a function trigger to start a process, or to a function input to pass the button text. | event or string |
+### Widget to function input
+
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `onClick` | Fires when a user clicks the button and passes the configured button text string directly into a function input. | string |
 
 ### Function output or modifier to widget
 
-State and appearance you drive from backend logic. The button's visual properties (`text`, `icon`, `fontSize`, `iconSize`, `type`, `stylingMode`, `hint`) are also bindable, so you can restyle it at runtime.
-
-| Property  | Description                                                                                                                             | Type    |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `disable` | When `true`, disables the button and prevents clicks.                                                                                   | boolean |
-| `enable`  | When `true`, enables the button. Use this to re-enable a button that starts disabled in its [settings](button.md#configuration).        | boolean |
-| `toggle`  | Enables or disables the button based on a `true` or `false` input.                                                                      | boolean |
-| `done`    | Connect a long-running function's output here to show a loading indicator on the button. It clears when the function returns an output. | any     |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `disable` | Disables the button and prevents user interactions when `true`. | boolean |
+| `enable` | Enables the button when `true`. Use this to re-enable a button that starts as initially disabled. | boolean |
+| `toggle` | Dynamically enables or disables the button based on the incoming boolean value. | boolean |
+| `done` | Displays an active loading indicator on the button when connected to a running function. The loading state clears automatically when the function returns its output. | any |
 
 ## Configuration
 
-Double-click a button in the UI preview, or select it and click the edit icon, to open its settings.
+Set the widget's defaults in the settings panel.
 
-| Property               | Label                 | Description                                                                                                        | Type    |
-| ---------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------ | ------- |
-| `text`                 | Text                  | The text label on the button.                                                                                      | string  |
-| `icon`                 | Icon                  | Adds an icon to the left of the text.                                                                              | string  |
-| `fontSize`             | Text size             | The size of the text.                                                                                              | integer |
-| `iconSize`             | Icon size             | The size of the icon.                                                                                              | integer |
-| `type`                 | Type                  | The button color scheme, based on the App theme (`default`, `normal`, `success`, `danger`, `back`, `transparent`). | string  |
-| `stylingMode`          | Styling mode          | The visual style (`text`, `contained`, `outlined`).                                                                | string  |
-| `hint`                 | Hover text            | A tooltip shown when the user hovers over the button.                                                              | string  |
-| `disabled`             | Initially disabled    | If `true`, the button starts disabled when the App loads.                                                          | boolean |
-| `requiresConfirmation` | Requires confirmation | If `true`, a click opens a confirmation dialog before the button acts.                                             | boolean |
-| `confirmationTitle`    | Confirmation title    | The title of the confirmation dialog.                                                                              | string  |
-| `confirmationText`     | Confirmation text     | The message in the confirmation dialog.                                                                            | string  |
-| `reload`               | Reload                | If `true`, clicking the button reloads the App.                                                                    | boolean |
+### General settings
+
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `text` | Text | Sets the text label displayed on the button. | string |
+| `icon` | Icon | Adds a visual icon to the left of the button text. | string |
+| `fontSize` | Text size | Sets the font size of the button text label in pixels. | integer |
+| `iconSize` | Icon size | Sets the layout size of the button icon in pixels. | integer |
+| `type` | Type | Controls the button color scheme configuration based on the theme, supporting `default`, `normal`, `success`, `danger`, `back`, or `transparent`. | string |
+| `stylingMode` | Styling mode | Controls the visual container rendering style, supporting `text`, `contained`, or `outlined`. | string |
+| `hint` | Hover text | Sets the tooltip text displayed when a user hovers over the button. | string |
+| `disabled` | Initially disabled | Disables the button when the App first loads when set to `true`. | boolean |
+| `requiresConfirmation` | Requires confirmation | Opens an interactive confirmation modal dialog before executing actions when set to `true`. | boolean |
+| `confirmationTitle` | Confirmation title | Sets the title text displayed on the confirmation modal dialog. | string |
+| `confirmationText` | Confirmation text | Sets the main description message displayed inside the confirmation modal dialog. | string |
+| `reload` | Reload | Reloads the active App automatically upon a user click when set to `true`. | boolean |
+| `width` | Width | Sets the layout width dimension of the button in pixels. | integer |
+| `height` | Height | Sets the layout height dimension of the button in pixels. | integer |
+
+## Tips and tricks
 
 {% hint style="info" %}
-#### Making specific UI areas clickable
+#### Making specific user interface areas clickable
+Use transparent buttons to capture user clicks on specific areas of your layout and pass contextual information directly into your logic. This configuration lets you build interactive visual maps.
 
-Use transparent buttons to collect clicks on specific areas of your interface and pass information to your logic, handy for building interactive visual maps.
-
-For example, upload an image of your shopfloor and place a transparent button over a machine. Set the button text to the machine ID. Because the type is `transparent`, the text stays hidden. When a user clicks the machine, the button passes the ID to your logic via `onClick`. You can then act on it, such as navigating to a detail page filtered for that machine.
+For example, upload an image of your shopfloor and position a transparent button over a specific machine asset. Set the button text to match the unique machine asset ID. Selecting the `transparent` type keeps the text completely hidden from the view. When a user clicks that area of the image, the button passes the ID into your logic via the `onClick` property to execute filtered data navigation or page routing.
 {% endhint %}
