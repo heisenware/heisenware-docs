@@ -1,43 +1,52 @@
-# Value Box
+# Value box
 
-The **ValueBox** widget is a highly versatile component for displaying a single piece of data. It can intelligently render various data types, including text, numbers, booleans, and even complex objects or images encoded in Base64.
+The value box widget displays a standalone piece of data. It automatically visualizes text strings, numbers, booleans, complex data structures, or Base64 images in your Apps.
 
-It's an essential building block for dashboards, detail views, and any interface where you need to display a specific value with customizable styling, such as font size, weight, color, and alignment.
+<div><figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-24 at 10.32.06.png" alt="" width="239"><figcaption><p>A value box</p></figcaption></figure> <figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-24 at 11.51.56.png" alt="" width="216"><figcaption><p>A value box displaying an object</p></figcaption></figure></div>
 
-This widget is perfect for debugging as well, as the connected value is shown without frills.
+## Data binding
 
-<div><figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-24 at 10.32.06.png" alt="" width="239"><figcaption><p>A value box</p></figcaption></figure> <figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-24 at 11.51.56.png" alt="" width="216"><figcaption><p>A Value box displaying an object</p></figcaption></figure></div>
+### Function output or modifier to widget
 
-## Data Binding
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `value` | Supplies the data payload to be displayed on the widget canvas. | string \| number \| boolean \| object |
+| `clear` | Clears the currently displayed value layout when set to `true`. | boolean |
+| `textColor` | Programmatically overrides the configured text color property at runtime. | string |
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+### Widget to function input
 
-### Input
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `onClick` | Fires when a user clicks the value box container. The payload carries the current underlying data value. | string \| number \| boolean \| object |
 
-| **Property**  | **Type** | **Description**                                                                           |
-| ------------- | -------- | ----------------------------------------------------------------------------------------- |
-| **`onClick`** | `Any`    | Fired when a user clicks on the widget. The payload is the current value being displayed. |
+### Data formats
 
-### Output
+The widget inspects the incoming data type of the `value` property and adaptively switches its rendering style:
 
-| **Property**    | **Type**  | **Description**                                                                                                      |
-| --------------- | --------- | -------------------------------------------------------------------------------------------------------------------- |
-| **`value`**     | `Any`     | The data to be displayed. The widget adapts its rendering based on the data type (e.g., text, object, Base64 image). |
-| **`clear`**     | `Boolean` | When `true`, clears the currently displayed value.                                                                   |
-| **`textColor`** | `String`  | Programmatically overrides the configured text color.                                                                |
+* **Booleans:** Renders directly as the text string `"true"` or `"false"`.
+* **Objects:** Displays inside an interactive, collapsible JSON tree viewer component.
+* **Base64 images:** Strings beginning with standard PNG (`iVBORw0KGgo`), JPEG (`/9j/`), or SVG (`PD94bWwgdm`) headers automatically render as visual images scaling to the container boundary.
+* **Multiline strings:** Text blocks containing explicit line breaks (`
+`) split automatically into separate paragraph rows, applying any configured prefix or suffix tokens to each separate line.
+* **Non-serializable data:** Tokens matching `__vrpc::not-serializable__` display as `[skipped]`.
 
 ## Configuration
 
-### Settings
+Set the widget's defaults in the settings panel.
 
-These properties control the appearance and styling of the text displayed within the widget.
+### General settings
 
-| **Label**                | **Description**                                                             | **Type**       | **Property**     |
-| ------------------------ | --------------------------------------------------------------------------- | -------------- | ---------------- |
-| **Font Size**            | The size of the text in pixels.                                             | Integer        | `fontSize`       |
-| **Font Weight**          | The weight (thickness) of the text, from `normal` to `bolder`.              | Integer        | `fontWeight`     |
-| **Horizontal Alignment** | Aligns the text horizontally within the widget (`left`, `center`, `right`). | String         | `justifyContent` |
-| **Vertical Alignment**   | Aligns the text vertically within the widget (`top`, `middle`, `bottom`).   | String         | `alignItems`     |
-| **Text Color**           | The color of the displayed text.                                            | String (Color) | `color`          |
-| **Suffix**               | Text to be appended to the displayed value.                                 | String         | `suffix`         |
-| **Placeholder**          | Text to display when the widget has no value.                               | String         | `placeholder`    |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `placeholder` | Placeholder | Italicized text string displayed in gray characters when the bound value is null or undefined. | string |
+| `format` | Format | Specifies the formatting mask rule applied to numeric measurements or valid date strings. | string |
+| `prefix` | Prefix | Text string prepended directly to the front of the displayed value. | string |
+| `suffix` | Suffix | Text string appended directly to the trailing end of the displayed value. | string |
+| `color` | Text color | Sets the fallback color of the displayed characters. Defaults to the global workspace theme text color when gray. | string |
+| `fontSize` | Font size | Sets the size of the text characters in pixels. | integer \| string |
+| `fontWeight` | Font weight | Sets the typographical font thickness weight parameter (such as normal, bold, or explicit thickness numbers). | string \| integer |
+| `justifyContent` | Horizontal alignment | Aligns the text content horizontally within the container canvas (options include `left`, `center`, or `right`). | string |
+| `alignItems` | Vertical alignment | Aligns the text content vertically within the container canvas (options include `top`, `middle`, or `bottom`). | string |
+| `width` | Width | Sets the total outer width layout dimension of the widget container block. | string \| number |
+| `height` | Height | Sets the total outer height layout dimension of the widget container block. | string \| number |
