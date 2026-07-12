@@ -20,12 +20,19 @@ These input widgets sit in the toolbar, each with its own configuration and data
 
 ## Connecting to backend logic (data binding)
 
-Input widgets exchange data with your logic through the Backend Builder. You drag from a function onto the widget, and the slot you pick sets the direction:
+Input widgets exchange data with your logic through the Backend Builder.
 
-* **Widget to function input**: The widget sends what the user enters into a function's input. This is the main direction for input widgets, and the event carries its data with it, so the entered value travels into your logic the moment it's confirmed (e.g. a submitted `formData`).
-* **Function output to widget**: A function's output (or a modifier) writes back into a widget property to update its state. Link a function's output to a form's `clear` property, for example, and the form resets the moment the flow reaches that output.
+### How to link
 
-For the full mechanic, see [connecting widgets to logic](../README.md#connecting-widgets-to-logic).
+Link a widget by dragging the logic onto it:
+
+1. Drag a [function](../../../build-backend/functions.md) part (an input or output) or a [modifier](../../../build-backend/extension-nodes/modifier.md) onto the widget.
+2. On the function block, pick the widget property you want to link.
+
+### Interaction types
+
+* **To a function input**: The widget sends what the user enters (e.g. `formData`) into a function.
+* **From a function output or a modifier**: A function or modifier sends data back to update the widget. Link a function's output to a form's `clear` property, for example, and the form resets the moment the flow reaches that output.
 
 ## Configuration and data binding
 
