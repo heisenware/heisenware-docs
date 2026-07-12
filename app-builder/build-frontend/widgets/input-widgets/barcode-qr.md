@@ -4,34 +4,50 @@ The barcode / QR widget uses the device's camera to scan and decode a wide varie
 
 It opens a full-screen camera view, then captures the decoded value and closes the scanner the moment it detects a barcode, keeping data entry and product identification fast.
 
-<figure><img src="../../../../.gitbook/assets/create_barcod_QR_looped.gif" alt=""><figcaption></figcaption></figure>
-
 <figure><img src="../../../../.gitbook/assets/Screenshot 2025-06-10 at 16.15.06.png" alt=""><figcaption><p>The barcode / QR scanner button in the UI</p></figcaption></figure>
 
 ## Data binding
 
-Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
+### Widget to function input
 
-### Input
+| **Property** | **Description**                                                                                                                                          | **Type**                    |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **`text`**   | Fires when a barcode is scanned, sending the decoded string. In scan mode `multiple`, the payload is an array of decoded strings.                        | `String` or `Array<String>` |
 
-| **Property**  | **Type**                   | **Description**                                                                                                                                                                              |
-| ------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`barcode`** | `String\|Array<String>`    | <p>Fired when a barcode is successfully scanned. The payload is the text content decoded from the barcode.<br>In scan mode <code>multiple</code> the result is an array of the contents.</p> |
+### Function output to widget
 
-### Output
-
-| **Property** | **Type**  | **Description**                                                                   |
-| ------------ | --------- | --------------------------------------------------------------------------------- |
-| **`clear`**  | `Boolean` | When `true`, clears the last scanned barcode value from your application's state. |
+| **Property** | **Description**                                                            | **Type**  |
+| ------------ | ------------------------------------------------------------------------- | --------- |
+| **`clear`**  | Clears the scanned value(s) currently held by the widget.                 | `Boolean` |
+| **`button`** | Overrides the scan button at runtime (label, styling, disabled state, and more), for example to restyle it per user or context. Takes a `button` object; see [button configuration](#button-configuration). | `Object`  |
 
 ## Configuration
 
+Set the widget's defaults in the settings panel. The scan button is the visible part of the widget, so most settings style that button. You can override any of these at runtime through the `button` binding above.
+
 ### Settings
 
-A button launches the barcode scanner. Customize its appearance with standard button properties, set in the widget's settings panel; some can also be driven dynamically through [data binding](./#configuration-and-data-binding). Common properties include:
+| **Property**        | **Label**          | **Description**                                                    | **Type** |
+| ------------------- | ------------------ | ----------------------------------------------------------------- | -------- |
+| `scanMode`          | Scan mode          | Scan a `single` barcode or `multiple` while the camera is active. | String   |
+| `text`              | Button text        | The text on the scan button.                                      | String   |
+| `icon`              | Icon               | The icon on the scan button.                                      | String   |
+| `fontSize`          | Text size          | The size of the button's text.                                    | Integer  |
+| `iconSize`          | Icon size          | The size of the button's icon.                                    | Integer  |
+| `type`              | Button type        | The button type (`default`, `normal`, `success`, `danger`, `back`). | String |
+| `stylingMode`       | Styling mode       | The button's styling mode (`text`, `contained`, `outlined`).      | String   |
+| `hoverText`         | Hover text         | A tooltip shown when the user hovers over the button.             | String   |
+| `initiallyDisabled` | Initially disabled | If `true`, the button is disabled when the App first loads.       | Boolean  |
 
-* **`scanMode`**: Whether to scan a single or multiple barcodes while the camera is active.
-* **`text`**: The text displayed on the button (e.g., "Scan Barcode").
-* **`icon`**: The icon displayed on the button (e.g., "fa-thin fa-barcode-scan").
-* **`type`**: The button's style type (`normal`, `default`, `success`, `danger`).
-* **`stylingMode`**: The visual style of the button (`text`, `outlined`, `contained`).
+### Button configuration
+
+Bind a `button` object to the widget to override the scan button from backend logic at runtime. This lets you change its label, styling, or state on the fly, for example restyling it for a specific user or context.
+
+| **Property**  | **Description**                                              | **Type** |
+| ------------- | ----------------------------------------------------------- | -------- |
+| `text`        | The button text.                                            | String   |
+| `fontSize`    | The size of the button's text.                              | Integer  |
+| `iconSize`    | The size of the button's icon.                              | Integer  |
+| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | String |
+| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`). | String   |
+| `disabled`    | When truthy, disables the button; when falsy, enables it.   | Any      |
