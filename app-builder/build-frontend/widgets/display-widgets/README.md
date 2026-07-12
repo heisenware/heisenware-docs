@@ -10,8 +10,6 @@ We group widgets by their primary purpose, but many are versatile. A [form](../i
 
 ## Available display widgets
 
-Each display widget has its own documentation page.
-
 * [**Card**](card.md): A container for grouping and giving structure to other elements.
 * [**Chart**](chart.md): Line, bar, area, and scatter charts.
 * [**Chat**](chat.md): A conversational interface for [RAG](../../../build-backend/function-explorer/extensions/rag-ai/) use cases.
@@ -35,9 +33,9 @@ Each display widget has its own documentation page.
 
 ## Connecting to logic (data binding)
 
-Display widgets get their data from your functions and flows. You drag from a function onto the widget, and the slot you pick sets the direction:
+Display widgets get their data from your functions and modifiers. You drag from a function or modifier onto the widget, and the slot you pick sets the direction:
 
-* **Function output to widget**: A function's output (or a modifier) writes into a widget property, such as a time series into a chart's `data`. This is the main direction for display widgets.
+* **Function output or modifier to widget**: A function's output (or a modifier) writes into a widget property, such as a time series into a chart's `data`. This is the main direction for display widgets.
 * **Widget to function input**: Some display widgets, like the data grid, also send data back. A widget event flows into a function's input, carrying its data with it, so an edited cell or selected row travels into your logic the moment it changes.
 
-For the full mechanic, see [connecting widgets to logic](../README.md#connecting-widgets-to-logic).
+For the full mechanic, see [connecting widgets to logic](../#connecting-widgets-to-logic).

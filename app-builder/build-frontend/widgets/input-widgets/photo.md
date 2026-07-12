@@ -12,16 +12,16 @@ Since [v88 — Almost forever](../../../../release-notes/v88-almost-forever.md),
 
 ### Widget to function input
 
-| Property | Description                                                                                                                                                       | Type  |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `images` | Fires whenever a photo is taken and saved, or deleted. The payload is an array of photo objects. See [file object structure](#file-object-structure) for details. | array |
+| Property | Description                                                                                                                                                               | Type  |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `images` | Fires whenever a photo is taken and saved, or deleted. The payload is an array of photo objects. See [file object structure](photo.md#file-object-structure) for details. | array |
 
-### Function output to widget
+### Function output or modifier to widget
 
-| Property    | Description                                                                                                          | Type    |
-| ----------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
-| `isLoading` | When `true`, shows a loading indicator, useful during data fetching.                                                | boolean |
-| `button`    | Overrides the capture button at runtime. Takes a `button` object; see [button configuration](#button-configuration). | object  |
+| Property    | Description                                                                                                                  | Type    |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `isLoading` | When `true`, shows a loading indicator, useful during data fetching.                                                         | boolean |
+| `button`    | Overrides the capture button at runtime. Takes a `button` object; see [button configuration](photo.md#button-configuration). | object  |
 
 #### File object structure
 
@@ -53,14 +53,14 @@ The structure of the photo objects in the `images` array depends on the `storage
 
 ### Settings
 
-| Property          | Label                    | Description                                                                          | Type    |
-| ----------------- | ------------------------ | ------------------------------------------------------------------------------------ | ------- |
-| `storageType`     | Storage type             | How each photo is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | string |
-| `aspectRatio`     | Aspect ratio             | The aspect ratio of the camera view. `cover` fills the screen.                       | string  |
-| `orientation`     | Orientation              | The camera orientation, `portrait` or `landscape`.                                   | string  |
-| `maxPhotos`       | Maximum number of photos | The total number of photos the widget captures.                                      | integer |
-| `resolution`      | Resolution               | The capture resolution: `preview`, `balanced`, `high`, or `original`.                | string  |
-| `thumbnailHeight` | Thumbnail size           | The height (in pixels) of the preview thumbnails.                                    | number  |
+| Property          | Label                    | Description                                                                                        | Type    |
+| ----------------- | ------------------------ | -------------------------------------------------------------------------------------------------- | ------- |
+| `storageType`     | Storage type             | How each photo is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | string  |
+| `aspectRatio`     | Aspect ratio             | The aspect ratio of the camera view. `cover` fills the screen.                                     | string  |
+| `orientation`     | Orientation              | The camera orientation, `portrait` or `landscape`.                                                 | string  |
+| `maxPhotos`       | Maximum number of photos | The total number of photos the widget captures.                                                    | integer |
+| `resolution`      | Resolution               | The capture resolution: `preview`, `balanced`, `high`, or `original`.                              | string  |
+| `thumbnailHeight` | Thumbnail size           | The height (in pixels) of the preview thumbnails.                                                  | number  |
 
 ### Button configuration
 
