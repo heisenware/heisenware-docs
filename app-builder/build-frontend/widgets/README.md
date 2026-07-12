@@ -44,9 +44,3 @@ You always drag from the function onto the widget, but the slot you pick on the 
 * **Function trigger to a button**: Connect a function's trigger to a [button](trigger-widgets/button.md) so a click starts the function. Only the click is sent, no data. This works with buttons only, since they're the one [trigger widget](trigger-widgets/).
 
 To start a function automatically from UI input rather than a click, wire the function's input to its own trigger. The incoming data then both feeds the function and fires it, no button needed. See [auto-triggering on input](trigger-widgets/#auto-triggering-on-input).
-
-### Connection directions
-
-* **To input**: The widget sends data into a function.
-* **To trigger**: A user action starts a function flow.
-* **From output**: A function sends data to a widget property, either to visualize a value or to change a visual setting.
