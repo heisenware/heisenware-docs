@@ -2,23 +2,22 @@
 
 The upload widget handles file and photo uploads. Users pick one or more files, and you store each as a physical file on the server or as a Base64-encoded buffer in your data. It also offers file-type restriction, multi-file selection, and thumbnail previews.
 
-<figure><img src="../../../../.gitbook/assets/upload_bottom.png" alt=""><figcaption><p>Uupload widget</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/upload_bottom.png" alt=""><figcaption><p>A full and an empty upload widget</p></figcaption></figure>
 
 ## Data binding
 
-Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
+### Widget to function input
 
-### Input
+| **Property** | **Description**                                                                                                                                            | **Type** |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **`files`**  | Fires whenever files are uploaded or deleted. The payload is an array of file objects. See [file object structure](#file-object-structure) for details.    | `Array`  |
 
-| **Property** | **Type** | **Description**                                                                                                                                            |
-| ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`files`**  | `Array`  | Fired whenever files are successfully uploaded or deleted. The payload is an array of file objects. See the **File object structure** section for details. |
+### Function output to widget
 
-### Output
-
-| **Property** | **Type**  | **Description**                                         |
-| ------------ | --------- | ------------------------------------------------------- |
-| **`clear`**  | `Boolean` | When `true`, clears all uploaded files from the widget. |
+| **Property** | **Description**                                                                                                                                  | **Type**  |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| **`clear`**  | When `true`, clears all uploaded files from the widget.                                                                                          | `Boolean` |
+| **`button`** | Overrides the upload button at runtime (label, styling, disabled state, and more). Takes a `button` object; see [button configuration](#button-configuration). | `Object`  |
 
 #### File object structure
 
@@ -50,32 +49,34 @@ The structure of the file objects in the `files` array depends on the configured
 
 ## Configuration
 
+Set the widget's defaults in the settings panel. A button triggers the file selection, so several settings style that button. You can override any of the button settings at runtime through the `button` binding above.
+
 ### Settings
 
-Set these in the widget's settings panel to control the upload widget's behavior and appearance. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
+| **Property**    | **Label**               | **Description**                                                                | **Type** |
+| --------------- | ----------------------- | ----------------------------------------------------------------------------- | -------- |
+| `storageType`   | Storage type            | How each file is stored: as a physical `File` on the server or a Base64 `Buffer`. | String |
+| `accept`        | Restrict file types     | The selectable file categories. Users can pick one or more.                   | Array    |
+| `multiple`      | Allow multi-file upload | If `true`, users can select and upload several files at once.                 | Boolean  |
+| `maxFiles`      | Maximum number of files | The total number of files the widget accepts.                                 | Integer  |
+| `showThumbnails`| Show thumbnails         | If `true`, shows a preview thumbnail for uploaded image files.                | Boolean  |
+| `thumbnailHeight`| Thumbnail size         | The height (in pixels) of the preview thumbnails.                             | Number   |
 
-| **Label**                   | **Description**                                                                                         | **Type** | **Property**      |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- | -------- | ----------------- |
-| **Storage type**            | Determines how the uploaded file is stored: as a physical `File` on the server or as a Base64 `Buffer`. | String   | `storageType`     |
-| **Restrict file types**     | Restricts the selectable file types. Users can select one or more predefined categories.                | Array    | `accept`          |
-| **Allow multi-file upload** | If `true`, users can select and upload multiple files at once.                                          | Boolean  | `multiple`        |
-| **Maximum number of files** | The total number of files that can be uploaded to the widget.                                           | Integer  | `maxFiles`        |
-| **Show thumbnails**         | If `true`, displays a preview thumbnail for uploaded image files.                                       | Boolean  | `showThumbnails`  |
-| **Thumbnail size**          | Sets the height (in pixels) of the preview thumbnails.                                                  | Number   | `thumbnailHeight` |
+Plus the standard button settings (`text`, `icon`, `fontSize`, `iconSize`, `type`, `stylingMode`, `hoverText`, `initiallyDisabled`) that style the upload button.
 
 ### Taking photos exclusively
 
-<div align="left"><figure><img src="../../../../.gitbook/assets/Upload_photo.png" alt=""><figcaption></figcaption></figure></div>
-
-When only the `Photo` category is selected (see the dedicated [Photo](photo.md) widget for camera-only capture), modern devices like mobile phones and tablets open the camera directly when the user taps the widget's button. To allow a combination of file and camera uploads, select all the categories you want to permit while leaving `Photo` active.
+When only the `Photo` category is selected (see the dedicated [Photo](photo.md) widget for camera-only capture), phones and tablets open the camera directly when the user taps the button. To allow both file and camera uploads, select every category you want to permit while leaving `Photo` active.
 
 ### Button configuration
 
-A button triggers the file selection. Customize its appearance with standard button properties, such as:
+Bind a `button` object to the widget to override the upload button from backend logic at runtime, for example to change its label or styling for a specific user or context.
 
-* **`text`**: The text displayed on the button (e.g., "Upload File").
-* **`icon`**: The icon displayed on the button (e.g., "upload").
-* **`type`**: The button's style type (`normal`, `default`, `success`, `danger`).
-* **`stylingMode`**: The visual style of the button (`text`, `outlined`, `contained`).
-
-You configure these within a `button` object.
+| **Property**  | **Description**                                             | **Type** |
+| ------------- | ---------------------------------------------------------- | -------- |
+| `text`        | The button text.                                           | String   |
+| `fontSize`    | The size of the button's text.                             | Integer  |
+| `iconSize`    | The size of the button's icon.                             | Integer  |
+| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | String |
+| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`). | String   |
+| `disabled`    | When truthy, disables the button; when falsy, enables it.  | Any      |
