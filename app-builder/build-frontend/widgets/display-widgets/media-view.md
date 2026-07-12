@@ -13,7 +13,7 @@ The media view widget displays images and PDF documents. It visualizes raw Base6
 | `data` | Supplies the media content used to render images or documents on the widget canvas. Automatically unpacks single-item arrays. | string \| array \| object |
 | `clear` | Clears the currently displayed media item from the view layout when a signal is received. | boolean |
 
-#### Data formats
+### Data formats
 
 The `data` property handles multiple flexible input payload types to streamline integration with your backends.
 
