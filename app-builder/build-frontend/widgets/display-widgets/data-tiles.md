@@ -1,124 +1,103 @@
-# Data Tiles
+# Data tiles
 
-The **DataTiles** widget is designed to display a collection of items in a responsive, tiled layout. Each tile acts as a miniature, read-only or editable form, making it an excellent choice for creating dashboards, galleries, or any interface where data needs to be presented in a visually distinct and organized manner.
-
-It supports inline editing and automatic configuration, providing a flexible way to build dynamic and interactive displays.
+The data tiles widget displays a collection of data objects inside a responsive, tiled grid layout. Each tile functions as a miniature form template, making it ideal for building visual galleries, summary matrices, or interactive status dashboards.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2025-06-10 at 14.06.37.png" alt="" width="563"><figcaption><p>A Data Tiles widget displaying 6 objects with multiple data fields each</p></figcaption></figure>
 
-## Data Binding
+## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+### Function output to widget
 
-### Input
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `data` | An array of data objects, where each discrete object renders as an individual tile. | array |
+| `isLoading` | Toggles a visual loading overlay indicator during background data operations. | boolean |
 
-| **Property**   | **Type** | **Description**                                                                                             |
-| -------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| **`onUpdate`** | `Object` | Fired when a field within a tile is updated. The payload contains the updated field and the item's ID.      |
-| **`onChange`** | `Object` | Fired when a field within a tile is updated. The payload is the complete data object for the modified item. |
+### Widget to function input
 
-### Output
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `onChange` | Fires when a user modifies a field inside any tile. Triggers a baseline `onChange` event containing the complete row object, alongside a targeted legacy `onUpdate` event payload. | object |
 
-| **Property**    | **Type**  | **Description**                                                                              |
-| --------------- | --------- | -------------------------------------------------------------------------------------------- |
-| **`data`**      | `Array`   | An array of data objects, where each object is rendered as a separate tile.                  |
-| **`isLoading`** | `Boolean` | When `true`, displays a loading indicator, useful for showing progress during data fetching. |
+#### Automatic configuration
 
-#### Automatic Configuration
-
-If you provide data to the widget without pre-defining any data fields, the widget will automatically inspect the first data record. It will generate a field for each property, infer the data type (`text`, `number`, `dateTime`, etc.), and apply default settings. These automatically generated fields will then appear in the configuration panel for you to customize further.
+Feed raw data to the widget without pre-defining any structural entries in your data fields, and it auto-configures itself. It inspects the properties of the first available record, generates a field entry for each key path, infers matching editor data types (such as `text`, `number`, `dateTime`, or `media`), and loads them into your configuration panel for further design adjustment.
 
 ## Configuration
 
-### Tile Settings
+Set the widget's defaults in the settings panel.
+
+### Tile settings
 
 #### Appearance
 
-These properties control the layout and styling of the tiles and the fields within them.
+These settings control the dimensions, alignment, and internal label tracking parameters of the individual tile blocks.
 
-| **Label**          | **Description**                                                               | **Type** | **Property**          |
-| ------------------ | ----------------------------------------------------------------------------- | -------- | --------------------- |
-| **Justification**  | Aligns the tiles within the widget's container.                               | String   | `justification`       |
-| **Tile Width**     | Sets a fixed width for each tile in pixels.                                   | Number   | `tileWidth`           |
-| **Tile Height**    | Sets a fixed height for each tile in pixels.                                  | Number   | `tileHeight`          |
-| **Column Count**   | Sets the number of columns used to arrange fields within each tile.           | String   | `colCount`            |
-| **Label Location** | Specifies where to display field labels relative to the editors.              | String   | `labelLocation`       |
-| **Label Mode**     | Defines how labels are displayed (`Static`, `Floating`, `Hidden`, `Outside`). | String   | `labelMode`           |
-| **Show Colon**     | If `true`, adds a colon after each field label text.                          | Boolean  | `showColonAfterLabel` |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `justification` | Justification | Aligns row layouts within the parent grid container area (`flex-start`, `flex-end`, or `center`). | string |
+| `tileWidth` | Tile width | Enforces a fixed horizontal structural width for every tile item in pixels. | number |
+| `tileHeight` | Tile height | Enforces a fixed vertical structural height for every tile item in pixels. | number |
+| `colCount` | Column count | Sets the number of layout columns used to arrange inputs inside each tile. Use `auto` for flexible scaling. | integer or string |
+| `labelLocation` | Label location | Dictates where to anchor text labels relative to their input editors (`top`, `left`, `right`). | string |
+| `labelMode` | Label mode | Selects structural label visualization styles (`static`, `floating`, `hidden`, `outside`). | string |
+| `showColonAfterLabel` | Show colon | Appends a typographical colon suffix after each visible field label text when checked. | boolean |
+| `fontSizeContent` | Font size content | Adjusts the typography point text size for input content and editor fields. | integer |
+| `fontSizeLabel` | Font size label | Adjusts the typography point text size for field labels and tile text elements. | integer |
 
-#### Data Handling
+#### Data handling
 
-These properties control the interactive features of the tiles.
+These properties manage the interactive features and payload compilation rules for tile modifications.
 
-| **Label**                   | **Description**                                                                                                 | **Type** | **Property**          |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | --------------------- |
-| **Allow Updating**          | Allows users to edit the fields within each tile.                                                               | Boolean  | `allowUpdating`       |
-| **Show All Fields On Edit** | If `true`, the data payload for update events will include all fields from the item, not just the modified one. | Boolean  | `showAllFieldsOnEdit` |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `allowUpdating` | Allow updating | Toggles form input controls out of read-only states, letting users modify parameters inline. | boolean |
+| `showAllFieldsOnEdit` | Show all fields on edit | Forces update event payloads to return the entire compiled item object instead of transmitting only modified fields. | boolean |
 
-### Data Fields
+### Data fields
 
-This is where you define the title and fields that make up the content of each tile.
+Map text keys and array metrics extracted from your data source into visible tile fields.
 
-| **Label**       | **Description**                                                               | **Type** | **Property** |
-| --------------- | ----------------------------------------------------------------------------- | -------- | ------------ |
-| **Title Field** | The field from your data source to be used as the main title for each tile.   | String   | `titleField` |
-| **Data Fields** | An array of field objects that define the content displayed within each tile. | Array    | `dataFields` |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `titleField` | Title field | Selects a specific object property path to display as a prominent, bold header at the top of each tile. | string |
+| `titleColor` | Title color | Overrides the global theme template text color for the primary tile title text element. | string |
+| `dataFields` | Data fields | An array of field mapping configurations detailing individual inputs nested inside each tile. | array |
 
-#### Field Properties
+#### Field properties
 
-Each object in the `dataFields` array can have the following properties:
+Each individual configuration object nested inside the `dataFields` configuration array supports these properties:
 
-| **Label**         | **Description**                                                         | **Type** | **Property** |
-| ----------------- | ----------------------------------------------------------------------- | -------- | ------------ |
-| **Data Field**    | The field from your data source that this item is bound to.             | String   | `dataField`  |
-| **Label**         | The user-friendly text displayed as the field's label.                  | String   | `label`      |
-| **Column Span**   | The number of columns the field should occupy within the tile's layout. | Integer  | `colSpan`    |
-| **Visible**       | Toggles the visibility of the field.                                    | Boolean  | `visible`    |
-| **Editor Widget** | The editor to use for displaying and editing this field.                | String   | `widget`     |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `dataField` | The raw object key mapping path extracted out of the item record object. | string |
+| `label` | The friendly descriptive text displayed as the field category header label. | string |
+| `colSpan` | The total number of layout columns this specific field occupies within the tile template grid. | integer |
+| `visible` | Toggles the visual rendering visibility of this field item within the tile container. | boolean |
+| `widget` | Dictates the active user interface input control loaded inside the block template layout. | string |
 
-#### Editor Widget Options
+### Editor widget options
 
-Each `widget` type has its own set of specific configuration options.
+Configure sub-properties nested inside your field structures based on your selected `widget` type.
 
-**Number (`number`) / Slider (`slider`)**
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `min` | Minimum | (`number` and `slider` only) The lowest numeric value bound allowed for entry. | number |
+| `max` | Maximum | (`number` and `slider` only) The highest numeric value bound allowed for entry. | number |
+| `defaultValue` | Default value | (`number`, `slider`, `dropdown`, `tags` variants) The initial value used inside empty entries. | string or number |
+| `precision` | Precision | (`number` only) Caps the maximum count of fixed decimal fraction places shown. | number |
+| `currency` | Currency | (`number` only) Prepends currency identifier tags (such as `EUR` or `$`) ahead of values. | string |
+| `handleLargeNumber` | Handle large numbers | (`number` only) Downsamples massive integers into condensed unit string variations (such as `1.2M`). | boolean |
+| `discover` | Discover options | (`dropdown` and `tags` only) Automatically extracts unique choices directly from historical dataset values. | boolean |
+| `options` | Options | (`dropdown` and `tags` only) A comma-separated list mapping hardcoded selection options. | string |
+| `switchedOnText` | Switched on text | (`switch` only) The active label text displayed when the toggle is toggled true. | string |
+| `switchedOffText` | Switched off text | (`switch` only) The inactive label text displayed when the toggle is toggled false. | string |
+| `dateType` | Date type | (`dateTime` only) Adjusts picker depths, choosing between `date`, `time`, or combining into `datetime`. | string |
+| `formatDescription` | Format description | (`dateTime` only) Selects specific formatting options driven by preset properties or explicit tokens. | string |
+| `justification` | Justification | (`media` only) Aligns the asset element layout position within its template box area (`left`, `center`, `right`). | string |
+| `thumbnailSize` | Thumbnail size | (`media` only) Defines the pixel height dimension for preview imagery loaded inside tile views. | integer |
 
-| **Label**                | **Description**                                                                          | **Type** | **Property**        |
-| ------------------------ | ---------------------------------------------------------------------------------------- | -------- | ------------------- |
-| **Minimum**              | The minimum allowed value.                                                               | Number   | `min`               |
-| **Maximum**              | The maximum allowed value.                                                               | Number   | `max`               |
-| **Default Value**        | The initial value of the editor.                                                         | Number   | `defaultValue`      |
-| **Precision**            | (`number` only) The number of decimal places to allow.                                   | Number   | `precision`         |
-| **Currency**             | (`number` only) A currency symbol or code to display (e.g., $, €, EUR).                  | String   | `currency`          |
-| **Handle Large Numbers** | (`number` only) Formats large numbers with abbreviations (e.g., 1,200,000 becomes 1.2M). | Boolean  | `handleLargeNumber` |
-
-**Dropdown (`dropdown`) / Tags (`tags`)**
-
-| **Label**            | **Description**                                                                                       | **Type** | **Property**   |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | -------- | -------------- |
-| **Discover Options** | If `true`, automatically populates the dropdown options from the unique values in this column's data. | Boolean  | `discover`     |
-| **Options**          | A comma-separated list of predefined options.                                                         | String   | `options`      |
-| **Default Value**    | The initial selected value.                                                                           | String   | `defaultValue` |
-
-**Switch (`switch`)**
-
-| **Label**             | **Description**                        | **Type** | **Property**      |
-| --------------------- | -------------------------------------- | -------- | ----------------- |
-| **Switched On Text**  | Text displayed when the switch is ON.  | String   | `switchedOnText`  |
-| **Switched Off Text** | Text displayed when the switch is OFF. | String   | `switchedOffText` |
-
-**Date/Time (`dateTime`)**
-
-| **Label**              | **Description**                                                            | **Type** | **Property**        |
-| ---------------------- | -------------------------------------------------------------------------- | -------- | ------------------- |
-| **Date Type**          | The type of picker to display: `Date Only`, `Time Only`, or `Date & Time`. | String   | `dateType`          |
-| **Format Description** | Choose between a `Preset` format or an `Explicit`, custom format.          | String   | `formatDescription` |
-
-**Media (`media`)**
-
-| **Label**          | **Description**                                                       | **Type** | **Property**    |
-| ------------------ | --------------------------------------------------------------------- | -------- | --------------- |
-| **Justification**  | Aligns the media within its display area (`Left`, `Center`, `Right`). | String   | `justification` |
-| **Thumbnail Size** | The height (in pixels) of the media thumbnail.                        | Integer  | `thumbnailSize` |
+## Video demo
 
 {% embed url="https://youtu.be/p9-NG_BB6hU" %}
 Data tiles explained
