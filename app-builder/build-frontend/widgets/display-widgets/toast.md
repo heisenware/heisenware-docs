@@ -1,47 +1,61 @@
 # Toast
 
-The toast is a timed, temporary notification that displays a message at the top or bottom of the screen when triggered.
+The toast widget displays temporary, timed notification messages at specified positions on the screen. It visualizes alert text strings or detailed event error objects triggered by backend logic in your Apps.
 
 <figure><img src="../../../../.gitbook/assets/Toast.png" alt="" width="365"><figcaption></figcaption></figure>
 
-## Settings
+## Data binding
 
-All customization options in the toast widget are in the Settings tab :gear:.
+### Function output or modifier to widget
 
-### Notification type
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `message` | Supplies the text string or structured object block to be broadcast as a temporary notification. | string \| object |
 
-There are 4 types of toast: `Info`, `Warning`, `Error` and `Success`. The type can be selected in the `Notification Type` dropdown and the color of each type is set in the Theme Builder.&#x20;
+### Data formats
 
-<figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-10 at 11.49.05.png" alt="" width="343"><figcaption><p>Toast types in the default theme colors</p></figcaption></figure>
+The `message` property accepts either a flat string or a structured object to dynamically append cause diagnostics to the notification framework.
 
-The Info, Warning, Error and Success colors are the same throughout the app and across different widgets (eg. Buttons).
+**Plain text message**
+A standalone string printed directly within the notification body:
+`"Operation completed successfully."`
 
-### Display Time
-
-The `Display Time` is the amout of time the toast will be visible for in milliseconds. You can type the display time in the number box. The default is 3 seconds.
-
-### Position
-
-You can choose where the Toast appears on the screen. There are 6 options: either at the top or bottom of the screen, and right, left or center.
-
-## Setting the Toast message
-
-<div align="center"><figure><img src="../../../../.gitbook/assets/Toast_widget.png" alt="" width="96"><figcaption><p>Toast widget <br>in build mode</p></figcaption></figure></div>
-
-When adding the toast widget to the app Frontend Builder, it will look like a small message icon. The icon disappears on the deployed app or in test mode, so the location of the widget doesn't matter.&#x20;
-
-To set the toast message, drag an output onto the widget. The only action that can be performed is "call message".
+**Structured message object**
+An object containing explicit `message` and optional `cause` properties. If a `cause` is provided, the widget appends it to the display layout automatically as `${message}, because: ${cause}`:
+```json
+{
+  "message": "Database write failed",
+  "cause": "Connection timeout"
+}
+```
 
 <figure><img src="../../../../.gitbook/assets/Call_Message.png" alt="" width="285"><figcaption></figcaption></figure>
 
-The content of the output is the message in the toast, and the `call message` action is triggered when the output is updated.
+## Configuration
 
-Multiple outputs can be connected to the same toast widget, and the toast will only display the message in the output that was triggered.&#x20;
+Set the widget's defaults in the settings panel.
+
+<div align="center"><figure><img src="../../../../.gitbook/assets/Toast_widget.png" alt="" width="96"><figcaption><p>Toast widget in build mode</p></figcaption></figure></div>
+
+### General settings
+
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `type` | Notification type | Sets the notification alert category style (options include `info`, `warning`, `error`, or `success`). Visual color schemes are managed globally within the Theme Editor. | string |
+| `displayTime` | Display time | Sets the duration in milliseconds that the notification stays visible on screen before automatically fading out. Defaults to `3000` (3 seconds). | integer |
+| `position` | Position | Sets the display anchor placement region on the screen viewport (such as top right, top center, top left, bottom right, bottom center, bottom left). | string |
+
+<figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-10 at 11.49.05.png" alt="" width="343"><figcaption><p>Toast types in the default theme colors</p></figcaption></figure>
+
+## Tips and tricks
 
 {% hint style="info" %}
-**Note:** Messages that are linked to the same toast **and** are triggered at the same time will all appear stacked in the same spot. To avoid that, it's advisable to either stagger the trigger events or set up extra toasts.
+#### Message stacking and mobile viewport scaling
+When multiple backend parameters trigger the same toast widget simultaneously, the individual notifications stack on top of each other in the same position. To maintain absolute layout clarity, stagger your upstream trigger event timings or instantiate separate toast widgets.
+
+On mobile phone viewports, the widget automatically ignores external structural parameters and optimizes its dimensions to fill the width of the screen minus 32 pixels.
 {% endhint %}
 
-## Video Demo
+## Video demo
 
 {% embed url="https://www.youtube.com/watch?v=2tz0Kj0uNbY" %}
