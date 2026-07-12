@@ -1,34 +1,37 @@
 # Photo
 
-The photo widget lets users capture images with their device camera. Its full-screen camera interface gives control over aspect ratio and orientation, ideal for photo capture in the field. It stores each photo as a physical file on the server or as a Base64-encoded buffer, and shows a preview list of everything taken.
+The photo widget lets users capture images with their device camera. The full-screen camera interface provides direct control over aspect ratio and orientation to support photo capture in the field. The widget stores each photo as a physical file on the server or as a Base64-encoded string, and displays a preview list of captured images.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot from 2025-08-11 13-45-19.png" alt=""><figcaption><p>Default view with one photo taken</p></figcaption></figure>
 
 {% hint style="info" %}
-Since [v88 — Almost forever](../../../../release-notes/v88-almost-forever.md), the [upload widget](upload.md) can take photos too, at a much higher resolution than this widget. The photo widget is still the better fit when smaller images are fine, when webcams need to work, or when you require a specific aspect ratio.
+#### Alternative photo capture options
+The upload widget also captures photos at higher resolutions since v88. Use the photo widget when you require webcams, smaller image sizes, or specific aspect ratios.
 {% endhint %}
 
 ## Data binding
 
 ### Widget to function input
 
-| Property | Description                                                                                                                                                               | Type  |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `images` | Fires whenever a photo is taken and saved, or deleted. The payload is an array of photo objects. See [file object structure](photo.md#file-object-structure) for details. | array |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `images` | Fires when a user takes, saves, or deletes a photo. The payload carries an array of photo objects. | array |
 
 ### Function output or modifier to widget
 
-| Property    | Description                                                                                                                  | Type    |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `isLoading` | When `true`, shows a loading indicator, useful during data fetching.                                                         | boolean |
-| `button`    | Overrides the capture button at runtime. Takes a `button` object; see [button configuration](photo.md#button-configuration). | object  |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `images` | Populates the widget with an existing array of photo objects. | array |
+| `isLoading` | Displays a loading indicator when `true`. | boolean |
+| `button` | Overrides the capture button configuration at runtime. | object |
 
-#### File object structure
+### Data formats
 
-The structure of the photo objects in the `images` array depends on the `storageType` setting.
+The structure of the photo objects inside the `images` array depends on your configured storage type.
 
-**If `storageType` is `file`:**
+**File storage payload**
 
+When `storageType` is set to `file`, the payload provides a server path:
 ```json
 {
   "lastModified": 1678886400000,
@@ -38,8 +41,9 @@ The structure of the photo objects in the `images` array depends on the `storage
 }
 ```
 
-**If `storageType` is `buffer`:**
+**Buffer storage payload**
 
+When `storageType` is set to `buffer`, the payload provides a Base64-encoded string:
 ```json
 {
   "lastModified": 1678886400000,
@@ -51,17 +55,19 @@ The structure of the photo objects in the `images` array depends on the `storage
 
 ## Configuration
 
-### Settings
+Set the widget's defaults in the settings panel.
 
-| Property          | Label                    | Description                                                                                        | Type    |
-| ----------------- | ------------------------ | -------------------------------------------------------------------------------------------------- | ------- |
-| `storageType`     | Storage type             | How each photo is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | string  |
-| `aspectRatio`     | Aspect ratio             | The aspect ratio of the camera view. `cover` fills the screen.                                     | string  |
-| `orientation`     | Orientation              | The camera orientation, `portrait` or `landscape`.                                                 | string  |
-| `maxPhotos`       | Maximum number of photos | The total number of photos the widget captures.                                                    | integer |
-| `resolution`      | Resolution               | The capture resolution: `preview`, `balanced`, `high`, or `original`.                              | string  |
-| `thumbnailHeight` | Thumbnail size           | The height (in pixels) of the preview thumbnails.                                                  | number  |
+### General settings
+
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `storageType` | Storage type | Controls whether the widget stores each photo as a physical file on the server (`file`) or as a Base64 string (`buffer`). | string |
+| `aspectRatio` | Aspect ratio | Sets the aspect ratio of the camera view. Use `cover` to fill the available screen area. | string |
+| `orientation` | Orientation | Dictates the camera capture orientation, supporting `portrait` or `landscape`. | string |
+| `maxPhotos` | Maximum number of photos | Sets the total number of photos the widget can hold. The capture button disables automatically when the list reaches this limit. | integer |
+| `resolution` | Resolution | Sets the active camera capture resolution quality, supporting `preview`, `balanced`, `high`, or `original`. | string |
+| `thumbnailHeight` | Thumbnail size | Sets the layout height of the preview thumbnails in pixels. | number |
 
 ### Button configuration
 
-A button triggers the camera. Style its defaults in the settings panel, or bind a `button` object to override it from backend logic at runtime. The object accepts standard button properties, most commonly `text`, `hint`, `fontSize`, `type` (`default`, `normal`, `success`, `danger`, `back`), and `stylingMode` (`text`, `contained`, `outlined`).
+The widget renders a button to activate the camera interface. Style the default appearance directly in the settings panel, or pass a `button` object to override its properties from backend logic at runtime. The configuration object accepts standard button fields including text, hint, font size, type (`default`, `normal`, `success`, `danger`, `back`), and styling mode (`text`, `contained`, `outlined`).
