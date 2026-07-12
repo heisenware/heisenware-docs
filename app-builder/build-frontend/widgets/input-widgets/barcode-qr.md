@@ -12,14 +12,14 @@ It opens a full-screen camera view, then captures the decoded value and closes t
 
 | **Property** | **Description**                                                                                                                                          | **Type**                    |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| **`text`**   | Fires when a barcode is scanned, sending the decoded string. In scan mode `multiple`, the payload is an array of decoded strings.                        | String or Array<String> |
+| `text`   | Fires when a barcode is scanned, sending the decoded string. In scan mode `multiple`, the payload is an array of decoded strings.                        | string or array<string> |
 
 ### Function output to widget
 
 | **Property** | **Description**                                                            | **Type**  |
 | ------------ | ------------------------------------------------------------------------- | --------- |
-| **`clear`**  | Clears the scanned value(s) currently held by the widget.                 | Boolean |
-| **`button`** | Overrides the scan button at runtime (label, styling, disabled state, and more), for example to restyle it per user or context. Takes a `button` object; see [button configuration](#button-configuration). | Object |
+| `clear`  | Clears the scanned value(s) currently held by the widget.                 | boolean |
+| `button` | Overrides the scan button at runtime (label, styling, disabled state, and more), for example to restyle it per user or context. Takes a `button` object; see [button configuration](#button-configuration). | object |
 
 ## Configuration
 
@@ -29,15 +29,15 @@ Set the widget's defaults in the settings panel. The scan button is the visible 
 
 | **Property**        | **Label**          | **Description**                                                    | **Type** |
 | ------------------- | ------------------ | ----------------------------------------------------------------- | -------- |
-| `scanMode`          | Scan mode          | Scan a `single` barcode or `multiple` while the camera is active. | String   |
-| `text`              | Button text        | The text on the scan button.                                      | String   |
-| `icon`              | Icon               | The icon on the scan button.                                      | String   |
-| `fontSize`          | Text size          | The size of the button's text.                                    | Integer  |
-| `iconSize`          | Icon size          | The size of the button's icon.                                    | Integer  |
-| `type`              | Button type        | The button type (`default`, `normal`, `success`, `danger`, `back`). | String |
-| `stylingMode`       | Styling mode       | The button's styling mode (`text`, `contained`, `outlined`).      | String   |
-| `hoverText`         | Hover text         | A tooltip shown when the user hovers over the button.             | String   |
-| `initiallyDisabled` | Initially disabled | If `true`, the button is disabled when the App first loads.       | Boolean  |
+| `scanMode`          | Scan mode          | Scan a `single` barcode or `multiple` while the camera is active. | string   |
+| `text`              | Button text        | The text on the scan button.                                      | string   |
+| `icon`              | Icon               | The icon on the scan button.                                      | string   |
+| `fontSize`          | Text size          | The size of the button's text.                                    | integer  |
+| `iconSize`          | Icon size          | The size of the button's icon.                                    | integer  |
+| `type`              | Button type        | The button type (`default`, `normal`, `success`, `danger`, `back`). | string |
+| `stylingMode`       | Styling mode       | The button's styling mode (`text`, `contained`, `outlined`).      | string   |
+| `hoverText`         | Hover text         | A tooltip shown when the user hovers over the button.             | string   |
+| `initiallyDisabled` | Initially disabled | If `true`, the button is disabled when the App first loads.       | boolean  |
 
 ### Button configuration
 
@@ -45,9 +45,9 @@ Bind a `button` object to the widget to override the scan button from backend lo
 
 | **Property**  | **Description**                                              | **Type** |
 | ------------- | ----------------------------------------------------------- | -------- |
-| `text`        | The button text.                                            | String   |
-| `fontSize`    | The size of the button's text.                              | Integer  |
-| `iconSize`    | The size of the button's icon.                              | Integer  |
-| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | String |
-| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`). | String   |
-| `disabled`    | When truthy, disables the button; when falsy, enables it.   | Any      |
+| `text`        | The button text.                                            | string   |
+| `fontSize`    | The size of the button's text.                              | integer  |
+| `iconSize`    | The size of the button's icon.                              | integer  |
+| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | string |
+| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`). | string   |
+| `disabled`    | When truthy, disables the button; when falsy, enables it.   | any      |
