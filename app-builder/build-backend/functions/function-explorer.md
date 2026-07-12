@@ -2,7 +2,7 @@
 
 The Function Explorer is the structural repository in the left panel that holds all tools required to build your application logic. It organizes available Functions into logical categories and hierarchies (such as classes and instances), and allows you to drag and drop them directly onto the Backend Builder canvas.
 
-<div align="left"><figure><img src="../../../.gitbook/assets/image (529).png" alt=""><figcaption></figcaption></figure></div>
+<figure><img src="../../../.gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
 
 ## Categories
 
