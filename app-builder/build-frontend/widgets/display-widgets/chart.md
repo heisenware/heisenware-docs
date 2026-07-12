@@ -1,8 +1,6 @@
 # Chart
 
-The chart widget is a powerful data-visualization tool for building line, bar, area, and scatter charts.
-
-Configure multiple panes and axes, define complex data series, and control every visual detail to build rich, interactive dashboards.
+The chart widget displays data arrays as line, bar, area, scatter, bubble, or financial charts. It visualizes complex datasets across multiple customizable panes, axes, and series to build interactive dashboards.
 
 <figure><img src="../../../../.gitbook/assets/Chart1.png" alt=""><figcaption><p>All types of single-series chart</p></figcaption></figure>
 
@@ -10,13 +8,12 @@ Configure multiple panes and axes, define complex data series, and control every
 
 ## Data binding
 
-Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
+### Function output to widget
 
-### Output
-
-| **Property** | **Type** | **Description**                                |
-| ------------ | -------- | ---------------------------------------------- |
-| **`data`**   | `Array`  | An array of data objects to plot on the chart. |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `data` | An array of data objects or values to plot on the chart. The chart automatically flattens nested objects using a hyphen delimiter (for example, `sensor: { temp: 21 }` becomes `sensor-temp`). | array |
+| `constantLines` | An array of dynamic constant lines fed from the backend to display indicator lines across matching axis indices. | array\<object\> |
 
 #### Automatic configuration
 
@@ -24,133 +21,128 @@ Feed data to the widget without defining any series in the data settings, and it
 
 ## Configuration
 
+Set the widget's defaults in the settings panel.
+
 ### Chart settings
 
-These properties control the overall behavior and appearance of the chart canvas.
-
-| **Label**                   | **Description**                                                                 | **Type** | **Property**           |
-| --------------------------- | ------------------------------------------------------------------------------- | -------- | ---------------------- |
-| **Show value tooltips**     | If `true`, a tooltip with the point's value appears when a user hovers over it. | Boolean  | `showTooltips`         |
-| **Adjust on zoom**          | If `true`, the value axis adjusts its range when the user zooms the chart.      | Boolean  | `adjustOnZoom`         |
-| **Auto hide point markers** | If `true`, point markers hide when there are too many to display clearly.       | Boolean  | `autoHidePointMarkers` |
-| **Enable crosshair**        | If `true`, shows crosshair lines to help users track points on the chart.       | Boolean  | `enableCrosshair`      |
-| **Negatives as zeroes**     | If `true`, treats all negative values as zero.                                  | Boolean  | `negativesAsZeroes`    |
-| **Rotated**                 | If `true`, rotates the chart, swapping the argument and value axes.             | Boolean  | `rotated`              |
-| **Disabled**                | If `true`, disables all user interaction with the chart.                        | Boolean  | `disabled`             |
-| **Point selection mode**    | Whether a user can select a `single` or `multiple` points.                      | String   | `pointSelectionMode`   |
-| **Series selection mode**   | Whether a user can select a `single` or `multiple` series.                      | String   | `seriesSelectionMode`  |
-| **Bar group padding**       | Controls the padding between groups of bars in a bar chart.                     | Number   | `barGroupPadding`      |
-| **Bar group width**         | Sets a fixed width for groups of bars.                                          | Number   | `barGroupWidth`        |
-| **Palette**                 | A custom array of colors for the chart series.                                  | Array    | `palette`              |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `showTooltips` | Show value tooltips | Displays a detailed informational popup when hovering over a data point. Formats dates and numbers automatically based on system locale. | boolean |
+| `zoomAndPan` | Zoom and pan | Controls chart interactivity. Set to `enabled` (always active), `selectable` (adds an on-chart button to lock scrolling and unlock zoom), or `none`. | string |
+| `scaleToConstantLines` | Scale to constant lines | Adds an 8% padding margin to the top and bottom of the value scales to prevent constant line labels from clipping. | boolean |
+| `adjustOnZoom` | Adjust on zoom | Recalculates the value axis range dynamically when zooming into an argument range. | boolean |
+| `autoHidePointMarkers` | Auto hide point markers | Hides point markers automatically when the density of data points clutters the view. | boolean |
+| `enableCrosshair` | Enable crosshair | Displays crosshair tracking lines that follow the user cursor to map intersections on the axes. | boolean |
+| `negativesAsZeroes` | Negatives as zeroes | Treats all negative values in the dataset as zero. | boolean |
+| `rotated` | Rotated | Swaps the horizontal argument axis and the vertical value axis layouts. | boolean |
+| `disabled` | Disabled | Disables all hover, zoom, pan, and click interactions on the chart canvas. | boolean |
+| `pointSelectionMode` | Point selection mode | Determines whether users can select a `single` point or `multiple` points. | string |
+| `seriesSelectionMode` | Series selection mode | Determines whether users can select a `single` series or `multiple` series. | string |
+| `barGroupPadding` | Bar group padding | Controls the spacing between distinct groups of bars in a bar chart. | number |
+| `barGroupWidth` | Bar group width | Enforces a fixed pixel width for groups of bars. | number |
+| `palette` | Palette | An array of custom hex color codes used sequentially to paint chart series. | array |
+| `defaultPane` | Default pane | Names the primary pane used when no explicit pane assignment is configured on a series. | string |
 
 ### Value axes settings
 
-Configure the vertical (or horizontal, if rotated) axes of your chart. You can define multiple axes across different panes.
+Configure the value axes for the chart. You can add multiple axes and distribute them across different layout panes.
 
-| **Label**          | **Description**                                                             | **Type**       | **Property**      |
-| ------------------ | --------------------------------------------------------------------------- | -------------- | ----------------- |
-| **Title**          | The text title displayed for the axis.                                      | String         | `title`           |
-| **Position**       | The axis position relative to the chart (`left`, `right`, `top`, `bottom`). | String         | `position`        |
-| **Axis width**     | The thickness of the axis line in pixels.                                   | Integer        | `width`           |
-| **Color**          | The color of the axis line.                                                 | String (Color) | `color`           |
-| **Start value**    | A fixed starting value for the axis, overriding the automatic range.        | Number         | `fixedStartValue` |
-| **End value**      | A fixed ending value for the axis, overriding the automatic range.          | Number         | `fixedEndValue`   |
-| **Visible**        | Toggles the visibility of the entire axis.                                  | Boolean        | `visible`         |
-| **End on tick**    | If `true`, ensures the axis ends on a major tick mark.                      | Boolean        | `endOnTick`       |
-| **Inverted**       | If `true`, inverts the direction of the axis values.                        | Boolean        | `inverted`        |
-| **Label**          | An object holding settings for the axis labels (see below).                 | Object         | `label`           |
-| **Constant lines** | An array of constant lines to display on the axis.                          | Array          | `constantLines`   |
-| **Grid and ticks** | An object holding settings for the axis grid lines and tick marks.          | Object         | `grid`            |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `title` | Title | The text label displayed alongside the axis line. | string |
+| `position` | Position | Positions the axis relative to the pane area (`left`, `right`, `top`, `bottom`). | string |
+| `width` | Axis width | Sets the line thickness of the axis in pixels. | integer |
+| `color` | Color | Sets the color of the axis line. | string |
+| `fixedStartValue` | Start value | Enforces a hard starting limit for the axis range, overriding automatic calculations. | number |
+| `fixedEndValue` | End value | Enforces a hard ending limit for the axis range, overriding automatic calculations. | number |
+| `visible` | Visible | Toggles the visibility of the entire axis line. | boolean |
+| `endOnTick` | End on tick | Forces the axis scale boundary to snap perfectly to a major tick mark. | boolean |
+| `inverted` | Inverted | Flips the direction of values along the scale. | boolean |
+| `label` | Label | Configuration object for axis labels, including `visible`, `fontSize`, `fontWeight`, `fontColor`, and `format`. | object |
+| `grid` | Grid and ticks | Configuration object managing major and minor grid lines, line colors, and tick visibility. | object |
+| `constantLines` | Constant lines | An array of static indicator lines to draw across this axis, supporting custom labels, dash styles, and colors. | array\<object\> |
 
 ### Argument axis settings
 
-Configure the horizontal (or vertical, if rotated) axis, which represents the argument, the independent variable of your data.
+Configure the axis representing your independent variable (usually the horizontal X-axis).
 
-| **Label**                | **Description**                                                               | **Type**       | **Property**           |
-| ------------------------ | ----------------------------------------------------------------------------- | -------------- | ---------------------- |
-| **Title**                | The text title displayed for the axis.                                        | String         | `titleX`               |
-| **Argument type**        | The data type of the argument field (`numeric`, `datetime`, `string`).        | String         | `argumentTypeX`        |
-| **Axis width**           | The thickness of the axis line in pixels.                                     | Integer        | `widthX`               |
-| **Color**                | The color of the axis line.                                                   | String (Color) | `colorX`               |
-| **Visible**              | Toggles the visibility of the entire axis.                                    | Boolean        | `visibleX`             |
-| **End on tick**          | If `true`, ensures the axis ends on a major tick mark.                        | Boolean        | `endOnTickX`           |
-| **Inverted**             | If `true`, inverts the direction of the axis values.                          | Boolean        | `invertedX`            |
-| **Tick interval unit**   | For date-time axes, sets the unit for tick intervals (e.g. `days`, `months`). | String         | `intervalUnitX`        |
-| **Tick interval**        | The number of units between each major tick mark.                             | Integer        | `intervalX`            |
-| **Aggregation unit**     | The unit by which to group data for aggregation (e.g. `days`, `months`).      | String         | `aggregationUnitX`     |
-| **Aggregation interval** | The number of units in each aggregation group.                                | Integer        | `aggregationIntervalX` |
-| **Label**                | An object holding settings for the axis labels.                               | Object         | `labelX`               |
-| **Grid and ticks**       | An object holding settings for the axis grid lines and tick marks.            | Object         | `gridX`                |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `titleX` | Title | The text label displayed underneath or beside the argument axis. | string |
+| `argumentTypeX` | Argument type | Dictates the data scale type (`numeric`, `datetime`, `string`). | string |
+| `widthX` | Axis width | Sets the line thickness of the axis line in pixels. | integer |
+| `colorX` | Color | Sets the color of the axis line. | string |
+| `visibleX` | Visible | Toggles the visibility of the argument axis line. | boolean |
+| `endOnTickX` | End on tick | Forces the argument axis scale boundary to snap perfectly to a major tick mark. | boolean |
+| `invertedX` | Inverted | Reverses the horizontal or vertical progression direction of the arguments. | boolean |
+| `intervalUnitX` | Tick interval unit | Sets the date-time unit size (`days`, `months`, `hours`) for tick generation. | string |
+| `intervalX` | Tick interval | The step multiplier between major tick marks based on the selected unit. | integer |
+| `aggregationUnitX` | Aggregation unit | The date-time unit size used to group dense raw points into summary intervals. | string |
+| `aggregationIntervalX` | Aggregation interval | The step multiplier defining the duration of each summary interval group. | integer |
+| `labelX` | Label | Configuration object for layout spacing, text formatting, and font styling of labels. | object |
+| `gridX` | Grid and ticks | Toggles visibility and colors for major/minor grids and physical ticks. | object |
 
 ### Legend settings
 
-Configure the chart's legend, which identifies the different data series.
-
-| **Label**                | **Description**                                                                            | **Type** | **Property**                |
-| ------------------------ | ------------------------------------------------------------------------------------------ | -------- | --------------------------- |
-| **Visible**              | Toggles the visibility of the legend.                                                      | Boolean  | `legendVisible`             |
-| **Title**                | The main title for the legend.                                                             | String   | `legendTitle`               |
-| **Subtitle**             | The subtitle for the legend, shown below the title.                                        | String   | `legendSubtitle`            |
-| **Vertical alignment**   | Aligns the legend vertically (`top` or `bottom`).                                          | String   | `legendVerticalAlignment`   |
-| **Horizontal alignment** | Aligns the legend horizontally (`left`, `center`, `right`).                                | String   | `legendHorizontalAlignment` |
-| **Item text position**   | The position of the text relative to the series marker (`top`, `bottom`, `left`, `right`). | String   | `legendItemTextPosition`    |
-| **Position**             | Positions the legend `inside` or `outside` the chart's plot area.                          | String   | `legendPosition`            |
-| **Orientation**          | Arranges legend items `vertically` or `horizontally`.                                      | String   | `legendOrientation`         |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `legendVisible` | Visible | Toggles the visibility of the series legend block. | boolean |
+| `legendTitle` | Title | The main header string shown inside the legend bounding box. | string |
+| `legendSubtitle` | Subtitle | Secondary text positioned directly below the legend title. | string |
+| `legendVerticalAlignment` | Vertical alignment | Snaps the legend block vertically to the `top` or `bottom`. | string |
+| `legendHorizontalAlignment` | Horizontal alignment | Snaps the legend block horizontally to the `left`, `center`, or `right`. | string |
+| `legendItemTextPosition` | Item text position | Controls whether item labels sit to the `left`, `right`, `top`, or `bottom` of their color marker. | string |
+| `legendPosition` | Position | Places the entire legend block `inside` or `outside` the active chart plotting pane. | string |
+| `legendOrientation` | Orientation | Lays out the legend items `horizontally` or `vertically`. | string |
+| `legendFont` | Font settings | Styling configuration object managing legend text size, weight, and color. | object |
 
 ### Data settings
 
-Map your data to the chart's series here.
-
-| **Label**          | **Description**                                                              | **Type** | **Property**    |
-| ------------------ | ---------------------------------------------------------------------------- | -------- | --------------- |
-| **Argument field** | The field from your data source that provides the arguments (X-axis values). | String   | `argumentField` |
-| **Series data**    | An array of series objects, each defining a set of data to plot.             | Array    | `seriesData`    |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `argumentField` | Argument field | The object key path in your data array providing the base axis coordinates. | string |
+| `seriesData` | Series data | An array of series mapping configurations detailing individual plots. | array\<object\> |
 
 #### Series properties
 
-Each object in the `seriesData` array can have these properties:
+Each object inside the `seriesData` configuration array supports these properties:
 
-| **Label**               | **Description**                                                              | **Type**       | **Property**        |
-| ----------------------- | ---------------------------------------------------------------------------- | -------------- | ------------------- |
-| **Pane**                | The pane on which to display this series.                                    | String         | `pane`              |
-| **Series name**         | The series name, shown in the legend and tooltips.                           | String         | `name`              |
-| **Value field**         | The field from your data source that provides the values (Y-axis values).    | String         | `valueField`        |
-| **Series type**         | The visual representation of the series (e.g. `line`, `bar`, `area`).        | String         | `type`              |
-| **Value axis**          | The value axis to associate this series with.                                | String         | `axis`              |
-| **Aggregation**         | The aggregation method to apply to data points (`avg`, `min`, `max`, `sum`). | String         | `aggregation`       |
-| **Data points**         | The symbol marking data points on the series line (e.g. `circle`, `square`). | String         | `pointSymbol`       |
-| **Custom color**        | A specific color for this series, overriding the chart palette.              | String (Color) | `color`             |
-| **Tag field**           | A field whose value appears in the tooltip for each data point.              | String         | `tagField`          |
-| **Ignore empty points** | Lets the chart ignore empty values in a data series.                         | Boolean        | `ignoreEmptyPoints` |
-| **Range value 1**       | For `rangearea` and `rangebar` types, the field for the start of the range.  | String         | `rangeValue1Field`  |
-| **Range value 2**       | For `rangearea` and `rangebar` types, the field for the end of the range.    | String         | `rangeValue2Field`  |
-| **Size field**          | For `bubble` charts, the field that sets each bubble's size.                 | String         | `sizeField`         |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `pane` | Pane | Assigns this specific data series to a designated chart layout pane. | string |
+| `name` | Series name | The display label for this series inside tooltips and the legend block. | string |
+| `valueField` | Value field | The object key path in your data array providing the primary Y-axis values. | string |
+| `type` | Series type | The chart visualization type (such as `line`, `bar`, `area`, `scatter`, `bubble`, `rangebar`, `candlestick`). | string |
+| `axis` | Value axis | Associates the series with a specific named value axis. | string |
+| `aggregation` | Aggregation | The downsampling function applied when data is clustered (`avg`, `min`, `max`, `sum`, `count`). | string |
+| `pointSymbol` | Data points | Defines the geometric shape marking points on lines or areas (`circle`, `square`, `triangle`, `none`). | string |
+| `color` | Custom color | Overrides the global color palette with a specific hex color code for this plot. | string |
+| `tagField` | Tag field | Key path to a data property whose string value gets appended as a highlighted header tag inside the tooltip. | string |
+| `ignoreEmptyPoints` | Ignore empty points | Connects lines across missing or null data gaps instead of leaving empty canvas breaks. | boolean |
+| `rangeValue1Field` | Range value 1 | Specifies the starting boundary key for range charts (`rangearea`, `rangebar`). | string |
+| `rangeValue2Field` | Range value 2 | Specifies the ending boundary key for range charts (`rangearea`, `rangebar`). | string |
+| `sizeField` | Size field | Specifies the key determining bubble diameter calculations in bubble charts. | string |
+| `openValueField` | Open value field | Maps the opening value key for financial stock tracking layouts. | string |
+| `closeValueField` | Close value field | Maps the closing value key for financial stock tracking layouts. | string |
+| `highValueField` | High value field | Maps the maximum threshold value key for financial stock tracking layouts. | string |
+| `lowValueField` | Low value field | Maps the minimum threshold value key for financial stock tracking layouts. | string |
 
 ## Tips and tricks
 
+### Reading nested data objects
+
+The chart automatically flattens complex data structures passed into `data`. If your backend payload contains nested objects, access deep keys by substituting hyphens for the object path. For example, a structure like `sensor: { temp: 21 }` becomes `sensor-temp`.
+
 ### Multi-series charts
 
-To show several data series on one chart (comparing temperature and humidity over time, for example), the chart needs a specific data format. You can't plug in two separate arrays; you combine them into a single array of objects, where each object shares a common argument like a timestamp.
+To show several data series on one chart (comparing temperature and humidity over time, for example), the chart needs a specific data format. You cannot plug in separate arrays; you must combine them into a single array of objects where each object shares a common argument like a timestamp.
 
 #### Prepare the data
 
-Assume you have two separate arrays, each holding objects with a `date` and a `value`.
-
-{% stepper %}
-{% step %}
-#### Combine the arrays
-
-Use a [combine](../../../build-backend/function-explorer/utilities/data-processing.md#combine) function to merge your two data arrays into one.
-{% endstep %}
-
-{% step %}
-#### Transform with a modifier
-
-Add a JavaScript [modifier](../../../build-backend/extension-nodes/modifier.md) to the output of the combine function. The code below merges the two datasets by timestamp, producing a new list of objects with `date`, `value1` (from the first array), and `value2` (from the second).
+Combine your data arrays using a combine function node inside the Backend Builder. Then, append a JavaScript modifier node to the output. This code merges the two datasets by timestamp, producing a list of objects with `date`, `value1` (from the first array), and `value2` (from the second):
 
 ```js
 // 'x' represents the input array containing your two datasets
-
 Array.from(new Set((x[0] || []).concat(x[1] || []).map(i => i.date)))
   .sort()
   .map(d => ({
@@ -162,31 +154,25 @@ Array.from(new Set((x[0] || []).concat(x[1] || []).map(i => i.date)))
   }))
 ```
 
-{% hint style="info" %}
-If your data uses different field names (`timestamp` instead of `date`, say), adjust the property names in the code above to match.
-{% endhint %}
-{% endstep %}
-{% endstepper %}
+If your data uses different field names (like `timestamp` instead of `date`), adjust the property names in the code to match.
 
 #### The required data structure
 
-After the modifier, your data looks like the example below. Some values are `null`, which is normal: it happens when a timestamp exists in one dataset but not the other (the sensors recorded at slightly different milliseconds, for example).
+After the modifier node, your data uses this structure. Some values are `null`, which is normal: it happens when a timestamp exists in one dataset but not the other (such as when sensors record at slightly different milliseconds):
 
 ```json
 [
-  { "date": "2023-10-27T10:00:01Z", "value1": 25.5, "value2": null },
-  { "date": "2023-10-27T10:00:02Z", "value1": 25.6, "value2": 60.2 },
-  { "date": "2023-10-27T10:00:03Z", "value1": null, "value2": 60.1 }
+  { "date": "2026-10-27T10:00:01Z", "value1": 25.5, "value2": null },
+  { "date": "2026-10-27T10:00:02Z", "value1": 25.6, "value2": 60.2 },
+  { "date": "2026-10-27T10:00:03Z", "value1": null, "value2": 60.1 }
 ]
 ```
 
 #### Configure the chart
 
-Once your data is transformed:
-
-1. Connect the modifier output to the chart widget.
-2. Enable **Ignore empty points** for series 1, so the chart skips the `null` points instead of breaking the line.
-3. Add a series 2, bind it to `value2`, and enable **Ignore empty points** there too.
+1. Connect the modifier node output to the chart `data` property.
+2. Enable ignore empty points for series 1, so the chart bridges `null` points instead of breaking the line.
+3. Add a second series under `seriesData`, bind it to `value2`, and enable ignore empty points there too.
 
 The chart now displays both lines on the same time axis, bridging any gaps from mismatched timestamps.
 
@@ -196,31 +182,19 @@ The chart now displays both lines on the same time axis, bridging any gaps from 
 
 ### Optimizing for large datasets
 
-With thousands of data points, rendering performance becomes a concern. The most effective fix is data aggregation.
-
-Instead of plotting every point, the chart groups your data into intervals (days, weeks, months) and shows a single aggregated point per interval (the average, sum, min, or max).
+With thousands of data points, rendering performance becomes a concern. The most effective fix is data aggregation. Instead of plotting every point, the chart groups your data into intervals (days, weeks, months) and shows a single aggregated point per interval (the average, sum, min, or max).
 
 To enable aggregation:
 
-1. **Set the series aggregation**: In the series properties, set the aggregation method to `avg`, `sum`, `min`, or `max`.
-2. **Configure the argument axis**: In the argument axis settings, set the aggregation unit (e.g. `days`) and aggregation interval (e.g. `7` for weekly).
+* **Set the series aggregation**: In the series properties under `seriesData`, set the aggregation method to `avg`, `sum`, `min`, or `max`.
+* **Configure the argument axis**: In the argument axis settings, set the aggregation unit (such as `days`) and the aggregation interval (such as `7` for weekly groupings).
 
 ### Enhancing the user experience
 
-For complex charts, interactive features make all the difference.
-
-#### Zooming and panning
-
-The chart supports zooming and panning out of the box. Users drag to select a region to zoom into and scroll the mouse wheel to zoom in and out. It pairs well with aggregation: zooming in can reveal more granular, non-aggregated data.
-
-#### Intelligent markers
-
-On line or area charts with many points, a marker on every point clutters the view. Turn on **Auto hide point markers** in the chart settings to hide them when the chart is dense; they reappear as the user zooms in.
-
-#### Tooltips and crosshairs
-
-Enable **Show value tooltips** to give users precise values on hover. To compare values across series at the same argument, enable the crosshair. A tag field in your series configuration adds rich, contextual information to the tooltips.
-
-#### Interacting with the chart
-
-On desktop, zoom by scrolling with a mouse or trackpad. With the cursor on an axis, the chart zooms that dimension only, leaving the other unchanged. With the cursor inside the pane, it zooms without warping, centered on the cursor. On touch devices, zoom with spread and pinch gestures, and pan with a drag.
+* **Zooming and panning**: The chart supports zooming and panning out of the box. Users drag to select a region to zoom into and scroll the mouse wheel to zoom in and out. This pairs well with aggregation, as zooming in reveals more granular, non-aggregated data.
+* **Intelligent markers**: On dense line or area charts, a marker on every point clutters the view. Turn on auto hide point markers in the chart settings to hide them automatically; they reappear when the user zooms in.
+* **Tooltips and crosshairs**: Enable show value tooltips to give users precise values on hover. To compare values across multiple series at the same argument coordinate, enable the crosshairs. Configuring a tag field in your series data adds rich, contextual information to the tooltips.
+* **Interacting with the chart**: On desktop, zoom by scrolling with a mouse or trackpad. Placing the cursor directly on an axis zooms that dimension only, leaving the other unchanged. Placing the cursor inside the pane zooms without warping, centering on the cursor. On touch devices, zoom using spread and pinch gestures, and pan with a drag gesture.
+* **Interactivity controls**: When setting `zoomAndPan` to `selectable`, an interactive toggle button appears in the top-right corner of the canvas:
+  * **Lock to scroll (Search icon)**: Disables chart zooming. Mouse wheels and touch drags scroll the page layout normally.
+  * **Unlock to zoom (Lock icon)**: Intercepts mouse wheels, pinch gestures, and click-drags to zoom into chart values. The rest of the App screen stays locked in place.
