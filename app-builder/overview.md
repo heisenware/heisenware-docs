@@ -38,3 +38,44 @@ The App Builder's core strength is data binding: connect almost any element to a
 * **Reactive synchronization**: No manual glue code. Interface and logic stay in sync in real time as data flows through the App.
 
 <figure><img src="../.gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
+
+## App Builder settings
+
+Customize how the App Builder behaves and how you control the canvas. To access these preferences, click the settings icon in the Top Bar.
+
+<figure><img src="../.gitbook/assets/image (31).png" alt="" width="367"><figcaption></figcaption></figure>
+
+### Viewport controls
+
+Defines the navigation logic of the Backend Builder canvas. Choose between two modes:
+
+* **Design-tool-like**: Mimics the behavior of tools like Figma or Miro.
+* **Google-maps-tool**: Navigation behaves like an interactive map.
+
+### Grid and snapping
+
+* **Grid size**: Defines the size of the canvas grid.
+* **Snap to grid**: When enabled, function blocks align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
+
+### Navigation (WASD)
+
+Fine-tune keyboard navigation on the canvas:
+
+* **Invert WASD controls**: Switches the direction of the W, A, S, and D keys. By default, W is up and S is down.
+* **Pan speed**: Controls how fast the camera moves across the canvas when using WASD.
+* **Zoom speed**: Controls the sensitivity of the Q (zoom out) and E (zoom in) keys.
+
+### Default modifier type
+
+Every time you add a [modifier](build-backend/extension-nodes/modifier.md), Heisenware defaults to a specific type. Choose which one appears first:
+
+* **JSONata**: Ideal for data transformation and querying.
+* **JavaScript**: Use this if you prefer writing standard JS logic for your modifiers.
+
+### Debug backend
+
+Enables advanced backend debugging.
+
+{% hint style="danger" %}
+This setting should typically remain off. It is intended for support cases when working directly with the Heisenware technical team.
+{% endhint %}
