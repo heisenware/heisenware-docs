@@ -1,38 +1,40 @@
 # Filter
 
-The Filter acts as a conditional gate for your flow, allowing you to branch logic based on specific conditions. It is the primary method for implementing `if/else` scenarios within Heisenware.
+The filter acts as a conditional gate for your flow. It branches logic or halts it based on a condition and is the primary way to implement `if/else` scenarios in Heisenware.
 
-Filters are part of the Function extensions. To add a Filter to your Function:
+To add a filter:
 
-1. Click the `+` icon on the right side of any Function Output, Modifier, or existing filter.
+1. Click the + icon on the right side of a function output, modifier, or existing filter.
 2. Select Filter from the list.
-3. A new Filter box will appear where you can write your JavaScript logic.
+3. Click the new filter box (Click to edit...) to open the code editor and write your condition.
 
 <figure><img src="../../../.gitbook/assets/image (505).png" alt=""><figcaption></figcaption></figure>
 
-## When to use
+## How filters work
 
-A Filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The input value from the preceding output is available as the reserved variable `x`.
+A filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The input value from the preceding output is available as the reserved variable `x`.
 
-### **Logical gate**
+Click the filter icon on the left to evaluate the filter manually during development. The last result appears below the expression.
 
-If the result is `true`, the data is passed on to the next Modifier following that filter; if `false`, the data flow is halted at this point.
+### Logical gate
+
+If the result is `true`, the data passes on to the next node following the filter. If `false`, the flow halts at this point.
 
 <div align="center"><figure><img src="../../../.gitbook/assets/image (295).png" alt=""><figcaption></figcaption></figure></div>
 
-### **Branching logic**
+### Branching logic
 
-The `true` and `false` states of the Filter can be used to trigger separate logic paths. For example, you can use the `true` state to trigger another Function.
+Use the `true` and `false` states of the filter to trigger separate logic paths. For example, use the `true` state to trigger another function.
 
 <figure><img src="../../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
-A Filter condition that evaluates to a "falsy" value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow. This is the only way to interrupt a flow and is essential when building complex backend logic.
+#### Falsy values halt the flow
+
+A filter condition that evaluates to a falsy value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow. This is the only way to interrupt a flow and is essential when building complex backend logic.
 {% endhint %}
 
-## JS Filter examples
-
-Unlike [modifiers](modifier.md), Filters strictly require an expression that evaluates to a boolean state (`true` or `false`).
+## Filter examples
 
 ### Example 1: Threshold monitoring
 
@@ -79,7 +81,7 @@ Return of the filter: `true`
 
 ### Example 3: Validating array data
 
-Ensures that an array contains data before attempting to process it.
+Ensures that an array contains data before the flow processes it.
 
 Data:
 
@@ -99,13 +101,13 @@ Return of the filter: `false`
 
 ## Using AI for filters
 
-You can use AI chatbots like ChatGPT, Claude, or Gemini to generate complex Filter logic. Since Filters use standard JavaScript, you can provide the AI with the context of your data structure to get an immediate result.
+Use AI chatbots like ChatGPT, Claude, or Gemini to generate complex filter logic. Filters use standard JavaScript, so provide the AI with your data structure to get an immediate result.
 
-To optimize results, copy this article as context for the AI. Use the Copy button at the top of the page or the direct Open in ChatGPT or Open in Claude buttons located in the top navigation bar.
+For best results, copy this article as context for the AI. Use the Copy button at the top of the page or the Open in ChatGPT / Open in Claude buttons in the top navigation bar.
 
 #### Recommended AI prompt
 
-Copy and paste this prompt into your AI to ensure it understands the Heisenware environment and specific variable references.
+Copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
 
 ```
 I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Filter" expression.
