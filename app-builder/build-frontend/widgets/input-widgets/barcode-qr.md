@@ -12,14 +12,14 @@ It opens a full-screen camera view, then captures the decoded value and closes t
 
 | **Property** | **Description**                                                                                                                                          | **Type**                    |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| **`text`**   | Fires when a barcode is scanned, sending the decoded string. In scan mode `multiple`, the payload is an array of decoded strings.                        | `String` or `Array<String>` |
+| **`text`**   | Fires when a barcode is scanned, sending the decoded string. In scan mode `multiple`, the payload is an array of decoded strings.                        | String or Array<String> |
 
 ### Function output to widget
 
 | **Property** | **Description**                                                            | **Type**  |
 | ------------ | ------------------------------------------------------------------------- | --------- |
-| **`clear`**  | Clears the scanned value(s) currently held by the widget.                 | `Boolean` |
-| **`button`** | Overrides the scan button at runtime (label, styling, disabled state, and more), for example to restyle it per user or context. Takes a `button` object; see [button configuration](#button-configuration). | `Object`  |
+| **`clear`**  | Clears the scanned value(s) currently held by the widget.                 | Boolean |
+| **`button`** | Overrides the scan button at runtime (label, styling, disabled state, and more), for example to restyle it per user or context. Takes a `button` object; see [button configuration](#button-configuration). | Object |
 
 ## Configuration
 
