@@ -21,6 +21,21 @@ The kanban widget provides a visual tool for managing workflows and tracking ope
 | `onCardClick` | Fires when a user clicks any part of a card. The payload is the data object for that card. | object |
 | `onTitleClick` | Fires when a user clicks a card's title, if the title is configured to be clickable. The payload is the data object for that card. | object |
 
+### Data structure
+
+To populate the kanban board, ensure the bound array of card objects includes key fields corresponding to the configured stage, title, subtitle, and status parameters.
+
+For example, if you configure the Stage key as `stage`, Title key as `taskName`, and Status key as `priority`, a single card data object should follow this structure:
+
+```json
+{
+  "id": 101,
+  "taskName": "Design new login screen",
+  "stage": "In Progress",
+  "priority": "High"
+}
+```
+
 ## Configuration
 
 ### General settings
@@ -46,21 +61,6 @@ The kanban widget provides a visual tool for managing workflows and tracking ope
 | `statusMappings` | Status mappings | Defines a list of status values and their corresponding colors used to display a colored border on each card. | array |
 | `status` | Status | The specific status value from the data (such as High, Urgent, or Low). | string |
 | `color` | Color | The color applied to the card's border when its status matches. | string |
-
-## Tips and tricks
-
-To populate the kanban board, ensure the bound array of card objects includes key fields corresponding to the configured stage, title, subtitle, and status parameters.
-
-For example, if you configure the Stage key as `stage`, Title key as `taskName`, and Status key as `priority`, a single card data object should follow this structure:
-
-```json
-{
-  "id": 101,
-  "taskName": "Design new login screen",
-  "stage": "In Progress",
-  "priority": "High"
-}
-```
 
 ## Video demo
 
