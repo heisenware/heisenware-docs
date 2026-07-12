@@ -110,14 +110,20 @@ For best results, copy this article as context for the AI. Use the Copy button a
 Copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
 
 ```
-I am working in Heisenware, a node-based visual programming tool for industrial applications. I need to write a "Filter" expression.
+I am working in Heisenware, a node-based visual programming tool for industrial applications. I need a "Filter" expression that acts as a conditional gate in a flow.
 
-Context:
-* Heisenware Filters evaluate a JavaScript expression.
-* The expression must return true or false.
+Full documentation: https://docs.heisenware.com/app-builder/build-backend/extension-nodes/filter.md
+
+Rules:
+* A filter is a single JavaScript expression that must return true or false. JSONata is not supported here.
 * The input data is referenced as x.
-* I need a concise expression that halts the flow if a condition is not met.
+* If the result is falsy, the flow halts at the filter.
+* No statements or variable declarations. For multi-step logic, use an IIFE: (() => { ... })().
+* Reply with the expression only, no explanation, no markdown fences.
 
-My Task:
-[Describe your condition here, e.g., "I have an object with a 'pressure' value. I only want the flow to continue if the pressure is between 2.0 and 4.5 bar."]
+My input data (sample):
+[Paste a sample of the data arriving at the filter here.]
+
+My task:
+[Describe your condition, e.g., "Only continue if pressure is between 2.0 and 4.5 bar."]
 ```
