@@ -35,16 +35,9 @@ Each display widget has its own documentation page.
 
 ## Connecting to logic (data binding)
 
-Display widgets get their data from your functions and flows.
+Display widgets get their data from your functions and flows. You drag from a function onto the widget, and the slot you pick sets the direction:
 
-### How to link
+* **Function output to widget**: A function's output (or a modifier) writes into a widget property, such as a time series into a chart's `data`. This is the main direction for display widgets.
+* **Widget to function input**: Some display widgets, like the data grid, also send data back. A widget event flows into a function's input, carrying its data with it, so an edited cell or selected row travels into your logic the moment it changes.
 
-Link a widget by dragging the logic onto it:
-
-1. Drag a [function's](../../../build-backend/functions.md) output, or a [modifier](../../../build-backend/extension-nodes/modifier.md), onto the widget.
-2. On the function block, pick the widget property you want to feed (e.g., `value` or `data`).
-
-### Interaction types
-
-* **From a function output or a modifier**: A function or modifier sends a value, such as a time series, to the widget's `data` property.
-* **To function input**: Some display widgets, like the data grid, also accept input. Connect one to a function input and it behaves like an input widget, sending selected rows or edited cells back to your logic.
+For the full mechanic, see [connecting widgets to logic](../README.md#connecting-widgets-to-logic).
