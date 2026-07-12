@@ -4,21 +4,30 @@ The photo widget lets users capture images with their device camera. Its full-sc
 
 <figure><img src="../../../../.gitbook/assets/Screenshot from 2025-08-11 13-45-19.png" alt=""><figcaption><p>Default view with one photo taken</p></figcaption></figure>
 
+{% hint style="info" %}
+Since [v88 — Almost forever](../../../../release-notes/v88-almost-forever.md), the [upload widget](upload.md) can take photos too, at a much higher resolution than this widget. The photo widget is still the better fit when smaller images are fine, when webcams need to work, or when you require a specific aspect ratio.
+{% endhint %}
+
 ## Data binding
 
-Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
+### Widget to function input
 
-### Input
+| Property | Description                                                                                                                                                       | Type  |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `images` | Fires whenever a photo is taken and saved, or deleted. The payload is an array of photo objects. See [file object structure](#file-object-structure) for details. | array |
 
-| **Property** | **Type** | **Description**                                                                                                                                                             |
-| ------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`images`** | `Array`  | Fired whenever a new photo is taken and saved, or when a photo is deleted. The payload is an array of photo objects. See the **File object structure** section for details. |
+### Function output to widget
+
+| Property    | Description                                                                                                          | Type    |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `isLoading` | When `true`, shows a loading indicator, useful during data fetching.                                                | boolean |
+| `button`    | Overrides the capture button at runtime. Takes a `button` object; see [button configuration](#button-configuration). | object  |
 
 #### File object structure
 
-The structure of the photo objects in the `images` array depends on the configured storage type.
+The structure of the photo objects in the `images` array depends on the `storageType` setting.
 
-**If `storageType` is `File`:**
+**If `storageType` is `file`:**
 
 ```json
 {
@@ -29,7 +38,7 @@ The structure of the photo objects in the `images` array depends on the configur
 }
 ```
 
-**If `storageType` is `Buffer`:**
+**If `storageType` is `buffer`:**
 
 ```json
 {
@@ -42,23 +51,17 @@ The structure of the photo objects in the `images` array depends on the configur
 
 ## Configuration
 
-Set these in the widget's settings panel to control the camera and photo management. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
-
 ### Settings
 
-| **Label**                    | **Description**                                                                                          | **Type** | **Property**      |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------- | -------- | ----------------- |
-| **Storage type**             | Determines how the captured photo is stored: as a physical `File` on the server or as a Base64 `Buffer`. | String   | `storageType`     |
-| **Aspect ratio**             | Sets the aspect ratio of the camera view. `Cover` fills the screen.                                      | String   | `aspectRatio`     |
-| **Orientation**              | Sets the camera orientation to `Portrait` or `Landscape`.                                                | String   | `orientation`     |
-| **Maximum number of photos** | The total number of photos that can be captured with the widget.                                         | Integer  | `maxPhotos`       |
-| **Thumbnail size**           | Sets the height (in pixels) of the preview thumbnails.                                                   | Number   | `thumbnailHeight` |
+| Property          | Label                    | Description                                                                          | Type    |
+| ----------------- | ------------------------ | ------------------------------------------------------------------------------------ | ------- |
+| `storageType`     | Storage type             | How each photo is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | string |
+| `aspectRatio`     | Aspect ratio             | The aspect ratio of the camera view. `cover` fills the screen.                       | string  |
+| `orientation`     | Orientation              | The camera orientation, `portrait` or `landscape`.                                   | string  |
+| `maxPhotos`       | Maximum number of photos | The total number of photos the widget captures.                                      | integer |
+| `resolution`      | Resolution               | The capture resolution: `preview`, `balanced`, `high`, or `original`.                | string  |
+| `thumbnailHeight` | Thumbnail size           | The height (in pixels) of the preview thumbnails.                                    | number  |
 
 ### Button configuration
 
-A button triggers the camera interface. Customize its appearance with standard button properties, such as:
-
-* **`text`**: The text displayed on the button (e.g., "Take Photo").
-* **`icon`**: The icon displayed on the button (e.g., "camera").
-* **`type`**: The button's style type (`normal`, `default`, `success`, `danger`).
-* **`stylingMode`**: The visual style of the button (`text`, `outlined`, `contained`).
+A button triggers the camera. Style its defaults in the settings panel, or bind a `button` object to override it from backend logic at runtime. The object accepts standard button properties, most commonly `text`, `hint`, `fontSize`, `type` (`default`, `normal`, `success`, `danger`, `back`), and `stylingMode` (`text`, `contained`, `outlined`).
