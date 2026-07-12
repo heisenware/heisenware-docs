@@ -1,7 +1,7 @@
 # Error handler
 
-The Error Handler allows you to gracefully manage potential errors thrown by a Function. It provides a separate output that will only activate if the Function it's attached to fails or throws an exception.
+The error handler manages errors thrown by a function. It opens a separate output that only activates when the function fails or throws an exception. Unlike the other extension nodes, the error handler attaches directly to a function only, not to other extension nodes.
 
-This enables you to build a safe, separate logic path to handle error conditions, such as logging the error details to a database or displaying a user-friendly error message on the UI.
+Build a dedicated logic path from this output to handle error conditions, for example to log the error details to a database or display an error message in the UI.
 
-<figure><img src="../../../.gitbook/assets/image (28).png" alt=""><figcaption><p>Error simulator Function with captured error message and JSONata modification.</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (28).png" alt=""><figcaption><p>Error simulator function with captured error message and JSONata modification</p></figcaption></figure>
