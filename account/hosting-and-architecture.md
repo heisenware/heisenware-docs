@@ -38,15 +38,15 @@ We offer the Docker Agent for all relevant architectures (amd64, arm64, arm/v7).
 
 Standard Agents ship with pre-made code for industrial protocols. Code Adapters go further: they wrap your own source code and expose it as visual building blocks ([functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of a Code Adapter as a Heisenware-specific wrapper for your algorithms.
 
-Like Agents, Code Adapters come as both a native application and a containerized version, which the platform calls [Custom Extensions](../app-builder/build-backend/function-explorer/extensions/README.md#custom-extensions).
+Like Agents, Code Adapters come as both a native application and a containerized version, which the platform calls [Custom Extensions](../app-builder/build-backend/function-explorer/extensions/#custom-extensions).
 
 #### Native Code Adapter
 
-The Native Code Adapter lets you integrate custom code running natively on your OS. It relies on language-specific versions of our [VRPC library](../developers/vrpc/).
+The Native Code Adapter lets you integrate custom code running natively on your OS. It relies on language-specific versions of our [VRPC library](../advanced/vrpc/).
 
 #### Docker Code Adapter
 
-We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as a [Custom Extension](../app-builder/build-backend/function-explorer/extensions/README.md#custom-extensions). From there, you have two options for where to run the container:
+We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as a [Custom Extension](../app-builder/build-backend/function-explorer/extensions/#custom-extensions). From there, you have two options for where to run the container:
 
 1. **Inside the platform (cloud)**: You load your image as an extension. The platform handles its lifecycle (hosting, restarting) and persists files into the central `shared` folder automatically. Your code effectively runs as part of the Heisenware cloud.
 2. **Outside the platform (edge)**: Useful for bridging a private or local network. You run the container on your own hardware and secure the connection with environment variables. Your code can talk to local devices while you still control everything from the cloud platform.

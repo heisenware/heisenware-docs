@@ -19,7 +19,7 @@ Heisenware connects external data three ways:
 
 The standard choice for general IoT use cases. Use this for sensors or devices that push data to Heisenware's MQTT broker.
 
-### [VRPC](../developers/vrpc/) client
+### [VRPC](../advanced/vrpc/) client
 
 An advanced method for connecting custom code and proprietary libraries, the most powerful option for specialized software integrations.
 
@@ -71,5 +71,5 @@ To integrate your code, write a [Code Adapter](../account/hosting-and-architectu
 {% hint style="info" %}
 #### Technical implementation
 
-For details, examples, and adapter setup, visit our [VRPC developer section](../developers/vrpc/).
+For details, examples, and adapter setup, visit our [VRPC developer section](../advanced/vrpc/).
 {% endhint %}

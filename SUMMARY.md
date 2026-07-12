@@ -132,13 +132,13 @@
 
 * [Overview](production-apps/overview.md)
 
-## ACCOUNT
+## Account
 
 * [Account management](account/account-management/README.md)
   * [Account structure](account/account-management/account-structure.md)
 * [Hosting and architecture](account/hosting-and-architecture.md)
 
-## TUTORIALS
+## Tutorials
 
 * [App templates](tutorials/app-templates/README.md)
   * [Your First Heisenware App](tutorials/app-templates/your-first-heisenware-app.md)
@@ -153,12 +153,12 @@
   * [Connect Heidenhain CNC with OPC UA Support](tutorials/integration-guides/connect-heidenhain-cnc-with-opc-ua-support.md)
 * [On-premise installation](tutorials/on-premise-installation.md)
 
-## Developers
+## Advanced
 
-* [High-level architecture](developers/high-level-architecture/README.md)
-  * [Installation modes](developers/high-level-architecture/installation-modes.md)
-* [VRPC](developers/vrpc/README.md)
-  * [Protocol Details](developers/vrpc/protocol-details.md)
+* [High-level architecture](advanced/high-level-architecture/README.md)
+  * [Installation modes](advanced/high-level-architecture/installation-modes.md)
+* [VRPC](advanced/vrpc/README.md)
+  * [Protocol Details](advanced/vrpc/protocol-details.md)
 
 ## Miscellaneous
 
