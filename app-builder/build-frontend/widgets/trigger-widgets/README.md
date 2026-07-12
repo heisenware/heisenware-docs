@@ -14,22 +14,15 @@ The button is the only official widget in this category, but you can also use [i
 
 ## Connecting to backend logic (data binding)
 
-Trigger widgets link an event, like a click, to a [function](../../../build-backend/functions.md).
+You drag from a function onto the button, and the slot you pick sets what happens:
 
-### How to link
+* **Function trigger to button**: A click starts the connected function. Only the click is sent, no data. This is the main direction for trigger widgets.
+* **Function output to button**: A function's output (or a modifier) writes back into a button property. Link an output to a button's `done` property, for example, to show a loading animation until that part of the flow finishes.
 
-Link a widget by dragging the logic onto it:
-
-1. Drag a trigger from a function onto the widget.
-2. On the function block, pick the widget event, usually `onClick`, to complete the link. A button has only one event, so the selection happens automatically.
-
-### Two-way interaction
-
-* **To a function trigger**: Clicking the button starts the connected flow.
-* **From a function output or a modifier**: A function or modifier sends data back to the button. Link a function's output to a button's `done` property, for example, to show a loading animation on the button until that part of the flow finishes.
+When you link a trigger, a button has only one event (`onClick`), so the selection happens automatically. For the full mechanic, see [connecting widgets to logic](../README.md#connecting-widgets-to-logic).
 
 {% hint style="info" %}
 #### Auto-triggering on input
 
-You can fire a function automatically when a user enters data, with no click required. Connect the function's input to its trigger.
+To fire a function automatically from UI input rather than a click, wire the function's input to its own trigger. The incoming data then both feeds the function and fires it, no button needed.
 {% endhint %}
