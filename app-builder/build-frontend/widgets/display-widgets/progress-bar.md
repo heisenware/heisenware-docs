@@ -1,34 +1,37 @@
-# Progress Bar
+# Progress bar
 
-The **ProgressBar** widget provides a simple and effective way to visualize the status of a task or a specific value within a defined range. It displays a horizontal bar that fills from left to right to represent the current progress as a percentage.
+The progress bar widget visualizes the operational status of a task or a specific metric within a defined range[cite: 24, 25]. It displays a horizontal bar that fills from left to right to represent progress as a percentage in your Apps[cite: 25].
 
-It's an ideal component for showing loading states, task completion, or any value that needs to be tracked against a minimum and maximum.
+<figure><img src="../../../../.gitbook/assets/progressBar.png" alt="" width="375"><figcaption><p>A progress bar in Heisenware</p></figcaption></figure>
 
-<figure><img src="../../../../.gitbook/assets/progressBar.png" alt="" width="375"><figcaption><p>A progress bar in Heisenware.</p></figcaption></figure>
+## Data binding
 
-## Data Binding
+### Function output or modifier to widget
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
-
-### Output
-
-| **Property** | **Type** | **Description**                                                                             |
-| ------------ | -------- | ------------------------------------------------------------------------------------------- |
-| **`value`**  | `Number` | Sets the current value of the progress bar, which determines how much of the bar is filled. |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `value` | Sets the current numeric value determining how much of the bar is filled[cite: 24, 25]. | number |
+| `min` | Sets the minimum boundary value corresponding to 0% progress[cite: 24, 25]. | number |
+| `max` | Sets the maximum boundary value corresponding to 100% progress[cite: 24, 25]. | number |
+| `showStatus` | Toggles the layout visibility of the percentage text label inside the progress bar[cite: 24]. | boolean |
 
 ## Configuration
 
-### Settings
+Set the widget's defaults in the settings panel.
 
-These properties control the range of the progress bar.
+### General settings
 
-| **Label**   | **Description**                                           | **Type** | **Property** |
-| ----------- | --------------------------------------------------------- | -------- | ------------ |
-| **Minimum** | The minimum value of the progress bar, representing 0%.   | Integer  | `min`        |
-| **Maximum** | The maximum value of the progress bar, representing 100%. | Integer  | `max`        |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `min` | Minimum | The default minimum value of the progress bar, representing 0%[cite: 25]. | integer |
+| `max` | Maximum | The default maximum value of the progress bar, representing 100%[cite: 25]. | integer |
+| `showStatus` | Show status | Toggles the visibility of the percentage text label when checked[cite: 24]. | boolean |
+
+## Tips and tricks
 
 {% hint style="info" %}
-The percentage is calculated as `value * 100 / (max-min)`
+#### Percentage calculation and theme styling
+The widget automatically calculates the fill percentage using the formula: `(value * 100) / (max - min)`[cite: 25]. 
 
-The color of the progress bar is the theme accent color by default and cannot be changed currently.
+The progress bar fill color matches your active theme accent color configuration and cannot be modified independently[cite: 25].
 {% endhint %}
