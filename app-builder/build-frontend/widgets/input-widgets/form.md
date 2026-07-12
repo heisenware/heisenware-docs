@@ -1,6 +1,6 @@
 # Form
 
-The form widget lets you build dynamic, data-driven forms with a wide variety of input types. Configure the layout, create complex field groups, and connect it to your backend logic to handle submission, validation, and live updates.
+The form widget lets you build dynamic, data-driven forms with a wide variety of input types. Configure the layout, create complex field groups, and connect the widget to backend logic to handle submission, validation, and live updates.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2025-05-20 at 15.42.53.png" alt="" width="332"><figcaption><p>A form with different editor types</p></figcaption></figure>
 
@@ -8,105 +8,77 @@ The form widget lets you build dynamic, data-driven forms with a wide variety of
 
 ### Widget to function input
 
-| Property           | Description                                                                                                      | Type   |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------- | ------ |
-| `formData`         | Fires whenever any field's value changes. The payload is an object holding all current form data.                | object |
-| `validationResult` | Fires after a `validate` command. Contains `{ isValid, status, brokenRules }` describing the validation outcome. | object |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `formData` | Fires whenever any field value changes. The payload is an object holding all current form data. | object |
+| `validationResult` | Fires after a `validate` command executes. Contains an object describing the validation outcome with `isValid`, `status`, and `brokenRules`. | object |
 
 ### Function output or modifier to widget
 
-| Property    | Description                                                                                                                                                 | Type            |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `autoFill`  | Pre-fills the form with the provided data object. The structure should match the `dataField` names. Can be set not to trigger an outgoing `formData` event. | object          |
-| `clear`     | When `true`, clears all data from the form.                                                                                                                 | boolean         |
-| `validate`  | When `true`, triggers the form's validation.                                                                                                                | boolean         |
-| `readOnly`  | Sets the entire form's read-only state.                                                                                                                     | boolean         |
-| `options`   | Provides options for `select`, `tags`, or `radioGroup` editors at runtime. The object keys should match the `dataField` of the target editor.               | object          |
-| `addFields` | Adds new fields to the form. An array of field objects for a single group, or an object whose keys are group `dataField`s and values are arrays of fields.  | array or object |
-| `setFields` | Replaces all existing fields with a new set. An array of field objects for a single group, or a full group-structure object.                                | array or object |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `autoFill` | Pre-fills the form with the provided data object. The structure must match the `dataField` names. | object |
+| `clear` | Clears all data from the form when set to `true`. | boolean |
+| `validate` | Triggers form validation when set to `true`. | boolean |
+| `readOnly` | Sets the read-only state of the entire form when set to `true`. | boolean |
+| `options` | Provides options for `select`, `tags`, or `radioGroup` editors at runtime. The object keys must match the `dataField` of the target editor. | object |
+| `addFields` | Adds new fields to the form dynamically. Accepts an array of field objects for a single group, or an object mapping group `dataField` keys to arrays of fields. | array or object |
+| `setFields` | Replaces all existing fields with a new set dynamically. Accepts an array of field objects for a single group, or a full group-structure object. | array or object |
+
+### Data structure
 
 #### Autofilling the form (`autoFill`)
+To pre-fill the form, pass a YAML object to the `autoFill` property. Its structure must mirror your form configuration.
 
-To pre-fill the form, pass a JSON object to the `autoFill` property. Its structure must mirror your form's configuration.
+* **Keys**: Keys in your YAML object must match the `dataField` names defined for each field in the configuration.
+* **Nesting**: Nest your YAML object to match if you use form groups with a designated `dataField`. The group's `dataField` becomes the key for a nested object holding that group's fields.
 
-* **Keys**: The keys in your JSON object must match the `dataField` names you defined for each field in the configuration.
-* **Nesting**: If you use form groups and gave a group a `dataField`, nest your JSON object to match. The group's `dataField` becomes a key for a nested object holding that group's fields.
-
-**Example:**
-
-Let's say you have a form with two groups, `personalInfo` and `addressInfo`.
-
-**Configuration:**
-
-* Group 1 `dataField`: `personalInfo`
-  * Field `dataField`: `firstName`
-  * Field `dataField`: `lastName`
-* Group 2 `dataField`: `addressInfo`
-  * Field `dataField`: `street`
-  * Field `dataField`: `city`
-
-The JSON object you pass to `autoFill` or `formData` looks like this:
-
-```json
-{
-  "personalInfo": {
-    "firstName": "John",
-    "lastName": "Doe"
-  },
-  "addressInfo": {
-    "street": "123 Main St",
-    "city": "Anytown"
-  }
-}
+**Example configuration:**
+```yaml
+# personalInfo/
+personalInfo:
+  firstName: "John"
+  lastName: "Doe"
+# addressInfo/
+addressInfo:
+  street: "123 Main St"
+  city: "Anytown"
 ```
 
-If your form uses no groups with `dataField`s, the object stays flat: `{ "firstName": "John", "lastName": "Doe" }`.
+The object stays flat if your form configuration uses no groups with `dataField` names:
+```yaml
+firstName: "John"
+lastName: "Doe"
+```
 
 #### Setting options at runtime (`options`)
+To populate a `select`, `tags`, or `radioGroup` editor at runtime, pass a YAML object to the `options` property.
 
-To populate a `select`, `tags`, or `radioGroup` editor at runtime, pass a JSON object to the `options` property.
-
-* **Keys**: The keys of this object must match the `dataField` of the specific editor you want to update.
+* **Keys**: Keys of this object must match the `dataField` name of the specific editor you want to update.
 * **Values**: The value for each key must be an array of options.
 
-The options in the array can be in two formats:
+The options in the array support two formats:
+1. **Simple array of strings**: Use this format when the display text and the value match. For example: `["Apple", "Banana", "Cherry"]`
+2. **Array of key-value pairs**: Use this format when you require different text for display and for the submitted value. Follow the format `["Display Text", "value"]`. For example: `[ ["New York", "NY"], ["California", "CA"] ]`
 
-1. **Simple array of strings**: Use this when the display text and the value are the same. `["Apple", "Banana", "Cherry"]`
-2. **Array of key-value pairs**: Use this when you need different text for display and for the submitted value. The format is `[ "Display Text", "value" ]`. `[ [ "New York", "NY" ], [ "California", "CA" ], [ "Texas", "TX" ] ]`
-
-**Example:**
-
-Imagine a form with a `state` selector and a `productTags` tag box.
-
-**Configuration:**
-
-* Field `dataField`: `state` (a `select` editor)
-* Field `dataField`: `productTags` (a `tags` editor)
-
-The JSON object you pass to the `options` property to populate both:
-
-```json
-{
-  "state": [
-    [ "New York", "NY" ],
-    [ "California", "CA" ],
-    [ "Texas", "TX" ]
-  ],
-  "productTags": [
-    "New",
-    "Best Seller",
-    "Clearance"
-  ]
-}
+**Example configuration:**
+```yaml
+# options/
+state:
+  - [ "New York", "NY" ]
+  - [ "California", "CA" ]
+  - [ "Texas", "TX" ]
+productTags:
+  - "New"
+  - "Best Seller"
+  - "Clearance"
 ```
 
 {% hint style="info" %}
-#### Special case: location field data
+#### Extended location field data
+When a user selects a place using a `location` editor, the widget adds an extended object to the `formData` payload. The standard field (`dataField`) contains the formatted address string, while a secondary field with an `Ext` suffix (`dataFieldExt`) contains a detailed object with properties like `name`, `address`, `city`, `postcode`, `country`, and `geoJson`.
 
-When using a `location` editor, a successful place selection adds an extended object to the `formData` payload. The standard field (`dataField`) contains the formatted address string, while a second field with an `Ext` suffix (`dataFieldExt`) contains a detailed object with properties like `name`, `address`, `city`, `postcode`, `country`, and `geoJson`.
-
-**Example `formData` payload for a location field named `officeAddress`:**
-
+**Example payload for a location field named `officeAddress`:**
 ```json
 {
   "officeAddress": "One Heisenware Way, Silicon Valley, CA 94043, USA",
@@ -133,117 +105,98 @@ When using a `location` editor, a successful place selection adds an extended ob
 
 ### Style settings
 
-These properties control the overall appearance and layout of the form.
+These properties control the overall appearance and layout of the form widget.
 
-| Property                    | Label                              | Description                                                             | Type    |
-| --------------------------- | ---------------------------------- | ----------------------------------------------------------------------- | ------- |
-| `colCount`                  | Column count                       | number of columns arranging the form items.                             | string  |
-| `labelLocation`             | Label location                     | Where field labels sit relative to the editors.                         | string  |
-| `labelMode`                 | Label mode                         | How labels display (`static`, `floating`, `hidden`, `outside`).         | string  |
-| `showColonAfterLabel`       | Show colon                         | If `true`, adds a colon after each field label.                         | boolean |
-| `initiallyReadOnly`         | Initially readonly                 | Renders the whole form read-only when it first loads.                   | boolean |
-| `triggerFormDataOnAutoFill` | Trigger formData event on autofill | If enabled, an `autoFill` command will also trigger a `formData` event. | boolean |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `colCount` | Column count | Sets the number of columns arranging the form items. | integer |
+| `labelLocation` | Label location | Controls where field labels sit relative to the editors. | string |
+| `labelMode` | Label mode | Defines how labels display, supporting `static`, `floating`, `hidden`, or `outside`. | string |
+| `showColonAfterLabel` | Show colon | Adds a colon after each field label when set to `true`. | boolean |
+| `initiallyReadOnly` | Initially read-only | Renders the entire form as read-only when it first loads. | boolean |
+| `triggerFormDataOnAutoFill` | Trigger form data event on autofill | Automatically triggers an outgoing `formData` event when an `autoFill` command executes. | boolean |
+| `fontSizeContent` | Content font size | Sets the font size in pixels for text inside the form fields. | integer |
+| `fontSizeLabel` | Label font size | Sets the font size in pixels for the field labels. | integer |
 
 {% hint style="info" %}
-The column count can be modified for each screen type separately, so different screens can have a different number of columns.
-
-The other style settings are automatically set on all screens at once for consistency.
+#### Screen-specific column layouts
+Modify the column count for each screen type separately to display a different number of columns across interfaces. The platform automatically applies other style settings to all screens at once to preserve layout consistency.
 {% endhint %}
 
 ### Data settings
 
-Define the structure and content of your form here: the fields, groups, and tabs.
+Define the structure and content of your form by configuring groups and fields.
 
 **Form groups**
 
-Organize your form into one or more groups. With multiple groups, you can optionally show them as tabs.
+Organize your form into one or more groups. With multiple groups, you can optionally display them as tabs.
 
-| Property    | Label            | Description                                                                              | Type   |
-| ----------- | ---------------- | ---------------------------------------------------------------------------------------- | ------ |
-| `dataField` | Group field name | A unique name for the group. On submit, every field in this group nests under this name. | string |
-| `label`     | Group label      | A visible title displayed above the group of fields.                                     | string |
-| `tabView`   | Tab label        | Groups that share a `tabView` label render as tabs within a tab panel.                   | string |
-| `fields`    | Fields           | An array of field objects that belong to this group.                                     | array  |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `dataField` | Group field name | A unique name for the group. On submit, every field in this group nests under this key. | string |
+| `label` | Group label | A visible title displayed above the group of fields. | string |
+| `tabView` | Tab label | Groups sharing an identical `tabView` label render as tabs within a tab panel. | string |
+| `fields` | Fields | An array of field objects belonging to this group. | array |
 
 **Form fields**
 
-Each item in the `fields` array defines an input editor in your form.
+Each item in the `fields` array defines an active input editor in your form.
 
-| Property     | Label       | Description                                                                       | Type    |
-| ------------ | ----------- | --------------------------------------------------------------------------------- | ------- |
-| `dataField`  | Field name  | A unique name for the field, used as the key in the form's data object. Required. | string  |
-| `label`      | Label       | The text label displayed for the field editor.                                    | string  |
-| `helpText`   | Help text   | Hint text to guide the user.                                                      | string  |
-| `colSpan`    | Column span | number of columns the field occupies in the layout.                               | integer |
-| `isRequired` | Required    | Marks the field as mandatory.                                                     | boolean |
-| `disabled`   | Disabled    | Disables the field, preventing user interaction.                                  | boolean |
-| `readOnly`   | Read only   | Makes the field read-only.                                                        | boolean |
-| `editor`     | Editor type | The input editor to render. See the editor types below.                           | string  |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `dataField` | Field name | A unique name for the field that serves as the key in the form data object. | string |
+| `label` | Label | The text label displayed for the field editor. | string |
+| `helpText` | Help text | Hint text to guide the user. | string |
+| `colSpan` | Column span | The number of columns the field occupies in the layout. | integer |
+| `isRequired` | Required | Marks the field as mandatory during form validation. | boolean |
+| `disabled` | Disabled | Disables the field to prevent user interaction. | boolean |
+| `readOnly` | Read-only | Makes the specific field read-only. | boolean |
+| `editor` | Editor type | The input control type to render. Supports sixteen different editor options. | string |
 
-#### Editor types and options
+#### Editor types
 
-The `editor` property sets the input control the user sees. Thirteen types are available:
+The `editor` property configuration determines which interface control renders on screen:
 
-<table><thead><tr><th width="267">Editor type</th><th>Type</th></tr></thead><tbody><tr><td>Text box</td><td>string</td></tr><tr><td>Select box</td><td>string</td></tr><tr><td>Number box</td><td>number</td></tr><tr><td>Check box</td><td>bool</td></tr><tr><td>Password</td><td>string</td></tr><tr><td>Tag box</td><td>array</td></tr><tr><td>Date/time select</td><td>date</td></tr><tr><td>Color select</td><td>number (hexadecimal)</td></tr><tr><td>Location select</td><td>geojson</td></tr><tr><td>Radio group</td><td>string</td></tr><tr><td>Text area</td><td>string</td></tr><tr><td>Slider</td><td>number</td></tr><tr><td>Switch</td><td>bool</td></tr></tbody></table>
+| **Editor type** | **Description or value type** |
+| :--- | :--- |
+| `text` | Text box, outputs a string value. |
+| `select` | Select box, outputs a string selection value. |
+| `number` | Number box, outputs a numeric value. |
+| `checkbox` | Check box, outputs a boolean value. |
+| `password` | Password text box, hides characters and outputs a string value. |
+| `tags` | Tag box, outputs an array of selected values. |
+| `dateTime` | Date/time select, outputs a serialized date string. |
+| `dateRange` | Date range selector, outputs an array containing date spans. |
+| `color` | Color select, outputs a hexadecimal color number. |
+| `location` | Location select, provides Google Maps autocompletion to output a geojson object. |
+| `radioGroup` | Radio button group, outputs a string selection value. |
+| `textarea` | Text area field, spans multiple lines and outputs a string value. |
+| `slider` | Range slider, outputs a numeric value. |
+| `switch` | Binary switch toggle, outputs a boolean value. |
+| `calendar` | Inline calendar picker, outputs a selected date value. |
+| `edgeConnector` | Specialized dropdown that lists available edge-connector data sources. |
 
-Each editor has its own set of specific configuration options.
+#### Editor-specific configuration options
 
-**Text box (`text`)**
+Configure the specific behavioral parameters of your selected input controllers using the unified options table below.
 
-| Property      | Label            | Description                                                        | Type    |
-| ------------- | ---------------- | ------------------------------------------------------------------ | ------- |
-| `accentColor` | Use accent color | If `true`, applies the theme's accent color to the editor's style. | boolean |
-
-**Number box (`number`)**
-
-| Property        | Label          | Description                                | Type    |
-| --------------- | -------------- | ------------------------------------------ | ------- |
-| `min`           | Minimum        | The minimum allowed value.                 | number  |
-| `max`           | Maximum        | The maximum allowed value.                 | number  |
-| `defaultValue`  | Default value  | The initial value of the editor.           | number  |
-| `prefix`        | Prefix         | A string to display before the number.     | string  |
-| `suffix`        | Suffix         | A string to display after the number.      | string  |
-| `showSeparator` | Show separator | If `true`, displays a thousands separator. | boolean |
-| `precision`     | Precision      | The number of decimal places to allow.     | number  |
-
-**Slider (`slider`)**
-
-| Property       | Label         | Description                            | Type   |
-| -------------- | ------------- | -------------------------------------- | ------ |
-| `min`          | Minimum       | The minimum value of the slider range. | number |
-| `max`          | Maximum       | The maximum value of the slider range. | number |
-| `defaultValue` | Default value | The initial value of the slider.       | number |
-| `step`         | Step          | The increment value for the slider.    | number |
-
-**Select box (`select`), tag box (`tags`), radio group (`radioGroup`)**
-
-| Property             | Label                 | Description                                                                             | Type    |
-| -------------------- | --------------------- | --------------------------------------------------------------------------------------- | ------- |
-| `options`            | Options               | A comma-separated list of options. For key-value pairs, use the format `display:value`. | string  |
-| `defaultValue`       | Default value         | The initial selected value.                                                             | string  |
-| `searchEnabled`      | Enable searching      | (`select` only) Allows users to search through the options.                             | boolean |
-| `showClearButton`    | Show clear button     | (`select` only) Shows a button to clear the selection.                                  | boolean |
-| `showDropDownButton` | Show drop down button | (`select` only) Shows the dropdown arrow button.                                        | boolean |
-| `layout`             | Layout                | (`radioGroup` only) Arranges radio buttons `vertically` or `horizontally`.              | string  |
-
-**Switch (`switch`)**
-
-| Property          | Label             | Description                            | Type                |
-| ----------------- | ----------------- | -------------------------------------- | ------------------- |
-| `switchedOnText`  | Switched on text  | Text displayed when the switch is on.  | string              |
-| `switchedOffText` | Switched off text | Text displayed when the switch is off. | string              |
-| `defaultValue`    | Default value     | The initial state of the switch.       | string (`on`/`off`) |
-
-**Date/time (`dateTime`)**
-
-| Property   | Label     | Description                                                   | Type   |
-| ---------- | --------- | ------------------------------------------------------------- | ------ |
-| `dateType` | date type | The type of picker to display: `date`, `time`, or `datetime`. | string |
-
-**Location (`location`)**
-
-This editor uses the Google Maps Places API to provide address autocompletion.
-
-| Property       | Description                                                                                               | Type   |
-| -------------- | --------------------------------------------------------------------------------------------------------- | ------ |
-| `locationType` | The type of search to perform: `address` (for full addresses) or `establishment` (for places/businesses). | string |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `accentColor` | Use accent color | Applies the global theme accent color style (`text` only). | boolean |
+| `min` | Minimum | Sets the minimum allowed numeric boundary value (`number` and `slider` only). | number |
+| `max` | Maximum | Sets the maximum allowed numeric boundary value (`number` and `slider` only). | number |
+| `defaultValue` | Default value | Defines the initial pre-selected state or fallback content value (`number`, `slider`, `select`, `tags`, `radioGroup`, `switch` only). | string, number, or boolean |
+| `prefix` | Prefix | Prepend text formatting before the number string representation (`number` only). | string |
+| `suffix` | Suffix | Append text formatting after the number string representation (`number` only). | string |
+| `showSeparator` | Show separator | Employs thousands punctuation marks within the text layout representation (`number` only). | boolean |
+| `precision` | Precision | Enforces a maximum scale count constraint for floating decimal places (`number` only). | number |
+| `step` | Step | Defines the strict adjustment interval stepping sequence increment value (`slider` only). | number |
+| `options` | Options | Comma-separated alternative options layout configurations matching the `display:value` pair structure rule (`select`, `tags`, `radioGroup` only). | string |
+| `searchEnabled` | Enable searching | Grants interactive textual lookup filters functionality over lists (`select` and `edgeConnector` only). | boolean |
+| `showClearButton` | Show clear button | Introduces an interactive clearing icon button utility component structure (`select` only). | boolean |
+| `showDropDownButton` | Show drop down button | Toggles structural layout rendering visibility for the dropdown expansion anchor indicator box (`select` and `edgeConnector` only). | boolean |
+| `layout` | Layout | Dictates explicit positioning configuration structures, allowing `vertically` or `horizontally` options (`radioGroup` only). | string |
+| `switchedOnText` | Switched on text | Overrides text layout representations matching active structural states (`switch` only). | string |
+| `switchedOffText` | Switched off text | Overrides text layout representations matching inactive structural states (`switch` only). | string |
+| `dateType` | Date type | Configures target structural picker focus formats among `date`, `time`, or `datetime` models (`dateTime` only). | string |
+| `locationType` | Location type | Declares target Google Places endpoint filtering scopes matching `address` or `establishment` classifications (`location` only). | string |
