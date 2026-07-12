@@ -38,7 +38,7 @@ There are four main types of functions, defined by how they handle context (stat
 ## Working with functions on the canvas
 
 * **Add**: Drag a function from the [Function Explorer](function-explorer.md) onto the canvas.
-* **Sequence**: Create a flow by drawing a wire, see [sequencing functions](../README.md#sequencing-functions).
+* **Sequence**: Create a flow by drawing a wire, see [sequencing functions](../#sequencing-functions).
 * **Configure**: Click a function to open its configuration. Use YAML for static data or binding for dynamic data from other functions or UI widgets.
 * **Documentation**: Click the info icon (<i class="fa-info">:info:</i>) next to a function's name to open its documentation panel.
 * **Comment**: Right-click a function and select comment to add context for your team.
@@ -50,13 +50,13 @@ Deleting a function permanently removes its configuration and all connected wire
 
 ### Status indicators
 
-Each function has a colored status indicator next to its name. Hover over the indicator for details.
+Each function has a colored status indicator icon next to its name. Hover over the indicator for details.
 
-* 🟢 **Green**: Ready / OK.
-* 🔵 **Blue**: Execution is slow (> 2 seconds).
-* 🟡 **Yellow**: Instance does not exist yet.
-* 🔴 **Red**: Error or exception occurred.
-* ⚪ **Gray**: Function is offline/unavailable.
+* **Green**: Ready / OK.
+* **Blue**: Execution is slow (> 2 seconds).
+* **Yellow**: Instance does not exist yet.
+* **Red**: Error or exception occurred.
+* **Gray**: Function is offline/unavailable.
 
 ## Inputs and data configuration
 
@@ -66,7 +66,7 @@ Inputs determine how a function behaves. Provide data via three sources:
 2. **Dynamic logic**: Data passed from the output, [modifier](../extension-nodes/modifier.md), or [filter](../extension-nodes/filter.md) of a previous function.
 3. **UI binding**: Live data from a [widget](../../build-frontend/widgets/) (e.g., a text field value).
 
-<figure><img src="../../../.gitbook/assets/randminteger_function.png" alt=""><figcaption><p>Function with object input in YAML format</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (37).png" alt=""><figcaption><p>Function with input in YAML format</p></figcaption></figure>
 
 ### YAML input
 
@@ -224,7 +224,7 @@ Link an output directly to the frontend to drive the user interface:
 
 * **Visualize**: Connect to a widget (e.g., a [chart](../../build-frontend/widgets/display-widgets/chart.md) or [value box](../../build-frontend/widgets/display-widgets/value-box.md)) to display the data.
 * **Control**: Connect to a widget (e.g., a [button](../../build-frontend/widgets/trigger-widgets/button.md)) and select the property you want to control (e.g., `disabled` or `toggle`) to dynamically change its behavior.
-* **Navigate**: Connect to a `Page Switch` trigger to automatically change screens based on logic.
+* **Navigate**: Connect to a `Page switch` trigger to automatically change screens based on logic.
 
 ## Extension nodes
 
@@ -265,5 +265,5 @@ Edit this address as needed. If you switch back to the regular (short) view, you
 
 When moving logic between environments (e.g., from a test device to a production machine), update the Agent name (box 1) to match the new Agent instead of rewiring your flow.
 
-You can even use [search and replace](../README.md#search-and-replace) to update the Agent name across multiple functions at once. This works even on addresses that are not explicitly set to the dynamic view.
+You can even use [search and replace](../#search-and-replace) to update the Agent name across multiple functions at once. This works even on addresses that are not explicitly set to the dynamic view.
 {% endhint %}
