@@ -10,14 +10,14 @@ The upload widget handles file and photo uploads. Users pick one or more files, 
 
 | **Property** | **Description**                                                                                                                                            | **Type** |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **`files`**  | Fires whenever files are uploaded or deleted. The payload is an array of file objects. See [file object structure](#file-object-structure) for details.    | `Array`  |
+| `files`  | Fires whenever files are uploaded or deleted. The payload is an array of file objects. See [file object structure](#file-object-structure) for details.    | `Array`  |
 
 ### Function output to widget
 
 | **Property** | **Description**                                                                                                                                  | **Type**  |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| **`clear`**  | When `true`, clears all uploaded files from the widget.                                                                                          | `Boolean` |
-| **`button`** | Overrides the upload button at runtime (label, styling, and more). Takes a `button` object; see [button configuration](#button-configuration). | `Object`  |
+| `clear`  | When `true`, clears all uploaded files from the widget.                                                                                          | `Boolean` |
+| `button` | Overrides the upload button at runtime (label, styling, and more). Takes a `button` object; see [button configuration](#button-configuration). | `Object`  |
 
 #### File object structure
 
@@ -55,12 +55,12 @@ Set the widget's defaults in the settings panel. A button triggers the file sele
 
 | **Property**     | **Label**               | **Description**                                                                       | **Type** |
 | ---------------- | ----------------------- | ------------------------------------------------------------------------------------ | -------- |
-| `storageType`    | Storage type            | How each file is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | String |
-| `accept`         | Restrict file types     | The file categories users may upload (see below). Pick one or more.                  | Array    |
-| `multiple`       | Allow multi-file upload | If `true`, users can select and upload several files at once.                        | Boolean  |
-| `maxFiles`       | Maximum number of files | The total number of files the widget accepts.                                        | Integer  |
-| `showThumbnails` | Show thumbnails         | If `true`, shows a preview thumbnail for uploaded image files.                       | Boolean  |
-| `thumbnailHeight`| Thumbnail size          | The height (in pixels) of the preview thumbnails.                                    | Number   |
+| `storageType`    | Storage type            | How each file is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | string |
+| `accept`         | Restrict file types     | The file categories users may upload (see below). Pick one or more.                  | array    |
+| `multiple`       | Allow multi-file upload | If `true`, users can select and upload several files at once.                        | boolean  |
+| `maxFiles`       | Maximum number of files | The total number of files the widget accepts.                                        | integer  |
+| `showThumbnails` | Show thumbnails         | If `true`, shows a preview thumbnail for uploaded image files.                       | boolean  |
+| `thumbnailHeight`| Thumbnail size          | The height (in pixels) of the preview thumbnails.                                    | number   |
 
 The button that opens the file picker is styled through the same settings as any button (`text`, `icon`, text size, icon size, type, styling mode, hover text, initially disabled).
 
@@ -82,8 +82,8 @@ Bind a `button` object to the widget to override the upload button from backend 
 
 | **Property**  | **Description**                                              | **Type** |
 | ------------- | ----------------------------------------------------------- | -------- |
-| `text`        | The button text.                                            | String   |
-| `hint`        | The tooltip shown on hover.                                 | String   |
-| `fontSize`    | The size of the button's text.                              | Integer  |
-| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | String |
-| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`). | String   |
+| `text`        | The button text.                                            | string   |
+| `hint`        | The tooltip shown on hover.                                 | string   |
+| `fontSize`    | The size of the button's text.                              | integer  |
+| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | string |
+| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`). | string   |
