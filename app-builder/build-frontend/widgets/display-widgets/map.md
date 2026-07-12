@@ -12,7 +12,7 @@ The map widget displays location markers on an interactive geographical map. It 
 | :--- | :--- | :--- |
 | `markers` | Supplies the geographical coordinate data used to render location markers on the map canvas. Accepts strings, arrays, or objects. | string \| array \| object |
 
-#### Marker data formats
+### Marker data formats
 
 The `markers` property accepts multiple flexible input formats depending on your backend data payload.
 
