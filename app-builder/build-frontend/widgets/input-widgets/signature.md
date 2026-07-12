@@ -8,23 +8,23 @@ It suits forms and documents that need user authorization, such as contracts, ag
 
 ## Data binding
 
-Link this widget to your logic by dragging items from the [Backend Builder](../../../build-backend/) onto it.
+### Widget to function input
 
-### Input
-
-| **Property**    | **Type** | **Description**                                                                                                                                                         |
-| --------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`signature`** | `String` | Fired when the user accepts a signature. The payload is a Base64-encoded string representing the signature as a PNG image, without the `data:image/png;base64,` prefix. |
+| **Property**    | **Description**                                                                                                                                                        | **Type** |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `signature` | Fires when the user accepts a signature. The payload is a Base64-encoded string of the signature as a PNG image, without the `data:image/png;base64,` prefix.          | `String` |
 
 ## Configuration
 
-Set these in the widget's settings panel to control the signature pad's appearance and text. Some can also be driven dynamically through [data binding](./#configuration-and-data-binding).
+### Settings
 
-| **Label**        | **Description**                                                                                                                                                | **Type**       | **Property**  |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------- |
-| **Pen color**    | Sets the color of the signature ink.                                                                                                                           | String (Color) | `penColor`    |
-| **Pad color**    | Sets the background color of the signature pad.                                                                                                                | String (Color) | `padColor`    |
-| **Display mode** | Determines how the signature pad is displayed. `Inline` shows the pad directly on the page, while `Popup` shows a button that opens the pad in a popup window. | String         | `displayMode` |
-| **Accept text**  | The text displayed on the button for confirming and saving the signature.                                                                                      | String         | `acceptText`  |
-| **Clear text**   | The text displayed on the button for clearing the signature pad.                                                                                               | String         | `clearText`   |
-| **Button text**  | The text displayed on the main button when display mode is set to `Popup`.                                                                                     | String         | `buttonText`  |
+| Property      | Label        | Description                                                                                           | Type           |
+| ------------- | ------------ | ---------------------------------------------------------------------------------------------------- | -------------- |
+| `penColor`    | Pen color    | The color of the signature ink.                                                                      | string (color) |
+| `padColor`    | Pad color    | The background color of the signature pad.                                                            | string (color) |
+| `displayMode` | Display mode | How the pad shows: `inline` on the page, or `popup` as a button that opens the pad in a popup window. | string         |
+| `acceptText`  | Accept text  | The text on the confirm-and-save button.                                                             | string         |
+| `clearText`   | Clear text   | The text on the clear button.                                                                        | string         |
+| `buttonText`  | Button text  | The text on the main button when display mode is `popup`.                                             | string         |
+| `width`       | Width        | The width of the signature pad in pixels.                                                            | integer        |
+| `height`      | Height       | The height of the signature pad in pixels.                                                           | integer        |
