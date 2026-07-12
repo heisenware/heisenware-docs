@@ -1,99 +1,97 @@
 # Sparkline
 
-The **Sparkline** widget is a small, lightweight chart that presents the general shape of data variation in a simple and highly condensed way. It's perfect for dashboards and reports where you need to show a trend within a compact space, often alongside related text or other data.
-
-You can configure its appearance as a line, bar, area, or win-loss chart, and customize its colors, points, and tooltips to create a clear and informative visualization.
+The sparkline widget displays a compact, simplified chart visualizing data variation and general trend shape. It provides rapid operational context in a condensed format for your Apps without occupying the screen space of a full chart.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2024-08-20 at 18.56.42.png" alt="" width="375"><figcaption></figcaption></figure>
 
-## Data Binding
+## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+### Function output or modifier to widget
 
-### Output
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `data` | An array of data objects plotted sequentially to form the sparkline trend. | array |
 
-| **Property** | **Type** | **Description**                                          |
-| ------------ | -------- | -------------------------------------------------------- |
-| **`data`**   | `Array`  | An array of data objects to be plotted on the sparkline. |
+#### Automatic configuration
 
-#### Automatic Configuration
-
-If you provide data to the widget without pre-defining the `Argument Key` and `Value Key`, the widget will automatically inspect the data. It will attempt to identify the most likely fields for the arguments and their corresponding numeric values and will populate the configuration panel with these suggestions.
+If the array payload is bound without pre-defining the `argumentField` (Argument key) and `valueField` (Value key) in the configuration panel, the widget inspects the incoming data structure. It automatically selects the most probable structural string field for the argument and numeric field for the value and populates the widget settings.
 
 ## Configuration
 
-### Styling
-
-These properties allow you to customize the visual appearance of the sparkline.
+Set the widget's defaults in the settings panel.
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-18 at 15.27.59.png" alt=""><figcaption><p>All types of sparkline</p></figcaption></figure>
 
-| **Label**                         | **Description**                                                                               | **Type**       | **Property**      |
-| --------------------------------- | --------------------------------------------------------------------------------------------- | -------------- | ----------------- |
-| **Type**                          | The visual representation of the sparkline (e.g., `Line`, `Bar`, `Area`).                     | String         | `type`            |
-| **Apply customized Colors**       | If `true`, enables the custom color settings below. Otherwise, default theme colors are used. | Boolean        | `customizeColors` |
-| **Color in first and last entry** | If `true`, applies a special color to the first and last data points.                         | Boolean        | `showFirstLast`   |
-| **First and Last Color**          | The color to use for the first and last data points.                                          | String (Color) | `firstLastColor`  |
-| **Color in min and max entry**    | If `true`, applies a special color to the minimum and maximum data points.                    | Boolean        | `showMinMax`      |
-| **Color of Maximum**              | The color to use for the maximum data point.                                                  | String (Color) | `maxColor`        |
-| **Color of Minimum**              | The color to use for the minimum data point.                                                  | String (Color) | `minColor`        |
-| **Margin**                        | An object that sets the padding around the sparkline (`top`, `bottom`, `left`, `right`).      | Object         | `margin`          |
+### Styling
+
+These properties control the core visual geometry of the sparkline.
+
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `type` | Type | The layout presentation style of the sparkline graph (options include `line`, `bar`, `area`, `spline`, `winloss`). | string |
+| `customizeColors` | Apply customized colors | Overrides default theme palette colors to apply the specific custom colors configured in this panel. | boolean |
+| `showFirstLast` | Color in first and last entry | Toggles applying a distinct highlight color to the first and last rendered data points. | boolean |
+| `firstLastColor` | First and last color | The specific color hex code applied to the first and last data points. | string |
+| `showMinMax` | Color in min and max entry | Toggles applying distinct highlight colors to the lowest and highest calculated data points. | boolean |
+| `maxColor` | Color of maximum | The specific color hex code applied to the highest recorded data point. | string |
+| `minColor` | Color of minimum | The specific color hex code applied to the lowest recorded data point. | string |
+| `margin` | Margin | Configuration object defining the internal layout padding around the sparkline (`top`, `bottom`, `left`, `right`). | object |
 
 <figure><img src="../../../../.gitbook/assets/Screenshot 2024-09-18 at 16.34.27.png" alt="" width="563"><figcaption><p>A sparkline with the first, last, minimum and maximum entries marked with points</p></figcaption></figure>
 
-#### Line, Area, and Spline Options
+### Line, area, and spline options
 
-These options apply when the **Type** is set to `line`, `area`, `spline`, etc.
+These properties apply specifically when the **Type** is set to a continuous plot like `line`, `area`, or `spline`.
 
-| **Label**                | **Description**                                                             | **Type**       | **Property**  |
-| ------------------------ | --------------------------------------------------------------------------- | -------------- | ------------- |
-| **Point Color**          | The color of the individual data point markers.                             | String (Color) | `pointColor`  |
-| **Point size in pixels** | The size of the data point markers.                                         | Integer        | `pointSize`   |
-| **Point Symbol**         | The shape of the data point markers (e.g., `circle`, `square`, `triangle`). | String         | `pointSymbol` |
-| **Line Color**           | The color of the sparkline's main line.                                     | String (Color) | `lineColor`   |
-| **Line Width**           | The thickness of the sparkline's main line in pixels.                       | Number         | `lineWidth`   |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `pointColor` | Point color | The specific color hex code used for the individual data point markers along the continuous line. | string |
+| `pointSize` | Point size in pixels | The visual diameter thickness size of the data point markers. | integer |
+| `pointSymbol` | Point symbol | The geometric layout shape of the data point markers (options include `circle`, `square`, `triangle`). | string |
+| `lineColor` | Line color | The primary stroke color hex code of the continuous main line. | string |
+| `lineWidth` | Line width | The thickness dimension of the continuous main line in pixels. | number |
 
-#### Bar Options
+### Bar options
 
-These options apply when the **Type** is set to `bar`.
+These properties apply specifically when the **Type** is set to `bar`.
 
-| **Label**              | **Description**                                    | **Type**       | **Property**       |
-| ---------------------- | -------------------------------------------------- | -------------- | ------------------ |
-| **Negative Bar Color** | The color for bars that represent negative values. | String (Color) | `barNegativeColor` |
-| **Positive Bar Color** | The color for bars that represent positive values. | String (Color) | `barPositiveColor` |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `barNegativeColor` | Negative bar color | The fill color hex code applied to bar columns falling below the baseline (negative). | string |
+| `barPositiveColor` | Positive bar color | The fill color hex code applied to bar columns rising above the baseline (positive). | string |
 
-#### Win-Loss Options
+### Win-loss options
 
-These options apply when the **Type** is set to `winloss`.
+These properties apply specifically when the **Type** is set to the binary `winloss` format.
 
-| **Label**              | **Description**                                           | **Type**       | **Property**       |
-| ---------------------- | --------------------------------------------------------- | -------------- | ------------------ |
-| **Win Color**          | The color for bars that are above the threshold (wins).   | String (Color) | `winColor`         |
-| **Loss Color**         | The color for bars that are below the threshold (losses). | String (Color) | `lossColor`        |
-| **Win-Loss Threshold** | The numeric value that separates "wins" from "losses".    | Number         | `winlossThreshold` |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `winColor` | Win color | The fill color hex code applied to column bars recording a value above the configured threshold. | string |
+| `lossColor` | Loss color | The fill color hex code applied to column bars recording a value below the configured threshold. | string |
+| `winlossThreshold` | Win-loss threshold | The mathematical baseline value used to separate positive wins from negative losses. | number |
 
-### Tooltip Settings
+### Tooltip settings
 
-These properties control the tooltip that appears when a user hovers over the sparkline.
+These nested properties control the interactive popup behavior on user hover.
 
-| **Label**          | **Description**                                                                             | **Type**       | **Property**   |
-| ------------------ | ------------------------------------------------------------------------------------------- | -------------- | -------------- |
-| **Enabled**        | Toggles the visibility of the tooltip.                                                      | Boolean        | `enabled`      |
-| **Interactive**    | If `true`, allows users to select and copy text from the tooltip.                           | Boolean        | `interactive`  |
-| **Color**          | The background color of the tooltip.                                                        | String (Color) | `color`        |
-| **Border Radius**  | The corner radius of the tooltip box in pixels.                                             | Number         | `cornerRadius` |
-| **Opacity**        | The opacity of the tooltip, from 0 (transparent) to 1 (opaque).                             | Number         | `opacity`      |
-| **Tooltip Border** | An object containing settings for the tooltip's border (`color`, `width`, `visible`, etc.). | Object         | `border`       |
-| **Tooltip Font**   | An object containing settings for the tooltip's text (`color`, `size`, `weight`, etc.).     | Object         | `font`         |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `enabled` | Enabled | Toggles the layout visibility of the tooltip popup container. | boolean |
+| `interactive` | Interactive | Unlocks cursor selection allowing users to highlight and copy tooltip text block content. | boolean |
+| `color` | Color | Sets the primary background fill color of the tooltip container. | string |
+| `cornerRadius` | Border radius | Sets the pixel dimension curvature applied to the tooltip container edges. | number |
+| `opacity` | Opacity | Modifies the alpha transparency channel of the tooltip block from `0` (clear) to `1` (solid). | number |
+| `border` | Tooltip border | Configuration object governing the external layout stroke of the container (`color`, `width`, `visible`). | object |
+| `font` | Tooltip font | Configuration object governing the typographical text profile of the values (`color`, `size`, `weight`). | object |
 
-### Data Settings
+### Data fields
 
-These properties control the fundamental data mapping and axis configuration of the sparkline.
+These properties map the incoming payload structure boundaries.
 
-| **Label**                    | **Description**                                                                            | **Type** | **Property**        |
-| ---------------------------- | ------------------------------------------------------------------------------------------ | -------- | ------------------- |
-| **Argument Key**             | The name of the field in your data objects that represents the argument (horizontal axis). | String   | `argumentField`     |
-| **Value Key**                | The name of the field in your data objects that represents the value (vertical axis).      | String   | `valueField`        |
-| **Ignore empty data points** | If `true`, empty or null data points will be ignored and not plotted.                      | Boolean  | `ignoreEmptyPoints` |
-| **Maximum of Value Axis**    | Sets a fixed maximum value for the vertical axis.                                          | Number   | `maxValue`          |
-| **Minimum of Value Axis**    | Sets a fixed minimum value for the vertical axis.                                          | Number   | `minValue`          |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `argumentField` | Argument key | The data object field name defining the horizontal axis sequence steps. | string |
+| `valueField` | Value key | The data object field name defining the vertical axis height measurements. | string |
+| `ignoreEmptyPoints` | Ignore empty data points | Excludes missing or null data records from the visual plot flow when set to true. | boolean |
+| `maxValue` | Maximum of value axis | Defines a rigid, fixed upper limit cap for the vertical drawing axis bounds. | number |
+| `minValue` | Minimum of value axis | Defines a rigid, fixed lower limit floor for the vertical drawing axis bounds. | number |
