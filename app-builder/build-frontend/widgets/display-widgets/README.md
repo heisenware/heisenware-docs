@@ -4,6 +4,7 @@ Display widgets render data as charts, gauges, maps, and tables. These component
 
 {% hint style="info" %}
 #### Widget versatility and categorization
+
 The platform groups widgets by their primary purpose, though many serve multiple roles. For example, a [form](../input-widgets/form.md) (an [input widget](../input-widgets/)) can display data and a [data grid](data-grid.md) (a [display widget](./)) can capture input. Check the properties of each widget to see its full capabilities.
 {% endhint %}
 
@@ -16,7 +17,7 @@ The platform groups widgets by their primary purpose, though many serve multiple
 * [**Data grid**](data-grid.md): Displays database records in an interactive table that supports viewing and editing.
 * [**Data list**](data-list.md): Displays a scrollable list of items.
 * [**Data tiles**](data-tiles.md): Arranges items into responsive tile layouts.
-* [**Dynamic group**](../widgets/dynamic-group.md): Bundles multiple widgets together to act as a repeated container driven by data.
+* [**Dynamic group**](../dynamic-group.md): Bundles multiple widgets together to act as a repeated container driven by data.
 * [**Iframe**](iframe.md): Embeds external web pages or applications inside the interface.
 * [**Kanban**](kanban.md): Arranges items on an interactive board to track process stages.
 * [**Linear gauge**](linear-gauge.md): Displays a primary value and a secondary sub-value on a linear bar.
@@ -34,7 +35,8 @@ The platform groups widgets by their primary purpose, though many serve multiple
 ## Data binding
 
 Display widgets receive data from functions and modifiers. Drag from a function or modifier onto the widget. The selected slot determines the data direction:
+
 * **Function output or modifier to widget**: A function output or modifier writes into a widget property, such as a time series array feeding into a chart data property. This is the primary direction for display widgets.
 * **Widget to function input**: Certain display widgets, such as the data grid, send data back to backend logic. A widget event flows into a function input along with its data payload, transmitting edited cells or selected rows the moment they change.
 
-See [Widgets](../README.md#data-binding) for the full mechanics.
+See [Widgets](../#data-binding) for the full mechanics.
