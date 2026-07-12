@@ -1,6 +1,6 @@
 # Upload
 
-The upload widget handles file and photo uploads. Users pick one or more files, and you store each as a physical file on the server or as a Base64-encoded buffer in your data. It also offers file-type restriction, multi-file selection, and thumbnail previews.
+The upload widget handles file and photo uploads. Users select one or more files from their local storage or capture images directly using their device camera. The widget stores each item as a physical file on the server or as a Base64-encoded string, and displays an interactive preview list of all uploaded items.
 
 <figure><img src="../../../../.gitbook/assets/upload_bottom.png" alt=""><figcaption><p>A full and an empty upload widget</p></figcaption></figure>
 
@@ -8,23 +8,26 @@ The upload widget handles file and photo uploads. Users pick one or more files, 
 
 ### Widget to function input
 
-| **Property** | **Description**                                                                                                                                                  | **Type** |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `files`      | Fires whenever files are uploaded or deleted. The payload is an array of file objects. See [file object structure](upload.md#file-object-structure) for details. | `Array`  |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `files` | Fires when a user uploads or deletes a file. The payload carries an array of file objects. | array |
 
 ### Function output or modifier to widget
 
-| **Property** | **Description**                                                                                                                                         | **Type**  |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `clear`      | When `true`, clears all uploaded files from the widget.                                                                                                 | `Boolean` |
-| `button`     | Overrides the upload button at runtime (label, styling, and more). Takes a `button` object; see [button configuration](upload.md#button-configuration). | `Object`  |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `files` | Populates the widget with an existing array of file objects. | array |
+| `clear` | Clears all uploaded files from the widget interface when `true`. | boolean |
+| `isLoading` | Displays a loading indicator when `true`. | boolean |
+| `button` | Overrides the upload button configuration at runtime. | object |
 
-#### File object structure
+### Data formats
 
-The structure of the file objects in the `files` array depends on the `storageType` setting.
+The structure of the file objects inside the `files` array depends on your configured storage type.
 
-**If `storageType` is `file`:**
+**File storage payload**
 
+When `storageType` is set to `file`, the payload provides a server path:
 ```json
 {
   "lastModified": 1678886400000,
@@ -35,8 +38,9 @@ The structure of the file objects in the `files` array depends on the `storageTy
 }
 ```
 
-**If `storageType` is `buffer`:**
+**Buffer storage payload**
 
+When `storageType` is set to `buffer`, the payload provides a Base64-encoded string:
 ```json
 {
   "lastModified": 1678886400000,
@@ -49,41 +53,57 @@ The structure of the file objects in the `files` array depends on the `storageTy
 
 ## Configuration
 
-Set the widget's defaults in the settings panel. A button triggers the file selection, so several settings style that button. You can override any of the button settings at runtime through the `button` binding above.
+Set the widget's defaults in the settings panel.
 
-### Settings
+### General settings
 
-| **Property**      | **Label**               | **Description**                                                                                   | **Type** |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------- | -------- |
-| `storageType`     | Storage type            | How each file is stored: as a physical file on the server (`file`) or a Base64 string (`buffer`). | string   |
-| `accept`          | Restrict file types     | The file categories users may upload (see below). Pick one or more.                               | array    |
-| `multiple`        | Allow multi-file upload | If `true`, users can select and upload several files at once.                                     | boolean  |
-| `maxFiles`        | Maximum number of files | The total number of files the widget accepts.                                                     | integer  |
-| `showThumbnails`  | Show thumbnails         | If `true`, shows a preview thumbnail for uploaded image files.                                    | boolean  |
-| `thumbnailHeight` | Thumbnail size          | The height (in pixels) of the preview thumbnails.                                                 | number   |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `storageType` | Storage type | Controls whether the widget stores each file as a physical file on the server (`file`) or as a Base64 string (`buffer`). | string |
+| `multiple` | Allow multi-file upload | Allows users to select and upload several files simultaneously when `true`. Live camera captures via the photo category still execute one image at a time. | boolean |
+| `showThumbnails` | Show thumbnails | Displays a preview thumbnail layout for uploaded image files when `true`. | boolean |
+| `thumbnailHeight` | Thumbnail size | Sets the layout height of the preview thumbnails in pixels. | number |
 
-The button that opens the file picker is styled through the same settings as any button (`text`, `icon`, text size, icon size, type, styling mode, hover text, initially disabled).
+### Restriction settings
 
-#### File categories
+Configure these validation and processing behaviors inside the restrictions property group.
 
-The `accept` setting limits uploads to these categories:
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `accept` | Restrict file types | Specifies the allowed file categories for upload. Supported categories include text, documents, spreadsheets, presentations, images, audio, video, archives, web, or photo. | array |
+| `maxFiles` | Maximum number of files | Sets the total number of files the widget can hold. The interface automatically disables the upload controls when reaching this limit. | integer |
+| `aspectRatio` | Aspect ratio | Enforces a specific crop aspect ratio on image captures taken via the live camera when the photo category is active. | number or string |
+| `resolution` | Resolution | Adjusts the target resolution quality optimization for image captures taken via the live camera, supporting `preview`, `balanced`, `high`, or `original`. | string |
 
-`Text`, `Documents`, `Spreadsheets`, `Presentations`, `Images`, `Audio`, `Video`, `Archives`, `Web`, and `Photo` (live camera capture).
+#### Allowed file categories and extensions
 
-When you include `Photo`, the widget can also apply an aspect ratio and a resolution to captured images (`preview`, `balanced`, `high`, or `original`).
+The `accept` configuration limits user selections to the following mapped extensions:
+* **Text**: `.txt`, `.md`
+* **Documents**: `.doc`, `.docx`, `.pdf`, `.rtf`, `.odt`
+* **Spreadsheets**: `.xls`, `.xlsx`, `.ods`, `.csv`
+* **Presentations**: `.ppt`, `.pptx`, `.odp`
+* **Images**: `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp`, `.tiff`, `.svg`, `.webp`, `.heic`, `.heif`
+* **Audio**: `.mp3`, `.wav`, `.flac`, `.aac`, `.ogg`, `.wma`
+* **Video**: `.mp4`, `.avi`, `.mov`, `.wmv`, `.mkv`, `.flv`
+* **Archives**: `.zip`, `.rar`, `.7z`, `.tar`, `.gz`, `.iso`
+* **Web**: `.html`, `.htm`, `.css`, `.js`, `.json`, `.xml`, `.yml`
+* **Photo**: Activates direct live camera capture interfaces.
 
-### Taking photos exclusively
+{% hint style="info" %}
+#### Device-specific responsive upload modes
+The widget dynamically adjusts its layout buttons based on the user's operating system and your selected file categories. 
 
-When only the `Photo` category is selected (see the dedicated [Photo](photo.md) widget for camera-only capture), phones and tablets open the camera directly when the user taps the button. To allow both file and camera uploads, select every category you want to permit while leaving `Photo` active.
+On desktop interfaces, it exclusively uses the standard file picker interface. On mobile or tablet devices, selecting only the `Photo` category activates a single camera launch button. Selecting a mix of file categories and `Photo` splits the interface into a two-button layout group, allowing users to choose between picking a file or snapping a photo.
+{% endhint %}
 
 ### Button configuration
 
-Bind a `button` object to the widget to override the upload button from backend logic at runtime, for example to change its label or styling for a specific user or context.
+Style the default button appearance directly in the settings panel, or pass a `button` object to override its properties from backend logic at runtime.
 
-| **Property**  | **Description**                                                     | **Type** |
-| ------------- | ------------------------------------------------------------------- | -------- |
-| `text`        | The button text.                                                    | string   |
-| `hint`        | The tooltip shown on hover.                                         | string   |
-| `fontSize`    | The size of the button's text.                                      | integer  |
-| `type`        | The button type (`default`, `normal`, `success`, `danger`, `back`). | string   |
-| `stylingMode` | The button's styling mode (`text`, `contained`, `outlined`).        | string   |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `text` | Sets the button text string label. | string |
+| `hint` | Sets the tooltip hover text string. | string |
+| `fontSize` | Sets the size of the button text in pixels. | integer |
+| `type` | Sets the color style classification, supporting `default`, `normal`, `success`, `danger`, or `back`. | string |
+| `stylingMode` | Sets the background container rendering type, supporting `text`, `contained`, or `outlined`. | string |
