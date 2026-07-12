@@ -1,129 +1,76 @@
 # Build backend
 
-In the backend, you define the intelligence and connectivity of your application. You build logic visually on a global canvas by connecting Functional blocks, allowing for real-time data processing and seamless integration with external systems.
+The backend is the working core of your App. It fetches, processes, and stores data, talks to machines and external systems, and drives everything users see in the UI. You build it visually by wiring functions into flows on a global canvas.
 
-## How the backend works
+{% hint style="info" %}
+#### Always-on logic
 
-The backend operates on a few fundamental rules:
+Backend logic runs in the background, even when no user has the App open. This makes the backend the central hub for continuous data processing and system monitoring.
+{% endhint %}
 
-* **Event-driven logic**: Nothing happens in a vacuum. [Functions](functions/) only execute when they receive a trigger or a data update.
-* **Persistent environment**: Unlike the UI, which only exists when a user opens the app, your backend logic resides in the Backend Builder and can run processes in the background.
-* **Bridge to local data**: If you need data from a local network (like a factory floor), you use [Edge Agents](agents/) to tunnel that information securely into your backend.
+## Core backend components
 
-### Your backend tools
-
-To build and manage this logic, you use three primary tools located in the App Builder:
-
-* [**Backend Builder**](./#backend-builder): The central canvas where you drag, drop, and wire [Functions](functions/) together.
-* [**Function Explorer**](functions/function-explorer.md): The searchable panel on the left where you find all available Functions.
-* [**File Explorer**](file-explorer.md): The searchable panel on the left where you can load and manage files (CSVs, PDFs, etc.) that your logic (but also your UI) needs to read or where it can write to.
+* [**Functions**](functions/): The atomic building blocks of your logic. They fetch data, process information, manage databases, and control devices. Find them all in the [Function Explorer](functions/function-explorer.md).
+* [**Extension nodes**](extension-nodes/): Modifiers, filters, recorders, and error handlers that refine data directly inside a flow.
+* [**Agents**](agents/): Standalone gateways that execute logic (like connectors) directly inside a local network, for example on a factory floor, and tunnel the data securely into your backend.
+* [**Files**](file-explorer.md): CSVs, PDFs, images, and other resources your logic or UI reads from and writes to. Manage them in the File Explorer.
 
 ## Backend Builder
 
-The Backend Builder is your visual engineering environment. It provides an endless canvas where you build application backend logic by dragging, dropping, and connecting Functions.
+Turn individual functions into automated flows inside the Backend Builder. Drag functions onto the endless canvas and wire them together: data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences.
 
-Unlike traditional programming that relies on variables, the Backend Builder uses a data-driven architecture. Data flows directly from one Function's Output to another's input, creating reactive, event-driven sequences (flows).
+### Adding functions
 
-To build your logic, you interact with [Functions](functions/) directly on the canvas using the following core actions:
-
-### Adding Functions
-
-* **From the Explorer**: Drag Functions from the [Function Explorer](functions/function-explorer.md) in the left panel.
+* **From the Explorer**: Drag functions from the [Function Explorer](functions/function-explorer.md) in the left panel onto the canvas.
 * **Quick access**: Use the toolbar for common utilities like `echo`, `memory`, `trigger`, or `combine`.
 
 <figure><img src="../../.gitbook/assets/memory_flow_builder_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
-### Sequencing Functions
+### Sequencing functions
 
-You create flows by drawing wires between Functions. Click on the output of a Function (or its [Modifier](extension-nodes/modifier.md)) from which you want to transfer data or events, and drag it to the part of the next Function you intend to receive it.
+Create flows by drawing wires between functions. Click the output of a function (or a [modifier](extension-nodes/modifier.md) attached to it) and drag the wire to the part of the next function that receives it.
 
-* **Output to Trigger**: Drag a connection to the Trigger of the next Function if you want the completion of the first Function to execute the second without handing over data.
-* **Output to Input**: Drag a connection to an input port to hand over specific data.
-* **Reactive Inputs**: An input on the second Function can be internally connected to its own trigger. This ensures the Function executes automatically whenever that input value is updated or changed.
+* **Output to trigger**: The completion of the first function executes the second, without handing over data.
+* **Output to input**: Hands over specific data to the next function.
+* **Reactive inputs**: An input can be internally connected to its own trigger. The function then executes automatically whenever that input value updates.
 
-#### Logic behavior
+Functions only execute when they receive a trigger or a data update. One output can drive multiple functions, and inputs can receive data from many sources across the canvas or UI.
 
-* **Event-driven**: Once a Function completes, it passes data through the wire to immediately start the next step.
-* **Flexible routing**: One output can drive multiple Functions, and Inputs can receive data from many sources across the canvas or UI.
+{% hint style="info" %}
+#### Session isolation
 
-{% hint style="success" %}
-#### **Session** isolation
-
-Functions and flows execute in an isolated manner for each user session. This ensures that data processing for one user or machine does not interfere with another. Each session maintains its own state and logic execution path, providing a secure and predictable environment for multi-user applications.
+Functions and flows execute in isolation for each user session. Each session keeps its own state and execution path, so data processing for one user or machine never interferes with another.
 {% endhint %}
 
-### **Grouping (sections)**
+### Grouping (sections)
 
-As your application grows, use grouping to keep the canvas clean. To group, select multiple Functions and click the group icon in the toolbar to create a named container. This is a visual aid that can be collapsed to save space.
+Keep a growing canvas clean by grouping functions. Select multiple functions and click the group icon in the toolbar to create a named container that you can collapse to save space. Groups are a visual aid only and have no impact on how the logic executes.
+
+To bundle functions into a reusable custom function instead, use a [subflow](functions/subflows.md).
 
 <figure><img src="../../.gitbook/assets/gruppieren_functions_2_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
-{% hint style="success" %}
-Sections have no impact on how the logic executes when using production apps.
-{% endhint %}
+### Annotations
 
-### **Annotations (documentation of your backend logic)**
-
-Use the annotation tool to place free-text notes anywhere on the canvas. These are ideal for documenting complex logic paths or leaving instructions for other developers.
+Place free-text notes anywhere on the canvas using the annotation tool, for example to document complex logic paths or leave instructions for other developers.
 
 <figure><img src="../../.gitbook/assets/Annotation_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
-### Controls to navigate the canvas
+### Navigating the canvas
 
-* **Panning**: Use your trackpad, or hold Shift + mouse wheel for horizontal movement and just the mouse wheel for vertical movement. You can also use WASD on your keyboard to pan.
-* **Zooming:** Use trackpad pinch-to-zoom or hold Ctrl + mouse wheel. You can also zoom in and out using Q and E on your keyboard.
+* **Panning**: Use your trackpad, or hold Shift + mouse wheel for horizontal movement and the mouse wheel alone for vertical movement. You can also pan with WASD on your keyboard.
+* **Zooming**: Use trackpad pinch-to-zoom or hold Ctrl + mouse wheel. You can also zoom with Q and E on your keyboard.
 
 {% hint style="info" %}
-You can customize these controls (like mouse wheel behavior) in the [App Builder settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6).
+Customize these controls (like mouse wheel behavior) in the [App Builder settings](../overview.md#app-builder-settings).
 {% endhint %}
 
 ### Search and replace
 
-To make bulk configuration changes, select at least two Functions to activate the Search and replace tool in the toolbar. This allows you to find a specific string within the selected Functions (such as a device's IP address) and replace it with a new value across all of them at once.
+Change the configuration of many functions at once. Select at least two functions to activate the search and replace tool in the toolbar, then find a specific string (such as a device's IP address) and replace it with a new value across the whole selection.
 
 {% hint style="warning" %}
 Search and replace currently only supports strings without spaces.
 {% endhint %}
 
 <figure><img src="../../.gitbook/assets/search_in_function_and_replace_2_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
-
-### App Builder Settings
-
-You can customize how the Backend Builder behaves and how you control the canvas. To access these, click the Settings icon in the toolbar. These preferences improve your efficiency and help you tailor the environment to your workflow.
-
-<figure><img src="../../.gitbook/assets/image (31).png" alt="" width="367"><figcaption></figcaption></figure>
-
-#### Viewport Controls
-
-This defines the navigation logic of the canvas. You can choose between two primary modes:
-
-* **Design-tool-like**: Mimics the behavior of tools like Figma or Miro.
-* **Google-maps-tool**: Navigation behaves like an interactive map.
-
-#### Grid and Snapping
-
-* **Grid Size**: Defines the size of the canvas grid.
-* **Snap to Grid**: When enabled, Function blocks will align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
-
-#### Navigation (WASD)
-
-For users who prefer keyboard navigation, you can fine-tune your movement:
-
-* **Invert WASD Controls:** Switches the direction of the W, A, S, and D keys. By default, W is up and S is down.
-* **Pan Speed**: Controls how fast the camera moves across the canvas when using WASD.
-* **Zoom Speed**: Controls the sensitivity of the Q (zoom out) and E (zoom in) keys.
-
-#### Default Modifier Type
-
-Every time you add a [Modifier](extension-nodes/modifier.md) to a Function, Heisenware defaults to a specific type. You can choose which one appears first:
-
-* **JSONata**: Ideal for data transformation and querying.
-* **JavaScript**: Use this if you prefer writing standard JS logic for your modifiers.
-
-#### Debug Backend
-
-This enables advanced backend debugging.
-
-{% hint style="danger" %}
-This setting should typically remain off. It is intended for support cases when working directly with the Heisenware technical team.
-{% endhint %}
