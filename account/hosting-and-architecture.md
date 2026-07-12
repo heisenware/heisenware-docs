@@ -26,19 +26,19 @@ An Agent is a piece of software that runs on your local hardware and opens a sec
 
 The Native Agent is a single binary executable (Linux/macOS) or a Windows `.exe` that starts with one click. It must run on local hardware that can reach the device you want to connect.
 
-Security is built in. When you download the Agent from your Heisenware account, Heisenware compiles it fresh, just for you, with your own credentials embedded directly in the binary. An Agent downloaded from a different account will not work with yours. For details on using the Native Agent, [see the Agents documentation](../app-builder/build-backend/function-explorer/agents/#native-agent).
+Security is built in. When you download the Agent from your Heisenware account, Heisenware compiles it fresh, just for you, with your own credentials embedded directly in the binary. An Agent downloaded from a different account will not work with yours. For details on using the Native Agent, [see the Agents documentation](../app-builder/build-backend/agents/#native-agent).
 
 #### Docker Agent
 
 The Docker Agent works much like the Native Agent, but packed into a Docker container. Docker is especially useful for vendors that offer edge-connectivity hardware, such as Siemens, WAGO, Hilscher, Welotec, or Weidmüller.
 
-We offer the Docker Agent for all relevant architectures (amd64, arm64, arm/v7). To get started quickly, pass the necessary credentials as environment variables to the container. For details, [see the Agents documentation](../app-builder/build-backend/function-explorer/agents/#docker-agent).
+We offer the Docker Agent for all relevant architectures (amd64, arm64, arm/v7). To get started quickly, pass the necessary credentials as environment variables to the container. For details, [see the Agents documentation](../app-builder/build-backend/agents/#docker-agent).
 
 ### Code Adapters (Custom Extensions)
 
-Standard Agents ship with pre-made code for industrial protocols. Code Adapters go further: they wrap your own source code and expose it as visual building blocks ([functions](../app-builder/build-backend/functions.md)) in the cloud platform. Think of a Code Adapter as a Heisenware-specific wrapper for your algorithms.
+Standard Agents ship with pre-made code for industrial protocols. Code Adapters go further: they wrap your own source code and expose it as visual building blocks ([functions](../app-builder/build-backend/functions/)) in the cloud platform. Think of a Code Adapter as a Heisenware-specific wrapper for your algorithms.
 
-Like Agents, Code Adapters come as both a native application and a containerized version, which the platform calls [Custom Extensions](../app-builder/build-backend/function-explorer/extensions/#custom-extensions).
+Like Agents, Code Adapters come as both a native application and a containerized version, which the platform calls [Custom Extensions](../app-builder/build-backend/functions/extensions/#custom-extensions).
 
 #### Native Code Adapter
 
@@ -46,7 +46,7 @@ The Native Code Adapter lets you integrate custom code running natively on your 
 
 #### Docker Code Adapter
 
-We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as a [Custom Extension](../app-builder/build-backend/function-explorer/extensions/#custom-extensions). From there, you have two options for where to run the container:
+We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as a [Custom Extension](../app-builder/build-backend/functions/extensions/#custom-extensions). From there, you have two options for where to run the container:
 
 1. **Inside the platform (cloud)**: You load your image as an extension. The platform handles its lifecycle (hosting, restarting) and persists files into the central `shared` folder automatically. Your code effectively runs as part of the Heisenware cloud.
 2. **Outside the platform (edge)**: Useful for bridging a private or local network. You run the container on your own hardware and secure the connection with environment variables. Your code can talk to local devices while you still control everything from the cloud platform.
@@ -60,7 +60,7 @@ For organizations with strict internal compliance requirements or air-gapped net
 In an on-premises deployment, the entire platform runs on your local servers. It moves every cloud component one level down into your infrastructure.
 
 * **Direct connectivity**: The platform connects directly to local devices, with no Agent required.
-* **Network segmentation**: In large shopfloor setups with segmented networks, you can still use [Agents](../app-builder/build-backend/function-explorer/agents/) (Native or Docker) to bridge lower-level subnets securely.
+* **Network segmentation**: In large shopfloor setups with segmented networks, you can still use [Agents](../app-builder/build-backend/agents/) (Native or Docker) to bridge lower-level subnets securely.
 
 <figure><img src="../.gitbook/assets/image (488).png" alt=""><figcaption></figcaption></figure>
 

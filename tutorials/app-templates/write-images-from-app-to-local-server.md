@@ -11,13 +11,13 @@ description: >-
 {% step %}
 ### Prepare file connector agent
 
-Download an [agent](../../app-builder/build-backend/function-explorer/agents/) with file connector and start the agent on the server or PC you want to store the images.
+Download an [agent](../../app-builder/build-backend/agents/) with file connector and start the agent on the server or PC you want to store the images.
 {% endstep %}
 
 {% step %}
 ### Add photo widget and configure it
 
-Pick the [photo widget](../../app-builder/build-frontend/widgets/input-widgets/photo.md) from input widgets and place it into the user interface of your app. Switch the storage type of the photo widget from file to buffer.&#x20;
+Pick the [photo widget](../../app-builder/build-frontend/widgets/input-widgets/photo.md) from input widgets and place it into the user interface of your app. Switch the storage type of the photo widget from file to buffer.
 {% endstep %}
 
 {% step %}
@@ -43,7 +43,7 @@ The final memory Function, after taking a photo in test mode, must look like in 
 {% step %}
 ### Configure the writeBufferToFile Function
 
-Find the [writeBufferToFile](../../app-builder/build-backend/function-explorer/connectors/file-i-o.md#writebuffertofile) Function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.&#x20;
+Find the [writeBufferToFile](../../app-builder/build-backend/functions/connectors/file-i-o.md#writebuffertofile) Function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.
 
 Connect the path Modifier with the `filePath` input and the buffer Modifier with the `buffer` input.
 

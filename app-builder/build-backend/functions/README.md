@@ -4,12 +4,12 @@ Functions are the core building blocks for application logic in Heisenware. They
 
 All Functions follow the same anatomy. Each part of it is represented by a colored box with a unique icon inside.
 
-<figure><img src="../../.gitbook/assets/image (502).png" alt=""><figcaption><p>A Function merging two (or more) objects</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (502).png" alt=""><figcaption><p>A Function merging two (or more) objects</p></figcaption></figure>
 
-* [**Input(s)**](functions.md#inputs-and-data-configuration): Arguments the Function needs to work (e.g., a number to calculate or a string to send). If a Function does not require an input, the box is not shown.
-* [**Trigger**](functions.md#triggers-and-execution-logic): The signal that tells the Function to execute (e.g., a button click or a data change).
-* [**Output**](functions.md#outputs-and-chaining): The result of the operation also available for the next step in your flow.
-* [**Extensions**](functions.md#function-extensions) **(optional)**: Add-ons to [filter](extension-nodes/filter.md), [record](extension-nodes/recorder.md), or [modify](extension-nodes/modifier.md) data on the fly.
+* [**Input(s)**](./#inputs-and-data-configuration): Arguments the Function needs to work (e.g., a number to calculate or a string to send). If a Function does not require an input, the box is not shown.
+* [**Trigger**](./#triggers-and-execution-logic): The signal that tells the Function to execute (e.g., a button click or a data change).
+* [**Output**](./#outputs-and-chaining): The result of the operation also available for the next step in your flow.
+* [**Extensions**](./#function-extensions) **(optional)**: Add-ons to [filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), or [modify](../extension-nodes/modifier.md) data on the fly.
 
 ### Types of Functions
 
@@ -55,10 +55,10 @@ Each Function has a colored status indicator next to its name. Hover over the in
 Inputs determine how a Function behaves. You can provide data via three sources:
 
 1. **Static data**: Fixed values typed directly into the Function Input (configured via YAML) or set via a web form (opened with a click on the blue arrow icon inside the Function Input).
-2. **Dynamic logic**: Data passed from the Output, [Modifier](extension-nodes/modifier.md), or [Filter](extension-nodes/filter.md) of a previous Function.
-3. **UI binding**: Live data from a [Widget](../build-frontend/widgets/) (e.g., a text field value).
+2. **Dynamic logic**: Data passed from the Output, [Modifier](../extension-nodes/modifier.md), or [Filter](../extension-nodes/filter.md) of a previous Function.
+3. **UI binding**: Live data from a [Widget](../../build-frontend/widgets/) (e.g., a text field value).
 
-<figure><img src="../../.gitbook/assets/randminteger_function.png" alt=""><figcaption><p>Function with object input in YAML format</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/randminteger_function.png" alt=""><figcaption><p>Function with object input in YAML format</p></figcaption></figure>
 
 ### YAML input
 
@@ -148,7 +148,7 @@ Right-click an Function Input to switch between YAML and HTML view, or to set an
 
 Functions with a `on` prefix (e.g., `onMessage`) use callbacks. These listen for external events (like an incoming MQTT message) and provide that data via a specific output nested inside the Function Input.
 
-<figure><img src="../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A Function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A Function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
 
 ## Triggers & execution logic
 
@@ -157,15 +157,15 @@ The Trigger determines _when_ a Function runs.
 ### Trigger sources
 
 * **Data-driven**: Link an Output, Modifier, or Filter to a Trigger to run `on change`, `on update`, or `on true`.
-* **UI events**: Link a widget event (like a [button](../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the Trigger.
+* **UI events**: Link a widget event (like a [button](../../build-frontend/widgets/trigger-widgets/button.md)'s `on Click`) to the Trigger.
 * **App lifecycle**: Right-click the Trigger to set execution `on App Start` (once) or `on App Stop`.
 * **Periodically**: Right-click the Trigger to set a recurring execution interval.
-* **Page load**: Drag a [page](../build-frontend/page-explorer.md) onto the Trigger to execute the Function when that page loads.
+* **Page load**: Drag a [page](../../build-frontend/page-explorer.md) onto the Trigger to execute the Function when that page loads.
 * **Manual (during development)**: Click the Trigger icon inside the Trigger to execute the Function during development.
 
-<figure><img src="../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a Function</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a Function</p></figcaption></figure>
 
-<figure><img src="../../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption><p>Use a button click to execute a Function</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption><p>Use a button click to execute a Function</p></figcaption></figure>
 
 ### Sequential processing of arrays (looping)
 
@@ -183,7 +183,7 @@ A common use case for sequential processing is merging a single element into eac
 
 The image below illustrates a `combine` Function where the Trigger is configured to Process One By One on its first input (`On arg 1`). As a result, the Function executes for each sub-array, and the singular element from the second input is merged into both.
 
-<figure><img src="../../.gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -214,15 +214,15 @@ You can link an output to another Function to create a chain of logic:
 
 You can link an output directly to the frontend to drive the user interface:
 
-* **Visualize**: Connect to a widget (e.g., a [Chart](../build-frontend/widgets/display-widgets/chart.md) or [Value Box](../build-frontend/widgets/display-widgets/value-box.md)) to display the data.
-* **Control**: Connect to a widget (e.g., a [Button](../build-frontend/widgets/trigger-widgets/button.md)) and select the specific property you want to control (e.g., `disabled` or `toggle`) to dynamically change its behavior.
+* **Visualize**: Connect to a widget (e.g., a [Chart](../../build-frontend/widgets/display-widgets/chart.md) or [Value Box](../../build-frontend/widgets/display-widgets/value-box.md)) to display the data.
+* **Control**: Connect to a widget (e.g., a [Button](../../build-frontend/widgets/trigger-widgets/button.md)) and select the specific property you want to control (e.g., `disabled` or `toggle`) to dynamically change its behavior.
 * **Navigate**: Connect to a `Page Switch` trigger to automatically change screens based on logic.
 
 ## Function extensions
 
-Extensions are tools attached directly to a Function's Output. They allow you to [modify](extension-nodes/modifier.md), [Filter](extension-nodes/filter.md), [record](extension-nodes/recorder.md), or [handle errors](extension-nodes/error-handler.md) on the fly without adding separate Function blocks.
+Extensions are tools attached directly to a Function's Output. They allow you to [modify](../extension-nodes/modifier.md), [Filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), or [handle errors](../extension-nodes/error-handler.md) on the fly without adding separate Function blocks.
 
-<div align="center"><figure><img src="../../.gitbook/assets/function_extentions.png" alt=""><figcaption><p>One function with three extensions</p></figcaption></figure></div>
+<div align="center"><figure><img src="../../../.gitbook/assets/function_extentions.png" alt=""><figcaption><p>One function with three extensions</p></figcaption></figure></div>
 
 ### Working with extensions
 
@@ -230,7 +230,7 @@ Extensions are tools attached directly to a Function's Output. They allow you to
 * **Chain**: You can add an extension to the output of _another_ extension to create a multi-step pipeline (e.g., filter data then modify it).
 * **Delete**: Right-click an extension and select Delete.
 
-<div align="center"><figure><img src="../../.gitbook/assets/modifer_add_looped.gif" alt=""><figcaption><p>Adding extensions</p></figcaption></figure></div>
+<div align="center"><figure><img src="../../../.gitbook/assets/modifer_add_looped.gif" alt=""><figcaption><p>Adding extensions</p></figcaption></figure></div>
 
 ## Data binding (connecting to UI)
 
@@ -244,7 +244,7 @@ Functions communicate bidirectionally with the frontend widgets via data binding
 
 Any Function inherently addresses the corresponding backend code using a specific structure. To view or edit this, right-click the Function name and select `Use Dynamic Address`.
 
-<figure><img src="../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right click the Function name and choose e.g. <code>Use Dynamic Address</code></p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right click the Function name and choose e.g. <code>Use Dynamic Address</code></p></figcaption></figure>
 
 This reveals the "path" to the underlying code, consisting of up to three boxes:
 
@@ -254,7 +254,7 @@ This reveals the "path" to the underlying code, consisting of up to three boxes:
 * **Box 2 (Class)**: The actual name of the underlying code class in the programming language (e.g., `Busylight`, `Barcode`, `OpcuaClient`).
 * **Box 3 (Instance)**: The specific instance name (e.g., `server1`). This box only appears for member Functions. Static Functions (like `generateBarcode`) do not belong to an instance, so this box is hidden.
 
-<figure><img src="../../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static Function and a member Function</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static Function and a member Function</p></figcaption></figure>
 
 You can edit this address to your liking. If you switch back to the regular (short) view, your changes are kept.
 

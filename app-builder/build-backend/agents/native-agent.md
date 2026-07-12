@@ -14,19 +14,19 @@ The Native Agent is a fully installable package. When installed, it registers it
 {% step %}
 #### Configure and build
 
-In the [Functions Library](../), click the create Agent icon (<i class="fa-cloud-arrow-down">:cloud-arrow-down:</i>).&#x20;
+In the [Functions Library](../functions/function-explorer.md), click the create Agent icon (<i class="fa-cloud-arrow-down">:cloud-arrow-down:</i>).
 
 * **Connectors**: Select the specific tools (e.g., S7, SQL) you want this Agent to carry.
 * **Target OS**: Choose the operating system of the machine where the Agent will live.
 * **Prefix (optional)**: Enter a [prefix](native-agent.md#using-a-prefix-for-fleet-deployment-1) if you plan to deploy this exact file to multiple machines (e.g., `milling-machine-`). Each instance will then automatically generate its own unique ID (e.g., `milling-machine-abc123`).
 * Click Prepare for Download to compile and download your installer package.
 
-<figure><img src="../../../../.gitbook/assets/native_agent_connecters_looped.gif" alt="" width="375"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/native_agent_connecters_looped.gif" alt="" width="375"><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-**Lost your file?**&#x20;
+**Lost your file?**
 
-All agents you've built are backed up in the [file server](../../file-explorer.md) under the `native-agents` folder.
+All agents you've built are backed up in the [file server](../file-explorer.md) under the `native-agents` folder.
 {% endhint %}
 {% endstep %}
 
@@ -47,7 +47,7 @@ Once installed, the service starts immediately. The Agent and its selected conne
 {% endstepper %}
 
 {% hint style="warning" %}
-**Troubleshooting: Check Port 8883**&#x20;
+**Troubleshooting: Check Port 8883**
 
 The Agent requires port 8883 to be open for outbound traffic. If the Agent runs but does not appear in your Library, speak with your IT administrator to ensure this port is not blocked by a firewall.
 {% endhint %}

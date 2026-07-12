@@ -25,7 +25,7 @@ Navigate to the App Manager > Integrations page. [Add a new MQTT integration](..
 {% step %}
 #### Configure your MQTT Client
 
-Configure your external client using the connection details and instructions provided in the [MQTT integration guide](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#connecting-an-external-client-to-heisenware). You will need the username and password generated in Step 2.
+Configure your external client using the connection details and instructions provided in the [MQTT integration guide](../../app-builder/build-backend/functions/connectors/mqtt-client.md#connecting-an-external-client-to-heisenware). You will need the username and password generated in Step 2.
 {% endstep %}
 
 {% step %}
@@ -40,9 +40,9 @@ Publish some test data on a topic from your external client to Heisenware. This 
 Your Heisenware tenant includes a default internal MQTT client.
 
 * Open the App Builder for your app.
-* Use the [`onJsonMessage`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#onjsonmessage) (or [`onStringMessage`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#onstringmessage)) Function belonging to the internal client.
+* Use the [`onJsonMessage`](../../app-builder/build-backend/functions/connectors/mqtt-client.md#onjsonmessage) (or [`onStringMessage`](../../app-builder/build-backend/functions/connectors/mqtt-client.md#onstringmessage)) Function belonging to the internal client.
 * Enter the topic you are publishing on into the Function.
-* Trigger the Function manually. You are now subscribed.&#x20;
+* Trigger the Function manually. You are now subscribed.
 * Enable [Test Mode](../../app-builder/deploy-and-maintain.md#app-testing-test-mode) to see incoming data appear inside the event handler.
 {% endstep %}
 
@@ -68,12 +68,12 @@ You must complete the Initial Setup (steps 1–3 above) before proceeding.
 {% step %}
 #### Publish Data to the Internal Broker
 
-Use the [`publishJson`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#publishjson) or [`publishString`](../../app-builder/build-backend/function-explorer/connectors/mqtt-client.md#publishstring) Function in the App Builder to publish data to a specific topic.
+Use the [`publishJson`](../../app-builder/build-backend/functions/connectors/mqtt-client.md#publishjson) or [`publishString`](../../app-builder/build-backend/functions/connectors/mqtt-client.md#publishstring) Function in the App Builder to publish data to a specific topic.
 
 You can manually fill the message input box or use dynamic data.
 
 {% hint style="info" %}
-The [Data Simulation](../../app-builder/build-backend/function-explorer/utilities/data-simulation.md) class is a great way to create dynamic data for testing. You can prepare this simulated data using a [Modifier](/broken/pages/eybgxpp69PNrUW2fHZ4X#modifier) before publishing.
+The [Data Simulation](../../app-builder/build-backend/functions/utilities/data-simulation.md) class is a great way to create dynamic data for testing. You can prepare this simulated data using a [Modifier](/broken/pages/eybgxpp69PNrUW2fHZ4X#modifier) before publishing.
 {% endhint %}
 {% endstep %}
 

@@ -21,7 +21,7 @@ description: Copy the app from our demo and learn how to build faster with Heise
 
 ### HTTP
 
-1. Drag and drop the [HTTP `get` Function](../../app-builder/build-backend/function-explorer/connectors/http-rest.md#do-a-get-request) on the canvas
+1. Drag and drop the [HTTP `get` Function](../../app-builder/build-backend/functions/connectors/http-rest.md#do-a-get-request) on the canvas
 2. Configure the Function:
 
 ```yaml
@@ -43,9 +43,9 @@ $average($)
 ### OPC UA
 
 1. Create an OPC UA client with the [OPC UA `create` Function](../../app-builder/build-backend/Function-explorer/connectors/opc-ua-client.md#create).
-2. Call the client `Demo` or use any other name you like.&#x20;
+2. Call the client `Demo` or use any other name you like.
 3. Trigger the Function.
-4. Connect to an OPC UA server using the [`connect` Function](../../app-builder/build-backend/function-explorer/connectors/opc-ua-client.md#connect) from within the client just created. You can use the following public server:
+4. Connect to an OPC UA server using the [`connect` Function](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#connect) from within the client just created. You can use the following public server:
 
 ```
 opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
@@ -53,7 +53,7 @@ opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
 
 5. Trigger the `connect` Function
 6. Check the connection with the isConnected Function
-7. Use the clients [readNode](../../app-builder/build-backend/function-explorer/connectors/opc-ua-client.md#readnode) Function and configure it with the following node ID:
+7. Use the clients [readNode](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#readnode) Function and configure it with the following node ID:
 
 ```
 ns=2;i=10846
@@ -66,7 +66,7 @@ value.value
 ```
 
 {% hint style="info" %}
-Alternatively to step 7 and 8, you can also use the [readVariableValue](../../app-builder/build-backend/function-explorer/connectors/opc-ua-client.md#readvariablevalue) Function to get right to the value.
+Alternatively to step 7 and 8, you can also use the [readVariableValue](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#readvariablevalue) Function to get right to the value.
 {% endhint %}
 
 ## Configure data flow
@@ -82,14 +82,14 @@ Alternatively to step 7 and 8, you can also use the [readVariableValue](../../ap
 $sum($)
 ```
 
-5. Set the readNode trigger  and the `get` Function Trigger to `every 10s`.
+5. Set the readNode trigger and the `get` Function Trigger to `every 10s`.
 6. Set the combine trigger to `on input change` by drag and drop of each of the Functions arguments (or just one of them) on the Trigger.
 7. Test your logic using the [test mode](/broken/pages/eFPI0X9VZcFlensbHWF5). Wait at least 10 seconds to see data.
 
 ### Record historic data
 
 1. Add a [Recorder](your-first-heisenware-app.md#record-historic-data) to the Modifier behind the combine Function.
-2. Call the recorded data point `demo_data` or use any other name you like.&#x20;
+2. Call the recorded data point `demo_data` or use any other name you like.
 3. Start the test mode for a minute or so to record some data.
 
 ## Build user interface
@@ -106,7 +106,7 @@ $sum($)
 ### Visualize recorded data
 
 1. Click on the database icon of the Recorder to auto generate the [InfluxDB `read` Function](/broken/pages/WbN12C0jrmgbmfoePmC2#read-function).
-2. Within the `read` Function, change the `tail` value to 10.&#x20;
+2. Within the `read` Function, change the `tail` value to 10.
 3. Trigger the `read` Function.
 4. Create a [new page](../../app-builder/build-frontend/page-explorer.md#add-and-delete) with right-click in the pages panel on the first page and a click on `New Page`.
 5. Configure the apps main menu using the [navigation builder](/broken/pages/rvvWSVQBKkjdqJHIsrkv#navigation-menu). Rename pages and add icons if you like.
@@ -132,5 +132,5 @@ $sum($)
 ## Publish and open the app
 
 1. Click on [deploy](/broken/pages/eFPI0X9VZcFlensbHWF5).
-2. Scan the QR code to open the app on your phone or click the URL to open the desktop version of your app.&#x20;
+2. Scan the QR code to open the app on your phone or click the URL to open the desktop version of your app.
 3. Optionally install the app on your device.

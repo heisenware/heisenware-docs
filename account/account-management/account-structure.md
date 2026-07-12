@@ -2,13 +2,13 @@
 
 The Heisenware platform follows a clear hierarchy, and understanding it is key to managing your Apps effectively.
 
-An account holds all your organization's [members](../../app-manager/members.md) and contains at least one workspace. It can also have [multiple workspaces](#multiple-workspaces) to separate Apps, data, and resources across different teams or locations.
+An account holds all your organization's [members](../../app-manager/members.md) and contains at least one workspace. It can also have [multiple workspaces](account-structure.md#multiple-workspaces) to separate Apps, data, and resources across different teams or locations.
 
 By default, every new account has a single `Default Workspace`. This workspace is a container for your Apps and all their shared resources.
 
 Inside it, you can build an unlimited number of Apps. Every App in a workspace shares access to that workspace's resources:
 
-* **Databases**: A [timeseries database](../../app-builder/build-backend/function-explorer/storage/timeseries-database.md) (InfluxDB) for high-frequency sensor data, and a [relational database](../../app-builder/build-backend/function-explorer/storage/relational-database.md) (PostgreSQL) for structured data.
+* **Databases**: A [timeseries database](../../app-builder/build-backend/functions/storage/timeseries-database.md) (InfluxDB) for high-frequency sensor data, and a [relational database](../../app-builder/build-backend/functions/storage/relational-database.md) (PostgreSQL) for structured data.
 * [**File Explorer**](../../app-builder/build-backend/file-explorer.md): Stores and manages the files your Apps use.
 * [**Integrations (inbound)**](../../app-manager/inbound-integrations.md): Shared connections to external systems.
 

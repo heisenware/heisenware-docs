@@ -10,7 +10,7 @@ Heisenware connects external data three ways:
 
 ### Native or Docker Agent
 
-[Agents](../app-builder/build-backend/function-explorer/agents/) securely bridge data from private networks (on-premises servers, local databases) to the cloud.
+[Agents](../app-builder/build-backend/agents/) securely bridge data from private networks (on-premises servers, local databases) to the cloud.
 
 * **Setup**: You create and deploy Native Agents directly in the App Builder. You download and deploy Docker Agents via Docker.
 * **Management**: Once deployed, an Agent entry appears in the Integrations panel for monitoring. No manual credentials required.
@@ -59,7 +59,7 @@ Paste these credentials into your external client's configuration.
 
 ### Method 2: Smart onboarding
 
-The preferred, passwordless method. The external client sends a request, and you approve it in the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/build-backend/function-explorer/#smart-onboarding).
+The preferred, passwordless method. The external client sends a request, and you approve it in the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/build-backend/functions/function-explorer.md#smart-onboarding).
 
 ## Integrate custom code via VRPC
 

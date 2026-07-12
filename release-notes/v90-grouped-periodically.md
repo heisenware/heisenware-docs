@@ -14,8 +14,8 @@ description: 19 Feb 2026
 * Improved [Status Lamp](../app-builder/build-frontend/widgets/display-widgets/status-lamp.md) widget (added multi-state support and rectangle shape)
 * Improved [Icon](../app-builder/build-frontend/text-icons-and-images.md) widget (optional backrgounds of different shapes)
 * Many new properties settable at runtime across different widgets
-* [Database](../app-builder/build-backend/function-explorer/storage/relational-database.md#audit-logging) audit logging
-* New [Machine Simulator](../app-builder/build-backend/function-explorer/extensions/process-simulations.md#machine-simulation) extension
+* [Database](../app-builder/build-backend/functions/storage/relational-database.md#audit-logging) audit logging
+* New [Machine Simulator](../app-builder/build-backend/functions/extensions/process-simulations.md#machine-simulation) extension
 * First version of AI Assistant (experimental)
 * First version of Subflow support (experimental)
 

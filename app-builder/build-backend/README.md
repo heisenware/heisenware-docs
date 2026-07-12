@@ -6,16 +6,16 @@ In the backend, you define the intelligence and connectivity of your application
 
 The backend operates on a few fundamental rules:
 
-* **Event-driven logic**: Nothing happens in a vacuum. [Functions](functions.md) only execute when they receive a trigger or a data update.
+* **Event-driven logic**: Nothing happens in a vacuum. [Functions](functions/) only execute when they receive a trigger or a data update.
 * **Persistent environment**: Unlike the UI, which only exists when a user opens the app, your backend logic resides in the Backend Builder and can run processes in the background.
-* **Bridge to local data**: If you need data from a local network (like a factory floor), you use [Edge Agents](function-explorer/agents/) to tunnel that information securely into your backend.
+* **Bridge to local data**: If you need data from a local network (like a factory floor), you use [Edge Agents](agents/) to tunnel that information securely into your backend.
 
 ### Your backend tools
 
 To build and manage this logic, you use three primary tools located in the App Builder:
 
-* [**Backend Builder**](./#backend-builder): The central canvas where you drag, drop, and wire [Functions](functions.md) together.
-* [**Function Explorer**](function-explorer/): The searchable panel on the left where you find all available Functions.
+* [**Backend Builder**](./#backend-builder): The central canvas where you drag, drop, and wire [Functions](functions/) together.
+* [**Function Explorer**](functions/function-explorer.md): The searchable panel on the left where you find all available Functions.
 * [**File Explorer**](file-explorer.md): The searchable panel on the left where you can load and manage files (CSVs, PDFs, etc.) that your logic (but also your UI) needs to read or where it can write to.
 
 ## Backend Builder
@@ -24,11 +24,11 @@ The Backend Builder is your visual engineering environment. It provides an endle
 
 Unlike traditional programming that relies on variables, the Backend Builder uses a data-driven architecture. Data flows directly from one Function's Output to another's input, creating reactive, event-driven sequences (flows).
 
-To build your logic, you interact with [Functions](functions.md) directly on the canvas using the following core actions:
+To build your logic, you interact with [Functions](functions/) directly on the canvas using the following core actions:
 
 ### Adding Functions
 
-* **From the Explorer**: Drag Functions from the [Function Explorer](function-explorer/) in the left panel.
+* **From the Explorer**: Drag Functions from the [Function Explorer](functions/function-explorer.md) in the left panel.
 * **Quick access**: Use the toolbar for common utilities like `echo`, `memory`, `trigger`, or `combine`.
 
 <figure><img src="../../.gitbook/assets/memory_flow_builder_looped.gif" alt="" width="563"><figcaption></figcaption></figure>

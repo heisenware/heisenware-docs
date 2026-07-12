@@ -1,19 +1,19 @@
-# Relational Database
+# Relational database
 
 The `Relational Database` class provides a consistent way to interact with SQL databases (PostgreSQL, MySQL, SQLite) without writing raw SQL.
 
 ### Quick start: The internal PostgreSQL instance
 
-Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use.  Simply select `internal-postgres` in your Function's instance field to start creating tables and managing data.
+Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use. Simply select `internal-postgres` in your Function's instance field to start creating tables and managing data.
 
-<p align="center"><img src="../../../../.gitbook/assets/image (50).png" alt=""></p>
+<div align="center"><img src="../../../../.gitbook/assets/image (50).png" alt=""></div>
 
 ### Connecting an external database
 
 To connect to your own external database, you must use the `create` function. How you configure this depends on where your database is located:
 
 * **Cloud/public database**: If your database is accessible over the internet, you can create the instance directly in your cloud environment.
-* **Local database (via Agent)**: If your database is inside a private network (e.g., on a shopfloor server), you must first deploy an [Edge Agent](../agents/) in that network. You then create the database instance _within_ that Agent to establish a secure bridge.
+* **Local database (via Agent)**: If your database is inside a private network (e.g., on a shopfloor server), you must first deploy an [Edge Agent](../../agents/) in that network. You then create the database instance _within_ that Agent to establish a secure bridge.
 
 {% hint style="info" %}
 **One set of functions**: Whether you are using the internal database or an external connection, the functions for querying, inserting, and managing data are identical.
@@ -26,7 +26,7 @@ To connect to your own external database, you must use the `create` function. Ho
 Initializes the database connection. This is the first step for any external database.
 
 {% hint style="success" %}
-Skip this step for the  `internal-postgres`. It is already instantiated for you.
+Skip this step for the `internal-postgres`. It is already instantiated for you.
 {% endhint %}
 
 Parameters
@@ -56,7 +56,7 @@ ssl: true
 
 Checks if the database connection is currently active. Returns `true` if connected, `false` otherwise.
 
-Output&#x20;
+Output
 
 Returns `true` if connected, `false` otherwise.
 
@@ -72,7 +72,7 @@ Output An array of table name strings.
 DANGER: This function drops and recreates the entire database, deleting ALL tables and data. Use with extreme caution.
 {% endhint %}
 
-Output&#x20;
+Output
 
 Returns `true` if the reset was successful.
 
@@ -527,7 +527,7 @@ This method is ideal for partial updates. For JSON columns, it merges the new da
 
 Example
 
-BEFORE: Row in 'settings' table:&#x20;
+BEFORE: Row in 'settings' table:
 
 ```json
 {
@@ -550,7 +550,7 @@ settings: {
 }
 ```
 
-AFTER: The row is now:&#x20;
+AFTER: The row is now:
 
 ```json
 {

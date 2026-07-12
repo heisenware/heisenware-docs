@@ -3,7 +3,7 @@
 The PDF Template Editor gives you a visual workflow for designing dynamic documents. You build a template by placing dynamic placeholders onto an uploaded PDF background.
 
 {% hint style="info" %}
-The editor works exclusively with the [PDF Templates class](../build-backend/function-explorer/utilities/pdf-templates.md). Each template you create becomes an instance in this class, carrying the `fillTemplate` function that populates your document with data.
+The editor works exclusively with the [PDF Templates class](../build-backend/functions/utilities/pdf-templates.md). Each template you create becomes an instance in this class, carrying the `fillTemplate` function that populates your document with data.
 
 To see the complete process in action, follow our [step-by-step guide](../../tutorials/app-templates/automating-pdf-reports.md).
 {% endhint %}
@@ -100,7 +100,7 @@ The variable name you enter (e.g., `invoiceNumber`) must exactly match the key i
 
 ## Populating the template
 
-To bring your PDF to life, call the [`fillTemplate`](../build-backend/function-explorer/utilities/pdf-templates.md#filltemplate) function in your backend logic. It is the engine: it takes a data object (say, a JSON object from a database), merges the values into your placeholders, and outputs the finished PDF. For detailed input and output specifications, see the [PDF Templates class documentation](../build-backend/function-explorer/utilities/pdf-templates.md).
+To bring your PDF to life, call the [`fillTemplate`](../build-backend/functions/utilities/pdf-templates.md#filltemplate) function in your backend logic. It is the engine: it takes a data object (say, a JSON object from a database), merges the values into your placeholders, and outputs the finished PDF. For detailed input and output specifications, see the [PDF Templates class documentation](../build-backend/functions/utilities/pdf-templates.md).
 
 To see these concepts in action, follow our step-by-step guide on [automating PDF reports](../../tutorials/app-templates/automating-pdf-reports.md).
 
@@ -108,7 +108,7 @@ To see these concepts in action, follow our step-by-step guide on [automating PD
 
 To permanently remove a PDF template and its associated function:
 
-1. Navigate to the [Function Explorer](../build-backend/function-explorer/).
+1. Navigate to the [Function Explorer](../build-backend/functions/function-explorer.md).
 2. Open the PDF Templates class.
 3. Right-click the specific template instance.
 4. Select Remove.

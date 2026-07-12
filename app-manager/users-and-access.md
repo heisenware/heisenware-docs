@@ -44,7 +44,7 @@ You can change these settings at any time, but each change instantly affects all
 
 * **Option**: _Only previously invited users can log in_
 * **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
-* **Programmatic invite:** With the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md) in the backend, you can also invite users programmatically from another App.
+* **Programmatic invite:** With the [`users` class](../app-builder/build-backend/functions/utilities/users.md) in the backend, you can also invite users programmatically from another App.
 
 ## User management
 
@@ -53,18 +53,18 @@ The Users card in each App gives you a real-time view of who is accessing your s
 {% hint style="info" %}
 #### Managing users programmatically
 
-You can also manage users from within an App using the [`users` class](../app-builder/build-backend/function-explorer/utilities/users.md).
+You can also manage users from within an App using the [`users` class](../app-builder/build-backend/functions/utilities/users.md).
 {% endhint %}
 
 ### Anonymized sessions
 
-For Apps using [Public access](#public-access) or [Shared security](#shared-security), the table shows anonymized strings, IP addresses, and session data so you can track unique device usage.
+For Apps using [Public access](users-and-access.md#public-access) or [Shared security](users-and-access.md#shared-security), the table shows anonymized strings, IP addresses, and session data so you can track unique device usage.
 
 <figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
 
 ### Registered profiles
 
-For Apps using [Individual registration](#individual-registration) or [Dual authentication](#dual-authentication), the table shows names and usernames (email addresses). Heisenware recognizes a user logging in from different devices with the same email as the same person.
+For Apps using [Individual registration](users-and-access.md#individual-registration) or [Dual authentication](users-and-access.md#dual-authentication), the table shows names and usernames (email addresses). Heisenware recognizes a user logging in from different devices with the same email as the same person.
 
 <figure><img src="../.gitbook/assets/image (452).png" alt=""><figcaption></figcaption></figure>
 

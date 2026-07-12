@@ -18,11 +18,11 @@ In this scenario, you must use an Edge Agent (available as a native binary or Do
 
 * **Customized Native Agent**: You can compile a Native Agent directly inside the App Builder. You decide exactly which connectors and credentials you want to include in the package.
 * **Deployment**: Once you have built your custom binary, you install it on a target system within the local network.
-* **Visibility in library**: Once the agent is online, it automatically appears in your [library](../). Inside the visual Agent representation, you will find the specific connector classes you selected during the build process.
+* **Visibility in library**: Once the agent is online, it automatically appears in your [library](../function-explorer.md). Inside the visual Agent representation, you will find the specific connector classes you selected during the build process.
 * **Edge execution**: Using functions from this agent-specific category ensures that the logic is executed directly at the edge, allowing you to integrate local devices seamlessly.
 
 {% hint style="info" %}
-For a deep dive into the build process and deployment options, please refer to the [Edge Agent](../agents/) article.
+For a deep dive into the build process and deployment options, please refer to the [Edge Agent](../../agents/) article.
 {% endhint %}
 
 ## Available Connectors

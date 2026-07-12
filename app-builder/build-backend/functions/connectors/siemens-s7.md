@@ -34,7 +34,7 @@ For the connector to have permission to read and write data, you must enable thi
 You must first create an instance of the connector and then use its functions to interact with your PLC.
 
 {% hint style="success" %}
-Typically you will first install the Siemens S7 connector within an [agent](../agents/). That way you can connect your cloud platform to your shopfloor (OT), on-premises PLCs.
+Typically you will first install the Siemens S7 connector within an [agent](../../agents/). That way you can connect your cloud platform to your shopfloor (OT), on-premises PLCs.
 {% endhint %}
 
 ### connect

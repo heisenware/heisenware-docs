@@ -7,12 +7,12 @@ Since all methods in this class are **static**, you do not need to create an ins
 {% hint style="warning" %}
 IMPORTANT
 
-It is crucial to understand _where_ the `File` functions are executed.&#x20;
+It is crucial to understand _where_ the `File` functions are executed.
 
 1. Heisenware Platform\
    If you use them just directly as they are, all functions are "seeing" the file system of the platform installation itself. This is equivalent of what you can see when using the [Resources](../../file-explorer.md) browser. The route path to all resources is called `/shared`. Hence, to refer to a file in the uploads folder the full path looks like: `/shared/uploads/test.csv`
 2. Your local OS\
-   Very often you want to deal with files that are physically located on your premises. In that case you first have to compile, download and install an [Agent](../agents/) containing this `File` class. Once, taking the functions out of the agent, the underlying file system reflects the one the agent is running on (your local OS). Now, the file paths are the regular ones that you would use yourself to open your local files, like: `C:\Users\YourUserName\Documents/test.csv`
+   Very often you want to deal with files that are physically located on your premises. In that case you first have to compile, download and install an [Agent](../../agents/) containing this `File` class. Once, taking the functions out of the agent, the underlying file system reflects the one the agent is running on (your local OS). Now, the file paths are the regular ones that you would use yourself to open your local files, like: `C:\Users\YourUserName\Documents/test.csv`
 {% endhint %}
 
 {% hint style="danger" %}
@@ -69,7 +69,7 @@ Writes one or more buffer-[file objects](../../../build-frontend/widgets/input-w
 **Parameters**
 
 * `dirname`: The path to the directory into which the provided file(s) should be written.
-* `bufferData`: A single object or an array of objects containing at least the `name` and the `base64` property&#x20;
+* `bufferData`: A single object or an array of objects containing at least the `name` and the `base64` property
 
 <figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This functions plays nice with the <a href="../../../build-frontend/widgets/input-widgets/photo.md">Photo</a> or <a href="../../../build-frontend/widgets/input-widgets/upload.md">File</a> widget when configured use <code>Buffer</code> as storage type. When executing as agent, this allows to realize something like an Image server.</p></figcaption></figure>
 

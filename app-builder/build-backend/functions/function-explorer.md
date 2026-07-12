@@ -19,11 +19,11 @@ If your requirements exceed the default set of Functions, you can expand the lib
 
 ### Agents
 
-For isolated local networks or systems without internet access, you must use a native or Docker [agent](agents/). Once an agent is installed and started, the agent itself and any connectors built within it appear automatically in the library. These agents act as secure bridges, allowing you to interact with on-premise hardware as if it were natively connected.
+For isolated local networks or systems without internet access, you must use a native or Docker [agent](../agents/). Once an agent is installed and started, the agent itself and any connectors built within it appear automatically in the library. These agents act as secure bridges, allowing you to interact with on-premise hardware as if it were natively connected.
 
 ### Extensions
 
-[Extensions](./#extensions) allow you to expand the platform's capabilities using container technology. An extension is a standard Docker image that Heisenware executes and exposes as visual Functions within your library.
+[Extensions](function-explorer.md#extensions) allow you to expand the platform's capabilities using container technology. An extension is a standard Docker image that Heisenware executes and exposes as visual Functions within your library.
 
 There are two categories of extensions:
 

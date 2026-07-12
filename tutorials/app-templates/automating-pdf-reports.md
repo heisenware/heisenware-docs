@@ -21,7 +21,7 @@ Once you have the PDF, you have two options:
 
 First, we need a place to store the submitted reports. We'll use the `defineTable` Function to create a table in the internal PostgreSQL database.
 
-In the Backend Builder, place the `defineTable` Function on the canvas and configure its Inputs  as shown below.
+In the Backend Builder, place the `defineTable` Function on the canvas and configure its Inputs as shown below.
 
 ```yaml
 #name
@@ -91,10 +91,10 @@ Combine All Form Data
 
 Now we'll merge the main form data with our newly created signature object.
 
-* Drag the [`mergeObjects`](../../app-builder/build-backend/function-explorer/utilities/data-processing.md#merging-objects) function onto the canvas.
+* Drag the [`mergeObjects`](../../app-builder/build-backend/functions/utilities/data-processing.md#merging-objects) function onto the canvas.
 * Connect the Form widget to the first input of `mergeObjects`.
 * Connect the signature Modifier to the second input of `mergeObjects`.
-* Connect both Inputs  to the Trigger of `mergeObjects` to trigger the Function `on input update`.
+* Connect both Inputs to the Trigger of `mergeObjects` to trigger the Function `on input update`.
 
 <figure><img src="../../.gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
@@ -102,7 +102,7 @@ Now we'll merge the main form data with our newly created signature object.
 {% step %}
 Save to the Database & Trigger the Flow
 
-* Drag the [`addRow`](../../app-builder/build-backend/function-explorer/storage/relational-database.md#addrow) Function onto the canvas.
+* Drag the [`addRow`](../../app-builder/build-backend/functions/storage/relational-database.md#addrow) Function onto the canvas.
 * Set its `table` input to `acceptanceReports`.
 * Connect the output of the `mergeObjects` Function to the `data` input of `addRow`.
 * Finally, connect the Submit Button to the Trigger of the `addRow` Functions trigger. This makes the button start the entire save process.
@@ -163,7 +163,7 @@ Now, return to the Backend Builder to connect the template to your existing logi
 
 {% stepper %}
 {% step %}
-From the Function Explorer, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/function-explorer/utilities/pdf-templates.md) Class) and drag its `fillTemplate` Function onto the canvas.
+From the Function Explorer, find your `AcceptanceReport` instance (under the [`PDF Templates`](../../app-builder/build-backend/functions/utilities/pdf-templates.md) Class) and drag its `fillTemplate` Function onto the canvas.
 {% endstep %}
 
 {% step %}
@@ -181,7 +181,7 @@ Our flow is now complete up to the point of generating the PDF. The final step w
 
 ## Step 4: Send the Report via Email
 
-The final step in our workflow is to automatically email the generated PDF report. We will use the `send` Function from the [internal mailer](../../app-builder/build-backend/function-explorer/connectors/email.md) and configure it to send an email automatically whenever a new report is created.
+The final step in our workflow is to automatically email the generated PDF report. We will use the `send` Function from the [internal mailer](../../app-builder/build-backend/functions/connectors/email.md) and configure it to send an email automatically whenever a new report is created.
 
 Return to the Backend Builder to add the final piece of logic to your flow.
 
@@ -191,7 +191,7 @@ From the Function Explorer, find your internal mailer instance and drag its `sen
 {% endstep %}
 
 {% step %}
-Configure the static Inputs  for the email
+Configure the static Inputs for the email
 
 ```yaml
 #address

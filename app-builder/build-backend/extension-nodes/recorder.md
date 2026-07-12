@@ -1,6 +1,6 @@
 # Recorder
 
-The Recorder captures a Function's Output and stores it as time-series data in the [internal InfluxDB](../function-explorer/storage/timeseries-database.md). This allows you to store a data stream, visualize it within your applications, or analyze it as required. It records data during both build-time (in test mode) and the app's runtime.
+The Recorder captures a Function's Output and stores it as time-series data in the [internal InfluxDB](../functions/storage/timeseries-database.md). This allows you to store a data stream, visualize it within your applications, or analyze it as required. It records data during both build-time (in test mode) and the app's runtime.
 
 The Recorder has two settings:
 

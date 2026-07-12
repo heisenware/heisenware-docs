@@ -7,7 +7,7 @@ The App Builder is a core component of the Heisenware platform: a visual develop
 The App Builder splits into four areas that cover the App lifecycle and development workflow.
 
 * **Top Bar (top)**: Opens the [Theme Editor](build-frontend/theme-editor.md) and [PDF Template Editor](build-frontend/pdf-template-editor.md), and gives access to App Builder settings, language, and help. It also shows the current App version and holds the controls to [test and deploy](deploy-and-maintain.md).
-* **Explorers (left)**: Switch between the [Function Explorer](build-backend/function-explorer/) for backend logic, the [Page Explorer](build-frontend/page-explorer.md) for frontend structure, and the [File Explorer](build-backend/file-explorer.md) for resources needed during app development.
+* **Explorers (left)**: Switch between the [Function Explorer](build-backend/functions/function-explorer.md) for backend logic, the [Page Explorer](build-frontend/page-explorer.md) for frontend structure, and the [File Explorer](build-backend/file-explorer.md) for resources needed during app development.
 * **Backend Builder (center)**: An infinite drawing area where you create the [business logic](build-backend/) of your entire App by wiring up selected functions into automated flows.
 * **Frontend Builder (right)**: A page-specific design canvas for composing user interfaces for all screen sizes. This is where you [build user interfaces (UI)](build-frontend/) using text, images, and interactive widgets.
 
@@ -19,9 +19,9 @@ Heisenware uses a highly integrated development process. Rather than working in 
 
 ### Build backend
 
-In the [Backend Builder](build-backend/) you create event-driven logic by dragging [functions](build-backend/functions.md) from the [Function Explorer](build-backend/function-explorer/) onto the canvas and wiring them into flows. Functions are the atomic building blocks of an App: standard utility blocks, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
+In the [Backend Builder](build-backend/) you create event-driven logic by dragging [functions](build-backend/functions/) from the [Function Explorer](build-backend/functions/function-explorer.md) onto the canvas and wiring them into flows. Functions are the atomic building blocks of an App: standard utility blocks, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
 
-This logic runs in a global scope. It persists and runs independently of the active UI page, which makes the backend the central hub for continuous data processing or system monitoring. To reach machines and databases in isolated networks, you configure [Native Agents](build-backend/function-explorer/agents/native-agent.md) or [Docker Agents](build-backend/function-explorer/agents/docker-agent.md) that tunnel data from local systems directly into your App's logic.
+This logic runs in a global scope. It persists and runs independently of the active UI page, which makes the backend the central hub for continuous data processing or system monitoring. To reach machines and databases in isolated networks, you configure [Native Agents](build-backend/agents/native-agent.md) or [Docker Agents](build-backend/agents/docker-agent.md) that tunnel data from local systems directly into your App's logic.
 
 ### Build frontend
 

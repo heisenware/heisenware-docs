@@ -8,7 +8,7 @@ description: 12 July 2026
 
 ### Features
 
-* **Finalized** [**subflows**](../app-builder/build-backend/subflows.md): Completed the core subflows feature within the Backend Builder.
+* **Finalized** [**subflows**](../app-builder/build-backend/functions/subflows.md): Completed the core subflows feature within the Backend Builder.
 * **Explicit data schema re-scanning**: Added an explicit data re-scan option for bound [widgets](../app-builder/build-frontend/widgets/). A widget, such as a data grid, checks if its underlying data structure or keys have changed or been added, and then automatically updates its properties and visual layout to match.
 * **Overhauled** [**Page Explorer**](../app-builder/build-frontend/page-explorer.md): Integrated the navigation menu editor directly into the Page Explorer panel. You can configure quick settings like name, icon, and app bar title via a small edit icon next to each page. Menu layout types can now vary based on screen size, using configurations like **Bottom tabs only** for mobile screens or **Fixed left menu** for large desktop monitors.
 * **Fixed menu drawer**: Added a new [navigation menu option](../app-builder/build-frontend/page-explorer.md) providing a fixed-size left menu.
@@ -24,8 +24,8 @@ description: 12 July 2026
 * **Enhanced** [**chart**](../app-builder/build-frontend/widgets/display-widgets/chart.md) **interaction**: Improved the zoom and pan responsiveness of the chart widget.
 * **Upgraded MQTT broker**: Updated and optimized the internal MQTT broker configuration to increase overall message resilience.
 * **Application-wide client caching**: Implemented comprehensive client-side caching to drastically reduce browser reload times for deployed [Apps](https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/production-apps).
-* [**Heidenhain DNC Agent**](../app-builder/build-backend/function-explorer/connectors/heidenhain-dnc.md): Released a native Heidenhain DNC Agent to facilitate direct edge connectivity with supported CNC systems.
-* [**LXC Agent**](../app-builder/build-backend/function-explorer/agents/lxc-agent-insys.md): Released an Insys-compatible LXC Agent container variant of the local connector system.
+* [**Heidenhain DNC Agent**](../app-builder/build-backend/functions/connectors/heidenhain-dnc.md): Released a native Heidenhain DNC Agent to facilitate direct edge connectivity with supported CNC systems.
+* [**LXC Agent**](../app-builder/build-backend/agents/lxc-agent-insys.md): Released an Insys-compatible LXC Agent container variant of the local connector system.
 
 ### Fixes
 
