@@ -1,82 +1,74 @@
 # Map
 
-The **Map** widget provides a powerful way to visualize geographical data by displaying one or more markers on an interactive Google Map.
-
-It's a highly versatile component for any application that needs to display locations, track assets, or show points of interest. The map can be configured with various controls, layers like traffic and transit, and custom marker styles.
+The map widget displays location markers on an interactive geographical map. It visualizes coordinate strings, location arrays, or asset data objects on your dashboards.
 
 <figure><img src="../../../../.gitbook/assets/map.png" alt="" width="375"><figcaption></figcaption></figure>
 
-## Data Binding
+## Data binding
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+### Function output or modifier to widget
 
-### Output
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `markers` | Supplies the geographical coordinate data used to render location markers on the map canvas. Accepts strings, arrays, or objects. | string \| array \| object |
 
-| **Property**  | **Type**                        | **Description**                                                                                                        |
-| ------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **`markers`** | `Array` or `Object` or `String` | Provides the location data to be displayed as markers on the map. See the **Marker Data Formats** section for details. |
+## Configuration
 
-#### Marker Data Formats
+Set the widget's defaults in the settings panel.
 
-The `markers` property is highly flexible and accepts data in several formats.
+### General settings
 
-1\. Single Location String:
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `defaultCenter` | Default center | Sets the initial latitude and longitude center coordinate point of the map view. | string |
+| `defaultZoom` | Default zoom | Sets the initial magnification zoom level of the map canvas. | integer |
+| `defaultIcon` | Default icon | Sets the default icon style class applied to all plotted location markers. | string |
+| `defaultIconSize` | Default icon size | Sets the default display text or icon size dimension for the markers in pixels. | integer |
+| `defaultIconColor` | Default icon color | Sets the default text color hex code used to paint the marker icons. | string |
+| `centerOnMarkers` | Center on markers | Dynamically recenters the map grid automatically to fit all active markers when their coordinates update. | boolean |
+| `showMapControls` | Show map type selectors | Toggles the layout visibility of the user controls for switching map styles. | boolean |
+| `showTrafficLayer` | Show traffic information | Overlays real-time traffic density conditions onto the active map track. | boolean |
+| `showTransitLayer` | Show transit information | Overlays local public transportation routes and station networks onto the map. | boolean |
 
-A single string with comma-separated latitude and longitude.
+## Tips and tricks
 
-"40.7128, -74.0060"
+The `markers` property accepts multiple flexible input formats depending on your backend data payload.
 
-2\. Array of Location Strings:
+### Single coordinate string
+A single text string containing comma-separated latitude and longitude coordinates:
+`"40.7128, -74.0060"`
 
-\["40.7128, -74.0060", "34.0522, -118.2437"]
+### Array of coordinate strings
+Multiple location text strings grouped inside an array container:
+`["40.7128, -74.0060", "34.0522, -118.2437"]`
 
-3\. Array with Latitude and Longitude:
+### Single coordinate array
+A flat numerical array listing latitude and longitude sequentially:
+`[40.7128, -74.0060]`
 
-A single array containing the latitude and longitude.
+### Array of coordinate arrays
+Nested numerical arrays to plot multiple tracking points simultaneously:
+`[[40.7128, -74.0060], [34.0522, -118.2437]]`
 
-\[40.7128, -74.0060]
-
-4\. Array of Coordinate Arrays:
-
-\[\[40.7128, -74.0060], \[34.0522, -118.2437]]
-
-**5. Object with `lat` and `lng` properties:**
-
+### Coordinate object
+A structured object defining explicit `lat` and `lng` properties:
 ```json
-{ "lat": 40.7128, "lng": -74.0060 }
-
+{
+  "lat": 40.7128,
+  "lng": -74.0060
+}
 ```
 
-6\. Array of Location Objects:
-
-This is the most powerful format, as it allows you to customize each marker individually.
-
+### Array of location objects
+An advanced structure to customize individual markers with unique styles. Properties like `icon`, `iconColor`, and `iconSize` override the default widget configuration thresholds at runtime:
 ```json
 [
   { "lat": 40.7128, "lng": -74.0060, "icon": "fas fa-star", "iconColor": "gold" },
   { "lat": 34.0522, "lng": -118.2437, "icon": "fas fa-map-pin", "iconSize": 32 }
 ]
-
 ```
 
-## Configuration
-
-### Settings
-
-These properties control the initial state, appearance, and features of the map.
-
-| **Label**                    | **Description**                                                                                    | **Type**       | **Property**       |
-| ---------------------------- | -------------------------------------------------------------------------------------------------- | -------------- | ------------------ |
-| **Default Center**           | The initial center point of the map as a "latitude, longitude" string.                             | String         | `defaultCenter`    |
-| **Default Zoom**             | The initial zoom level of the map (e.g., 1 is the whole world, 15 is city level).                  | Integer        | `defaultZoom`      |
-| **Default Icon**             | The default icon to use for all markers (e.g., a Font Awesome class like `fas fa-map-marker-alt`). | String         | `defaultIcon`      |
-| **Default Icon Size**        | The default size of the marker icons in pixels.                                                    | Integer        | `defaultIconSize`  |
-| **Default Icon Color**       | The default color of the marker icons.                                                             | String (Color) | `defaultIconColor` |
-| **Center on Markers**        | If `true`, the map will automatically adjust its center to fit all markers whenever they change.   | Boolean        | `centerOnMarkers`  |
-| **Show Map Type Selectors**  | If `true`, displays controls for switching between map types (e.g., Satellite, Terrain).           | Boolean        | `showMapControls`  |
-| **Show Traffic Information** | If `true`, overlays real-time traffic information on the map.                                      | Boolean        | `showTrafficLayer` |
-| **Show Transit Information** | If `true`, overlays public transit routes and stations on the map.                                 | Boolean        | `showTransitLayer` |
-
 {% hint style="info" %}
-When displaying multiple locations, if the setting "Center on markers" is active, the map will be centered on the midpoint between all the locations with the preset default zoom. Some markers may not be visible as a result of this. Changing the default zoom to an appropriate scale can get around the issue.
+#### Visibility with automatic recentering
+When enabling *Center on markers*, the map calculates the geographic midpoint to position the view. This center calculation can push some markers outside the view boundary if the *Default zoom* scale is too restrictive. Adjust the *Default zoom* setting to fit all coordinate points into the visible display area.
 {% endhint %}
