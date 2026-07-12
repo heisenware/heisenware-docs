@@ -1,26 +1,31 @@
 ---
 description: >-
-  Learn how to create, deploy and use Agents.
+  Learn how to create, deploy, and use Agents.
 ---
 
 # Agents
 
-Agents are secure, industrial-grade bridges that run as system services (daemons) within your private network. They tunnel data from local protocols (S7, Modbus, OPC UA, etc.) to your cloud workspace, ensuring connectivity that persists through system restarts and power cycles.
+An Agent is a small piece of Heisenware software that you install on a machine inside a separated network, for example on a factory floor. It executes logic, like connectors for S7, Modbus, or OPC UA, directly where the systems and devices are, and exchanges data securely with your workspace. Agents distribute your App logic: parts of it run in the cloud, parts of it at the edge, next to the machines it talks to.
 
-<div data-full-width="true"><figure><img src="../../../../.gitbook/assets/Heisenware Agent.png" alt="" width="525"><figcaption><p>Heisenware Agent</p></figcaption></figure></div>
+<div data-full-width="true"><figure><img src="../../../.gitbook/assets/Heisenware Agent.png" alt="" width="525"><figcaption><p>Heisenware Agent</p></figcaption></figure></div>
 
-## Types of agents
+## How Agents work
 
-Depending on your local infrastructure and edge hardware setup, Heisenware offers three distinct types of agents to bridge your local networks with the cloud workspace.
+1. Build or download an Agent and install it on a machine inside the target network.
+2. The Agent connects to the Heisenware Cloud through an outbound-only MQTTS connection on port 8883. No inbound firewall rules or VPNs are required.
+3. Once online, the Agent appears in the [Function Explorer](../functions/function-explorer.md) as its own entry, holding the connectors it carries.
+4. Functions dragged from an Agent entry execute on the Agent's machine, directly at the edge.
 
-### Native Agent
+Agents run as system services or containers. They start automatically after reboots and power cycles and stay available around the clock.
 
-The [Native Agent](native-agent.md) is a fully installable package that registers itself directly as a background service on the host operating system (a Windows Service or Linux Daemon). It is managed natively by the OS to guarantee 24/7 background availability, automatic start-up upon reboots, and compatibility across Windows, macOS, Linux, and ARM64 industrial PCs.
+{% hint style="info" %}
+#### A function is a function
 
-### Docker agent
+In the App Builder, you never notice that you are working on a machine in a different network. A function from an Agent looks and behaves like any other function: drag it onto the canvas, wire it, configure it. It just runs somewhere else. Only its [address](../functions/README.md#advanced-addressing) reveals where.
+{% endhint %}
 
-The [Docker agent](docker-agent.md) provides the same core bridging capabilities but runs inside an isolated containerized environment. It is the ideal deployment choice for edge gateways or servers where infrastructure is already managed via Docker. Unlike the native package, credentials are not baked into the installer and are passed flexibly using environment variables during container runtime.
+## Types of Agents
 
-### LXC agent (Insys)
+Choose the Agent that matches your edge hardware:
 
-The [LXC agent](lxc-agent-insys.md) is a specialized runtime container designed specifically for edge computing directly on INSYS icom industrial routers and gateways (such as the MRX, MRO, ECR, and SCR series). It is distributed as a native `.tar` update packet, runs as an isolated Linux System Container (LXC) within the router's web environment, and features optimized memory constraints to safeguard core networking functions.
+<table><thead><tr><th width="220">Type</th><th>Choose when</th></tr></thead><tbody><tr><td><a href="native-agent.md"><strong>Native Agent</strong></a></td><td>You have a Windows, macOS, or Linux machine (including ARM64 industrial PCs). Installs as a background service directly on the operating system. Credentials are built into the installer.</td></tr><tr><td><a href="docker-agent.md"><strong>Docker Agent</strong></a></td><td>Your edge infrastructure already runs Docker. Same functionality in an isolated container. Credentials are passed as environment variables at startup.</td></tr><tr><td><a href="lxc-agent-insys.md"><strong>LXC Agent (Insys)</strong></a></td><td>Your edge device is an INSYS icom industrial router or gateway (MRX, MRO, ECR, SCR series). Distributed as a <code>.tar</code> update packet and installed via the router's web interface.</td></tr></tbody></table>
