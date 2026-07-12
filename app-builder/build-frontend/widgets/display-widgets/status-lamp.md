@@ -1,54 +1,66 @@
-# Status Lamp
+# Status lamp
 
-The **StatusLamp** widget provides a simple, visual indicator of a state or condition, similar to an LED light. It displays a colored circle that can change based on the data it receives.
+The status lamp widget provides a visual indicator of states or conditions, displaying single or multiple status indicators similar to LED lights. It visualizes status strings, numeric values, or explicit color arrays in your Apps.
 
-This widget is perfect for dashboards, monitoring screens, and any interface where you need a clear, at-a-glance indication of status, such as online/offline, success/failure, or active/inactive.
+<figure><img src="../../../../.gitbook/assets/statusLamp.gif" alt=""><figcaption><p>A status lamp</p></figcaption></figure>
 
-<figure><img src="../../../../.gitbook/assets/statusLamp.gif" alt=""><figcaption><p>A Status Lamp</p></figcaption></figure>
+## Data binding
 
-## Data Binding
+### Function output or modifier to widget
 
-Connect the widget to your application's logic by dragging the corresponding items from the Backend Builder.
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `value` | Determines the lamp color based on the configured status mappings. Accepts a single status value or an array of values to render multiple lamps. | string \| number \| array |
+| `color` | Overrides mappings to apply explicit hex color codes or decimal color values directly. Accepts a single color or an array of colors. | string \| number \| array |
 
-### Output
+### Widget to function input
 
-| **Property** | **Type**             | **Description**                                                                                                                                                                                              |
-| ------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`value`**  | `String` or `Object` | Determines the lamp's color based on the configured mappings. If a string is provided, it's matched directly. If an object is provided, the widget looks for a `status` property within the object to match. |
+| **Property** | **Description** | **Type** |
+| :--- | :--- | :--- |
+| `onClick` | Fires when a user clicks the status lamp. The payload carries the configured context object or string. | string \| object |
 
-{% hint style="info" %}
-The Status Lamp only accepts single values in the `value` field. To associate ranges of numbers to a mapping, you will first need to create the groupings.
+### Data formats
 
-This can be done using [Filters](https://docs.heisenware.com/building-apps/data-processing/function-extensions/filter).
-{% endhint %}
+The `value` and `color` properties can accept either single items or array structures to dynamically render multiple indicators inside a single widget container.
+
+**Single status value**
+Passes a standalone value evaluated against the configuration mappings:
+`"online"`
+
+**Array of status values**
+Passes multiple status values to draw multiple sequential lamps inside the same widget layout:
+`["online", "offline", "error"]`
+
+**Explicit color array**
+Passes direct decimal numbers or hex color strings into the `color` property to bypass the settings panel mappings entirely:
+`["#FF0000", "#00FF00", 65280]`
 
 ## Configuration
 
-### Settings
+Set the widget's defaults in the settings panel.
 
-These properties define the mapping between status values and the lamp's appearance.
+### General settings
 
-| **Label**           | **Description**                                                                | **Type** | **Property** |
-| ------------------- | ------------------------------------------------------------------------------ | -------- | ------------ |
-| **Status Mappings** | Defines a list of status values and their corresponding colors and hover text. | Array    | `mappings`   |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `mappings` | Status mappings | Defines the list of status values and their associated color rules. | array |
+| `shape` | Shape | Sets the geometric visual layout profile of the indicators (options include `circle` or `rectangle`). | string |
+| `spacing` | Spacing | Sets the pixel layout gap distribution distance between items when the shape is configured as a rectangle. | number |
 
-#### Status Mapping Properties
+### Status mapping properties
 
-Each item in the `Status Mappings` array links a specific value to a color and an optional tooltip.
+These configuration options define each individual rule item nested inside the `mappings` array.
 
-| **Label**      | **Description**                                                                                           | **Type**       | **Property** |
-| -------------- | --------------------------------------------------------------------------------------------------------- | -------------- | ------------ |
-| **Value**      | The specific status value from your data that will trigger this mapping (e.g., "online", "error", "200"). | String         | `value`      |
-| **Color**      | The color the lamp will display when its input value matches.                                             | String (Color) | `color`      |
-| **Hover Text** | Optional text that will appear in a tooltip when a user hovers over the lamp.                             | String         | `hoverText`  |
+| **Property** | **Label** | **Description** | **Type** |
+| :--- | :--- | :--- | :--- |
+| `value` | Value | The explicit data value string or number that triggers this mapping rule (such as `online`, `error`, or `200`). | string |
+| `color` | Color | The color hex code applied to the lamp frame when the bound input matches. | string |
 
-## Monitoring the status of a Function
+## Tips and tricks
 
-The status lamp can also be used to monitor the status of a Function in the Backend Builder.&#x20;
+### Monitoring the status of a function
+The status lamp can monitor the live execution status of a function node inside the Backend Builder. This provides an easy way to check if your integrations or data connections are actively running.
 
-This is particularly useful when handling many integrations and data connections, to have an easy way to monitor whether these are active.
-
-To link a Function status to the status lamp, simply drag the status indicator to the left of the Function onto the widget.
+To link a function node status to the widget, drag the status indicator circle located directly to the left of the function node on the canvas onto the status lamp widget workspace slot.
 
 <figure><img src="../../../../.gitbook/assets/Link_function_to_status.gif" alt=""><figcaption></figcaption></figure>
-
