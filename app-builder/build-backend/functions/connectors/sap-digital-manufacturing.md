@@ -1,127 +1,101 @@
----
-description: Beta Feature
----
+# SAP Digital Manufacturing
 
-# Sap Digital Manufacturing
+{% hint style="info" %}
+This connector is currently a beta feature.
+{% endhint %}
 
-The `SapDigitalManufacturing` class is a client wrapper for the **SAP Digital Manufacturing** cloud API. It handles the OAuth2 authentication flow and provides simplified methods to interact with the API, such as reading data from standard endpoints and querying Managed Data Objects (MDOs) via OData.
+The SAP Digital Manufacturing connector provides a client wrapper for the SAP Digital Manufacturing cloud API. It handles the OAuth2 authentication flow and provides methods to interact with the API, such as reading data from standard endpoints and querying Managed Data Objects (MDO) via OData. Managing these interactions requires creating an instance for each specific SAP Digital Manufacturing tenant.
 
-You must create an instance of this class to connect to your specific SAP Digital Manufacturing tenant.
+### create
+Instantiates a configuration instance for the SAP Digital Manufacturing client to connect to a specific tenant API.
 
-#### create
+#### Parameters
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>publicApiEndpoint</code></td><td>The base URL endpoint for the target digital manufacturing API, such as <code>https://api.eu20.dmc.cloud.sap</code>. Required.</td><td>string</td></tr><tr><td></td><td><code>authUrl</code></td><td>The full URL of the OAuth token endpoint provided by the authentication service. Required.</td><td>string</td></tr><tr><td></td><td><code>clientId</code></td><td>The OAuth client ID used for application authentication. Required.</td><td>string</td></tr><tr><td></td><td><code>clientSecret</code></td><td>The OAuth client secret used for application authentication. Required.</td><td>string</td></tr></tbody></table>
 
-Creates an instance of the SAP Digital Manufacturing client. This configures the connection details required to authenticate and communicate with your specific API tenant.
+#### Output
+Instantiates the client configuration profile.
 
-**Parameters**
-
-* `options`: An object containing your tenant's connection and authentication credentials.
-  * `publicApiEndpoint`: The base URL for your Digital Manufacturing API (e.g., `"https://api.eu20.dmc.cloud.sap"`).
-  * `authUrl`: The full URL of the OAuth token endpoint, which is specific to your authentication service setup.
-  * `clientId`: The OAuth client ID for your application.
-  * `clientSecret`: The OAuth client secret for your application.
-
-**Example**
-
+#### Example
 ```yaml
 # options
-publicApiEndpoint: https://api.eu20.dmc.cloud.sap
-authUrl: https://my-subaccount.authentication.eu20.hana.ondemand.com/oauth/token
+publicApiEndpoint: [https://api.eu20.dmc.cloud.sap](https://api.eu20.dmc.cloud.sap)
+authUrl: [https://my-subaccount.authentication.eu20.hana.ondemand.com/oauth/token](https://my-subaccount.authentication.eu20.hana.ondemand.com/oauth/token)
 clientId: sb-abc123def456!xyz
 clientSecret: my-very-secret-key-!@#$
-
 ```
 
-#### canCommunicate
+---
 
-Performs a basic check to verify that the provided credentials are correct and that a connection to the API endpoint can be established. It authenticates and makes a simple request to the root of the API.
+### `canCommunicate`
+Verifies communication with the cloud API endpoint using the configured credentials.
 
-Output
+#### Parameters
+None.
 
-Returns true if communication is successful, false otherwise.
+#### Output
+Returns `true` if the authentication flow and a test request to the root API endpoint succeed, otherwise `false`.
 
-#### read
+---
 
-Performs a generic GET request to any standard REST API endpoint within the Digital Manufacturing suite. This is useful for querying collections of data like orders, materials, or resources.
+### `read`
+Performs a generic GET request against standard REST API endpoints within the digital manufacturing suite.
 
-**Parameters**
+#### Parameters
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The relative API path of the destination endpoint, such as <code>/order/v1/orders</code>. Required.</td><td>string</td></tr><tr><td><code>params</code></td><td>Optional query parameters specified as key-value pairs appended to the generated URL.</td><td>object</td></tr></tbody></table>
 
-* `path`: The relative path of the API endpoint (e.g., `/order/v1/orders`).
-* `params`: An optional object of key-value pairs that will be converted into URL query parameters.
+#### Output
+Returns the parsed JSON response object from the API endpoint, or throws an error if the request fails.
 
-**Example 1: Get a list of all work centers in a plant**
+#### Examples
 
+##### Example 1: Read work centers
 ```yaml
 # path
 /resource/v1/workcenters
 # params
 plant: 1710
-
 ```
 
-_Generated URL: `.../resource/v1/workcenters?plant=1710`_
-
-**Example 2: Get details for a specific production order**
-
+##### Example 2: Read production order details
 ```yaml
 # path
 /order/v1/orders
 # params
 plant: 1710
 order: '1000456'
-
 ```
 
-_Generated URL: `.../order/v1/orders?plant=1710&order=1000456`_
+---
 
-Output
+### `readMdo`
+Queries a Managed Data Object (MDO) using the OData protocol to read custom master data tables.
 
-The parsed JSON response from the API.
+#### Parameters
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>entityPath</code></td><td>The OData entity path for the targeted object, such as <code>/ToolMDOs</code>. Required.</td><td>string</td></tr><tr><td><code>query</code></td><td>An optional OData query string used to filter, sort, or select specific data fields, such as <code>?$top=10</code>. Default empty string.</td><td>string</td></tr></tbody></table>
 
-#### readMdo
+#### Output
+Returns the parsed JSON response object from the OData service, or throws an error if the read operation fails.
 
-Reads data from a **Managed Data Object (MDO)** using the OData protocol. MDOs are custom data tables you can create in SAP Digital Manufacturing to store your own master data (e.g., tool lists, quality parameters, special instructions).
+#### Examples
 
-**Parameters**
-
-* `entityPath`: The OData path for the MDO (e.g., `/ToolMDOs`).
-* `query`: An optional OData query string to filter, sort, or select data.
-
-**Example 1: Read the top 5 entries from a Tool MDO**
-
+##### Example 1: Read entries with a top limit
 ```yaml
 # entityPath
 /ToolMDOs
 # query
 ?$top=5
-
 ```
 
-_Generated URL: `.../ToolMDOs?$top=5`_
-
-Example 2: Read a specific tool by its ID
-
-This uses the standard OData key predicate format.
-
+##### Example 2: Read a specific entry by identifier
 ```yaml
 # entityPath
 /ToolMDOs('TOOL-001')
-
 ```
 
-_Generated URL: `.../ToolMDOs('TOOL-001')`_
-
-**Example 3: Filter tools by type and select specific fields**
-
+##### Example 3: Filter entries and select specific fields
 ```yaml
 # entityPath
 /ToolMDOs
 # query
 ?$filter=toolType eq 'DRILL'&select=toolId,description,wear
-
 ```
-
-_Generated URL: `.../ToolMDOs?$filter=toolType%20eq%20'DRILL'&$select=toolId,description,wear`_
-
-Output
-
-The parsed JSON response from the OData service.
