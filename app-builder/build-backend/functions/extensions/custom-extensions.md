@@ -1,12 +1,12 @@
 # Custom Extensions
 
-Custom Extensions let you extend the Heisenware platform to your specific needs. We provide a project setup into which you add your custom functionality in a completely non-intrusive fashion. Built on our [VRPC](../../../../advanced/vrpc.md) library, you write plain Node.js code (no APIs to learn) and make it ready for visual programming in minutes.
+## Custom Extensions
 
-{% hint style="info" %}
-We are actively working on the same idea for C++ and Python.
-{% endhint %}
+Custom Extensions let you extend the Heisenware platform to your specific needs. We provide a project setup into which you add your custom functionality in a completely non-intrusive fashion. Built on our VRPC library, you write plain Node.js code (no APIs to learn) and make it ready for visual programming in minutes.
 
-The best starting point is our [docker-extension-starter-js](https://github.com/heisenware/heisenware-docker-extension-starter-js). We recommend [downloading](https://github.com/heisenware/heisenware-docker-extension-starter-js/archive/refs/heads/master.zip) this project as a scaffold, changing it to your needs, and placing it under your software versioning.
+\{% hint style="info" %\} We are actively working on the same idea for C++ and Python. \{% endhint %\}
+
+The best starting point is our [docker-extension-starter-js](https://github.com/heisenware/heisenware-docker-extension-starter-js). We recommend [downloading](https://github.com/heisenware/heisenware-docker-extension-starter-js/archive/refs/heads/master.zip) this project as a scaffold, changing it to your needs, and placing it under your own version control.
 
 You end up creating a Docker image whose containers integrate into the platform in one of two ways.
 
@@ -14,17 +14,17 @@ You end up creating a Docker image whose containers integrate into the platform 
 
 Once your Docker image is built, pushed, and publicly accessible ([contact us](mailto:support@heisenware.com) for private registry support), load it as a Custom Extension.
 
-<div align="left"><figure><img src="../../../../.gitbook/assets/image (46).png" alt=""><figcaption></figcaption></figure></div>
+\<div align="left">\<figure>\<img src="../../../../.gitbook/assets/image (46).png" alt="">\<figcaption>\</figcaption>\</figure>\</div>
 
-Once installed, and given your code is syntactically correct, it immediately appears in the [Function Explorer](../function-explorer.md). To apply a new version, install it again (works even with the same label).
+Once installed, and given your code is syntactically correct, it immediately appears in the Function Explorer. To apply a new version, install it again (works even with the same label).
 
-{% hint style="info" %}
-Any instances you create are automatically persisted and restarted. You find them in the [File Explorer](../../file-explorer.md) under `extensions/my-extension/...`
-{% endhint %}
+\{% hint style="info" %\} Any instances you create are automatically persisted and restarted. You find them in the File Explorer under `extensions/my-extension/...` \{% endhint %\}
 
 ### Running outside the platform
 
 This lets you run your custom code on-premises while we bridge it automatically, seamlessly, and securely into the cloud. Start a container of your image locally and configure it with the correct credentials using environment variables:
+
+bash
 
 ```bash
 docker run -it \
@@ -35,9 +35,11 @@ docker run -it \
 myusername/myimage:1.0.0
 ```
 
-To retrieve a valid username and password, add a VRPC integration under [Integrations (inbound)](../../../../app-manager/inbound-integrations.md) in the App Manager.
+To retrieve a valid username and password, add a VRPC integration under Integrations (inbound) in the App Manager.
 
-Example: for an account named `my-company`, an integration with username `agentRunner`, and a password `secret`, the call would be:
+Example: For an account named `my-company`, an integration with username `agentRunner`, and a password `secret`, the call would be:
+
+bash
 
 ```bash
 docker run -it \
@@ -50,4 +52,4 @@ myusername/myimage:1.0.0
 
 When everything is set up correctly, you should see something like this on your console:
 
-<figure><img src="../../../../.gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
+\<figure>\<img src="../../../../.gitbook/assets/image (48).png" alt="">\<figcaption>\</figcaption>\</figure>
