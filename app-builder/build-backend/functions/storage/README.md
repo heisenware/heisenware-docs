@@ -8,13 +8,13 @@ Use the [relational database](relational-database.md) class for structured data 
 
 Every account includes a pre-configured instance called `internal-postgres`. It runs a managed PostgreSQL database, so you can drag CRUD functions onto the canvas and store data right away.
 
-To connect an existing SQL server instead (PostgreSQL, MySQL, SQLite, MSSQL), create a new instance with the `create` function and enter your connection details.
+To connect an existing SQL server instead (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, and more), create a new instance with the `create` function and enter your connection details.
 
 ## Timeseries storage
 
 Use the [timeseries database](timeseries-database.md) class for high-frequency data like sensor readings or machine telemetry.
 
-Every account includes a managed InfluxDB instance called `internal-influxdb`. The easiest way to fill it: Attach a [recorder](../../extension-nodes/recorder.md) to any function output and it stores every value with zero configuration. Use the timeseries database functions to read and query the recorded data.
+Every account includes a managed InfluxDB instance called `internal-influx`. The easiest way to fill it: Attach a [recorder](../../extension-nodes/recorder.md) to any function output and it stores every value with zero configuration. Use the timeseries database functions to read and query the recorded data.
 
 To connect your own InfluxDB server instead, create a new instance with the `create` function.
 
