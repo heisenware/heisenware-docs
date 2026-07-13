@@ -1,144 +1,117 @@
-# GPIO Counter
+# GPIO counter
 
-The `GpioCounter` class provides a high-level interface for counting digital pulses on a Raspberry Pi's GPIO pins. It is designed to interpret signals from sensors (like inductive proximity sensors, light barriers, or rotary encoders) to track production counts, machine cycles, or flow rates.
+The GPIO counter counts digital pulses on a Raspberry Pi's GPIO pins. It interprets signals from sensors (like inductive proximity sensors, light barriers, or rotary encoders) to track production counts, machine cycles, or flow rates.
 
-Beyond simple counting, this class features intelligent state detection. It monitors the time interval between pulses to automatically determine if a machine or process is running or stopped.
+Beyond counting, the class monitors the time interval between pulses to automatically determine whether a machine or process is running or stopped. It offers two operation modes:
 
-It offers two distinct operation modes:
-
-1. Average Mode (Default): Automatically detects a stop if the time between pulses exceeds the running average by a certain factor. This adapts dynamically to the speed of the machine.
-2. Target Mode: Detects a stop if the time between pulses exceeds a fixed target interval (plus a defined tolerance). This is useful for processes with strict cycle times.
+1. Average mode (default): Detects a stop when the time between pulses exceeds the running average by a configurable factor. This adapts dynamically to the speed of the machine.
+2. Target mode: Detects a stop when the time between pulses exceeds a fixed target interval plus a defined tolerance. Use this for processes with strict cycle times. Target mode is active when both `targetInterval` and `deviation` are set.
 
 {% hint style="warning" %}
-**Important:** This class requires your application to be running on a Raspberry Pi (supported architectures: RPi 4 and RPi 5).
+#### Hardware requirement
 
-If no compatible hardware is detected, the class will automatically fall back to a simulation mode, allowing you to test your logic using the `simulatePulse` function.
+This class requires a Raspberry Pi 4 or 5. If no compatible hardware is detected, the class automatically falls back to a simulation mode, letting you test your logic with the `simulatePulse` function.
 {% endhint %}
 
-## Internal State Machine
+## State machine
 
-The `GpioCounter` operates on a simple but robust internal state machine. Understanding these states and transitions is helpful for debugging and for predicting how the counter will behave in production environments.
+The counter operates on an internal state machine. Understanding the states helps with debugging and predicting the behavior in production.
 
 <figure><img src="../../../../.gitbook/assets/image (30).png" alt=""><figcaption></figcaption></figure>
 
-#### States
+### States
 
-* **Initialized**: The default starting state when an instance is created or reset. The counter is idle, waiting for the first signal to arrive. No timeouts are active.
-* **Counting**: The active state. The counter is registering pulses, calculating averages, and the auto-stop watchdog timer is running.
-* **Stopped**: The state entered when the process has finished or paused. This happens automatically if the pulse interval becomes too long (watchdog expiry) or if `stop()` is called manually.
+* `initialized`: The starting state after `create` or `reset`. The counter is idle, waiting for the first signal. No watchdog is active.
+* `counting`: The active state. The counter registers pulses, calculates averages, and runs the auto-stop watchdog.
+* `stopped`: The process has finished or paused. Entered automatically when the pulse interval becomes too long, or manually via `stop`. The count is preserved.
+* `rebooted`: The counter restored a persisted count after a restart. Pulses are ignored in this state; call `start` to resume counting.
+* `ended`: A terminal state entered via `end`. No further counts are registered and no auto-restart occurs until you call `reset`.
 
-#### Transitions
+### Transitions
 
-* **Auto-Start** (`Initialized` → `Counting`): Occurs automatically when the very first pulse is detected on the GPIO pin.
-* **Auto-Stop** (`Counting` → `Stopped`): Occurs when the time since the last pulse exceeds the calculated limit (based on `stopFactor` or `targetInterval`). This usually indicates the machine has stopped.
-* **Continue** (`Stopped` → `Counting`): If `continueAfterStop` is set to `true`, a new pulse will automatically wake the counter up and resume counting.
-* Manual Control:
-  * `start()`: Forces transition to Counting.
-  * `stop()`: Forces transition to Stopped.
-  * `reset()`: Forces transition back to Initialized.
+* Auto-start (`initialized` → `counting`): The very first pulse on the GPIO pin starts the counter automatically.
+* Auto-stop (`counting` → `stopped`): The time since the last pulse exceeded the limit calculated from `stopFactor` or `targetInterval`. This usually means the machine has stopped.
+* Continue (`stopped` → `counting`): With `continueAfterStop: true`, a new pulse automatically resumes counting.
+* Manual control: `start` forces `counting`, `stop` forces `stopped`, `end` forces `ended`, and `reset` returns to `initialized`.
 
-## Static Functions
+### Persistence across restarts
 
-These functions help you manage hardware resources before creating a counter instance.
+The counter continuously persists its count and averages to a state file on disk. When an instance is created and a state file for the GPIO pin exists, the data is restored and the state becomes `rebooted`. This way a power cut or App restart does not lose your production count.
 
-### isAccessible
+## Static functions
 
-Checks if any compatible GPIO hardware (Raspberry Pi 4 or 5) is accessible on the current system. This is useful for feature detection to avoid errors on unsupported devices.
+These functions manage hardware resources before you create a counter instance.
 
-Output
+### `isAccessible`
+
+Checks whether compatible GPIO hardware (Raspberry Pi 4 or 5) is accessible on the current system. Useful for feature detection to avoid errors on unsupported devices.
+
+#### Parameters
+
+None.
+
+#### Output
 
 Returns `true` if compatible hardware is detected, otherwise `false`.
 
-***
+### `getPinConsumer`
 
-### getPinConsumer
+Retrieves the name of the process that currently holds a specific GPIO pin. Helps diagnose resource conflicts when a pin is busy.
 
-Retrieves the name of the process or consumer that is currently holding a specific GPIO pin. This helps diagnose resource conflicts if a pin is busy.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>gpio</code></td><td>The BCM pin number to check.</td><td>integer</td></tr></tbody></table>
 
-* `gpio`: The BCM pin number to check.
-
-Example
+#### Example
 
 ```yaml
 # gpio
 17
 ```
 
-Output
+#### Output
 
-Returns a string with the consumer name (e.g., `'gpiod'`) or `null` if the pin is free or if the system is in simulation mode.
+A string with the consumer name (e.g. `'gpiod'`), or `null` if the pin is free or the system runs in simulation mode.
 
-***
+### `isPinFree`
 
-### isPinFree
+Checks whether a specific GPIO pin is currently free to use.
 
-Checks if a specific GPIO pin is currently free to use.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>gpio</code></td><td>The BCM pin number to check.</td><td>integer</td></tr></tbody></table>
 
-* `gpio`: The BCM pin number to check.
-
-Example
-
-```yaml
-# gpio
-17
-```
-
-Output
+#### Output
 
 Returns `true` if the pin has no active consumer, otherwise `false`.
 
-***
+### `release`
 
-### release
+Forcefully releases a specific GPIO pin if an internal driver instance holds it. Use this to recover pins that were not properly disposed of.
 
-Forcefully releases a specific GPIO pin if it is currently locked by an internal driver instance. This can be used to recover pins that were not properly disposed of.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>gpio</code></td><td>The BCM pin number to release.</td><td>integer</td></tr></tbody></table>
 
-* `gpio`: The BCM pin number to release.
+#### Output
 
-Example
+Returns `true` if the pin was found and released, otherwise `false`.
 
-```yaml
-# gpio
-17
-```
+## Instance and control
 
-Output
+### `create`
 
-Returns `true` if the pin was found and successfully released, otherwise `false`.
+Creates a counter instance. This initializes the hardware connection (or the simulation) and configures the counting logic. The parameter combination determines the mode: providing both `targetInterval` and `deviation` activates target mode, otherwise the counter runs in average mode.
 
-## Constructor and Member Functions
+#### Parameters
 
-### create
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>gpio</code></td><td>The BCM pin number connected to the sensor. Required.</td><td>integer</td></tr><tr><td></td><td><code>pullUpDown</code></td><td>Resistor configuration: <code>none</code>, <code>pullup</code>, or <code>pulldown</code>. Default <code>none</code>.</td><td>string</td></tr><tr><td></td><td><code>edge</code></td><td>The signal edge to count: <code>rising</code>, <code>falling</code>, or <code>both</code>. Default <code>rising</code>.</td><td>string</td></tr><tr><td></td><td><code>debounceTimeout</code></td><td>Debounce time in milliseconds to prevent false counts from noisy signals. Default <code>10</code>.</td><td>integer</td></tr><tr><td></td><td><code>activeLow</code></td><td>If <code>true</code>, inverts the logic (useful if your sensor outputs 0 when active). Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>minCount</code></td><td>The minimum number of pulses required before the auto-stop watchdog activates. Default <code>5</code>.</td><td>integer</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>If <code>true</code>, the counter automatically resumes counting when a new pulse arrives after a stop. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>stopFactor</code></td><td>Average mode only: The multiplier applied to the average interval to trigger a stop. Default <code>2.0</code>.</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>Target mode only: The expected cycle time in seconds.</td><td>number</td></tr><tr><td></td><td><code>deviation</code></td><td>Target mode only: The allowed deviation in percent (0 to 100) before a pulse counts as too late.</td><td>number</td></tr></tbody></table>
 
-Creates a new `GpioCounter` instance. This initializes the hardware connection (or simulation) and configures the counting logic.
+#### Examples
 
-You can configure the counter in either Average Mode or Target Mode by providing different combinations of parameters.
+Example 1: Average mode
 
-Parameters
-
-* `options`: An object containing the configuration settings.
-  * `gpio`: (Required) The BCM pin number connected to the sensor.
-  * `direction`: (Internal/Fixed) Always set to `'in'`.
-  * `pullUpDown`: Resistor configuration. Can be `'none'`, `'pullup'`, or `'pulldown'`. Defaults to `'none'`.
-  * `edge`: The signal edge to count. Can be `'rising'`, `'falling'`, or `'both'`. Defaults to `'rising'`.
-  * `debounceTimeout`: Hardware/Software debounce time in milliseconds to prevent false counts from noisy switches. Defaults to `10`.
-  * `activeLow`: If `true`, inverts the logic (useful if your sensor outputs 0 when active). Defaults to `false`.
-  * `minCount`: The minimum number of pulses required before the auto-stop watchdog logic activates. Defaults to `5`.
-  * `continueAfterStop`: If `true`, the counter automatically resumes the 'counting' state when a new pulse is detected after a stop. Defaults to `true`.
-  * Mode Specific Parameters:
-    * `stopFactor`: (Average Mode Only) The multiplier applied to the average interval to trigger a stop. Defaults to `2.0`.
-    * `targetInterval`: (Target Mode Only) The expected cycle time in seconds.
-    * `deviation`: (Target Mode Only) The allowed deviation in percent (0-100) before a pulse is considered "too late".
-
-Example 1: Average Mode
-
-Configures a counter on GPIO 17. It will stop if a pulse takes more than 2.5 times the current average interval.
+This counter on GPIO 17 stops when a pulse takes more than 2.5 times the current average interval.
 
 ```yaml
 # options
@@ -148,9 +121,9 @@ stopFactor: 2.5
 minCount: 10
 ```
 
-Example 2: Target Mode
+Example 2: Target mode
 
-Configures a counter on GPIO 22. It expects a pulse every 5 seconds. It will detect a stop/error if a pulse takes longer than 5.5 seconds (5s + 10% deviation).
+This counter on GPIO 22 expects a pulse every 5 seconds. It detects a stop when a pulse takes longer than 5.5 seconds (5 s plus 10 % deviation).
 
 ```yaml
 # options
@@ -159,79 +132,96 @@ targetInterval: 5
 deviation: 10
 ```
 
-Output
+### `start`
 
-Returns a new `GpioCounter` instance.
+Manually starts the counting process. Normally the counter starts automatically with the first pulse; use this to force the `counting` state and arm the watchdog before a signal arrives, or to resume counting from the `rebooted` state.
 
-***
+Has no effect while the counter is already counting or in the `ended` state (call `reset` first).
 
-### start
+#### Parameters
 
-Manually starts the counting process.
+None.
 
-Normally, the counter starts automatically when the first pulse is detected. Use this function if you want to force the state to 'counting' and arm the watchdog timer immediately, even before a signal arrives.
+#### Output
 
-Output
+Nothing.
 
-Returns `true` (void).
+### `stop`
 
-***
+Manually stops the counting process. Transitions to `stopped` and cancels the watchdog. The current count is preserved. Has no effect unless the counter is counting.
 
-### stop
+#### Parameters
 
-Manually stops the counting process.
+None.
 
-This transitions the state to 'stopped' and cancels any active watchdogs. The current count is preserved.
+#### Output
 
-Output
+Nothing.
 
-Returns `true` (void).
+### `end`
 
-***
+Forces the counter into the terminal `ended` state. No further pulses are counted and no auto-restart occurs until you call `reset`. Use this to close a production session definitively.
 
-### reset
+#### Parameters
 
-Resets the counter back to its initial state.
+None.
 
-This sets the count to 0, clears all averages, and resets the state to 'initialized'.
+#### Output
 
-You can optionally pass new configuration parameters to update the counter's logic during the reset.
+Nothing.
 
-Parameters
+### `reset`
 
-* `options`: (Optional) An object to update specific settings.
-  * `minCount`
-  * `stopFactor`
-  * `targetInterval`
-  * `deviation`
-  * `continueAfterStop`
+Resets the counter to its initial state: The count becomes 0, all averages clear, and the state returns to `initialized`. Optionally pass configuration parameters to update the counting logic during the reset.
 
-Example: Reset and change to a stricter stop factor
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>minCount</code></td><td>New minimum count.</td><td>integer</td></tr><tr><td></td><td><code>stopFactor</code></td><td>New stop factor (average mode).</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>New target interval in seconds (target mode).</td><td>number</td></tr><tr><td></td><td><code>deviation</code></td><td>New deviation in percent (target mode).</td><td>number</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>Whether to resume counting automatically after a stop.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
+
+Reset and switch to a stricter stop factor:
 
 ```yaml
 # options
 stopFactor: 1.5
 ```
 
-Output
+#### Output
 
-Returns `true` (void).
+Nothing.
 
-***
+### `dispose`
 
-### onCount
+Releases the hardware resources (frees the GPIO pin) and removes all listeners. Call this when the counter is no longer needed to prevent hardware conflicts.
 
-Registers a listener that is triggered every time a valid pulse is counted.
+#### Parameters
 
-This is the primary way to receive data from the counter.
+None.
 
-Parameters
+#### Output
 
-* `callback`: The function to execute on each count.
+Nothing.
 
-Output Payload
+### `delete`
 
-The callback receives an object with detailed information about the event:
+Removes the instance.
+
+{% hint style="danger" %}
+Deleting an instance removes its configuration. To count on that pin again, trigger `create` anew.
+{% endhint %}
+
+## Data and events
+
+### `onCount`
+
+Registers a callback that fires every time a valid pulse is counted. This is the primary way to receive data from the counter.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>Callback that receives a data object on each count.</td><td>callback</td></tr></tbody></table>
+
+#### Callback payload
 
 ```json
 {
@@ -244,96 +234,77 @@ The callback receives an object with detailed information about the event:
 }
 ```
 
-* `avgInterval`: The calculated running average time between pulses (ms).
-* `delta`: The time passed since the _previous_ pulse (ms).
+`avgInterval` is the running average time between pulses in milliseconds; `delta` is the time since the previous pulse in milliseconds.
 
-***
+### `onStateChange`
 
-### onStateChange
+Registers a callback that fires whenever the counter's state changes (e.g. from `counting` to `stopped`).
 
-Registers a listener that is triggered whenever the counter's state changes (e.g., from 'counting' to 'stopped').
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>Callback that receives a state object on each change.</td><td>callback</td></tr></tbody></table>
 
-* `callback`: The function to execute on state change.
-
-Output Payload
+#### Callback payload
 
 ```json
 {
   "state": "stopped",
   "previousState": "counting",
   "count": 125,
+  "exceededTargetCount": 0,
   "timestamp": 1715605005000
 }
 ```
 
-***
+### `simulatePulse`
 
-### simulatePulse
+Manually simulates an input pulse. Useful for testing your application logic away from the physical hardware. Only works in simulation mode; on real hardware the call is ignored with a warning in the logs.
 
-Manually simulates an input signal pulse.
+#### Parameters
 
-This is extremely useful for testing your application logic when you are developing away from the physical hardware (Simulation Mode).
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The signal value to simulate. Default <code>1</code>.</td><td>integer</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* `value`: The signal value to simulate. Defaults to `1`.
+Nothing. The pulse arrives through the listener registered with `onCount`.
 
-Example
-
-```yaml
-# value
-1
-```
-
-***
-
-### getCount
+### `getCount`
 
 Retrieves the current total count.
 
-Output
+#### Output
 
-An integer representing the number of pulses counted so far.
+An integer with the number of pulses counted so far.
 
-***
+### `getExceededTargetCount`
 
-### getExceededTargetCount
+Retrieves how often the pulse interval exceeded the configured target time (target mode only).
 
-Retrieves the number of times the pulse interval exceeded the configured target time (only applicable in Target Mode).
+#### Output
 
-Output
+An integer with the number of exceeded targets.
 
-An integer count of exceeded targets.
+### `getState`
 
-***
+Retrieves the current state of the counter.
 
-### getState
+#### Output
 
-Retrieves the current status of the counter.
+A string: `initialized`, `counting`, `stopped`, `rebooted`, or `ended`.
 
-Output
+### `getAverageInterval`
 
-A string representing the state: `'initialized'`, `'counting'`, or `'stopped'`.
+Retrieves the current running average time between pulses.
 
-***
+#### Output
 
-### getAverageInterval
+A number with the average interval in milliseconds.
 
-Retrieves the current calculated average time between pulses in milliseconds.
+### `getData`
 
-Output
+Retrieves a snapshot of the counter's current data.
 
-A number representing the average interval.
-
-***
-
-### getData
-
-Retrieves a comprehensive snapshot of the counter's current data.
-
-Output
+#### Output
 
 ```json
 {
@@ -345,13 +316,11 @@ Output
 }
 ```
 
-***
+### `getConfiguration`
 
-### getConfiguration
+Retrieves the current configuration of the instance.
 
-Retrieves the current configuration settings of the instance.
-
-Output
+#### Output
 
 ```json
 {
@@ -362,13 +331,3 @@ Output
   "continueAfterStop": true
 }
 ```
-
-***
-
-### dispose
-
-Releases the hardware resources (unexports the GPIO pin) and removes all listeners. Call this when the counter is no longer needed to prevent memory leaks or hardware conflicts.
-
-Output
-
-Returns `true` (void).
