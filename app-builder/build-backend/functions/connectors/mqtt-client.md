@@ -1,63 +1,24 @@
-# MQTT Client
+# MQTT client
 
-The `MqttClient` class is a wrapper for connecting to an MQTT broker. It simplifies the process of connecting, publishing, subscribing, and handling messages, and automatically manages features like keep-alives and reconnections.
+The MQTT client connector handles client connections to an MQTT broker over various transport protocols, including standard TCP, TLS, and WebSockets. It automatically coordinates server keep-alive pings, Quality of Service (QoS) delivery flows, automated reconnection routines, and early publish message queuing.
 
-## Working with the Heisenware Broker
+Heisenware provides a built-in pre-configured instance named `internal-mqtt` connected directly to the platform's local broker. You can use `internal-mqtt` straight out of the box in your application logic to publish or subscribe to internal topics without defining connection configurations. To communicate with a distinct, external third-party broker, initialize a separate connector instance and use the connection management functions below.
 
-Heisenware includes a built-in MQTT broker. There are two main ways to interact with it:
+## Connection management
 
-### Connecting an External Client TO Heisenware
+### `connect`
 
-If you have an external device or application (like an IoT sensor) that needs to publish data _to_ the Heisenware broker, you must first create credentials for it. Please follow the guide on [Creating an MQTT Integration](../../../../app-manager/integrations-inbound-connections.md#mqtt-client) to do this.
+Establishes an active connection to the specified MQTT broker. If the client is already connected to an identical URL with matching options, the transaction terminates without re-executing. If you target a different broker configuration path or alter security credentials, the client automatically closes the active session before initializing the new connection handler.
 
-{% hint style="info" %}
-**Broker Connection Details**
+#### Parameters
 
-Your internal Heisenware broker is available at the following address:
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The destination broker URL endpoint including the transport protocol prefix (such as <code>mqtt://broker.hivemq.com</code> or <code>mqtts://test.mosquitto.org</code>). Required.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>clientId</code></td><td>A unique tracking string for the client session. Generates a random alphanumeric tracking hash automatically if omitted.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The authentication username credential required by the broker.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The authentication password credential required by the broker.</td><td>string</td></tr><tr><td></td><td><code>keepalive</code></td><td>The time window interval in seconds between successive server keep-alive ping messages. Default 60.</td><td>integer</td></tr><tr><td></td><td><code>connectTimeout</code></td><td>The connection threshold wait limit in milliseconds before a connection handshake fails. Default 30000.</td><td>integer</td></tr><tr><td></td><td><code>will</code></td><td>A last will and testament configuration block delivered automatically by the broker if the client terminates ungracefully.</td><td>object</td></tr></tbody></table>
 
-* Hostname: `<account>.heisenware.cloud`
-* Port: `8884` (MQTTS, TLS encrypted)
-* Topic Prefix: `<account>.default/`
+#### Output
 
-For example, an account named `my-company` would publish to a topic like `my-company.default/test`.
+Returns `true` when a connection session is successfully established with the broker host.
 
-**HINT:** To use the secure `8884` port, you may need to adjust your MQTT client's settings. Most clients require you to enable an option to proceed without validating the server certificate, when Heisenware certificate is not stored in your environment.
-{% endhint %}
-
-### Using the Internal Client (`internal-mqtt`)
-
-For use within your application logic, Heisenware provides a pre-configured instance called `internal-mqtt`. You can use this instance to subscribe to topics on the internal broker (including data published by your external clients) or to publish messages from your app. No `create` or `connect` step is needed for this instance.
-
-<p align="center"><br><img src="../../../../.gitbook/assets/image (482).png" alt=""></p>
-
-To connect to a different, non-Heisenware broker, you must use the `create` and `connect` functions below. The [video example below](mqtt-client.md#video-example-connecting-to-an-external-broker) focusses on that topic, too.
-
-## Connection Management
-
-### create
-
-Creates a new, unconnected MQTT client instance.
-
-### connect
-
-Connects the client to a specified MQTT broker using a URL and various options.
-
-Parameters
-
-* `url`: The broker URL, including the protocol (e.g., `mqtt://broker.hivemq.com`, `wss://test.mosquitto.org:8081`).
-* `options`: An object for connection configuration.
-  * `clientId`: A unique ID for this client. If not provided, a random one is generated.
-  * `username`: The username for authentication, if required.
-  * `password`: The password for authentication, if required.
-  * `keepalive`: The interval in seconds for keep-alive pings. Defaults to `60`.
-  * `connectTimeout`: Timeout in milliseconds for the connection attempt. Defaults to `30000`.
-  * `will`: A "Last Will and Testament" object to be published by the broker if this client disconnects ungracefully.
-    * `topic`: The topic for the will message.
-    * `payload`: The will message payload.
-    * `qos`: The QoS level for the will.
-    * `retain`: The retain flag for the will.
-
-Example: Connect with username and a last will
+#### Example
 
 ```yaml
 # url
@@ -65,61 +26,80 @@ mqtt://broker.hivemq.com
 # options
 username: my-device-user
 password: my-secret-password
-will: {
-  topic: 'devices/my-device/status',
-  payload: 'offline',
-  qos: 1,
+will:
+  topic: devices/my-device/status
+  payload: offline
+  qos: 1
   retain: true
-}
 ```
 
-Output
+### `disconnect`
 
-Returns true on a successful connection.
+Closes the active network channel link with the MQTT broker and purges all instance messaging listeners from memory.
 
-### disconnect
+#### Parameters
 
-Closes the connection to the broker.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>force</code></td><td>When set to <code>true</code>, the client severs the network socket instantly without waiting for remaining in-flight message acknowledgments to complete. Default false.</td><td>boolean</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* `force`: If `true`, the client closes immediately without waiting for in-flight messages to be acknowledged. Defaults to `false`.
+Returns `true` upon successful session termination.
 
-Output
+### `isConnected`
 
-Returns true on success.
+Checks whether the client possesses a live, active communication session with the broker.
 
-### isConnected
+#### Parameters
 
-Checks if the client is currently connected to the broker.
+None.
 
-Output
+#### Output
 
-Returns true if connected, false otherwise.
+Returns `true` if connected, otherwise `false`.
 
-### isReconnecting
+### `isReconnecting`
 
-Checks if the client is in the process of reconnecting after a disconnect.
+Checks whether the client is currently executing an automated reconnection logic loop following an unexpected connection failure.
 
-Output
+#### Parameters
 
-Returns true if the client is currently trying to reconnect.
+None.
 
-## Publishing Messages
+#### Output
 
-### publishString
+Returns `true` if a reconnection routine is running, otherwise `false`.
 
-Publishes a string message to a specific topic.
+### `delete`
 
-Parameters
+Removes the instance configuration from the execution scope and clears active memory paths.
 
-* `topic`: The topic to publish to.
-* `message`: The string message to publish.
-* `options`: An optional object for publish settings.
-  * `qos`: The Quality of Service level (`0`, `1`, or `2`). Defaults to `0`.
-  * `retain`: If `true`, the message is stored by the broker as the "last known good" value for that topic. Defaults to `false`.
+{% hint style="danger" %}
+Deleting an instance removes its configuration. To communicate with the broker again, trigger `create` anew.
+{% endhint %}
 
-Example
+#### Parameters
+
+None.
+
+#### Output
+
+Nothing.
+
+## Publishing messages
+
+### `publishString`
+
+Transmits an alphanumeric text string payload directly to a specific topic channel destination.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td></td><td>The destination topic channel path string. Required.</td><td>string</td></tr><tr><td><code>message</code></td><td></td><td>The textual message payload data to transmit. Required.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The Quality of Service message delivery guarantee level (0, 1, or 2). Default 0.</td><td>integer</td></tr><tr><td></td><td><code>retain</code></td><td>When set to <code>true</code>, instructs the broker to persist the message as the last verified value for the target topic path. Default false.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+A promise that resolves when the message packet delivery finishes processing.
+
+#### Example
 
 ```yaml
 # topic
@@ -130,17 +110,19 @@ Device starting up...
 qos: 1
 ```
 
-### publishJson
+### `publishJson`
 
-Publishes a JSON object to a specific topic. The object is automatically stringified.
+Transmits a structured data object straight to a specified topic path channel. The connector formats the payload data automatically into a serialized text string layout before packet delivery.
 
-Parameters
+#### Parameters
 
-* `topic`: The topic to publish to.
-* `message`: The JSON object to publish.
-* `options`: An optional configuration object (see `publishString` for details).
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td></td><td>The destination topic channel path string. Required.</td><td>string</td></tr><tr><td><code>message</code></td><td></td><td>The structured data object payload parameters to transmit. Required.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The Quality of Service delivery guarantee tier (0, 1, or 2). Default 0.</td><td>integer</td></tr><tr><td></td><td><code>retain</code></td><td>When set to <code>true</code>, the broker stores the message record persistently. Default false.</td><td>boolean</td></tr></tbody></table>
 
-Example
+#### Output
+
+A promise that resolves when the serialized data packet transmission completes.
+
+#### Example
 
 ```yaml
 # topic
@@ -150,18 +132,21 @@ temperature: 21.5
 humidity: 45.2
 ```
 
-## Subscribing to Messages
+## Subscribing to messages
 
-### subscribe
+### `subscribe`
 
-Subscribes to one or more topics to receive messages. Supports MQTT wildcards (`+` for single level, `#` for multi-level).
+Registers a subscription across designated topic channels to begin intercepting passing message streams.
 
-Parameters
+#### Parameters
 
-* `topic`: A string, an array of strings, or an object representing the topic(s) to subscribe to.
-* `options`: Optional settings, primarily for setting the `qos` level of the subscription.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td></td><td>A standalone routing string, array of topic strings, or tracking map. Supports path wildcard tags (<code>+</code> for single level and <code>#</code> for multi-level paths). Required.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The maximum requested Quality of Service assignment matching tier. Default 0.</td><td>integer</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns `true` when the subscription instructions map cleanly into the routing client layers.
+
+#### Example
 
 ```yaml
 # topic
@@ -170,16 +155,19 @@ sensors/+/temperature
 qos: 1
 ```
 
-### onStringMessage
+### `onStringMessage`
 
-Attaches a listener that is triggered for incoming messages, providing the payload as a string. This is a convenient way to subscribe and handle messages in one step.
+Attaches an explicit event callback listener to intercept arriving message packets and return raw payload text strings.
 
-Parameters
+#### Parameters
 
-* `listener`: The callback function that will receive the message.
-* `topic`: An optional topic or array of topics to subscribe to. If omitted, the listener will receive messages from all topics the client is already subscribed to.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td></td><td>The callback script target triggered instantly on message arrival. Receives payload string, destination topic, and raw packet metadata properties. Required.</td><td>callback</td></tr><tr><td><code>topic</code></td><td></td><td>An optional path string or array of paths to subscribe to. If omitted, the callback monitors messages matching all subscriptions active on the connector.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The subscription configuration matching QoS tier. Default 0.</td><td>integer</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns a confirmation verification string when successfully bound.
+
+#### Example
 
 ```yaml
 # listener
@@ -188,16 +176,19 @@ Example
 devices/my-device/commands
 ```
 
-### onJsonMessage
+### `onJsonMessage`
 
-Attaches a listener for incoming messages and automatically parses the payload as JSON. If parsing fails, the message is ignored.
+Attaches an event callback listener to intercept incoming message streams and parse incoming data into standard JSON objects automatically. If the incoming payload fails formatting parser validation, the transaction drops with a logging console warning.
 
-Parameters
+#### Parameters
 
-* `listener`: The callback function that will receive the parsed JSON object.
-* `topic`: An optional topic or array of topics to subscribe to.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td></td><td>The callback function executed on valid arrival. Receives the parsed data parameters enhanced with a fallback <code>__topic__</code> text attribute property. Required.</td><td>callback</td></tr><tr><td><code>topic</code></td><td></td><td>An optional routing path or array of paths to subscribe to. If blank, matches all subscriptions initialized on the instance.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The subscription configuration matching QoS tier. Default 0.</td><td>integer</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns a status verification string when successfully bound.
+
+#### Example
 
 ```yaml
 # listener
@@ -206,26 +197,43 @@ Example
 devices/my-device/config
 ```
 
-### unsubscribe
+### `unsubscribe`
 
-Unsubscribes from a topic or topics, stopping the flow of messages from them.
+Instructs the connector client to drop specific topic channel paths and halt related background processing loops.
 
-Parameters
+#### Parameters
 
-* `topic`: A string or an array of strings representing the topic(s) to unsubscribe from.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td>A literal path string or an array list of string channel paths to drop. Required.</td><td>any</td></tr></tbody></table>
 
-## Utility Functions
+#### Output
 
-### getLastMessageId
+A promise that resolves when the unsubscription transactions clear the client channel layer.
 
-Gets the message ID of the last message sent by this client.
+## Utility functions
 
-Output
+### `getLastMessageId`
 
-The last message ID number.
+Queries the packet index tracking identifier integer assigned to the most recently delivered outbound message stream.
 
-## Video Example: Connecting to an External Broker
+#### Parameters
 
-For a complete walkthrough of how to create a new MQTT client instance and connect it to an external, third-party broker (such as HiveMQ), please see the video guide below.
+None.
+
+#### Output
+
+An integer matching the tracking number code of the last sent packet.
+
+## Tips and tricks
+
+### Multi-level layout wildcards
+MQTT path levels use forward slash symbols (`/`) to divide data branches. When binding message listening callbacks, you can map the `+` character symbol to match any variable parameter at an isolated folder level, or add a trailing `#` multi-level character code to capture all descending nested paths along that channel trunk.
+
+### Pre-handshake publication queuing
+The communication mapping engine allows direct processing calls to `publishString` or `publishJson` before the client fully finishes its initial connection handshake routines with the target host. Messages passed during a temporary connection loss phase or during startup queue safely inside memory buffers and stream outbound automatically once handshakes resolve.
+
+## Video demo
+
+Watch the walkthrough example to learn how to create and manage external broker communication models using custom instance flows.
 
 {% embed url="https://www.youtube.com/watch?v=QG1Wsac2NbU" %}
+```
