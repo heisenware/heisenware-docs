@@ -1,24 +1,26 @@
 # Storage
 
-Heisenware provides a unified approach to data. Whether you use our built-in storage or connect your own, you use the same Functional blocks to manage your data.
+The storage category holds the classes that persist and manage your App's data. Heisenware includes two production-ready internal databases (PostgreSQL and InfluxDB), so you can store data without setting anything up. The same classes also connect to your own external database servers.
 
-## Relational storage (SQL)
+## Relational storage
 
-For structured data like user profiles, orders, or inventory, we use the [relational database](relational-database.md) class.
+Use the [relational database](relational-database.md) class for structured data like user profiles, orders, or inventory.
 
-* **Internal (managed)**: Every account comes with a pre-configured instance called `internal-postgres`. You can start dragging CRUD Functions onto the canvas immediately. No further setup is required.
-* **External (connect)**: If you have an existing SQL database (PostgreSQL, MySQL, SQLite, MSSQL), you simply use the `create` Function of the same class to establish a connection.
+Every account includes a pre-configured instance called `internal-postgres`. It runs a managed PostgreSQL database, so you can drag CRUD functions onto the canvas and store data right away.
 
-## Time series storage (IoT)
+To connect an existing SQL server instead (PostgreSQL, MySQL, SQLite, MSSQL), create a new instance with the `create` function and enter your connection details.
 
-For high-frequency data like sensor readings or machine telemetry, we use the [time series database](timeseries-database.md) class.
+## Timeseries storage
 
-* **Internal (managed)**: Use the [Recorder](../../extension-nodes/recorder.md) right in your flow to store millions of data points with zero configuration and the `internal-influxdb` to read and query that data.
-* **External (connect)**: Use the `create` Function to point the logic toward your own InfluxDB server.
+Use the [timeseries database](timeseries-database.md) class for high-frequency data like sensor readings or machine telemetry.
+
+Every account includes a managed InfluxDB instance called `internal-influxdb`. The easiest way to fill it: Attach a [recorder](../../extension-nodes/recorder.md) to any function output and it stores every value with zero configuration. Use the timeseries database functions to read and query the recorded data.
+
+To connect your own InfluxDB server instead, create a new instance with the `create` function.
 
 ## In-memory storage
 
-For temporary data that only needs to live during a session (and doesn't need to be saved to a disk), use our specialized utility classes:
+For temporary data that only lives during a session and does not need to be saved to disk, use these lightweight classes:
 
-* [**Data store**](data-store.md): For simple state management.
-* [**Circular buffer**](circular-buffer.md): For "rolling" data (e.g., the last 100 values for a live chart).
+* [Data store](data-store.md): Simple state management.
+* [Circular buffer](circular-buffer.md): Rolling data, e.g. the last 100 values for a live chart.
