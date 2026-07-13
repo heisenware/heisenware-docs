@@ -1,4 +1,4 @@
-# HTTP client
+# HTTP / REST
 
 The `Http` class provides a flexible engine for executing HTTP requests and interacting with REST APIs. It supports all standard HTTP verification methods and works in two modes: as standalone static utilities for immediate, one-off calls, or as a persistent instance client configured with uniform base URLs, shared header contexts, and automated authentication handlers.
 
@@ -242,8 +242,9 @@ Returns the communication rule matrix supported by the resource server.
 ## Tips and tricks
 
 ### Automatic parameter formatting fallback
+
 When executing functions using either the static utilities or the instance methods, passing a flat object straight into the `options` field without defining specific top-level routing namespaces like `params` or `headers` triggers a backward compatibility handler. The processor automatically intercepts this block and remaps the flat object into a nested query object assigned directly to `params`.
 
 ### Intercepted error mappings
+
 If a remote service triggers a network fault or issues an evaluation code matching an HTTP error range (such as `404` or `500`), the adapter aggregates the context details. It throws an error compiling the technical status code value and matching text strings, while attaching the original payload response inside the execution error cause.
-```
