@@ -6,7 +6,7 @@ Custom Extensions let you extend the Heisenware platform to your specific needs.
 We are actively working on the same idea for C++ and Python.
 {% endhint %}
 
-The best starting point is our [docker-extension-starter-js](https://github.com/heisenware/heisenware-docker-extension-starter-js). We recommend [downloading](https://github.com/heisenware/heisenware-docker-extension-starter-js/archive/refs/heads/master.zip) this project as a scaffold, changing it to your needs, and placing it under your own version control.
+The best starting point is our [docker-extension-starter-js](https://github.com/heisenware/heisenware-docker-extension-starter-js). We recommend [downloading this project](https://github.com/heisenware/heisenware-docker-extension-starter-js/archive/refs/heads/master.zip) as a scaffold, changing it to your needs, and placing it under your version control.
 
 You end up creating a Docker image whose containers integrate into the platform in one of two ways.
 

@@ -5,7 +5,7 @@ Docker Extensions expand the platform's capabilities using Docker container tech
 {% hint style="info" %}
 #### Not to be confused with extension nodes
 
-Docker Extensions add whole new function classes to the platform. [Extension nodes](../../extension-nodes.md) (modifiers, filters, recorders, and error handlers) are the small nodes that attach to a function's output on the canvas.
+Docker Extensions add whole new function classes to the platform. [Extension nodes](../../extension-nodes/) (modifiers, filters, recorders, and error handlers) are the small nodes that attach to a function's output on the canvas.
 {% endhint %}
 
 There are two categories of Docker Extensions:
@@ -17,7 +17,7 @@ There are two categories of Docker Extensions:
 
 Pre-built modules provided by Heisenware to add advanced capabilities without any coding:
 
-<table><thead><tr><th width="240">Extension</th><th>Description</th></tr></thead><tbody><tr><td><a href="industrial-blockchain.md">Industrial blockchain</a></td><td>Immutable data logging and audit trails.</td></tr><tr><td><a href="rag-ai/">RAG AI</a></td><td>Retrieval-Augmented Generation for context-aware AI assistants.</td></tr><tr><td><a href="process-simulations.md">Process simulations</a></td><td>Simulates energy consumption, production and machine data, and silo fill levels.</td></tr><tr><td><a href="ogc-sensorthings-api.md">OGC SensorThings API</a></td><td>Accesses and manages IoT sensor data via the standardized OGC SensorThings API.</td></tr></tbody></table>
+<table><thead><tr><th width="207.5927734375">Extension</th><th>Description</th></tr></thead><tbody><tr><td><a href="industrial-blockchain.md">Industrial blockchain</a></td><td>Immutable data logging and audit trails.</td></tr><tr><td><a href="rag-ai/">RAG AI</a></td><td>Retrieval-Augmented Generation for context-aware AI assistants.</td></tr><tr><td><a href="process-simulations.md">Process simulations</a></td><td>Simulates energy consumption, production and machine data, and silo fill levels.</td></tr><tr><td><a href="ogc-sensorthings-api.md">OGC SensorThings API</a></td><td>Accesses and manages IoT sensor data via the standardized OGC SensorThings API.</td></tr></tbody></table>
 
 Once installed, these extensions run alongside the standard platform functionality. They appear as new blocks in the [Function Explorer](../function-explorer.md) and can be used immediately in your flows.
 
