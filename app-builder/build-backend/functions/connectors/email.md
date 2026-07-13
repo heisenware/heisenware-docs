@@ -1,15 +1,16 @@
-# Email
+# Email connector
 
-The email connector sends emails via SMTP. It configures a mail transport once and then sends messages with plain text or HTML content and any number of attachments.
+The email connector sends emails via SMTP by configuring a mail transport once and transmitting messages containing plain text or HTML content alongside any number of attachments.
+
+This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can interact with an SMTP server, though Heisenware includes a pre-initialized instance out of the box.
 
 {% hint style="info" %}
 #### Ready-to-use instance
-
-Heisenware ships with a pre-initialized email instance called `internal-email`. It is always available, so you can use `send` directly without calling `create`:
+Heisenware ships with a pre-initialized email instance called `internal-email`. It is always available, letting you call `send` directly.
 
 ![](<../../../../.gitbook/assets/image (483).png>)
 
-To send through another mailing system (e.g. Gmail, Office 365, or a private SMTP server), create a new instance with your server's connection and authentication details.
+To send through another mailing system (such as Gmail, Office 365, or a private SMTP server), create a new instance with your server's connection and authentication details.
 {% endhint %}
 
 ### `create`
@@ -18,7 +19,72 @@ Creates a new email client instance by configuring the connection to an SMTP ser
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>host</code></td><td>The hostname or IP address of your SMTP server (e.g. <code>smtp.gmail.com</code>).</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port to connect to. Common values: <code>465</code> for SMTPS (use with <code>secure: true</code>), <code>587</code> for STARTTLS (use with <code>secure: false</code>), <code>25</code> for unencrypted SMTP. Default <code>587</code>, or <code>465</code> if <code>secure</code> is <code>true</code>.</td><td>integer</td></tr><tr><td></td><td><code>secure</code></td><td>If <code>true</code>, the connection uses direct SSL/TLS. If <code>false</code> (the default), the connection upgrades to TLS via STARTTLS if the server supports it.</td><td>boolean</td></tr><tr><td></td><td><code>ignoreTLS</code></td><td>If <code>true</code> (and <code>secure</code> is <code>false</code>), TLS is not used even if the server supports STARTTLS. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>requireTLS</code></td><td>If <code>true</code> (and <code>secure</code> is <code>false</code>), the connection must upgrade to STARTTLS, otherwise no message is sent. Default <code>false</code>.</td><td>boolean</td></tr><tr><td><code>auth</code></td><td><code>user</code></td><td>The username, typically your full email address.</td><td>string</td></tr><tr><td></td><td><code>pass</code></td><td>The password for the email account.</td><td>string</td></tr><tr><td></td><td><code>type</code></td><td>The authentication type: <code>login</code> (default) or <code>oauth2</code>.</td><td>string</td></tr><tr><td><code>defaults</code></td><td></td><td>An object merged into every email sent with this instance, e.g. to set a shared <code>from</code> address.</td><td>object</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>host</code></td>
+      <td>The hostname or IP address of your SMTP server (such as <code>smtp.gmail.com</code>).</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>port</code></td>
+      <td>The port to connect to. Common values include 465 for SMTPS (use with <code>secure: true</code>), 587 for STARTTLS (use with <code>secure: false</code>), or 25 for unencrypted SMTP. Default 587, or 465 if <code>secure</code> is true.</td>
+      <td>integer</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>secure</code></td>
+      <td>If true, the connection uses direct SSL/TLS. If false, the connection upgrades to TLS via STARTTLS if the server supports it. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>ignoreTLS</code></td>
+      <td>If true (and <code>secure</code> is false), the connector does not use TLS even if the server supports STARTTLS. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>requireTLS</code></td>
+      <td>If true (and <code>secure</code> is false), the connection must upgrade to STARTTLS, otherwise the connector does not send the message. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td><code>auth</code></td>
+      <td><code>user</code></td>
+      <td>The username, typically your full email address.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>pass</code></td>
+      <td>The password for the email account.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>type</code></td>
+      <td>The authentication type: <code>login</code> or <code>oauth2</code>. Default <code>login</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>defaults</code></td>
+      <td></td>
+      <td>An object merged into every email sent with this instance, such as to set a shared <code>from</code> address.</td>
+      <td>object</td>
+    </tr>
+  </tbody>
+</table>
 
 For OAuth2 (`type: oauth2`), provide the standard nodemailer OAuth2 keys in `auth` (such as `clientId`, `clientSecret`, `refreshToken`, and `accessToken`).
 
@@ -28,7 +94,7 @@ Right-click the `auth` input and mark it as a secret to mask the password.
 
 #### Examples
 
-Example 1: Connecting with STARTTLS (e.g. Office 365)
+Example 1: Connecting with STARTTLS (such as Office 365)
 
 ```yaml
 # options
@@ -54,19 +120,108 @@ user: my-user@my-legacy-server.com
 pass: another-password
 ```
 
+#### Output
+
+Returns the email client instance. Throws an error if configuration fails.
+
 ### `send`
 
 Composes and sends an email. The function automatically detects whether `content` is HTML or plain text.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th width="130">Key</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td><code>from</code></td><td>The sender's address, plain (<code>sender@server.com</code>) or formatted (<code>'"Sender Name" &#x3C;sender@server.com>'</code>). Omit it if the instance defines a default <code>from</code>.</td><td>string</td></tr><tr><td></td><td><code>to</code></td><td>The primary recipient(s), as a single address, a comma-separated string, or an array of strings.</td><td>string or array</td></tr><tr><td></td><td><code>cc</code></td><td>Carbon copy recipient(s), same formats as <code>to</code>.</td><td>string or array</td></tr><tr><td></td><td><code>bcc</code></td><td>Blind carbon copy recipient(s), same formats as <code>to</code>.</td><td>string or array</td></tr><tr><td><code>subject</code></td><td></td><td>The subject line of the email.</td><td>string</td></tr><tr><td><code>content</code></td><td></td><td>The body of the email, as plain text or HTML.</td><td>string</td></tr><tr><td><code>attachments</code></td><td><code>filename</code></td><td>The filename shown in the email. Unicode is allowed.</td><td>string</td></tr><tr><td></td><td><code>content</code></td><td>The attachment content as a string, Buffer, or stream. For base64 content, add <code>encoding: base64</code>.</td><td>any</td></tr><tr><td></td><td><code>encoding</code></td><td>The encoding of the <code>content</code> value, e.g. <code>base64</code>.</td><td>string</td></tr><tr><td></td><td><code>path</code></td><td>A file path to the attachment. Streams the file from disk, which is more memory-efficient for large files than <code>content</code>.</td><td>string</td></tr><tr><td></td><td><code>href</code></td><td>A URL to the file. The content is downloaded from the URL.</td><td>string</td></tr><tr><td></td><td><code>httpHeaders</code></td><td>Optional HTTP headers to pass with the <code>href</code> request, e.g. an authorization header.</td><td>object</td></tr><tr><td></td><td><code>cid</code></td><td>A unique content ID to embed the attachment as an inline image in the HTML body (e.g. <code>&#x3C;img src="cid:my-image-cid"></code>).</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>address</code></td>
+      <td><code>from</code></td>
+      <td>The sender's address, plain (<code>sender@server.com</code>) or formatted (<code>'"Sender Name" &lt;sender@server.com&gt;'</code>). Omit this if the instance defines a default <code>from</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>to</code></td>
+      <td>The primary recipient or recipients, provided as a single address, a comma-separated string, or an array of strings.</td>
+      <td>string or array</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>cc</code></td>
+      <td>Carbon copy recipients, using the same formats as <code>to</code>.</td>
+      <td>string or array</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>bcc</code></td>
+      <td>Blind carbon copy recipients, using the same formats as <code>to</code>.</td>
+      <td>string or array</td>
+    </tr>
+    <tr>
+      <td><code>subject</code></td>
+      <td></td>
+      <td>The subject line of the email.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>content</code></td>
+      <td></td>
+      <td>The body of the email, provided as plain text or HTML.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>attachments</code></td>
+      <td><code>filename</code></td>
+      <td>The filename shown in the email. Unicode characters are allowed.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>content</code></td>
+      <td>The attachment content as a string, Buffer, or stream. For base64 content, add <code>encoding: base64</code>.</td>
+      <td>any</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>encoding</code></td>
+      <td>The encoding of the <code>content</code> value, such as <code>base64</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>path</code></td>
+      <td>A file path to the attachment. This streams the file from disk, which is more memory-efficient for large files than <code>content</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>href</code></td>
+      <td>A URL to the file. The connector downloads the content from this URL.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>httpHeaders</code></td>
+      <td>Optional HTTP headers to pass with the <code>href</code> request, such as an authorization header.</td>
+      <td>object</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>cid</code></td>
+      <td>A unique content ID to embed the attachment as an inline image in the HTML body (for example, <code>&lt;img src="cid:my-image-cid"&gt;</code>).</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
-`attachments` is an array. Each element is an object with the keys above; provide either `content`, `path`, or `href` per attachment.
-
-#### Output
-
-Returns `true` on a successful send. On failure, the function logs the error and returns nothing; it does not throw.
+The `attachments` property accepts an array of objects containing the keys listed above. Provide either `content`, `path`, or `href` per attachment.
 
 #### Examples
 
@@ -146,17 +301,30 @@ Check out our new logo!
 ]
 ```
 
+#### Output
+
+Returns `true` on a successful send. If the send fails, the function logs the error and returns nothing without throwing an error.
+
 ### `delete`
 
 Removes the instance and its configured mail transport.
 
 {% hint style="danger" %}
-Deleting an instance removes its configuration. To send through that server again, trigger `create` anew.
+#### Irreversible action
+Deleting an instance removes its configuration. To send through that server again, you must trigger `create` anew.
 {% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
 
 ## App Builder example
 
-In the example below, a [form](../../../build-frontend/widgets/input-widgets/form.md) fills the subject and content, an [upload](../../../build-frontend/widgets/input-widgets/upload.md) widget provides the attachments, and the recipient address is predefined. A button triggers the `send` function.
+In the example below, a [form](../../../../build-frontend/widgets/input-widgets/form.md) fills the subject and content, an [upload](../../../../build-frontend/widgets/input-widgets/upload.md) widget provides the attachments, and the recipient address is predefined. A button triggers the `send` function.
 
 <figure><img src="../../../../.gitbook/assets/image (418).png" alt=""><figcaption></figcaption></figure>
 
