@@ -1,6 +1,6 @@
 # Connectors
 
-Connectors are [functions](/app-builder/build-backend/functions.md) that handle translation between Heisenware and external systems. They let flows communicate natively with third-party systems, industrial protocols, and external databases.
+Connectors are [functions](/app-builder/build-backend/functions/README.md) that handle translation between Heisenware and external systems. They let flows communicate natively with third-party systems, industrial protocols, and external databases.
 
 ## Connection scenarios
 
@@ -56,25 +56,25 @@ The following table lists the available connectors and their required configurat
 
 | Connector | Description | Type |
 | :--- | :--- | :--- |
-| [Allen-Bradley](/app-builder/build-backend/functions/connectors/allen-bradley.md) | Connects directly to Allen-Bradley PLCs for machine data acquisition and control. | Instance creation required|
-| [Email](/app-builder/build-backend/functions/connectors/email.md) | Sends emails via SMTP. | Instance creation required|
+| [Allen-Bradley](/app-builder/build-backend/functions/connectors/allen-bradley.md) | Connects directly to Allen-Bradley PLCs for machine data acquisition and control. | Instance creation required |
+| [Email](/app-builder/build-backend/functions/connectors/email.md) | Sends emails via SMTP. | Instance creation required |
 | [File I/O](/app-builder/build-backend/functions/connectors/file-i-o.md) | Reads from and writes to files on a connected file system. | Static functions only |
 | [GraphQL](/app-builder/build-backend/functions/connectors/graphql.md) | Interacts with any GraphQL API for flexible data queries. | Static functions only |
-| [GPIO Counter](/app-builder/build-backend/functions/connectors/gpio-counter.md) | Counts digital pulses on Raspberry Pi GPIO pins, with automatic run/stop detection. | Instance creation required|
-| [Heidenhain DNC](/app-builder/build-backend/functions/connectors/heidenhain-dnc.md) | Connects to Heidenhain DNC systems and requires a local connection scenario. | Instance creation required|
-| [Heidenhain OPC UA](/app-builder/build-backend/functions/connectors/heidenhain-opc-ua.md) | Connects to Heidenhain controllers using the OPC UA protocol. | Instance creation required|
+| [GPIO Counter](/app-builder/build-backend/functions/connectors/gpio-counter.md) | Counts digital pulses on Raspberry Pi GPIO pins, with automatic run/stop detection. | Instance creation required |
+| [Heidenhain DNC](/app-builder/build-backend/functions/connectors/heidenhain-dnc.md) | Connects to Heidenhain DNC systems and requires a local connection scenario. | Instance creation required |
+| [Heidenhain OPC UA](/app-builder/build-backend/functions/connectors/heidenhain-opc-ua.md) | Connects to Heidenhain controllers using the OPC UA protocol. | Instance creation required |
 | [HTTP / REST](/app-builder/build-backend/functions/connectors/http-rest.md) | Makes requests to standard web APIs and HTTP endpoints. | Mixed (Static and instance options) |
-| [Hydra MIP](/app-builder/build-backend/functions/connectors/hydra-mip.md) | Integrates natively with the Manufacturing Integration Platform (MIP). | Instance creation required|
-| [Kuando Busylight](/app-builder/build-backend/functions/connectors/kuando-busylight.md) | Controls Kuando Busylight status indicators. | Instance creation required|
-| [Label Printer](/app-builder/build-backend/functions/connectors/label-printer.md) | Sends print commands to ZPL-compatible label printers. | Instance creation required|
-| [Modbus](/app-builder/build-backend/functions/connectors/modbus.md) | Communicates with industrial devices using the Modbus protocol. | Instance creation required|
-| [MQTT Client](/app-builder/build-backend/functions/connectors/mqtt-client.md) | Connects to an MQTT broker to publish and subscribe to topics. | Instance creation required|
-| [OPC UA Client](/app-builder/build-backend/functions/connectors/opc-ua-client.md) | Connects to an OPC UA server for industrial automation data exchange. | Instance creation required|
-| [OPC UA Server](/app-builder/build-backend/functions/connectors/opc-ua-server.md) | Deploys an OPC UA server to expose data from the application. | Instance creation required|
+| [Hydra MIP](/app-builder/build-backend/functions/connectors/hydra-mip.md) | Integrates natively with the Manufacturing Integration Platform (MIP). | Instance creation required |
+| [Kuando Busylight](/app-builder/build-backend/functions/connectors/kuando-busylight.md) | Controls Kuando Busylight status indicators. | Instance creation required |
+| [Label Printer](/app-builder/build-backend/functions/connectors/label-printer.md) | Sends print commands to ZPL-compatible label printers. | Instance creation required |
+| [Modbus](/app-builder/build-backend/functions/connectors/modbus.md) | Communicates with industrial devices using the Modbus protocol. | Instance creation required |
+| [MQTT Client](/app-builder/build-backend/functions/connectors/mqtt-client.md) | Connects to an MQTT broker to publish and subscribe to topics. | Instance creation required |
+| [OPC UA Client](/app-builder/build-backend/functions/connectors/opc-ua-client.md) | Connects to an OPC UA server for industrial automation data exchange. | Instance creation required |
+| [OPC UA Server](/app-builder/build-backend/functions/connectors/opc-ua-server.md) | Deploys an OPC UA server to expose data from the application. | Instance creation required |
 | [Operating System (OS)](/app-builder/build-backend/functions/connectors/operating-system-os.md) | Accesses statistics and information from the host operating system. | Static functions only |
-| [Relational database](/app-builder/build-backend/functions/storage/relational-database.md) | Connects to external SQL databases. | Instance creation required|
-| [RS-232/485](/app-builder/build-backend/functions/connectors/rs-232-485.md) | Communicates with devices over a serial port. | Instance creation required|
-| [SAP Digital Manufacturing](/app-builder/build-backend/functions/connectors/sap-digital-manufacturing.md) | Integrates natively with SAP Digital Manufacturing. | Instance creation required|
-| [Siemens S7](/app-builder/build-backend/functions/connectors/siemens-s7.md) | Connects directly to Siemens S7 PLCs for data acquisition and control. | Instance creation required|
-| [Timeseries database](/app-builder/build-backend/functions/storage/timeseries-database.md) | Connects to external InfluxDB databases. | Instance creation required|
-| [Zebra RFID IoT](/app-builder/build-backend/functions/connectors/zebra-rfid-iot.md) | Interacts with Zebra RFID readers and devices. | Instance creation required|
+| [Relational database](/app-builder/build-backend/functions/storage/relational-database.md) | Connects to external SQL databases. | Instance creation required |
+| [RS-232/485](/app-builder/build-backend/functions/connectors/rs-232-485.md) | Communicates with devices over a serial port. | Instance creation required |
+| [SAP Digital Manufacturing](/app-builder/build-backend/functions/connectors/sap-digital-manufacturing.md) | Integrates natively with SAP Digital Manufacturing. | Instance creation required |
+| [Siemens S7](/app-builder/build-backend/functions/connectors/siemens-s7.md) | Connects directly to Siemens S7 PLCs for data acquisition and control. | Instance creation required |
+| [Timeseries database](/app-builder/build-backend/functions/storage/timeseries-database.md) | Connects to external InfluxDB databases. | Instance creation required |
+| [Zebra RFID IoT](/app-builder/build-backend/functions/connectors/zebra-rfid-iot.md) | Interacts with Zebra RFID readers and devices. | Instance creation required |
