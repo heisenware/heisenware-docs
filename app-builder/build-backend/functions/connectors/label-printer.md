@@ -1,58 +1,76 @@
-# Label Printer
+# Label printer
 
-The `Label` class is designed for creating, managing, and printing labels. It works by using a template string (for example, in a printer-specific language like ZPL) with placeholders that can be dynamically filled with data. Multiple labels can be generated and collected into a single batch, which can then be sent directly to a network-connected printer.
+The label printer connector creates, manages, and prints layout streams on industrial network-connected devices. It merges baseline template layouts with dynamic variables, accumulates them into distinct printing batches, and transmits raw text streams directly over TCP network connections.
 
-Because this class manages state (like the current batch of labels), you must first create an instance of it before using its functions.
+You must create an instance of the `Label` class to preserve configuration schemas and track the state of accumulated label records.
 
-***
+## Instance and control
 
-### create
+### `create`
 
-Creates an instance of a label-maker and sets the initial template.
+Constructs a label printer instance and sets the initial layout template string.
 
-Parameters
+#### Parameters
 
-* template: A string representing the label's layout. Use `{{variable}}` syntax for placeholders that will be replaced with data.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td>The layout layout blueprint string. Use <code>{{variableName}}</code> syntax to mark the layout fields that receive dynamic text updates.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
 
-This example creates a `Label` instance with a simple ZPL template for a 4x6 inch label.
+An instance of the label printer.
+
+#### Example
+
+This example initializes an instance using a standard Zebra Programming Language (ZPL) layout template tailored for a 4x6 inch label area:
 
 ```yaml
 # template
 ^XA^LL1218^PW812^FO50,50^A0N,50,50^FD{{product_name}}^FS^FO50,120^A0N,30,30^FDPart No: {{part_number}}^FS^XZ
 ```
 
-***
+### `setTemplate`
 
-### setTemplate
+Updates the print template layout blueprint for an existing instance. Calling this function automatically flushes all previously generated label text records from the internal print queue.
 
-Updates the template for an existing `Label` instance. Note that calling this function will also clear the current batch of any previously generated labels.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td>The updated layout layout text block.</td><td>string</td></tr></tbody></table>
 
-* template: The new template string to use for subsequent labels.
+#### Output
 
-Example
+Returns the updated template string.
+
+#### Example
 
 ```yaml
 # template
 ^XA^FO100,100^A0N,40,40^FD{{message}}^FS^XZ
 ```
 
-***
+### `getTemplate`
 
-### addLabel
+Retrieves the text blueprint layout currently assigned to the active instance.
 
-Generates a new label by filling the current template with the provided variables. The newly created label is added to the internal batch for later printing. The function also returns the single, generated label string.
+#### Parameters
 
-Parameters
+None.
 
-* variables: An object where each key corresponds to a placeholder in the template (without the curly braces) and its value is the data to be inserted.
+#### Output
 
-Example
+Returns the active template string line.
 
-Using the template from the `create` example, this adds a specific product label to the batch.
+### `addLabel`
+
+Generates a single label record by inserting dynamic key data variables straight into the template placeholders, then automatically saves the entry to the printing batch.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variables</code></td><td>An object where each key corresponds exactly to an designated template placeholder tag name excluding the curly brackets.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the compiled text string value with all placeholder tags replaced. The function throws a validation error if any template placeholder variable is missing from the input properties object.
+
+#### Example
 
 ```yaml
 # variables
@@ -60,58 +78,97 @@ product_name: High-Torque Motor
 part_number: HT-5000
 ```
 
-Output
+### `showBatch`
 
-Returns the generated label string with variables replaced. For example: `^XA^LL1218^PW812^FO50,50^A0N,50,50^FDHigh-Torque Motor^FS^FO50,120^A0N,30,30^FDPart No: HT-5000^FS^XZ`
+Retrieves the complete sequence of generated label records currently stored in the queue.
 
-***
-
-### showBatch
-
-Returns the entire current batch of labels that have been generated since the last time the batch was cleared.
-
-Parameters
+#### Parameters
 
 None.
 
-Output
+#### Output
 
-A single string containing all generated labels concatenated together.
+Returns a single concatenated text block containing all batched label instructions separated by carriage return and line feed markers (`\r\n`).
 
-***
+### `getNumberOfLabels`
 
-### clearBatch
+Queries the total quantity of labels currently compiled inside the printing queue.
 
-Removes all previously generated labels from the current batch, effectively starting a new, empty batch.
-
-Parameters
+#### Parameters
 
 None.
 
-Output
+#### Output
 
-Returns `true` upon successful clearing of the batch.
+Returns an integer tracking the length of the batch list.
 
-***
+### `clearBatch`
 
-### sendBatchToPrinter
+Clears out all accumulated label strings from the internal print queue to start a fresh batch sequence.
 
-Sends the entire current batch of labels to a specified printer over the network.
+#### Parameters
 
-Parameters
+None.
 
-* ip: The IP address of the target printer.
-* port: The network port of the printer. Defaults to `9100` if not specified.
+#### Output
 
-Example
+Returns `true` when the print queue array flushes successfully.
+
+### `removeDuplicates`
+
+Filters out identical text strings from the current print queue to avoid wasting media rolls on duplicated output patterns.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns an integer defining the total count of duplicate labels removed from the active batch list.
+
+### `sendBatchToPrinter`
+
+Transmits the compiled text block sequence directly to a network-connected industrial printer via a raw TCP socket connection.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>ip</code></td><td></td><td>The IP address of the destination network printer device.</td><td>string</td></tr><tr><td><code>port</code></td><td></td><td>The designated raw printing port. Default 9100.</td><td>integer</td></tr><tr><td><code>options</code></td><td><code>removeDuplicates</code></td><td>When set to <code>true</code>, automatically filters identical labels from the queue before transmitting data. Default false.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns a promise that resolves to `true` when transmission succeeds. The operation rejects with an error if the batch queue is empty, the connection times out past 5000 milliseconds, or network write paths fail.
+
+#### Example
 
 ```yaml
 # ip
 192.168.1.123
 # port
 9100
+# options
+removeDuplicates: true
 ```
 
-Output
+### `delete`
 
-This function returns a Promise. In the platform, this means it will return `null` if the batch is sent successfully or an error object if the connection or printing fails.
+Removes the instance and clears the label batch queues from memory.
+
+{% hint style="danger" %}
+Deleting an instance removes its configuration. To communicate with the printer again, trigger `create` anew.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Nothing.
+
+## Tips and tricks
+
+### Zebra hardware matching constraints
+The socket layer pushes layout text chunks joined by standard network carriage returns and line feeds (`\r\n`). This raw TCP output channel perfectly suits default print servers like the Zebra ZT411 UHF, or any network thermal engine expecting unfiltered ZPL commands.
+
+### Blueprint alteration behaviors
+Altering your print layouts mid-flow via `setTemplate` completely strips out the underlying data array. Always trigger this method before running your loops, because updating a structural blueprint layout automatically resets the layout memory to safeguard against printing mismatched layout fields.
