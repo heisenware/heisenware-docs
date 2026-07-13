@@ -1,125 +1,120 @@
-# OPC UA Server
+# OPC UA server
 
-The `OpcuaServer` class allows you to create and run a custom OPC UA server. Its primary feature is the ability to define a server's "information model" (the structure of folders, objects, and variables) declaratively. You can then add dynamic behavior by listening and responding to read/write requests from OPC UA clients using event handlers.
+The `OpcuaServer` class runs a custom OPC UA server on your infrastructure. It lets you construct a declarative information model out of folders, objects, and variables, and attach dynamic application logic to process incoming data reads and writes from external OPC UA clients. 
 
-## Important Concepts
+You must create an instance of this class to configure network listener ports, map variable schemas, and manage server lifecycles.
 
-To use this class effectively, it's crucial to understand how variables are defined and how to interact with them. Variables are defined within an `object` in the information model and can be one of three types, determined by which property they are defined under: `getters`, `setters`, or `requestors`.
+## Variable interaction types
 
-### Variable Interaction Types
+Variables are defined inside objects within the server's information model. Their operational behavior is governed by three distinct configuration categories:
 
-* `getters` (Read-Only from a Client's Perspective)
-  * These variables are managed _internally_ by your logic. An OPC UA client can read their value, but cannot write to it.
-  * Your platform logic is responsible for updating the value of a "getter" variable by calling the `setValue()` function whenever its state changes.
-  * Use Case: Displaying a machine's current temperature or speed that is read periodically from a sensor.
-* `setters` (Write-Only from a Client's Perspective)
-  * These variables are designed to receive data _from_ an OPC UA client. When a client writes a new value to a "setter" variable, the `onSet` event is triggered for that variable's path.
-  * Your `onSet` event handler contains the logic to process this new value (e.g., send a command to a machine).
-  * Crucially, after handling the input, you must call `setValue()` to acknowledge the change and update the server's internal state.
-  * Use Case: Allowing a client to set a target temperature or a production recipe.
-* `requestors` (Read-On-Demand)
-  * These variables do not have their value stored continuously on the server. Instead, when a client tries to read a "requestor" variable, the `onRequest` event is triggered.
-  * Your `onRequest` event handler must then fetch or calculate the value from its source and provide it back to the server by calling `setValue()`.
-  * Use Case: Querying a database or another API for a value only when a client explicitly asks for it.
+* **Getters (Read-Only for clients)** — Managed internally by your application logic. External OPC UA clients can read these values but cannot modify them. Your application logic updates a getter variable by calling `setValue` whenever its real-world state changes.
+* **Setters (Write-Only for clients)** — Designed to ingest data updates transmitted from external OPC UA clients. When a client modifies a setter node, the server triggers the `onSet` event handler. After your application logic processes the data, you must invoke `setValue` to finalize the node synchronization.
+* **Requestors (Read-On-Demand for clients)** — Variables whose data payloads are not held in continuous server cache memory. When a client reads a requestor node, the server fires the `onRequest` event handler. Your application logic must then immediately calculate or fetch the data value and hand it to the server using `setValue`.
 
-## Current Limitations
+## Server lifecycle
 
-* Security: The server currently operates with `SecurityPolicy.None` and `MessageSecurityMode.None`. This means the communication is unencrypted. Certificate-based security is not supported at this time.
-* Authentication: The primary mechanism for access control is the `allowAnonymous` flag in the constructor.&#x20;
-* Data Types: Only a predefined set of data types is supported for variables (e.g., `boolean`, `integer`, `string`, `arrayInteger`, etc.).
+### `create`
 
-## Creating OPC UA Server Instance
+Constructs an unconnected OPC UA server instance and maps out its information model structure.
 
-### create
+#### Parameters
 
-Creates a new OPC UA server instance. The structure of the server is defined by the `objects` array.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>objects</code></td><td>An array list defining folders, objects, and variables inside the server information model. Each node requires a <code>path</code> and a <code>type</code> (<code>folder</code> or <code>object</code>), along with <code>getters</code>, <code>setters</code>, or <code>requestors</code> primitive type maps. Required.</td><td>array</td></tr><tr><td></td><td><code>port</code></td><td>The TCP network port where the server listens for inbound connections. Separate parallel server instances must use distinct port numbers. Default 4840.</td><td>integer</td></tr><tr><td></td><td><code>allowAnonymous</code></td><td>Controls whether external clients can connect without validating user credentials. Default true.</td><td>boolean</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* `options`: An object for configuring the server.
-  * `objects`: An array of objects defining the server's information model. Each object must have:
-    * `path`: A `/` separated path for the folder or object (e.g., `MyMachine/Data`).
-    * `type`: Can be `folder` or `object`.
-    * `getters`, `setters`, `requestors`: Objects where each key is a variable name and the value is its data type (e.g., `{ myVariable: 'integer' }`).
-  * `port`: The TCP port for the server to listen on. Defaults to `4840`.
-  * `allowAnonymous`: If `true`, clients can connect without authentication. Defaults to `true`.
+An instance of the OPC UA server.
 
-Example: Defining an information model
+#### Example
 
 ```yaml
 # options
 port: 4841
 allowAnonymous: true
-objects: [
-  {
-    path: 'Machine1',
-    type: 'folder'
-  },
-  {
-    path: 'Machine1/Status',
-    type: 'object',
-    getters: {
-      currentSpeed: 'integer',
-      isHot: 'boolean'
-    },
-    setters: {
-      targetSpeed: 'integer'
-    },
-    requestors: {
-      uptime: 'string'
-    }
-  }
-]
+objects:
+  - path: Machine1
+    type: folder
+  - path: Machine1/Status
+    type: object
+    getters:
+      currentSpeed: integer
+      isHot: boolean
+    setters:
+      targetSpeed: integer
+    requestors:
+      uptime: string
 ```
 
-## Functions
+### `start`
 
-### onSet
+Initializes and brings up the underlying OPC UA server engine, exposing the endpoint to network traffic.
 
-Registers a handler that is triggered when a client writes a value to a `setter` variable.
+#### Parameters
 
-Parameters
+None.
 
-* `variablePath`: The full path to the variable (e.g., `Machine1/Status:targetSpeed`).
-* `listener`: The callback function that will be executed. It receives one argument: the `value` written by the client.
+#### Output
 
-Example
+Returns a string containing the primary endpoint connection URL (for example, `opc.tcp://localhost:4841/UA/HeisenwareOPCUAServer`).
 
-```yaml
-# variablePath
-Machine1/Status:targetSpeed
-# listener
-<callback>
-```
+### `stop`
 
-### onRequest
+Gracefully shuts down the active server engine and releases occupied network sockets.
 
-Registers a handler that is triggered when a client reads a `requestor` variable.
+#### Parameters
 
-Parameters
+None.
 
-* `variablePath`: The full path to the variable (e.g., `Machine1/Status:uptime`).
-* `listener`: The callback function that will be executed.
+#### Output
 
-Example
+Nothing.
 
-```yaml
-# variablePath
-Machine1/Status:uptime
-# listener
-<callback>
-```
+### `isStarted`
 
-### setValue
+Queries whether the underlying server engine is currently running and accepting client connections.
 
-Sets a new value for a specific variable on the server. This is the essential function used to update `getters` and to respond within `onSet` and `onRequest` handlers.
+#### Parameters
 
-Parameters
+None.
 
-* `variablePath`: The full path to the variable (e.g., `Machine1/Status:currentSpeed`).
-* `value`: The new value to set for the variable.
+#### Output
 
-Example
+Returns `true` if the server engine is active, otherwise `false`.
+
+### `delete`
+
+Removes the server instance from the runtime environment and deallocates address space configurations.
+
+{% hint style="danger" %}
+#### Delete instance
+
+Deleting an instance removes its configuration. To communicate with the device again, trigger `create` anew.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Nothing.
+
+## Data operations and events
+
+### `setValue`
+
+Sets a new data value for a specific variable node on the server. This function updates getter nodes and serves as the essential response vehicle within your custom `onSet` and `onRequest` event scripts.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variablePath</code></td><td>The destination path targeting a specific node variable, formatted as <code>path/to/object:variableName</code>. Required.</td><td>string</td></tr><tr><td><code>value</code></td><td>The data payload to store inside the node variable. Must match the declared schema data type. Required.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` if the node variable is validated and updated successfully, otherwise `false`.
+
+#### Example
 
 ```yaml
 # variablePath
@@ -128,104 +123,81 @@ Machine1/Status:currentSpeed
 1500
 ```
 
-### onServerUpdate
+### `onSet`
 
-Registers a handler that is triggered whenever a variable's value is updated on the server via `setValue()`. This event is throttled to fire at most once per second.
+Registers an event callback listener executed automatically whenever an external OPC UA client writes a new value to a designated `setter` variable node.
 
-Parameters
+#### Parameters
 
-* `listener`: The callback function, which receives `timestamp` and `variablePath` as arguments.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variablePath</code></td><td>The precise path of the setter variable node to monitor, formatted as <code>path/to/object:variableName</code>. Required.</td><td>string</td></tr><tr><td><code>listener</code></td><td>The callback function evaluated when a write occurs. Receives the updated value parameter sent by the client. Required.</td><td>callback</td></tr></tbody></table>
 
-Example
+#### Output
 
-```yaml
-# listener
-<callback>
-```
+Returns a confirmation string tracking successful registration: `'subscribed'`.
 
-### start
-
-Initializes and starts the OPC UA server, making it available for clients to connect.
-
-Output
-
-The endpoint URL of the running server (e.g., opc.tcp://my-pc:4841/UA/HeisenwareOPCUAServer).
-
-### stop
-
-Shuts down the OPC UA server.
-
-### isStarted
-
-Checks if the server is currently running.
-
-Output
-
-Returns true if the server is started, false otherwise.
-
-## Complete Usage Example
-
-Here’s a step-by-step example showing how to create, configure, and run the server based on the model defined in the `create` example.
-
-{% stepper %}
-{% step %}
-#### Create the Server (as shown above)
-
-First, create the server instance with the desired information model.
-{% endstep %}
-
-{% step %}
-#### Handle Client Writes (onSet)
-
-When a client sets a new targetSpeed, we process it and then confirm the change by calling setValue.
+#### Example
 
 ```yaml
 # variablePath
 Machine1/Status:targetSpeed
 # listener
-<callback that receives the new speed>
-  // Logic to send the new speed to the actual machine...
-  // After processing, confirm the value back to the OPC UA server:
-  // this.setValue('Machine1/Status:targetSpeed', newSpeed)
+<callback>
 ```
-{% endstep %}
 
-{% step %}
-#### Handle On-Demand Reads (onRequest)
+### `onRequest`
 
-When a client requests the uptime, we calculate it and provide it back via setValue.
+Registers an event callback listener executed automatically whenever an external OPC UA client attempts to read a designated `requestor` variable node on-demand.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variablePath</code></td><td>The precise path of the requestor variable node to monitor, formatted as <code>path/to/object:variableName</code>. Required.</td><td>string</td></tr><tr><td><code>listener</code></td><td>The callback function evaluated when an on-demand read request arrives. Required.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns a confirmation string tracking successful registration: `'subscribed'`.
+
+#### Example
 
 ```yaml
 # variablePath
 Machine1/Status:uptime
 # listener
 <callback>
-  // Logic to get the current machine uptime...
-  // const currentUptime = '2 days, 4 hours';
-  // this.setValue('Machine1/Status:uptime', currentUptime)
 ```
-{% endstep %}
 
-{% step %}
-#### Update Internal State (setValue)
+### `onServerUpdate`
 
-Imagine your platform has a separate loop that checks the machine's actual speed every 5 seconds. You would use setValue to update the currentSpeed getter.
+Registers a global diagnostic event listener evaluated whenever any data variable node value updates on the server via `setValue`.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function executed upon value update synchronization events. Receives an epoch millisecond timestamp and the modified variable path string. Required.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns a confirmation string tracking successful registration: `'subscribed'`.
+
+#### Example
 
 ```yaml
-# variablePath
-Machine1/Status:currentSpeed
-# value
-1498 // The speed read from the machine sensor
+# listener
+<callback>
 ```
-{% endstep %}
 
-{% step %}
-#### Start the Server
+## Tips and tricks
 
-After all handlers are configured, start the server.
+### Server update throttling constraints
+The internal notification processor throttles `onServerUpdate` events to fire a maximum of once per second to protect system resources. Rapid successions of `setValue` updates apply to memory values instantly, but listeners registered to track global server updates will receive notification markers aggregated at one-second intervals.
 
-```yaml
-# (Call the start() function)
-```
-{% endstep %}
-{% endstepper %}
+### Protocol and encryption limitations
+The local server implementation operates with unencrypted communication profiles (`SecurityPolicy.None` and `MessageSecurityMode.None`). It does not support custom application certificates or encrypted transport envelopes. Ensure you manage outer network security boundaries when routing client traffic across public infrastructure.
+
+### Data type mapping validation rules
+The underlying engine strictly validates values passed to `setValue` against your information model schema boundaries. Input data types must comply with these precise parameters:
+
+| Model data type | Expected platform primitive |
+| :--- | :--- |
+| `boolean` | Primitive Javascript boolean values (`true` or `false`). |
+| `string`, `date` | Textual strings. Dates must conform to standard ISO 8601 syntax. |
+| `integer`, `bigint`, `float`, `double`, `timestamp` | Numeric values. |
+| `arrayBoolean`, `arrayInteger`, `arrayString`, etc. | Standard array blocks containing matching primitive types. |
