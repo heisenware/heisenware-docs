@@ -1,8 +1,8 @@
 # Operating system
 
-The `OS` class provides a collection of static utility functions for retrieving live performance metrics and hardware information from the underlying operating system. It monitors CPU utilization, memory allocation, storage availability, network throughput, and running Docker container states. 
+The Operating system utility (`OS`) provides static functions to retrieve live performance metrics and hardware information from the host operating system. Use it to monitor CPU utilization, memory allocation, disk storage, network throughput, and running Docker containers. 
 
-Because all functions in this class are static, they do not manage state. You do not need to create or delete an instance to use them.
+Since all functions in this class are static, they do not manage state. You do not need to create an instance to use them.
 
 ## System metrics
 
@@ -12,7 +12,7 @@ Retrieves the current overall CPU utilization as a percentage.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The measurement window in milliseconds over which to calculate utilization. Default 1000.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The measurement window in milliseconds used to calculate utilization. Default 1000.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -39,11 +39,12 @@ Returns an integer representing the core count.
 
 ### `loadAverage`
 
-Retrieves the system load averages for the past 1, 5, and 15 minutes, normalized by the total number of available logical CPU cores.
+Retrieves system load averages for the past 1, 5, and 15 minutes, normalized by the total number of available logical CPU cores.
 
 {% hint style="info" %}
 #### Platform limitation
-Load averages are a Unix-specific metric. When executed on a Windows runtime environment, this function always returns `[0, 0, 0]`.
+
+Load averages are a Unix-specific metric. On Windows, this function always returns `[0, 0, 0]`.
 {% endhint %}
 
 #### Parameters
@@ -56,7 +57,7 @@ Returns an array of three numbers representing the normalized system load averag
 
 ### `driveInfo`
 
-Retrieves capacity and utilization metrics for the system's primary disk drive.
+Retrieves capacity and utilization metrics for the primary disk drive.
 
 #### Parameters
 
@@ -78,7 +79,7 @@ Returns an object containing disk storage statistics:
 
 ### `memInfo`
 
-Retrieves resource allocation and utilization metrics for the system's physical memory.
+Retrieves resource allocation and utilization metrics for the physical memory.
 
 #### Parameters
 
@@ -103,7 +104,7 @@ Retrieves network input and output throughput statistics aggregated across activ
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The measurement window in milliseconds over which to calculate network throughput. Default 1000.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The measurement window in milliseconds used to calculate network throughput. Default 1000.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -139,7 +140,7 @@ None.
 
 #### Output
 
-Returns an object breaking down system uptime into explicit chronological increments alongside the absolute duration in seconds:
+Returns an object breaking down system uptime into chronological increments alongside the absolute duration in seconds:
 
 ```json
 {
@@ -166,7 +167,7 @@ Returns a string containing the operating system identifier (such as `Linux`, `m
 
 ### `hostname`
 
-Retrieves the assigned network hostname of the local system.
+Retrieves the network hostname of the local system.
 
 #### Parameters
 
@@ -180,15 +181,15 @@ Returns a string containing the system hostname.
 
 ### `containerStats`
 
-Retrieves live resource utilization and status metrics for all running Docker containers, matching the output behavior of the standard `docker stats` command.
+Retrieves live resource utilization and status metrics for all running Docker containers.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>socketPath</code></td><td>The local file system path pointing to the Docker daemon socket communication interface. Default <code>'/var/run/docker.sock'</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>socketPath</code></td><td>The file system path to the Docker daemon socket. Default <code>'/var/run/docker.sock'</code>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of objects detailing container execution statistics, processing allocations, and calculated memory usage with inactive file cache overhead automatically removed:
+Returns an array of objects detailing container execution statistics, processing allocations, and memory usage with inactive file cache overhead removed:
 
 ```json
 [
@@ -216,15 +217,15 @@ Returns an array of objects detailing container execution statistics, processing
 
 ### `containerInfo`
 
-Retrieves comprehensive low-level configuration and state metadata profiles for all running Docker containers, matching the behavior of the `docker inspect` command.
+Retrieves configuration and state metadata profiles for all running Docker containers.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>socketPath</code></td><td>The local file system path pointing to the Docker daemon socket communication interface. Default <code>'/var/run/docker.sock'</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>socketPath</code></td><td>The file system path to the Docker daemon socket. Default <code>'/var/run/docker.sock'</code>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of detailed inspection objects containing container configuration profiles, layer settings, storage volume bindings, and internal network maps.
+Returns an array of detailed inspection objects containing container configuration profiles, layer settings, storage volume bindings, and network maps.
 
 #### Example
 
