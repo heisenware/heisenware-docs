@@ -1,115 +1,178 @@
 # Zebra RFID IoT
 
-This document provides a guide to using the `Zebra` class, a powerful interface for controlling and receiving data from Zebra Fixed RFID readers (e.g., FX7500, FX9600). The class leverages Zebra's modern IoT Connector (ZIOTC) service, which runs on the reader and communicates data over standard IoT protocols like MQTT.
+The Zebra RFID IoT connector controls and receives data from Zebra fixed RFID readers (such as the FX7500, FX9600, or ATR7000). Instead of managing direct physical serial wires or proprietary connections, the connector exchanges structured events and commands asynchronously over the platform's internal MQTT broker by communicating with the Zebra IoT Connector (ZIOTC) service running locally on the reader.
 
-## Architecture Overview
+You must create an instance to register functional topic scopes, track device heartbeats, and run tag data aggregation stream handlers.
 
-The `Zebra` class is designed to be the final piece in a larger data pipeline. It doesn't communicate with the reader directly over a serial or proprietary connection. Instead, it interacts with Heisenware's internal MQTT message broker, subscribing to topics that the reader's ZIOTC service publishes to, and publishing commands back to the reader.
+## Architecture and setup
 
-The flow is as follows:
+The communication line links the physical hardware reader directly to your application logic flows through an intermediary messaging loop:
 
-Zebra RFID Reader -> Zebra IoT Connector (on-reader service) -> Heisenware MQTT Broker -> Your Application (using this `Zebra` class)
+`Zebra RFID Reader` → `Zebra IoT Connector (On-Reader Service)` → `Platform MQTT Broker` → `Your Application Flow`
 
-{% hint style="success" %}
-**Important MQTT Topic Configuration**
+For this coordination to resolve, configure the ZIOTC service interface using the reader's local web administration console (located under **Communication > Zebra IoT Connector**) to append uniform structural topic suffixes matching these paths:
 
-For this class to function, you must configure the ZIOTC service on the reader's web interface (under Communication > Zebra IoT Connector) to use specific topic suffixes. The topics you configure must match the ones used by this class, which are constructed as follows:
+* Management Event Topic: `<Base Topic>/m-evt`
+* Data Event Topic: `<Base Topic>/d-evt`
+* Management Request Topic: `<Base Topic>/m-req`
+* Control Request Topic: `<Base Topic>/c-req`
 
-* Management Event Topic: `<Your Base Topic>/m-evt`
-* Data Event Topic: `<Your Base Topic>/d-evt`
-* Management Request Topic: `<Your Base Topic>/m-req`&#x20;
-* Control Request Topic: `<Your Base Topic>/c-req`&#x20;
+If your specific reader firmware version requires explicit response topic declarations, supplement the configuration with these routes:
+* Management Response Topic: `<Base Topic>/m-res`
+* Control Response Topic: `<Base Topic>/c-res`
 
-On newer versions of the web interface you may be also asked to enter a management and control response topic in those cases use:
+## Connection management
 
-* Management Response Topic: `<Your Base Topic>/m-res`&#x20;
-* Control Response Topic: `<Your Base Topic>/c-res`
-{% endhint %}
+### `create`
 
-## Available Functions
+Constructs a Zebra IoT connector instance and binds it to the configured root MQTT tracking topic path.
 
-### create
+#### Parameters
 
-Creates an instance of the Zebra IoT connector interface, which will then connect to the MQTT broker to communicate with a specific reader.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>baseTopic</code></td><td>The root MQTT topic string assigned to the target reader inside its local ZIOTC interface settings. Required.</td><td>string</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* `baseTopic`: The root MQTT topic for the target reader, as configured in its ZIOTC settings. This is required.
+An instance of the Zebra RFID connector interface.
 
-Example
+#### Example
 
 ```yaml
 # baseTopic
-<account>/zebra/atr7000/12345
+my-account/zebra/atr7000/12345
 ```
 
-### getVersion
+### `isConnected`
 
-Retrieves the reader's firmware and hardware version information.
+Queries whether the underlying MQTT communication channel to the broker layer is fully open and active.
 
-Output
+#### Parameters
 
-An object containing version details.
+None.
 
-### getNetwork
+#### Output
 
-Retrieves the reader's current network configuration (IP address, MAC address, etc.).
+Returns `true` if the communication client link is operational, otherwise `false`.
 
-Output
+### `delete`
 
-An object containing network details.
+Removes the connector instance from the local runtime engine execution context and clears all registered data and tracking listeners.
 
-### getConfig
+{% hint style="danger" %}
+#### Delete instance
 
-Retrieves the reader's entire configuration.
+Deleting an instance removes its configuration. To communicate with the device again, trigger `create` anew.
+{% endhint %}
 
-Output
+#### Parameters
 
-An object containing the full configuration.
+None.
 
-### getStatus
+#### Output
 
-Retrieves the reader's current operational status.
+Nothing.
 
-Output
+## Reader status and configuration
 
-An object containing status details.
+### `getVersion`
 
-### getLed
+Retrieves the structural hardware and system firmware version details reported by the connected reader.
 
-Retrieves the current state of the reader's status LED.
+#### Parameters
 
-Output
+None.
 
-An object describing the LED's color and state.
+#### Output
 
-### getMode
+An object containing version metadata parameters returned by the hardware host.
 
-Retrieves the reader's current tag reading mode.
+### `getNetwork`
 
-Output
+Retrieves the current low-level network interface settings running on the reader.
 
-An object describing the mode and its parameters.
+#### Parameters
 
-### getLogConfiguration
+None.
 
-Retrieves the reader's logging configuration.
+#### Output
 
-Output
+An object highlighting active network parameters, including local IP addresses and hardware MAC locations.
 
-An object containing logging details.
+### `getConfig`
 
-### setLed
+Retrieves the entire operational parameter configuration block currently deployed to the reader profile.
 
-Controls the reader's status LED.
+#### Parameters
 
-Parameters
+None.
 
-* `color`: The desired color. Can be `off`, `red`, `amber`, or `green`.
-* `seconds`: The duration in seconds for the LED to be in this state.
-* `flash`: A boolean indicating if the LED should flash.
+#### Output
 
-Example
+An object compiling the comprehensive operational settings of the hardware unit.
+
+### `getStatus`
+
+Queries the active, live device status profile of the physical reader hardware.
+
+#### Parameters
+
+None.
+
+#### Output
+
+An object detailing diagnostic hardware conditions and state parameters.
+
+### `getLed`
+
+Queries the active color state configuration displayed on the reader's application status indicator LED.
+
+#### Parameters
+
+None.
+
+#### Output
+
+An object detailing the target LED color and current visualization status.
+
+### `getMode`
+
+Retrieves the functional tag scanning mode configuration profile currently running on the device.
+
+#### Parameters
+
+None.
+
+#### Output
+
+An object tracking the current operational scan mode and related sub-parameters.
+
+### `getLogConfiguration`
+
+Queries the system logging rules and level configurations mapped to the reader device.
+
+#### Parameters
+
+None.
+
+#### Output
+
+An object detailing the active logging levels and event metrics.
+
+## Control and operations
+
+### `setLed`
+
+Manipulates the status color mode displayed on the physical reader unit's application LED.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The target color value to apply (<code>off</code>, <code>red</code>, <code>amber</code>, or <code>green</code>). Required.</td><td>string</td></tr><tr><td><code>seconds</code></td><td>The execution duration window in seconds for the color state to remain active. Required.</td><td>integer</td></tr><tr><td><code>flash</code></td><td>Forces an intermittent flashing animation routine when set to <code>true</code>. Required.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` once the management instruction successfully logs to the device.
+
+#### Example
 
 ```yaml
 # color
@@ -120,95 +183,95 @@ green
 true
 ```
 
-#### setMode
+### `setMode`
 
-Sets the mode of operation for the reader. This is a highly detailed function that configures all aspects of a reader's operational mode.
+Deploys detailed operational scanning attributes, antenna constraints, filtration rules, and metadata collection parameters to the reader unit.
 
-**Parameters**
+#### Parameters
 
-* `options`: Configuration options for the operation mode.
-  * `type`: The type of mode of operation. Defaults to `"SIMPLE"`.
-    * **Enum**: `"SIMPLE"`, `"INVENTORY"`, `"PORTAL"`, `"CONVEYOR"`, `"CUSTOM"`, `"DIRECTIONALITY"`
-  * `modeSpecificSettings`: Mode-specific settings (e.g., `inventorySettings`, `portalSettings`).
-  * `environment`: The type of environment in which the reader operates. Defaults to `"HIGH_INTERFERENCE"`.
-    * **Enum**: `"LOW_INTERFERENCE"`, `"HIGH_INTERFERENCE"`, `"VERY_HIGH_INTERFERENCE"`, `"AUTO_DETECT"`, `"DEMO"`
-  * `antennas`: Array of integers representing the antenna ports to use. If absent, all ports are used.
-  * `filter`: Tag ID filter object. If absent, no filter is used.
-  * `transmitPower`: Desired Transmit Power (in dBm). Can be a single number or an array of numbers. Defaults to `27` dBm (or `36` dBm EIRP for ATR).
-  * `antennaStopCondition`: Stop condition(s) for antennas. Can be a single object or an array of objects. Defaults to a single inventory round.
-  * `query`: Gen2 query parameters object.
-  * `selects`: Gen2 select parameters. Array of select objects (applied to all antennas) or an array of arrays (one per antenna).
-  * `delayAfterSelects`: Duration in milliseconds (0-65) to wait after the final select before issuing a query.
-  * `accesses`: Gen2 access commands (read, write, lock, kill). Can be an array of commands (applied to all antennas) or an array of arrays (one per antenna).
-  * `delayBetweenAntennaCycles`: Object defining a delay between antenna cycles if no tags are read.
-  * `tagMetaData`: Array of strings or objects to control tag metadata.
-    * **Enum strings**: `"ANTENNA"`, `"RSSI"`, `"PHASE"`, `"CHANNEL"`, `"SEEN_COUNT"`, `"PC"`, `"XPC"`, `"CRC"`, `"EPC"`, `"TID"`, `"USER"`, `"MAC"`, `"HOSTNAME"`, `"TAGURI"`, `"EPCURI"`.
-    * **Partial reads**: You can request portions of memory banks, e.g., `"EPC[1,3-5]"` to get the first word and words 3 through 5.
-    * **Objects**: Can be `{"userDefined": ...}` or `{"antennaNames": ...}`.
-  * `radioStartConditions`: Object to control when the radio starts inventorying after a "start" command.
-  * `radioStopConditions`: Object to control when an ongoing operation completes.
-  * `reportFilter`: Object to control when and how often a tag is reported. **Note**: Cannot be set in "INVENTORY" mode.
-  * `rssiFilter`: Object to filter tags by RSSI threshold. **Note**: FX9600 only.
-  * `beams`: Array of beam objects to use. **Note**: ATR7000 reader only.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>type</code></td><td>The functional tracking mode type selection (<code>SIMPLE</code>, <code>INVENTORY</code>, `PORTAL`, <code>CONVEYOR</code>, <code>CUSTOM</code>, <code>DIRECTIONALITY</code>). Required.</td><td>string</td></tr><tr><td></td><td><code>environment</code></td><td>The environmental RF interference mitigation tier (<code>LOW_INTERFERENCE</code>, <code>HIGH_INTERFERENCE</code>, <code>VERY_HIGH_INTERFERENCE</code>, <code>AUTO_DETECT</code>, <code>DEMO</code>). Default 'HIGH_INTERFERENCE'.</td><td>string</td></tr><tr><td></td><td><code>antennas</code></td><td>An array list of active antenna port indexes to include in the sweep cycle. Utilizes all ports if omitted.</td><td>array</td></tr><tr><td></td><td><code>transmitPower</code></td><td>The radio transmission energy power value expressed in dBm. Accepts a standalone number or an array of numbers. Default 27.</td><td>number or array</td></tr><tr><td></td><td><code>tagMetaData</code></td><td>An array list of metadata primitives to bundle with tracking events (such as <code>ANTENNA</code>, <code>RSSI</code>, <code>PHASE</code>, <code>CHANNEL</code>, <code>EPC</code>, <code>TID</code>).</td><td>array</td></tr><tr><td></td><td><code>antennaStopCondition</code></td><td>An object block defining operational lifecycle cut-off boundaries for active antennas.</td><td>object or array</td></tr><tr><td></td><td><code>filter</code></td><td>A tag filtration object tracking targeted EPC identifier prefix values.</td><td>object</td></tr></tbody></table>
 
-**Example 1: Configure a basic Inventory mode** _Goal: Read on antennas 1 & 2 at 30.1 dBm, stop after 500ms, and report RSSI and PC bits._
+#### Output
+
+Returns `true` when the configuration parameters deploy and confirm successfully.
+
+#### Examples
+
+Example 1: Basic inventory polling configuration
 
 ```yaml
 # options
 type: INVENTORY
-antennas: [1, 2]
+antennas:
+  - 1
+  - 2
 transmitPower: 30.1
-antennaStopCondition: [
-  { type: DURATION, value: 500 }
-]
-tagMetaData: ['RSSI', 'PC']
+antennaStopCondition:
+  - type: DURATION
+    value: 500
+tagMetaData:
+  - RSSI
+  - PC
 ```
 
-**Example 2: Advanced mode with filters and metadata** _Goal: Use PORTAL mode, filter for a specific tag prefix on antenna 1, set environment to low interference, and report EPC, TID, and RSSI._
+Example 2: Triggered portal filtering configuration
 
 ```yaml
 # options
 type: PORTAL
 environment: LOW_INTERFERENCE
-antennas: [1]
+antennas:
+  - 1
 transmitPower: 25
-filter: {
+filter:
   prefix: '3008'
-}
-tagMetaData: ['EPC', 'TID', 'RSSI']
-reportFilter: {
-  duration: 0 
-}
+tagMetaData:
+  - EPC
+  - TID
+  - RSSI
+reportFilter:
+  duration: 0
 ```
 
-Understanding Reader Modes
+### `start`
 
-The `type` parameter in `setMode` is crucial for optimizing reader performance:
+Instructs the remote reader unit to instantly start radio sweeps and begin streaming tag information records over data event channels.
 
-* `SIMPLE`: The most basic mode. It reads and reports every unique tag it sees. Good for simple "is this tag present?" applications.
-* `INVENTORY`: Optimized for taking stock. The reader periodically reports a list of all unique tags seen during an interval, along with metadata like read counts and signal strength (RSSI).
-* `PORTAL`: Designed for dock doors or checkpoints. The reader typically waits for an external trigger (e.g., a motion sensor) to start reading and reports the batch of tags that passed through.
-* `CONVEYOR`: Optimized for items moving on a conveyor belt, accurately capturing tags that are in view for only a short period.
-* `CUSTOM`: Allows for fine-grained control over low-level radio parameters for advanced scenarios.
+#### Parameters
 
-### start
+None.
 
-Commands the reader to start reading RFID tags. Tag data will be sent via data events.
+#### Output
 
-### stop
+Returns `true` when execution completes safely.
 
-Commands the reader to stop reading RFID tags.
+### `stop`
 
-### onHeartbeatEvent
+Instructs the remote reader unit to halt active radio polling sweeps and pause incoming tag data streams.
 
-Registers a handler to be notified of periodic heartbeat events from the reader, which indicate it is still online.
+#### Parameters
 
-Parameters
+None.
 
-* `name`: A unique name for this handler.
-* `handler`: The callback function that will receive the heartbeat event object.
+#### Output
 
-Example
+Returns `true` when execution completes safely.
+
+## Event listeners
+
+### `onHeartbeatEvent`
+
+Binds a validation callback handler evaluated immediately whenever periodic online heartbeat signals arrive from the tracking hardware.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>A unique identification tracking label string separating this specific event handler module. Required.</td><td>string</td></tr><tr><td><code>handler</code></td><td>The target callback script evaluated on arrival. Receives the raw heartbeat payload structure directly. Required.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns a confirmation verification string when successfully bound.
+
+#### Example
 
 ```yaml
 # name
@@ -217,16 +280,19 @@ heartbeat_checker
 <callback>
 ```
 
-### onErrorEvent
+### `onErrorEvent`
 
-Registers a handler to be notified of any error events reported by the reader.
+Binds a tracking callback handler evaluated instantly whenever the hardware platform intercepts an internal operational or system processing error fault.
 
-Parameters
+#### Parameters
 
-* `name`: A unique name for this handler.
-* `handler`: The callback function that will receive the error event object.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>A unique identification tracking label string separating this specific error handler block. Required.</td><td>string</td></tr><tr><td><code>handler</code></td><td>The target callback script executed upon fault detection events. Receives the system error object. Required.</td><td>callback</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns a confirmation verification string when successfully bound.
+
+#### Example
 
 ```yaml
 # name
@@ -235,21 +301,21 @@ error_logger
 <callback>
 ```
 
-### onDataEvent
+### `onDataEvent`
 
-Registers a handler to receive RFID tag data. This is the primary method for getting tag reads and includes options for filtering and aggregating data.
+Registers a data accumulation callback module used to intercept passing RFID tag captures. This block manages aggregation timelines, filters out extraneous reads, and packages metrics before routing payloads upstream.
 
-Parameters
+#### Parameters
 
-* `name`: A unique name for this data handler.
-* `handler`: The callback function that will receive the tag data.
-* `options`: An optional object to configure data handling.
-  * `scanDuration`: Time in ms to collect unique tags before reporting them in a single batch. `0` reports tags immediately.
-  * `clearAfter`: Time in ms of inactivity after which the internal list of seen tags is cleared.
-  * `aggregate`: If `true`, reports a batch of unique tags seen during the `scanDuration`. If `false`, reports every single tag read immediately.
-  * `antenna`: If set to an integer, only tags read by that specific antenna will be reported.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>A unique tracking label identifier used to map this data stream handler module. Required.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>The destination script executed on frame assembly validation. Receives an array list of tracked messages. Required.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>scanDuration</code></td><td>The temporal collection accumulation window in milliseconds over which to group unique tag reads into a single combined batch. Set to 0 to deliver instantly. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>clearAfter</code></td><td>A quiet operational window limit in milliseconds of absolute interface inactivity after which the internal list flushes automatically. Set to 0 to never clear. Default 10000.</td><td>integer</td></tr><tr><td></td><td><code>aggregate</code></td><td>Groups matching unique hardware records captured during the scan duration window when set to <code>true</code>. Disables batching and delivers items standalone when <code>false</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>antenna</code></td><td>An optional antenna port index filter number to isolate incoming messages to a single physical port line path.</td><td>integer</td></tr></tbody></table>
 
-Example: Immediate Reporting
+#### Output
+
+Returns a confirmation verification status string when successfully mapped.
+
+#### Examples
+
+Example 1: Streaming data delivery without aggregation
 
 ```yaml
 # name
@@ -260,9 +326,9 @@ immediate_reporter
 aggregate: false
 ```
 
-Example: Aggregated Reporting
+Example 2: Compiled window aggregation
 
-This will collect all unique tags seen in a 2-second window and then fire the handler with the complete list.
+This gathers unique records inside a rolling 2-second collection timeline before evaluating the callback with the full inventory batch array:
 
 ```yaml
 # name
@@ -274,21 +340,48 @@ scanDuration: 2000
 aggregate: true
 ```
 
-### clearData
+### `clearData`
 
-Manually clears the internal cache of seen tags for a specific data handler. This is useful for starting a fresh reading session without waiting for the `clearAfter` timeout.
+Manually clears out the internal tracking message records cached inside a targeted data listener. This utility resets tracking tables instantly without waiting for a structural `clearAfter` timeline threshold to trigger.
 
-Parameters
+#### Parameters
 
-* `name`: The name of the `onDataEvent` handler to clear.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The explicit string lookup name of the targeted `onDataEvent` handler cache to flush. Required.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns `true` when the internal storage maps clear completely.
+
+#### Example
 
 ```yaml
 # name
 batch_reporter
 ```
 
-Output
+### `removeDataListener`
 
-Returns true on success.
+Unregisters an operational data tracking listener module and tears down its associated collection timers safely.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The precise registration string label of the target data listener module to destroy. Required.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns a confirmation string indicating whether the module path was successfully unbound or not found.
+
+#### Example
+
+```yaml
+# name
+batch_reporter
+```
+
+## Tips and tricks
+
+### Operational design parameters
+* `SIMPLE` — Baseline tracker profile. Delivers a data event notification immediately for every single tag read signature encountered. Ideal for direct detection routines.
+* `INVENTORY` — Optimized for counting assets. Periodically aggregates and delivers full batch summaries of every unique tag identified during the tracking interval along with tracking statistics.
+* `PORTAL` — Tailored for entry control doors, sorting gates, or logistical chokepoints. Operates in conjunction with physical sensors or automated triggers to track localized physical item transit bursts.
+* `CONVEYOR` — Calibrated for picking up fast-moving targets traveling along high-speed automation line tracks where visibility windows span a fraction of a second.
