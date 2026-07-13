@@ -1,114 +1,103 @@
 # Hydra MIP
 
-Heisenware is a partner company of [MPDV](https://www.mpdv.com/). The `Mip` class provides a high-level connector for interacting with an MPDV Hydra Manufacturing Integration Platform (MIP). It simplifies communication by abstracting the underlying API into a consistent set of functions.
+The Hydra MIP connector communicates with the MPDV Hydra Manufacturing Integration Platform (MIP). It abstracts the underlying API into a unified layer, supporting both legacy Hydra 8 dialog transactions and modern MIP 2.0 Shop Floor Connectivity Services (SCS). The connector automatically detects the backend capability at runtime and routes requests dynamically.
 
-There are two primary ways to interact with the MIP using this class:
+Create an instance of the `Mip` class to manage sessions and execute transactions against a specific MIP server.
 
-1. Service Calls: For performing Create, Read, Update, and Delete (CRUD) operations on data objects known as "services" (e.g., reading an order, creating a new material).
-2. Dialog Calls: For executing predefined business transactions and workflows (e.g., logging on to an operation, posting part quantities, changing machine status).
+## Connection and lifecycle
 
-You must create an instance of this class to connect to a specific MIP server.
+### `create`
 
-### create
+Constructs a Mip instance and initializes communication with the designated MIP server. The constructor establishes session lifecycle triggers and configures TLS security mappings.
 
-Creates a Mip instance and configures the connection to a specific MIP server.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>credentials</code></td><td><code>url</code></td><td>The base URL of the target MIP server.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>accessId</code></td><td>An 8-digit client identifier, left-padded with zeros if necessary.</td><td>string</td></tr><tr><td></td><td><code>rejectUnauthorized</code></td><td>Enables or disables strict TLS server certificate verification. Default <code>true</code>.</td><td>boolean</td></tr><tr><td><code>caPath</code></td><td></td><td>Optional absolute file path to a root CA certificate (.pem file) for internal TLS resolution.</td><td>string</td></tr></tbody></table>
 
-* `options`: An object containing the connection credentials.
-  * `url`: The base URL of the MIP server.
-  * `username`: The username for authentication.
-  * `password`: The password for authentication.
-  * `accessId`: An 8-digit ID (left-padded with zeros if necessary) that identifies the client application.
-
-Example
+#### Example
 
 ```yaml
-# options
-url: https://my-mip-server.com:8080
-username: myuser
-password: mysecretpassword
-accessId: 00123456
+# credentials
+url: [https://mpdv-mip-test05.mpdv.cloud:8080](https://mpdv-mip-test05.mpdv.cloud:8080)
+username: heisenware
+password: Samx1ngSeeCrt
+accessId: '302127'
+rejectUnauthorized: true
+# caPath
+'/shared/certificates/rootCA.pem'
 ```
 
-## Connection and API Discovery
+### `canCommunicate`
 
-These functions are used to manage the connection and discover the capabilities of the connected MIP server.
+Checks whether communication with the MIP server is operational and authenticated.
 
-### canCommunicate
+#### Parameters
 
-Checks if a connection to the MIP server can be established and authenticated.
+None.
 
-Output
+#### Output
 
-Returns true if communication is possible, false otherwise.
+Returns `true` if communication succeeds, otherwise `false`.
 
-### logout
+### `getMipVersion`
 
-Explicitly terminates the current session on the MIP server. If not called, sessions will time out automatically.
+Retrieves the runtime strategy description of the connected backend.
 
-### getAllServices
+#### Parameters
 
-Retrieves a list of all available (but not necessarily licensed) services on the server.
+None.
 
-Output
+#### Output
 
-An array of service name strings (e.g., MDUnits, BOOrder, BOPerson).
+Returns `'Hydra X / MIP 2.0 (SCS)'` or `'Hydra 8 / MIP 1.x (Legacy)'`.
 
-### getCreateParameters
+### `isMip2`
 
-Retrieves the parameters required to create a new record for a given service.
+Determines if the current backend supports modern MIP 2.0 architectures.
 
-Parameters
+#### Parameters
 
-* `serviceName`: The name of the service (e.g., `MDUnits`).
+None.
 
-Output
+#### Output
 
-An object where keys are the parameter names (in camelCase) and values are their data types. Mandatory parameters are marked with a \* suffix.
+Returns `true` if MIP 2.0 is supported, otherwise `false`.
 
-### getReadParameters
+### `logout`
 
-Retrieves all readable parameters (fields) for a given service.
+Explicitly terminates the open session on the MIP server and clears active cookies.
 
-Parameters
+#### Parameters
 
-* `serviceName`: The name of the service.
+None.
 
-Output
+#### Output
 
-An object where keys are the parameter names (in camelCase) and values are their data types.
+Returns `true` upon successful session termination, otherwise `false`.
 
-### getUpdateParameters
+## Low-level service CRUD
 
-Retrieves the parameters needed to update a record. This includes mandatory parameters to identify the record and optional parameters that can be changed.
+### `getAllServices`
 
-Parameters
+Lists all data-layer services registered on the connected server.
 
-* `serviceName`: The name of the service.
+#### Parameters
 
-### getDeleteParameters
+None.
 
-Retrieves the mandatory parameters needed to identify and delete a record for a given service.
+#### Output
 
-Parameters
+An array of service name strings.
 
-* `serviceName`: The name of the service.
+### `create`
 
-## High-Level Service Functions (CRUD)
+Creates a new instance record for a given service type.
 
-These functions provide a simplified way to perform Create, Read, Update, and Delete operations. Note that all data object keys must be in camelCase.
+#### Parameters
 
-### create
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name (such as <code>MDUnits</code>, <code>BOOperation</code>, <code>BOPerson</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The data payload for the creation transaction. Use <code>getCreateParameters</code> to look up mandatory attributes.</td><td>object</td></tr></tbody></table>
 
-Creates a new record for the given service type. Use `getCreateParameters` to find out which fields are mandatory.
-
-Parameters
-
-* `serviceName`: The name of the service (e.g., `MDUnits`).
-* `data`: An object containing the data for the new record.
-
-Example: Create a new unit
+#### Example
 
 ```yaml
 # serviceName
@@ -119,18 +108,19 @@ unitsClassification: Test
 unitsDesignation: A fake test unit
 ```
 
-### read
+#### Output
 
-Reads records from the given service, with options to filter and select specific fields.
+Returns `true` on success or throws an error on failure.
 
-Parameters
+### `read`
 
-* `serviceName`: The name of the service.
-* `options`: An optional object.
-  * `filter`: An object or array to filter results.
-  * `fields`: An array of strings to limit the returned fields.
+Queries records from a given service with options for filtering and field selection.
 
-Example: Read units with more than one digit
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td></td><td>The service name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters records based on specific criteria. Accepts a simple array <code>['field', '=', 'val']</code>, an object <code>{ field: 'val' }</code>, or nested arrays. MIP does not support OR logic.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>When <code>true</code>, omits null attributes from the return value. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # serviceName
@@ -138,211 +128,700 @@ MDUnits
 # options
 filter: [unitsDigits, '>', 1]
 fields: [unitsUnit, unitsDesignation]
+skipNull: true
 ```
 
-### update
+#### Output
 
-Updates an existing record. The `data` object must include the mandatory parameters (found via `getUpdateParameters`) to identify the record.
+An array of parsed data objects.
 
-Parameters
+### `update`
 
-* `serviceName`: The name of the service.
-* `data`: An object containing the identifying fields and the new data to be set.
+Modifies an existing service instance record.
 
-### delete
+#### Parameters
 
-Deletes an existing record. The `data` object must contain the mandatory parameters (found via `getDeleteParameters`) to identify the record.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data update block. Must include the mandatory primary keys required to identify the row.</td><td>object</td></tr></tbody></table>
 
-Parameters
+#### Example
 
-* `serviceName`: The name of the service.
-* `data`: An object containing the identifying fields.
+```yaml
+# serviceName
+MDUnits
+# data
+unitsUnit: C
+unitsClassification: Temp
+unitsDesignation: Degree Celsius
+```
 
-### execute
+#### Output
 
-Runs the special "execute" command on a service.
+Returns `true` on success.
 
-Parameters
+### `delete`
 
-* `serviceName`: The name of the service.
-* `data`: The payload data for the execution command.
+Removes an existing service instance record.
 
-## Dialog Functions
+#### Parameters
 
-These functions execute predefined business transactions. All keys in the `options` object must be in camelCase.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>Mandatory identification payload required to resolve the specific instance.</td><td>object</td></tr></tbody></table>
 
-### runDialog
+#### Example
 
-A generic function to run any named dialog with a set of key-value pairs.
+```yaml
+# serviceName
+MDUnits
+# data
+unitsUnit: T
+unitsClassification: Test
+```
 
-Parameters
+#### Output
 
-* `dialogName`: The name of the dialog (e.g., `A_AN`).
-* `options`: An object containing the parameters for the dialog. You can add `dryRun: true` to the options to get the generated dialog string without sending it.
+Returns `true` on success.
 
-### logOperationOn (Arbeitsgang anmelden)
+### `execute`
 
-Logs an operation on to a workplace or machine.
+Invokes a specific processing action on a target service.
 
-Parameters
+#### Parameters
 
-* `options`: An object containing the transaction data.
-  * `anr`: Order number (MES-Auftragsnummer).
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`: Person number (Personalnummer).
-  * `knr`: Person-card number (Personalkartennummer).
-  * `cnr`: Batch number (Chargen-Nummer).
-  * `mst`: New machine status (Maschinenstatus).
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The parameters required for execution. Keys must match the service definition.</td><td>object</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns `true` on success.
+
+## Metadata inspection
+
+### `getCreateParameters`
+
+Queries the parameters needed to create records for a specified service.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An object mapping camelCase attributes to their lowercase data types. Mandatory parameters have a `*` suffix.
+
+### `getReadParameters`
+
+Queries the schema parameters available for retrieval from a service.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An object mapping readable camelCase fields to their lowercase data types.
+
+### `getUpdateParameters`
+
+Queries the schema guidelines for updating records inside a service.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An object mapping updatable attributes to data types, with mandatory lookup attributes marked with a `*` suffix.
+
+### `getExecuteParameters`
+
+Queries the validation constraints needed for executing functions on a service.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An object mapping functional input tags to data types.
+
+### `getDeleteParameters`
+
+Queries the minimal mandatory parameter requirements to delete a service instance.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An object highlighting mandatory row identification fields.
+
+### `getReadableFields`
+
+Lists all column elements explicitly exposed as selectable output fields.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An array of objects mapping selectable keys to their lowercase types.
+
+## Order management (MIP-WO)
+
+### `getOrders`
+
+Fetches production orders and enriches them with active operations, BOM components, and allocated tools.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters the orders to retrieve. Evaluates an array or object expression.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Appends custom attributes to the default return payload.</td><td>array</td></tr><tr><td></td><td><code>includeOperations</code></td><td>Includes corresponding operations. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeComponents</code></td><td>Includes related component requirements. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeProductionResources</code></td><td>Includes related tool records. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # options
-anr: '0004990701'
-mnr: '4560'
-knr: '999999'
+filter: { orderId: JR150702 }
+includeOperations: false
+fields: [ordertypeActive]
 ```
 
-### logOperationAndPersonOn (Arbeitsgang und Person anmelden)
+#### Output
 
-Logs both an operation and a person on to a workplace or machine simultaneously.
+An array of complex order structures.
 
-Parameters
+### `getOrder`
 
-* `options`: An object containing the transaction data.
-  * `anr`: Order number (MES-Auftragsnummer).
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`: Person number (Personalnummer).
-  * `knr`: Person-card number (Personalkartennummer).
-  * `cnr`: Batch number (Chargen-Nummer).
-  * `mst`: New machine status (Maschinenstatus).
+Fetches details for an isolated order instance.
 
-Example
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td></td><td>The unique order ID string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>Specifies explicit fields to fetch. If empty, all available fields return.</td><td>array</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# orderId
+'4711'
+# options
+fields: [orderId, orderDesignation, orderPlanStartTimestamp]
+```
+
+#### Output
+
+An order object, or `null` if not found.
+
+### `startOperation`
+
+Registers an operation log-on transaction (Arbeitsgang anmelden).
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code> or <code>usr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>batchId</code></td><td>The batch identifier. Legacy acronym fallback: <code>cnr</code>.</td><td>string</td></tr><tr><td></td><td><code>mst</code></td><td>The target machine status code (Legacy specific).</td><td>integer</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # options
-anr: '0004990701'
-mnr: '4560'
-pnr: '2998'
+orderId: '0004990701'
+operationId: '10'
+workplaceId: '4560'
+personId: '2998'
 ```
 
-### postPartQuantity (Teilrückmeldung)
+#### Output
 
-Posts produced part quantities, including good parts and scrap, for an active operation.
+Returns a promise that resolves when the logon transaction is completed.
 
-Parameters
+### `finishOperation`
 
-* `options`: An object containing the transaction data.
-  * `anr`: Order number (MES-Auftragsnummer).
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`: Person number (Personalnummer).
-  * `knr`: Person-card number (Personalkartennummer).
-  * `egrGut`: Registered yield (Erfasste Gutmenge).
-  * `egrAus`: Registered scrap (Erfasste Ausschussmenge).
-  * `eggGut`: Yield Cause code (Grund).
-  * `eggAus`: Scrap Cause code (Ausschussgrund).
-  * `egeGut`: Yield unit (e.g., ST for pieces).
-  * `egeAus`: Scrap unit.
+Registers an operation log-off transaction that finishes the step (Arbeitsgang beenden).
 
-Example
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>Produced good quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>Produced scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>Reason code for scrap logs. Legacy acronym fallback: <code>eggAus</code>.</td><td>integer</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # options
-anr: 'AAA2100473100200'
-mnr: '60610'
-knr: '11111'
-egrGut: 1
-egrAus: 2
-eggAus: 1
+orderId: '0004990701'
+operationId: '10'
+workplaceId: '4560'
+yield: 100
+scrap: 5
+scrapReason: 1
 ```
 
-### interruptOperation (Arbeitsgang unterbrechen)
+#### Output
 
-Interrupts a currently active operation. You can optionally post part quantities at the same time.
+Executes the close-out request and confirms completion.
 
-Parameters
+### `interruptOperation`
 
-* `options`: An object containing the transaction data.
-  * `anr`: Order number (MES-Auftragsnummer).
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`, `knr`: Person identifiers.
-  * `egrGut`, `egrAus`, `eggGut`, `eggAus`, `egeGut`, `egeAus`: Optional part quantity details.
+Pauses an active operation without completing the entire work step (Arbeitsgang unterbrechen).
 
-Example
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier (Legacy acronym: <code>anr</code>).</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier (Legacy acronym: <code>avnr</code>).</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace identifier (Legacy acronym: <code>mnr</code>).</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier (Legacy acronym: <code>pnr</code>).</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>Partial good quantity achieved prior to pause (Legacy acronym: <code>egrGut</code>).</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>Partial scrap quantity achieved prior to pause (Legacy acronym: <code>egrAus</code>).</td><td>integer</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # options
-anr: 'AAA2100451210200'
-mnr: '60610'
-egrGut: 1
-egeGut: ST
+orderId: '0004990701'
+workplaceId: '4560'
+yield: 50
 ```
 
-### logOperationOff (Arbeitsgang abmelden)
+#### Output
 
-Logs an operation off, typically without finishing it (leaving it in an interrupted state). Part quantities can be posted simultaneously.
+Concludes the pause registration workflow.
 
-Parameters
+### `reportPartialQuantity`
 
-* `options`: An object containing the transaction data.
-  * `anr`: Order number (MES-Auftragsnummer).
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`, `knr`: Person identifiers.
-  * `egrGut`, `egrAus`, `eggGut`, `eggAus`, `egeGut`, `egeAus`: Optional part quantity details.
+Posts runtime performance counts and quantities without altering the operation status (Teilrückmeldung).
 
-### finishOperation (Arbeitsgang beenden)
+#### Parameters
 
-Finishes an operation that was previously started or interrupted, concluding the work step. Part quantities can be posted at the same time.
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier (Legacy acronym: <code>anr</code>).</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier (Legacy acronym: <code>avnr</code>).</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace identifier (Legacy acronym: <code>mnr</code>).</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier (Legacy acronym: <code>pnr</code>).</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier (Legacy acronym: <code>knr</code>).</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>Produced good quantity (Legacy acronym: <code>egrGut</code>).</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>Produced scrap quantity (Legacy acronym: `egrAus`).</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>Scrap reason code (Legacy acronym: <code>eggAus</code>).</td><td>integer</td></tr></tbody></table>
 
-Parameters
-
-* `options`: An object containing the transaction data.
-  * `anr`: Order number (MES-Auftragsnummer).
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`, `knr`: Person identifiers.
-  * `egrGut`, `egrAus`, `eggGut`, `eggAus`, `egeGut`, `egeAus`: Optional part quantity details.
-
-### changeMachineStatus (Maschinenstatus ändern)
-
-Changes the status of a machine, for example, to indicate a malfunction or setup time.
-
-Parameters
-
-* `options`: An object containing the transaction data.
-  * `mst`: The new machine status code.
-  * `mnr`: Workplace or machine number (Arbeitsplatz-/Maschinennummer).
-  * `pnr`, `knr`: Optional person identifiers.
-  * `bem`: A free text comment.
-
-Example
+#### Example
 
 ```yaml
 # options
-mst: 3
-mnr: '60510'
-knr: '11111'
-bem: 'Tool change required'
+orderId: 'AAA2100473100200'
+workplaceId: '60610'
+personId: '11111'
+yield: 100
+scrap: 2
+scrapReason: 1
 ```
 
-## Specialized and Raw Functions
+#### Output
 
-### readOrders
+Submits quantity records into the runtime database tracking engine.
 
-A specialized, high-level function to conveniently read production orders and their related data.
+### `__getOperationStatus`
 
-Parameters
+Queries the live status indicators and performance progress of an active operation.
 
-* `options`: An object to configure the read operation.
-  * `filter`: Filters the orders to be received.
-  * `fields`: An array of additional `order` or `ordertype` fields to include.
-  * `includeOperations`: If `true`, related operations are included. Defaults to `true`.
-  * `includeComponents`: If `true`, Bill of Material (BOM) components are included. Defaults to `true`.
-  * `includeProductionResources`: If `true`, related production resources (tools) are included. Defaults to `true`.
+#### Parameters
 
-### rawServiceCall
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>operationId</code></td><td>The unique operation tracking identifier.</td><td>string</td></tr></tbody></table>
 
-Executes a raw service call for advanced use cases. The parameters directly map to the MIP Service Interface specification.
+#### Example
 
-### rawDialogCall
+```yaml
+# operationId
+CIOYM0010040
+```
 
-Executes a raw dialog call by sending the complete dialog string.
+#### Output
+
+An object detailing current counts, tracked performance duration, and normalized `statusDescription` attributes (`PREPARED`, `RUNNING`, `INTERRUPTED`, `FINISHED`, `ARCHIVED`, `DELETED`).
+
+### `__getOperationTimeline`
+
+Retrieves the event history logs recorded against a specified operation.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>operationId</code></td><td>The unique operation tracking identifier.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+A sorted timeline array of transaction event objects, with the newest records listed first.
+
+### `__updateOrderStatus`
+
+Updates the operational workflow flag assigned to an order.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td>The order identifier.</td><td>string</td></tr><tr><td><code>newStatus</code></td><td>Target workflow status constraint: <code>ANG</code> (Created), <code>FREI</code> (Released), <code>SPER</code> (Locked), <code>BEEN</code> (Finished), <code>ABGS</code> (Closed), <code>STOR</code> (Cancelled).</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# orderId
+'4711'
+# newStatus
+FREI
+```
+
+#### Output
+
+Returns `true` on a successful change registration.
+
+### `__setOrderPriority`
+
+Adjusts the scheduling priority value recorded against an order.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td>The order identifier.</td><td>string</td></tr><tr><td><code>newPriority</code></td><td>The numeric or string priority designation. Lower values map to higher urgency.</td><td>number or string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` on a successful change registration.
+
+### `__rescheduleOrder`
+
+Alters the target planning times assigned to an order.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td>The order identifier.</td><td>string</td></tr><tr><td><code>startDate</code></td><td>Target start window timestamp formatted as an ISO 8601 string or Date object.</td><td>string or any</td></tr><tr><td><code>endDate</code></td><td>Optional target closure window timestamp formatted as an ISO 8601 string or Date object.</td><td>string or any</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# orderId
+'4711'
+# startDate
+2023-10-27T06:00:00
+# endDate
+2023-10-27T14:00:00
+```
+
+#### Output
+
+Returns `true` on a successful change registration.
+
+## Workplaces and resources
+
+### `getWorkplaces`
+
+Retrieves machine and workplace resource profiles matching type code `MNR`.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>User-defined filters applied alongside the primary type constraint.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Custom columns to retrieve.</td><td>array</td></tr><tr><td></td><td><code>includeStatusAssignments</code></td><td>Enriches results with machine status lists. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeGroups</code></td><td>Enriches results with capacity group strings. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>skipNull</code></td><td>Omits parameters containing null values. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+An array of enriched workplace resource records.
+
+### `getResources`
+
+Queries active assets and production utilities other than workplaces.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>type</code></td><td>Targets explicit types (such as <code>TOOL</code>, <code>GAGE</code>). If blank, all resources excluding workplaces match.</td><td>string</td></tr><tr><td></td><td><code>filter</code></td><td>User-defined filters.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Columns to select.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>Omits null fields. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+An array of filtered resource asset objects.
+
+### `__changeWorkplaceStatus`
+
+Directly updates the technical status code recorded against a machine (Maschinenstatus ändern).
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>workplaceId</code></td><td>The workplace identifier (Legacy acronym: <code>mnr</code>).</td><td>string</td></tr><tr><td></td><td><code>machineStatus</code></td><td>The target status tracking identifier (Legacy acronym: <code>mst</code>).</td><td>integer</td></tr><tr><td></td><td><code>personId</code></td><td>Optional personnel number context (Legacy acronym: <code>pnr</code>).</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>Optional person-card tracking indicator (Legacy acronym: <code>knr</code>).</td><td>string</td></tr><tr><td></td><td><code>comment</code></td><td>Optional text comment payload (Legacy acronym: <code>bem</code>).</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+workplaceId: '60510'
+machineStatus: 3
+comment: Tool change required
+```
+
+#### Output
+
+Pushes the status alteration and confirms execution.
+
+## Human resources (MIP-HR)
+
+### `getPersons`
+
+Retrieves personnel records enhanced with assigned qualifications, structural shifts, and live attendance tracking metrics.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters applied against the base personnel list.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Custom fields to return.</td><td>array</td></tr><tr><td></td><td><code>includeQualifications</code></td><td>Fetches assigned qualifications. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeAssignments</code></td><td>Fetches planned workplace assignments. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeClockingStatus</code></td><td>Fetches live attendance data for the current date. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>skipNull</code></td><td>Omits null fields from results. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+filter: { personLastname: Smith }
+includeQualifications: true
+includeAssignments: false
+```
+
+#### Output reply
+
+An array of enriched person objects.
+
+### `__getClockingStatus`
+
+Retrieves the current Time and Attendance (PZE) state recorded for a person on the current calendar date.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>personId</code></td><td>The unique personnel tracking number.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns a status tracking object containing state tags and chronologies:
+
+```json
+{
+  "status": "PRESENT",
+  "type": "K",
+  "time": "2026-07-13"
+}
+```
+
+{% hint style="danger" %}
+#### MIP 2.0 limitation
+This function is exclusively supported on MIP 2.0 strategies and throws a `MipError` if run against a legacy infrastructure.
+{% endhint %}
+
+### `__clockPerson`
+
+Submits a Time and Attendance booking transaction (such as Clock In, Clock Out, or Break).
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>personId</code></td><td>The personnel identification number.</td><td>string</td></tr><tr><td></td><td><code>type</code></td><td>Booking type: <code>in</code>, <code>out</code>, or <code>break</code>.</td><td>string</td></tr><tr><td></td><td><code>timestamp</code></td><td>Optional specific booking time. Defaults to now.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>Optional employee card identifier.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Executes the transaction and confirms success. Throws an evaluation error on legacy strategies.
+
+## Material management (MIP-MAT)
+
+### `__bookMaterialConsumption`
+
+Books material consumption quantities against an operational machine, order, or line operation.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>data</code></td><td><code>workplace</code></td><td>The workplace identifier where material usage occurs.</td><td>string</td></tr><tr><td></td><td><code>material</code></td><td>The material identifier.</td><td>string</td></tr><tr><td></td><td><code>quantity</code></td><td>Numeric consumption quantity value.</td><td>number</td></tr><tr><td></td><td><code>unit</code></td><td>Unit of measure.</td><td>string</td></tr><tr><td></td><td><code>orderId</code></td><td>Optional order context.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>Optional operation context.</td><td>string</td></tr><tr><td></td><td><code>batchId</code></td><td>Optional batch identifier for batch-managed items.</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# data
+workplace: '4711'
+material: RAW_STEEL_01
+quantity: 15.5
+unit: KG
+orderId: PROD-2023-001
+```
+
+#### Output
+
+Submits usage records via the MIP 2.0 service block or routes back to the legacy `A_MAT` dialog string on old architectures.
+
+### `__getMaterialStock`
+
+Aggregates inventory quantities across stock locations, buffers, and material masters.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>materialId</code></td><td>Optional identifier to isolate a specific material.</td><td>string</td></tr><tr><td></td><td><code>storageLocation</code></td><td>Optional buffer identifier to isolate a specific storage location.</td><td>string</td></tr><tr><td></td><td><code>includeZeroStock</code></td><td>Includes records showing 0 quantity if set to <code>true</code>. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+materialId: RAW_STEEL_01
+includeZeroStock: false
+```
+
+#### Output
+
+An array of stock tracking snapshots mapped with location details:
+
+```json
+[
+  {
+    "material": "RAW_STEEL_01",
+    "description": "Premium Grade Steel",
+    "quantity": 250,
+    "unit": "KG",
+    "batch": "B29312",
+    "location": {
+      "id": "BUF_01",
+      "name": "Main Production Buffer",
+      "type": "STORAGE"
+    }
+  }
+]
+```
+
+{% hint style="danger" %}
+#### strategy incompatibility
+This execution path is unsupported under Legacy configurations and throws an error.
+{% endhint %}
+
+## Quality management (MIP-QP)
+
+### `__recordMeasurement`
+
+Records an individual inspection metric value against a characteristic.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>taskId</code></td><td>The active inspection task identifier.</td><td>string</td></tr><tr><td><code>characteristicId</code></td><td>The characteristic identifier being evaluated.</td><td>string</td></tr><tr><td><code>value</code></td><td>The numeric value measured.</td><td>number</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# taskId
+IT-2023-998877
+# characteristicId
+DIAMETER_01
+# value
+15.05
+```
+
+#### Output
+
+Submits single measurement acquisitions into the validation engine under MIP 2.0. Throws an exception on legacy backends.
+
+### `__completeInspectionTask`
+
+Finalizes an active inspection task to trigger usage evaluation workflows.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>taskId</code></td><td>The target inspection task identifier.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` on success. Throws an error on old strategies.
+
+## Core services (MIP-CORE)
+
+### `__triggerEscalation`
+
+Dispatches generic system escalation events and formats message key elements.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>eventId</code></td><td>The escalation identifier string (such as <code>DB.FILL_LEVEL_EXCEEDED</code>).</td><td>string</td></tr><tr><td><code>variables</code></td><td>Key/value data pairs incorporated into the alert template text (maximum 30 keys).</td><td>object</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# eventId
+DB.FILL_LEVEL_EXCEEDED
+# variables
+DB.FREE: '62'
+DB.USED: '962'
+```
+
+#### Output
+
+Returns `true` if processed successfully under MIP 2.0. Throws an error on legacy platforms.
+
+### `__sendEmail`
+
+Sends email notifications using internal MIP mail distribution modules.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>to</code></td><td>The destination email address.</td><td>string</td></tr><tr><td></td><td><code>subject</code></td><td>The email subject line.</td><td>string</td></tr><tr><td></td><td><code>message</code></td><td>The text body payload. Use <code>\n</code> for line breaks.</td><td>string</td></tr><tr><td></td><td><code>attachment</code></td><td>Optional base64 encoded document string.</td><td>string</td></tr><tr><td></td><td><code>attachmentName</code></td><td>Optional attachment file name definition.</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+to: maintenance@example.com
+subject: Machine Alert
+message: Machine 4711 is down.
+```
+
+#### Output
+
+Returns `true` if sent successfully under MIP 2.0. Throws an error on old platforms.
+
+### `__getShopfloorServiceLogs`
+
+Retrieves processing logs generated by Shop Floor Connectivity Services (SCS).
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>start</code></td><td>Evaluation window start parameter. Accepts ISO strings or negative relative durations (such as <code>'-15m'</code>, <code>'-2h'</code>, <code>'-1d'</code>).</td><td>string or any</td></tr><tr><td></td><td><code>stop</code></td><td>Evaluation window end parameter. Accepts ISO strings or <code>'now'</code>. Default <code>now</code>.</td><td>string or any</td></tr><tr><td></td><td><code>user</code></td><td>Optional identifier to filter tracking logs to a single user or device.</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+start: -2h
+stop: now
+```
+
+#### Output
+
+An array of raw service log entries. Throws an error on legacy architectures.
+
+## Raw API communication
+
+### `rawServiceCall`
+
+Executes unparsed network tracking queries mapped against endpoint paths.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The explicit relative target path string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>params</code></td><td>An array of raw filters containing acronym, operator, and value definitions.</td><td>array</td></tr><tr><td></td><td><code>columns</code></td><td>Specific data column selection parameters.</td><td>array</td></tr><tr><td></td><td><code>requestId</code></td><td>Optional tracking tracking identifier.</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# url
+/data/MDUnits/list
+# options
+params:
+  - acronym: units.unit
+    operator: EQUAL
+    value: C
+```
+
+#### Output
+
+Returns unmapped API data elements.
+
+### `rawDialogCall`
+
+Directly executes raw textual legacy dialog command strings.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogString</code></td><td>The complete mapped dialog message string payload.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the unparsed string response.
+
+### `runDialog`
+
+Assembles and issues custom transactional dialog parameters.
+
+#### Parameters
+
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogName</code></td><td></td><td>The name string code of the dialog (such as <code>A_AN</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>dryRun</code></td><td>If <code>true</code>, returns the compiled dialog string without submitting a network request.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns the evaluated confirmation data or the raw string block text if `dryRun` is active.
+
+## Tips and tricks
+
+### Implicit AND logic constraints
+The data filtering interpreter processes logical parameters sequentially as implicit `AND` rules. Attempting to introduce explicit `OR` keywords or nesting logic arrays containing disjunction blocks triggers a `FILTER_ERR` runtime rejection.
+
+### Service execution payloads vs CRUD boundaries
+When calling `execute`, input payload arrays must not pass an explicit `operator` key attribute inside parameter objects. Doing so breaks the parameter validation rules applied by MIP 2.0 connectivity strategies.
+
+### Automated session tracking timeouts
+Open communication channels that are not explicitly cleared using the `logout` function remain active in an authenticated state on the remote server. These resources are cleared by automated server sweeps after a rolling 30-minute window of inactivity.
+```
