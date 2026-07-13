@@ -1,8 +1,8 @@
-# Label printer
+# Label Printer
 
 The label printer connector creates, manages, and prints layout streams on industrial network-connected devices. It merges template layouts with dynamic variables, groups them into distinct printing batches, and transmits raw text streams directly over TCP connections.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can interact with a printer.
+This connector requires [instance creation](./#instance-creation) before you can interact with a printer.
 
 ## Instance and control
 
@@ -12,22 +12,7 @@ Constructs a label printer instance and sets the initial layout template string.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>template</code></td>
-      <td>The layout blueprint string. Use <code>{{variableName}}</code> syntax to mark the layout fields that receive dynamic text updates.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td>The layout blueprint string. Use <code>{{variableName}}</code> syntax to mark the layout fields that receive dynamic text updates.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -48,22 +33,7 @@ Updates the print template layout blueprint for an existing instance. Calling th
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>template</code></td>
-      <td>The updated layout text block.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td>The updated layout text block.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -94,22 +64,7 @@ Generates a single label record by inserting dynamic variables directly into the
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>variables</code></td>
-      <td>An object where each key corresponds to a designated template placeholder name, excluding the curly brackets.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variables</code></td><td>An object where each key corresponds to a designated template placeholder name, excluding the curly brackets.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -117,3 +72,4 @@ Generates a single label record by inserting dynamic variables directly into the
 # variables
 product_name: High-Torque Motor
 part_number: HT-5000
+```

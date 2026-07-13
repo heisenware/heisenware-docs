@@ -2,7 +2,7 @@
 
 The Kuando Busylight connector controls Kuando Busylight status indicators. It changes the light's color and brightness, makes it blink or pulse, and plays the device's built-in sounds.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can control a physical unit, though it includes a static utility for device scanning. Because a Busylight is a physical USB device on your premises, this function typically executes inside an [Agent](/app-builder/build-backend/agents.md) installed on the local computer where the light is connected (see the [local connection scenario](/app-builder/build-backend/functions/connectors.md#local-connection-via-agent)).
+This connector requires [instance creation](./#instance-creation) before you can control a physical unit, though it includes a static utility for device scanning. Because a Busylight is a physical USB device on your premises, this function typically executes inside an [Agent](../../agents.md) installed on the local computer where the light is connected (see the [local connection scenario](../connectors.md#local-connection-via-agent)).
 
 ## Device management
 
@@ -24,22 +24,7 @@ Creates an instance to control a specific Kuando Busylight and establishes a con
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>deviceIndex</code></td>
-      <td>The zero-based index of the device to control, selected from the array returned by <code>getDevices</code>. Default 0.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>deviceIndex</code></td><td>The zero-based index of the device to control, selected from the array returned by <code>getDevices</code>. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -82,6 +67,7 @@ Removes the instance and disconnects from the device.
 
 {% hint style="danger" %}
 #### Irreversible action
+
 Deleting an instance removes its configuration. To control the device again, you must trigger `create` anew.
 {% endhint %}
 
@@ -101,22 +87,7 @@ Turns on the light with a solid, continuous color.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>color</code></td>
-      <td>The desired color in any CSS-compatible format (such as <code>#ff0000</code>, <code>rgb(255, 0, 0)</code>, or <code>red</code>).</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The desired color in any CSS-compatible format (such as <code>#ff0000</code>, <code>rgb(255, 0, 0)</code>, or <code>red</code>).</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -135,22 +106,7 @@ Fades the light in and out smoothly using the specified color.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>color</code></td>
-      <td>The color to pulse, provided in any CSS-compatible format.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The color to pulse, provided in any CSS-compatible format.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -169,32 +125,7 @@ Flashes the light using the specified color and timing configuration.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>color</code></td>
-      <td>The color to blink, provided in any CSS-compatible format.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>onDuration</code></td>
-      <td>The time in seconds the light stays on during each blink cycle. Default 0.5.</td>
-      <td>number</td>
-    </tr>
-    <tr>
-      <td><code>offDuration</code></td>
-      <td>The time in seconds the light stays off during each blink cycle. Default 0.3.</td>
-      <td>number</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The color to blink, provided in any CSS-compatible format.</td><td>string</td></tr><tr><td><code>onDuration</code></td><td>The time in seconds the light stays on during each blink cycle. Default 0.5.</td><td>number</td></tr><tr><td><code>offDuration</code></td><td>The time in seconds the light stays off during each blink cycle. Default 0.3.</td><td>number</td></tr></tbody></table>
 
 #### Example
 
@@ -217,22 +148,7 @@ Changes the brightness of the light. The new intensity applies immediately to th
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>value</code></td>
-      <td>The light intensity measured in percent (0 to 100).</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The light intensity measured in percent (0 to 100).</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -251,27 +167,7 @@ Plays one of the device's built-in sounds once.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>name</code></td>
-      <td>The name of the tone to play, matching an item from the list returned by <code>getTones</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>volume</code></td>
-      <td>Optional volume level (0 to 10). If provided, this value also sets the new default volume. If omitted, the connector uses the last configured volume. Default 3.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the tone to play, matching an item from the list returned by <code>getTones</code>.</td><td>string</td></tr><tr><td><code>volume</code></td><td>Optional volume level (0 to 10). If provided, this value also sets the new default volume. If omitted, the connector uses the last configured volume. Default 3.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -290,25 +186,11 @@ Sets the default volume for all sounds played by the device.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>value</code></td>
-      <td>The target volume level (0 to 10).</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The target volume level (0 to 10).</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # value
 7
+```

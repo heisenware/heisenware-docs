@@ -1,4 +1,4 @@
-# GPIO counter
+# GPIO Counter
 
 The GPIO counter counts digital pulses on a Raspberry Pi's GPIO pins. It interprets signals from sensors (such as inductive proximity sensors, light barriers, or rotary encoders) to track production counts, machine cycles, or flow rates.
 
@@ -7,10 +7,11 @@ Beyond counting, the class monitors the time interval between pulses to automati
 1. average mode (default): Detects a stop when the time between pulses exceeds the running average by a configurable factor. This adapts dynamically to the speed of the machine.
 2. target mode: Detects a stop when the time between pulses exceeds a fixed target interval plus a defined tolerance. Use this for processes with strict cycle times. Target mode is active when both `targetInterval` and `deviation` are set.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can interact with a physical pin, though it includes static utilities for hardware and pin detection.
+This connector requires [instance creation](./#instance-creation) before you can interact with a physical pin, though it includes static utilities for hardware and pin detection.
 
 {% hint style="warning" %}
 #### Hardware requirement
+
 This class requires a Raspberry Pi 4 or 5. If no compatible hardware is detected, the class automatically falls back to a simulation mode, letting you test your logic with the `simulatePulse` function.
 {% endhint %}
 
@@ -61,22 +62,7 @@ Retrieves the name of the process that currently holds a specific GPIO pin. This
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>gpio</code></td>
-      <td>The BCM pin number to check.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>gpio</code></td><td>The BCM pin number to check.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -95,22 +81,7 @@ Checks whether a specific GPIO pin is currently free to use.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>gpio</code></td>
-      <td>The BCM pin number to check.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>gpio</code></td><td>The BCM pin number to check.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -122,22 +93,7 @@ Forcefully releases a specific GPIO pin if an internal driver instance holds it.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>gpio</code></td>
-      <td>The BCM pin number to release.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>gpio</code></td><td>The BCM pin number to release.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -151,78 +107,7 @@ Creates a counter instance, initializes the hardware connection or simulation, a
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>gpio</code></td>
-      <td>The BCM pin number connected to the sensor.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>pullUpDown</code></td>
-      <td>Resistor configuration: <code>none</code>, <code>pullup</code>, or <code>pulldown</code>. Default <code>none</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>edge</code></td>
-      <td>The signal edge to count: <code>rising</code>, <code>falling</code>, or <code>both</code>. Default <code>rising</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>debounceTimeout</code></td>
-      <td>Debounce time in milliseconds to prevent false counts from noisy signals. Default 10.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>activeLow</code></td>
-      <td>If true, inverts the logic (useful if your sensor outputs 0 when active). Default false.</td>
-      <td>boolean</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>minCount</code></td>
-      <td>The minimum number of pulses required before the auto-stop watchdog activates. Default 5.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>continueAfterStop</code></td>
-      <td>If true, the counter automatically resumes counting when a new pulse arrives after a stop. Default true.</td>
-      <td>boolean</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>stopFactor</code></td>
-      <td>Average mode only: The multiplier applied to the average interval to trigger a stop. Default 2.0.</td>
-      <td>number</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>targetInterval</code></td>
-      <td>Target mode only: The expected cycle time in seconds.</td>
-      <td>number</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>deviation</code></td>
-      <td>Target mode only: The allowed deviation in percent (0 to 100) before a pulse counts as too late.</td>
-      <td>number</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>gpio</code></td><td>The BCM pin number connected to the sensor.</td><td>integer</td></tr><tr><td></td><td><code>pullUpDown</code></td><td>Resistor configuration: <code>none</code>, <code>pullup</code>, or <code>pulldown</code>. Default <code>none</code>.</td><td>string</td></tr><tr><td></td><td><code>edge</code></td><td>The signal edge to count: <code>rising</code>, <code>falling</code>, or <code>both</code>. Default <code>rising</code>.</td><td>string</td></tr><tr><td></td><td><code>debounceTimeout</code></td><td>Debounce time in milliseconds to prevent false counts from noisy signals. Default 10.</td><td>integer</td></tr><tr><td></td><td><code>activeLow</code></td><td>If true, inverts the logic (useful if your sensor outputs 0 when active). Default false.</td><td>boolean</td></tr><tr><td></td><td><code>minCount</code></td><td>The minimum number of pulses required before the auto-stop watchdog activates. Default 5.</td><td>integer</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>If true, the counter automatically resumes counting when a new pulse arrives after a stop. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>stopFactor</code></td><td>Average mode only: The multiplier applied to the average interval to trigger a stop. Default 2.0.</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>Target mode only: The expected cycle time in seconds.</td><td>number</td></tr><tr><td></td><td><code>deviation</code></td><td>Target mode only: The allowed deviation in percent (0 to 100) before a pulse counts as too late.</td><td>number</td></tr></tbody></table>
 
 #### Examples
 
@@ -295,48 +180,7 @@ Resets the counter to its initial state by setting the count to 0, clearing all 
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>minCount</code></td>
-      <td>New minimum count parameter.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>stopFactor</code></td>
-      <td>New stop factor value (average mode).</td>
-      <td>number</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>targetInterval</code></td>
-      <td>New target interval measured in seconds (target mode).</td>
-      <td>number</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>deviation</code></td>
-      <td>New allowed deviation in percent (target mode).</td>
-      <td>number</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>continueAfterStop</code></td>
-      <td>Whether to resume counting automatically when a new pulse arrives after a stop.</td>
-      <td>boolean</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>minCount</code></td><td>New minimum count parameter.</td><td>integer</td></tr><tr><td></td><td><code>stopFactor</code></td><td>New stop factor value (average mode).</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>New target interval measured in seconds (target mode).</td><td>number</td></tr><tr><td></td><td><code>deviation</code></td><td>New allowed deviation in percent (target mode).</td><td>number</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>Whether to resume counting automatically when a new pulse arrives after a stop.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -367,6 +211,7 @@ Removes the counter instance.
 
 {% hint style="danger" %}
 #### Irreversible action
+
 Deleting an instance removes its configuration. To count on that pin again, you must trigger `create` anew.
 {% endhint %}
 
@@ -386,22 +231,7 @@ Registers a callback that fires every time a valid pulse is counted. This serves
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>callback</code></td>
-      <td>Callback that fires on each count. Delivers an object containing metrics like total count and interval delta.</td>
-      <td>callback</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>Callback that fires on each count. Delivers an object containing metrics like total count and interval delta.</td><td>callback</td></tr></tbody></table>
 
 #### Example
 
@@ -435,22 +265,7 @@ Registers a callback that fires whenever the counter's state changes, such as fr
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>callback</code></td>
-      <td>Callback that fires on state changes. Delivers an object containing the new and previous states.</td>
-      <td>callback</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>Callback that fires on state changes. Delivers an object containing the new and previous states.</td><td>callback</td></tr></tbody></table>
 
 #### Example
 
@@ -481,22 +296,7 @@ Manually simulates an input pulse. Use this to test your application logic away 
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>value</code></td>
-      <td>The signal value to simulate. Default 1.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The signal value to simulate. Default 1.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 

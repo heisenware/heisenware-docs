@@ -2,7 +2,7 @@
 
 The Hydra MIP connector communicates with the MPDV Hydra Manufacturing Integration Platform (MIP). It abstracts the underlying API into a unified layer, supporting both legacy Hydra 8 dialog transactions and modern MIP 2.0 Shop Floor Connectivity Services (SCS). The connector automatically detects the backend version at runtime and routes requests dynamically.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can manage sessions or execute transactions against a specific MIP server.
+This connector requires [instance creation](./#instance-creation) before you can manage sessions or execute transactions against a specific MIP server.
 
 ## Connection and lifecycle
 
@@ -12,42 +12,7 @@ Creates a client instance configured to communicate with a specific MIP server.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>url</code></td>
-      <td>The endpoint URL of the target MIP server.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>username</code></td>
-      <td>The username used for authentication.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>password</code></td>
-      <td>The password used for authentication.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>accessId</code></td>
-      <td>The access tracking credential string.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>url</code></td><td>The endpoint URL of the target MIP server.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username used for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password used for authentication.</td><td>string</td></tr><tr><td></td><td><code>accessId</code></td><td>The access tracking credential string.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -131,27 +96,7 @@ Creates a new instance record for a given service type.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name (such as <code>MDUnits</code>, <code>BOOperation</code>, or <code>BOPerson</code>).</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>data</code></td>
-      <td>The data payload for the creation transaction. Use <code>getCreateParameters</code> to look up mandatory attributes.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name (such as <code>MDUnits</code>, <code>BOOperation</code>, or <code>BOPerson</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The data payload for the creation transaction. Use <code>getCreateParameters</code> to look up mandatory attributes.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -174,42 +119,7 @@ Queries records from a given service with options for filtering and field select
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>filter</code></td>
-      <td>Filters records based on specific criteria. Accepts a simple array like <code>['field', '=', 'val']</code>, an object like <code>{ field: 'val' }</code>, or nested arrays. MIP does not support OR logic.</td>
-      <td>any</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>fields</code></td>
-      <td>Restricts the evaluation to specific columns.</td>
-      <td>array</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>skipNull</code></td>
-      <td>When true, omits null attributes from the return value. Default false.</td>
-      <td>boolean</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td></td><td>The service name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters records based on specific criteria. Accepts a simple array like <code>['field', '=', 'val']</code>, an object like <code>{ field: 'val' }</code>, or nested arrays. MIP does not support OR logic.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>When true, omits null attributes from the return value. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -232,27 +142,7 @@ Modifies an existing service instance record.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>data</code></td>
-      <td>The data update block. This block must include the mandatory primary keys required to identify the row.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data update block. This block must include the mandatory primary keys required to identify the row.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -275,32 +165,13 @@ Removes an existing service instance record.
 
 {% hint style="danger" %}
 #### Destructive action
+
 This permanently deletes the service instance record from the server. You cannot undo this action.
 {% endhint %}
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>data</code></td>
-      <td>Mandatory identification payload required to resolve the specific instance.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>Mandatory identification payload required to resolve the specific instance.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -322,27 +193,7 @@ Invokes a specific processing action on a target service.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>data</code></td>
-      <td>The parameters required for execution. Keys must match the service definition.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The parameters required for execution. Keys must match the service definition.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -356,22 +207,7 @@ Queries the parameters needed to create records for a specified service.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -383,22 +219,7 @@ Queries the schema parameters available for retrieval from a service.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -410,22 +231,7 @@ Queries the schema guidelines for updating records inside a service.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -437,22 +243,7 @@ Queries the validation constraints needed for executing functions on a service.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -464,22 +255,7 @@ Queries the minimal mandatory parameter requirements to delete a service instanc
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -491,22 +267,7 @@ Lists all column elements explicitly exposed as selectable output fields.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>serviceName</code></td>
-      <td>The service name.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -520,48 +281,7 @@ Fetches production orders and enriches them with active operations, BOM componen
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>filter</code></td>
-      <td>Filters the orders to retrieve. Evaluates an array or object expression.</td>
-      <td>any</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>fields</code></td>
-      <td>Appends custom attributes to the default return payload.</td>
-      <td>array</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>includeOperations</code></td>
-      <td>Includes corresponding operations. Default true.</td>
-      <td>boolean</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>includeComponents</code></td>
-      <td>Includes related component requirements. Default true.</td>
-      <td>boolean</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>includeProductionResources</code></td>
-      <td>Includes related tool records. Default true.</td>
-      <td>boolean</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters the orders to retrieve. Evaluates an array or object expression.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Appends custom attributes to the default return payload.</td><td>array</td></tr><tr><td></td><td><code>includeOperations</code></td><td>Includes corresponding operations. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeComponents</code></td><td>Includes related component requirements. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeProductionResources</code></td><td>Includes related tool records. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -582,30 +302,7 @@ Fetches details for an isolated order instance.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>orderId</code></td>
-      <td></td>
-      <td>The unique order ID string.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>fields</code></td>
-      <td>Specifies explicit fields to fetch. If empty, all available fields return.</td>
-      <td>array</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td></td><td>The unique order ID string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>Specifies explicit fields to fetch. If empty, all available fields return.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
@@ -626,60 +323,7 @@ Registers an operation log-on transaction (Arbeitsgang anmelden).
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>orderId</code></td>
-      <td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>operationId</code></td>
-      <td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>workplaceId</code></td>
-      <td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>personId</code></td>
-      <td>The person identifier. Legacy acronym fallback: <code>pnr</code> or <code>usr</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>cardId</code></td>
-      <td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>batchId</code></td>
-      <td>The batch identifier. Legacy acronym fallback: <code>cnr</code>.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>mst</code></td>
-      <td>The target machine status code (Legacy specific).</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code> or <code>usr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>batchId</code></td><td>The batch identifier. Legacy acronym fallback: <code>cnr</code>.</td><td>string</td></tr><tr><td></td><td><code>mst</code></td><td>The target machine status code (Legacy specific).</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
