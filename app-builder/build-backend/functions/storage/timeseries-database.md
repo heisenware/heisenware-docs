@@ -1,73 +1,73 @@
 # Timeseries database
 
-{% hint style="info" %}
-This article already reflects v91 which is not yet released to the public. Some features may not be existing with your current version.
-{% endhint %}
-
-The `Timeseries Database` class provides a specialized client for interacting with InfluxDB. It is designed for high-frequency data where the time of the recording is just as important as the value itself—such as sensor readings (IoT), machine performance metrics, or energy consumption.
-
-{% hint style="success" %}
-**Key feature: Intelligent downsampling & Native Multi-Fields**
-
-A standout feature of this class is its built-in support for downsampling. This allows you to manage data storage efficiently by keeping high-resolution raw data for recent events while automatically aggregating older data into lower-resolution buckets.
-
-Additionally, the engine natively supports multi-field telemetry. You can log entire objects (e.g., `{ cycle_time: 4.2, yield: 150 }`), and the database will automatically fan them out into highly optimized, individually queryable fields, reconstructing them for you on the fly when you read them back.
-{% endhint %}
-
-### Quick start: The internal instance
-
-Heisenware provides a pre-initialized InfluxDB instance called `internal-influx`. It is globally available and ready for use. You do not need to call a "create" function; simply select `internal-influx` in your function's instance field to start logging time-series data immediately.
+The timeseries database class is a specialized client for InfluxDB. It is designed for high-frequency data where the time of the recording is just as important as the value itself, such as sensor readings, machine performance metrics, or energy consumption.
 
 {% hint style="info" %}
-#### **Direct data recording with the recorder**
+#### Key features: Intelligent downsampling and native multi-fields
 
-For the fastest way to log data, you can use the [Recorder](../../extension-nodes/recorder.md) extension. Simply click the `+` icon on any Function's Output or Modifier and select the Recorder. By default, it is configured to log data directly into the `internal-influx` instance on the fly, without needing extra function blocks in your flow.
+The class has built-in support for downsampling: It keeps high-resolution raw data for recent events while automatically aggregating older data into lower-resolution buckets, so storage stays efficient.
+
+It also natively supports multi-field telemetry. Log entire objects (e.g. `{ cycle_time: 4.2, yield: 150 }`) and the database automatically fans them out into individually queryable fields, reconstructing the object on the fly when you read it back.
+{% endhint %}
+
+## Quick start: The internal instance
+
+Heisenware provides a pre-initialized InfluxDB instance called `internal-influx`. It is globally available and ready for use. Select `internal-influx` in your function's instance field to start logging timeseries data immediately, no `create` needed.
+
+{% hint style="info" %}
+#### Direct data recording with the recorder
+
+The fastest way to log data is the [recorder](../../extension-nodes/recorder.md) extension node. Click the `+` icon on any function output or modifier and select the recorder. By default it logs data directly into the `internal-influx` instance, without extra function blocks in your flow.
 {% endhint %}
 
 ## Connecting an external database
 
-To connect to an external InfluxDB instance, use the `create` function. As with all Heisenware integrations, consider your location:
+To connect an external InfluxDB instance, use the `create` function:
 
-* Cloud connection: Connect directly if your InfluxDB server is accessible via the internet.
-* Local connection (via Agent): If your InfluxDB is hosted on a private network, deploy an [Edge Agent](https://docs.heisenware.com/app-builder/build-backend/functions-library/agents) in that network and create your instance within that agent.
+* Cloud or public database: Connect directly if your InfluxDB server is accessible via the internet.
+* Local database (via Agent): If your InfluxDB is hosted on a private network, deploy an [Agent](../../agents/) in that network and create your instance within that Agent.
 
 {% hint style="info" %}
-One set of functions: Whether you use the managed `internal-influx` or a custom connection via an Agent, the functions for writing and querying data remain identical.
+Whether you use the managed `internal-influx` or a custom connection, the functions for writing and querying data are identical.
 {% endhint %}
 
-## Constructor and Member Functions
+## Connection
 
-### create
+### `create`
 
-Creates an instance of the InfluxDB client, configuring it to connect to a specific database URL with the necessary credentials.
+Creates an InfluxDB client instance connecting to a specific database URL with the necessary credentials.
 
-{% hint style="success" %}
-Skip this step for the `internal-influx`. It is already instantiated for you.
+{% hint style="info" %}
+Skip this step for `internal-influx`. It is already instantiated for you.
 {% endhint %}
 
-Parameters
+#### Parameters
 
-* `url`: The URL of your InfluxDB instance (e.g., `http://localhost:8086`).
-* `token`: The authentication token with the required permissions for your organization and buckets.
-* `org`: The name of the organization in InfluxDB.
+<table><thead><tr><th width="110">Input</th><th width="150">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The URL of your InfluxDB instance (e.g. <code>http://localhost:8086</code>).</td><td>string</td></tr><tr><td><code>token</code></td><td></td><td>The authentication token with the required permissions for your organization and buckets.</td><td>string</td></tr><tr><td><code>org</code></td><td></td><td>The name of the organization in InfluxDB.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>flushInterval</code></td><td>The interval in milliseconds to flush buffered writes. Default <code>5000</code>.</td><td>integer</td></tr><tr><td></td><td><code>batchSize</code></td><td>The number of points to buffer before writing. Default <code>1000</code>.</td><td>integer</td></tr><tr><td></td><td><code>downsamplingPipeline</code></td><td>Overrides the default downsampling stages.</td><td>array</td></tr></tbody></table>
 
-### writePoint
+{% hint style="info" %}
+Right-click the `token` input and mark it as a secret to mask it.
+{% endhint %}
 
-Writes a single data point to a specific bucket and **measurement**. This is the standard way to record a piece of data.
+### `delete` (instance)
 
-If you pass a JavaScript object as data, the engine intelligently fans it out into native InfluxDB **fields**, allowing you to run fast analytics on individual properties later. _(Note: If a measurement historically used stringified JSON blobs, it will automatically continue doing so to prevent breaking existing dashboards)._
+Removes the instance and its connection configuration. The database itself is not touched.
 
-Parameters
+## Writing data
 
-* `bucket`: The name of the bucket to write to.
-* `measurement`: The name of the measurement (e.g., "temperature", "production\_line").
-* `data`: The value to record. Can be a number, string, boolean, or an object (e.g., `{ temp: 45, status: "ok" }`).
-* `tags`: An optional object of key-value pairs to tag the data.
-  * _Advanced Control:_ You can force the object storage behavior by passing `objectStorageType: 'fields'` or `objectStorageType: 'json'` in the tags. This control flag is intercepted and stripped before saving to the database.
+### `writePoint`
 
-<div align="left"><figure><img src="../../../../.gitbook/assets/image (4).png" alt="" width="375"><figcaption><p>Measurement vs. Tags vs. Fields</p></figcaption></figure></div>
+Writes a single data point to a specific bucket and measurement. This is the standard way to record a piece of data.
 
-Example
+If you pass an object as data, the engine fans it out into native InfluxDB fields, allowing fast analytics on individual properties later. If a measurement historically used stringified JSON blobs, it automatically continues doing so to prevent breaking existing dashboards.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket to write to.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement (e.g. <code>temperature</code>, <code>production_line</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The value to record: A number, string, boolean, or an object (e.g. <code>{ temp: 45, status: "ok" }</code>).</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value pairs to tag the data. Advanced: Force the object storage behavior by adding <code>objectStorageType: 'fields'</code> or <code>objectStorageType: 'json'</code>. This control flag is stripped before saving.</td><td>object</td></tr></tbody></table>
+
+<div align="left"><figure><img src="../../../../.gitbook/assets/image (4).png" alt="" width="375"><figcaption><p>Measurement vs. tags vs. fields</p></figcaption></figure></div>
+
+#### Example
 
 ```yaml
 # bucket
@@ -83,22 +83,25 @@ line_id: A1
 objectStorageType: fields
 ```
 
-Output
+#### Output
 
 Returns `true` on success.
 
-### writePoints
+{% hint style="info" %}
+#### Internal bucket names
 
-Writes multiple data points at once to a specific bucket and measurement. This is more efficient than calling `writePoint` multiple times in a loop.
+When using the internal database, bucket names indicate retention: `F` (forever), `Y` (year), `M` (month), `W` (week), `D` (day), `H` (hour).
+{% endhint %}
 
-Parameters
+### `writePoints`
 
-* `bucket`: The name of the bucket.
-* `measurement`: The name of the measurement.
-* `data`: An array of values or objects to record.
-* `tags`: Optional tags. If provided as an array, it must match the length of the `data` array (one tag object per data point). If provided as a single object, it applies to all points.
+Writes multiple data points at once to a specific bucket and measurement. More efficient than calling `writePoint` in a loop.
 
-Example
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of values or objects to record.</td><td>array</td></tr><tr><td><code>tags</code></td><td>Optional tags. As an array, it must match the length of <code>data</code> (one tag object per point), otherwise the function throws an error. As a single object, it applies to all points.</td><td>object or array</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # bucket
@@ -109,23 +112,21 @@ vibration
 [0.5, 0.6, 0.4, 0.8]
 ```
 
-Output
+#### Output
 
 Returns `true` on success.
 
-### writeDownsampled
+### `writeDownsampled`
 
-Writes numeric data or multi-field objects to the high-frequency bucket (`H+`) specifically for the purpose of automatic downsampling.
+Writes numeric data or multi-field objects to the high-frequency bucket (`H+`) specifically for automatic downsampling.
 
-If you pass a complex object containing both numbers and strings (e.g., `{ speed: 120, status: "running" }`), the full object is kept in the raw `H+` bucket for debugging, but only the numeric fields are automatically aggregated into the long-term historical buckets.
+If you pass an object containing both numbers and strings (e.g. `{ speed: 120, status: "running" }`), the full object is kept in the raw `H+` bucket for debugging, but only the numeric fields are aggregated into the long-term historical buckets. Top-level strings and booleans in `data` cannot be downsampled and are dropped with a warning in the logs.
 
-Parameters
+#### Parameters
 
-* `measurement`: The name of the measurement.
-* `data`: The numeric value, object, or array to store.
-* `tags`: Optional tags to associate with the data.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>The numeric value, object, or array to store.</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional tags to associate with the data.</td><td>object</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # measurement
@@ -138,101 +139,78 @@ status: heating
 machine: m1
 ```
 
-Output
+#### Output
 
 Returns `true` on success.
 
 <details>
 
-<summary>Understanding Downsampling</summary>
+<summary>Understanding downsampling</summary>
 
-This class uses an advanced Downsampling Pipeline to store your data efficiently. This system allows you to write high-frequency data (like sensor readings every second) without running out of storage or slowing down your dashboards when querying long time ranges (like "last year").
+The downsampling pipeline stores your data efficiently: You can write high-frequency data (like sensor readings every second) without running out of storage or slowing down dashboards when querying long time ranges.
 
-**The Concept: "Hot" vs. "Cold" Data**
+#### The concept: Hot vs. cold data
 
-Think of your data like news.
+Think of your data like news:
 
-* "Hot" Data (Recent): You care about every detail. _Example: "What is the temperature right now? Did it spike 5 seconds ago?"_
-* "Cold" Data (Historical): You care about trends, not microseconds. _Example: "What was the average temperature last month?"_
+* Hot data (recent): You care about every detail. "What is the temperature right now? Did it spike 5 seconds ago?"
+* Cold data (historical): You care about trends, not microseconds. "What was the average temperature last month?"
 
-Our system automatically moves data through "buckets" as it ages, reducing its resolution (granularity) to save space while keeping the statistical accuracy you need.
+The system automatically moves data through buckets as it ages, reducing its resolution to save space while keeping the statistical accuracy you need.
 
-**1. The Pipeline Structure**
+#### 1. The pipeline structure
 
-Data flows automatically through a series of stages. You only write to the start of the pipeline; the system handles the rest.
+Data flows automatically through a series of stages. You only write to the start of the pipeline.
 
 ![](<../../../../.gitbook/assets/image (1).png>)
 
-| **Bucket Name** | **Resolution (Granularity)** | **Retention (How long it stays)** | **Used For**                                   |
-| --------------- | ---------------------------- | --------------------------------- | ---------------------------------------------- |
-| `H+`            | Raw (Every point)            | 1 Day                             | Real-time monitoring, debugging recent events. |
-| `D+`            | 5 Minutes                    | 1 Week                            | zooming into last week's performance.          |
-| `W+`            | 1 Hour                       | 1 Month                           | Weekly trends and patterns.                    |
-| `M+`            | 1 Day                        | 1 Year                            | Monthly analysis and seasonal trends.          |
-| `Y+`            | 1 Week                       | Forever                           | Long-term historical archiving.                |
+<table><thead><tr><th width="130">Bucket</th><th width="180">Resolution</th><th width="140">Retention</th><th>Used for</th></tr></thead><tbody><tr><td><code>H+</code></td><td>Raw (every point)</td><td>1 day</td><td>Real-time monitoring, debugging recent events.</td></tr><tr><td><code>D+</code></td><td>5 minutes</td><td>1 week</td><td>Zooming into last week's performance.</td></tr><tr><td><code>W+</code></td><td>1 hour</td><td>1 month</td><td>Weekly trends and patterns.</td></tr><tr><td><code>M+</code></td><td>1 day</td><td>1 year</td><td>Monthly analysis and seasonal trends.</td></tr><tr><td><code>Y+</code></td><td>1 week</td><td>Forever</td><td>Long-term historical archiving.</td></tr></tbody></table>
 
-**2. How Writing Works**
+#### 2. How writing works
 
-As a developer, you don't need to choose which bucket to write to. You simply send data to the system, and it lands in the Raw (`H+`) bucket automatically.
+You do not choose a bucket. You send data and it lands in the raw (`H+`) bucket automatically. Behind the scenes, scheduled tasks process the data: For example, every 5 minutes a task takes the raw data from `H+`, calculates mean, min, max, and count, and saves a single summary point into `D+`.
 
-Background Tasks:
+#### 3. How reading works (smart stitching)
 
-Behind the scenes, scheduled tasks wake up periodically to process this data. For example, every 5 minutes, a task takes all the raw data from H+, calculates the Mean, Min, Max, and Count, and saves a single summary point into D+.
-
-**3. How Reading Works (The "Smart Stitching")**
-
-This is the most powerful feature. When you ask for data, you don't need to know which bucket it is in. You just provide a time range, and the `readDownsampled` function acts as a smart broker:
+When you ask for data, you do not need to know which bucket it is in. Provide a time range and `readDownsampled` acts as a smart broker:
 
 1. It looks at your requested `start` and `stop` times.
-2. It automatically selects the highest-resolution bucket available for that period.
-3. If your request spans across boundaries (e.g., "last 2 hours" to "last 2 weeks"), it stitches data together seamlessly.
+2. It selects the highest-resolution bucket available for that period.
+3. If your request spans boundaries (e.g. "last 2 hours" to "last 2 weeks"), it stitches the data together seamlessly.
 
-Example Scenario:
+Example: If you ask for the last 2 days, the system might return the last 24 hours from the raw (`H+`) bucket (high detail) and the 24 hours before that from the 5-minute (`D+`) bucket (medium detail).
 
-If you ask for "The last 2 days", the system might return:
+#### 4. Configuration examples
 
-* The last 24 hours from the Raw (`H+`) bucket (high detail).
-* The 24 hours before that from the 5-minute (`D+`) bucket (medium detail).
-
-**4. Configuration Examples**
-
-Here is how you use this in your low-code functions.
-
-Scenario A: Real-Time Debugging
-
-You want to see exactly what happened in the last 15 minutes. The system will pull from the Raw (`H+`) bucket.
+Scenario A: Real-time debugging. See exactly what happened in the last 15 minutes; the system pulls from the raw (`H+`) bucket.
 
 ```yaml
-# Function: readDownsampled
-options:
-  start: "-15m"
-  tail: 100
+# (readDownsampled)
+# options
+start: "-15m"
+tail: 100
 ```
 
-Scenario B: Monthly Reporting
-
-You want to visualize the trend over the last 30 days. Loading raw data for 30 days would be millions of points (slow!). The system automatically pulls from the Hourly (`W+`) or Daily (`M+`) buckets, making the query instant.
+Scenario B: Monthly reporting. Visualize the trend over the last 30 days; instead of millions of raw points, the system pulls from the hourly (`W+`) or daily (`M+`) buckets, making the query instant.
 
 ```yaml
-# Function: readDownsampled
-options:
-  start: "-30d"
-  limit: 1000
+# (readDownsampled)
+# options
+start: "-30d"
+limit: 1000
 ```
 
-Scenario C: The "Stitched" View
-
-You want the last 50 data points, regardless of how old they are. The system will look at the newest data first, and if it doesn't find enough, it will automatically look further back in time into older buckets.
+Scenario C: The stitched view. Get the last 50 data points regardless of age; the system looks at the newest data first and automatically reaches back into older buckets if needed.
 
 ```yaml
-# Function: readDownsampled
-options:
-  tail: 50
+# (readDownsampled)
+# options
+tail: 50
 ```
 
-**Summary of Aggregated Fields**
+#### Aggregated fields
 
-When data is downsampled, we don't just keep the average. We preserve four key statistics for every window, so you never lose the context of what happened:
+When data is downsampled, four key statistics are preserved for every window, so you never lose the context:
 
 * `mean`: The average value (good for smooth lines).
 * `max`: The highest value seen (good for detecting spikes).
@@ -241,43 +219,25 @@ When data is downsampled, we don't just keep the average. We preserve four key s
 
 </details>
 
-### read
+## Reading data
 
-Reads time-series data from a specific bucket and measurement. It offers powerful options for filtering by time, isolating specific fields, limiting results, and aggregating data.
+### `read`
 
-The Magic Router: If you query a measurement that contains multiple fields (e.g., an object) and do not specify a target field, the engine automatically pivots the data and reconstructs the original JavaScript object for you.
+Reads timeseries data from a specific bucket and measurement, with options for filtering by time, isolating fields, limiting results, and aggregating data.
 
-{% hint style="info" %}
-Internal bucket names when using the internal database, bucket names indicate retention:
+If you query a measurement that contains multiple fields (e.g. an object) and do not specify a target field, the engine automatically pivots the data and reconstructs the original object for you.
 
-`F` (Forever), `Y` (Year), `M` (Month), `W` (Week), `D` (Day), `H` (Hour).
-{% endhint %}
+#### Parameters
 
-Parameters
-
-* `bucket`: The name of the bucket to query.
-* `measurement`: The name of the measurement.
-* `options`: An optional object to refine the query.
-  * `field`: The specific field to isolate (e.g., `'cycle_time'`). If omitted, returns all fields as an object.
-  * `start`: The earliest time to include (e.g., `'-12h'`, `'-7d'`, `'2025-01-01T00:00:00Z'`). Defaults to `'-1y'`.
-  * `stop`: The latest time to include. Defaults to `'now()'`.
-  * `limit`: Limits the result to the _first_ `n` data points.
-  * `tail`: Limits the result to the _last_ `n` data points.
-  * `every`: Duration of time windows for aggregation (e.g., `'15m'`). Requires `func`.
-  * `func`: The aggregation function (e.g., `'mean'`, `'sum'`, `'count'`, `'last'`).
-  * `tags`: An object of tags to filter by.
+<table><thead><tr><th width="150">Input</th><th width="150">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The name of the bucket to query.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>The specific field to isolate (e.g. <code>cycle_time</code>). If omitted, all fields are returned as an object.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>The earliest time to include (e.g. <code>-12h</code>, <code>-7d</code>, <code>2025-01-01T00:00:00Z</code>). Default <code>-1y</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The latest time to include. Default <code>now()</code>.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>Limits the result to the first n data points.</td><td>integer</td></tr><tr><td></td><td><code>tail</code></td><td>Limits the result to the last n data points.</td><td>integer</td></tr><tr><td></td><td><code>every</code></td><td>Duration of time windows for aggregation (e.g. <code>15m</code>).</td><td>string</td></tr><tr><td></td><td><code>func</code></td><td>The aggregation function applied per window (e.g. <code>mean</code>, <code>sum</code>, <code>count</code>, <code>last</code>). Default <code>mean</code>.</td><td>string</td></tr><tr><td></td><td><code>tags</code></td><td>An object of tags to filter by.</td><td>object</td></tr><tr><td></td><td><code>difference</code></td><td>Set to <code>true</code> to calculate differences between readings, or <code>nonNegative</code> to additionally ignore counter resets safely. Default <code>false</code>.</td><td>boolean or string</td></tr><tr><td></td><td><code>fillPrevious</code></td><td>If <code>true</code>, carries the last known value forward into empty time windows.</td><td>boolean</td></tr><tr><td></td><td><code>cumulativeSum</code></td><td>If <code>true</code>, keeps a running total across the selected time range.</td><td>boolean</td></tr><tr><td></td><td><code>derivativeUnit</code></td><td>Calculates the rate of change per given unit (e.g. <code>1m</code> for per-minute rates).</td><td>string</td></tr></tbody></table>
 
 <details>
 
 <summary>Examples</summary>
 
-#### 1. Smoothing Noisy Sensor Data (Averages)
+#### 1. Smoothing noisy sensor data (averages)
 
-The Problem: An analog temperature or vibration sensor sends data every second. When plotted on a dashboard, the chart looks incredibly "spiky" and noisy, making it hard to see the actual trend.
-
-The Solution: Group the data into time windows (e.g., 5 minutes) and calculate the `mean` (average). This acts as a low-pass filter, smoothing the line out perfectly.
-
-Task: _Show me a smooth trend of the extruder temperature over the last 12 hours._
+An analog sensor sends data every second and the chart looks spiky. Group the data into time windows and calculate the mean to smooth the line. Task: Show a smooth trend of the extruder temperature over the last 12 hours.
 
 ```yaml
 # measurement
@@ -288,13 +248,9 @@ every: 5m
 func: mean
 ```
 
-#### 2. Peak Detection & Shift Highs
+#### 2. Peak detection and shift highs
 
-The Problem: You want to ensure a motor never exceeded its safe operating temperature during a shift, or you want to find the maximum pressure a hydraulic press reached yesterday.
-
-The Solution: Use the `max` (or `min`) function combined with an `every` window that matches your reporting period (e.g., 8 hours for a shift, 1 day for daily reports).
-
-Task: _Find the highest temperature the motor reached each day over the last 30 days._
+Find the maximum a value reached per reporting period. Task: Find the highest temperature the motor reached each day over the last 30 days.
 
 ```yaml
 # measurement
@@ -305,13 +261,9 @@ every: 1d
 func: max
 ```
 
-#### 3. Counting Incidents or Machine Faults
+#### 3. Counting incidents or machine faults
 
-The Problem: Your application logs an entry every time a machine throws a fault code or a quality inspection fails. You want a bar chart showing how many errors happened hour by hour.
-
-The Solution: Use the `count` function. It ignores the actual values and simply counts how many data points occurred within each time window.
-
-Task: _Show me a bar chart of quality inspection failures per hour for the current shift._
+Your App logs an entry for every fault or failed inspection. Use `count` to chart how many occurred per time window. Task: Show quality inspection failures per hour for the current shift.
 
 ```yaml
 # measurement
@@ -322,13 +274,9 @@ every: 1h
 func: count
 ```
 
-#### 4. The Resetting Machine Counter (Pieces Produced)
+#### 4. The resetting machine counter (pieces produced)
 
-The Problem: Your PLC tracks the total number of parts produced using an integer counter. When the shift ends (or the counter hits its memory limit, like `9999`), it resets back to `0`. If you try to calculate the average or sum of this data, the reset will ruin your math.
-
-The Solution: Use the `difference: nonNegative` option. This calculates the exact number of pieces produced between each reading and automatically ignores the impossible negative drop when the machine resets to zero.
-
-Task: _Show me the total number of pieces produced per hour over the last 24 hours._
+A PLC part counter resets to 0 at shift end or at its memory limit, ruining sums and averages. Use `difference: nonNegative` to calculate the pieces produced between readings while ignoring the impossible negative drop at reset. Task: Show the total pieces produced per hour over the last 24 hours.
 
 ```yaml
 # measurement
@@ -337,17 +285,13 @@ packaging_line
 field: piece_counter
 start: -24h
 every: 1h
-func: sum              # Add up the differences in each hour
-difference: nonNegative # Safely ignore the counter resets back to 0
+func: sum
+difference: nonNegative
 ```
 
-#### 5. Event-Driven Machine States (Sparse Data)
+#### 5. Event-driven machine states (sparse data)
 
-The Problem: To save bandwidth, a machine only sends data when its state changes (e.g., `1` for Running, `0` for Stopped, `2` for Fault). If the machine turned on at 8:00 AM and you query the data at 9:00 AM, the database might return nothing for that hour, leaving a gap in your dashboard.
-
-The Solution: Use `fillPrevious: true`. This tells the engine to look backward, find the last known state, and carry it forward into any empty time windows to create a continuous, accurate timeline.
-
-Task: _Plot a continuous minute-by-minute state chart for the current 8-hour shift._
+A machine only sends data when its state changes, leaving gaps in the timeline. Use `fillPrevious: true` to carry the last known state forward into empty windows. Task: Plot a continuous minute-by-minute state chart for the current 8-hour shift.
 
 ```yaml
 # measurement
@@ -356,17 +300,13 @@ cnc_machine_1
 field: status_code
 start: -8h
 every: 1m
-func: last             # Get the latest state in that minute
-fillPrevious: true     # If no state was broadcast, assume the previous state
+func: last
+fillPrevious: true
 ```
 
-#### 6. Cumulative Running Totals (Energy/Water Usage)
+#### 6. Cumulative running totals (energy or water usage)
 
-The Problem: Your smart meter reports the amount of energy (kWh) or water (Liters) consumed every 15 minutes. The maintenance team wants to see a chart showing the _accumulated_ total usage building up throughout the shift.
-
-The Solution: Use `cumulativeSum: true` to keep a running tally of the data points across your selected time range.
-
-Task: _Show the running total of energy consumed so far in the last 12 hours_
+A meter reports consumption every 15 minutes and you want the accumulated total building up throughout the shift. Use `cumulativeSum: true`. Task: Show the running total of energy consumed in the last 12 hours.
 
 ```yaml
 # measurement
@@ -376,16 +316,12 @@ field: interval_kwh
 start: -12h
 every: 15m
 func: sum
-cumulativeSum: true    # Add each 15m window to the running total
+cumulativeSum: true
 ```
 
-#### 7. Rate of Change / Drainage (Derivatives)
+#### 7. Rate of change (derivatives)
 
-The Problem: You are monitoring the absolute volume of a liquid tank (in liters). You don't just want to see the volume go down; you want to trigger an alarm if the tank is draining _too fast_ (Liters per Minute).
-
-The Solution: Use `derivativeUnit`. This calculates the mathematical slope between your data points, converting absolute values into a speed or rate.
-
-Task: _Show me the minute-by-minute drain rate of the chemical tank._
+You monitor the absolute volume of a tank but want to alarm when it drains too fast. Use `derivativeUnit` to convert absolute values into a rate. Task: Show the minute-by-minute drain rate of the chemical tank.
 
 ```yaml
 # measurement
@@ -393,22 +329,18 @@ chemical_tank_A
 # options
 field: volume_liters
 start: -1h
-derivativeUnit: 1m     # Convert absolute volume into Liters/Minute
+derivativeUnit: 1m
 ```
 
-#### 8. Isolating Metrics from Multi-Field Payloads
+#### 8. Isolating metrics from multi-field payloads
 
-The Problem: You used the `writePoint` function to save an entire JavaScript object containing multiple metrics at once (e.g., `{ temperature: 45, vibration: 1.2, speed: 1500 }`). Now, you only want to visualize one specific metric on a chart.
-
-The Solution: Use the `field` option to tell the engine to extract only that specific data stream before applying any math or aggregation.
-
-Task: _Show me the maximum vibration recorded every 5 minutes._
+You saved an entire object with `writePoint` (e.g. `{ temperature: 45, vibration: 1.2, speed: 1500 }`) and want to visualize one metric. Use the `field` option. Task: Show the maximum vibration recorded every 5 minutes.
 
 ```yaml
 # measurement
 robot_arm_2
 # options
-field: vibration       # Isolate just the vibration metric from the payload
+field: vibration
 start: -24h
 every: 5m
 func: max
@@ -416,9 +348,9 @@ func: max
 
 </details>
 
-Output
+#### Output
 
-An array of objects, where each object has a `date` (ISO timestamp) and a `value` (which can be a single primitive or a reconstructed object).
+An array of objects, each with a `date` (ISO timestamp) and a `value` (a single primitive or a reconstructed object):
 
 ```json
 [
@@ -429,37 +361,20 @@ An array of objects, where each object has a `date` (ISO timestamp) and a `value
 
 <details>
 
-<summary>Understanding Aggregation</summary>
+<summary>Understanding aggregation</summary>
 
-When working with time-series data, you often have thousands of individual data points (like sensor readings every second). To make sense of this data or to visualize it effectively, you typically want to group these points into larger time windows and summarize them. This process is called aggregation.
+Timeseries data often has thousands of individual points. To visualize it effectively, group the points into larger time windows and summarize them. Two parameters control this:
 
-In the `read` function, this is controlled by two parameters:
+* `every`: The size of the time window (e.g. `1h`, `15m`, `1d`).
+* `func`: The calculation applied to the points within each window.
 
-* `every`: Defines the size of the time window (e.g., `'1h'` for one hour, `'15m'` for 15 minutes, `'1d'` for one day).
-* `func`: Defines the mathematical calculation to apply to the data points within each window.
+#### Available functions
 
-#### Available Functions
-
-The following functions can be used in the `func` parameter to summarize your data:
-
-| **Function** | **Description**                           | **Typical Use Case**                                                      |
-| ------------ | ----------------------------------------- | ------------------------------------------------------------------------- |
-| `mean`       | Calculates the average value.             | Smoothing out noisy sensor data (e.g., average temperature per hour).     |
-| `median`     | Finds the middle value.                   | Finding the "typical" value while ignoring extreme outliers.              |
-| `min`        | Finds the lowest value.                   | Detecting the coldest temperature or lowest battery level in a period.    |
-| `max`        | Finds the highest value.                  | Detecting peak power usage or maximum pressure in a day.                  |
-| `sum`        | Adds up all values.                       | Calculating total energy consumption (kWh) or total volume flowed.        |
-| `count`      | Counts the number of data points.         | Counting how many times a machine cycled or how many error logs occurred. |
-| `last`       | Takes the very last value in the window.  | Seeing the final state of a system at the end of each period.             |
-| `first`      | Takes the very first value in the window. | Seeing the starting state of a system at the beginning of each period.    |
+<table><thead><tr><th width="120">Function</th><th width="270">Description</th><th>Typical use case</th></tr></thead><tbody><tr><td><code>mean</code></td><td>Calculates the average value.</td><td>Smoothing noisy sensor data (e.g. average temperature per hour).</td></tr><tr><td><code>median</code></td><td>Finds the middle value.</td><td>Finding the typical value while ignoring extreme outliers.</td></tr><tr><td><code>min</code></td><td>Finds the lowest value.</td><td>Detecting the coldest temperature or lowest battery level.</td></tr><tr><td><code>max</code></td><td>Finds the highest value.</td><td>Detecting peak power usage or maximum pressure.</td></tr><tr><td><code>sum</code></td><td>Adds up all values.</td><td>Calculating total energy consumption or total volume flowed.</td></tr><tr><td><code>count</code></td><td>Counts the number of data points.</td><td>Counting machine cycles or error logs.</td></tr><tr><td><code>last</code></td><td>Takes the last value in the window.</td><td>The final state of a system at the end of each period.</td></tr><tr><td><code>first</code></td><td>Takes the first value in the window.</td><td>The starting state of a system at the beginning of each period.</td></tr></tbody></table>
 
 #### Examples
 
-The following examples show how to configure the `read` function options to perform different types of analysis.
-
-**1. Smoothing Data (Hourly Average)**
-
-If you have a sensor sending data every second, a chart might look very "spiky." To see a smooth trend, you can calculate the average (`mean`) for every hour (`1h`).
+Smoothing data (hourly average):
 
 ```yaml
 # options
@@ -468,9 +383,7 @@ every: 1h
 func: mean
 ```
 
-**2. Peak Detection (Daily Maximum)**
-
-To monitor a motor's performance, you might want to know the highest speed or temperature it reached each day over the past month.
+Peak detection (daily maximum):
 
 ```yaml
 # options
@@ -479,9 +392,7 @@ every: 1d
 func: max
 ```
 
-**3. Usage Totals (Monthly Sum)**
-
-If you are tracking water flow where each data point represents liters used since the last reading, you can sum them up to get the total monthly consumption.
+Usage totals (monthly sum):
 
 ```yaml
 # options
@@ -490,9 +401,7 @@ every: 1mo
 func: sum
 ```
 
-**4. Incident Counting**
-
-If your application writes a value of `1` every time an error occurs, you can count how many errors happened in 15-minute intervals.
+Incident counting (15-minute intervals):
 
 ```yaml
 # options
@@ -503,25 +412,15 @@ func: count
 
 </details>
 
-### readDownsampled
+### `readDownsampled`
 
-A "smart" query function that automatically stitches together data from different aggregated buckets. It retrieves high-resolution data for recent timeframes and lower-resolution (aggregated) data for older timeframes, providing an optimized view of long-term history without processing millions of raw data points.
+A smart query function that automatically stitches together data from the downsampling buckets: High-resolution data for recent timeframes, aggregated data for older ones. This provides an optimized view of long-term history without processing millions of raw points. See [understanding downsampling](timeseries-database.md#writedownsampled) for the pipeline details.
 
-You can extract specific metrics (like `max` or `min`) from targeted fields (like `cycle_time`).
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="150">Input</th><th width="110">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>The specific field to extract. Default <code>value</code>.</td><td>string</td></tr><tr><td></td><td><code>aggFunc</code></td><td>The statistic returned as the main <code>value</code> (e.g. <code>mean</code>, <code>max</code>). Default <code>mean</code>.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>Earliest time to include. Default <code>-1y</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>Latest time to include. Default <code>now()</code>.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>Limits the result to the first n points.</td><td>integer</td></tr><tr><td></td><td><code>tail</code></td><td>Limits the result to the last n points.</td><td>integer</td></tr><tr><td></td><td><code>tags</code></td><td>Filter by tags.</td><td>object</td></tr></tbody></table>
 
-* `measurement`: The name of the measurement.
-* `options`: Query options.
-  * `field`: The specific field to extract (defaults to `'value'`).
-  * `aggFunc`: The statistical aggregation to return as the main `value` (e.g., `'mean'`, `'max'`). Defaults to `'mean'`.
-  * `start`: Earliest time (default `'-1y'`).
-  * `stop`: Latest time (default `'now()'`).
-  * `limit`: Limit to first `n` results.
-  * `tail`: Limit to last `n` results.
-  * `tags`: Filter by tags.
-
-Example
+#### Example
 
 ```yaml
 # measurement
@@ -533,9 +432,9 @@ aggFunc: max
 tags: { line_id: "A1" }
 ```
 
-Output
+#### Output
 
-An array of objects containing statistical data (`mean`, `min`, `max`, `count`) for each time point. The requested `aggFunc` is mapped to the main `value` key for easy chart binding.
+An array of objects containing the statistics (`mean`, `min`, `max`, `count`) per time point. The requested `aggFunc` is mapped to the main `value` key for easy chart binding:
 
 ```json
 [
@@ -545,44 +444,104 @@ An array of objects containing statistical data (`mean`, `min`, `max`, `count`) 
     "min": 4.1,
     "max": 5.2,
     "count": 60,
-    "value": 5.2,  // The 'max' value requested via aggFunc
+    "value": 5.2,
     "raw": false
   }
 ]
 ```
 
-### query
+### `query`
 
-Allows you to execute a raw Flux query string. This provides maximum flexibility for complex database operations not covered by the helper functions.
+Executes a raw Flux query string, for complex operations not covered by the helper functions.
 
-Parameters
+#### Parameters
 
-* `flux`: The raw Flux query string.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>flux</code></td><td>The raw Flux query string.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # flux
 from(bucket:"my-bucket") |> range(start: -1h) |> filter(fn: (r) => r._measurement == "cpu")
 ```
 
-Output
+#### Output
 
 The raw result rows from InfluxDB.
 
-### delete
+## Live data and caching
 
-Deletes data from a measurement. You can delete the entire measurement or specify a time range to delete only a portion of the data.
+### `subscribeToChange`
 
-Parameters
+Registers a callback that fires whenever new data is written to a measurement via `writePoint`, `writePoints`, or `writeDownsampled`. Use it to react to incoming data without polling.
 
-* `bucket`: The name of the bucket.
-* `measurement`: The name of the measurement to delete.
-* `options`: Time range options.
-  * `start`: Start time (defaults to `1970-01-01...`).
-  * `stop`: End time (defaults to now).
+#### Parameters
 
-Example
+<table><thead><tr><th width="150">Input</th><th width="170">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to watch.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>Callback that receives a payload on every write, see below.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>Guarantees the handler fires at most once every X milliseconds. Default <code>0</code> (every write).</td><td>integer</td></tr><tr><td></td><td><code>includeData</code></td><td>If <code>true</code>, includes the written <code>data</code> and <code>tags</code> in the payload. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Callback payload
+
+By default the payload only contains the measurement name: `{ measurement }`. With `includeData: true`, it also contains a copy of the written data and tags: `{ measurement, data, tags }`.
+
+#### Output
+
+A unique handler ID string. Use it with `unsubscribeFromChange`. Registering the same callback twice returns the existing ID.
+
+### `unsubscribeFromChange`
+
+Unregisters change handlers. The behavior depends on the provided arguments:
+
+* No arguments: Unsubscribes all handlers across all measurements.
+* Only `measurement`: Unsubscribes all handlers of that measurement.
+* Both: Unsubscribes the specific handler from that measurement.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>Optional measurement to unsubscribe from.</td><td>string</td></tr><tr><td><code>handlerId</code></td><td>Optional specific handler ID returned by <code>subscribeToChange</code>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` if something was unsubscribed, otherwise `false`.
+
+### `enableCaching`
+
+Enables time-based caching of `read` and `readDownsampled` results for a specific measurement. Repeated identical queries within the TTL return the cached result instead of hitting the database, and identical queries running at the same time share one database request. Useful for dashboards where many widgets query the same data.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement to cache.</td><td>string</td></tr><tr><td><code>ttlMs</code></td><td>Time-to-live of cached results in milliseconds. Default <code>30000</code>.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Nothing.
+
+### `disableCaching`
+
+Disables caching for a specific measurement and instantly purges its cached results.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Nothing.
+
+## Management
+
+### `delete` (measurement data)
+
+Deletes data from a measurement: The entire measurement, or only a time range.
+
+{% hint style="danger" %}
+This permanently deletes the data. The action cannot be undone.
+{% endhint %}
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="100">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to delete.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>start</code></td><td>Start time. Default <code>1970-01-01</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>End time. Default: Now.</td><td>string</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # bucket
@@ -593,33 +552,49 @@ test_data
 start: -1h
 ```
 
-Output
+#### Output
 
 Returns `true` on success.
 
-### flush
+### `flush`
 
-Manually forces any buffered data (pending writes) to be sent to the database immediately. This is useful during testing or before shutting down a process to ensure no data is lost.
+Manually forces any buffered pending writes to be sent to the database immediately. Useful during testing or before shutting down a process, to ensure no data is lost.
 
-Output
+#### Parameters
 
-Returns `true` (void promise) when complete.
+None.
 
-### reset
+#### Output
 
-Danger Zone. This function deletes all data from all measurements in all buckets connected to this instance. The buckets themselves are preserved, but they will be empty.
+Nothing on success. Throws an error on failure.
 
-Output
+### `reset`
+
+Deletes all data from all measurements in all buckets connected to this instance. The buckets themselves are preserved, but empty.
+
+{% hint style="danger" %}
+This permanently deletes ALL data of the instance. The action cannot be undone.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
 
 Returns `true` when the reset is complete.
 
-### listBuckets
+### `listBuckets`
 
-Retrieves a list of all available buckets in the connected organization.
+Retrieves all available buckets in the connected organization.
 
-Output
+#### Parameters
 
-An array of bucket objects.
+None.
+
+#### Output
+
+An array of bucket objects:
 
 ```json
 [
@@ -628,26 +603,24 @@ An array of bucket objects.
 ]
 ```
 
-### listMeasurements
+### `listMeasurements`
 
 Lists detailed information about all measurements across all buckets.
 
-Parameters
+#### Parameters
 
-* `options`:
-  * `includeStats`: If `true`, calculates row count and cardinality (Warning: this can be slow).
-  * `statsRangeStart`: Time range for stats (default `'-1y'`).
+<table><thead><tr><th width="110">Input</th><th width="170">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>includeStats</code></td><td>If <code>true</code>, calculates row count and cardinality. Can be slow.</td><td>boolean</td></tr><tr><td></td><td><code>statsRangeStart</code></td><td>Time range for the statistics. Default <code>-1y</code>.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # options
 includeStats: true
 ```
 
-Output
+#### Output
 
-An array of measurement details.
+An array of measurement details:
 
 ```json
 [
@@ -661,16 +634,15 @@ An array of measurement details.
 ]
 ```
 
-### getMeasurementDetails
+### `getMeasurementDetails`
 
-Retrieves the schema (fields and tags) for a specific measurement in a specific bucket.
+Retrieves the schema (fields and tags) of a specific measurement in a specific bucket.
 
-Parameters
+#### Parameters
 
-* `bucket`: The bucket name.
-* `measurement`: The measurement name.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The bucket name.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The measurement name.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # bucket
@@ -679,7 +651,7 @@ D
 production_line
 ```
 
-Output
+#### Output
 
 ```json
 {
@@ -688,19 +660,15 @@ Output
 }
 ```
 
-### getMeasurementStats
+### `getMeasurementStats`
 
-Calculates statistics (row count and cardinality) for a specific measurement over a given time range.
+Calculates statistics (row count and cardinality) of a specific measurement over a given time range.
 
-Parameters
+#### Parameters
 
-* `bucket`: The bucket name.
-* `measurement`: The measurement name.
-* `options`:
-  * `start`: Start time (default `'-30d'`).
-  * `stop`: End time (default `'now()'`).
+<table><thead><tr><th width="150">Input</th><th width="100">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The bucket name.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The measurement name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>start</code></td><td>Start time. Default <code>-30d</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>End time. Default <code>now()</code>.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # bucket
@@ -711,7 +679,7 @@ errors
 start: -7d
 ```
 
-Output
+#### Output
 
 ```json
 {
