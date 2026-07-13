@@ -231,3 +231,4 @@ Returns an array of detailed inspection objects containing container configurati
 ```yaml
 # socketPath
 '/var/run/docker.sock'
+```
