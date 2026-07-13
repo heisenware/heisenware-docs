@@ -510,3 +510,467 @@ Example 2: Reading a CSV string with no header row
 noheader: true
 headers: ['id', 'name', 'price']
 checkType: true
+```
+
+#### Output
+
+Returns an array of JSON objects (or the format specified by `output`). Throws an error if the input is neither a valid path, base64 string, nor a valid CSV string.
+
+### `writeCsv`
+
+Converts an array of JSON objects into a CSV string and writes it to a file.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>json</code></td>
+      <td></td>
+      <td>An array of JSON objects.</td>
+      <td>array</td>
+    </tr>
+    <tr>
+      <td><code>filename</code></td>
+      <td></td>
+      <td>The path where the <code>.csv</code> file is saved.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>keys</code></td>
+      <td>An array of strings specifying which properties to include as columns, in order.</td>
+      <td>array</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>delimiter</code></td>
+      <td>The field separator. Default <code>,</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>prependHeader</code></td>
+      <td>If false, the connector omits the header row. Default true.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>eol</code></td>
+      <td>The end-of-line character. Default <code>\n</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>sortHeader</code></td>
+      <td>If true, sorts the headers alphabetically. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>emptyFieldValue</code></td>
+      <td>The value used for empty, null, or undefined fields. Default <code>''</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>excelBOM</code></td>
+      <td>If true, adds a BOM character for correct UTF-8 display in Excel.</td>
+      <td>boolean</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example
+
+```yaml
+# json
+[
+  { "id": 1, "name": "Product A", "price": 19.99, "stock": 100 },
+  { "id": 2, "name": "Product B", "price": 25.50, "stock": 250 }
+]
+# filename
+/path/to/output.csv
+# options
+keys: ['id', 'name', 'price']
+prependHeader: false
+```
+
+#### Output
+
+Returns `true` on a successful write.
+
+## Excel files
+
+### `readXlsx`
+
+Reads an Excel file and converts its content into JSON. If the file contains only one sheet (or only one is queried), the result is an array of row objects. For files with multiple sheets, the result is an object containing one key per sheet name.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>fileInput</code></td>
+      <td></td>
+      <td>The path to the <code>.xlsx</code> file or a base64 encoded string of the file content.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>headerRows</code></td>
+      <td>The number of rows from the top treated as a header and excluded from the data.</td>
+      <td>integer</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>sheets</code></td>
+      <td>An array of sheet names to include. Default includes all existing sheets.</td>
+      <td>array</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>columnToKey</code></td>
+      <td>An object whose keys identify xlsx columns and whose values define the corresponding property name in the result.</td>
+      <td>object</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>range</code></td>
+      <td>A cell range to read (such as <code>'A2:C10'</code>).</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
+
+{% hint style="info" %}
+#### Configuration tips
+* Use `columnToKey: { '*': '{{columnHeader}}' }` to automatically extract names from the header row.
+* Use `columnToKey: { A: '{{A1}}', B: '{{B1}}' }` to use names defined anywhere in the sheet.
+* Configure options per sheet by passing objects inside the `sheets` array:
+
+```yaml
+sheets:
+  - name: sheet1
+    range: 'A2:B2'
+  - name: sheet2
+    range: 'A3:B4'
+```
+{% endhint %}
+
+#### Examples
+
+Example 1: Reading a specific range with named columns
+
+```yaml
+# fileInput
+/path/to/report.xlsx
+# options
+range: 'B2:D10'
+columnToKey: {
+  B: product,
+  C: quantity,
+  D: price
+}
+```
+
+Output:
+
+```json
+[
+  { "product": "Widget", "quantity": 10, "price": 19.99 }
+]
+```
+
+Example 2: Reading a table with a single header row and mapped columns
+
+```yaml
+# fileInput
+/path/to/assets.xlsx
+# options
+headerRows: 1
+columnToKey: {
+  B: barcode,
+  C: name,
+  D: acquired,
+  H: keeper,
+  K: inventoryNo,
+  M: serialNo,
+  N: costCtr
+}
+```
+
+Output:
+
+```json
+[
+  { "barcode": 187552, "name": "HP Laptop", "acquired": "2025-06-01T00:00:00.000Z" }
+]
+```
+
+Example 3: Combining Excel reading with a file upload
+
+<figure><img src="../../../../.gitbook/assets/image (44).png" alt=""><figcaption><p>Uploads an .xlsx file, saves it as a base64 buffer, and feeds it to the <code>readXlsx</code> function.</p></figcaption></figure>
+
+### `readXlsxCells`
+
+Reads the values of one or more specific cells from an Excel sheet.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>fileInput</code></td>
+      <td>The path to the <code>.xlsx</code> file or a base64 encoded string of the file content.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>cellAddresses</code></td>
+      <td>A single cell address (such as <code>'B5'</code>) or an array of addresses (such as <code>['A1', 'C5']</code>).</td>
+      <td>string or array</td>
+    </tr>
+    <tr>
+      <td><code>sheetIdentifier</code></td>
+      <td>The name (such as <code>'Sales'</code>) or zero-based index (<code>0</code>) of the sheet. Default targets the first sheet.</td>
+      <td>string or integer</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example
+
+```yaml
+# fileInput
+/path/to/report.xlsx
+# cellAddresses
+['B2', 'D5']
+# sheetIdentifier
+'Summary'
+```
+
+#### Output
+
+Returns the cell value, or an array of values when you provide multiple addresses (such as `['Total Revenue', 15000]`). Empty or non-existent cells return no value. Throws an error if the file or sheet is not found.
+
+### `writeXlsx`
+
+Writes an array of JSON objects to a new Excel file.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>data</code></td>
+      <td></td>
+      <td>The array of JSON objects to write. This array must not be empty.</td>
+      <td>array</td>
+    </tr>
+    <tr>
+      <td><code>filePath</code></td>
+      <td></td>
+      <td>The path where the new <code>.xlsx</code> file is saved.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>sheetName</code></td>
+      <td>The name for the worksheet. Default <code>Sheet1</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>headers</code></td>
+      <td>An array of strings used as the header row. Default uses the keys of the first data object.</td>
+      <td>array</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example
+
+```yaml
+# data
+[
+  { "product": "Widget", "quantity": 10, "price": 19.99 },
+  { "product": "Gadget", "quantity": 5, "price": 49.95 }
+]
+# filePath
+/path/to/new_report.xlsx
+# options
+sheetName: 'Inventory'
+```
+
+#### Output
+
+Returns nothing on success. Throws an error on empty data, an invalid path, or a failed write.
+
+## Other document formats
+
+### `readPdf`
+
+Reads a PDF file and extracts its text content and metadata.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>filename</code></td>
+      <td>The path to the <code>.pdf</code> file.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Output
+
+Returns an object containing `text` (the full text content), `numpages`, `numrender`, and `info` (metadata):
+
+```json
+{
+  "numpages": 2,
+  "numrender": 2,
+  "info": {
+    "PDFFormatVersion": "1.7",
+    "Title": "My Annual Report",
+    "Author": "John Doe",
+    "Creator": "Microsoft® Word for Office 365",
+    "CreationDate": "D:20250822120200Z"
+  },
+  "metadata": null,
+  "text": "\n\nPage 1 Content\n\nThis is the first paragraph of the annual report...\n\n",
+  "version": "1.10.100"
+}
+```
+
+### `readXml`
+
+Reads an XML file and converts it into a JSON object.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>filename</code></td>
+      <td></td>
+      <td>The path to the <code>.xml</code> file.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>attrkey</code></td>
+      <td>The key used for XML attributes. Default <code>_attr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>explicitArray</code></td>
+      <td>If false, single-element arrays convert to a single object. Default true.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>mergeAttrs</code></td>
+      <td>If true, merges attributes into their parent object instead of a separate <code>attrkey</code> object.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>explicitRoot</code></td>
+      <td>If false, the root XML element is excluded from the result.</td>
+      <td>boolean</td>
+    </tr>
+  </tbody>
+</table>
+
+All other [xml2js](https://www.npmjs.com/package/xml2js) parser options pass through directly.
+
+#### Output
+
+Returns a JSON representation of the XML content.
+
+### `readDocx`, `readPptx`, `readHtml`, `readTxt`, `readMd`
+
+These functions read their respective file types and extract the plain text content.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>filename</code></td>
+      <td></td>
+      <td>The path to the file.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>preserveLineBreaks</code></td>
+      <td>Maintains line breaks from the original document. Default true.</td>
+      <td>boolean</td>
+    </tr>
+  </tbody>
+</table>
+
+All other [textract](https://www.npmjs.com/package/textract#configuration) options pass through directly.
+
+#### Output
+
+Returns the plain text content of the file as a string.
