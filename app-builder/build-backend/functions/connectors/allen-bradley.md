@@ -2,7 +2,7 @@
 
 The Allen-Bradley connector communicates with Allen-Bradley programmable logic controllers (PLCs) using the EtherNet/IP protocol. After establishing a connection, the connector automatically discovers all tags at both the controller and program scope. You can then read and write tags individually or in groups, or subscribe to them for real-time updates.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can interact with a PLC.
+This connector requires [instance creation](./#instance-creation) before you can interact with a PLC.
 
 ## Tags and user-defined types
 
@@ -18,30 +18,7 @@ Creates a controller instance that represents the connection to a specific PLC. 
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>ipAddress</code></td>
-      <td></td>
-      <td>The IP address of the target PLC on the network.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>slot</code></td>
-      <td>The slot number of the CPU in the PLC chassis. Default 0.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>ipAddress</code></td><td></td><td>The IP address of the target PLC on the network.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>slot</code></td><td>The slot number of the CPU in the PLC chassis. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -98,6 +75,7 @@ Removes the instance and its connection.
 
 {% hint style="danger" %}
 #### Irreversible action
+
 Deleting an instance removes its configuration. To interact with the PLC again, you must trigger `create` and `connect` anew.
 {% endhint %}
 
@@ -117,22 +95,7 @@ Reads the current value of a single tag. This function requires an active connec
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>tagName</code></td>
-      <td>The exact name of the tag to read, such as <code>MotorSpeed</code> or <code>Program:MainProgram.MyData.Status</code>.</td>
-      <td>string</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tagName</code></td><td>The exact name of the tag to read, such as <code>MotorSpeed</code> or <code>Program:MainProgram.MyData.Status</code>.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -151,22 +114,7 @@ Reads multiple tags in a single, optimized network request. This is more efficie
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>tagNames</code></td>
-      <td>An array of tag names to read.</td>
-      <td>array</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tagNames</code></td><td>An array of tag names to read.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
@@ -193,27 +141,7 @@ Writes a new value to a tag. The function handles both simple tags (numbers, boo
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>tagName</code></td>
-      <td>The name of the tag to target.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>value</code></td>
-      <td>The value to write. Provide a primitive for simple tags or an object for UDTs.</td>
-      <td>any</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tagName</code></td><td>The name of the tag to target.</td><td>string</td></tr><tr><td><code>value</code></td><td>The value to write. Provide a primitive for simple tags or an object for UDTs.</td><td>any</td></tr></tbody></table>
 
 #### Examples
 
@@ -246,22 +174,7 @@ Writes values to multiple tags in a single, optimized network request. The conne
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>tags</code></td>
-      <td>An object where each key is a tag name and each value is the value to write.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tags</code></td><td>An object where each key is a tag name and each value is the value to write.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -313,27 +226,7 @@ Subscribes to one or more tags for real-time updates. When a tag value changes o
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>tagNames</code></td>
-      <td>A single tag name or an array of tag names to subscribe to.</td>
-      <td>string or array</td>
-    </tr>
-    <tr>
-      <td><code>rate</code></td>
-      <td>How often the PLC sends updates, measured in milliseconds. Default 500.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tagNames</code></td><td>A single tag name or an array of tag names to subscribe to.</td><td>string or array</td></tr><tr><td><code>rate</code></td><td>How often the PLC sends updates, measured in milliseconds. Default 500.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -354,22 +247,7 @@ Registers a callback that fires whenever new data arrives from a subscribed tag.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>listener</code></td>
-      <td>Callback that fires on new data. Delivers an object containing <code>tagName</code> and <code>value</code>.</td>
-      <td>callback</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that fires on new data. Delivers an object containing <code>tagName</code> and <code>value</code>.</td><td>callback</td></tr></tbody></table>
 
 #### Example
 
@@ -388,22 +266,7 @@ Registers a callback that fires when a subscription error occurs, such as a lost
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>listener</code></td>
-      <td>Callback that handles the subscription error. Delivers the error object.</td>
-      <td>callback</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that handles the subscription error. Delivers the error object.</td><td>callback</td></tr></tbody></table>
 
 #### Example
 
