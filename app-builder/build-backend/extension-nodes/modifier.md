@@ -6,7 +6,7 @@ To add a modifier:
 
 1. Click the + icon on the right side of a function output, filter, or existing modifier.
 2. Select Modifier from the list.
-3. Click the new modifier box (Click to edit...) to open the code editor and write your expression.
+3. Click the new modifier node (Click to edit...) to open the code editor and write your expression.
 
 A modifier uses either JSONata or a JavaScript expression. Switch between types by right-clicking the modifier and selecting Jsonata or Expression. Adjust the default type in the [App Builder settings](../../overview.md#app-builder-settings).
 
@@ -552,7 +552,8 @@ For best results, copy this article as context for the AI. Use the Copy button a
 Alternatively, copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
 
 ```
-I am working in Heisenware, a node-based visual programming tool for industrial applications. I need a "Modifier" expression that transforms data on the fly between functions.
+I am working in Heisenware, a node-based visual programming tool for industrial applications. 
+I need a "modifier" expression that transforms data on the fly between functions.
 
 Full documentation: https://docs.heisenware.com/app-builder/build-backend/extension-nodes/modifier.md
 

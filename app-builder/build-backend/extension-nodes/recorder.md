@@ -1,10 +1,10 @@
 # Recorder
 
-The recorder captures a function's output and stores it as timeseries data in the [internal InfluxDB](../functions/storage/timeseries-database.md). Use it to record a data stream, visualize it in your Apps, or analyze it later. It records during build-time (in test mode) and during the App's runtime.
+The recorder captures a function's output and stores it as timeseries data in the [internal InfluxDB](../functions/storage/timeseries-database.md). Use it to record a data stream, visualize it in your Apps, or analyze it later. It records during build time (in test mode) and during the App's runtime.
 
 ## Settings
 
-* **Measurement name**: Fill the Data Point Name box with a unique name. You need this name to find and read the recorded data.
+* **Measurement name**: Fill the data point name box with a unique name. You need this name to find and read the recorded data.
 * **Recording type**: Right-click the recorder to select how long the data is stored: 1 hour (H, default), 1 day (D), 1 week (W), 1 month (M), 1 year (Y), or downsampled (DS) for long-term storage in downsampled form.
 
 <figure><img src="../../../.gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>

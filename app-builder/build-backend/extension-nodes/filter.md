@@ -110,7 +110,8 @@ For best results, copy this article as context for the AI. Use the Copy button a
 Copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
 
 ```
-I am working in Heisenware, a node-based visual programming tool for industrial applications. I need a "Filter" expression that acts as a conditional gate in a flow.
+I am working in Heisenware, a node-based visual programming tool for industrial applications. 
+I need a "Filter" expression that acts as a conditional gate in a flow.
 
 Full documentation: https://docs.heisenware.com/app-builder/build-backend/extension-nodes/filter.md
 
