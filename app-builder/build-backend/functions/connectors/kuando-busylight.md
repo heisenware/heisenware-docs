@@ -1,121 +1,111 @@
 # Kuando Busylight
 
-The `Busylight` class provides a high-level interface to control Kuando Busylight devices. It allows you to change the light's color and brightness, make it blink or pulse, and play various built-in sounds to indicate status.
+The Kuando Busylight connector controls Kuando Busylight status indicators. It changes the light's color and brightness, makes it blink or pulse, and plays the device's built-in sounds.
 
-You must create an instance of this class to control a specific device connected to your computer.
+Create an instance to control a specific device. Since a Busylight is a USB device on your premises, this class typically runs inside an [Agent](../../agents/) installed on the computer the light is connected to (see [connection scenarios](./#local-connection-via-agent)).
 
-### getDevices
+## Device management
 
-This is a static function that scans the system and returns a list of all connected Busylight devices.
+### `getDevices`
 
-Output
+A static function that scans the system and returns all connected Busylight devices.
 
-An array of device objects, where each object contains details about a connected Busylight.
+#### Parameters
 
-***
+None.
 
-### create
+#### Output
 
-Creates an instance to control a specific Busylight device found on the system.
+An array of device objects, each with details about a connected Busylight.
 
-Parameters
+### `create`
 
-* `deviceIndex`: The zero-based index of the device to control from the list returned by `getDevices()`. Defaults to `0`.
+Creates an instance controlling one specific Busylight and connects to it. To control several lights on the same computer, create one instance per device with its respective index.
 
-Example
+#### Parameters
+
+<table><thead><tr><th width="140">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>deviceIndex</code></td><td>The zero-based index of the device to control, from the list returned by <code>getDevices</code>. Default <code>0</code>.</td><td>integer</td></tr></tbody></table>
+
+#### Example
 
 ```yaml
 # deviceIndex
 0
 ```
 
-### getName
+### `getName`
 
 Retrieves the model name of the connected device.
 
-Output
+#### Parameters
 
-A string representing the device name (e.g., "Busylight Omega model 2").
+None.
 
-### getTones
+#### Output
 
-Retrieves a list of all available sound/tone names for the connected device.
+A string with the device name (e.g. `Busylight Omega model 2`).
 
-Output
+### `getTones`
 
-An array of strings, where each string is the name of a playable tone.
+Retrieves all available tone names of the connected device.
 
-### setLightIntensity
+#### Parameters
 
-Changes the brightness of the light. This setting is applied to all subsequent light commands.
+None.
 
-Parameters
+#### Output
 
-* `value`: The light intensity as a percentage (from `0` to `100`).
+An array of strings, each the name of a playable tone.
 
-Example
+### `delete`
 
-```yaml
-# value
-50
-```
+Removes the instance.
 
-### setToneVolume
+{% hint style="danger" %}
+Deleting an instance removes its configuration. To control the device again, trigger `create` anew.
+{% endhint %}
 
-Sets the volume for sounds played by the device.
+## Light and sound
 
-Parameters
+### `setColor`
 
-* `value`: The volume level (from `0` to `10`).
+Turns the light on with a solid color.
 
-Example
+#### Parameters
 
-```yaml
-# value
-7
-```
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The desired color in any CSS-compatible format (e.g. <code>#ff0000</code>, <code>rgb(255, 0, 0)</code>, or <code>red</code>).</td><td>string</td></tr></tbody></table>
 
-### setColor
-
-Turns the light on with a solid, specified color.
-
-Parameters
-
-* `color`: The desired color, which can be provided in any CSS-compatible format (e.g., `#ff0000`, `rgb(255, 0, 0)`, or `red`).
-
-Example
+#### Example
 
 ```yaml
 # color
 '#0000FF'
 ```
 
-### pulse
+### `pulse`
 
 Makes the light gently fade in and out with the specified color.
 
-Parameters
+#### Parameters
 
-* `color`: The color to pulse.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The color to pulse, in any CSS-compatible format.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # color
 orange
 ```
 
-### blink
+### `blink`
 
 Makes the light blink with the specified color and timing.
 
-Parameters
+#### Parameters
 
-* `color`: The color to blink.
-* `onDuration`: The time in seconds to keep the light on during each blink. Defaults to `0.5`.
-* `offDuration`: The time in seconds to keep the light off during each blink. Defaults to `0.3`.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>color</code></td><td>The color to blink, in any CSS-compatible format.</td><td>string</td></tr><tr><td><code>onDuration</code></td><td>The time in seconds the light stays on during each blink. Default <code>0.5</code>.</td><td>number</td></tr><tr><td><code>offDuration</code></td><td>The time in seconds the light stays off during each blink. Default <code>0.3</code>.</td><td>number</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # color
@@ -126,26 +116,67 @@ red
 0.2
 ```
 
-#### playTone
+### `setLightIntensity`
+
+Changes the brightness of the light. The new intensity applies immediately to the current light and to all subsequent light commands.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The light intensity in percent (0 to 100).</td><td>integer</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# value
+50
+```
+
+### `playTone`
 
 Plays one of the device's built-in sounds once.
 
-Parameters
+#### Parameters
 
-* `name`: The name of the tone to play (from the list returned by `getTones()`).
-* `volume`: An optional volume level (`0` to `10`). If not provided, the last set volume is used.
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the tone to play, from the list returned by <code>getTones</code>.</td><td>string</td></tr><tr><td><code>volume</code></td><td>Optional volume level (0 to 10). If provided, it also becomes the new default volume. If omitted, the last set volume is used (initially <code>3</code>).</td><td>integer</td></tr></tbody></table>
 
-Example
+#### Example
 
 ```yaml
 # name
 'Open Office'
 ```
 
-### alert
+### `setToneVolume`
 
-Triggers a pre-configured alert sequence, combining a flashing red light and a specific tone to grab attention. The alert automatically turns off after a few seconds.
+Sets the default volume for sounds played by the device.
 
-### off
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The volume level (0 to 10).</td><td>integer</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# value
+7
+```
+
+#### Output
+
+Returns `true` once set.
+
+### `alert`
+
+Triggers a pre-configured alert sequence combining a flashing red light and a tone to grab attention. The alert switches off automatically after about 4 seconds.
+
+#### Parameters
+
+None.
+
+### `off`
 
 Switches off both the light and any playing sound immediately.
+
+#### Parameters
+
+None.
