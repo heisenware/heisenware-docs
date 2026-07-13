@@ -12,15 +12,14 @@ The Native Agent is a fully installable package. It registers itself as a backgr
 
 {% stepper %}
 {% step %}
-
 #### Configure and build
 
 In the [Function Explorer](../functions/function-explorer.md), click the create Agent icon (<i class="fa-cloud-arrow-down">:cloud-arrow-down:</i>).
 
 * **Connectors**: Select the connectors (e.g., S7, SQL) this Agent should carry.
 * **Target OS**: Choose the operating system of the machine where the Agent will run.
-* **Prefix (optional)**: Enter a [prefix](#using-a-prefix-for-fleet-deployment) if you plan to deploy the same file to multiple machines (e.g., `milling-machine-`). Each instance then generates its own unique ID (e.g., `milling-machine-abc123`).
-* Click Prepare for Download to compile and download your installer package.
+* **Prefix (optional)**: Enter a [prefix](native-agent.md#using-a-prefix-for-fleet-deployment) if you plan to deploy the same file to multiple machines (e.g., `milling-machine`). Each instance then generates its own unique ID (e.g., `milling-machine-abc123`).
+* Click _Prepare for download_ to compile and download your installer package.
 
 <figure><img src="../../../.gitbook/assets/native_agent_connecters_looped.gif" alt="" width="375"><figcaption></figcaption></figure>
 
@@ -32,7 +31,6 @@ All Agents you have built are backed up on the [file server](../file-explorer.md
 {% endstep %}
 
 {% step %}
-
 #### Run the installer
 
 Move the package to the target machine, unzip, and run the installer.
@@ -42,7 +40,6 @@ Move the package to the target machine, unzip, and run the installer.
 {% endstep %}
 
 {% step %}
-
 #### Automatic discovery
 
 The service starts immediately after installation. The Agent and its connectors appear in the [Function Explorer](../functions/function-explorer.md). Drag these functions onto the Backend Builder canvas. In production Apps, they execute locally on the machine running the Agent.

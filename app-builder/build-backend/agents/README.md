@@ -15,13 +15,14 @@ Agents run as system services or containers. They start automatically after rebo
 
 {% hint style="info" %}
 #### A function is a function
-In the App Builder, you never notice that you are working on a machine in a different network. A function from an Agent looks and behaves like any other function: drag it onto the canvas, wire it, configure it. It just runs somewhere else. Only its [address](../functions/README.md#advanced-addressing) reveals where.
+
+In the App Builder, you never notice that you are working on a machine in a different network. A function from an Agent looks and behaves like any other function: drag it onto the canvas, wire it, configure it. It just runs somewhere else. Only its [address](../functions/#advanced-addressing) reveals where.
 {% endhint %}
 
 ## Types of Agents
 
 Choose the Agent that matches your edge hardware:
 
-<table><thead><tr><th width="220">Type</th><th>Choose when</th></tr></thead><tbody><tr><td><a href="native-agent.md"><strong>Native Agent</strong></a></td><td>You have a Windows, macOS, or Linux machine (including ARM64 industrial PCs). Installs as a background service directly on the operating system. Credentials are built into the installer.</td></tr><tr><td><a href="docker-agent.md"><strong>Docker Agent</strong></a></td><td>Your edge infrastructure already runs Docker. Same functionality in an isolated container. Credentials are passed as environment variables at startup.</td></tr><tr><td><a href="lxc-agent-insys.md"><strong>LXC Agent (Insys)</strong></a></td><td>Your edge device is an INSYS icom industrial router or gateway (MRX, MRO, ECR, SCR series). Distributed as a <code>.tar</code> update packet and installed via the router's web interface.</td></tr></tbody></table>
+<table><thead><tr><th width="220">Type</th><th>Choose when</th></tr></thead><tbody><tr><td><a href="native-agent.md"><strong>Native Agent</strong></a></td><td>You have a Windows, macOS, or Linux machine (including ARM64 industrial PCs). Installs as a background service directly on the operating system. Credentials are built into the installer.</td></tr><tr><td><a href="docker-agent.md"><strong>Docker Agent</strong></a></td><td>Your edge infrastructure already runs Docker. Same functionality in an isolated container. Pass credentials as environment variables at startup.</td></tr><tr><td><a href="lxc-agent-insys.md"><strong>LXC Agent (Insys)</strong></a></td><td>Your edge device is an INSYS icom industrial router or gateway (MRX, MRO, ECR, SCR series). Distributed as a <code>.tar</code> update packet and installed via the router's web interface.</td></tr></tbody></table>
 
 Every [Native Agent](native-agent.md) you build is also stored in the [File Explorer](../file-explorer.md) in the `native-agents` folder, ready to download again at any time.

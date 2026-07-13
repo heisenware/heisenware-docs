@@ -6,9 +6,9 @@ To add a filter:
 
 1. Click the + icon on the right side of a function output, modifier, or existing filter.
 2. Select Filter from the list.
-3. Click the new filter box (Click to edit...) to open the code editor and write your condition.
+3. Click the new filter box (_Click to edit…_) to open the code editor and write your condition.
 
-<figure><img src="../../../.gitbook/assets/image (505).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (53).png" alt=""><figcaption><p>randomInteger function with filter extension node</p></figcaption></figure>
 
 ## How filters work
 

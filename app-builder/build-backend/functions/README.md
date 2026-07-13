@@ -2,24 +2,24 @@
 
 Functions are the core building blocks of your App logic. They are visual representations of actual code that fetch data, process information, manage databases, and control devices.
 
-All functions follow the same anatomy. Each part is represented by a colored box with a unique icon inside.
+All functions follow the same anatomy. A colored box with a unique icon represents each part.
 
-<figure><img src="../../../.gitbook/assets/image (502).png" alt=""><figcaption><p>A function merging two (or more) objects</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (51).png" alt=""><figcaption><p>A function merging two (or more) objects</p></figcaption></figure>
 
-* [**Input(s)**](./#inputs-and-data-configuration): Arguments the function needs to work (e.g., a number to calculate or a string to send). If a function does not require an input, the box is not shown.
-* [**Trigger**](./#triggers-and-execution-logic): The signal that tells the function to execute (e.g., a button click or a data change).
-* [**Output**](./#outputs-and-chaining): The result of the operation, also available for the next step in your flow. Click the x icon to empty the output.
-* [**Extension nodes**](../extension-nodes/) **(optional)**: Separate nodes at the output that [filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), or [modify](../extension-nodes/modifier.md) data on the fly.
+* [**Input(s)**](./#inputs-and-data-configuration): Arguments the function needs to work (e.g., a number to calculate or a string to send). The platform hides the box if a function does not require an input. Some functions let you add extra inputs.  Click the pencil icon to modify input data via a form or use YAML during development.
+* [**Trigger**](./#triggers-and-execution-logic): The signal that tells the function to execute (e.g., a button click or a data change). Click the play icon to trigger the function manually during development.
+* [**Output**](./#outputs-and-chaining): The result of the operation, which passes to the next step in your flow. Click the x icon to empty the output during development.
+* [**Extension nodes**](../extension-nodes/) **(optional)**: Separate nodes that take data from a function and [filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), [modify](../extension-nodes/modifier.md), or [handle errors](../extension-nodes/error-handler.md) it on the fly.
 
 ## Function categories
 
-All available functions live in the [Function Explorer](function-explorer.md), the panel on the left where you browse them by category. Each category has its own reference section:
+All available functions live in the [Function Explorer](function-explorer.md), the panel on the left where you browse them by category. Each category has its reference section:
 
 * [**Connectors**](connectors/): Integration functions for industrial protocols and external systems, from MQTT and OPC UA to Siemens S7 and SAP Digital Manufacturing.
 * [**Storage**](storage/): The relational database and timeseries database classes to connect to databases. Both include a built-in internal database (PostgreSQL and InfluxDB). Also holds lightweight stores like the data store and circular buffer.
 * [**Utilities**](utilities/): Data processing, timers, cron jobs, barcode generation, PDF processing, and more.
 * [**Extensions**](extensions/): Docker-based modules that extend the platform, such as RAG AI or process simulations.
-* **Custom**: Your own building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
+* **Custom**: Your building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
 
 ## Types of functions
 
@@ -55,7 +55,7 @@ Each function has a colored status indicator icon next to its name. Hover over t
 * **Green**: Ready / OK.
 * **Blue**: Execution is slow (> 2 seconds).
 * **Yellow**: Instance does not exist yet.
-* **Red**: Error or exception occurred.
+* **Red**: An error or exception occurred.
 * **Gray**: Function is offline/unavailable.
 
 ## Inputs and data configuration
@@ -180,7 +180,7 @@ The trigger determines _when_ a function runs.
 To process an array item by item (like a `for` loop):
 
 1. Right-click the trigger.
-2. Select `Process one by one`.
+2. Select _Process one by one_.
 3. Choose the input containing the array. The trigger changes to a dotted line, indicating it runs once for every item in the list.
 
 <details>
@@ -244,7 +244,7 @@ Functions communicate bidirectionally with frontend widgets via data binding.
 
 ## Advanced addressing
 
-Every function addresses its underlying backend code using a specific structure. To view or edit it, right-click the function name and select `Use Dynamic Address`.
+Every function addresses its underlying backend code using a specific structure. To view or edit it, right-click the function name and select _Use dynamic address_.
 
 <figure><img src="../../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right-click the function name and choose e.g. <code>Use Dynamic Address</code></p></figcaption></figure>
 
@@ -252,9 +252,9 @@ This reveals the "path" to the underlying code, consisting of up to three boxes:
 
 `<Agent/Service> <Class> [Instance]`
 
-* **Box 1 (agent/service)**: The program executing the function. This can be a generic internal service (e.g., "Utility Functions") or a specific Agent running on a machine.
+* **Box 1 (agent/service)**: The program executing the function. This can be a generic internal service (e.g., "Utility functions") or a specific Agent running on a machine.
 * **Box 2 (class)**: The name of the underlying code class (e.g., `Busylight`, `Barcode`, `OpcuaClient`).
-* **Box 3 (instance)**: The specific instance name (e.g., `server1`). This box only appears for member functions. Static functions (like `generateBarcode`) do not belong to an instance, so this box is hidden.
+* **Box 3 (instance)**: The specific instance name (e.g., `server1`). This box only appears for member functions. Static functions (like `generateBarcode`) do not belong to an instance, so the platform hides this box.
 
 <figure><img src="../../../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static function and a member function</p></figcaption></figure>
 

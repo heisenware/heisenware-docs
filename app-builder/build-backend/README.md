@@ -32,7 +32,7 @@ Create flows by drawing wires between functions. Click the output of a function 
 
 * **Output to trigger**: The completion of the first function executes the second, without handing over data.
 * **Output to input**: Hands over specific data to the next function.
-* **Reactive inputs**: An input can be internally connected to its own trigger. The function then executes automatically whenever that input value updates.
+* **Reactive inputs**: You can internally connect an input to its trigger. The function then executes automatically whenever that input value updates.
 
 Functions only execute when they receive a trigger or a data update. One output can drive multiple functions, and inputs can receive data from many sources across the canvas or UI.
 

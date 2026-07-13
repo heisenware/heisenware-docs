@@ -32,14 +32,12 @@ The LXC Agent runs on a hardware appliance, so you configure it through the INSY
 
 {% stepper %}
 {% step %}
-
 #### Upload the update packet
 
 Log into your INSYS router's web interface and navigate to the Container menu. Upload the `.tar` file you downloaded. Assign the container an instance name (e.g., `heisenware-agent`).
 {% endstep %}
 
 {% step %}
-
 #### Configure networking
 
 In the container's network settings, map it to an internal network bridge (e.g., `net2` or `lan`). Assign it a dedicated IPv4 address, subnet mask, and gateway.
@@ -52,14 +50,12 @@ Like every Agent, the LXC container needs outbound internet access on port 8883 
 {% endstep %}
 
 {% step %}
-
 #### Activate the profile (initial boot)
 
 Click Activate Profile in the INSYS UI. The router boots the LXC container for the first time, extracting the application payload and generating the persistent data directories.
 {% endstep %}
 
 {% step %}
-
 #### Provide environment variables (`config.env`)
 
 INSYS LXC containers behave like full lightweight virtual machines, so environment variables cannot be passed through the router's web interface. Provide them via a configuration file instead:
@@ -80,7 +76,6 @@ Generate the username and password by creating a [VRPC integration](../../../app
 {% endstep %}
 
 {% step %}
-
 #### Restart the container
 
 Restart the container via the INSYS web interface. On reboot, the Agent automatically detects and parses the `/data/config.env` file. Once the connection is established, the Agent appears in your [Function Explorer](../functions/function-explorer.md).
@@ -89,8 +84,8 @@ Restart the container via the INSYS web interface. On reboot, the Agent automati
 
 ## Persisting data
 
-Persistence is handled automatically. The LXC Agent symlinks its internal `/shared` directory to the INSYS router's persistent `/data` partition.
+The LXC Agent handles persistence automatically. The LXC Agent symlinks its internal `/shared` directory to the INSYS router's persistent `/data` partition.
 
-* Configurations and instances created by the Agent are stored safely in the router's flash memory.
+* The router safely stores configurations and instances in its flash memory.
 * If you update the Agent by uploading a newer `.tar` file to the same instance, your data stays intact and re-attaches to the new version.
 * Backing up the router's profile via the INSYS web interface includes the Agent's configuration state.

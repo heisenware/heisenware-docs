@@ -5,7 +5,7 @@ The Docker Agent provides the same functionality as the [Native Agent](native-ag
 ## Key differences
 
 * **Containerized execution**: Runs in an isolated Docker container instead of directly on the host operating system.
-* **Environment configuration**: Credentials are not built into an installer. You provide them as environment variables at startup.
+* **Environment configuration**: Unlike the Native Agent, the Docker Agent does not include built-in credentials. Provide them as environment variables at startup.
 * **Hardware and network access**: To reach local networks, USB devices, or persist data, use standard Docker features like host networking or volume mounting.
 * **Platform independent**: Runs on any platform that supports Docker.
 

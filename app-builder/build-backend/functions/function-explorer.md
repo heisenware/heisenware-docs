@@ -9,7 +9,7 @@ The Function Explorer is the panel on the left that holds all functions availabl
 * [**Connectors**](connectors/): Integration functions for industrial protocols and external systems. Connectors in this category require the target system to be reachable over the network or internet.
 * [**Storage**](storage/): The relational database and timeseries database classes to connect to databases, including the built-in internal PostgreSQL and InfluxDB. Also holds lightweight stores like the data store and circular buffer.
 * [**Utilities**](utilities/): Data processing, timers, cron jobs, barcode generation, PDF processing, and more.
-* **Custom**: Your own building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
+* **Custom**: Your building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
 
 In addition to the categories, every installed and started [Agent](../agents/) appears as its own entry, listed by its name and holding the connector classes selected when building it.
 
