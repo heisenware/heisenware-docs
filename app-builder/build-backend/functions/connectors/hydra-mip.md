@@ -2,13 +2,56 @@
 
 The Hydra MIP connector communicates with the MPDV Hydra Manufacturing Integration Platform (MIP). It abstracts the underlying API into a unified layer, supporting both legacy Hydra 8 dialog transactions and modern MIP 2.0 Shop Floor Connectivity Services (SCS). The connector automatically detects the backend version at runtime and routes requests dynamically.
 
-Create an instance of the `Mip` class to manage sessions and execute transactions against a specific MIP server.
+This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can manage sessions or execute transactions against a specific MIP server.
 
-### Example
+## Connection and lifecycle
+
+### `create`
+
+Creates a client instance configured to communicate with a specific MIP server.
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>url</code></td>
+      <td>The endpoint URL of the target MIP server.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>username</code></td>
+      <td>The username used for authentication.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>password</code></td>
+      <td>The password used for authentication.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>accessId</code></td>
+      <td>The access tracking credential string.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example
 
 ```yaml
-# name
-mipClient1
 # options
 url: [https://mpdv-mip-test05.mpdv.cloud:8080](https://mpdv-mip-test05.mpdv.cloud:8080)
 username: heisenware
@@ -16,7 +59,9 @@ password: Samx1ngSeeCrt
 accessId: '302127'
 ```
 
-## Connection and lifecycle
+#### Output
+
+Returns the MIP client instance. Throws an error if configuration fails.
 
 ### `canCommunicate`
 
@@ -28,7 +73,7 @@ None.
 
 #### Output
 
-Returns `true` if communication succeeds, otherwise `false`.
+Returns `true` if communication succeeds, or `false` if it fails.
 
 ### `getMipVersion`
 
@@ -52,11 +97,11 @@ None.
 
 #### Output
 
-Returns `true` if MIP 2.0 is supported, otherwise `false`.
+Returns `true` if the backend supports MIP 2.0, or `false` if it does not.
 
 ### `logout`
 
-Explicitly terminates the open session on the MIP server and clears active cookies.
+Terminates the open session on the MIP server and clears active cookies.
 
 #### Parameters
 
@@ -64,7 +109,7 @@ None.
 
 #### Output
 
-Returns `true` upon successful session termination, otherwise `false`.
+Returns `true` upon successful session termination, or `false` if it fails.
 
 ## Low-level service CRUD
 
@@ -78,7 +123,7 @@ None.
 
 #### Output
 
-An array of service name strings.
+Returns an array of service name strings.
 
 ### `create`
 
@@ -86,7 +131,27 @@ Creates a new instance record for a given service type.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name (such as <code>MDUnits</code>, <code>BOOperation</code>, <code>BOPerson</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The data payload for the creation transaction. Use <code>getCreateParameters</code> to look up mandatory attributes.</td><td>object</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name (such as <code>MDUnits</code>, <code>BOOperation</code>, or <code>BOPerson</code>).</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>data</code></td>
+      <td>The data payload for the creation transaction. Use <code>getCreateParameters</code> to look up mandatory attributes.</td>
+      <td>object</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -101,7 +166,7 @@ unitsDesignation: A fake test unit
 
 #### Output
 
-Returns `true` on success or throws an error on failure.
+Returns `true` on success. Throws an error if the transaction fails.
 
 ### `read`
 
@@ -109,7 +174,42 @@ Queries records from a given service with options for filtering and field select
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td></td><td>The service name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters records based on specific criteria. Accepts a simple array <code>['field', '=', 'val']</code>, an object <code>{ field: 'val' }</code>, or nested arrays. MIP does not support OR logic.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>When <code>true</code>, omits null attributes from the return value. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>filter</code></td>
+      <td>Filters records based on specific criteria. Accepts a simple array like <code>['field', '=', 'val']</code>, an object like <code>{ field: 'val' }</code>, or nested arrays. MIP does not support OR logic.</td>
+      <td>any</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>fields</code></td>
+      <td>Restricts the evaluation to specific columns.</td>
+      <td>array</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>skipNull</code></td>
+      <td>When true, omits null attributes from the return value. Default false.</td>
+      <td>boolean</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -124,7 +224,7 @@ skipNull: true
 
 #### Output
 
-An array of parsed data objects.
+Returns an array of parsed data objects matching the query.
 
 ### `update`
 
@@ -132,7 +232,27 @@ Modifies an existing service instance record.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data update block. Must include the mandatory primary keys required to identify the row.</td><td>object</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>data</code></td>
+      <td>The data update block. This block must include the mandatory primary keys required to identify the row.</td>
+      <td>object</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -147,15 +267,40 @@ unitsDesignation: Degree Celsius
 
 #### Output
 
-Returns `true` on success.
+Returns `true` on a successful update. Throws an error if the operation fails.
 
 ### `delete`
 
 Removes an existing service instance record.
 
+{% hint style="danger" %}
+#### Destructive action
+This permanently deletes the service instance record from the server. You cannot undo this action.
+{% endhint %}
+
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>Mandatory identification payload required to resolve the specific instance.</td><td>object</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>data</code></td>
+      <td>Mandatory identification payload required to resolve the specific instance.</td>
+      <td>object</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -169,7 +314,7 @@ unitsClassification: Test
 
 #### Output
 
-Returns `true` on success.
+Returns `true` on a successful deletion. Throws an error if the operation fails.
 
 ### `execute`
 
@@ -177,11 +322,31 @@ Invokes a specific processing action on a target service.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The parameters required for execution. Keys must match the service definition.</td><td>object</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>data</code></td>
+      <td>The parameters required for execution. Keys must match the service definition.</td>
+      <td>object</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-Returns `true` on success.
+Returns `true` on a successful execution. Throws an error if the action fails.
 
 ## Metadata inspection
 
@@ -191,11 +356,26 @@ Queries the parameters needed to create records for a specified service.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-An object mapping camelCase attributes to their lowercase data types. Mandatory parameters have a `*` suffix.
+Returns an object mapping camelCase attributes to their lowercase data types. Mandatory parameters include a `*` suffix.
 
 ### `getReadParameters`
 
@@ -203,11 +383,26 @@ Queries the schema parameters available for retrieval from a service.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-An object mapping readable camelCase fields to their lowercase data types.
+Returns an object mapping readable camelCase fields to their lowercase data types.
 
 ### `getUpdateParameters`
 
@@ -215,11 +410,26 @@ Queries the schema guidelines for updating records inside a service.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-An object mapping updatable attributes to data types, with mandatory lookup attributes marked with a `*` suffix.
+Returns an object mapping updatable attributes to data types, with mandatory lookup attributes marked with a `*` suffix.
 
 ### `getExecuteParameters`
 
@@ -227,11 +437,26 @@ Queries the validation constraints needed for executing functions on a service.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-An object mapping functional input tags to data types.
+Returns an object mapping functional input tags to data types.
 
 ### `getDeleteParameters`
 
@@ -239,11 +464,26 @@ Queries the minimal mandatory parameter requirements to delete a service instanc
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-An object highlighting mandatory row identification fields.
+Returns an object highlighting mandatory row identification fields.
 
 ### `getReadableFields`
 
@@ -251,11 +491,26 @@ Lists all column elements explicitly exposed as selectable output fields.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>serviceName</code></td>
+      <td>The service name.</td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Output
 
-An array of objects mapping selectable keys to their lowercase types.
+Returns an array of objects mapping selectable keys to their lowercase types.
 
 ## Order management (MIP-WO)
 
@@ -265,7 +520,48 @@ Fetches production orders and enriches them with active operations, BOM componen
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters the orders to retrieve. Evaluates an array or object expression.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Appends custom attributes to the default return payload.</td><td>array</td></tr><tr><td></td><td><code>includeOperations</code></td><td>Includes corresponding operations. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeComponents</code></td><td>Includes related component requirements. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>includeProductionResources</code></td><td>Includes related tool records. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>filter</code></td>
+      <td>Filters the orders to retrieve. Evaluates an array or object expression.</td>
+      <td>any</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>fields</code></td>
+      <td>Appends custom attributes to the default return payload.</td>
+      <td>array</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>includeOperations</code></td>
+      <td>Includes corresponding operations. Default true.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>includeComponents</code></td>
+      <td>Includes related component requirements. Default true.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>includeProductionResources</code></td>
+      <td>Includes related tool records. Default true.</td>
+      <td>boolean</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -278,7 +574,7 @@ fields: [ordertypeActive]
 
 #### Output
 
-An array of complex order structures.
+Returns an array of complex order structures.
 
 ### `getOrder`
 
@@ -286,7 +582,30 @@ Fetches details for an isolated order instance.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td></td><td>The unique order ID string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>Specifies explicit fields to fetch. If empty, all available fields return.</td><td>array</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>orderId</code></td>
+      <td></td>
+      <td>The unique order ID string.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>fields</code></td>
+      <td>Specifies explicit fields to fetch. If empty, all available fields return.</td>
+      <td>array</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -299,7 +618,7 @@ fields: [orderId, orderDesignation, orderPlanStartTimestamp]
 
 #### Output
 
-An order object, or `null` if not found.
+Returns an order object, or `null` if the order is not found.
 
 ### `startOperation`
 
@@ -307,7 +626,60 @@ Registers an operation log-on transaction (Arbeitsgang anmelden).
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code> or <code>usr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>batchId</code></td><td>The batch identifier. Legacy acronym fallback: <code>cnr</code>.</td><td>string</td></tr><tr><td></td><td><code>mst</code></td><td>The target machine status code (Legacy specific).</td><td>integer</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th width="150">Input</th>
+      <th width="120">Key</th>
+      <th>Description</th>
+      <th width="100">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>orderId</code></td>
+      <td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>operationId</code></td>
+      <td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>workplaceId</code></td>
+      <td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>personId</code></td>
+      <td>The person identifier. Legacy acronym fallback: <code>pnr</code> or <code>usr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>cardId</code></td>
+      <td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>batchId</code></td>
+      <td>The batch identifier. Legacy acronym fallback: <code>cnr</code>.</td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>mst</code></td>
+      <td>The target machine status code (Legacy specific).</td>
+      <td>integer</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Example
 
@@ -317,3 +689,8 @@ orderId: '0004990701'
 operationId: '10'
 workplaceId: '4560'
 personId: '2998'
+```
+
+#### Output
+
+Returns `true` on successful registration. Throws an error if the transaction fails.
