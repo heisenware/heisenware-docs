@@ -1,139 +1,180 @@
 # File I/O
 
-The `File` class is a comprehensive, static utility for handling various file input and output (I/O) operations. It provides a unified interface to read data from multiple file formats, write data to files, and manage files and folders on the local filesystem.
+The file I/O functions read data from multiple file formats (CSV, Excel, PDF, XML, Word, and more), write data to files, and manage files and folders on a file system. All functions in this class are static, so you need no instance.
 
-Since all methods in this class are **static**, you do not need to create an instance of it.
+## Where the functions execute
+
+The file system these functions see depends on where they run:
+
+1. Platform: Used directly, the functions see the file system of the platform installation itself, the same content as in the [File Explorer](../../file-explorer.md). The root path is `/shared`, so a file in the uploads folder has the full path `/shared/uploads/test.csv`.
+2. Your local OS: To work with files on your premises, compile, download, and install an [Agent](../../agents/) containing this class. Functions taken from the Agent see the file system the Agent runs on, with regular local paths like `C:\Users\YourUserName\Documents\test.csv`.
 
 {% hint style="warning" %}
-IMPORTANT
+#### Pitfall on Windows
 
-It is crucial to understand _where_ the `File` functions are executed.
-
-1. Heisenware Platform\
-   If you use them just directly as they are, all functions are "seeing" the file system of the platform installation itself. This is equivalent of what you can see when using the [Resources](../../file-explorer.md) browser. The route path to all resources is called `/shared`. Hence, to refer to a file in the uploads folder the full path looks like: `/shared/uploads/test.csv`
-2. Your local OS\
-   Very often you want to deal with files that are physically located on your premises. In that case you first have to compile, download and install an [Agent](../../agents/) containing this `File` class. Once, taking the functions out of the agent, the underlying file system reflects the one the agent is running on (your local OS). Now, the file paths are the regular ones that you would use yourself to open your local files, like: `C:\Users\YourUserName\Documents/test.csv`
+When referring to Windows paths, quote the YAML input. Unquoted, `C:\Users` is parsed as an object with key `C` and value `\Users`. Define it as `'C:\Users'`.
 {% endhint %}
 
-{% hint style="danger" %}
-Pitfall on Windows
+## Reading any file
 
-When referring to paths on a windows OS, remember to quote the YAML input as otherwise a `C:\Users` would be parsed as an object with key `C` and value `\Users`. So, define it like: `'C:\Users'`
-{% endhint %}
+### `read`
 
-## Universal Read Function
+Reads a file and automatically parses its content based on the file extension. This is a convenience wrapper that calls the matching specific function (e.g. `readCsv`, `readPdf`) for you. Supported extensions: `csv`, `xlsx`, `docx`, `pptx`, `html`, `htm`, `md`, `txt`, `xsl`, `pdf`, `xml`.
 
-### read
+#### Parameters
 
-Reads a file from disk and automatically parses its content based on the file extension. This function acts as a convenient wrapper, calling the appropriate specific read function (e.g., `readCsv`, `readPdf`) for you.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td>The full path to the file.</td><td>string</td></tr><tr><td><code>options</code></td><td>Options specific to the detected file type. See the respective read function.</td><td>object</td></tr></tbody></table>
 
-**Parameters**
-
-* `filename`: The full path to the file.
-* `options`: An optional object containing configuration options specific to the file type being read.
-
-Example
-
-Goal: Automatically parse a file without knowing its type beforehand.
+#### Example
 
 ```yaml
 # filename
 /path/to/my-data.xlsx
 ```
 
-> This will internally call `readXlsx` and return the parsed JSON content.
+This internally calls `readXlsx` and returns the parsed JSON content.
 
-## Basic File Operations
+#### Output
 
-### readFileToBuffer
+The parsed content of the file. Throws an error for unsupported file types.
 
-Reads any file from disk and returns its entire content as a **base64 encoded string**.
+### `exists`
 
-**Parameters**
+Checks whether a file exists at the given path.
 
-* `filePath`: The path of the file to read.
+#### Parameters
 
-### writeBufferToFile
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td>The path of the file to check.</td><td>string</td></tr></tbody></table>
 
-Writes a base64 encoded string to a new file on disk.
+#### Output
 
-**Parameters**
+Returns `true` if the file exists, otherwise `false`.
 
-* `filePath`: The full path where the file will be saved, including the filename and extension.
-* `buffer`: The content of the file as a base64 encoded string.
+## Working with buffers
 
-### writeBuffersToDirectory
+### `readFileToBuffer`
 
-Writes one or more buffer-[file objects](../../../build-frontend/widgets/input-widgets/photo.md#file-object-structure) to a specified directory
+Reads any file and returns its entire content as a base64 encoded string.
 
-**Parameters**
+#### Parameters
 
-* `dirname`: The path to the directory into which the provided file(s) should be written.
-* `bufferData`: A single object or an array of objects containing at least the `name` and the `base64` property
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filePath</code></td><td>The path of the file to read.</td><td>string</td></tr></tbody></table>
 
-<figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This functions plays nice with the <a href="../../../build-frontend/widgets/input-widgets/photo.md">Photo</a> or <a href="../../../build-frontend/widgets/input-widgets/upload.md">File</a> widget when configured use <code>Buffer</code> as storage type. When executing as agent, this allows to realize something like an Image server.</p></figcaption></figure>
+#### Output
 
-{% hint style="success" %}
-Using this two or three simple functions, you can happily realize a file share between your App and your local OS. It allows you for example to store pictures taken with the App (see [Photo](../../../build-frontend/widgets/input-widgets/photo.md) widget) on your own file server.
+The file content as a base64 encoded string.
+
+### `writeBufferToFile`
+
+Writes a base64 encoded string to a new file.
+
+#### Parameters
+
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filePath</code></td><td>The full path where the file is saved, including the filename and extension.</td><td>string</td></tr><tr><td><code>buffer</code></td><td>The content of the file as a base64 encoded string.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` on success.
+
+### `writeBuffersToDirectory`
+
+Writes one or more buffer-[file objects](../../../build-frontend/widgets/input-widgets/photo.md#file-object-structure) to a directory. The directory (including parent folders) is created if it does not exist.
+
+#### Parameters
+
+<table><thead><tr><th width="140">Input</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>dirname</code></td><td>The path to the directory into which the file(s) are written.</td><td>string</td></tr><tr><td><code>bufferData</code></td><td>A single object or an array of objects, each containing at least the <code>name</code> and <code>base64</code> properties.</td><td>object or array</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when all files were written. Throws an error listing every file that failed.
+
+<figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This function plays nice with the <a href="../../../build-frontend/widgets/input-widgets/photo.md">photo</a> or <a href="../../../build-frontend/widgets/input-widgets/upload.md">upload</a> widget when configured to use <code>Buffer</code> as storage type.</p></figcaption></figure>
+
+{% hint style="info" %}
+Using these functions from an Agent realizes a file share between your App and your local OS. For example, store pictures taken with the [photo](../../../build-frontend/widgets/input-widgets/photo.md) widget on your own file server.
 {% endhint %}
 
-### moveFile
+## Managing files and folders
+
+### `moveFile`
 
 Moves or renames a file.
 
-**Parameters**
+#### Parameters
 
-* `oldPath`: The original path of the file.
-* `newPath`: The new path for the file.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>oldPath</code></td><td>The original path of the file.</td><td>string</td></tr><tr><td><code>newPath</code></td><td>The new path for the file.</td><td>string</td></tr></tbody></table>
 
-### copyFile
+#### Output
+
+Nothing on success. Throws an error on failure.
+
+### `copyFile`
 
 Copies a file from a source path to a destination path.
 
-**Parameters**
+#### Parameters
 
-* `src`: The path of the file to copy.
-* `dest`: The path where the copy will be created.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>src</code></td><td>The path of the file to copy.</td><td>string</td></tr><tr><td><code>dest</code></td><td>The path where the copy is created.</td><td>string</td></tr></tbody></table>
 
-### deleteFile
+#### Output
 
-Deletes a file from the filesystem.
+Nothing on success. Throws an error on failure.
 
-**Parameters**
+### `deleteFile`
 
-* `filename`: The path of the file to delete.
+Deletes a file.
 
-## Folder Management
+{% hint style="danger" %}
+This permanently deletes the file. The action cannot be undone.
+{% endhint %}
 
-### createFolder
+#### Parameters
 
-Creates a new folder at the specified path.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td>The path of the file to delete.</td><td>string</td></tr></tbody></table>
 
-**Parameters**
+#### Output
 
-* `path`: The path where the new folder should be created.
+Nothing on success. Throws an error if the file does not exist.
 
-### deleteFolder
+### `createFolder`
 
-Deletes a folder and all of its contents recursively.
+Creates a new folder at the specified path, including missing parent folders.
 
-**Parameters**
+#### Parameters
 
-* `dir`: The path of the folder to delete.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The path where the new folder is created.</td><td>string</td></tr></tbody></table>
 
-### browse
+#### Output
 
-Recursively scans the content of a folder and returns a JSON object representing its structure, including files and subfolders.
+Nothing on success. Throws an error on failure.
 
-**Parameters**
+### `deleteFolder`
 
-* `filename`: The path to the folder to browse.
+Deletes a folder and all of its contents recursively. Does not throw if the folder is missing.
 
-Output
+{% hint style="danger" %}
+This permanently deletes the folder with everything inside it. The action cannot be undone.
+{% endhint %}
 
-A nested JSON object detailing the folder's contents, including properties like name, path, size, isDir, and a children array for directories.
+#### Parameters
 
-**Output Example** The function returns a nested JSON object representing the complete directory tree.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dir</code></td><td>The path of the folder to delete.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Nothing.
+
+### `browse`
+
+Recursively scans a folder and returns a JSON object representing its structure, including files and subfolders.
+
+#### Parameters
+
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td>The path of the folder to browse.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+A nested JSON object detailing the folder's contents, with the properties `name`, `path`, `size`, `modDate`, `isDir`, and a `children` array for directories:
 
 ```json
 {
@@ -163,43 +204,27 @@ A nested JSON object detailing the folder's contents, including properties like 
       "size": 4096,
       "isDir": true,
       "childrenCount": 1,
-      "children": [
-        {
-          "id": "12348",
-          "path": "/path/to/project/images/logo.png",
-          "name": "logo.png",
-          "modDate": "2025-08-20T14:00:00.000Z",
-          "size": 5120,
-          "isDir": false,
-          "isFile": true,
-          "isSymlink": false
-        }
-      ]
+      "children": []
     }
   ]
 }
 ```
 
-## CSV File Handling
+## CSV files
 
-### readCsv
+### `readCsv`
 
-Reads a CSV file or a CSV string and converts it into an array of JSON objects. This function is a powerful wrapper around the `csvtojson` library.
+Reads CSV data and converts it into an array of JSON objects. The input can be a file path, a raw CSV string, or a base64 encoded string of the file content; the type is detected automatically.
 
-**Parameters**
+#### Parameters
 
-* `fileInfo`: The path to the `.csv` file, a raw CSV string, OR a base64 encoded string of the file content.
-* `options`: An optional configuration object.
-  * `delimiter`: The column delimiter. Can be a string (e.g., `;`), `'auto'` for detection, or an array of potential delimiters (e.g., `[',', ';', '|']`).
-  * `checkType`: If `true`, automatically converts numbers, booleans, and JSON objects/arrays from strings to their native types. Defaults to `false`.
-  * `headers`: An array of strings to manually set the header names for each column. Use this if the CSV has no header row.
-  * `noheader`: A boolean indicating the CSV file has no header row. When `true`, the output will be an array of arrays instead of an array of objects.
-  * `output`: Can be set to `'json'` (default), `'csv'` (array of arrays), or `'line'` (each line as a string).
-  * `ignoreEmpty`: If `true`, empty lines in the CSV will be ignored.
-  * `flatKeys`: If `true`, converts nested JSON in headers (e.g., `person.name`) into nested JSON objects in the output.
-  * `colParser`: An object to define custom parsing logic for specific columns. Keys are the column headers, and values are functions to transform the data.
+<table><thead><tr><th width="120">Input</th><th width="160">Key</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>fileInfo</code></td><td></td><td>The path to the <code>.csv</code> file, a raw CSV string, or a base64 encoded string of the file content.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>delimiter</code></td><td>The column delimiter. A string (e.g. <code>;</code>), <code>auto</code> for detection, or an array of candidates (e.g. <code>[',', ';', '|']</code>). Default <code>,</code>.</td><td>string or array</td></tr><tr><td></td><td><code>checkType</code></td><td>If <code>true</code>, automatically converts numbers and booleans from strings to their native types. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>noheader</code></td><td>Indicates that the CSV data has no header row. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>headers</code></td><td>An array of strings used as column headers, e.g. when the CSV has no header row.</td><td>array</td></tr><tr><td></td><td><code>output</code></td><td>The output format: <code>json</code> (default), <code>csv</code> (array of arrays), or <code>line</code> (each line as a string).</td><td>string</td></tr><tr><td></td><td><code>trim</code></td><td>Trims whitespace from headers and values. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>ignoreEmpty</code></td><td>If <code>true</code>, ignores empty lines. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>quote</code></td><td>The character used for quoting columns. Default <code>"</code>.</td><td>string</td></tr><tr><td></td><td><code>includeColumns</code></td><td>A regex specifying which columns to include.</td><td>string</td></tr><tr><td></td><td><code>ignoreColumns</code></td><td>A regex specifying which columns to ignore.</td><td>string</td></tr></tbody></table>
 
-**Example 1: Reading a semicolon-delimited CSV with type conversion**
+All other [csvtojson](https://www.npmjs.com/package/csvtojson) options pass through as well.
+
+#### Examples
+
+Example 1: Reading a semicolon-delimited CSV with type conversion
 
 ```yaml
 # fileInfo
@@ -209,7 +234,7 @@ delimiter: ;
 checkType: true
 ```
 
-**Example 2: Reading a CSV with no header row**
+Example 2: Reading a CSV string with no header row
 
 ```yaml
 # fileInfo
@@ -220,21 +245,21 @@ headers: ['id', 'name', 'price']
 checkType: true
 ```
 
-### writeCsv
+#### Output
+
+An array of JSON objects (or the format set via `output`). Throws an error if the input is neither a valid path, base64, nor a CSV string.
+
+### `writeCsv`
 
 Converts an array of JSON objects into a CSV string and writes it to a file.
 
-**Parameters**
+#### Parameters
 
-* `json`: An array of JSON objects.
-* `filename`: The path where the `.csv` file will be saved.
-* `options`: An optional configuration object.
-  * `keys`: An array of strings specifying which properties to include as columns and in what order.
-  * `delimiter`: The delimiter to use. Defaults to `,`.
-  * `prependHeader`: If `false`, the header row will not be included in the output. Defaults to `true`.
-  * `excelBOM`: If `true`, adds a BOM character to ensure correct UTF-8 display in Excel.
+<table><thead><tr><th width="120">Input</th><th width="170">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>json</code></td><td></td><td>An array of JSON objects.</td><td>array</td></tr><tr><td><code>filename</code></td><td></td><td>The path where the <code>.csv</code> file is saved.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>keys</code></td><td>An array of strings specifying which properties to include as columns, in order.</td><td>array</td></tr><tr><td></td><td><code>delimiter</code></td><td>The field separator. Default <code>,</code>.</td><td>string</td></tr><tr><td></td><td><code>prependHeader</code></td><td>If <code>false</code>, the header row is omitted. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>eol</code></td><td>The end-of-line character. Default <code>\n</code>.</td><td>string</td></tr><tr><td></td><td><code>sortHeader</code></td><td>If <code>true</code>, sorts the headers alphabetically. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>emptyFieldValue</code></td><td>The value used for empty, null, or undefined fields. Default <code>''</code>.</td><td>string</td></tr><tr><td></td><td><code>excelBOM</code></td><td>If <code>true</code>, adds a BOM character for correct UTF-8 display in Excel.</td><td>boolean</td></tr></tbody></table>
 
-**Example: Writing specific keys to a CSV file without a header**
+#### Example
+
+Writing specific keys to a CSV file without a header:
 
 ```yaml
 # json
@@ -249,62 +274,66 @@ keys: ['id', 'name', 'price']
 prependHeader: false
 ```
 
-## Excel File Handling
+#### Output
 
-### readXlsx
+Returns `true` on a successful write.
 
-Reads an Excel file and converts its content into JSON. The result is an object where each key is a sheet name when more than one sheet is available (or queried). The result is a simple array of rows in case only one sheet is available (or queried).
+## Excel files
 
-**Parameters**
+### `readXlsx`
 
-* `fileInput`: The path to the `.xlsx` file OR a base64 encoded string of the file content.
-* `options`: An optional configuration object.
-  * `header`: An array of strings to use as headers. If not provided, the first row of the sheet is used.
-  * `headerRows`: The number of rows to treat as header (counting from top) and exclude from data.
-  * `range`: A string specifying a cell range to read (e.g., `'A2:C10'`).
-  * `columnToKey`: An object whose keys identify xlsx columns and whose values define the corresponding name in the result.
+Reads an Excel file and converts its content into JSON. If only one sheet is available (or queried), the result is an array of row objects. With multiple sheets, the result is an object with one key per sheet name.
 
-{% hint style="success" %}
-**Tipps**
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th width="150">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>fileInput</code></td><td></td><td>The path to the <code>.xlsx</code> file or a base64 encoded string of the file content.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>headerRows</code></td><td>The number of rows (counting from top) treated as header and excluded from the data.</td><td>integer</td></tr><tr><td></td><td><code>sheets</code></td><td>An array of sheet names to include. Default: All existing sheets.</td><td>array</td></tr><tr><td></td><td><code>columnToKey</code></td><td>An object whose keys identify xlsx columns and whose values define the corresponding property name in the result.</td><td>object</td></tr><tr><td></td><td><code>range</code></td><td>A cell range to read (e.g. <code>'A2:C10'</code>).</td><td>string</td></tr></tbody></table>
+
+{% hint style="info" %}
+#### Tips for columnToKey and per-sheet options
 
 * Use `columnToKey: { '*': '{{columnHeader}}' }` to automatically extract the names from the header.
 * Use `columnToKey: { A: '{{A1}}', B: '{{B1}}' }` to use names defined anywhere in the sheet.
-*   Use any option within a sheet to configure things per sheet:<br>
+* Configure options per sheet by using objects in `sheets`:
 
-    ```yaml
-    sheets: [
-      {
-        name: sheet1,
-        range: 'A2:B2'
-      },
-      {
-        name: sheet2,
-        range: 'A3:B4'
-      }
-    ]
-    ```
+```yaml
+sheets: [
+  {
+    name: sheet1,
+    range: 'A2:B2'
+  },
+  {
+    name: sheet2,
+    range: 'A3:B4'
+  }
+]
+```
 {% endhint %}
 
-**Example 1: Reading only a specific range from the first sheet**
+#### Examples
+
+Example 1: Reading a specific range with named columns
 
 ```yaml
 # fileInput
 /path/to/report.xlsx
 # options
 range: 'B2:D10'
-header: [product, quantity, price]
-sheets: [Sheet 1]
+columnToKey: {
+  B: product,
+  C: quantity,
+  D: price
+}
 ```
 
-**Output**
+Output:
 
-<pre class="language-json"><code class="lang-json">[
-  { "product": "Widget", "quantity": 10, "price": 19.99 },
-  ...
-<strong>]
-</strong></code></pre>
+```json
+[
+  { "product": "Widget", "quantity": 10, "price": 19.99 }
+]
+```
 
-**Example 2: Reading a table with a single header column and mapping columns to names**
+Example 2: Reading a table with a single header row and mapped columns
 
 ```yaml
 # fileInput
@@ -312,39 +341,39 @@ sheets: [Sheet 1]
 # options
 headerRows: 1
 columnToKey: {
-  B: barcode, 
-  C: name, 
-  D: acquired, 
-  H: keeper, 
-  K: inventoryNo, 
-  M: serialNo, 
+  B: barcode,
+  C: name,
+  D: acquired,
+  H: keeper,
+  K: inventoryNo,
+  M: serialNo,
   N: costCtr
 }
 ```
 
-**Output**
+Output:
 
-<pre class="language-json"><code class="lang-json">[
-  { "barcode": 187552, "name": "HP Laptop", "acquired": "2025-06-01T00:00:00.000Z" ... },
-  ...
-<strong>]
-</strong></code></pre>
+```json
+[
+  { "barcode": 187552, "name": "HP Laptop", "acquired": "2025-06-01T00:00:00.000Z" }
+]
+```
 
-**Example 3: Combine xlsx reading with file upload**
+Example 3: Combining xlsx reading with a file upload
 
-<figure><img src="../../../../.gitbook/assets/image (44).png" alt=""><figcaption><p>Uploads an .xlsx file, saves it as buffer (base64) and then feeds it to the <code>readXlsx</code> function</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (44).png" alt=""><figcaption><p>Uploads an .xlsx file, saves it as buffer (base64), and feeds it to the <code>readXlsx</code> function</p></figcaption></figure>
 
-### readXlsxCells
+### `readXlsxCells`
 
 Reads the value(s) of one or more specific cells from an Excel sheet.
 
-**Parameters**
+#### Parameters
 
-* `fileInput`: The path to the `.xlsx` file or its base64 content.
-* `cellAddresses`: A single cell address string (e.g., `'B5'`) or an array of strings (e.g., `['A1', 'C5']`).
-* `sheetIdentifier`: The name (e.g., `'Sales'`) or zero-based index (`0`) of the sheet. Defaults to the first sheet.
+<table><thead><tr><th width="170">Input</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>fileInput</code></td><td>The path to the <code>.xlsx</code> file or a base64 encoded string of the file content.</td><td>string</td></tr><tr><td><code>cellAddresses</code></td><td>A single cell address (e.g. <code>'B5'</code>) or an array of addresses (e.g. <code>['A1', 'C5']</code>).</td><td>string or array</td></tr><tr><td><code>sheetIdentifier</code></td><td>The name (e.g. <code>'Sales'</code>) or zero-based index (<code>0</code>) of the sheet. Default: The first sheet.</td><td>string or integer</td></tr></tbody></table>
 
-**Example: Reading multiple cells from a sheet named "Summary"**
+#### Example
+
+Reading multiple cells from a sheet named Summary:
 
 ```yaml
 # fileInput
@@ -355,23 +384,19 @@ Reads the value(s) of one or more specific cells from an Excel sheet.
 'Summary'
 ```
 
-Output
+#### Output
 
-An array containing the values of the requested cells (e.g., \['Total Revenue', 15000]).
+The cell's value, or an array of values when multiple addresses are given (e.g. `['Total Revenue', 15000]`). Empty or non-existent cells return no value. Throws an error if the file or sheet is not found.
 
-### writeXlsx
+### `writeXlsx`
 
 Writes an array of JSON objects to a new Excel file.
 
-**Parameters**
+#### Parameters
 
-* `data`: The array of JSON objects to write.
-* `filePath`: The path where the new `.xlsx` file will be saved.
-* `options`: An optional configuration object.
-  * `sheetName`: The name for the worksheet. Defaults to `'Sheet1'`.
-  * `headers`: An array of strings to use as the header row. If not provided, keys from the first data object are used.
+<table><thead><tr><th width="120">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>data</code></td><td></td><td>The array of JSON objects to write. Must not be empty.</td><td>array</td></tr><tr><td><code>filePath</code></td><td></td><td>The path where the new <code>.xlsx</code> file is saved.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>sheetName</code></td><td>The name for the worksheet. Default <code>Sheet1</code>.</td><td>string</td></tr><tr><td></td><td><code>headers</code></td><td>An array of strings used as the header row. Default: The keys of the first data object.</td><td>array</td></tr></tbody></table>
 
-**Example**
+#### Example
 
 ```yaml
 # data
@@ -383,25 +408,25 @@ Writes an array of JSON objects to a new Excel file.
 /path/to/new_report.xlsx
 # options
 sheetName: 'Inventory'
-
 ```
 
-## Other Document Formats
+#### Output
 
-### readPdf
+Nothing on success. Throws an error on empty data, an invalid path, or a failed write.
+
+## Other document formats
+
+### `readPdf`
 
 Reads a PDF file and extracts its text content and metadata.
 
-**Parameters**
+#### Parameters
 
-* `filename`: The path to the `.pdf` file.
-* `options`: Optional configuration (not typically needed).
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td>The path to the <code>.pdf</code> file.</td><td>string</td></tr></tbody></table>
 
-Output
+#### Output
 
-An object containing text (the full text content), numpages, numrender, and info (metadata).
-
-**Output Example** The function returns a JSON object containing the extracted text, metadata, and parsing information.
+An object containing `text` (the full text content), `numpages`, `numrender`, and `info` (metadata):
 
 ```json
 {
@@ -409,42 +434,41 @@ An object containing text (the full text content), numpages, numrender, and info
   "numrender": 2,
   "info": {
     "PDFFormatVersion": "1.7",
-    "IsAcroFormPresent": false,
-    "IsXFAPresent": false,
     "Title": "My Annual Report",
     "Author": "John Doe",
-    "Subject": "Q4 Financials",
-    "Keywords": "finance, report, Q4",
     "Creator": "Microsoft® Word for Office 365",
-    "Producer": "Microsoft® Word for Office 365",
-    "CreationDate": "D:20250822120200Z",
-    "ModDate": "D:20250822120200Z"
+    "CreationDate": "D:20250822120200Z"
   },
   "metadata": null,
-  "text": "\n\nPage 1 Content\n\nThis is the first paragraph of the annual report...\n\nPage 2 Content\n\nThis is the second page...\n\n",
+  "text": "\n\nPage 1 Content\n\nThis is the first paragraph of the annual report...\n\n",
   "version": "1.10.100"
 }
 ```
 
-### readXml
+### `readXml`
 
 Reads an XML file and converts it into a JSON object.
 
-**Parameters**
+#### Parameters
 
-* `filename`: The path to the `.xml` file.
-* `options`: An optional configuration object for the `xml2js` parser.
-  * `attrkey`: The key to use for XML attributes. Defaults to `_attr`.
-  * `explicitArray`: If `false`, arrays of one element are converted to a single object. Defaults to `true`.
-  * `mergeAttrs`: If `true`, merges attributes into their parent object instead of putting them in a separate `_attr` key.
-  * `explicitRoot`: If `false`, the root XML element is not included in the final JSON object.
+<table><thead><tr><th width="120">Input</th><th width="150">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td></td><td>The path to the <code>.xml</code> file.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>attrkey</code></td><td>The key used for XML attributes. Default <code>_attr</code>.</td><td>string</td></tr><tr><td></td><td><code>explicitArray</code></td><td>If <code>false</code>, single-element arrays are converted to a single object. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>mergeAttrs</code></td><td>If <code>true</code>, merges attributes into their parent object instead of a separate <code>attrkey</code> object.</td><td>boolean</td></tr><tr><td></td><td><code>explicitRoot</code></td><td>If <code>false</code>, the root XML element is not included in the result.</td><td>boolean</td></tr></tbody></table>
 
-### readDocx / readPptx / readHtml / readTxt / readMd
+All other [xml2js](https://www.npmjs.com/package/xml2js) parser options pass through as well.
 
-These functions all read their respective file types and extract the plain text content.
+#### Output
 
-**Parameters**
+A JSON representation of the XML content.
 
-* `filename`: The path to the file.
-* `options`: An optional configuration object for the `textract` library.
-  * `preserveLineBreaks`: If `true`, maintains line breaks from the original document.
+### `readDocx`, `readPptx`, `readHtml`, `readTxt`, `readMd`
+
+These functions read their respective file type and extract the plain text content.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filename</code></td><td></td><td>The path to the file.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>preserveLineBreaks</code></td><td>Maintains line breaks from the original document. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+
+All other [textract](https://www.npmjs.com/package/textract#configuration) options pass through as well.
+
+#### Output
+
+The plain text content of the file as a string.
