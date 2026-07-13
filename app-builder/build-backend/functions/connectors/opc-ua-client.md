@@ -1,8 +1,8 @@
 # OPC UA client
 
-The OPC UA client communicates with OPC UA servers. It handles secure connections, browses the server's address space, reads and writes variables, calls methods, monitors data for changes, and transfers files. The code class name is `OpcuaClient`. 
+The OPC UA client connector (`OpcuaClient`) communicates with OPC UA servers. It manages secure connections, browses the server's address space, reads and writes variables, calls methods, monitors data for changes, and transfers files. 
 
-Create an instance of the OPC UA client to manage the connection and session with a server. For secure connections, generate certificates first using `createCertificates`.
+This connector requires [instance creation](./#instance-creation) before you can manage the connection and session with a server. For secure connections, generate certificates using `createCertificates`.
 
 {% hint style="info" %}
 See the [Video demo](#video-demo) at the bottom of this page.
@@ -11,52 +11,52 @@ See the [Video demo](#video-demo) at the bottom of this page.
 ## Security and certificates
 
 {% hint style="info" %}
-For unencrypted connections, skip directly to [Certificate management](#certificate-management) or [Instance and connection](#instance-and-connection).
+For unencrypted connections, skip directly to [Connection and lifecycle](#connection-and-lifecycle).
 {% endhint %}
 
-Secure OPC UA communication (`Sign` or `SignAndEncrypt`) requires a Public Key Infrastructure (PKI): a system of folders and files that manages digital certificates to establish trust between client and server. Create a PKI store only if you connect with a `securityMode` of `Sign` or `SignAndEncrypt`. For unsecured connections (`securityMode: None`), ignore the certificate management functions.
+Secure OPC UA communication (`Sign` or `SignAndEncrypt`) requires a Public Key Infrastructure (PKI) to manage digital certificates and establish trust between the client and the server. Only create a PKI store when connecting with a `securityMode` of `Sign` or `SignAndEncrypt`. For unsecured connections, you can ignore certificate management.
 
-### Self-signed versus CA-signed certificates
+### Self-signed and CA-signed certificates
 
-The `createCertificates` function prepares the client for secure connections in one of two modes:
+`createCertificates` prepares the client for secure connections in one of two modes:
 
-1. Self-signed (default): The client creates its own certificate, which a higher authority does not sign. This is the simplest approach and the recommendation for most scenarios.
-2. CA-signed (set `useCA` to `true`): The client first creates its own Certificate Authority (CA) and uses it to sign the application and user certificates. Use this when a server is configured to trust a single CA instead of multiple individual client certificates.
+* **Self-signed (default)**: The client creates its own certificate without a signature from a certificate authority. This is the simplest approach and works best for most scenarios.
+* **CA-signed (set `useCA` to `true`)**: The client creates its own Certificate Authority (CA) to sign the application and user certificates. Use this if the server trusts a single CA instead of multiple individual client certificates.
 
 ### Establishing trust
 
-OPC UA security uses a two-way trust model:
+OPC UA security requires a two-way trust model:
 
-* The server must trust the client: A server administrator configures the server to accept the client's public certificate.
-* The client must trust the server: To prevent man-in-the-middle attacks, the client needs the server's public certificate in its trust list.
+* **The server trusts the client**: Configure the server to accept the client's public certificate.
+* **The client trusts the server**: Add the server's public certificate to the client's trust list to prevent man-in-the-middle attacks.
 
-The `createCertificates` and `addServerCertificate` functions manage this process from the client side.
+Manage this process using `createCertificates` and `addServerCertificate`.
 
-### The client's PKI folder structure
+### Client PKI folder structure
 
-Running `createCertificates` generates a standard folder structure named `pki`. The key folders are:
+`createCertificates` generates a standard `pki` folder structure:
 
-* `pki/own/certs/`: The client's public certificates (for example, `heisenware_opcua_client.pem`). Give this file to the server administrator.
-* `pki/own/private/`: The client's private keys. Keep these secret. The client automatically restricts file permissions to the owner.
-* `pki/trusted/certs/`: The client's trust list. Place the public certificates of all securely connected OPC UA servers in this folder. The `addServerCertificate` function automates this.
-* `pki/issuers/certs/`: In CA mode, the public certificate of the CA that issues certificates. If an external CA signed the server certificate, add the server's public CA certificate here using `addCertificateAuthority`.
+* `pki/own/certs/`: The client's public certificates (for example, `heisenware_opcua_client.pem`). Provide this file to the server administrator.
+* `pki/own/private/`: The client's private keys. Keep these keys secret. The client automatically restricts access permissions.
+* `pki/trusted/certs/`: The client's trust list. Place the public certificates of trusted OPC UA servers in this folder. Use `addServerCertificate` to automate this.
+* `pki/issuers/certs/`: In CA mode, this folder holds the public certificate of the CA that issues certificates. If an external CA signed the server certificate, add the server's public CA certificate here using `addCertificateAuthority`.
 
 {% hint style="info" %}
 #### PKI store location
 
-The location of the `pki` store depends on where the OPC UA client runs:
+The location of the `pki` folder depends on where the client runs:
 
 * **Agent**: The folder resides in the same directory as your Agent executable.
-* **Platform**: The folder resides under `/shared/certificates`. Click the refresh button in the File Explorer to view it.
+* **Platform**: The folder resides under `/shared/certificates`. Click the refresh icon in the File Explorer to view it.
 {% endhint %}
 
 ## Certificate management
 
-These static functions handle the setup of a secure connection.
+These static functions manage secure connection setup.
 
 ### `createCertificates`
 
-Initializes the local PKI store and creates a client certificate for the application and a user certificate for user authentication. By default, the function creates self-signed certificates. Run this once.
+Initializes the local PKI store and creates a client certificate for the application and a user certificate for authentication. By default, this function creates self-signed certificates. Run this function once.
 
 #### Parameters
 
@@ -64,26 +64,26 @@ Initializes the local PKI store and creates a client certificate for the applica
 
 #### Output
 
-Returns `true` when the client successfully creates the PKI structure and certificates.
+Returns `true` when the PKI structure and certificates are successfully created.
 
 ### `addServerCertificate`
 
-Adds a server's public certificate to the client's trust list, letting the client establish a secure connection with it.
+Adds a server's public certificate to the client's trust list to establish a secure connection.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The server's public certificate, as a file path or PEM content string.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>Optional filename for the certificate. Required if providing a PEM string. If empty, the function keeps the original filename.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The server's public certificate, specified as a file path or PEM string.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>An optional filename for the certificate. Required if providing a PEM string.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` if the client successfully saves the certificate.
+Returns `true` when the certificate is saved successfully.
 
 #### Examples
 
-Example 1: Adding a certificate from a file
+**Example 1: Add a certificate from a file**
 
 {% hint style="info" %}
-When the OPC UA client runs on-premises and not in Agent mode, upload the server certificate using the [File Explorer](../../file-explorer.md) first. Drag the file from there to the input of this function. You can then delete the file from the `uploads` folder.
+If the client runs on the platform (not in Agent mode), upload the server certificate using the File Explorer, drag the file to this parameter, and then delete it from the uploads folder.
 {% endhint %}
 
 ```yaml
@@ -91,7 +91,7 @@ When the OPC UA client runs on-premises and not in Agent mode, upload the server
 /path/to/downloaded/server_cert.pem
 ```
 
-Example 2: Adding a certificate from a string
+**Example 2: Add a certificate from a string**
 
 ```yaml
 # certificateInput
@@ -102,41 +102,41 @@ my_trusted_server.pem
 
 ### `addCertificateAuthority`
 
-Adds a server's public CA certificate to the `issuers` directory of the PKI store. Use this when a Certificate Authority signed the server certificate. This function works like `addServerCertificate`.
+Adds a server's public CA certificate to the `issuers` directory of the PKI store. Use this if a Certificate Authority signed the server certificate.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The CA's public certificate, as a file path or PEM content string.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>Optional filename for the certificate. Required if providing a PEM string. If empty, the function keeps the original filename.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The CA's public certificate, specified as a file path or PEM string.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>An optional filename for the CA certificate. Required if providing a PEM string.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` if the client successfully saves the certificate.
+Returns `true` when the certificate is saved successfully.
 
-## Instance and connection
+## Connection and lifecycle
 
 ### `create`
 
-Constructs an OPC UA client instance. The security settings determine how the client connects.
+Creates an OPC UA client instance. The security settings determine how the client connects.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>securityMode</code></td><td>The security mode to use: <code>None</code>, <code>Sign</code>, or <code>SignAndEncrypt</code>. Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>securityPolicy</code></td><td>The encryption algorithm to use (such as <code>Basic256Sha256</code>). Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>automaticallyAcceptUnknownCertificate</code></td><td>Disables server trust checking. Default false.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>securityMode</code></td><td>The security mode to use (<code>None</code>, <code>Sign</code>, or <code>SignAndEncrypt</code>). Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>securityPolicy</code></td><td>The encryption algorithm to use (such as <code>Basic256Sha256</code>). Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>automaticallyAcceptUnknownCertificate</code></td><td>Disables server validation. Default false.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="danger" %}
-#### Never disable server validation in production
+#### Destructive action
 
-Never set `automaticallyAcceptUnknownCertificate` to `true` in a production environment. This disables server validation and exposes the system to man-in-the-middle attacks. Use this setting for debugging only.
+Never set <code>automaticallyAcceptUnknownCertificate</code> to <code>true</code> in production. This disables server validation and exposes the system to man-in-the-middle attacks.
 {% endhint %}
 
 #### Examples
 
-Example 1: Create a client for an unsecured connection
+**Example 1: Create a client for an unsecured connection**
 
 ```yaml
 # (No arguments needed)
 ```
 
-Example 2: Create a client for a secure connection
+**Example 2: Create a client for a secure connection**
 
 ```yaml
 # options
@@ -146,35 +146,33 @@ securityPolicy: Basic256Sha256
 
 ### `connect`
 
-Connects to an OPC UA server using the security settings defined in `create` and the user identity.
+Connects to an OPC UA server.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>endpointUrl</code></td><td></td><td>The full URL of the server endpoint (such as <code>opc.tcp://my-server.com:4840</code>).</td><td>string</td></tr><tr><td><code>userIdentity</code></td><td><code>username</code></td><td>Username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>Password for authentication.</td><td>string</td></tr><tr><td></td><td><code>userCertificate</code></td><td>User certificate for certificate-based authentication.</td><td>string</td></tr><tr><td></td><td><code>userPrivateKey</code></td><td>The private key belonging to the user certificate.</td><td>string</td></tr><tr><td></td><td><code>useDefaultUserCertificate</code></td><td>Set to <code>true</code> to authenticate with the user certificate created by <code>createCertificates</code>. Default false.</td><td>boolean</td></tr></tbody></table>
-
-Leave `userIdentity` empty for an anonymous connection.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>endpointUrl</code></td><td></td><td>The full URL of the server endpoint (such as <code>opc.tcp://my-server.com:4840</code>).</td><td>string</td></tr><tr><td><code>userIdentity</code></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>userCertificate</code></td><td>The user certificate for certificate-based authentication.</td><td>string</td></tr><tr><td></td><td><code>userPrivateKey</code></td><td>The private key belonging to the user certificate.</td><td>string</td></tr><tr><td></td><td><code>useDefaultUserCertificate</code></td><td>Set to <code>true</code> to authenticate with the user certificate created by <code>createCertificates</code>. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` if the client connects successfully.
+Returns `true` when the connection succeeds. Throws an error on failure.
 
 #### Examples
 
-Example 1: Unsecured, anonymous connection
+**Example 1: Unsecured, anonymous connection**
 
 ```yaml
 # endpointUrl
 opc.tcp://my-server.com:4840
 ```
 
-Example 2: Secure, anonymous connection
+**Example 2: Secure, anonymous connection**
 
 ```yaml
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 ```
 
-Example 3: Secure connection with username and password
+**Example 3: Secure connection with username and password**
 
 ```yaml
 # endpointUrl
@@ -184,7 +182,7 @@ username: myuser
 password: mysecretpassword
 ```
 
-Example 4: Secure connection with a user certificate
+**Example 4: Secure connection with a user certificate**
 
 ```yaml
 # endpointUrl
@@ -195,7 +193,7 @@ useDefaultUserCertificate: true
 
 ### `disconnect`
 
-Closes the active session and disconnects from the OPC UA server.
+Disconnects from the OPC UA server and closes the active session.
 
 #### Parameters
 
@@ -203,11 +201,11 @@ None.
 
 #### Output
 
-Returns `true` if the client disconnects successfully.
+Returns `true` on successful disconnection.
 
 ### `isConnected`
 
-Checks if the client has an active connection to the server.
+Checks whether the client is connected to the server.
 
 #### Parameters
 
@@ -215,16 +213,16 @@ None.
 
 #### Output
 
-Returns `true` if the client is connected, or `false` if disconnected.
+Returns `true` if connected, or `false` if disconnected.
 
 ### `delete`
 
-Removes the instance and closes the server connection.
+Removes the client instance and closes the connection.
 
 {% hint style="danger" %}
-#### Irreversible action
+#### Destructive action
 
-Deleting an instance removes its configuration. To connect again, you must trigger `create` and `connect` anew.
+Deleting an instance removes its configuration. To communicate with the server again, you must create a new instance.
 {% endhint %}
 
 #### Parameters
@@ -233,13 +231,13 @@ None.
 
 #### Output
 
-Returns `true` after deletion.
+Returns `true` on successful deletion. Throws an error if the operation fails.
 
 ## Browsing
 
 ### `browse`
 
-Browses any node address on the server. More specific functions, such as `browseObjects`, act as wrappers around this function.
+Browses a node address on the server.
 
 #### Parameters
 
@@ -247,7 +245,7 @@ Browses any node address on the server. More specific functions, such as `browse
 
 #### Output
 
-Returns an array of objects representing each found node, including its `browseName`, `nodeId`, and `nodeClass`.
+Returns an array of objects representing each node found, including its name, ID, and class.
 
 #### Example
 
@@ -258,15 +256,15 @@ Returns an array of objects representing each found node, including its `browseN
 
 ### `browseObjects`
 
-Browses the server's `Objects` folder. You can specify a deeper starting path.
+Browses the server's Objects folder.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The browse path starting inside the <code>Objects</code> folder (such as <code>2:Demo/2:Dynamic</code>).</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The browse path starting inside the Objects folder.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of objects representing each found node inside the `Objects` folder.
+Returns an array of objects representing each node found.
 
 #### Example
 
@@ -277,15 +275,15 @@ Returns an array of objects representing each found node inside the `Objects` fo
 
 ### `browseTypes`
 
-Browses the server's `Types` folder to explore the data type hierarchy.
+Browses the server's Types folder to explore the data type hierarchy.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>Optional browse path starting inside the <code>Types</code> folder.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>An optional browse path starting inside the Types folder.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of objects representing each found node inside the `Types` folder.
+Returns an array of objects representing each node found.
 
 #### Example
 
@@ -296,15 +294,15 @@ Returns an array of objects representing each found node inside the `Types` fold
 
 ### `browseViews`
 
-Browses the server's `Views` folder.
+Browses the server's Views folder.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>Optional browse path starting inside the <code>Views</code> folder.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>An optional browse path starting inside the Views folder.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of objects representing each found node inside the `Views` folder.
+Returns an array of objects representing each node found.
 
 #### Example
 
@@ -317,7 +315,7 @@ Returns an array of objects representing each found node inside the `Views` fold
 
 ### `readNode`
 
-Reads all attributes of an OPC UA node. This returns more details than `readVariable`, which only fetches the node's value.
+Reads all attributes of an OPC UA node.
 
 #### Parameters
 
@@ -325,7 +323,7 @@ Reads all attributes of an OPC UA node. This returns more details than `readVari
 
 #### Output
 
-Returns a JSON object representing the node's `DataValue`, including the value, status code, and timestamps.
+Returns a JSON object containing the node's attributes, status code, and timestamps.
 
 ```json
 {
@@ -344,14 +342,14 @@ Returns a JSON object representing the node's `DataValue`, including the value, 
 
 #### Examples
 
-Example 1: Read using a `nodeId`
+**Example 1: Read using a nodeId**
 
 ```yaml
 # address
 ns=2;s=Demo.Dynamic.Int32
 ```
 
-Example 2: Read using a browse path
+**Example 2: Read using a browse path**
 
 ```yaml
 # address
@@ -372,14 +370,14 @@ Returns the raw value of the variable.
 
 #### Examples
 
-Example 1: Read using a `nodeId`
+**Example 1: Read using a nodeId**
 
 ```yaml
 # address
 ns=2;s=Demo.Dynamic.Int32
 ```
 
-Example 2: Read using a browse path
+**Example 2: Read using a browse path**
 
 ```yaml
 # address
@@ -388,7 +386,7 @@ Example 2: Read using a browse path
 
 ### `writeVariable`
 
-Writes a new value to a server variable. The function checks the data type and write permissions, converts the value to the required OPC UA data type, and writes it. If the variable is read-only, the function throws an error.
+Writes a new value to a server variable. Converts the value to the required OPC UA data type before writing. If the variable is read-only, this function throws an error.
 
 #### Parameters
 
@@ -396,7 +394,7 @@ Writes a new value to a server variable. The function checks the data type and w
 
 #### Output
 
-Returns `null` on a successful write, or throws an error on failure.
+Returns `null` on a successful write. Throws an error on failure.
 
 #### Example
 
@@ -409,7 +407,7 @@ ns=2;s=Demo.Dynamic.Int32
 
 ### `callMethod`
 
-Invokes a method on an OPC UA object. The function automatically converts input arguments to the required data types.
+Invokes a method on an OPC UA object.
 
 #### Parameters
 
@@ -433,11 +431,11 @@ ns=2;s=Demo.Methods.Multiply
 
 ### `monitorNode`
 
-Subscribes to changes of an entire OPC UA node. The listener fires with the node data on every change.
+Subscribes to changes of an OPC UA node. Triggers the callback on every change.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback that receives the node data on every change. Payload: a JSON object representing the node's <code>DataValue</code>.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. Receives a JSON object representing the node's <code>DataValue</code>.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -456,11 +454,11 @@ samplingInterval: 5000
 
 ### `monitorVariable`
 
-Subscribes to value changes of a specific variable. The listener fires with the new value on every change.
+Subscribes to value changes of a variable. Triggers the callback with the new value on every change.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the variable.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback that receives the new value on every change. Payload: the raw value of the variable.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the variable.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. Receives the raw value of the variable.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -483,11 +481,11 @@ Stops an active subscription for a monitored item.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nodeId</code></td><td>The identifier string returned by a previous monitoring function.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nodeId</code></td><td>The monitored item ID string returned by the monitoring function.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` if the client successfully terminates the subscription.
+Returns `true` when the subscription terminates successfully. Throws an error on failure.
 
 #### Example
 
@@ -512,7 +510,7 @@ Returns a nested array of objects representing the directory structure.
 
 ### `readFile`
 
-Reads the content of a server file.
+Reads the contents of a file on the server.
 
 #### Parameters
 
@@ -531,15 +529,15 @@ ns=2;s=Demo.Files.TextFile
 
 ### `writeFile`
 
-Creates a file in a server folder and uploads content to it.
+Creates a file on the server and uploads content to it.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>folderAddress</code></td><td>The <code>nodeId</code> or browse path of the target folder.</td><td>string</td></tr><tr><td><code>newFileName</code></td><td>The name for the new file.</td><td>string</td></tr><tr><td><code>pathOrBase64</code></td><td>The file content to upload, as a base64 string or local path.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>folderAddress</code></td><td>The <code>nodeId</code> or browse path of the target folder.</td><td>string</td></tr><tr><td><code>newFileName</code></td><td>The name of the new file.</td><td>string</td></tr><tr><td><code>pathOrBase64</code></td><td>The file content, specified as a base64 string or local file path.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns the `nodeId` of the newly created file on the server.
+Returns the <code>nodeId</code> of the newly created file on the server.
 
 #### Example
 
@@ -554,7 +552,7 @@ SGVsbG8sIFdvcmxkIQ==
 
 ### `deleteFile`
 
-Deletes a file from a folder on the server.
+Deletes a file on the server.
 
 {% hint style="danger" %}
 #### Destructive action
@@ -568,7 +566,7 @@ Deleting a file permanently removes it from the server. This action cannot be un
 
 #### Output
 
-Returns `true` if the server successfully deletes the file.
+Returns `true` when the file is successfully deleted. Throws an error on failure.
 
 #### Example
 
@@ -579,15 +577,15 @@ ns=2;s=Demo.Files
 report.txt
 ```
 
-## Events
+## Event listeners
 
 ### `listenToEvents`
 
-Registers a listener to receive client lifecycle events (such as `Connected`, `Connection Lost`, or `Session Closed`).
+Registers a callback to receive client lifecycle events (such as `Connected`, `Connection Lost`, or `Session Closed`).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that receives client lifecycle events. Payload: a string representing the event type.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback evaluated on client lifecycle events. Receives a string representing the event type.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -595,17 +593,20 @@ Returns `true` on successful registration.
 
 ## Deprecated functions
 
-The following functions still appear in the Function Explorer for backward compatibility. Use their replacements in new flows.
+The following functions are maintained for backward compatibility. Update your App logic to use the recommended replacements.
 
-<table><thead><tr><th width="250">Deprecated function</th><th>Use instead</th></tr></thead><tbody><tr><td><code>readVariableValue</code></td><td><code>readVariable</code></td></tr><tr><td><code>writeVariableValue</code></td><td><code>writeVariable</code></td></tr></tbody></table>
+| Deprecated function | Use instead |
+| :--- | :--- |
+| `readVariableValue` | `readVariable` |
+| `writeVariableValue` | `writeVariable` |
 
 ## Tips and tricks
 
-Establishing a secure certificate-based connection is the most common point of failure in OPC UA. An error almost always means a broken link in the chain of trust. This section covers the most common pitfalls.
+Establishing a secure certificate-based connection is the primary point of failure in OPC UA. An error usually indicates a broken link in the chain of trust. Use these troubleshooting steps to resolve common issues.
 
 ### Switch an existing instance to a secure connection
 
-Security settings are part of the `create` function. To switch an unsecured instance to a secure connection, remove the instance and create it again. Right-click the existing active instance (green in the UI), click **Remove**, then trigger the `create` function with your new security configuration.
+To switch an unsecured instance to a secure connection, remove the instance and create it again. Right-click the existing active instance (green in the UI), click **Remove**, and then trigger the `create` function with your new security configuration.
 
 ### Server rejects the client certificate
 
@@ -645,12 +646,12 @@ If a server certificate points to a Certificate Revocation List (CRL), the clien
 
 To resolve this, download the CRL file manually and place it in the client's `pki/issuers/crl` or `pki/trusted/crl` folder. If you generated the server certificate with a custom CA, you can create an empty CRL file to satisfy this check.
 
-### Application versus user authentication
+### Application and user authentication
 
 These two certificate types serve distinct purposes:
 
-1. Application certificate (`heisenware_opcua_client.pem`): Identifies the application to establish the secure, encrypted channel between client and server. This is mandatory for secure connections.
-2. User certificate (`heisenware_opcua_user.pem`): Identifies the user to handle authentication and permissions after the secure channel is established. This is optional.
+1. **Application certificate (`heisenware_opcua_client.pem`)**: Identifies the application to establish the secure, encrypted channel between client and server. This is mandatory for secure connections.
+2. **User certificate (`heisenware_opcua_user.pem`)**: Identifies the user to handle authentication and permissions after the secure channel is established. This is optional.
 
 User certificate authentication requires server-side configuration. The server administrator must create the user account and map it explicitly to the user's public certificate.
 
@@ -660,6 +661,6 @@ OPC UA blocks secure connections if the clocks of the client and server differ s
 
 ## Video demo
 
-Watch the video to learn how to connect to an OPC UA server, then read, record, and visualize data.
+Watch the video to learn how to connect to an OPC UA server, read, record, and visualize data.
 
 {% embed url="https://www.youtube.com/watch?t=15s&v=7TNHk2eqRWc" %}
