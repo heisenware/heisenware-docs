@@ -236,4 +236,3 @@ The communication mapping engine allows direct processing calls to `publishStrin
 Watch the walkthrough example to learn how to create and manage external broker communication models using custom instance flows.
 
 {% embed url="https://www.youtube.com/watch?v=QG1Wsac2NbU" %}
-```
