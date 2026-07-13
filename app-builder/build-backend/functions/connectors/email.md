@@ -1,4 +1,4 @@
-# Email connector
+# Email
 
 The email connector sends emails via SMTP by configuring a mail transport once and transmitting messages containing plain text or HTML content alongside any number of attachments.
 
