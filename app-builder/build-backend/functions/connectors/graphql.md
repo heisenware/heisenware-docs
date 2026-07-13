@@ -1,23 +1,24 @@
 # GraphQL
 
-The `Graphql` class is a utility for interacting with GraphQL APIs. It provides a single static function to send queries or mutations to a GraphQL endpoint and retrieve the results.
+The GraphQL connector interacts with GraphQL APIs. It provides a single static function to send queries or mutations to an endpoint and retrieve the results. Since the function is static, you need no instance.
 
-Since the method is **static**, you do not need to create an instance of this class.
+### `request`
 
-***
+Sends a query or a mutation to a GraphQL API endpoint.
 
-### request
+#### Parameters
 
-Sends a query or a mutation to a specified GraphQL API endpoint.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The endpoint URL of the GraphQL API.</td><td>string</td></tr><tr><td><code>document</code></td><td>The GraphQL query or mutation, written in standard GraphQL syntax.</td><td>string</td></tr><tr><td><code>variables</code></td><td>Optional variables required by the document.</td><td>object</td></tr><tr><td><code>headers</code></td><td>Optional request headers as key-value pairs, commonly used for authentication.</td><td>object</td></tr></tbody></table>
 
-**Parameters**
+{% hint style="info" %}
+Right-click the `headers` input and mark it as a secret to mask tokens or credentials.
+{% endhint %}
 
-* `url`: The endpoint URL of the GraphQL API.
-* `document`: The GraphQL query or mutation, written in standard GraphQL syntax.
-* `variables`: An optional object containing any variables required by the document.
-* `headers`: An optional object for sending request headers, commonly used for authentication.
+#### Examples
 
-**Example: Simple Query** This example queries for a list of movies.
+Example 1: Simple query
+
+This queries a list of movies.
 
 ```yaml
 # url
@@ -32,7 +33,9 @@ query {
 }
 ```
 
-**Example: Query with Variables** This example fetches a single movie by its ID, which is passed as a variable.
+Example 2: Query with variables
+
+This fetches a single movie by its ID, passed as a variable.
 
 ```yaml
 # url
@@ -50,7 +53,9 @@ query getMovieById($movieId: ID!) {
 movieId: "123"
 ```
 
-**Example: Mutation** This example creates a new movie.
+Example 3: Mutation
+
+This creates a new movie.
 
 ```yaml
 # url
@@ -67,7 +72,9 @@ title: My New Movie
 year: 2025
 ```
 
-**Example: Query with Authentication** This example sends an `Authorization` header with a Bearer token.
+Example 4: Query with authentication
+
+This sends an `Authorization` header with a Bearer token.
 
 ```yaml
 # url
@@ -82,4 +89,6 @@ query {
 Authorization: Bearer my-secret-auth-token
 ```
 
-**Output** The data payload returned by the GraphQL API in response to the query or mutation.
+#### Output
+
+The data payload returned by the GraphQL API. Throws an error if the request fails or the API returns errors.
