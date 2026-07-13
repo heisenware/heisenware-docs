@@ -1,6 +1,6 @@
 # Operating system
 
-The Operating system utility (`OS`) provides static functions to retrieve live performance metrics and hardware information from the host operating system. Use it to monitor CPU utilization, memory allocation, disk storage, network throughput, and running Docker containers. 
+The Operating system utility provides static functions to retrieve live performance metrics and hardware information from the host operating system. Use it to monitor CPU utilization, memory allocation, disk storage, network throughput, and running Docker containers. 
 
 Since all functions in this class are static, they do not manage state. You do not need to create an instance to use them.
 
