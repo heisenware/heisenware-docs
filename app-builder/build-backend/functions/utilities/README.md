@@ -1,23 +1,13 @@
 # Utilities
 
-The Utilities category contains the foundational building blocks for data processing, timing, and asset generation. Unlike [connectors](../connectors/) or [storage](../storage/), these classes do not require external systems. They provide the core logic and helper tools to manage your application's behavior.
+Utilities are the foundational building blocks for data processing, timing, and asset generation. These classes work without external systems and provide the core logic and helper tools to manage your App's behavior.
 
-#### Available utility classes
+## Available utility classes
 
-* [**Barcode Generation**](barcode-generation.md): Dynamically generates barcodes and QR codes as images or binary data for labels and UI display.
-* [**Counter**](counter.md): Manages incremental values—perfect for tracking production counts or sequence numbers.
-* [**Cron**](cron.md): Provides a powerful way to schedule automated tasks (like daily reports or backups) using the standard cron expression format.
-* [**Data Processing**](data-processing.md): Essential functions for manipulating data, such as merging objects, filtering arrays, or mapping value ranges.
-* [**Data Simulation**](data-simulation.md): Generates synthetic data points to test your logic before connecting to real hardware.
-* [**Event Simulation**](event-simulation.md): Triggers mock events to verify that your reactive flows (like alarms or UI changes) respond correctly.
-* [**PDF Processing**](pdf-processing.md): Tools to split, merge, or modify existing PDF documents.
-* [**PDF Templates**](pdf-templates.md): Generates professional, dynamic PDF documents (like invoices or delivery notes) using HTML/CSS templates.
-* [**Stopwatch**](stopwatch.md): A high-resolution timer for accurately measuring intervals.
-* [**Timer**](timer.md): Introduces delays or "wait" periods into your flows.
-* [**Users**](users.md): A service for programmatically managing users and application access. Use it to list available apps, registered users, and generate dynamic invitation links.
+<table><thead><tr><th width="220">Class</th><th>Description</th></tr></thead><tbody><tr><td><a href="barcode-generation.md">Barcode generation</a></td><td>Dynamically generates barcodes and QR codes as images or binary data for labels and UI display.</td></tr><tr><td><a href="counter.md">Counter</a></td><td>Manages incremental values, for example production counts or sequence numbers.</td></tr><tr><td><a href="cron.md">Cron</a></td><td>Schedules automated tasks (like daily reports or backups) using the standard cron expression format.</td></tr><tr><td><a href="data-processing.md">Data processing</a></td><td>Functions for manipulating data, such as merging objects, filtering arrays, or mapping value ranges.</td></tr><tr><td><a href="data-simulation.md">Data simulation</a></td><td>Generates synthetic data points to test your logic before connecting to real hardware.</td></tr><tr><td><a href="event-simulation.md">Event simulation</a></td><td>Triggers mock events to verify that your reactive flows (like alarms or UI changes) respond correctly.</td></tr><tr><td><a href="pdf-processing.md">PDF processing</a></td><td>Splits, merges, or modifies existing PDF documents.</td></tr><tr><td><a href="pdf-templates.md">PDF templates</a></td><td>Generates dynamic PDF documents (like invoices or delivery notes) using HTML/CSS templates.</td></tr><tr><td><a href="stopwatch.md">Stopwatch</a></td><td>A high-resolution timer for accurately measuring intervals.</td></tr><tr><td><a href="timer.md">Timer</a></td><td>Introduces delays or wait periods into your flows.</td></tr><tr><td><a href="users.md">Users</a></td><td>Manages users and App access programmatically. Lists available Apps and registered users, and generates dynamic invitation links.</td></tr></tbody></table>
 
 {% hint style="info" %}
-#### Pro Tip: Testing with simulated data
+#### Testing with simulated data
 
-When building complex industrial logic, use Data and Event Simulation during the initial build phase. This allows you to verify that your dashboards and databases are working correctly before you ever touch a physical PLC or sensor. Once your logic is proven, simply swap the simulation blocks for your actual [connectors](../connectors/).
+When building complex industrial logic, use data and event simulation during the initial build phase. This lets you verify that your dashboards and databases work correctly before you touch a physical PLC or sensor. Once your logic is proven, swap the simulation blocks for your actual [connectors](../connectors/).
 {% endhint %}
