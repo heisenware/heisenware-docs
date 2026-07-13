@@ -1,6 +1,6 @@
 # Relational database
 
-The relational database connector (`RelationalDatabase`) communicates with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, and more) without writing raw SQL. You can define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
+The relational database connector communicates with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, and more) without writing raw SQL. You can define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
 
 ## Quick start: the internal PostgreSQL instance
 
