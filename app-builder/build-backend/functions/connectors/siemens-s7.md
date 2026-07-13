@@ -1,77 +1,98 @@
 # Siemens S7
 
-This document explains how to use the S7 Connector to communicate with Siemens S7 PLCs. Think of this connector as a universal translator that allows your app to "speak" the same language as the PLC.
+The Siemens S7 connector communicates directly with Siemens S7 programmable logic controllers (PLCs). It acts as an integration layer to read and write PLC memory areas using raw memory addresses or human-readable variable aliases. 
 
-The process is simple:
+You must create an instance of the `S7` class to preserve connection states and manage targeted variable polling configurations.
 
-1. **Connect** to the PLC.
-2. **Define** the variables (or "tags") you want to read or write.
-3. **Perform** the read or write operations.
+## TIA Portal configuration
 
-## Finding Connection Details in TIA Portal
+To establish a connection, gather the IP address, rack number, and slot number from your TIA Portal project configuration.
 
-To connect to a PLC, you need three key pieces of information: its **IP Address**, **Rack**, and **Slot**. You can find these in your TIA Portal project.
+### IP address
 
-### 1. IP Address
+Select the PLC in your project tree panel. Open the properties tab below and navigate to **PROFINET interface > Ethernet addresses** to identify the configured network IP address.
 
-Select the PLC in the "Project tree" on the left. In the "Properties" tab below, go to "**PROFINET interface > Ethernet addresses**". The **IP address** is listed here.
+### Rack and slot
 
-### 2. Rack & Slot
+Modern S7-1200 and S7-1500 controllers typically reside on rack 0 and slot 1. For classic S7-300 and S7-400 hardware, click **Device configuration** to verify your CPU's hardware position. The processor is usually positioned on rack 0, slot 2.
 
-For S7-1200 and S7-1500 series PLCs, the Rack and Slot are almost always **Rack `0`** and **Slot `1`**. For older S7-300/400 series, you can find this by clicking on "**Device configuration**". The PLC is typically on Rack `0`, and the Slot is usually `2`.
+### Enable PUT and GET communication
 
-### 3. Enable PUT/GET Communication (Crucial!)
+The controller requires explicit access configuration to permit remote partner communication:
 
-For the connector to have permission to read and write data, you must enable this setting in TIA Portal:
+1. Right-click the controller block and select **Properties**.
+2. Navigate to **Protection & Security > Connection mechanisms**.
+3. Enable the checkbox for **Permit access with PUT/GET communication from remote partner**.
+4. Compile and download the updated hardware configuration to the physical PLC.
 
-1. Right-click the PLC and select "**Properties**".
-2. Go to "**Protection & Security > Connection mechanisms**".
-3. Check the box for "**Permit access with PUT/GET communication from remote partner**".
-4. Download the hardware configuration to the PLC.
+## Connection management
 
-## Connector Functions
+### `connect`
 
-You must first create an instance of the connector and then use its functions to interact with your PLC.
+Establishes a connection channel to the target PLC using the hardware addresses gathered from TIA Portal.
 
-{% hint style="success" %}
-Typically you will first install the Siemens S7 connector within an [agent](../../agents/). That way you can connect your cloud platform to your shopfloor (OT), on-premises PLCs.
-{% endhint %}
+#### Parameters
 
-### connect
+<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>host</code></td><td>The network IP address or hostname of the PLC. Required.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The communication port of the target PLC interface. Default 102.</td><td>integer</td></tr><tr><td></td><td><code>rack</code></td><td>The physical hardware rack position. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>slot</code></td><td>The slot position number of the CPU module. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>timeout</code></td><td>Connection threshold execution limit in milliseconds. Default 5000.</td><td>integer</td></tr></tbody></table>
 
-Establishes the connection to the target PLC using the details you found in TIA Portal.
+#### Output
 
-**Example:**
+Returns `true` when a connection channel is successfully established, or throws a runtime connection error on failure.
+
+#### Example
 
 ```yaml
 # options
-host: 192.168.0.1  # IP Address from TIA Portal
+host: 192.168.0.1
 port: 102
 rack: 0
-slot: 1            # Use 1 for S7-1200/1500, often 2 for S7-300/400
+slot: 1
 ```
 
-### Addressing PLC Variables
+### `disconnect`
 
-You have two ways to tell the connector which variables to read or write: using an **Address Dictionary** for convenience or using **Direct Addresses**. You can even use both at the same time!
+Terminates the active TCP connection session with the PLC.
 
-**Method 1: Using an Address Dictionary (Recommended)**
+#### Parameters
 
-An Address Dictionary lets you create a "shopping list" of all the PLC variables you want to work with. You give each variable a simple, human-readable name (an alias) and map it to its specific address in the PLC. This makes your code much easier to read and maintain.
+None.
 
-**Method 2: Using Direct & Mixed Addresses**
+#### Output
 
-If you prefer, you can use the PLC's raw memory address directly in functions like `addItems` and `writeItems`. The connector is smart enough to handle a mix of aliases and direct addresses. When it sees a string, it first checks if it's an alias in the dictionary. If not, it treats it as a direct address.
+Returns `true` upon successful disconnection tracking cleanup.
 
-### setAddressDictionary
+### `getStatus`
 
-Configures the connector with your list of aliases.
+Queries the active connection state running on the instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns a string detailing the current connectivity state: `'disconnected'`, `'connecting'`, or `'connected'`.
+
+## Variable addressing and dictionary
+
+### `setAddressDictionary`
+
+Configures the connector instance with an alias lookup directory. This layer lets you map simple names to raw PLC addresses for use across all subsequent polling or data transactions.
 
 {% hint style="danger" %}
-Setting a new dictionary will clear the current list of items being monitored. Always set your dictionary **before** adding items that rely on it.
+#### Polling configuration reset
+Registering a new address directory completely flushes out all items currently added to your read monitoring queues. Always establish your dictionary map sequence before building active tracking tables.
 {% endhint %}
 
-**Example:**
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dictionary</code></td><td>An object structure where keys represent human-readable aliases and values define raw PLC memory strings. Default {}.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` on a successful layout registration.
+
+#### Example
 
 ```yaml
 # dictionary
@@ -81,36 +102,106 @@ CONVEYOR_RUNNING: 'Q4.1'
 PROCESS_STEP_COMPLETE: 'M10.5'
 ```
 
-### addItems
+### `showAddressDictionary`
 
-Tells the connector which variables you want to actively monitor. You can provide aliases, direct addresses, or a mix of both.
+Retrieves an isolated configuration copy of the active address alias directory.
 
-**Example 1: Using Aliases**
+#### Parameters
+
+None.
+
+#### Output
+
+Returns an object structure detailing the currently registered lookup elements.
+
+## Polling list configuration
+
+### `addItems`
+
+Registers specific variable addresses or directory aliases inside the continuous background read polling engine.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>items</code></td><td>A standalone variable string, alias indicator, or an array list of strings to add to the active tracking scope. Required.</td><td>array or string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` upon successful registration.
+
+#### Examples
+
+Example 1: Register raw memory addresses
 
 ```yaml
 # items
-[MOTOR_SPEED, E_STOP_PRESSED]
+- 'DB1,X0.0'
+- 'MW10'
 ```
 
-**Example 2: Using a Mix**
+Example 2: Register mixed aliases and raw addresses
 
 ```yaml
 # items
-[MOTOR_SPEED, 'DB10,X20.4']
+- MOTOR_SPEED
+- 'DB5,X1.5'
 ```
 
-**Example 3: Using a single item**
+### `removeItems`
+
+Strips specific variable entries from the internal read polling loop engine. You must provide the exact address string or alias label used to configure the entry.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>items</code></td><td>A variable string, alias key identifier, or an array list of strings to strip from the polling monitor. If left undefined, the function removes all variables.</td><td>array or string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` on successful execution.
+
+#### Example
 
 ```yaml
 # items
-'DB10,X20.4'
+- E_STOP_PRESSED
 ```
 
-### readAllItems
+### `removeAllItems`
 
-Reads the current values of all variables you added with `addItems`. The keys in the output object will match the strings you added (aliases and/or direct addresses).
+Completely flushes out all registered variables from the active background tracking queue.
 
-**Output from "Using a Mix" example above:**
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` when the polling parameters clear successfully.
+
+### `showAllItems`
+
+Queries the full collection of address variables currently tracked by the background tracking loop.
+
+#### Parameters
+
+None.
+
+#### Output
+
+An array list of all raw memory paths or dictionary alias keys currently assigned to the active polling queue.
+
+## Data operations
+
+### `readAllItems`
+
+Issues a bulk request to read the current hardware data value of every variable registered inside the active tracking list.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns an object containing updated key-value data snapshots where the keys map directly to the item designations defined in the polling configuration block:
 
 ```json
 {
@@ -119,15 +210,26 @@ Reads the current values of all variables you added with `addItems`. The keys in
 }
 ```
 
-### writeItems
+### `writeItems`
 
-Writes one or more new values to one or more variables in the PLC. If several values are written make sure the `items` and the `values` array are of same order and length.
+Writes data updates to one or more memory variables on the PLC.
 
 {% hint style="warning" %}
-You can only have one write operation running at a time.
+#### Serialization constraint
+The communication layer executes a single write instruction pipeline path at any given point in time. Attempting to pass concurrent writes while an evaluation transaction is in-flight results in a structural write rejection error.
 {% endhint %}
 
-**Example:**
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>items</code></td><td>A single target variable address, alias label string, or a matched array list of strings to update. Required.</td><td>array or string</td></tr><tr><td><code>values</code></td><td>The literal value or corresponding array list of values to transfer to the PLC memory map. Ensure the property length and position align perfectly with the inputs array. Required.</td><td>array or any</td></tr></tbody></table>
+
+#### Output
+
+Returns a promise that resolves to `true` when hardware data updates commit successfully.
+
+#### Examples
+
+Example 1: Update a single bit status flag
 
 ```yaml
 # items
@@ -136,71 +238,69 @@ CONVEYOR_RUNNING
 true
 ```
 
-### removeItems
-
-Removes one or more variables from the active monitoring list.
-
-**Example: Removes a single item**
+Example 2: Batch write multiple mixed primitive variables
 
 ```yaml
 # items
-E_STOP_PRESSED
+- MOTOR_SPEED
+- 'DB1,X0.7'
+# values
+- 1500
+- true
 ```
 
-### removeAllItems
+## Deprecated functions
 
-A convenient function to completely clear the list of monitored items.
+The following functions are maintained for backward compatibility with older configurations. Update your application logic loops to use the newer direct replacement paths.
 
-### showAddressDictionary & showAllItems
+| Deprecated function | Use instead |
+| :--- | :--- |
+| `initiateConnection` | `connect` |
+| `dropConnection` | `disconnect` |
 
-These functions are useful for debugging by showing the current state of the connector.
+## Tips and tricks
 
-* `showAddressDictionary`: Returns the currently configured address dictionary object.
-* `showAllItems`: Returns an array of all item strings currently in the monitoring list.
+### Memory address reference syntax
+Memory maps parse data strings using standard industrial notations formatted as `AREA,TYPE<BYTE_OFFSET>[.BIT_OR_LENGTH]`.
 
-### getStatus
+#### Memory areas
+* **`DB<number>`** (Data Block) — Main shared memory registers used to handle data logic, custom recipes, and process variables (such as `DB1,REAL4`).
+* **`I`** (Inputs) — Read-only state registers tracking physical digital and analog input blocks.
+* **`Q`** (Outputs) — Control registers driving physical state relays, actuators, or indicators.
+* **`M`** (Merkers/Internal Memory) — Internal processor flags and global operational staging variables.
 
-Checks the current connection state.
+#### Explicit data layouts
+* **Boolean** (`X`) — Single-bit data fields (such as `DB1,X0.0`).
+* **Byte** (`B`) — 8-bit whole values tracking raw integer scales from 0 to 255.
+* **Char Array** (`C`) — Extracts raw, unformatted alphanumeric sequences (such as `DB1,C20.10` for 10 sequential text fields).
+* **String** (`S`) — Parses formatted data lines containing standard Siemens S7 string headers.
+* **Integer** (`INT`) — 16-bit signed whole values.
+* **Word** (`WORD`) — 16-bit unsigned, purely positive data fields.
+* **Double Int** (`DINT`) — 32-bit signed whole value parameters.
+* **DWord** (`DWORD`) — 32-bit unsigned data fields.
+* **Real** (`REAL`) — 32-bit floating-point decimal parameters (such as `DB1,REAL14`).
 
-**Output:** Returns a string: `'disconnected'`, `'connecting'`, or `'connected'`.
+### Handling runtime string misalignments
+If textual characters returned by the `S` string type layout appear scrambled or contain misplaced characters, verify whether the PLC handles raw array elements rather than a standard S7 string definition layout. Standard S7 strings include distinct header properties defining capacity bounds. If your layout skips these fields, pass the `C` (Char Array) data specification block to read text patterns accurately (such as `DB1,C0.16`).
 
-## Appendix: S7 Address Syntax
+### Evaluating hardware `TIME` values
+Siemens S7 processors maintain `TIME` metrics formatted as unique double-word structures tracking elapsed durations in milliseconds. To read or manipulate these values correctly without causing format execution errors, declare the data type tag as a standard `DINT` signed 32-bit parameter.
 
-### Memory Areas
+## Delete instance
 
-The first part of an address defines _where_ the data is stored in the PLC.
+### `delete`
 
-| **Area**         | **Name**       | **Description**                                                                             | **Example** |
-| ---------------- | -------------- | ------------------------------------------------------------------------------------------- | ----------- |
-| **`DB<number>`** | Data Block     | The main area for storing program data, settings, and recipes. The most common area to use. | `DB1,REAL4` |
-| **`I`**          | Inputs         | Reads the status of **physical inputs** like sensors and buttons. (Read-Only)               | `I0.0`      |
-| **`Q`**          | Outputs        | Reads or controls **physical outputs** like motors and lights.                              | `Q4.1`      |
-| **`M`**          | Merkers/Memory | The PLC's internal "scratchpad" memory for flags and intermediate values.                   | `M10.5`     |
+Removes the S7 client instance from the runtime configuration engine and purges all active item polling tracking queues.
 
-### Data Types
+{% hint style="danger" %}
+Deleting an instance removes its configuration. To communicate with the PLC again, trigger `create` anew.
+{% endhint %}
 
-The address format is `AREA,TYPE<BYTE_OFFSET>[.BIT_OR_LENGTH]`.
+#### Parameters
 
-| **Data Type**              | **S7 Name** | **Description & Example**                         |
-| -------------------------- | ----------- | ------------------------------------------------- |
-| **Boolean** (On/Off)       | `X`         | A single bit. `DB1,X0.0`                          |
-| **Byte** (0-255)           | `B`         | An 8-bit number. `DB1,B1`                         |
-| **Char Array**             | `C`         | Reads raw text. `DB1,C20.10` (10 characters)      |
-| **String**                 | `S`         | A standard S7 string. `DB1,S20.10` (max 10 chars) |
-| **Integer** (Whole Number) | `INT`       | A 16-bit signed number. `DB1,INT2`                |
-| **Word** (Unsigned)        | `WORD`      | A 16-bit positive number. `DB1,WORD4`             |
-| **Double Int**             | `DINT`      | A 32-bit signed number. `DB1,DINT6`               |
-| **DWord** (Unsigned)       | `DWORD`     | A 32-bit positive number. `DB1,DWORD10`           |
-| **Real** (Decimal)         | `REAL`      | A 32-bit decimal number. `DB1,REAL14`             |
+None.
 
-## Common Pitfalls & Solutions
+#### Output
 
-* **Error: "Object does not exist"**
-  * **Problem:** You are trying to write to a Data Block (`DB`) that either doesn't exist or is too small in the PLC.
-  * **Solution:** Ensure the DB number is correct and that its size in TIA Portal is large enough to hold all your variables.
-* **Reading a String Looks Garbled**
-  * **Problem:** You might be using the `S` type on a raw array of characters.
-  * **Solution:** Use the `C` type (Char Array) for reading raw text that doesn't have the standard S7 string header. For example: `DB1,C0.16`.
-* **Working with `TIME` Values**
-  * **Problem:** The S7 `TIME` data type is a special format.
-  * **Solution:** Treat it as a `DINT`. The value will be the time in milliseconds. An address for a `TIME` variable would be `DB1,DINT32`.
+Nothing.
+```
