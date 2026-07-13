@@ -1,162 +1,91 @@
----
-description: >-
-  Learn how to connect to an OPC UA server using the Heisenware OPC UA
-  integration.
----
+# OPC UA client
 
-# OPC UA Client
+The OPC UA client communicates with OPC UA servers. It handles secure connections, browses the server's address space, reads and writes variables, calls methods, monitors data for changes, and transfers files.
 
-The `OpcuaClient` class provides a high-level interface for communicating with OPC UA servers. It simplifies complex operations like establishing secure connections, browse the server's address space, reading and writing variables, calling methods, monitoring data for changes, and handling file transfers.
-
-An instance of the client must be created to manage the connection state and session with a server. For secure connections, certificates must be generated first using the `createCertificates` function.
+Create an instance to manage the connection and session with a server. For secure connections, generate certificates first using `createCertificates`.
 
 {% hint style="info" %}
-Find a [video tutorial](opc-ua-client.md#video-tutorial) covering the basics at the bottom of this page.
+Find a [video tutorial](opc-ua-client.md#video-demo) covering the basics at the bottom of this page.
 {% endhint %}
 
-## Security & Certificates
+## Security and certificates
 
 {% hint style="info" %}
-In case you are using an un-encrypted communication between client and server  (not recommended in production settings) and also do not deal with certificate based authentication (advanced feature) you can directly jump [here](opc-ua-client.md#client-instantiation-and-connection).&#x20;
+#### Skip this section for unsecured connections
 
-Otherwise we strongly advise to make yourself confident with the OPC UA security concepts and our corresponding implementation by continuing to read below.
+If you use unencrypted communication between client and server (not recommended in production) and no certificate-based authentication, jump directly to [certificate management](opc-ua-client.md#certificate-management) or [instance and connection](opc-ua-client.md#instance-and-connection). Otherwise, read on to understand the OPC UA security concepts and our implementation.
 {% endhint %}
 
-For secure OPC UA communication (`Sign` or `SignAndEncrypt`), a Public Key Infrastructure (PKI) is essential. This is a system of folders and files that manages digital certificates to establish trust between the client and server.
+Secure OPC UA communication (`Sign` or `SignAndEncrypt`) requires a Public Key Infrastructure (PKI): a system of folders and files that manages digital certificates to establish trust between client and server. You only need a PKI store if you connect with a `securityMode` of `Sign` or `SignAndEncrypt`. For unsecured connections (`securityMode: None`), ignore the certificate management functions.
 
-#### When is Security Needed?
+### Self-signed versus CA-signed certificates
 
-You only need to manage a PKI store if you intend to connect to a server using a `securityMode` of `Sign` or `SignAndEncrypt`. For unsecured connections (`securityMode: 'None'`), you can ignore the certificate management functions.
+The `createCertificates` function prepares your client for secure connections in one of two modes:
 
-#### Certificate Generation: Self-Signed vs. CA-Signed
+1. Self-signed (default): the client creates its own certificate, not signed by a higher authority. This is the simplest approach and recommended for most scenarios.
+2. CA-signed (set `useCA: true`): the client first creates its own mini Certificate Authority (CA) and uses it to sign its application and user certificates. Use this when a server is configured to trust a single CA instead of many individual client certificates.
 
-The `createCertificates` static method prepares your client for secure connections. It can operate in two modes:
+### Establishing trust
 
-1. Self-Signed (Default): This is the simplest method. The client creates its own unique certificate that is not signed by a higher authority. This is the recommended approach for most scenarios as it's easier to manage.
-2. CA-Signed (Optional): The client first creates its own mini Certificate Authority (CA) and then uses that CA to sign its application and user certificates. This is useful for scenarios where a server is configured to trust a single CA instead of many individual client certificates.
+OPC UA security uses a two-way trust model:
 
-#### Establishing Trust
+* The server must trust your client: a server administrator configures the server to accept your client's public certificate.
+* Your client must trust the server: to prevent man-in-the-middle attacks, your client needs the server's public certificate in its own trust list.
 
-OPC UA security is built on a two-way trust model:
+The `createCertificates` and `addServerCertificate` functions manage this process from the client's side.
 
-* The Server Must Trust Your Client: A server administrator must configure the server to accept your client's public certificate.
-* Your Client Must Trust the Server: To prevent man-in-the-middle attacks, your client must have the server's public certificate in its own trust list.
-
-The `createCertificates` and `addServerCertificate` functions are designed to manage this process from the client's side.
-
-#### The Client's PKI Folder Structure
-
-{% hint style="info" %}
-The location of the `pki` store differs depending on whether you run the OPC UA client in agent mode, or within the platform itself (e.g. in on-premises setup). \
-\
-**Agent**: The folder will be placed in the same directory as your agent executable\
-**Platform**: You will find it under `(/shared/)certificates` (may need a refresh button click in the UI)
-{% endhint %}
+### The client's PKI folder structure
 
 Running `createCertificates` generates a standard folder structure named `pki`. The key folders are:
 
-* `pki/own/certs/`: Contains your client's public certificates (e.g., `heisenware_opcua_client.pem`). This is the file you give to the server administrator.
-* `pki/own/private/`: Contains your client's private keys. Keep these secret! The code automatically sets their file permissions to be readable only by the owner.
-* `pki/trusted/certs/`: This is the client's trust list. You must place the public certificates of any OPC UA servers you want to connect to securely in this folder. The `addServerCertificate` function automates this.
-* `pki/issuers/certs/`: In CA-mode, this contains the public certificate of the CA that can issue certificates. When a server certificate was signed by an external CA, you have to add the server's public CA certificate here.
+* `pki/own/certs/`: your client's public certificates (e.g. `heisenware_opcua_client.pem`). Give this file to the server administrator.
+* `pki/own/private/`: your client's private keys. Keep these secret. The code automatically restricts their file permissions to the owner.
+* `pki/trusted/certs/`: the client's trust list. Place the public certificates of all OPC UA servers you want to connect to securely in this folder. The `addServerCertificate` function automates this.
+* `pki/issuers/certs/`: in CA mode, the public certificate of the CA that issues certificates. When an external CA signed the server certificate, add the server's public CA certificate here using `addCertificateAuthority`.
 
-### A Guide to Certificate-Based Connections: Pitfalls & Troubleshooting
+{% hint style="info" %}
+#### Location of the PKI store
 
-Establishing a secure certificate-based connection is the most common point of failure in OPC UA. An error almost always means there is a broken link in the chain of trust. This guide covers the most common pitfalls.
+The location of the `pki` store depends on where the OPC UA client runs.
 
-{% hint style="warning" %}
-If you created an instance before and failed to connect using an un-secure connection, you have to re-create this instance in order to switch to a secure connection now (as security settings are part of the `create` function). For that right-click the existing instance (should be green if alive) and click `REMOVE` . It should turn yellow (indicating it is not yet available). Now, changes to the `create` Function Input will be applied when you trigger it again.
+**Agent**: the folder sits in the same directory as your Agent executable.\
+**Platform**: you find it under `(/shared/)certificates` (may need a refresh button click in the UI).
 {% endhint %}
 
-#### Pitfall 1: Server Rejects the Client Certificate
+## Certificate management
 
-This happens when your client attempts to connect, and the server immediately closes the connection. The error message is often generic, like `"The connection has been disconnected by third party"`. This means the server does not trust your client's application certificate.
+These static functions handle the one-time setup of a secure connection.
 
-**How to Fix (Prosys Example):**
+### `createCertificates`
 
-1. Attempt to connect your client to the Prosys server. This will fail, but it makes Prosys aware of your client's certificate.
-2. In the Prosys Simulation Server UI, go to the Certificates tab.
-3. Your client's certificate (`HeisenwareOPCUAClient`) will appear in the Rejected Certificates list.
-4. Right-click on your certificate and select Trust. This moves it to the Trusted Certificates list.
-5. Try connecting your client again. It should now succeed.
+Initializes the local PKI store and creates a client certificate (for the application) and a user certificate (for user authentication). By default the certificates are self-signed. Run this once.
 
-* If using CA-mode: Instead of trusting the client certificate directly, you would place your CA's public certificate (`heisenware_ca_cert.pem`) into the Prosys PKI folder at `pki/CA/issuers/certs/`.
+#### Parameters
 
-#### Pitfall 2: Client Rejects the Server Certificate
+<table><thead><tr><th width="130">Input</th><th width="170">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>useCA</code></td><td>If <code>true</code>, creates a local Certificate Authority and uses it to sign the certificates. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
-This is the reverse problem. Your client does not trust the server it's connecting to. You will receive a very clear error message: `"server Certificate verification failed"`.
+#### Output
 
-This happens because, for security, the client will only connect to servers it knows.
+Returns `true` on successful creation of the PKI structure and certificates.
 
-**How to Fix:**
-
-You must add the server's public certificate to your client's trust store.
-
-1. Obtain the server's public certificate file (e.g., by exporting it from the Prosys Certificates tab).
-2. Use the `addServerCertificate` static method to add it to your client's `pki/trusted/certs` folder.
-
-{% hint style="danger" %}
-CRITICAL: Never set `automaticallyAcceptUnknownCertificate: true` in a production environment. This disables server validation and exposes you to man-in-the-middle attacks.
-{% endhint %}
-
-#### Pitfall 3: The SAN Mismatch
-
-This is a very common reason for a `"server Certificate verification failed"` error, even when trust has been established.
-
-* What it is: A certificate's Subject Alternative Name (SAN) field lists all the hostnames and IP addresses for which it is valid.
-* The Problem: When you connect, the client strictly checks if the hostname in your endpoint URL (e.g., `opc.tcp://lenovo:4840`) is present in the server certificate's SAN list. If it's not, the connection is rejected.
-
-**How to Fix (Prosys Example):**
-
-1. Diagnose: You try to connect to `opc.tcp://localhost:53530`, but it fails. You check the Prosys certificate's SAN field using `openssl` and see it only lists `DNS:lenovo`.
-2. The Fix: Change your endpoint URL to match what's in the certificate: `await client.connect("opc.tcp://lenovo:53530/OPCUA/SimulationServer")`. The connection will now succeed.
-
-#### Pitfall 4: Certificate Revocation List (CRL) Failures
-
-This is an advanced and subtle issue. A certificate may contain a URL pointing to a Certificate Revocation List (CRL). A secure client will try to download this list to ensure the server's certificate hasn't been revoked. If the client is in an isolated network without internet access, it cannot download the CRL, and the validation fails.
-
-**How to Fix:**
-
-The proper solution is to manually download the CRL file and place it in the client's `pki/issuers/crl` or `pki/trusted/crl` folder. If you created the server's certificate with your own CA, you can generate an empty CRL file to satisfy the check.
-
-#### Pitfall 5: Application vs. User Authentication
-
-It's crucial to understand the two different types of certificates used:
-
-1. Application Certificate (`heisenware_opcua_client.pem`): Identifies your _application_. It is used to create the secure, encrypted channel between the client and server. This is mandatory for a secure connection.
-2. User Certificate (`heisenware_opcua_user.pem`): Identifies a _human user_. It is used to log in and acquire permissions after the secure channel is already established. This is optional.
-
-The Pitfall: Setting up user certificate authentication requires extra configuration on the server. For Prosys, this feature is only available in the Professional Edition. The server administrator must create a user and explicitly map that user account to the user's public certificate.
-
-#### Pitfall 6: Server's and Client's internal clocks are out of sync
-
-When the internal clocks of server and client are out of sync by some substantial time (e.g. 1 hour), OPC UA's internal security requirements may deny to establish the connection. If that's the case you will see a clear warning stating this fact in the client's logs.
-
-### Setup & Certificate Management
-
-These static functions are used for the one-time setup of a secure connection.
-
-#### createCertificates
-
-Initializes the entire local PKI store. It creates a new Certificate Authority (CA) and uses it to issue a client certificate (for the application) and a user certificate (for user authentication). This only needs to be run once.
-
-Output
-
-Returns true on successful creation of the PKI structure and certificates.
-
-#### addServerCertificate
+### `addServerCertificate`
 
 Adds a server's public certificate to your client's trust list, allowing your client to establish a secure connection with it.
 
-Parameters
+#### Parameters
 
-* `certificateInput`: The server's public certificate, provided either as a file path or as the PEM content string itself.
-* `certificateName`: An optional filename for the certificate. This is required if you provide the certificate content as a string.
+<table><thead><tr><th width="190">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The server's public certificate, either as a file path or as the PEM content string itself.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>Optional filename for the certificate. Required if you provide the certificate as a PEM string. With a file path, the original name is kept.</td><td>string</td></tr></tbody></table>
 
-Example 1: Adding a certificate from a file
+#### Output
+
+Returns `true` if the certificate was saved successfully.
+
+#### Examples
+
+Example 1: adding a certificate from a file
 
 {% hint style="info" %}
-When you are running the OPC UA client on-premises and not in agent mode, you will typically upload the server certificate using the [Resources](../../file-explorer.md) panel first. Once, done you can simply drag the file from there to the input of this function. After that, there is no need to keep the file in the `uploads` folder and you can simply delete it.
+When the OPC UA client runs on-premises and not in Agent mode, upload the server certificate using the [File Explorer](../../file-explorer.md) first. Then drag the file from there to the input of this function. Afterwards you can delete the file from the `uploads` folder.
 {% endhint %}
 
 ```yaml
@@ -164,7 +93,7 @@ When you are running the OPC UA client on-premises and not in agent mode, you wi
 '/path/to/downloaded/server_cert.pem'
 ```
 
-Example 2: Adding a certificate from a string variable
+Example 2: adding a certificate from a string
 
 ```yaml
 # certificateInput
@@ -173,39 +102,43 @@ Example 2: Adding a certificate from a string variable
 'my_trusted_server.pem'
 ```
 
-Output
+### `addCertificateAuthority`
 
-Returns true if the certificate was saved successfully.
+Adds a server's public CA certificate to the `issuers` section of the PKI store. Use this when an explicit Certificate Authority signed the server's certificates (the file often has "CA" in its name). Works like `addServerCertificate`.
 
-#### addCertificateAuthority
+#### Parameters
 
-Sometimes the server's public certificates are signed using an explicit Certficiate Authority (CA). If this is the case, you have to add this certificate (often has a CA in the name) to the PKI structure as well (to the `issuers` section). This function will do that for you and works analog to the `addServerCertificate` as described above.
+<table><thead><tr><th width="190">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The server's public CA certificate, either as a file path or as the PEM content string itself.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>Optional filename for the CA certificate. Required if you provide the certificate as a PEM string. With a file path, the original name is kept.</td><td>string</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* `certificateInput`: The server's public certificate, provided either as a file path or as the PEM content string itself.
-* `certificateName`: An optional filename for the certificate. This is required if you provide the certificate content as a string.
+Returns `true` if the certificate was saved successfully.
 
-## Client Instantiation and Connection
+## Instance and connection
 
-#### create
+### `create`
 
-Constructs an OPC UA client instance. The security settings you provide here determine how the client will attempt to connect.
+Constructs an OPC UA client instance. The security settings you provide here determine how the client attempts to connect.
 
-Parameters
+#### Parameters
 
-* `options`: An object for configuring the connection's security.
-  * `securityMode`: Can be `None`, `Sign`, or `SignAndEncrypt`. Defaults to `None`.
-  * `securityPolicy`: The encryption algorithm to use (e.g., `Basic256Sha256`). Defaults to `None`.
-  * `automaticallyAcceptUnknownCertificate:` Turns of server trust checking. Defaults to `false`.
+<table><thead><tr><th width="110">Input</th><th width="260">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>securityMode</code></td><td><code>None</code>, <code>Sign</code>, or <code>SignAndEncrypt</code>. Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>securityPolicy</code></td><td>The encryption algorithm to use (e.g. <code>Basic256Sha256</code>). Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>automaticallyAcceptUnknownCertificate</code></td><td>Disables server trust checking. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
-Example: Create a client for an unsecured connection
+{% hint style="danger" %}
+#### Never disable server validation in production
+
+Never set `automaticallyAcceptUnknownCertificate: true` in a production environment. This disables server validation and exposes you to man-in-the-middle attacks. Use it for debugging only.
+{% endhint %}
+
+#### Examples
+
+Example 1: create a client for an unsecured connection
 
 ```yaml
 # (No arguments needed)
 ```
 
-Example: Create a client for a secure connection
+Example 2: create a client for a secure connection
 
 ```yaml
 # options
@@ -213,60 +146,61 @@ securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 ```
 
-#### connect
+### `connect`
 
 Connects to an OPC UA server using the security settings defined in `create` and the user identity provided here.
 
-Parameters
+#### Parameters
 
-* `endpointUrl`: The full URL of the server endpoint.
-* `userIdentity`: An optional object specifying how to authenticate as a user.
-  * `username` & `password`: For username/password authentication.
-  * `useDefaultUserCertificate`: Set to `true` to authenticate with the user certificate created by `createCertificates`.
+<table><thead><tr><th width="140">Input</th><th width="240">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>endpointUrl</code></td><td></td><td>The full URL of the server endpoint (e.g. <code>opc.tcp://my-server.com:4840</code>).</td><td>string</td></tr><tr><td><code>userIdentity</code></td><td><code>username</code></td><td>Username for username/password authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>Password for username/password authentication.</td><td>string</td></tr><tr><td></td><td><code>userCertificate</code></td><td>A user certificate for certificate-based user authentication.</td><td>string</td></tr><tr><td></td><td><code>userPrivateKey</code></td><td>The private key belonging to the user certificate.</td><td>string</td></tr><tr><td></td><td><code>useDefaultUserCertificate</code></td><td>Set to <code>true</code> to authenticate with the user certificate created by <code>createCertificates</code>. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
-### Connection and Authentication Examples
+The entire `userIdentity` input is optional. Leave it empty for an anonymous connection.
 
-Here are examples for various connection scenarios.
+#### Output
 
-Example 1: Unsecured, Anonymous Connection
+Returns `true` if the connection was established successfully.
 
-This requires no PKI setup and no user identity.
+#### Examples
+
+Example 1: unsecured, anonymous connection
+
+Requires no PKI setup and no user identity.
 
 ```yaml
-# (In `create` Function)
+# (In `create` function)
 # (No arguments)
 
-# (In `connect` Function)
+# (In `connect` function)
 # endpointUrl
 opc.tcp://my-server.com:4840
 ```
 
-Example 2: Secure, Anonymous Connection
+Example 2: secure, anonymous connection
 
-This requires the PKI setup (createCertificates and addServerCertificate) but no user identity.
+Requires the PKI setup (`createCertificates` and `addServerCertificate`) but no user identity.
 
 ```yaml
-# (In `create` Function)
+# (In `create` function)
 # options
 securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 
-# (In `connect` Function)
+# (In `connect` function)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 ```
 
-Example 3: Secure Connection with Username/Password
+Example 3: secure connection with username and password
 
-This requires the PKI setup for a secure channel, plus username/password credentials for user authentication.
+Requires the PKI setup for a secure channel, plus username and password for user authentication.
 
 ```yaml
-# (In `create` Function)
+# (In `create` function)
 # options
 securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 
-# (In `connect` Function)
+# (In `connect` function)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 # userIdentity
@@ -274,152 +208,146 @@ username: myuser
 password: mysecretpassword
 ```
 
-Example 4: Secure Connection with a User Certificate
+Example 4: secure connection with a user certificate
 
-This is the most secure method, using certificates for both channel security and user authentication.
+The most secure method, using certificates for both channel security and user authentication.
 
 ```yaml
-# (In `create` Function)
+# (In `create` function)
 # options
 securityMode: SignAndEncrypt
 securityPolicy: Basic256Sha256
 
-# (In `connect` Function)
+# (In `connect` function)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 # userIdentity
 useDefaultUserCertificate: true
 ```
 
-## Standard OPC UA Functions
-
-Once connected, you can use these functions to interact with the server.
-
-### disconnect
+### `disconnect`
 
 Closes the active session and disconnects from the OPC UA server.
 
-Parameters
+#### Parameters
 
 None.
 
-Output
+#### Output
 
 Returns `true` on a successful disconnection.
 
-### isConnected
+### `isConnected`
 
 Checks if the client has a valid and active channel with the server.
 
-Parameters
+#### Parameters
 
 None.
 
-Output
+#### Output
 
 Returns `true` if the client is connected, otherwise `false`.
 
-### browse
+### `delete`
 
-This is the generic, non-recursive browse function. It can start from any node address on the server. The more specific functions like `browseObjects` are convenience wrappers around this one.
+Removes the instance and frees its resources, including the connection to the server.
 
-Parameters
+{% hint style="danger" %}
+Deleting an instance removes its configuration. To connect again, trigger `create` and `connect` anew.
+{% endhint %}
 
-* address: The `nodeId` or a full browse path (e.g., `/0:Objects/2:Demo`) from which to start Browse.
+## Browsing
 
-Example
+### `browse`
+
+The generic, non-recursive browse function. It starts from any node address on the server. The more specific functions like `browseObjects` are convenience wrappers around this one.
+
+#### Parameters
+
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or a full browse path (e.g. <code>/0:Objects/2:Demo</code>) from which to start.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+An array of objects, one per found node, each containing its `browseName`, `nodeId`, and `nodeClass`.
+
+#### Example
 
 ```yaml
 # address
 /0:Objects/2:Demo
 ```
 
-Output
-
-An array of objects, where each object represents a found node and contains its `browseName`, `nodeId`, and `nodeClass`.
-
-### browseObjects
+### `browseObjects`
 
 Performs a non-recursive browse of the server's `Objects` folder. You can specify a deeper path to start from.
 
-Parameters
+#### Parameters
 
-* path: The browse path, starting from within the `Objects` folder. Path items are separated by `/`, and each item uses `namespaceIndex:BrowseName` format (e.g., `2:Demo/2:Dynamic`).
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The browse path, starting inside the <code>Objects</code> folder. Separate path items with <code>/</code>, each in <code>namespaceIndex:BrowseName</code> format (e.g. <code>2:Demo/2:Dynamic</code>).</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
+
+An array of objects, one per found node, each containing its `browseName`, `nodeId`, and `nodeClass`.
+
+#### Example
 
 ```yaml
 # path
 2:Demo/2:Dynamic/2:Scalar
 ```
 
-Output
+### `browseTypes`
 
-An array of objects, where each object represents a found node and contains its `browseName`, `nodeId`, and `nodeClass`.
+Performs a non-recursive browse of the server's `Types` folder. Useful for exploring the server's data type hierarchy.
 
-### browseTypes
+#### Parameters
 
-Performs a non-recursive browse of the server's `Types` folder. This is useful for exploring the server's data type hierarchy.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>Optional browse path to start from within the <code>Types</code> folder. If omitted, browses from the folder root.</td><td>string</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* path: An optional browse path to start from within the `Types` folder. If omitted, it browses from the root of the `Types` folder.
+An array of objects, one per found data type node.
 
-Example
+#### Example
 
 ```yaml
 # path
 0:BaseObjectType/0:FolderType
 ```
 
-Output
-
-An array of objects, where each object represents a found data type node.
-
-### browseViews
+### `browseViews`
 
 Performs a non-recursive browse of the server's `Views` folder. Views are predefined, filtered collections of nodes.
 
-Parameters
+#### Parameters
 
-* path: An optional browse path to start from within the `Views` folder. If omitted, it browses from the root of the `Views` folder.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>Optional browse path to start from within the <code>Views</code> folder. If omitted, browses from the folder root.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
+
+An array of objects, one per found node within the specified view.
+
+#### Example
 
 ```yaml
 # path
 0:Server
 ```
 
-Output
+## Reading and writing
 
-An array of objects, where each object represents a found node within the specified view.
+### `readNode`
 
-### readNode
+Reads all attributes of a specific OPC UA node and returns a detailed data structure. This is more comprehensive than `readVariable`, which only fetches the node's value.
 
-Reads all attributes of a specific OPC UA node, returning a detailed data structure. This is more comprehensive than `readVariable`, which only fetches the node's value.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or a valid browse path of the node to read.</td><td>string</td></tr></tbody></table>
 
-* address: The `nodeId` or a valid browse path of the node to read.
+#### Output
 
-Example: Read using nodeId
-
-```yaml
-# address
-ns=2;s=Demo.Dynamic.Int32
-```
-
-Example: Read using Browse Path
-
-```yaml
-# address
-/0:Objects/2:Demo/2:Dynamic/2:Int32
-```
-
-Output
-
-A JSON object representing the node's `DataValue`. This includes the value, status code, and server/source timestamps. For example:
+A JSON object representing the node's `DataValue`, including the value, status code, and server/source timestamps. For example:
 
 ```json
 {
@@ -436,42 +364,65 @@ A JSON object representing the node's `DataValue`. This includes the value, stat
 }
 ```
 
-### readVariable
+#### Examples
 
-Reads the value of a single variable from the server. This is a convenience function that extracts just the value from the node's data.
-
-Parameters
-
-* address: The address of the variable, which can be its `nodeId` (recommended) or a full browse path.
-
-Example: Read using nodeId
+Example 1: read using a `nodeId`
 
 ```yaml
 # address
 ns=2;s=Demo.Dynamic.Int32
 ```
 
-Example: Read using Browse Path
+Example 2: read using a browse path
 
 ```yaml
 # address
 /0:Objects/2:Demo/2:Dynamic/2:Int32
 ```
 
-Output
+### `readVariable`
 
-The raw value of the variable (e.g., a number, a string, a boolean, or an array).
+Reads the value of a single variable from the server. A convenience function that extracts just the value from the node's data.
 
-### writeVariable
+#### Parameters
 
-Writes a new value to a variable on the server. The function automatically handles the conversion from a standard JavaScript type to the required OPC UA data type.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The address of the variable, either its <code>nodeId</code> (recommended) or a full browse path.</td><td>string</td></tr></tbody></table>
 
-Parameters
+#### Output
 
-* address: The `nodeId` or browse path of the variable to write to.
-* value: The new value to set.
+The raw value of the variable (e.g. a number, string, boolean, or array).
 
-Example
+#### Examples
+
+Example 1: read using a `nodeId`
+
+```yaml
+# address
+ns=2;s=Demo.Dynamic.Int32
+```
+
+Example 2: read using a browse path
+
+The leading `/0:Objects` is required for objects. Other (less common) starts are `/0:Views` or `/0:Types`. The number before the colon is the namespace index.
+
+```yaml
+# address
+/0:Objects/2:Demo/2:Dynamic/2:Int32
+```
+
+### `writeVariable`
+
+Writes a new value to a variable on the server. Before writing, the function reads the variable's data type and access level from the server, checks that the variable is writable, and converts the value to the required OPC UA data type. If the variable is not writable, it throws an error.
+
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the variable to write to.</td><td>string</td></tr><tr><td><code>value</code></td><td></td><td>The new value to set.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>skipTypeChecking</code></td><td>If <code>true</code>, skips reading metadata and permissions from the server before writing. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns `null` on a successful write or throws an error on failure.
+
+#### Example
 
 ```yaml
 # address
@@ -480,22 +431,19 @@ ns=2;s=Demo.Dynamic.Int32
 42
 ```
 
-Output
+### `callMethod`
 
-The function returns `null` on a successful write or throws an error on failure.
+Invokes a method on an OPC UA object on the server. Input arguments are automatically converted to the data types the method defines.
 
-***
+#### Parameters
 
-### callMethod
+<table><thead><tr><th width="170">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>methodAddress</code></td><td>The <code>nodeId</code> or browse path of the method to call.</td><td>string</td></tr><tr><td><code>inputValues</code></td><td>An array of values to pass as input arguments. Default <code>[]</code>.</td><td>array</td></tr></tbody></table>
 
-Invokes a method on an OPC UA object on the server. Input arguments are automatically converted to the correct data types as defined by the method on the server.
+#### Output
 
-Parameters
+An array containing the output arguments returned by the method call.
 
-* methodAddress: The `nodeId` or browse path of the method to call.
-* inputValues: An array of values to pass as input arguments to the method.
-
-Example
+#### Example
 
 This example calls a method that takes two input arguments.
 
@@ -506,48 +454,21 @@ ns=2;s=Demo.Methods.Multiply
 [ 5, 10 ]
 ```
 
-Output
+## Monitoring
 
-An array containing the output arguments returned by the method call.
+### `monitorNode`
 
-### monitorNode
+Subscribes to changes of an entire OPC UA node. The callback fires with the full node data object (value, status, and timestamps) whenever the server detects a change.
 
-Subscribes to changes for an entire OPC UA node. The provided callback function is triggered with the full node data object (including value, status, and timestamps) whenever a change is detected by the server.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node to monitor.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback that receives the full data object on every change.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often (in milliseconds) the server checks for changes. Default <code>1000</code>.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default <code>100</code>.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
 
-* address: The `nodeId` or browse path of the node to monitor.
-* listener: The callback function that will receive the full data object on change.
-* options: An object to configure the subscription.
-  * samplingInterval: How often (in milliseconds) the server should check for changes. Default is `1000`.
+#### Output
 
-Example
+Returns a unique `nodeId` string that identifies this monitored item. Use it to stop the monitoring with `stopMonitor`.
 
-```yaml
-# address
-ns=2;s=Demo.Dynamic.UInt16
-# listener
-<callback>
-# options
-samplingInterval: 5000
-```
-
-Output
-
-Returns a unique `nodeId` string that acts as an identifier for this monitored item, which is needed for `stopMonitor`.
-
-### monitorVariable
-
-Subscribes to value changes for a specific variable. A callback function is triggered every time the server reports a new value.
-
-Parameters
-
-* address: The `nodeId` or browse path of the variable to monitor.
-* listener: The callback function that will receive the new value.
-* options: An object to configure the subscription.
-  * samplingInterval: How often (in milliseconds) the server should check the variable for changes. Default is `1000`.
-
-Example
+#### Example
 
 ```yaml
 # address
@@ -558,71 +479,94 @@ ns=2;s=Demo.Dynamic.UInt16
 samplingInterval: 5000
 ```
 
-Output
+### `monitorVariable`
 
-Returns a unique `nodeId` string that acts as an identifier for this monitored item. This ID is used to stop the monitoring later.
+Subscribes to value changes of a specific variable. The callback fires with the new value every time the server reports one.
 
-### stopMonitor
+#### Parameters
+
+<table><thead><tr><th width="120">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the variable to monitor.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback that receives the new value on every change.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often (in milliseconds) the server checks for changes. Default <code>1000</code>.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default <code>100</code>.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns a unique `nodeId` string that identifies this monitored item. Use it to stop the monitoring with `stopMonitor`.
+
+#### Example
+
+```yaml
+# address
+ns=2;s=Demo.Dynamic.UInt16
+# listener
+<callback>
+# options
+samplingInterval: 5000
+```
+
+### `stopMonitor`
 
 Terminates an active subscription for a monitored item.
 
-Parameters
+#### Parameters
 
-* nodeId: The identifier string that was returned by a previous call to `monitorNode` or `monitorVariable`.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nodeId</code></td><td>The identifier string returned by a previous <code>monitorNode</code> or <code>monitorVariable</code> call.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
+
+Returns `true` if the subscription was terminated successfully.
+
+#### Example
 
 ```yaml
 # nodeId
 ns=2;s=Demo.Dynamic.UInt16
 ```
 
-Output
+## File transfer
 
-Returns `true` if the subscription was terminated successfully.
-
-### browseDirectory
+### `browseDirectory`
 
 Recursively browses a file-system-like directory structure exposed by an OPC UA server.
 
-Parameters
+#### Parameters
 
-* address: The `nodeId` or browse path of the starting directory node.
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the starting directory node.</td><td>string</td></tr></tbody></table>
 
-Output
+#### Output
 
 A nested array of objects representing the directory structure.
 
-### readFile
+### `readFile`
 
 Reads the entire content of a file exposed by the OPC UA server's file transfer feature.
 
-Parameters
+#### Parameters
 
-* address: The `nodeId` or browse path of the file node on the server.
+<table><thead><tr><th width="120">Input</th><th width="150">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the file node on the server.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>encoding</code></td><td>The encoding of the returned content, e.g. <code>ascii</code>, <code>utf8</code>. Default <code>base64</code>.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
+
+The complete content of the file as a string in the requested encoding.
+
+#### Example
 
 ```yaml
 # address
 ns=2;s=Demo.Files.TextFile
 ```
 
-Output
-
-The complete content of the file, encoded as a base64 string.
-
-### writeFile
+### `writeFile`
 
 Creates a new file in a specified folder on the server and uploads content to it.
 
-Parameters
+#### Parameters
 
-* folderAddress: The `nodeId` or browse path of the folder where the file will be created.
-* newFileName: The name for the new file.
-* pathOrBase64: The content to upload, either as a base64 string or a local file system path.
+<table><thead><tr><th width="170">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>folderAddress</code></td><td>The <code>nodeId</code> or browse path of the folder where the file will be created.</td><td>string</td></tr><tr><td><code>newFileName</code></td><td>The name for the new file.</td><td>string</td></tr><tr><td><code>pathOrBase64</code></td><td>The content to upload, either as a base64 string or a local file system path.</td><td>string</td></tr></tbody></table>
 
-Example
+#### Output
+
+The `nodeId` of the newly created file on the server.
+
+#### Example
 
 ```yaml
 # folderAddress
@@ -633,20 +577,23 @@ report.txt
 SGVsbG8sIFdvcmxkIQ==
 ```
 
-Output
-
-The `nodeId` of the newly created file on the server.
-
-### deleteFile
+### `deleteFile`
 
 Deletes a file from a folder on the OPC UA server.
 
-Parameters
+{% hint style="danger" %}
+This permanently removes the file on the server. The action cannot be undone.
+{% endhint %}
 
-* folderAddress: The `nodeId` or browse path of the folder containing the file.
-* fileName: The name of the file to delete.
+#### Parameters
 
-Example
+<table><thead><tr><th width="170">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>folderAddress</code></td><td>The <code>nodeId</code> or browse path of the folder containing the file.</td><td>string</td></tr><tr><td><code>fileName</code></td><td>The name of the file to delete.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` if the file was deleted successfully.
+
+#### Example
 
 ```yaml
 # folderAddress
@@ -655,24 +602,87 @@ ns=2;s=Demo.Files
 report.txt
 ```
 
-Output
+## Events
 
-Returns `true` if the file was deleted successfully.
+### `listenToEvents`
 
-### listenToEvents
+Registers a callback that receives lifecycle events from the client, such as `Connected`, `Connection Lost`, or `Session Closed`. Useful for monitoring the health of the connection.
 
-Registers a callback function to receive important lifecycle events from the client, such as `Connected`, `Connection Lost`, `Session Closed`, etc. This is useful for monitoring the health of the connection.
+#### Parameters
 
-Parameters
+<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that receives the event strings.</td><td>callback</td></tr></tbody></table>
 
-* listener: The callback function to receive event strings.
-
-Output
+#### Output
 
 Returns `true`.
 
-## Video tutorial
+## Deprecated functions
 
-Watch the video to learn how to connect to an OPC UA Server and read, record and visualize OPC UA data from that server within Heisenware.
+The following functions still appear in the Function Explorer for backwards compatibility. Use their replacements in new flows.
+
+<table><thead><tr><th width="250">Deprecated function</th><th>Use instead</th></tr></thead><tbody><tr><td><code>readVariableValue</code></td><td><code>readVariable</code></td></tr><tr><td><code>writeVariableValue</code></td><td><code>writeVariable</code></td></tr></tbody></table>
+
+## Tips and tricks
+
+Establishing a secure certificate-based connection is the most common point of failure in OPC UA. An error almost always means a broken link in the chain of trust. This section covers the most common pitfalls.
+
+### Switching an existing instance to a secure connection
+
+Security settings are part of the `create` function. If you created an instance with an unsecured configuration and now want a secure connection, re-create the instance: right-click the existing instance (green if alive) and click `REMOVE`. It turns yellow (not yet available). Changes to the `create` function input apply when you trigger it again.
+
+### Server rejects the client certificate
+
+The client attempts to connect and the server immediately closes the connection, often with a generic error like `"The connection has been disconnected by third party"`. The server does not trust your client's application certificate.
+
+How to fix (Prosys example):
+
+1. Attempt to connect your client to the Prosys server. This fails but makes Prosys aware of your client's certificate.
+2. In the Prosys Simulation Server UI, open the Certificates tab.
+3. Your client's certificate (`HeisenwareOPCUAClient`) appears in the Rejected Certificates list.
+4. Right-click your certificate and select Trust. It moves to the Trusted Certificates list.
+5. Connect again. It now succeeds.
+
+In CA mode, instead of trusting the client certificate directly, place your CA's public certificate (`heisenware_ca_cert.pem`) into the Prosys PKI folder at `pki/CA/issuers/certs/`.
+
+### Client rejects the server certificate
+
+The reverse problem: your client does not trust the server. You get a clear error message: `"server Certificate verification failed"`. For security, the client only connects to servers it knows.
+
+How to fix: add the server's public certificate to your client's trust store.
+
+1. Obtain the server's public certificate file (e.g. export it from the Prosys Certificates tab).
+2. Use `addServerCertificate` to add it to your client's `pki/trusted/certs` folder.
+
+### SAN mismatch
+
+A very common reason for a `"server Certificate verification failed"` error, even when trust is established. A certificate's Subject Alternative Name (SAN) field lists all hostnames and IP addresses for which it is valid. On connection, the client strictly checks that the hostname in your endpoint URL (e.g. `opc.tcp://lenovo:4840`) appears in the server certificate's SAN list. If not, it rejects the connection.
+
+How to fix (Prosys example):
+
+1. Diagnose: connecting to `opc.tcp://localhost:53530` fails. Checking the Prosys certificate's SAN field with `openssl` shows it only lists `DNS:lenovo`.
+2. Fix: change your endpoint URL to match the certificate, e.g. `opc.tcp://lenovo:53530/OPCUA/SimulationServer`. The connection now succeeds.
+
+### Certificate revocation list failures
+
+An advanced and subtle issue. A certificate may contain a URL pointing to a Certificate Revocation List (CRL). A secure client tries to download this list to verify the server's certificate has not been revoked. In an isolated network without internet access, the download fails and so does validation.
+
+How to fix: manually download the CRL file and place it in the client's `pki/issuers/crl` or `pki/trusted/crl` folder. If you created the server's certificate with your own CA, you can generate an empty CRL file to satisfy the check.
+
+### Application versus user authentication
+
+Two different certificate types are in play:
+
+1. Application certificate (`heisenware_opcua_client.pem`): identifies your application. It creates the secure, encrypted channel between client and server. Mandatory for a secure connection.
+2. User certificate (`heisenware_opcua_user.pem`): identifies a human user. It handles login and permissions after the secure channel is established. Optional.
+
+User certificate authentication requires extra configuration on the server. For Prosys, this feature is only available in the Professional Edition. The server administrator must create a user and explicitly map that user account to the user's public certificate.
+
+### Server and client clocks out of sync
+
+When the internal clocks of server and client differ substantially (e.g. by an hour), OPC UA's internal security requirements may deny the connection. In that case the client's logs show a clear warning stating this fact.
+
+## Video demo
+
+Watch the video to learn how to connect to an OPC UA server and read, record, and visualize OPC UA data within Heisenware.
 
 {% embed url="https://www.youtube.com/watch?t=15s&v=7TNHk2eqRWc" %}
