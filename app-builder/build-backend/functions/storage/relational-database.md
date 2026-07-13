@@ -1,19 +1,19 @@
 # Relational database
 
-The relational database class interacts with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, and more) without writing raw SQL. You define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
+The relational database connector (`RelationalDatabase`) communicates with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, and more) without writing raw SQL. You can define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
 
-## Quick start: The internal PostgreSQL instance
+## Quick start: the internal PostgreSQL instance
 
-Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use. Select `internal-postgres` in your function's instance field to start creating tables and managing data.
+Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use. Select `internal-postgres` in your function's instance field to create tables and manage data.
 
 <div align="center"><img src="../../../../.gitbook/assets/image (50).png" alt=""></div>
 
 ## Connecting an external database
 
-To connect your own database, use the `create` function. How you configure it depends on where the database is located:
+To connect an external database, use the `create` function. How you configure it depends on where the database is located:
 
-* Cloud or public database: If your database is accessible over the internet, create the instance directly in your application backend.
-* Local database (via Agent): If your database sits inside a private network (e.g. on a shopfloor server), deploy an [Agent](../../agents/) in that network first and create the database instance within that Agent.
+* **Cloud or public database**: If the database is accessible over the internet, create the instance directly in your App backend.
+* **Local database (via Agent)**: If the database sits inside a private network (such as on a shopfloor server), deploy an [Agent](../../agents.md) in that network first and create the database instance within that Agent.
 
 {% hint style="info" %}
 Whether you use the internal database or an external connection, the functions for querying, inserting, and managing data are identical.
@@ -31,17 +31,17 @@ Skip this step for `internal-postgres`. It is already instantiated for you.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="130">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect (e.g. <code>postgres</code>, <code>mysql</code>).</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default: The standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Whether to use SSL for the connection. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Whether to log all SQL statements. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>If <code>true</code>, skips the database introspection for instant startup. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect (such as <code>postgres</code> or <code>mysql</code>).</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default is the standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Uses SSL for the connection when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Logs all SQL statements when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>Skips the database introspection for instant startup when <code>true</code>. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
-Right-click the `options` input and mark it as a secret to mask the password.
+Right-click the <code>options</code> input and mark it as a secret to mask the password.
 {% endhint %}
 
 #### Example
 
 ```yaml
 # options
-dialect: 'postgres'   # postgres, mysql, mariadb, mssql, sqlite, oracle, snowflake
+dialect: 'postgres'
 database: 'mydb'
 username: 'user'
 password: 'pass'
@@ -59,11 +59,11 @@ None.
 
 #### Output
 
-Returns `true` if connected, otherwise `false`.
+Returns `true` if connected, or `false` if it is not.
 
 ### `getAllTables`
 
-Retrieves all tables that currently exist in the database.
+Retrieves all tables that exist in the database.
 
 #### Parameters
 
@@ -71,14 +71,16 @@ None.
 
 #### Output
 
-An array of table name strings.
+Returns an array of table name strings.
 
 ### `reset`
 
 Drops and recreates the entire database.
 
 {% hint style="danger" %}
-This deletes ALL tables and ALL data. The action cannot be undone.
+#### Destructive action
+
+This permanently deletes all tables and all data in the database. You cannot undo this action.
 {% endhint %}
 
 #### Parameters
@@ -87,39 +89,53 @@ None.
 
 #### Output
 
-Returns `true` if the reset was successful.
+Returns `true` if the reset succeeds.
 
 ### `delete`
 
-Removes the instance and its connection configuration. The database itself is not touched.
+Removes the instance and its connection configuration.
+
+{% hint style="danger" %}
+#### Destructive action
+
+Deleting an instance removes its configuration. To communicate with the database again, you must create a new instance.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` on successful deletion. Throws an error on failure.
 
 ## Schema and table definition
 
 ### `defineTable`
 
-Defines a table's schema. If the table does not exist, it is created. If it exists, the function attempts to alter it by adding any new fields.
+Defines a table schema. If the table does not exist, the function creates it. If it exists, the function adds any new fields.
 
-Unless you explicitly define a primary key yourself, several fields are added automatically:
+Unless you define a custom primary key, the function automatically adds these fields:
 
 * `id`: The table's primary key. A UUID on PostgreSQL, an auto-incrementing integer on other dialects.
 * `createdAt`: A timestamp recording when the row was created.
 * `updatedAt`: A timestamp tracking the last modification of the row.
 
 {% hint style="info" %}
-When the class runs inside an Agent, the automatic `createdAt` and `updatedAt` timestamps are disabled.
+When running inside an Agent, the database disables the automatic `createdAt` and `updatedAt` timestamps.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (e.g. <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table's columns. Keys are the field names (camelCase). Values are either a data type string or a configuration object (see below). Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code>, <code>date</code>, <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code>, <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>If <code>true</code>, all changes to this table are recorded, see <a href="relational-database.md#audit-logging">audit logging</a>. Replaces the deprecated <code>trackHistory</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code>, <code>date</code>, <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code>, <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. Replaces the deprecated <code>trackHistory</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
-Use English and camelCase for table and field names (e.g. `firstName`, `dateOfBirth`). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the `jsonb` type for JSON data: It is more efficient and allows nested properties in filter expressions.
+Use English and camelCase for table and field names (such as <code>firstName</code> or <code>dateOfBirth</code>). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the <code>jsonb</code> type for JSON data: it is more efficient and allows nested properties in filter expressions.
 {% endhint %}
 
 #### Examples
 
-Example 1: Simple table
+**Example 1: Simple table**
 
 ```yaml
 # name
@@ -130,7 +146,7 @@ email: uniquestring
 age: integer
 ```
 
-Example 2: Table with custom primary key and JSONB
+**Example 2: Table with custom primary key and JSONB**
 
 ```yaml
 # name
@@ -143,16 +159,18 @@ specs: jsonb
 ```
 
 {% hint style="warning" %}
-Always use `id` as the name of the primary key, even when overriding the default. Other names may cause unexpected behavior.
+#### Custom primary key naming
+
+Always use <code>id</code> as the name of the primary key, even when overriding the default. Other names can cause unexpected behavior.
 {% endhint %}
 
 ### Advanced field configuration
 
 For more control, provide an object as a field's value with these properties:
 
-<table><thead><tr><th width="160">Property</th><th>Description</th><th width="150">Type</th></tr></thead><tbody><tr><td><code>type</code></td><td>The data type string (e.g. <code>string</code>, <code>integer</code>). Required.</td><td>string</td></tr><tr><td><code>primaryKey</code></td><td>Sets this field as the primary key, overriding the default <code>id</code> field.</td><td>boolean</td></tr><tr><td><code>unique</code></td><td>Ensures all values in this column are unique (<code>uniquestring</code>/<code>uniqueinteger</code> are shorthands). Assign the same arbitrary string to several fields to make their combination unique.</td><td>boolean or string</td></tr><tr><td><code>allowNull</code></td><td>If <code>false</code>, the field must have a value.</td><td>boolean</td></tr><tr><td><code>defaultValue</code></td><td>A default value if none is provided: A literal (<code>active</code>, <code>0</code>) or a special value like <code>NOW</code> for the current time.</td><td>any</td></tr><tr><td><code>autoIncrement</code></td><td>Automatically increments an integer primary key for each new row.</td><td>boolean</td></tr><tr><td><code>validate</code></td><td>Adds model-level validations, e.g. <code>{ isEmail: true, max: 23 }</code>.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Property</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>type</code></td><td>The data type string (such as <code>string</code> or <code>integer</code>). Required.</td><td>string</td></tr><tr><td><code>primaryKey</code></td><td>Sets this field as the primary key, overriding the default <code>id</code> field.</td><td>boolean</td></tr><tr><td><code>unique</code></td><td>Ensures all values in this column are unique. Assign the same arbitrary string to several fields to make their combination unique.</td><td>boolean or string</td></tr><tr><td><code>allowNull</code></td><td>Allows null values when <code>true</code>. Set to <code>false</code> to require a value.</td><td>boolean</td></tr><tr><td><code>defaultValue</code></td><td>A default value used if none is provided: a literal (such as <code>active</code> or <code>0</code>) or a special value like <code>NOW</code> for the current time.</td><td>any</td></tr><tr><td><code>autoIncrement</code></td><td>Automatically increments an integer primary key for each new row.</td><td>boolean</td></tr><tr><td><code>validate</code></td><td>Adds validation constraints (such as <code>{ isEmail: true, max: 23 }</code>).</td><td>object</td></tr></tbody></table>
 
-Example 1: Advanced table with constraints
+**Example 1: Advanced table with constraints**
 
 ```yaml
 # name
@@ -164,9 +182,9 @@ status: { type: string, defaultValue: active }
 hireDate: { type: date, defaultValue: NOW }
 ```
 
-Example 2: Unique constraint across multiple columns
+**Example 2: Unique constraint across multiple columns**
 
-To make a combination of fields unique, assign an arbitrary string (here `timeAndId`) to the corresponding fields.
+To make a combination of fields unique, assign an arbitrary string (such as `timeAndId`) to the corresponding fields:
 
 ```yaml
 # name
@@ -183,49 +201,57 @@ Retrieves the schema definition of a given table.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-An object with one entry per field, each describing `type`, `primaryKey`, `allowNull`, `sqlType`, `defaultValue`, `unique`, `autoIncrement`, and, for foreign keys, the referenced table and field.
+Returns an object containing schema details for each field, including `type`, `primaryKey`, `allowNull`, `sqlType`, `defaultValue`, `unique`, `autoIncrement`, and any referenced foreign keys.
 
 ### `deleteTable`
 
 Deletes an entire table.
 
 {% hint style="danger" %}
-This permanently deletes the table with all its data. The action cannot be undone.
+#### Destructive action
+
+This permanently deletes the table and all its data. You cannot undo this action.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table to delete.</td><td>string</td></tr></tbody></table>
-
-### `enforceUniqueField`
-
-Retroactively enforces a UNIQUE and NOT NULL constraint on an existing field: It removes duplicate rows, removes rows with NULL values, and then applies both constraints.
-
-{% hint style="danger" %}
-This permanently deletes duplicate and NULL rows. The action cannot be undone.
-{% endhint %}
-
-#### Parameters
-
-<table><thead><tr><th width="110">Input</th><th width="100">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>field</code></td><td></td><td>The field to deduplicate and make unique (e.g. <code>barcode</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>keep</code></td><td>Which duplicate to keep: <code>newest</code> (latest <code>createdAt</code>/id) or <code>oldest</code>. Default <code>newest</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table to delete.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` on success. Throws an error on failure (all changes are rolled back).
+Returns `true` when deletion succeeds.
+
+### `enforceUniqueField`
+
+Retroactively enforces a UNIQUE and NOT NULL constraint on an existing field. It removes duplicate rows and rows with NULL values before applying both constraints.
+
+{% hint style="danger" %}
+#### Destructive action
+
+This permanently deletes duplicate and null rows. You cannot undo this action.
+{% endhint %}
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>field</code></td><td></td><td>The field to deduplicate and make unique (such as <code>barcode</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>keep</code></td><td>Which duplicate to keep: <code>newest</code> (latest <code>createdAt</code> or ID) or <code>oldest</code>. Default <code>newest</code>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` on success. Throws an error on failure and rolls back all changes.
 
 ## Querying and filtering data
 
 ### `getTableData`
 
-Fetches rows from one or more tables, with options for filtering, joining, sorting, and selecting specific fields. This is the primary function for reading data.
+Retrieves rows from one or more tables, with options for filtering, joining, sorting, and selecting specific fields. This is the primary function for reading data.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="120">Key</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table, or an array of table names for a multi-table join query.</td><td>string or array</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The conditions rows must meet. For multi-table queries, this must include the join conditions. See <a href="relational-database.md#filtering-explained">filtering explained</a>.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>Selects specific columns. For multi-table queries, use dot notation (e.g. <code>users.name</code>).</td><td>array</td></tr><tr><td></td><td><code>order</code></td><td>The sort order as <code>['fieldName', 'DIRECTION']</code>, where direction is <code>ASC</code> or <code>DESC</code>.</td><td>array</td></tr><tr><td></td><td><code>limit</code></td><td>The maximum number of rows to return.</td><td>integer</td></tr><tr><td></td><td><code>offset</code></td><td>The number of rows to skip, useful for pagination.</td><td>integer</td></tr><tr><td></td><td><code>autoJoin</code></td><td>For single-table queries, automatically includes data from related tables. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>locale</code></td><td>A locale string (e.g. <code>en-US</code>) to format date/time values in the output.</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>Verbosity of formatted dates: <code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>.</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>Verbosity of formatted times, same values as <code>dateStyle</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table, or an array of table names for a multi-table join query.</td><td>string or array</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The conditions rows must meet. For multi-table queries, this must include the join conditions.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>Selects specific columns. For multi-table queries, use dot notation (such as <code>users.name</code>).</td><td>array</td></tr><tr><td></td><td><code>order</code></td><td>The sort order specified as <code>['fieldName', 'DIRECTION']</code>, where direction is <code>ASC</code> or <code>DESC</code>.</td><td>array</td></tr><tr><td></td><td><code>limit</code></td><td>The maximum number of rows to return.</td><td>integer</td></tr><tr><td></td><td><code>offset</code></td><td>The number of rows to skip, useful for pagination.</td><td>integer</td></tr><tr><td></td><td><code>autoJoin</code></td><td>Automatically includes data from related tables for single-table queries. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>locale</code></td><td>A locale string (such as <code>en-US</code>) to format date and time values.</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>).</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>).</td><td>string</td></tr></tbody></table>
 
 ### Filtering explained
 
@@ -233,22 +259,35 @@ The `filter` option uses an array syntax to build precise queries.
 
 Simple conditions are an array of three elements: `[fieldName, operator, value]`.
 
-* `fieldName`: The column name. For `jsonb` fields, use dot notation to access nested keys (e.g. `specs.dimensions.width`). For multi-table queries, always prefix with the table name (e.g. `users.name`).
+* `fieldName`: The column name. For `jsonb` fields, use dot notation to access nested keys (such as `specs.dimensions.width`). For multi-table queries, always prefix with the table name (such as `users.name`).
 * `operator`: A comparison string, see the table below.
 * `value`: The value to compare against.
 
 Compound conditions combine conditions with `'and'` or `'or'`:
 
-* AND: `[ [condition1], 'and', [condition2] ]`, both must be true.
-* OR: `[ [condition1], 'or', [condition2] ]`, at least one must be true.
+* **AND**: `[ [condition1], 'and', [condition2] ]`, both must be true.
+* **OR**: `[ [condition1], 'or', [condition2] ]`, at least one must be true.
 
 Available operators:
 
-<table><thead><tr><th width="190">Operator(s)</th><th>Description</th><th width="200">Example value</th></tr></thead><tbody><tr><td><code>=</code>, <code>eq</code>, <code>is</code></td><td>Equals</td><td><code>'John'</code> or <code>100</code></td></tr><tr><td><code>&#x3C;></code>, <code>ne</code>, <code>isnot</code></td><td>Not equals</td><td><code>'John'</code> or <code>100</code></td></tr><tr><td><code>></code>, <code>gt</code></td><td>Greater than</td><td><code>99</code></td></tr><tr><td><code>>=</code>, <code>gte</code></td><td>Greater than or equal to</td><td><code>100</code></td></tr><tr><td><code>&#x3C;</code>, <code>lt</code></td><td>Less than</td><td><code>100</code></td></tr><tr><td><code>&#x3C;=</code>, <code>lte</code></td><td>Less than or equal to</td><td><code>100</code></td></tr><tr><td><code>contains</code></td><td>String field contains the value (case-insensitive)</td><td><code>'oh'</code> (matches 'John')</td></tr><tr><td><code>notcontains</code></td><td>String field does not contain the value</td><td><code>'Peter'</code></td></tr><tr><td><code>startswith</code></td><td>String field starts with the value</td><td><code>'J'</code></td></tr><tr><td><code>endswith</code></td><td>String field ends with the value</td><td><code>'oe'</code> (matches 'Doe')</td></tr><tr><td><code>between</code></td><td>Value is between two values in an array</td><td><code>[18, 30]</code> or <code>['A', 'D']</code></td></tr><tr><td><code>in</code></td><td>Value is one of several possibilities in an array</td><td><code>['active', 'pending']</code></td></tr></tbody></table>
+| Operator(s) | Description | Example value |
+| :--- | :--- | :--- |
+| `=`, `eq`, `is` | Equals | `'John'` or `100` |
+| `<>`, `ne`, `isnot` | Not equals | `'John'` or `100` |
+| `>`, `gt` | Greater than | `99` |
+| `>=`, `gte` | Greater than or equal to | `100` |
+| `<`, `lt` | Less than | `100` |
+| `<=`, `lte` | Less than or equal to | `100` |
+| `contains` | String field contains the value (case-insensitive) | `'oh'` (matches 'John') |
+| `notcontains` | String field does not contain the value | `'Peter'` |
+| `startswith` | String field starts with the value | `'J'` |
+| `endswith` | String field ends with the value | `'oe'` (matches 'Doe') |
+| `between` | Value is between two values in an array | `[18, 30]` or `['A', 'D']` |
+| `in` | Value is one of several possibilities in an array | `['active', 'pending']` |
 
 #### Examples
 
-Example 1: Simple filter and field selection
+**Example 1: Simple filter and field selection**
 
 Get the `name` and `email` of all active users:
 
@@ -260,7 +299,7 @@ filter: ['status', '=', 'active']
 fields: ['name', 'email']
 ```
 
-Example 2: Date range filter
+**Example 2: Date range filter**
 
 Find all orders placed in January 2025:
 
@@ -271,7 +310,7 @@ orders
 filter: ['createdAt', 'between', ['2025-01-01', '2025-01-31T23:59:59Z']]
 ```
 
-Example 3: Compound 'and' filter
+**Example 3: Compound 'and' filter**
 
 Find products that are in stock and cost more than 50:
 
@@ -282,7 +321,7 @@ products
 filter: [ ['quantity', '>', 0], 'and', ['price', '>', 50] ]
 ```
 
-Example 4: Sorting and limiting
+**Example 4: Sorting and limiting**
 
 Get the 5 most recent high-priority tickets:
 
@@ -295,9 +334,9 @@ order: ['createdAt', 'DESC']
 limit: 5
 ```
 
-Example 5: Multi-table join
+**Example 5: Multi-table join**
 
-Retrieve the names of users and the titles of their posts. The first filter condition defines the join:
+Retrieve user names and post titles. The first filter condition defines the join:
 
 ```yaml
 # name
@@ -308,9 +347,9 @@ filter: [ ['users.id', '=', 'posts.userId'] ]
 fields: ['users.name', 'posts.title']
 ```
 
-Example 6: Join with a where clause
+**Example 6: Join with a where clause**
 
-Retrieve the post titles of a specific user named Alice:
+Retrieve post titles for a specific user named Alice:
 
 ```yaml
 # name
@@ -325,9 +364,9 @@ filter: [
 fields: ['posts.title']
 ```
 
-Example 7: Join with a nested JSONB filter
+**Example 7: Join with a nested JSONB filter**
 
-Find all orders of Alice where the shipment was marked as high priority in its `details` JSON field:
+Find all orders for Alice where the shipment details JSON field has priority set to true:
 
 ```yaml
 # name
@@ -349,11 +388,11 @@ filter: [
 
 #### Output
 
-An array of objects, one per row matching the criteria.
+Returns an array of objects representing matching rows.
 
 ### `findRows`
 
-Works exactly like `getTableData`, with one difference: Without a filter it returns nothing, while `getTableData` returns all rows. Use it when the filter comes from user input (like a search field) and an empty input should not load the whole table.
+Works like `getTableData`, but returns nothing if you do not provide a filter. Use this when the filter comes from user input (such as a search field) and an empty input should not load the entire table.
 
 #### Parameters
 
@@ -361,19 +400,19 @@ The same as [`getTableData`](relational-database.md#gettabledata), but `filter` 
 
 #### Output
 
-An array of matching rows, or nothing when no filter is provided.
+Returns an array of matching rows, or nothing when no filter is provided.
 
 ### `findRow`
 
-Finds and returns the first row matching the provided filter. Without a filter it returns nothing.
+Finds and returns the first row matching the filter. Returns nothing if you do not provide a filter.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="110">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The filter conditions, see <a href="relational-database.md#filtering-explained">filtering explained</a>.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>Optional array of fields to return.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The filter conditions.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>An optional array of fields to return.</td><td>array</td></tr></tbody></table>
 
 #### Output
 
-The first matching row object, or `null` if no match is found.
+Returns the first matching row object, or `null` if no match is found.
 
 ### `getRow`
 
@@ -381,11 +420,11 @@ Retrieves a single row by its primary key.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="110">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td></td><td>The primary key of the row.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>Optional array of fields to return.</td><td>array</td></tr><tr><td></td><td><code>autoJoin</code></td><td>Whether to automatically include related data. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td></td><td>The primary key of the row.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>An optional array of fields to return.</td><td>array</td></tr><tr><td></td><td><code>autoJoin</code></td><td>Automatically includes related data when <code>true</code>. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-The row object, or `null` if the id was not found.
+Returns the row object, or `null` if the ID is not found.
 
 ## Data manipulation
 
@@ -395,7 +434,7 @@ Adds a single new row to a table.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An object where keys are column names and values are the data to insert.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An object containing the column values to insert.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -410,7 +449,7 @@ age: 34
 
 #### Output
 
-The created row as saved in the database (including the generated <code>id</code>).
+Returns the created row as saved in the database, including the generated `id`.
 
 ### `addRows`
 
@@ -418,7 +457,7 @@ Adds multiple rows to a table in a single, efficient bulk operation.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of data objects to insert.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of data objects to insert.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
@@ -436,19 +475,19 @@ products
 
 #### Output
 
-The number of rows added.
+Returns the number of rows added.
 
 ### `upsertRow`
 
-Atomically updates or inserts a row: It checks whether the row exists and either updates it or creates a new one. By default the check uses the primary key (`id`). The optional `uniqueKey` parameter lets you check against another business key (like an email) instead.
+Atomically updates or inserts a row. The function checks whether the row exists and either updates it or creates a new one. By default, the check uses the primary key (`id`). The optional `uniqueKey` parameter lets you check against another business key (such as an email) instead.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>Optional object specifying a unique key for the existence check.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object specifying a unique business key for the existence check.</td><td>object</td></tr></tbody></table>
 
 #### Examples
 
-Example 1: Upsert using the default primary key
+**Example 1: Upsert using the default primary key**
 
 Update the user with a specific ID, or create them if they do not exist:
 
@@ -461,7 +500,7 @@ name: Jane Smith
 age: 36
 ```
 
-Example 2: Upsert using a custom unique key
+**Example 2: Upsert using a custom unique key**
 
 Find a user by email. If they exist, update their age; if not, create them:
 
@@ -477,7 +516,7 @@ email: 'jane.doe@example.com'
 
 #### Output
 
-An array with the created/updated state and the primary key of the affected row.
+Returns an array containing the created/updated state and the primary key of the affected row.
 
 ### `changeRow`
 
@@ -485,7 +524,7 @@ Changes the content of a specific row identified by its primary key.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="100">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td></td><td>The primary key of the row to change.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The fields and their new values.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>patch</code></td><td>If <code>true</code>, partially updates nested JSON objects instead of replacing them.</td><td>boolean</td></tr><tr><td></td><td><code>fieldDelimiter</code></td><td>Unflattens the provided data using the given delimiter (e.g. flat keys like <code>settings.theme</code> become nested objects).</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td></td><td>The primary key of the row to change.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The fields and their new values.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>patch</code></td><td>Partially updates nested JSON objects instead of replacing them when <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>fieldDelimiter</code></td><td>Unflattens the data using the specified delimiter (such as flattening <code>settings.theme</code> to a nested object).</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -503,15 +542,15 @@ status: 'active'
 
 #### Output
 
-The changed row as now saved in the database. Throws an error if the row is not found.
+Returns the modified row object. Throws an error if the row is not found.
 
 ### `updateRow`
 
-Updates specific fields of an existing row, identified by the `id` inside the `data` object or by a `uniqueKey`. Behaves like a standard SQL UPDATE: Fields not included in `data` stay untouched, but JSON columns are replaced entirely with the provided value. To merge data into an existing JSON object, use `patchRow` instead.
+Updates specific fields of an existing row, identified by the `id` inside the `data` object or by a `uniqueKey`. Fields not included in `data` remain untouched, but the database replaces JSON columns entirely with the provided value. To merge data into an existing JSON object, use `patchRow` instead.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Contains the <code>id</code> property to identify the row, unless <code>uniqueKey</code> is used.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>Optional object identifying the row by a business key instead of the id (e.g. <code>email: jane@example.com</code>).</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -552,15 +591,15 @@ The `name` field stayed untouched, but the `theme` key in the JSON is gone.
 
 #### Output
 
-The updated row as now saved in the database. Throws an error if the row is not found.
+Returns the updated row object. Throws an error if the row is not found.
 
 ### `patchRow`
 
-Patches a row with new data, merging nested JSON objects instead of replacing them. Ideal for partial updates: Original JSON keys that are not part of the patch are preserved.
+Patches a row with new data by merging nested JSON objects instead of replacing them. Original JSON keys not included in the patch are preserved.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Contains the <code>id</code> property to identify the row, unless <code>uniqueKey</code> is used.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>Optional object identifying the row by a business key instead of the id.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -601,19 +640,21 @@ The original `theme` key is preserved and the new data is merged in.
 
 #### Output
 
-The patched row as now saved in the database. Throws an error if the row is not found.
+Returns the patched row object. Throws an error if the row is not found.
 
 ### `deleteRow`
 
 Deletes a single row from a table, identified by its primary key.
 
 {% hint style="danger" %}
-This permanently deletes the row. The action cannot be undone (unless <a href="relational-database.md#audit-logging">audit logging</a> is enabled, which stores a final snapshot).
+#### Destructive action
+
+This permanently deletes the row. You cannot undo this action.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td>The primary key of the row to delete.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td>The primary key of the row to delete.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -626,19 +667,21 @@ users
 
 #### Output
 
-Returns `true` if the row was deleted, or `false` if no row with that id exists.
+Returns `true` if the row is deleted, or `false` if no row with that ID exists.
 
 ### `clearTable`
 
 Deletes all rows from a table, leaving the table structure intact.
 
 {% hint style="danger" %}
-This permanently deletes all data in the table. The action cannot be undone.
+#### Destructive action
+
+This permanently deletes all data in the table. You cannot undo this action.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="190">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table to clear.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>nullifyLinkedRecords</code></td><td>If <code>true</code>, sets foreign keys in other tables pointing to this table to <code>NULL</code> before clearing. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table to clear.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>nullifyLinkedRecords</code></td><td>Sets foreign keys in other tables pointing to this table to <code>NULL</code> before clearing when <code>true</code>. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -653,55 +696,56 @@ Returns `true` on success.
 
 ## Relationships and associations
 
-These functions define the logical connections between tables, creating a relational data model. Relationships ensure data integrity and enable cross-table queries. The typical workflow has three steps:
+These functions define logical connections between tables to create a relational data model. Relationships ensure data integrity and enable cross-table queries. The workflow has three steps:
 
-1. Define tables: Create your tables using `defineTable`.
-2. Define the relationship: Use one of the association functions to declare how the tables connect.
-3. Link records: Use the foreign key fields created in step 2 to connect specific rows. For many-to-many relationships, use `associateRow`.
+1. **Define tables**: Create your tables using `defineTable`.
+2. **Define the relationship**: Use one of the association functions to declare how the tables connect.
+3. **Link records**: Use the foreign key fields created in step 2 to connect specific rows. For many-to-many relationships, use `associateRow`.
 
 ### `optionallyHasOne`
 
-Creates a one-to-many relationship where the child record can exist without a parent. This adds a nullable foreign key column to the child table. In short: A child has zero or one parent, a parent may have many children.
+Creates a one-to-many relationship where the child record can exist without a parent. This adds a nullable foreign key column to the child table.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (e.g. <code>posts</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (e.g. <code>users</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>Optional PascalCase string (e.g. <code>Owner</code>) to create a distinct relationship when the same two tables connect multiple times.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>posts</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional PascalCase string (such as <code>Owner</code>) to create a distinct relationship.</td><td>string</td></tr></tbody></table>
 
 ### `mandatorilyHasOne`
 
-Creates a one-to-many relationship where the child record cannot exist without a parent. This adds a non-nullable foreign key column to the child table. In short: A child must have exactly one parent, a parent may have many children.
+Creates a one-to-many relationship where the child record cannot exist without a parent. This adds a non-nullable foreign key column to the child table.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (e.g. <code>employees</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (e.g. <code>companies</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>Optional PascalCase string (e.g. <code>Manager</code>) to create a distinct relationship.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>employees</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>companies</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional PascalCase string (such as <code>Manager</code>) to create a distinct relationship.</td><td>string</td></tr></tbody></table>
 
 ### `optionallyHasMany`
 
-Creates a many-to-many relationship between two tables. This automatically generates a hidden junction table managing the associations. In short: A child can have many parents, a parent can have many children.
+Creates a many-to-many relationship between two tables. This automatically generates a hidden junction table to manage the associations.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The first table in the relationship.</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The second table in the relationship.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The first table in the relationship.</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The second table in the relationship.</td><td>string</td></tr></tbody></table>
 
 ### `associateRow`
 
-Links existing records together. Primarily used to create the links of a many-to-many relationship after it has been defined.
+Links existing records. Use this to create links for a many-to-many relationship after defining it.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="130">Type</th></tr></thead><tbody><tr><td><code>sourceTable</code></td><td>The name of the source table.</td><td>string</td></tr><tr><td><code>sourceId</code></td><td>The ID of the row in the source table.</td><td>string</td></tr><tr><td><code>targetTable</code></td><td>The name of the target table.</td><td>string</td></tr><tr><td><code>targetId</code></td><td>The ID or an array of IDs of the row(s) in the target table.</td><td>string or array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>sourceTable</code></td><td>The name of the source table.</td><td>string</td></tr><tr><td><code>sourceId</code></td><td>The ID of the row in the source table.</td><td>string</td></tr><tr><td><code>targetTable</code></td><td>The name of the target table.</td><td>string</td></tr><tr><td><code>targetId</code></td><td>The ID or an array of IDs of the row(s) in the target table.</td><td>string or array</td></tr></tbody></table>
 
 ### Relationship strategies and examples
 
-A practical guide to choosing and implementing the right relationship for your data model.
+This section guides you through choosing and implementing relationships.
 
 #### One-to-many (mandatory)
 
-The most common relationship. Use it when a child record would be meaningless without its parent. Scenario: An employee must belong to a company.
+The most common relationship. Use it when a child record requires a parent. Example: An employee must belong to a company.
 
 {% stepper %}
 {% step %}
-### Define tables
+
+#### Define tables
 
 Create the `companies` and `employees` tables.
 
@@ -722,7 +766,8 @@ lastName: string
 {% endstep %}
 
 {% step %}
-### Define the relationship
+
+#### Define the relationship
 
 Declare that an employee mandatorily has one company.
 
@@ -735,12 +780,13 @@ companies
 ```
 
 {% hint style="info" %}
-This adds a non-nullable `companyId` foreign key column to the `employees` table.
+This adds a non-nullable <code>companyId</code> foreign key column to the <code>employees</code> table.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-### Link records
+
+#### Link records
 
 Because `companyId` is mandatory, provide it when creating a new employee record.
 
@@ -758,11 +804,12 @@ companyId: 'a1b2c3d4-e5f6-4a3b-8c2d-1f2e3d4c5b6a'
 
 #### One-to-many (optional)
 
-Use this when the link between child and parent is optional. The child can be created first and linked later. Scenario: A blog post can optionally be assigned to a category.
+Use this when the link between child and parent is optional. The child can be created first and linked later. Example: A blog post can optionally be assigned to a category.
 
 {% stepper %}
 {% step %}
-### Define tables
+
+#### Define tables
 
 ```yaml
 # (call defineTable)
@@ -781,7 +828,8 @@ name: string
 {% endstep %}
 
 {% step %}
-### Define the relationship
+
+#### Define the relationship
 
 Declare that a post optionally has one category.
 
@@ -794,12 +842,13 @@ categories
 ```
 
 {% hint style="info" %}
-This adds a nullable `categoryId` foreign key column to the `posts` table.
+This adds a nullable <code>categoryId</code> foreign key column to the <code>posts</code> table.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-### Link records
+
+#### Link records
 
 Create a post without a category, and link it later by patching the record.
 
@@ -823,11 +872,12 @@ categoryId: 'c1b2a3d4-e5f6-4a3b-8c2d-1f2e3d4c5b6a'
 
 #### Many-to-many
 
-Use this when records in two tables can have multiple links to each other. Scenario: An order can contain many products, and a product can be part of many orders.
+Use this when records in two tables can have multiple links to each other. Example: An order can contain many products, and a product can be part of many orders.
 
 {% stepper %}
 {% step %}
-### Define tables
+
+#### Define tables
 
 ```yaml
 # (call defineTable)
@@ -846,7 +896,8 @@ price: number
 {% endstep %}
 
 {% step %}
-### Define the relationship
+
+#### Define the relationship
 
 Declare the many-to-many relationship between orders and products.
 
@@ -859,12 +910,13 @@ products
 ```
 
 {% hint style="info" %}
-This automatically creates a hidden junction table (e.g. `__orders2products`) storing the links between order IDs and product IDs.
+This automatically creates a hidden junction table (such as <code>__orders2products</code>) storing the links between order IDs and product IDs.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-### Link records
+
+#### Link records
 
 Connect the records with `associateRow`. Link one order to multiple products by providing an array of product IDs.
 
@@ -883,13 +935,14 @@ products
 {% endstep %}
 {% endstepper %}
 
-#### Advanced: Multiple relationships with roles
+#### Advanced: multiple relationships with roles
 
-Use the `role` parameter to define more than one distinct relationship between the same two tables. Scenario: A document has both an owner and an editor, both records in the `users` table.
+Use the `role` parameter to define multiple distinct relationships between the same two tables (such as a document with both an owner and an editor from the `users` table).
 
 {% stepper %}
 {% step %}
-### Define tables
+
+#### Define tables
 
 ```yaml
 # (call defineTable)
@@ -907,7 +960,8 @@ title: string
 {% endstep %}
 
 {% step %}
-### Define the relationships with roles
+
+#### Define the relationships with roles
 
 Create two distinct one-to-many relationships, specifying a role for each.
 
@@ -930,12 +984,13 @@ Editor
 ```
 
 {% hint style="info" %}
-This adds two separate foreign keys to the `documents` table: `ownerId` and `editorId`. The role name directly determines the name of the foreign key.
+This adds two separate foreign keys to the <code>documents</code> table: <code>ownerId</code> and <code>editorId</code>. The role name directly determines the name of the foreign key.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-### Link records
+
+#### Link records
 
 When creating a document, provide IDs for both the owner and the editor using the specific foreign key fields.
 
@@ -953,12 +1008,12 @@ editorId: 'u5s6e7r8-b5a6-4a3b-8c2d-1f2e3d4c5b6a'
 
 ## Audit logging
 
-The class features a built-in audit logging system that creates a secure, detailed, and queryable trail of all data changes. It tracks what changed, when, and who changed it: It automatically calculates the differences (diff) between old and new values for updates, and stores full snapshots for creations and deletions.
+The relational database connector (`RelationalDatabase`) features a built-in audit logging system that creates a secure, detailed, and queryable trail of all data changes. It tracks what changed, when, and who changed it. It automatically calculates the differences (diff) between old and new values for updates, and stores full snapshots for creations and deletions.
 
 {% hint style="warning" %}
 #### Deprecation notice
 
-The `trackHistory` option in `defineTable` and the `getHistoricalData` function are deprecated as of February 2025. Use `auditLog` and `getAuditLog` instead.
+The <code>trackHistory</code> option in <code>defineTable</code> and the <code>getHistoricalData</code> function are deprecated. Use <code>auditLog</code> and <code>getAuditLog</code> instead.
 {% endhint %}
 
 ### Enabling audit logs
@@ -976,11 +1031,11 @@ total: number
 auditLog: true
 ```
 
-The database then automatically creates a hidden, parallel table (e.g. `ordersAuditLog`) recording all CREATE, UPDATE, and DELETE actions on the main table.
+The database automatically creates a parallel table (such as `ordersAuditLog`) recording all CREATE, UPDATE, and DELETE actions on the main table.
 
 ### Tracking the actor
 
-To record who made a change, all data manipulation functions (`addRow`, `updateRow`, `patchRow`, `upsertRow`, `deleteRow`, ...) accept an optional `actorId` within their options. In a typical App, bind this to the currently authenticated user via the `$USER` variable or their user ID.
+To record who made a change, all data manipulation functions accept an optional `actorId` within their options. In an App, bind this to the authenticated user via the `$USER` variable or their user ID.
 
 ```yaml
 # table
@@ -998,11 +1053,11 @@ Retrieves and filters the recorded history, including natural language time pars
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="130">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table to query (e.g. <code>orders</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>id</code></td><td>Filters logs for a specific record's primary key.</td><td>string</td></tr><tr><td></td><td><code>actorId</code></td><td>Filters logs by the user who made the change.</td><td>string</td></tr><tr><td></td><td><code>action</code></td><td>Filters by action type: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>.</td><td>string</td></tr><tr><td></td><td><code>changedField</code></td><td>Only returns logs where a specific field was modified.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>Earliest time to include, also as natural language (e.g. <code>yesterday</code>, <code>-1h</code>).</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>Latest time to include. Default <code>now</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table to query.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>id</code></td><td>Filters logs for a specific record's primary key.</td><td>string</td></tr><tr><td></td><td><code>actorId</code></td><td>Filters logs by the user who made the change.</td><td>string</td></tr><tr><td></td><td><code>action</code></td><td>Filters by action type (<code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>).</td><td>string</td></tr><tr><td></td><td><code>changedField</code></td><td>Returns only logs where a specific field was modified.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>The earliest time to include, supporting natural language (such as <code>yesterday</code> or <code>-1h</code>).</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The latest time to include. Default <code>now</code>.</td><td>string</td></tr></tbody></table>
 
 #### Examples
 
-Example 1: View all changes to a specific record
+**Example 1: View all changes to a specific record**
 
 ```yaml
 # table
@@ -1011,7 +1066,7 @@ orders
 id: 'order-999'
 ```
 
-Example 2: Track specific field modifications
+**Example 2: Track specific field modifications**
 
 Find out who changed the `status` field of an order, and when:
 
@@ -1023,7 +1078,7 @@ id: 'order-999'
 changedField: status
 ```
 
-Example 3: Monitor user activity
+**Example 3: Monitor user activity**
 
 See all deletions performed by a specific admin in the last 24 hours:
 
@@ -1040,7 +1095,7 @@ start: -24h
 
 An array of log entries, ordered from newest to oldest. The `diff` object varies by action:
 
-CREATE: There is no old state, `new` contains the complete inserted record.
+**CREATE**: There is no old state; `new` contains the complete inserted record.
 
 ```json
 {
@@ -1054,7 +1109,7 @@ CREATE: There is no old state, `new` contains the complete inserted record.
 }
 ```
 
-UPDATE: The `diff` contains only the fields that actually changed, with their old and new values.
+**UPDATE**: The `diff` contains only the fields that actually changed, with their old and new values.
 
 ```json
 {
@@ -1070,7 +1125,7 @@ UPDATE: The `diff` contains only the fields that actually changed, with their ol
 }
 ```
 
-DELETE: There is no new state, `old` contains the final snapshot of the record, allowing potential data recovery.
+**DELETE**: There is no new state; `old` contains the final snapshot of the record.
 
 ```json
 {
@@ -1090,41 +1145,43 @@ These functions create and alter tables on the fly. Use them for rapid prototypi
 
 ### `autoUpsertRow`
 
-Upserts a row. If the table or columns do not exist, they are created automatically based on the provided data.
+Upserts a row. If the table or columns do not exist, the function creates them automatically based on the provided data.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>Optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` on success, otherwise `false` (errors are logged, not thrown).
+Returns `true` on success, or `false` if it fails. Errors are logged but not thrown.
 
 ### `autoAddRows`
 
-Bulk-inserts data. Like `autoUpsertRow`, it creates or alters the table schema as needed, based on the first data object in the array.
+Bulk-inserts data. Like `autoUpsertRow`, it creates or alters the table schema as needed based on the first data object in the array.
 
 #### Parameters
 
-<table><thead><tr><th width="130">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of data objects to insert. The schema is derived from the first object.</td><td>array</td></tr><tr><td><code>uniqueKey</code></td><td>Optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of data objects to insert. The schema is derived from the first object.</td><td>array</td></tr><tr><td><code>uniqueKey</code></td><td>An optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` on success, otherwise `false` (errors are logged, not thrown).
+Returns `true` on success, or `false` if it fails. Errors are logged but not thrown.
 
 ## Raw SQL and templates
 
 ### `executeSql`
 
-Executes a raw SQL statement with template variable substitution. Placeholders like `{{customer.id}}` are safely replaced with the corresponding values from the `variables` object (parameterized, not string-concatenated). For SELECT statements, the result is a plain array of row objects.
+Executes a raw SQL statement with template variable substitution. Placeholders such as `{{customer.id}}` are safely replaced with values from the `variables` object. For `SELECT` statements, the query returns an array of row objects.
 
 {% hint style="danger" %}
-Raw SQL can modify or delete any data in the database. Use with care.
+#### Destructive action
+
+Raw SQL can modify or delete database schemas and records. Run custom scripts with caution.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="110">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The SQL string containing <code>{{double.curly.braces}}</code> placeholders.</td><td>string</td></tr><tr><td><code>variables</code></td><td></td><td>The object containing the data for the placeholders. Nested values are addressed with dot notation.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>type</code></td><td>Forces a specific query type (e.g. <code>SELECT</code>, <code>UPDATE</code>, <code>INSERT</code>). If omitted, it is guessed from the SQL.</td><td>string</td></tr><tr><td></td><td><code>locale</code></td><td>If set, dates and times in the result are formatted in local representation (e.g. <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>Verbosity of formatted dates: <code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>.</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>Verbosity of formatted times, same values as <code>dateStyle</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The SQL string containing <code>{{double.curly.braces}}</code> placeholders.</td><td>string</td></tr><tr><td><code>variables</code></td><td></td><td>The object containing the data for the placeholders. Nested values are addressed with dot notation.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>type</code></td><td>Forces a specific query type (such as <code>SELECT</code>, <code>UPDATE</code>, or <code>INSERT</code>).</td><td>string</td></tr><tr><td></td><td><code>locale</code></td><td>Formats dates and times in the result using local representation (such as <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>).</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>).</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -1138,15 +1195,15 @@ minAge: 30
 
 #### Output
 
-The result of the query. For SELECT statements, an array of row objects.
+Returns the result of the query. For `SELECT` statements, this is an array of row objects.
 
 ### `fillTemplate`
 
-Fills a template string with data from the first record matching a given condition per table. Placeholders use double curly braces like `{{table.field}}`; for JSON fields, nested keys work as `{{table.jsonField.nestedKey}}`. With a `locale`, ISO date-time values are formatted automatically. Unresolved placeholders are removed from the result.
+Fills a template string with data from the first record matching a given condition per table. Placeholders use double curly braces such as `{{table.field}}` or nested keys such as `{{table.jsonField.nestedKey}}`. If you provide a `locale`, the function formats ISO date-time values automatically. Unresolved placeholders are removed from the result.
 
 #### Parameters
 
-<table><thead><tr><th width="110">Input</th><th width="110">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The template string containing the placeholders.</td><td>string</td></tr><tr><td><code>condition</code></td><td></td><td>An object mapping table names to their filter conditions (see <a href="relational-database.md#filtering-explained">filtering explained</a>). The first matching record per table fills the placeholders.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>locale</code></td><td>The locale for date/time formatting (e.g. <code>en-US</code>, <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>One of <code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>. Default <code>medium</code>.</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>One of <code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>. Default <code>medium</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The template string containing placeholders.</td><td>string</td></tr><tr><td><code>condition</code></td><td></td><td>An object mapping table names to their filter conditions.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>locale</code></td><td>The locale for date and time formatting (such as <code>en-US</code> or <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>). Default <code>medium</code>.</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>). Default <code>medium</code>.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -1167,32 +1224,35 @@ Result (example): "Hello Jane Doe! Your order #98765 will ship on 18 August 2025
 
 #### Output
 
-The template string with all placeholders filled.
+Returns the template string with all resolved placeholders.
 
 ## Change notifications
 
 ### `onChange`
 
-Registers a callback that fires whenever the given table changes (insert, update, or delete). Use it to refresh dashboards or trigger follow-up logic automatically.
+Registers a callback executed whenever the specified table changes (insert, update, or delete).
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table to subscribe to.</td><td>string</td></tr><tr><td><code>handler</code></td><td>Callback that fires on every change to the table.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table to subscribe to.</td><td>string</td></tr><tr><td><code>handler</code></td><td>The callback evaluated on every change to the table.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
-Returns the string `subscribed` to confirm the listener is registered.
+Returns `'subscribed'` to confirm registration.
 
 ## Deprecated functions
 
-The following functions still exist for backwards compatibility. Use their replacements in new flows.
+The following functions are maintained for backward compatibility. Use their recommended replacements in new flows.
 
-<table><thead><tr><th width="250">Deprecated function</th><th>Use instead</th></tr></thead><tbody><tr><td><code>getHistoricalData</code> (with <code>trackHistory</code>)</td><td><code>getAuditLog</code> (with <code>auditLog</code>)</td></tr><tr><td><code>findOne</code></td><td><code>findRow</code></td></tr></tbody></table>
+| Deprecated function | Use instead |
+| :--- | :--- |
+| `getHistoricalData` (with `trackHistory`) | `getAuditLog` (with `auditLog`) |
+| `findOne` | `findRow` |
 
 ## Tips and tricks
 
 ### Referencing the current user with $USER
 
-The `$USER` variable references the currently logged-in user of your App, particularly useful for Apps requiring authentication. A recommended practice: Define the username as a unique key (data type `uniquestring`) when creating the table. This enables the `upsertRow` function to both update and insert rows based on the existence of that unique key.
+The `$USER` variable references the authenticated user of your App. Define the username as a unique key (type `uniquestring`) when creating the table to allow `upsertRow` to update and insert rows based on that unique key.
 
 <div align="center"><figure><img src="../../../../.gitbook/assets/relationdat.png" alt=""><figcaption><p>$USER in combination with the upsertRow function</p></figcaption></figure></div>
