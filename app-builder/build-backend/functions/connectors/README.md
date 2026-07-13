@@ -10,7 +10,7 @@ The network location of the target system determines where a connector executes.
 
 When the platform can reach the target system directly, execute the connector in the application backend. The platform automatically manages the connection and execution. This scenario applies to:
 
-* The Heisenware cloud reaching systems on the public internet, such as a cloud API, a web service, or a public MQTT broker.
+* The Heisenware Cloud reaching systems on the public internet, such as a cloud API, a web service, or a public MQTT broker.
 * An [on-premise installation](/tutorials/on-premise-installation.md) reaching systems within the same network.
 
 ### Local connection (via Agent)
@@ -20,21 +20,21 @@ If the target system resides in an isolated network segment without inbound acce
 {% stepper %}
 {% step %}
 
-### Build
+#### Build
 
 Compile a Native Agent directly inside the [App Builder](/app-builder/overview.md) and select which connectors to include in the package.
 {% endstep %}
 
 {% step %}
 
-### Deploy
+#### Deploy
 
 Install the binary on a target system within the local network.
 {% endstep %}
 
 {% step %}
 
-### Use
+#### Use
 
 Once the Agent comes online, it appears automatically in the [Function Explorer](/app-builder/build-backend/functions/function-explorer.md). The Agent displays the connectors selected during the build. These functions execute directly at the edge, next to local devices.
 {% endstep %}
