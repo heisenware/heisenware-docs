@@ -50,7 +50,6 @@
       * [OPC UA Client](app-builder/build-backend/functions/connectors/opc-ua-client.md)
       * [OPC UA Server](app-builder/build-backend/functions/connectors/opc-ua-server.md)
       * [Operating System (OS)](app-builder/build-backend/functions/connectors/operating-system-os.md)
-      * [Raspberry Pi GPIO](app-builder/build-backend/functions/connectors/raspberry-pi-gpio.md)
       * [RS-232/485](app-builder/build-backend/functions/connectors/rs-232-485.md)
       * [Sap Digital Manufacturing](app-builder/build-backend/functions/connectors/sap-digital-manufacturing.md)
       * [Siemens S7](app-builder/build-backend/functions/connectors/siemens-s7.md)

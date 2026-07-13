@@ -22,7 +22,7 @@ description: 7 Dec 2025
 * New [Cron](../app-builder/build-backend/functions/utilities/cron.md) class allowing to schedule tasks
 * New [AllenBradley](../app-builder/build-backend/functions/connectors/allen-bradley.md) PLC connector
 * New [Stopwatch](../app-builder/build-backend/functions/utilities/stopwatch.md) class
-* New [Raspberry Pi](../app-builder/build-backend/functions/connectors/raspberry-pi-gpio.md) class allowing to read/write GPIOs
+* New [Raspberry Pi](/broken/pages/GoyYK9mvJLsWmbTmzpyp) class allowing to read/write GPIOs
 * New [GPIO Counter](../app-builder/build-backend/functions/connectors/gpio-counter.md) class
 
 ## Fixes
