@@ -5,8 +5,11 @@ The Modbus connector provides a unified interface for communicating with Modbus 
 * Modbus TCP: For devices connected over an Ethernet network.
 * Modbus RTU: For devices connected over serial lines (such as RS-485 or RS-232).
 
-To communicate with a device, create an instance of the `Modbus` class and call the appropriate connection function before executing any read or write transactions.
+{% hint style="info" %}
+#### Connection workflow
 
+To communicate with a device, you must first create a connector instance in the platform. In your application logic, always trigger `connectTcp` or `connectRtu` to establish an active session before executing any read or write functions.
+{% endhint %}
 ## Connection management
 
 ### `connectTcp`
