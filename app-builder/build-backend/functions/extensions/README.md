@@ -1,17 +1,17 @@
 # Docker Extensions
 
-Docker Extensions expand the platform's capabilities using Docker container technology. An extension is a standard Docker image that the Heisenware platform loads, executes, and exposes as functions within the App Builder.
+Docker Extensions expand the platform's capabilities using Docker container technology. A Docker Extension is a standard Docker image that the Heisenware platform loads, executes, and exposes as functions within the App Builder.
 
 {% hint style="info" %}
 #### Not to be confused with extension nodes
 
-Extensions are Docker-based modules that add whole new function classes to the platform. [Extension nodes](../../extension-nodes.md) (modifiers, filters, recorders, and error handlers) are the small nodes that attach to a function's output on the canvas.
+Docker Extensions add whole new function classes to the platform. [Extension nodes](../../extension-nodes.md) (modifiers, filters, recorders, and error handlers) are the small nodes that attach to a function's output on the canvas.
 {% endhint %}
 
-There are two categories of extensions:
+There are two categories of Docker Extensions:
 
-1. Official extensions (Heisenware made): ready-to-use, managed modules maintained by us.
-2. Custom Extensions (user made): your Docker images containing custom algorithms, drivers, or logic, built by wrapping your code into a [Code Adapter](../../../../account/hosting-and-architecture.md#docker-custom-code-adapter).
+1. Official extensions (Heisenware made): Ready-to-use, managed modules maintained by us.
+2. [Custom Extensions](custom-extensions.md) (user made): Your own Docker images containing custom algorithms, drivers, or logic.
 
 ## Official extensions
 
@@ -25,9 +25,4 @@ Once installed, these extensions run alongside the standard platform functionali
 
 ## Custom Extensions
 
-
-
-
-
-
-
+Build your own Docker Extension by wrapping plain Node.js code into a [Code Adapter](../../../../account/hosting-and-architecture.md#docker-custom-code-adapter) and loading it into the platform, or running it on your own infrastructure. See [Custom Extensions](custom-extensions.md) for the full guide.
