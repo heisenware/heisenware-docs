@@ -10,10 +10,10 @@ Heisenware provides a pre-initialized instance called `internal-postgres`. It is
 
 ## Connecting an external database
 
-To connect an external database, use the `create` function. How you configure it depends on where the database is located:
+To connect an external database, use the [`create`](relational-database.md#create) function. How you configure it depends on where the database is located:
 
 * **Cloud or public database**: If the database is accessible over the internet, create the instance directly in your App backend.
-* **Local database (via Agent)**: If the database sits inside a private network (such as on a shopfloor server), deploy an [Agent](../../agents.md) in that network first and create the database instance within that Agent.
+* **Local database (via Agent)**: If the database sits inside a private network (such as on a shopfloor server), deploy an [Agent](../../agents/) in that network first and create the database instance within that Agent.
 
 {% hint style="info" %}
 Whether you use the internal database or an external connection, the functions for querying, inserting, and managing data are identical.
@@ -34,7 +34,7 @@ Skip this step for `internal-postgres`. It is already instantiated for you.
 <table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect (such as <code>postgres</code> or <code>mysql</code>).</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default is the standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Uses SSL for the connection when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Logs all SQL statements when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>Skips the database introspection for instant startup when <code>true</code>. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
-Right-click the <code>options</code> input and mark it as a secret to mask the password.
+Right-click the `options` input and mark it as a secret to mask the password.
 {% endhint %}
 
 #### Example
@@ -130,7 +130,7 @@ When running inside an Agent, the database disables the automatic `createdAt` an
 <table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code>, <code>date</code>, <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code>, <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. Replaces the deprecated <code>trackHistory</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
-Use English and camelCase for table and field names (such as <code>firstName</code> or <code>dateOfBirth</code>). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the <code>jsonb</code> type for JSON data: it is more efficient and allows nested properties in filter expressions.
+Use English and camelCase for table and field names (such as `firstName` or `dateOfBirth`). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the `jsonb` type for JSON data: it is more efficient and allows nested properties in filter expressions.
 {% endhint %}
 
 #### Examples
@@ -161,7 +161,7 @@ specs: jsonb
 {% hint style="warning" %}
 #### Custom primary key naming
 
-Always use <code>id</code> as the name of the primary key, even when overriding the default. Other names can cause unexpected behavior.
+Always use `id` as the name of the primary key, even when overriding the default. Other names can cause unexpected behavior.
 {% endhint %}
 
 ### Advanced field configuration
@@ -270,20 +270,20 @@ Compound conditions combine conditions with `'and'` or `'or'`:
 
 Available operators:
 
-| Operator(s) | Description | Example value |
-| :--- | :--- | :--- |
-| `=`, `eq`, `is` | Equals | `'John'` or `100` |
-| `<>`, `ne`, `isnot` | Not equals | `'John'` or `100` |
-| `>`, `gt` | Greater than | `99` |
-| `>=`, `gte` | Greater than or equal to | `100` |
-| `<`, `lt` | Less than | `100` |
-| `<=`, `lte` | Less than or equal to | `100` |
-| `contains` | String field contains the value (case-insensitive) | `'oh'` (matches 'John') |
-| `notcontains` | String field does not contain the value | `'Peter'` |
-| `startswith` | String field starts with the value | `'J'` |
-| `endswith` | String field ends with the value | `'oe'` (matches 'Doe') |
-| `between` | Value is between two values in an array | `[18, 30]` or `['A', 'D']` |
-| `in` | Value is one of several possibilities in an array | `['active', 'pending']` |
+| Operator(s)         | Description                                        | Example value              |
+| ------------------- | -------------------------------------------------- | -------------------------- |
+| `=`, `eq`, `is`     | Equals                                             | `'John'` or `100`          |
+| `<>`, `ne`, `isnot` | Not equals                                         | `'John'` or `100`          |
+| `>`, `gt`           | Greater than                                       | `99`                       |
+| `>=`, `gte`         | Greater than or equal to                           | `100`                      |
+| `<`, `lt`           | Less than                                          | `100`                      |
+| `<=`, `lte`         | Less than or equal to                              | `100`                      |
+| `contains`          | String field contains the value (case-insensitive) | `'oh'` (matches 'John')    |
+| `notcontains`       | String field does not contain the value            | `'Peter'`                  |
+| `startswith`        | String field starts with the value                 | `'J'`                      |
+| `endswith`          | String field ends with the value                   | `'oe'` (matches 'Doe')     |
+| `between`           | Value is between two values in an array            | `[18, 30]` or `['A', 'D']` |
+| `in`                | Value is one of several possibilities in an array  | `['active', 'pending']`    |
 
 #### Examples
 
@@ -744,7 +744,6 @@ The most common relationship. Use it when a child record requires a parent. Exam
 
 {% stepper %}
 {% step %}
-
 #### Define tables
 
 Create the `companies` and `employees` tables.
@@ -766,7 +765,6 @@ lastName: string
 {% endstep %}
 
 {% step %}
-
 #### Define the relationship
 
 Declare that an employee mandatorily has one company.
@@ -780,12 +778,11 @@ companies
 ```
 
 {% hint style="info" %}
-This adds a non-nullable <code>companyId</code> foreign key column to the <code>employees</code> table.
+This adds a non-nullable `companyId` foreign key column to the `employees` table.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-
 #### Link records
 
 Because `companyId` is mandatory, provide it when creating a new employee record.
@@ -808,7 +805,6 @@ Use this when the link between child and parent is optional. The child can be cr
 
 {% stepper %}
 {% step %}
-
 #### Define tables
 
 ```yaml
@@ -828,7 +824,6 @@ name: string
 {% endstep %}
 
 {% step %}
-
 #### Define the relationship
 
 Declare that a post optionally has one category.
@@ -842,12 +837,11 @@ categories
 ```
 
 {% hint style="info" %}
-This adds a nullable <code>categoryId</code> foreign key column to the <code>posts</code> table.
+This adds a nullable `categoryId` foreign key column to the `posts` table.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-
 #### Link records
 
 Create a post without a category, and link it later by patching the record.
@@ -876,7 +870,6 @@ Use this when records in two tables can have multiple links to each other. Examp
 
 {% stepper %}
 {% step %}
-
 #### Define tables
 
 ```yaml
@@ -896,7 +889,6 @@ price: number
 {% endstep %}
 
 {% step %}
-
 #### Define the relationship
 
 Declare the many-to-many relationship between orders and products.
@@ -910,12 +902,11 @@ products
 ```
 
 {% hint style="info" %}
-This automatically creates a hidden junction table (such as <code>__orders2products</code>) storing the links between order IDs and product IDs.
+This automatically creates a hidden junction table (such as `__orders2products`) storing the links between order IDs and product IDs.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-
 #### Link records
 
 Connect the records with `associateRow`. Link one order to multiple products by providing an array of product IDs.
@@ -941,7 +932,6 @@ Use the `role` parameter to define multiple distinct relationships between the s
 
 {% stepper %}
 {% step %}
-
 #### Define tables
 
 ```yaml
@@ -960,7 +950,6 @@ title: string
 {% endstep %}
 
 {% step %}
-
 #### Define the relationships with roles
 
 Create two distinct one-to-many relationships, specifying a role for each.
@@ -984,12 +973,11 @@ Editor
 ```
 
 {% hint style="info" %}
-This adds two separate foreign keys to the <code>documents</code> table: <code>ownerId</code> and <code>editorId</code>. The role name directly determines the name of the foreign key.
+This adds two separate foreign keys to the `documents` table: `ownerId` and `editorId`. The role name directly determines the name of the foreign key.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-
 #### Link records
 
 When creating a document, provide IDs for both the owner and the editor using the specific foreign key fields.
@@ -1013,7 +1001,7 @@ The relational database connector (`RelationalDatabase`) features a built-in aud
 {% hint style="warning" %}
 #### Deprecation notice
 
-The <code>trackHistory</code> option in <code>defineTable</code> and the <code>getHistoricalData</code> function are deprecated. Use <code>auditLog</code> and <code>getAuditLog</code> instead.
+The `trackHistory` option in `defineTable` and the `getHistoricalData` function are deprecated. Use `auditLog` and `getAuditLog` instead.
 {% endhint %}
 
 ### Enabling audit logs
@@ -1244,10 +1232,10 @@ Returns `'subscribed'` to confirm registration.
 
 The following functions are maintained for backward compatibility. Use their recommended replacements in new flows.
 
-| Deprecated function | Use instead |
-| :--- | :--- |
+| Deprecated function                       | Use instead                     |
+| ----------------------------------------- | ------------------------------- |
 | `getHistoricalData` (with `trackHistory`) | `getAuditLog` (with `auditLog`) |
-| `findOne` | `findRow` |
+| `findOne`                                 | `findRow`                       |
 
 ## Tips and tricks
 

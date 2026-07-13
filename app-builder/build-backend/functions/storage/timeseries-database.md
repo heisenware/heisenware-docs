@@ -2,8 +2,6 @@
 
 The timeseries database connector is a specialized client for InfluxDB. It stores high-frequency data where the recording time is as important as the value itself, such as sensor readings, machine performance metrics, or energy consumption.
 
-This connector requires [instance creation](./#instance-creation) before you can write and query data, unless you use the pre-initialized `internal-influx` instance.
-
 {% hint style="info" %}
 #### Intelligent downsampling and native multi-fields
 
@@ -24,10 +22,10 @@ The [recorder](../../extension-nodes/recorder.md) extension node provides the fa
 
 ## Connecting an external database
 
-To connect an external InfluxDB instance, use the `create` function:
+To connect an external InfluxDB instance, use the [`create`](timeseries-database.md#create) function:
 
 * **Cloud or public database**: Connect directly if your InfluxDB server is accessible via the internet.
-* **Local database (via Agent)**: If your InfluxDB sits inside a private network, deploy an [Agent](/app-builder/build-backend/agents.md) in that network first and create the database instance within that Agent.
+* **Local database (via Agent)**: If your InfluxDB sits inside a private network, deploy an [Agent](../../agents.md) in that network first and create the database instance within that Agent.
 
 {% hint style="info" %}
 The functions for writing and querying data remain identical whether you use the managed `internal-influx` or a custom connection.
@@ -52,13 +50,7 @@ Data flows automatically through a series of stages. Write data only to the star
 
 ![](<../../../../.gitbook/assets/image (1).png>)
 
-| Bucket | Resolution | Retention | Typical use |
-| :--- | :--- | :--- | :--- |
-| `H+` | Raw (every point) | 1 day | Real-time monitoring, debugging recent events |
-| `D+` | 5 minutes | 1 week | Zooming into last week's performance |
-| `W+` | 1 hour | 1 month | Weekly trends and patterns |
-| `M+` | 1 day | 1 year | Monthly analysis and seasonal trends |
-| `Y+` | 1 week | Forever | Long-term historical archiving |
+<table><thead><tr><th width="102.66650390625">Bucket</th><th width="184.4444580078125">Resolution</th><th width="130.9261474609375">Retention</th><th>Typical use</th></tr></thead><tbody><tr><td><code>H+</code></td><td>Raw (every point)</td><td>1 day</td><td>Real-time monitoring, debugging recent events</td></tr><tr><td><code>D+</code></td><td>5 minutes</td><td>1 week</td><td>Zooming into last week's performance</td></tr><tr><td><code>W+</code></td><td>1 hour</td><td>1 month</td><td>Weekly trends and patterns</td></tr><tr><td><code>M+</code></td><td>1 day</td><td>1 year</td><td>Monthly analysis and seasonal trends</td></tr><tr><td><code>Y+</code></td><td>1 week</td><td>Forever</td><td>Long-term historical archiving</td></tr></tbody></table>
 
 #### How writing works
 
@@ -76,26 +68,29 @@ For example, if you query the last 2 days, the function returns the last 24 hour
 
 #### Configuration examples
 
-* **Real-time debugging**: Pulls from the raw (`H+`) bucket to view the last 15 minutes.
-  ```yaml
-  # (readDownsampled)
-  # options
-  start: "-15m"
-  tail: 100
-  ```
-* **Monthly reporting**: Pulls from the hourly (`W+`) or daily (`M+`) buckets to visualize trends over the last 30 days.
-  ```yaml
-  # (readDownsampled)
-  # options
-  start: "-30d"
-  limit: 1000
-  ```
-* **Stitched view**: Returns the last 50 data points regardless of age, automatically querying older buckets if needed.
-  ```yaml
-  # (readDownsampled)
-  # options
-  tail: 50
-  ```
+*   **Real-time debugging**: Pulls from the raw (`H+`) bucket to view the last 15 minutes.
+
+    ```yaml
+    # (readDownsampled)
+    # options
+    start: "-15m"
+    tail: 100
+    ```
+*   **Monthly reporting**: Pulls from the hourly (`W+`) or daily (`M+`) buckets to visualize trends over the last 30 days.
+
+    ```yaml
+    # (readDownsampled)
+    # options
+    start: "-30d"
+    limit: 1000
+    ```
+*   **Stitched view**: Returns the last 50 data points regardless of age, automatically querying older buckets if needed.
+
+    ```yaml
+    # (readDownsampled)
+    # options
+    tail: 50
+    ```
 
 #### Aggregated fields
 
@@ -118,10 +113,10 @@ Skip this step for `internal-influx`. It is already instantiated for you.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The URL of the InfluxDB instance (such as <code>http://localhost:8086</code>).</td><td>string</td></tr><tr><td><code>token</code></td><td></td><td>The authentication token with permissions for the target organization and buckets.</td><td>string</td></tr><tr><td><code>org</code></td><td></td><td>The name of the organization in InfluxDB.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>flushInterval</code></td><td>The interval in milliseconds to flush buffered writes. Default 5000.</td><td>integer</td></tr><tr><td></td><td><code>batchSize</code></td><td>The number of points to buffer before writing. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>downsamplingPipeline</code></td><td>Overrides the default downsampling stages.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="114.8148193359375">Input</th><th width="198.703857421875">Key</th><th width="292.66650390625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The URL of the InfluxDB instance (such as <code>http://localhost:8086</code>).</td><td>string</td></tr><tr><td><code>token</code></td><td></td><td>The authentication token with permissions for the target organization and buckets.</td><td>string</td></tr><tr><td><code>org</code></td><td></td><td>The name of the organization in InfluxDB.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>flushInterval</code></td><td>The interval in milliseconds to flush buffered writes. Default 5000.</td><td>integer</td></tr><tr><td></td><td><code>batchSize</code></td><td>The number of points to buffer before writing. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>downsamplingPipeline</code></td><td>Overrides the default downsampling stages.</td><td>array</td></tr></tbody></table>
 
 {% hint style="info" %}
-Right-click the <code>token</code> input and mark it as a secret to mask it.
+Right-click the `token` input and mark it as a secret to mask it.
 {% endhint %}
 
 ### `delete`
@@ -152,7 +147,7 @@ When you pass an object as data, the engine fans it out into native InfluxDB fie
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket to write to.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement (such as <code>temperature</code> or <code>production_line</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The value to record. Accepts a number, string, boolean, or object (such as <code>{ temp: 45, status: "ok" }</code>).</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value pairs to tag the data. To force the object storage behavior, add <code>objectStorageType: 'fields'</code> or <code>objectStorageType: 'json'</code>. The database strips this control flag before saving.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="123.14794921875">Input</th><th width="506.4072265625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket to write to.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement (such as <code>temperature</code> or <code>production_line</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The value to record. Accepts a number, string, boolean, or object (such as <code>{ temp: 45, status: "ok" }</code>).</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value pairs to tag the data. To force the object storage behavior, add <code>objectStorageType: 'fields'</code> or <code>objectStorageType: 'json'</code>. The database strips this control flag before saving.</td><td>object</td></tr></tbody></table>
 
 <div align="left"><figure><img src="../../../../.gitbook/assets/image (4).png" alt="" width="375"><figcaption><p>Measurement vs. tags vs. fields</p></figcaption></figure></div>
 
@@ -179,7 +174,7 @@ Returns `true` when the write succeeds. Throws an error on failure.
 {% hint style="info" %}
 #### Internal bucket names
 
-When using the internal database, bucket names indicate retention: <code>F</code> (forever), <code>Y</code> (year), <code>M</code> (month), <code>W</code> (week), <code>D</code> (day), <code>H</code> (hour).
+When using the internal database, bucket names indicate retention: `F` (forever), `Y` (year), `M` (month), `W` (week), `D` (day), `H` (hour).
 {% endhint %}
 
 ### `writePoints`
@@ -188,7 +183,7 @@ Writes multiple data points to a specific bucket and measurement. This is more e
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of values or objects to record.</td><td>array</td></tr><tr><td><code>tags</code></td><td>Optional tags. If specified as an array, the length must match the <code>data</code> array (one tag object per point). If specified as a single object, the tags apply to all points.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="128.7037353515625">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of values or objects to record.</td><td>array</td></tr><tr><td><code>tags</code></td><td>Optional tags. If specified as an array, the length must match the <code>data</code> array (one tag object per point). If specified as a single object, the tags apply to all points.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
@@ -216,7 +211,7 @@ When you pass an object containing both numbers and strings (such as `{ speed: 1
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>The numeric value, object, or array to store.</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional tags to associate with the data.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="139.8148193359375">Input</th><th width="489.4813232421875">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>The numeric value, object, or array to store.</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional tags to associate with the data.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -245,7 +240,7 @@ When you query a measurement containing multiple fields and do not specify a tar
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The name of the bucket to query.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>The specific field to isolate (such as <code>cycle_time</code>). If omitted, the function returns all fields as an object.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>The earliest time to include (such as <code>-12h</code>, <code>-7d</code>, or <code>2025-01-01T00:00:00Z</code>). Default <code>-1y</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The latest time to include. Default <code>now()</code>.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>Limits the result to the first n data points.</td><td>integer</td></tr><tr><td></td><td><code>tail</code></td><td>Limits the result to the last n data points.</td><td>integer</td></tr><tr><td></td><td><code>every</code></td><td>The duration of time windows for aggregation (such as <code>15m</code>).</td><td>string</td></tr><tr><td></td><td><code>func</code></td><td>The aggregation function applied per window (such as <code>mean</code>, <code>sum</code>, <code>count</code>, or <code>last</code>). Default <code>mean</code>.</td><td>string</td></tr><tr><td></td><td><code>tags</code></td><td>An object of tags to filter by.</td><td>object</td></tr><tr><td></td><td><code>difference</code></td><td>Calculates differences between readings when set to <code>true</code>. Set to <code>nonNegative</code> to ignore counter resets. Default <code>false</code>.</td><td>any</td></tr><tr><td></td><td><code>fillPrevious</code></td><td>Carries the last known value forward into empty time windows when set to <code>true</code>. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>cumulativeSum</code></td><td>Keeps a running total across the selected time range when set to <code>true</code>. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>derivativeUnit</code></td><td>Calculates the rate of change per given unit (such as <code>1m</code> for per-minute rates).</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="133.33349609375">Input</th><th width="148.7037353515625">Key</th><th width="377.036865234375">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The name of the bucket to query.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>The specific field to isolate (such as <code>cycle_time</code>). If omitted, the function returns all fields as an object.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>The earliest time to include (such as <code>-12h</code>, <code>-7d</code>, or <code>2025-01-01T00:00:00Z</code>). Default <code>-1y</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The latest time to include. Default <code>now()</code>.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>Limits the result to the first n data points.</td><td>integer</td></tr><tr><td></td><td><code>tail</code></td><td>Limits the result to the last n data points.</td><td>integer</td></tr><tr><td></td><td><code>every</code></td><td>The duration of time windows for aggregation (such as <code>15m</code>).</td><td>string</td></tr><tr><td></td><td><code>func</code></td><td>The aggregation function applied per window (such as <code>mean</code>, <code>sum</code>, <code>count</code>, or <code>last</code>). Default <code>mean</code>.</td><td>string</td></tr><tr><td></td><td><code>tags</code></td><td>An object of tags to filter by.</td><td>object</td></tr><tr><td></td><td><code>difference</code></td><td>Calculates differences between readings when set to <code>true</code>. Set to <code>nonNegative</code> to ignore counter resets. Default <code>false</code>.</td><td>any</td></tr><tr><td></td><td><code>fillPrevious</code></td><td>Carries the last known value forward into empty time windows when set to <code>true</code>. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>cumulativeSum</code></td><td>Keeps a running total across the selected time range when set to <code>true</code>. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>derivativeUnit</code></td><td>Calculates the rate of change per given unit (such as <code>1m</code> for per-minute rates).</td><td>string</td></tr></tbody></table>
 
 <details>
 
@@ -258,16 +253,16 @@ Timeseries databases often contain thousands of individual points. To visualize 
 
 #### Available functions
 
-| Function | Description | Typical use case |
-| :--- | :--- | :--- |
-| `mean` | Calculates the average value. | Smoothing noisy sensor data (such as average temperature per hour). |
-| `median` | Finds the middle value. | Finding the typical value while ignoring extreme outliers. |
-| `min` | Finds the lowest value. | Detecting the coldest temperature or lowest battery level. |
-| `max` | Finds the highest value. | Detecting peak power usage or maximum pressure. |
-| `sum` | Adds up all values. | Calculating total energy consumption or total volume flowed. |
-| `count` | Counts the number of data points. | Counting machine cycles or error logs. |
-| `last` | Takes the last value in the window. | The final state of a system at the end of each period. |
-| `first` | Takes the first value in the window. | The starting state of a system at the beginning of each period. |
+| Function | Description                          | Typical use case                                                    |
+| -------- | ------------------------------------ | ------------------------------------------------------------------- |
+| `mean`   | Calculates the average value.        | Smoothing noisy sensor data (such as average temperature per hour). |
+| `median` | Finds the middle value.              | Finding the typical value while ignoring extreme outliers.          |
+| `min`    | Finds the lowest value.              | Detecting the coldest temperature or lowest battery level.          |
+| `max`    | Finds the highest value.             | Detecting peak power usage or maximum pressure.                     |
+| `sum`    | Adds up all values.                  | Calculating total energy consumption or total volume flowed.        |
+| `count`  | Counts the number of data points.    | Counting machine cycles or error logs.                              |
+| `last`   | Takes the last value in the window.  | The final state of a system at the end of each period.              |
+| `first`  | Takes the first value in the window. | The starting state of a system at the beginning of each period.     |
 
 </details>
 
@@ -417,7 +412,7 @@ Reads downsampled data by automatically stitching together details across downsa
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>The specific field to extract. Default <code>value</code>.</td><td>string</td></tr><tr><td></td><td><code>aggFunc</code></td><td>The statistic returned as the main value (such as <code>mean</code> or <code>max</code>). Default <code>mean</code>.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>The earliest time to include. Default <code>-1y</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The latest time to include. Default <code>now()</code>.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>Limits the result to the first n points.</td><td>integer</td></tr><tr><td></td><td><code>tail</code></td><td>Limits the result to the last n points.</td><td>integer</td></tr><tr><td></td><td><code>tags</code></td><td>Filters by tags.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="132.4072265625">Input</th><th width="93.1480712890625">Key</th><th width="400.70361328125">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>The specific field to extract. Default <code>value</code>.</td><td>string</td></tr><tr><td></td><td><code>aggFunc</code></td><td>The statistic returned as the main value (such as <code>mean</code> or <code>max</code>). Default <code>mean</code>.</td><td>string</td></tr><tr><td></td><td><code>start</code></td><td>The earliest time to include. Default <code>-1y</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The latest time to include. Default <code>now()</code>.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>Limits the result to the first n points.</td><td>integer</td></tr><tr><td></td><td><code>tail</code></td><td>Limits the result to the last n points.</td><td>integer</td></tr><tr><td></td><td><code>tags</code></td><td>Filters by tags.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -477,7 +472,7 @@ Registers a callback executed whenever new data is written to a measurement.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to watch.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>The callback evaluated on every write. Receives the payload.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>Guarantees the handler fires at most once every X milliseconds. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>includeData</code></td><td>Includes the written data and tags in the payload when set to <code>true</code>. Default false.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="128.7037353515625">Input</th><th width="162.592529296875">Key</th><th width="359.7037353515625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to watch.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>The callback evaluated on every write. Receives the payload.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>Guarantees the handler fires at most once every X milliseconds. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>includeData</code></td><td>Includes the written data and tags in the payload when set to <code>true</code>. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -554,7 +549,7 @@ This permanently deletes the measurement data. You cannot undo this action.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to delete.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>start</code></td><td>The start time. Default <code>1970-01-01</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The end time. Default is the current time.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="94.0738525390625">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to delete.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>start</code></td><td>The start time. Default <code>1970-01-01</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The end time. Default is the current time.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -626,7 +621,7 @@ Lists detailed information about all measurements across all buckets.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>includeStats</code></td><td>Calculates row count and cardinality when set to <code>true</code>. This operation can be slow. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>statsRangeStart</code></td><td>The start of the time range for calculations. Default <code>-1y</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="112.963134765625">Input</th><th width="161.6666259765625">Key</th><th width="391.5185546875">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>includeStats</code></td><td>Calculates row count and cardinality when set to <code>true</code>. This operation can be slow. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>statsRangeStart</code></td><td>The start of the time range for calculations. Default <code>-1y</code>.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -685,7 +680,7 @@ Calculates row count and cardinality of a specific measurement over a given time
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The bucket name.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The measurement name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>start</code></td><td>The start time. Default <code>-30d</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The end time. Default <code>now()</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="99.629638671875">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td></td><td>The bucket name.</td><td>string</td></tr><tr><td><code>measurement</code></td><td></td><td>The measurement name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>start</code></td><td>The start time. Default <code>-30d</code>.</td><td>string</td></tr><tr><td></td><td><code>stop</code></td><td>The end time. Default <code>now()</code>.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
