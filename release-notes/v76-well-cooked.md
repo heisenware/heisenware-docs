@@ -8,17 +8,17 @@ description: Dec 4, 2023
 
 ## Features
 
-* All upload widgets (File, Barcode, DocumentScan) now show their uploaded data as “popover”, giving them a constant size (before the height was extended by the number of uploaded data).
-* &#x20;The form widget can now be configured to show groups of input elements as tabs
-* New command “validate” is available for the Form widget
-* Widgets can now have individual “default-detached” properties (currently: “tabView” and “colCount” of Form are supported)
+* All upload widgets – including [Upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) and [Barcode / QR](../app-builder/build-frontend/widgets/input-widgets/barcode-qr.md) – now display uploaded data in a popover. This keeps widget sizes constant instead of expanding their height as users upload more data.
+* Configure the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md) to display groups of input elements as tabs.
+* The `validate` command is now available for the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md).
+* Widgets now support individual `default-detached` properties. Currently, the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md) supports two properties: `tabView` and `colCount`.
 
 ## Fixes
 
-* When an output was linked to an input the input only triggered an event whenever the value of the output was changed. This sometimes led to missing re-renders on respective UI Widgets. Now, linked input items will always trigger an event, even when the corresponding value did not change.
-* Improved document recognition in DocumentScan widget
-* Improved RFID tag recognition algorithm in Zebra connector
-* Clearing the URL on production apps in order to wipe away the auth0 injected “code” parameter
-* Fixed slowdowns in rendering of production app when switching between pages of different height
-* Fixed choosing to large screen on production app leading to a rendering with scrollbars initially
-* Removed experimental Jupyter integration
+* Linking an output to an input now always triggers an event, even if the corresponding value remains unchanged. This fixes intermittent rendering issues on UI widgets where linked inputs previously only triggered events when values actually changed.
+* Improved document recognition in the document scan widget.
+* Improved the RFID tag recognition algorithm in the [Zebra RFID IoT](../app-builder/build-backend/functions/connectors/zebra-rfid-iot.md) connector.
+* Cleared the URL on [Production Apps](../production-apps/overview.md) to remove the Auth0-injected `code` parameter.
+* Resolved rendering slowdowns in [Production Apps](../production-apps/overview.md) when switching between pages of different heights.
+* Fixed initial scrollbar rendering issues that occurred when selecting a large screen size in [Production Apps](../production-apps/overview.md).
+* Removed the experimental Jupyter integration.
