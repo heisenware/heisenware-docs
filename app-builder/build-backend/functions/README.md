@@ -6,7 +6,7 @@ All functions follow the same anatomy. A colored box with a unique icon represen
 
 <figure><img src="../../../.gitbook/assets/image (51).png" alt=""><figcaption><p>A function merging two (or more) objects</p></figcaption></figure>
 
-* [**Input(s)**](./#inputs-and-data-configuration): Arguments the function needs to work (e.g., a number to calculate or a string to send). The platform hides the box if a function does not require an input. Some functions let you add extra inputs.  Click the pencil icon to modify input data via a form or use YAML during development.
+* [**Input(s)**](./#inputs-and-data-configuration): Arguments the function needs to work (e.g., a number to calculate or a string to send). The platform hides the box if a function does not require an input. Some functions let you add extra inputs. Click the pencil icon to modify input data via a form or use YAML during development.
 * [**Trigger**](./#triggers-and-execution-logic): The signal that tells the function to execute (e.g., a button click or a data change). Click the play icon to trigger the function manually during development.
 * [**Output**](./#outputs-and-chaining): The result of the operation, which passes to the next step in your flow. Click the x icon to empty the output during development.
 * [**Extension nodes**](../extension-nodes/) **(optional)**: Separate nodes that take data from a function and [filter](../extension-nodes/filter.md), [record](../extension-nodes/recorder.md), [modify](../extension-nodes/modifier.md), or [handle errors](../extension-nodes/error-handler.md) it on the fly.
@@ -152,7 +152,7 @@ Essential for large blocks of text, code, or templates.
 Right-click a function input to switch between YAML and HTML view, or to set an input as a secret (masking the value).
 {% endhint %}
 
-### Special inputs: callbacks
+### Callbacks
 
 Functions with an `on` prefix (e.g., `onMessage`) use callbacks. They listen for external events (like an incoming MQTT message) and provide that data via a specific output nested inside the function input.
 
