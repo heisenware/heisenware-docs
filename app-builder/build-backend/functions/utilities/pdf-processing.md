@@ -1,20 +1,16 @@
-# PDF Processing
+# PDF processing
 
-The `Pdf` class is a collection of static utility functions for creating and manipulating PDF documents. It can generate PDFs from structured JSON (`pdfmake` format), convert HTML content into PDFs, and merge multiple existing documents (PDF, PNG, JPG) into a single PDF file.
+With PDF processing, you create and manipulate PDF documents: generate PDFs from structured JSON (pdfmake format), convert HTML content into PDFs, and merge multiple existing documents into a single PDF file. All functions are static, so you do not need to create an instance.
 
-Since all methods in this class are static, you do not need to create an instance of it.
+## `mergeDocuments`
 
-***
+Merges multiple source documents into a single PDF file. The source documents can be PDFs or images (PNG, JPG, and, as file objects, HEIC). Images are automatically converted to PDF pages before merging, JPG images are auto-rotated based on their EXIF data. Inputs that cannot be read are skipped with a warning instead of failing the whole merge.
 
-### mergeDocuments
+### Parameters
 
-Merges multiple source documents into a single PDF file. The source documents can be PDFs, PNG images, or JPG images. The function automatically handles the conversion of images to PDF pages before merging.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>files</code></td><td>An array where each element is either a base64-encoded string of a file or a FileJSON object (an object with a <code>path</code> property pointing to the file).</td><td>array</td></tr></tbody></table>
 
-Parameters
-
-* `files`: An array where each element is either a base64 encoded string of a file or a FileJSON object (an object with a `path` property pointing to the file).
-
-Example
+### Example
 
 ```yaml
 # files
@@ -25,26 +21,21 @@ Example
 ]
 ```
 
-Output
+### Output
 
-A new FileJSON object representing the successfully merged PDF file, including its path, name, size, and type.
+A new FileJSON object representing the merged PDF file, including its path, name, size, and type.
 
-***
+## `createPdfFileFromJson`
 
-### createPdfFileFromJson
+Creates a new PDF file from a structured JSON object that follows the pdfmake document definition format. This allows for precise, programmatic control over the PDF layout and content.
 
-Creates a new PDF file from a structured JSON object that follows the `pdfmake` document definition format. This allows for precise, programmatic control over the PDF layout and content.
+For a detailed guide on the pdfmake format and to experiment with its capabilities, see the [pdfmake playground](http://pdfmake.org/playground.html).
 
-For a detailed guide on the `pdfmake` format and to experiment with its capabilities, see the [pdfmake playground](http://pdfmake.org/playground.html).
+### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>content</code></td><td>An object or array that defines the PDF content, following the pdfmake syntax.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>format</code>: the page size (for example <code>A4</code>, <code>A5</code>, <code>LETTER</code>), defaults to <code>A4</code>. <code>orientation</code>: <code>portrait</code> (default) or <code>landscape</code>.</td><td>object</td></tr></tbody></table>
 
-* `content`: An object or array that defines the PDF content, following the `pdfmake` syntax.
-* `options`: An optional object for page configuration.
-  * `format`: The page size (e.g., `A4`, `A5`, `LETTER`). Defaults to `A4`.
-  * `orientation`: The page orientation. Can be `portrait` or `landscape`. Defaults to `portrait`.
-
-Example
+### Example
 
 ```yaml
 # content
@@ -63,41 +54,35 @@ format: A4
 orientation: portrait
 ```
 
-Output
+### Output
 
 A FileJSON object representing the newly created PDF file.
 
-***
+## `createPdfBufferFromJson`
 
-### createPdfBufferFromJson
+Creates a PDF from a pdfmake JSON object, but returns it as a base64-encoded string instead of writing it to a file.
 
-Creates a PDF from a `pdfmake` JSON object, but returns it as a base64 encoded string instead of writing it to a file.
+### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>content</code></td><td>The pdfmake JSON content definition.</td><td>object</td></tr><tr><td><code>options</code></td><td>Page configuration, see <a href="#createpdffilefromjson"><code>createPdfFileFromJson</code></a>.</td><td>object</td></tr></tbody></table>
 
-* `content`: The `pdfmake` JSON content definition.
-* `options`: An optional object for page configuration (see `createPdfFileFromJson` for details).
+### Output
 
-Output
+A base64-encoded string representing the generated PDF document.
 
-A base64 encoded string representing the generated PDF document.
-
-***
-
-### createPdfFileFromHtml
+## `createPdfFileFromHtml`
 
 Converts an HTML string into a new PDF file.
 
-Parameters
+### Parameters
 
-* `html`: A string containing the HTML content to be converted.
-* `options`: An optional object for conversion and page settings.
-  * `format`: The page size. Defaults to `A4`.
-  * `orientation`: The page orientation. Defaults to `portrait`.
-  * `tableAutoSize`: If `true`, tables in the HTML will be automatically sized. Defaults to `true`.
-  * `removeExtraBlanks`: If `true`, attempts to remove extra blank spaces. Defaults to `false`.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>html</code></td><td>The HTML content to be converted.</td><td>string</td></tr><tr><td><code>options</code></td><td>Conversion and page settings. See below.</td><td>object</td></tr></tbody></table>
 
-Example
+Available options:
+
+<table><thead><tr><th width="180">Option</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>format</code></td><td>The page size. Defaults to <code>A4</code>.</td><td>string</td></tr><tr><td><code>orientation</code></td><td>The page orientation, <code>portrait</code> (default) or <code>landscape</code>.</td><td>string</td></tr><tr><td><code>tableAutoSize</code></td><td>If <code>true</code>, tables in the HTML are automatically sized. Defaults to <code>true</code>.</td><td>boolean</td></tr><tr><td><code>removeExtraBlanks</code></td><td>If <code>true</code>, attempts to remove extra blank spaces. Defaults to <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+### Example
 
 ```yaml
 # html
@@ -106,21 +91,18 @@ Example
 orientation: landscape
 ```
 
-Output
+### Output
 
 A FileJSON object representing the newly created PDF file.
 
-***
+## `createPdfBufferFromHtml`
 
-### createPdfBufferFromHtml
+Converts an HTML string into a PDF, returning it as a base64-encoded string.
 
-Converts an HTML string into a PDF, returning it as a base64 encoded string.
+### Parameters
 
-Parameters
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>html</code></td><td>The HTML content string.</td><td>string</td></tr><tr><td><code>options</code></td><td>Conversion and page settings, see <a href="#createpdffilefromhtml"><code>createPdfFileFromHtml</code></a>.</td><td>object</td></tr></tbody></table>
 
-* `html`: The HTML content string.
-* `options`: An optional object for conversion and page settings (see `createPdfFileFromHtml` for details).
+### Output
 
-Output
-
-A base64 encoded string representing the generated PDF document.
+A base64-encoded string representing the generated PDF document.
