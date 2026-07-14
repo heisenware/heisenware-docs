@@ -1,18 +1,22 @@
 # Circular buffer
 
-The circular buffer class implements a ring buffer: A fixed-size data structure used as if it were connected end-to-end. When the buffer is full, new elements overwrite the oldest ones. Use it for streams of data where only the most recent items matter, like the last 100 values for a live chart.
+The circular buffer class implements a fixed-size ring buffer structure where elements connect end-to-end. When the buffer reaches capacity, new items overwrite the oldest entries. Use this class for streaming data where only the most recent values matter, such as maintaining the last 100 data points for a live chart widget.
 
-The data lives in memory only; it is not saved to disk.
+Data remains in memory only and does not persist to disk. This class requires an instance. The code class name is `CircularBuffer`.
 
 ### `create`
 
-Creates a buffer instance with a specified capacity.
+Creates a new circular buffer instance with a specified capacity.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>capacity</code></td><td>The maximum number of items the buffer can hold. Default <code>100</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>capacity</code></td><td>The maximum number of items the buffer can hold. Default 100.</td><td>integer</td></tr></tbody></table>
 
-#### Example
+#### Output
+
+Returns the circular buffer instance.
+
+#### Examples
 
 ```yaml
 # capacity
@@ -21,13 +25,17 @@ Creates a buffer instance with a specified capacity.
 
 ### `pushBack`
 
-Adds an item to the back (end) of the buffer. This is the most common push operation. If the buffer is full, the item at the front is overwritten.
+Adds an item to the back of the buffer. If the buffer is full, the item at the front is overwritten.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The value or object to add.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The value or object to add.</td><td>any</td></tr></tbody></table>
 
-#### Example
+#### Output
+
+Returns nothing.
+
+#### Examples
 
 ```yaml
 # value
@@ -40,7 +48,11 @@ Adds an item to the front of the buffer. If the buffer is full, the item at the 
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The value or object to add.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The value or object to add.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 ### `popFront`
 
@@ -52,11 +64,11 @@ None.
 
 #### Output
 
-The value that was at the front of the buffer.
+Returns the removed value or object.
 
 ### `popBack`
 
-Removes and returns the item from the back (end) of the buffer.
+Removes and returns the item from the back of the buffer.
 
 #### Parameters
 
@@ -64,11 +76,11 @@ None.
 
 #### Output
 
-The value that was at the back of the buffer.
+Returns the removed value or object.
 
 ### `getBuffer`
 
-Returns all items currently in the buffer as a standard array.
+Returns all items currently inside the buffer as a standard array, ordered from front to back.
 
 #### Parameters
 
@@ -76,7 +88,7 @@ None.
 
 #### Output
 
-An array containing all stored values, ordered from front to back.
+Returns an array containing all stored values.
 
 ### `getSize`
 
@@ -88,11 +100,11 @@ None.
 
 #### Output
 
-An integer with the current size of the buffer.
+Returns the current item count as an integer.
 
 ### `getCapacity`
 
-Returns the maximum number of items the buffer can hold, as specified during creation.
+Returns the maximum number of items the buffer can hold.
 
 #### Parameters
 
@@ -100,11 +112,11 @@ None.
 
 #### Output
 
-An integer with the capacity of the buffer.
+Returns the buffer capacity configuration as an integer.
 
 ### `clear`
 
-Empties the buffer, removing all of its contents.
+Removes all contents and empties the buffer.
 
 #### Parameters
 
@@ -116,4 +128,18 @@ Returns `true`.
 
 ### `delete`
 
-Removes the instance. All buffered data is lost.
+Removes the circular buffer instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns nothing.
+
+{% hint style="danger" %}
+#### Permanent data loss
+
+Deleting removes the instance configuration. All buffered data is permanently lost.
+{% endhint %}
