@@ -50,16 +50,19 @@ Add the widgets for the form in the Frontend Builder.
 {% stepper %}
 {% step %}
 #### Add the form widget
+
 Drag a [form](../../app-builder/build-frontend/widgets/input-widgets/form.md) widget onto the canvas. Configure its fields so the field names exactly match your database columns (`customerName`, `projectID`, `acceptanceDate`, `comments`). Define custom, user-friendly labels for each field.
 {% endstep %}
 
 {% step %}
 #### Add the signature widget
+
 Drag a [signature](../../app-builder/build-frontend/widgets/input-widgets/signature.md) widget onto the canvas and place it below the form.
 {% endstep %}
 
 {% step %}
 #### Add the submit button
+
 Drag a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget below the signature widget and change its label setting to Submit.
 {% endstep %}
 {% endstepper %}
@@ -70,13 +73,13 @@ Drag a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.
 
 Switch to the Backend Builder to define the flow when a user clicks the Submit button.
 
-{% stepper %}
-{% step %}
-#### Format the signature
-The signature widget outputs a raw base64 string. Use an extension node to format it as an object for the database.
+
+
+\#### Format the signature The signature widget outputs a raw base64 string. Use an extension node to format it as an object for the database.
 
 1. Drag a [data store](../../app-builder/build-backend/functions/storage/data-store.md) function onto the canvas and connect the output of the signature widget to its input.
 2. Add a [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) extension node after the data store function. Configure it with the following expression to wrap the signature string in an object:
 
 ```javascript
 {signature: x}
+```

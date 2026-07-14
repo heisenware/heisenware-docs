@@ -139,16 +139,16 @@
 ## Tutorials
 
 * [App templates](tutorials/app-templates/README.md)
-  * [Your First Heisenware App](tutorials/app-templates/your-first-heisenware-app.md)
-  * [CRUD Operations with the Data Grid](tutorials/app-templates/crud-operations-with-the-data-grid.md)
-  * [Automating PDF Reports](tutorials/app-templates/automating-pdf-reports.md)
-  * [Minimal Photo Upload](tutorials/app-templates/minimal-photo-upload.md)
-  * [Write images from app to local server](tutorials/app-templates/write-images-from-app-to-local-server.md)
+  * [Your first Heisenware App](tutorials/app-templates/your-first-heisenware-app.md)
+  * [CRUD operations with the data grid](tutorials/app-templates/crud-operations-with-the-data-grid.md)
+  * [Automating PDF reports](tutorials/app-templates/automating-pdf-reports.md)
+  * [Minimal photo upload](tutorials/app-templates/minimal-photo-upload.md)
+  * [Write images from App to server](tutorials/app-templates/write-images-from-app-to-local-server.md)
 * [Integration guides](tutorials/integration-guides/README.md)
   * [Connectivity setup guide](tutorials/integration-guides/connectivity-setup-guide.md)
   * [Connect from Arduino via MQTT](tutorials/integration-guides/connect-from-arduino-via-mqtt.md)
   * [Connect an External MQTT Client](tutorials/integration-guides/connect-an-external-mqtt-client.md)
-  * [Connect Heidenhain CNC with OPC UA Support](tutorials/integration-guides/connect-heidenhain-cnc-with-opc-ua-support.md)
+  * [Connect Heidenhain CNC with OPC UA support](tutorials/integration-guides/connect-heidenhain-cnc-with-opc-ua-support.md)
 * [On-premise installation](tutorials/on-premise-installation.md)
 
 ## Advanced
