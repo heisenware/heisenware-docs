@@ -2,40 +2,37 @@
 description: 12 Oct 2025
 ---
 
-# v88 — Almost forever
+# v88 – Almost forever
 
 <div align="left"><figure><img src="../.gitbook/assets/image (49).png" alt="" width="285"><figcaption></figcaption></figure></div>
 
 ## Features
 
-* [Timeseries Database](../app-builder/build-backend/functions/storage/timeseries-database.md): table management, direct writes, auto downsampling
-* [Photo widget ](../app-builder/build-frontend/widgets/input-widgets/photo.md)with selectable resolution
-* [Extensions](../app-builder/build-backend/functions/extensions/) to power-up apps with any custom code running cloud or on-prem
-* [Industrial Blockchain](../app-builder/build-backend/functions/extensions/industrial-blockchain.md) Extension
-* [Process Simulator](../app-builder/build-backend/functions/extensions/process-simulations.md) Extension
-* [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) Extension
-* One-command [on-premise installer](../tutorials/on-premise-installation.md)
-* [Docker Agent](/broken/pages/G4PEtPdTe3j9GRx6sLC6) allowing to run all our connectors on any hardware supporting Docker
-* The [File Uploader](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget can now directly upload photos as well
-* The [Barcode](../app-builder/build-frontend/widgets/input-widgets/barcode-qr.md) widget can now scan several barcodes at once with the camera staying opened
+* Added table management, direct writes, and automatic downsampling to the [timeseries database](../app-builder/build-backend/functions/storage/timeseries-database.md).
+* Configure photo resolution directly within the [photo](../app-builder/build-frontend/widgets/input-widgets/photo.md) widget.
+* Introduced [Docker Extensions](../app-builder/build-backend/functions/extensions.md) to run custom code for your Apps, both in the cloud or on-premises. (Made the [Industrial Blockchain](../app-builder/build-backend/functions/extensions/industrial-blockchain.md), [Process Simulations](../app-builder/build-backend/functions/extensions/process-simulations.md), and [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) Docker Extensions.
+* Added a single-command script for [on-premise installation](../tutorials/on-premise-installation.md).
+* Released the [Docker Agent](../app-builder/build-backend/agents/docker-agent.md), which lets you run connectors on any hardware that supports Docker.
+* The [upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget now directly supports uploading photos.
+* The [barcode / QR](../app-builder/build-frontend/widgets/input-widgets/barcode-qr.md) widget now supports scanning multiple barcodes sequentially without closing the camera preview.
 
 ## Fixes
 
-* [File Uploader ](../app-builder/build-frontend/widgets/input-widgets/upload.md)when using buffer storage and multi-file upload option.
-* Fixed different behavior between App Builder preview and production apps with respect to widget positioning when using `Top Bar` or `Top Bar and Bottom Tabs` in the [App Settings](../app-builder/build-frontend/page-explorer.md#in-app-navigation). Production app widgets rendered to low in `y` (by the height of the top bar).
-* Fixed broken `fontSize` setting for the [Button](../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget
-* When duplicating [Sections](/broken/pages/9vKr7mso7EW9dCDhxV7Y#organizing-logic-with-sections-grouping), all previously existing widget links get cleaned which wasn't the case before
-* Fixed [onJsonMessage](../app-builder/build-backend/functions/connectors/mqtt-client.md#onjsonmessage) and [onStringMessage](../app-builder/build-backend/functions/connectors/mqtt-client.md#onstringmessage) not behaving correctly when used multiple times
-* Fixed dependency issue (realizing serial data transfer) causing immediate crash of the [Modbus](../app-builder/build-backend/functions/connectors/modbus.md) Agent
-* Fixed missing arrow when linking event handler items to inputs in the flow builder
-* Fixed loading correct initial page when app is using programmatic page switch
+* Fixed multi-file upload behavior in the [upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget when utilizing buffer storage.
+* Resolved a positioning discrepancy between the [App Builder](../app-builder/overview.md) preview and [Production Apps](../production-apps/overview.md) when using the Top Bar or Top Bar and Bottom Tabs in the [Page Explorer](../app-builder/build-frontend/page-explorer.md). Widgets in Production Apps no longer render too low on the y-axis.
+* Fixed a bug where the `fontSize` property on the [button](../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget did not apply correctly.
+* Duplicating canvas sections now correctly clears all pre-existing widget connections.
+* Fixed an issue where the `onJsonMessage` and `onStringMessage` events inside the [MQTT Client](../app-builder/build-backend/functions/connectors/mqtt-client.md) connector failed to trigger correctly when registered multiple times.
+* Resolved a dependency issue with serial data transfer that caused the [Modbus](../app-builder/build-backend/functions/connectors/modbus.md) connector to crash on startup.
+* Fixed a rendering bug in the [Backend Builder](../app-builder/build-backend.md) flow interface where the connection arrow was missing when linking event handlers to function inputs.
+* Fixed an issue where the incorrect initial page loaded when an App used programmatic page switching.
 
 ## Changes
 
-* Renamed input widget [File](../app-builder/build-frontend/widgets/input-widgets/upload.md) to `Upload`. Added fresh categories for filtering uploaded data, most importantly added `Photo`
-* Activating event flow from backend only in test mode
+* Renamed the File input widget to [Upload](../app-builder/build-frontend/widgets/input-widgets/upload.md), and added new filtering categories including photo.
+* Configured backend event flows to only activate when running in test mode.
 
-## Breaking Changes
+## Breaking changes
 
-* When `Top Bar` or `Top Bar and Bottom Tabs` widget in the App Builder need to be re-positioned to result in the same production app (see [Fixes](v88-almost-forever.md#fixes))
-* The [`readXlsx`](../app-builder/build-backend/functions/connectors/file-i-o.md#readxlsx) function does not anymore return an object with the sheet name as sole key, but in cases of a single sheet returns the array of rows directly
+* If your App uses a top bar or top bar and bottom tabs navigation layout, you may need to adjust your widget positions o align with the new layout rendering (see [Fixes](#fixes)).
+* The `readXlsx` function in the [File I/O](../app-builder/build-backend/functions/connectors/file-i-o.md) connector no longer returns an object containing the sheet name as the sole key when processing a single sheet. It now returns the array of rows directly.
