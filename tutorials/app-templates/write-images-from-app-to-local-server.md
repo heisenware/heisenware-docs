@@ -1,58 +1,47 @@
----
-description: >-
-  This tutorial explains how to share images taken inside an app with a local
-  server or PC using the photo widget, an agent and the writeBufferToFile
-  Function.
----
+# Minimal photo upload
 
-# Write images from app to local server
+This tutorial explains how to build an App that lets users scan a barcode as an order number, add a name, attach up to 10 photos, and send them directly to a local computer.
+
+## Frontend
+
+<div align="left"><figure><img src="../../.gitbook/assets/image (38).png" alt="" width="284"><figcaption></figcaption></figure></div>
+
+The frontend contains a [form](../../app-builder/build-frontend/widgets/input-widgets/form.md) widget to enter an order ID – which users can also scan using the [barcode / QR](../../app-builder/build-frontend/widgets/input-widgets/barcode-qr.md) widget – and a name. Users can then [upload](../../app-builder/build-frontend/widgets/input-widgets/upload.md) photos from their device gallery or file system, or take them directly using their camera. Once all information is available, the Save to server [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget becomes active and transfers the files to the local computer running a [Native Agent](../../app-builder/build-backend/agents/native-agent.md) with the [File I/O](../../app-builder/build-backend/functions/connectors/file-i-o.md) connector.
+
+## Backend
+
+<figure><img src="../../.gitbook/assets/image (36).png" alt=""><figcaption></figcaption></figure>
+
+* **Form auto-fill:** The optional barcode scan uses the `autofill` command to populate the form directly.
+* **Form data receipt:** An [`echo`](../../app-builder/build-backend/functions/utilities/data-processing.md#echo) function receives the form data. This lets the flow trigger [on page load](../../app-builder/build-backend/functions.md#trigger-sources) to run the connected validation routine, which enables the upload button.
+* **Photo retrieval:** A second [`echo`](../../app-builder/build-backend/functions/utilities/data-processing.md#echo) function retrieves the uploaded photos. This function uses the `File` storage option because camera images can exceed 5 MB, and buffers perform poorly on large files.
+* **Live validation:** The [`combine`](../../app-builder/build-backend/functions/utilities/data-processing.md#combine) function performs live validation whenever the form or photo inputs change. It uses the `toggle` command to enable or disable the button based on the [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) extension node logic.
+* **Sequential file processing:** Drag the [`readFileToBuffer`](../../app-builder/build-backend/functions/connectors/file-i-o.md#readfiletobuffer) function from your [Native Agent](../../app-builder/build-backend/agents/native-agent.md) onto the canvas. It receives an array of file paths from the [upload](../../app-builder/build-frontend/widgets/input-widgets/upload.md) widget and [processes them sequentially](../../app-builder/build-backend/functions.md#sequential-processing-of-arrays-looping) into a base64 buffer on the backend to write them to the `image` directory. The system interprets the relative path starting from the Native Agent's executable directory.
+* **UI feedback:** To improve the user experience, the button shows a loading animation until the files arrive on the server. Trigger the `done` event on the [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget to stop this animation and clear the widgets after a successful upload.
+
+## Step-by-step guide
 
 {% stepper %}
 {% step %}
-### Prepare file connector agent
+#### Download the template
 
-Download an [agent](../../app-builder/build-backend/agents/) with file connector and start the agent on the server or PC you want to store the images.
+Download the `minimal-photo-uploader.hwt` template file to your local computer.
+
+[Download the template](https://downloads.heisenware.cloud/public/templates%2Fminimal-photo-uploader.hwt)
 {% endstep %}
 
 {% step %}
-### Add photo widget and configure it
+#### Install the Native Agent
 
-Pick the [photo widget](../../app-builder/build-frontend/widgets/input-widgets/photo.md) from input widgets and place it into the user interface of your app. Switch the storage type of the photo widget from file to buffer.
+Install a [Native Agent](../../app-builder/build-backend/agents/native-agent.md) on the computer that will receive the uploaded photos. Ensure you configure and activate the [File I/O](../../app-builder/build-backend/functions/connectors/file-i-o.md) connector.
 {% endstep %}
 
 {% step %}
-### Prepare the photo data
+#### Import the template
 
-Use a memory Function to get images from the photo widget by connecting the photo widget with the memory Functions input. Also, add two [JSONata modifiers](/broken/pages/eybgxpp69PNrUW2fHZ4X#jsonata-modifier) to the memory to extract the base64 buffer string and prepare the path and file name.
-
-These are the JSONata snippets to use in your modifiers. Replace the path from the example with the path on your server where you want to store the images. All backslashes must be doubled to be working with JSONata syntax.
-
-```
-'C:\\Users\\gerri\\Desktop\\Demo\\Images' & '\\' & name & '.jpeg'
-```
-
-```
-base64
-```
-
-The final memory Function, after taking a photo in test mode, must look like in the screenshot below.
-
-<figure><img src="../../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-
-{% step %}
-### Configure the writeBufferToFile Function
-
-Find the [writeBufferToFile](../../app-builder/build-backend/functions/connectors/file-i-o.md#writebuffertofile) Function inside your file connector agent that should have appeared in the Function Explorer and drag it onto the canvas.
-
-Connect the path Modifier with the `filePath` input and the buffer Modifier with the `buffer` input.
-
-<figure><img src="../../.gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-
-{% step %}
-### Configure a Trigger
-
-Configure the writeBufferToFile Function Trigger as needed. For example, you could use the `on input change` trigger.
+1. Open the **App Builder**.
+2. Click the tags menu in the [Top Bar](../../app-builder/deploy-and-maintain.md).
+3. Select **Import** and upload the `minimal-photo-uploader.hwt` file.
+4. Select the imported template and confirm the import.
 {% endstep %}
 {% endstepper %}
