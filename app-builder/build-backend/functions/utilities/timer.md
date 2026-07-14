@@ -1,22 +1,28 @@
 # Timer
 
-With a timer, you introduce countdowns into your flows, map the countdown progress to a custom range, and react to tick and timeup events. A static helper also formats human-readable relative time differences.
+The timer class introduces countdowns into your flows, maps countdown progress to a custom range, and reacts to ticks and finished countdowns. It also provides a static utility function to format human-readable relative time differences. This class requires an instance for countdown features. The code class name is `Timer`.
 
 ## Static functions
 
-These functions work without creating an instance.
+Use these functions without creating an instance.
 
 ### `getRelativeTime`
 
-Calculates a human-readable, relative time string between a given time and the present moment, for example "5 minutes ago" or "in 2 hours".
+Calculates a human-readable, relative time string between a specified time and the current moment (for example, "3 hours ago" or "in 2 years").
 
 #### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="140">Type</th></tr></thead><tbody><tr><td><code>time</code></td><td>The time input, either as a Unix timestamp (in milliseconds) or an ISO 8601 date string.</td><td>number or string</td></tr><tr><td><code>options</code></td><td><code>locale</code>: the locale to use for formatting, for example <code>en</code> or <code>de</code>. Defaults to <code>en</code>.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>time</code></td><td></td><td>The time input, either as a Unix timestamp in milliseconds or an ISO 8601 date string.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>locale</code></td><td>The locale code to use for formatting (for example, <code>en</code> or <code>de</code>). Default <code>en</code>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the relative time as a string.
 
 #### Examples
 
-Time in the past:
+**Past time**
+
+Formats a date string from the past.
 
 ```yaml
 # time
@@ -25,32 +31,34 @@ Time in the past:
 locale: en-US
 ```
 
-Output: A string like `3 hours ago`.
+Output: `3 hours ago`
 
-Time in the future:
+**Future time**
+
+Formats a Unix timestamp in the future.
 
 ```yaml
 # time
 1752367200000
 ```
 
-Output: A string like `in 2 years`.
+Output: `in 2 years`
 
 ## Instance functions
 
-You must create an instance to use the countdown features.
+You must create an instance to use these functions.
 
 ### `create`
 
-Creates a new timer instance with a specified duration and progress range.
+Creates a new timer instance with a configured duration and progress range.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td>Settings for the timer. See below.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The value representing the start of the timer progress. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The value representing the end of the timer progress. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>totalSeconds</code></td><td>The total duration of the countdown in seconds. Default 10.</td><td>integer</td></tr><tr><td></td><td><code>autoStop</code></td><td>Automatically stops the timer when it reaches zero. If <code>false</code>, the timer keeps running and its state becomes <code>overdue</code>. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
 
-Available options:
+#### Output
 
-<table><thead><tr><th width="150">Option</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>min</code></td><td>The value representing the start of the timer's progress. Defaults to <code>0</code>.</td><td>number</td></tr><tr><td><code>max</code></td><td>The value representing the end of the timer's progress. Defaults to <code>100</code>.</td><td>number</td></tr><tr><td><code>totalSeconds</code></td><td>The total duration of the countdown in seconds. Defaults to <code>10</code>.</td><td>number</td></tr><tr><td><code>autoStop</code></td><td>If <code>true</code>, the timer automatically stops when it reaches zero. If <code>false</code>, it keeps running and its state becomes <code>overdue</code>. Defaults to <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+Returns the timer instance.
 
 #### Example
 
@@ -63,51 +71,75 @@ max: 100
 
 ### `setTotalSeconds`
 
-Sets or changes the total duration of the timer.
+Sets the total duration of the timer.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>seconds</code></td><td>The total number of seconds for the countdown.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>seconds</code></td><td>The total number of seconds for the countdown.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 ### `getTotalSeconds`
 
-Retrieves the total duration of the timer in seconds.
+Returns the total duration of the timer in seconds.
+
+#### Parameters
+
+None.
 
 #### Output
 
-An integer representing the total seconds.
+Returns the total seconds as an integer.
 
 ### `getSecondsLeft`
 
-Retrieves the remaining seconds on the timer. When the timer is stopped, this returns the total seconds.
+Returns the remaining seconds on the timer. When the timer is stopped, this returns the total seconds configuration.
+
+#### Parameters
+
+None.
 
 #### Output
 
-An integer representing the seconds left.
+Returns the seconds left as an integer.
 
 ### `getProgress`
 
-Retrieves the current progress of the timer, mapped to the `min` and `max` range defined at creation. When the timer is stopped, this returns `min`.
+Returns the current progress of the timer, mapped to the defined `min` and `max` range. When the timer is stopped, this returns the `min` value.
+
+#### Parameters
+
+None.
 
 #### Output
 
-A number representing the current progress.
+Returns the progress value as an integer.
 
 ### `getState`
 
-Retrieves the current state of the timer.
+Returns the current state of the timer.
+
+#### Parameters
+
+None.
 
 #### Output
 
-A string representing the current state:
-
-* `stopped`: The timer is not running.
-* `started`: The countdown is running.
-* `overdue`: The time is up, but the timer keeps running because `autoStop` is `false`.
+Returns a string representing the state: `stopped`, `started`, or `overdue`.
 
 ### `start`
 
-Starts the countdown timer. If called while a delayed `stop` is pending, it cancels the stop command.
+Starts the countdown timer. If called while a delayed stop is pending, this action cancels the stop command.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns nothing.
 
 ### `stop`
 
@@ -115,43 +147,61 @@ Stops the timer.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>waitingPeriod</code></td><td>An optional delay in milliseconds before the timer actually stops. Defaults to <code>0</code>. If <code>start</code> is called during this period, the stop command is cancelled. Further <code>stop</code> calls during this period are ignored.</td><td>number</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>waitingPeriod</code></td><td>An optional delay in milliseconds before the timer stops. If you call <code>start</code> during this period, the stop command is cancelled. Subsequent <code>stop</code> calls during this period are ignored. Default 0.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 #### Example
 
-Delayed stop:
+**Delayed stop**
+
+Stops the timer after a 5-second delay.
 
 ```yaml
 # waitingPeriod
 5000
 ```
 
+## Event listeners
+
+These functions let you subscribe callbacks to the timer instance events.
+
 ### `onTick`
 
-Registers a handler (listener) that is triggered every second while the timer is running. The listener receives two arguments: `secondsLeft` and `currentProgress`.
+Subscribes to the tick event. The callback runs every second while the timer is running.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function to execute on each tick.</td><td>function</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: <code>secondsLeft</code> (integer) and <code>currentProgress</code> (integer).</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 #### Example
 
 ```yaml
-# listener
+# callback
 <callback>
 ```
 
 ### `onTimeup`
 
-Registers a handler that is triggered once when the countdown reaches zero. The listener receives one argument: the Unix timestamp (in milliseconds) of when the time was up.
+Subscribes to the timeup event. The callback runs once when the countdown reaches zero.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function to execute when the time is up.</td><td>function</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the Unix timestamp in milliseconds when the countdown finished.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 #### Example
 
 ```yaml
-# listener
+# callback
 <callback>
 ```
