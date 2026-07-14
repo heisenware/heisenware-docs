@@ -1,6 +1,6 @@
 # Relational database
 
-The relational database connector communicates with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, and more) without writing raw SQL. You can define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
+The relational database connector communicates with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, Oracle, and Snowflake) without writing raw SQL. You can define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
 
 ## Quick start: the internal PostgreSQL instance
 
@@ -31,7 +31,7 @@ Skip this step for `internal-postgres`. It is already instantiated for you.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect (such as <code>postgres</code> or <code>mysql</code>).</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default is the standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Uses SSL for the connection when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Logs all SQL statements when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>Skips the database introspection for instant startup when <code>true</code>. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect: <code>postgres</code>, <code>mysql</code>, <code>mariadb</code>, <code>mssql</code>, <code>sqlite</code>, <code>oracle</code>, or <code>snowflake</code>.</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default is the standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Uses SSL for the connection when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Logs all SQL statements when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>Skips the database introspection for instant startup when <code>true</code>. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
 Right-click the `options` input and mark it as a secret to mask the password.
@@ -127,7 +127,7 @@ When running inside an Agent, the database disables the automatic `createdAt` an
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code>, <code>date</code>, <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code>, <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. Replaces the deprecated <code>trackHistory</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code> (alias <code>bool</code>), <code>date</code>, <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code>, <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. Replaces the deprecated <code>trackHistory</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
 Use English and camelCase for table and field names (such as `firstName` or `dateOfBirth`). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the `jsonb` type for JSON data: it is more efficient and allows nested properties in filter expressions.
@@ -270,20 +270,21 @@ Compound conditions combine conditions with `'and'` or `'or'`:
 
 Available operators:
 
-| Operator(s)         | Description                                        | Example value              |
-| ------------------- | -------------------------------------------------- | -------------------------- |
-| `=`, `eq`, `is`     | Equals                                             | `'John'` or `100`          |
-| `<>`, `ne`, `isnot` | Not equals                                         | `'John'` or `100`          |
-| `>`, `gt`           | Greater than                                       | `99`                       |
-| `>=`, `gte`         | Greater than or equal to                           | `100`                      |
-| `<`, `lt`           | Less than                                          | `100`                      |
-| `<=`, `lte`         | Less than or equal to                              | `100`                      |
-| `contains`          | String field contains the value (case-insensitive) | `'oh'` (matches 'John')    |
-| `notcontains`       | String field does not contain the value            | `'Peter'`                  |
-| `startswith`        | String field starts with the value                 | `'J'`                      |
-| `endswith`          | String field ends with the value                   | `'oe'` (matches 'Doe')     |
-| `between`           | Value is between two values in an array            | `[18, 30]` or `['A', 'D']` |
-| `in`                | Value is one of several possibilities in an array  | `['active', 'pending']`    |
+| Operator(s)                              | Description                                        | Example value              |
+| ---------------------------------------- | -------------------------------------------------- | -------------------------- |
+| `=`, `==`, `eq`, `equals`, `is`          | Equals                                             | `'John'` or `100`          |
+| `<>`, `!=`, `neq`, `notequals`, `isnot`  | Not equals                                         | `'John'` or `100`          |
+| `>`, `gt`                                | Greater than                                       | `99`                       |
+| `>=`, `gte`                              | Greater than or equal to                           | `100`                      |
+| `<`, `lt`                                | Less than                                          | `100`                      |
+| `<=`, `lte`                              | Less than or equal to                              | `100`                      |
+| `contains`                               | String field contains the value (case-insensitive) | `'oh'` (matches 'John')    |
+| `notcontains`                            | String field does not contain the value            | `'Peter'`                  |
+| `startswith`                             | String field starts with the value                 | `'J'`                      |
+| `endswith`                               | String field ends with the value                   | `'oe'` (matches 'Doe')     |
+| `between`                                | Value is between two values in an array            | `[18, 30]` or `['A', 'D']` |
+| `notbetween`                             | Value is not between two values in an array        | `[18, 30]` or `['A', 'D']` |
+| `in`                                     | Value is one of several possibilities in an array  | `['active', 'pending']`    |
 
 #### Examples
 
@@ -733,6 +734,10 @@ Links existing records. Use this to create links for a many-to-many relationship
 #### Parameters
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>sourceTable</code></td><td>The name of the source table.</td><td>string</td></tr><tr><td><code>sourceId</code></td><td>The ID of the row in the source table.</td><td>string</td></tr><tr><td><code>targetTable</code></td><td>The name of the target table.</td><td>string</td></tr><tr><td><code>targetId</code></td><td>The ID or an array of IDs of the row(s) in the target table.</td><td>string or array</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the association succeeds.
 
 ### Relationship strategies and examples
 
