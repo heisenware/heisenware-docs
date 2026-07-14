@@ -14,7 +14,7 @@ This guide uses a modern TNC7-based machine as an example, but the steps apply t
 
 {% stepper %}
 {% step %}
-#### Allow SSH access via password
+### Allow SSH access via password
 Temporarily enable password-based SSH access on your CNC machine.
 
 1. Open the settings (**Einstellungen**) menu on the controller.
@@ -39,7 +39,7 @@ Temporarily enable password-based SSH access on your CNC machine.
 {% endstep %}
 
 {% step %}
-#### Download and start a Native Agent
+### Download and start a Native Agent
 Open the App Builder on a computer that has network access to your CNC machine.
 
 1. Click the create Agent icon in the **Function Explorer** panel (see [Agents](../../app-builder/build-backend/agents.md)).
@@ -57,7 +57,7 @@ The system compiles a custom Native Agent executable to embed the specific secur
 Wait for the download dialog to open automatically in your browser.
 
 {% hint style="info" %}
-#### Re-downloading Agents
+### Re-downloading Agents
 You can access and download your compiled Native Agent executables at any time from the `native-agents` directory inside the [File Explorer](../../app-builder/build-backend/file-explorer.md).
 {% endhint %}
 
@@ -74,13 +74,13 @@ You can access and download your compiled Native Agent executables at any time f
 6. Once the terminal window opens and displays a broker connection status of `[OK]`, verify that your new Agent appears online in the **Function Explorer** panel of the **App Builder**.
 
 {% hint style="info" %}
-#### Troubleshooting Agent connectivity
+### Troubleshooting Agent connectivity
 If the Agent fails to connect and repeatedly loops through reconnection attempts, verify that your network firewall permits outbound traffic on port `8883` to establish the secure MQTTS connection.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-#### Set up certificates for the OPC UA connection
+### Set up certificates for the OPC UA connection
 To establish a secure connection to the Heidenhain OPC UA server, you must exchange certificates between the CNC machine and your host computer.
 
 Our Native Agent automates this file exchange. You only need to perform these configuration steps once per machine.
@@ -101,7 +101,7 @@ Our Native Agent automates this file exchange. You only need to perform these co
 {% endstep %}
 
 {% step %}
-#### Run the OPC UA Assistant on the machine
+### Run the OPC UA Assistant on the machine
 Open the OPC UA Assistant interface on your CNC machine.
 
 1. On a TNC7 controller, navigate to **Settings** (**Einstellungen**) > **Network/Remote Access** (**Netzwerk/Fernzugriff**) > **OPC UA** > **OPC UA Connection Assistant** (**OPC UA Verbindungsassistent**). On a TNC640 controller, open this menu via the Heros interface.
@@ -146,7 +146,7 @@ Open the OPC UA Assistant interface on your CNC machine.
 {% endstep %}
 
 {% step %}
-#### Connect to the OPC UA server
+### Connect to the OPC UA server
 Return to the **App Builder** in your browser to finalize the integration.
 
 1. Trigger the `finalizeOpcUaAssistant` function on your canvas. It should return a success message.
