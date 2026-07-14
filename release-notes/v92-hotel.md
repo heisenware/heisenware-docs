@@ -29,6 +29,7 @@ description: 12 July 2026
 * **Enhanced [chart](../app-builder/build-frontend/widgets/display-widgets/chart.md) interaction**: Improved zoom and pan responsiveness for the chart widget.
 * **Upgraded MQTT broker**: Updated and optimized the internal MQTT broker configuration to increase overall message resilience.
 * **Application-wide client caching**: Implemented client-side caching to drastically reduce browser reload times for deployed [Apps](../production-apps/overview.md).
+* **Restructured Product Docs**: Completely rebuilt and restructured the [Product Docs](../welcome.md).
 
 ## Fixes
 
