@@ -1,57 +1,63 @@
 # Counter
 
-With a counter, you maintain a numerical value, for example a production count or sequence number. You can increment, decrement, and reset the count. You must create an instance of the counter to use it.
+The counter class manages a numerical value, such as a production count or sequence number. Increment, decrement, or reset the count as needed. This class requires an instance.
 
-## `create`
+### `create`
 
-Creates a new counter instance, optionally starting from an initial value.
+Constructs a new counter instance.
 
-### Parameters
+#### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>initial</code></td><td>The number to start counting from. Defaults to <code>0</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>initial</code></td><td>The starting number for the count. Default 0.</td><td>integer</td></tr></tbody></table>
 
-### Example
+#### Output
 
-```yaml
-# initial
-10
-```
+Returns the counter instance.
 
-## `increment`
+### `increment`
 
-Increments the counter's value by one.
+Increments the counter value by one.
 
-### Output
+#### Parameters
 
-The new, incremented count as an integer.
+None.
 
-## `decrement`
+#### Output
 
-Decrements the counter's value by one.
+Returns the new, incremented count as an integer.
 
-### Output
+### `decrement`
 
-The new, decremented count as an integer.
+Decrements the counter value by one.
 
-## `reset`
+#### Parameters
 
-Resets the counter back to its initial value. You can optionally provide a new initial value to use for this and all future resets.
+None.
 
-### Parameters
+#### Output
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>initial</code></td><td>An optional new initial value.</td><td>integer</td></tr></tbody></table>
+Returns the new, decremented count as an integer.
 
-### Example
+### `reset`
 
-```yaml
-# initial
-100
-```
+Resets the counter back to its initial value.
 
-## `getCount`
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>initial</code></td><td>An optional new initial value for this and subsequent resets.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the reset count as an integer.
+
+### `getCount`
 
 Retrieves the current value of the counter.
 
-### Output
+#### Parameters
 
-The current count as an integer.
+None.
+
+#### Output
+
+Returns the current count as an integer.
