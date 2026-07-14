@@ -1,123 +1,163 @@
+---
+description: >-
+  This page introduces the core concepts, philosophy, and architectural
+  components of the open-source VRPC framework.
+---
+
 # VRPC
 
-{% hint style="success" %}
-VRPC is the engine behind Heisenware. All communication including frontend-backend, inter-microservice and also to external entities is based on VRPC. Understanding this protocol allows you to integrate any code to the Heisenware platform easily.
+{% hint style="info" %}
+#### The engine behind Heisenware
+VRPC (Variadic Remote Procedure Call) is the core communication engine of the Heisenware platform (see [High-level architecture](high-level-architecture.md)). All interactions – including frontend-to-backend logic, inter-microservice calls, and remote edge device connections – rely on VRPC. Understanding this protocol lets you easily integrate custom code into the Heisenware platform.
 {% endhint %}
 
-Welcome to VRPC! This document will introduce you to the core concepts of the VRPC framework, its philosophy, and its main components. By the end, you'll have a solid understanding of how VRPC works and how it can help you build powerful, distributed systems with ease.
+VRPC is an asynchronous Remote Procedure Call (RPC) framework that makes your existing code available over a network. We license VRPC under the permissive MIT open-source license. 
 
-We licensed VRPC with the most flexible open-source licence MIT. Feel free to do with it whatever is useful for you. Its available for different programming languages:
+The framework supports multiple programming languages:
+* **Node.js:** [vrpc-js](https://github.com/heisenware/vrpc-js)
+* **C++:** [vrpc-hpp](https://github.com/heisenware/vrpc-hpp)
+* **Arduino:** [vrpc-arduino](https://github.com/heisenware/vrpc-arduino)
+* **React:** [vrpc-react](https://github.com/heisenware/vrpc-react)
+* **Python:** [vrpc-py](https://github.com/heisenware/vrpc-py)
+* **R:** [vrpc-r](https://github.com/heisenware/vrpc-r)
 
-* Node.js: [https://github.com/heisenware/vrpc-js](https://github.com/heisenware/vrpc-js)
-* C++: [https://github.com/heisenware/vrpc-hpp](https://github.com/heisenware/vrpc-hpp)
-* Arduino: [https://github.com/heisenware/vrpc-arduino](https://github.com/heisenware/vrpc-arduino)
-* React: [https://github.com/heisenware/vrpc-react](https://github.com/heisenware/vrpc-react)
-* Python: [https://github.com/heisenware/vrpc-py](https://github.com/heisenware/vrpc-py)
-* R: [https://github.com/heisenware/vrpc-r](https://github.com/heisenware/vrpc-r)
-
-Usage is designed for programmers with sound knowledge in the respective programming language. Maturity, feature completeness and support follows the order of the above list.
+For more details on the libraries, visit the official [VRPC website](https://vrpc.io).
 
 ## What is VRPC?
 
-VRPC is an asynchronous **Remote Procedure Call (RPC)** framework designed to make your existing code available over the network with minimal effort.
+VRPC lets you expose classes written in Python, Node.js, or C++ to remote clients without modifying their internal business logic. Remote clients interact with these classes as if they were running locally in their own process, even if the code runs on a physical machine elsewhere.
 
-At its core, it allows you to take almost any class you've written in Python, Node.js or C++ (more is coming) and, without modifying its internal logic, expose its methods to remote clients. These clients can then interact with your class as if it were running locally in their own process, even if it's actually on a different machine halfway across the world.
+The core philosophy of VRPC is non-intrusive integration. You focus on writing clean, well-defined business logic classes first. VRPC then adapts this code for network communication rather than forcing you to structure your application around network constraints.
 
-The key philosophy behind VRPC is to be **non-intrusive**. You write your business logic first, focusing on creating clean, well-defined classes. Then, VRPC adapts this code for network communication, rather than forcing you to structure your code around the network from the start.
+## Core concepts
 
-## The Main Concepts
-
-VRPC's architecture is composed of a few key components that work together. Understanding their roles is key to using the framework effectively.
+The VRPC architecture consists of a few decoupled, cooperating components:
 
 ### VrpcAdapter
+The `VrpcAdapter` is the introspection engine. It analyzes your classes using runtime reflection, reads their public methods and JSDoc documentation, and automatically generates the network communication adapter. This layer abstracts away the complexity of wrapping your code for network access.
 
-The **Adapter** is the heart of VRPC. It's the component that works directly with your code. Using language features like introspection, the Adapter can analyze a class, understand its methods and documentation, and prepare it to be called remotely. This is the magic that makes VRPC non-intrusive; the Adapter does the heavy lifting of wrapping your code for network access.
-
-<figure><img src="../../.gitbook/assets/image (40).png" alt=""><figcaption><p>Visual example of how the Adapter works, here shown for C++</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (40).png" alt="Visual representation of the VRPC Adapter code generation flow"><figcaption></figcaption></figure>
 
 ### VrpcAgent
-
-An **Agent** is a server-side process that hosts your adapted code. You run an Agent on the machine where your code lives. The Agent's job is to:
-
-* Connect to a central message broker.
-* Tell the network which classes and instances it has available.
-* Listen for incoming RPC requests from clients.
-* Use the `VrpcAdapter` to execute the requested method on the correct instance.
-* Send the result (or any errors) back to the client.
+A `VrpcAgent` is a server-side process that hosts your adapted code. You run a `VrpcAgent` on the machine where your code executes (see [Agents](../app-builder/build-backend/agents.md)). The `VrpcAgent` manages the following tasks:
+* Connects to a central MQTT message broker using an outbound-only connection.
+* Advertises its available classes and active instances to the network.
+* Listens for incoming RPC requests from clients.
+* Uses the `VrpcAdapter` to execute the requested methods on the target instances.
+* Returns results or execution errors to the calling client.
 
 ### VrpcClient
+The `VrpcClient` library connects backend services, frontends, or external systems to the central message broker to interact with your remote code. Its primary job is to generate dynamic proxy objects.
 
-The **Client** is the library your end-users or other services will use to interact with your remote code. The Client connects to the same message broker as the Agents. Its primary job is to create **Proxy Objects**.
+### Proxy objects
+When you request a client to instantiate or retrieve a remote class, it returns a local proxy object rather than the actual object. This proxy object exposes the exact same methods and signatures as the underlying class. 
 
-### Proxy Objects
+Calling a method on the proxy object executes the following sequence:
+1. The client packages the method call and arguments into a standard message envelope.
+2. The client transmits the message across the broker to the hosting `VrpcAgent`.
+3. The `VrpcAgent` executes the real method on the target instance.
+4. The broker routes the serialized return value or execution error back to your proxy method.
 
-This is the main abstraction you'll work with on the client-side. When you ask a `VrpcClient` to create or get an instance of a remote class, it doesn't return the real object. Instead, it gives you a **Proxy**.
+This makes remote interaction function exactly like a local asynchronous operation.
 
-This Proxy Object looks and feels exactly like the original class—it has the same methods. When you call a method on the proxy, however, the call is transparently:
+### The MQTT broker
+Heisenware uses MQTT as the core communication backbone for VRPC. The broker acts as a central router for all control and data traffic:
+* Agents and clients connect to the broker using outbound-only connections. They do not require knowledge of each other's IP addresses or network locations.
+* Outbound-only connections enable seamless NAT traversal, eliminating the need to open incoming firewall ports or manage complex VPN configurations.
+* Agents publish metadata about their available classes, and clients subscribe to these catalogs dynamically.
 
-1. Packaged into a message.
-2. Sent over the network to the correct Agent.
-3. Executed on the real object.
-4. The result is sent back and returned from your proxy method call.
+This decoupled design ensures high scalability and resilience. You can start or stop Agents anywhere on your network; as long as they register with the same broker, clients discover and use them automatically.
 
-This makes remote interaction feel completely natural and local.
+<figure><img src="../../.gitbook/assets/image (41).png" alt="High-level architecture block diagram showing VrpcAdapter, VrpcAgent, and VrpcClient layers"><figcaption></figcaption></figure>
 
-### The MQTT Broker
+## Typical workflow
 
-The final piece of the puzzle is the **MQTT Broker**. VRPC uses MQTT as its communication backbone. The broker is a central server that acts like a post office for messages.
-
-* Agents and Clients both connect to the broker.
-* They **do not need to know each other's IP addresses**.
-* Agents publish information about the classes they have, and clients subscribe to this information.
-* When a client makes an RPC call, the message goes to the broker, which then routes it to the correct agent.
-
-This decoupled architecture makes the system incredibly flexible and scalable. You can add or remove agents anywhere on the network, and as long as they connect to the same broker, clients will be able to discover and use them automatically.
-
-<figure><img src="../../.gitbook/assets/image (41).png" alt=""><figcaption><p>Visual example of the three main components: Adapter, Agent and Client</p></figcaption></figure>
-
-## A Typical Workflow
-
-Putting it all together, a typical workflow looks like this:
+Follow this sequence to write, register, and execute custom code over the network:
 
 {% stepper %}
 {% step %}
-**Write Your Code**
+### Write your business logic
+Create a standard class using your preferred language (such as Node.js or Python). Do not write any API routers, network loops, or serialization code.
 
-You create a standard Python or Node.js class (e.g., `class MyService`).
+```javascript
+// calculator.js
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+}
+module.exports = Calculator;
+```
 {% endstep %}
 
 {% step %}
-**Adapt It**
+### Register with the adapter
+Register your class with the `VrpcAdapter` to automatically analyze its methods and expose its metadata.
 
-In your server-side code, you tell the `VrpcAdapter` about your class using `VrpcAdapter.register(MyService)`.
+```javascript
+const { VrpcAdapter } = require('vrpc');
+const Calculator = require('./calculator');
+
+VrpcAdapter.register(Calculator);
+```
 {% endstep %}
 
 {% step %}
-**Run an Agent**
+### Run the Agent
+Instantiate and start a `VrpcAgent` on the host machine to establish a secure connection to the central broker and advertise your class.
 
-You start a `VrpcAgent`, which connects to the broker and announces that it offers the `MyService` class.
+```javascript
+const { VrpcAgent } = require('vrpc');
+
+async function main() {
+  const agent = new VrpcAgent({
+    domain: 'your-domain',
+    agent: 'calculator-agent',
+    broker: 'mqtts://broker.heisenware.cloud'
+  });
+  await agent.start();
+}
+main();
+```
 {% endstep %}
 
 {% step %}
-**Connect a Client**
+### Connect the client
+Configure a `VrpcClient` in your frontend App or backend service to connect to the same broker and domain.
 
-In another application, you start a `VrpcClient` and connect it to the same broker.
+```javascript
+const { VrpcClient } = require('vrpc');
+
+async function main() {
+  const client = new VrpcClient({
+    domain: 'your-domain',
+    broker: 'mqtts://broker.heisenware.cloud'
+  });
+  await client.connect();
+}
+main();
+```
 {% endstep %}
 
 {% step %}
-**Create a Proxy**
+### Create the proxy instance
+Use the client to instantiate a remote instance. The client automatically resolves which Agent hosts the class and maps its methods dynamically.
 
-You ask the client to create an instance: `proxy = await client.create({ className: 'MyService' })`.
+```javascript
+const calculatorProxy = await client.create({
+  className: 'Calculator',
+  instance: 'my-calculator'
+});
+```
 {% endstep %}
 
 {% step %}
-**Call a Method**
+### Execute remote methods
+Call methods on the proxy object exactly like a local object. All network packaging, remote execution, and output serialization occur asynchronously under the hood.
 
-You use the proxy just like a local object: `result = await proxy.some_method(42)`.
+```javascript
+const result = await calculatorProxy.add(10, 20);
+console.log(result); // Outputs: 30
+```
 {% endstep %}
 {% endstepper %}
-
-Behind the scenes, VRPC handles all the networking, serialization, and message routing required to make this simple interaction possible.
-
-
-
