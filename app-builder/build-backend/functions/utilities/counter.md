@@ -1,69 +1,57 @@
 # Counter
 
-The `Counter` class is a simple utility for maintaining a numerical count. It allows for incrementing, decrementing, and resetting the count.
+With a counter, you maintain a numerical value, for example a production count or sequence number. You can increment, decrement, and reset the count. You must create an instance of the counter to use it.
 
-You must create an instance of the counter to use it.
-
-***
-
-### create
+## `create`
 
 Creates a new counter instance, optionally starting from an initial value.
 
-Parameters
+### Parameters
 
-* `initial`: The number to start counting from. Defaults to `0`.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>initial</code></td><td>The number to start counting from. Defaults to <code>0</code>.</td><td>integer</td></tr></tbody></table>
 
-Example
+### Example
 
 ```yaml
 # initial
 10
 ```
 
-***
-
-### increment
+## `increment`
 
 Increments the counter's value by one.
 
-Output
+### Output
 
-The new, incremented count.
+The new, incremented count as an integer.
 
-***
-
-### decrement
+## `decrement`
 
 Decrements the counter's value by one.
 
-Output
+### Output
 
-The new, decremented count.
+The new, decremented count as an integer.
 
-***
-
-### reset
+## `reset`
 
 Resets the counter back to its initial value. You can optionally provide a new initial value to use for this and all future resets.
 
-Parameters
+### Parameters
 
-* `initial`: An optional new initial value.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>initial</code></td><td>An optional new initial value.</td><td>integer</td></tr></tbody></table>
 
-Example: Reset to a new initial value
+### Example
 
 ```yaml
 # initial
 100
 ```
 
-***
-
-### getCount
+## `getCount`
 
 Retrieves the current value of the counter.
 
-Output
+### Output
 
-An integer representing the current count.
+The current count as an integer.
