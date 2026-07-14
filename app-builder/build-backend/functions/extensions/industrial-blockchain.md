@@ -1,187 +1,209 @@
 # Industrial Blockchain
 
-The `SafeUrChain` class provides an interface for interacting with a **SafeUrChain blockchain node**. This specialized blockchain is designed to create a secure, immutable ledger for tracking data across manufacturing and supply chain networks.
+The industrial blockchain extension provides an interface to interact with a SafeUrChain blockchain node. This specialized ledger creates a secure, immutable record for tracking data across manufacturing and supply chain networks. 
 
-This class provides methods for managing the lifecycle of a node (starting and stopping it) and for performing the two fundamental blockchain operations: writing new data as transactions and reading existing data from the chain.
+Use this class to manage the node lifecycle, execute transaction writes, and query the ledger. This class requires an instance for ledger operations, but provides static functions for node process management. The code class name is `SafeUrChain`.
 
-## Static Node Management
+## Node management
 
-These functions are used to control the blockchain node process itself.
+Use these static functions to control the local blockchain node process.
 
-### **startNode**
+### `startNode`
 
-Starts a SafeUrChain node on the local system with a specified configuration.
+Starts a SafeUrChain node on the local system.
 
-**Parameters**
+#### Parameters
 
-* `options`: An object for configuring the node's behavior.
-  * `network`: The name of the network to connect to. Defaults to `'hsmw'`.
-  * `index`: A unique index number for this node within the network. Defaults to `0`.
-  * `validator`: If `true`, this node will participate in validating and creating new blocks. Defaults to `true`.
-  * `validators`: An array of node IDs that are trusted validators in the network.
-  * `storeTransactionsFrom`: An array of node ID patterns from which to store transactions.
-  * `singleNode`: If `true`, configures the node to run in a standalone mode. Defaults to `true`.
-  * `blockTimeInMs`: The target time, in milliseconds, between new blocks. Defaults to `5000`.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>network</code></td><td>The name of the network to join. Default <code>'hsmw'</code>.</td><td>string</td></tr><tr><td></td><td><code>index</code></td><td>A unique identification index for this node in the network. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>validator</code></td><td>Enables participation in block validation and creation. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>validators</code></td><td>An array of trusted validator node IDs.</td><td>array</td></tr><tr><td></td><td><code>storeTransactionsFrom</code></td><td>An array of node ID patterns from which to store transactions.</td><td>array</td></tr><tr><td></td><td><code>singleNode</code></td><td>Runs the node in standalone isolation mode. Default <code>true</code>.</td><td>boolean</td></tr><tr><td></td><td><code>blockTimeInMs</code></td><td>The target duration between block creations in milliseconds. Default 5000.</td><td>integer</td></tr></tbody></table>
 
-**Example: Start a single validator node for a local test network**
+#### Output
 
-```
+Returns nothing.
+
+#### Examples
+
+**Start a single validator node**
+
+Configures and starts a standalone test network node.
+
+```yaml
 # options
 network: local-test
 index: 0
 validator: true
 validators: ['local-test-0']
 singleNode: true
-
 ```
 
-### **stopNode**
+### `stopNode`
 
-Stops the currently running `suc-node` process.
+Stops the currently running node process.
 
-### **isNodeRunning**
+#### Parameters
 
-Checks if a `suc-node` process is currently running on the system.
+None.
 
-Output
+#### Output
 
-Returns true if the node is running, false otherwise.
+Returns nothing.
 
-### create
+### `isNodeRunning`
 
-Creates a new instance of the SafeUrChain API client, connecting it to a specific node's GraphQL API endpoint.
+Checks whether the node process is active on the system.
 
-**Parameters**
+#### Parameters
 
-* `apiUrl`: The URL of the SafeUrChain node's API. If not provided, it defaults to an internal address based on environment variables.
+None.
 
-**Example**
+#### Output
 
-```
+Returns `true` if the node runs, or `false` if it is stopped.
+
+### `create`
+
+Initializes a new SafeUrChain API client instance connected to a specific node's GraphQL endpoint.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>apiUrl</code></td><td>The endpoint URL of the SafeUrChain node API. Falls back to internal environment variables if omitted.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the API client instance.
+
+#### Examples
+
+```yaml
 # apiUrl
 http://localhost:7878
-
 ```
 
-## Writing and Reading Data
+## Writing and reading data
 
-These are the primary functions for interacting with the blockchain's data ledger.
+Use these member functions to interact with the ledger.
 
-**write**
+### `write`
 
-Writes a single data point as a new transaction to the blockchain. The data is timestamped and associated with a "measurement" and optional tags for easy retrieval.
+Writes a data point as a new transaction to the blockchain. The ledger timestamps the entry and indexes it under a designated measurement string.
 
-**Parameters**
+#### Parameters
 
-* `measurement`: A string name for the category of data being recorded (e.g., `'temperature_sensor'`).
-* `data`: The data to be written. This can be any JSON-serializable value (number, string, object, array).
-* `tags`: An optional object of key-value pairs to add metadata for filtering (e.g., `{ machineId: 'M-500', location: 'hall_B' }`).
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The category identifier for the recorded data.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data payload to record. Accepts any JSON-serializable value.</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value metadata pairs used for filtering queries.</td><td>object</td></tr></tbody></table>
 
-**Example: Write a temperature reading from a specific machine**
+#### Output
 
-```
+Returns a string containing the unique transaction hash.
+
+#### Examples
+
+**Record a temperature reading**
+
+```yaml
 # measurement
-'temperature'
+temperature
 # data
 25.5
 # tags
-{
-  "machineId": "M-500",
-  "unit": "celsius"
-}
-
+machineId: M-500
+unit: celsius
 ```
 
-Output
+### `read`
 
-A string representing the unique hash of the new transaction.
+Queries data from the blockchain by measurement category and filters the results using metadata tags.
 
-### **read**
+#### Parameters
 
-Reads data from the blockchain by querying for a measurement and optionally filtering by tags.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement category to query.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>tags</code></td><td>Key-value pairs to filter records. Matches entries containing all specified tags.</td><td>object</td></tr></tbody></table>
 
-**Parameters**
+#### Output
 
-* `measurement`: The name of the measurement to read.
-* `options`: An object for filtering the data.
-  * `tags`: An object of key-value pairs to filter by. The query will return only data points that match all specified tags.
+Returns an array of data point objects sorted chronologically by date. Each object includes the value, timestamp, transaction hash, and block height.
 
-**Example: Read all temperature readings from machine M-500**
+#### Examples
 
-```
+**Query machine logs**
+
+```yaml
 # measurement
-'temperature'
+temperature
 # options
-tags: {
-  "machineId": "M-500"
-}
-
+tags:
+  machineId: M-500
 ```
 
-Output
+### `getDataPoint`
 
-An array of data point objects, sorted by date. Each object includes the original value, the date, and blockchain-specific information like its transactionHash and blockHeight.
+Retrieves a single data point directly using its unique transaction hash.
 
-### **getDataPoint**
+#### Parameters
 
-Retrieves a single, specific data point directly using its unique transaction hash.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>transactionHash</code></td><td>The targeted unique transaction hash identifier.</td><td>string</td></tr></tbody></table>
 
-**Parameters**
+#### Output
 
-* `transactionHash`: The hash of the transaction, returned by the `write` function.
+Returns an object containing the stored payload value, timestamp, block hash, and block height.
 
-Output
+## Blockchain inspection
 
-An object containing the stored value, the date of the transaction, and its blockHash and blockHeight.
+Use these functions to monitor blockchain structure and health status.
 
-## Blockchain Inspection
+### `getTopBlock`
 
-These functions allow you to inspect the structure and status of the blockchain itself.
+Retrieves the latest block added to the chain.
 
-### **getTopBlock**
+#### Parameters
 
-Retrieves the most recently added block (the "top" of the chain).
+None.
 
-Output
+#### Output
 
-An object containing the block's digest (its hash) and header information like timestamp, height, and the hash of the previousDigest.
+Returns an object containing the block digest hash and header info (including height, timestamp, and previous digest hash).
 
-### **getBlockAtHeight**
+### `getBlockAtHeight`
 
-Retrieves a specific block by its height (its sequential number in the chain).
+Retrieves a specific block using its sequential block height number.
 
-**Parameters**
+#### Parameters
 
-* `height`: The block number to retrieve.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>height</code></td><td>The block sequence number.</td><td>integer</td></tr></tbody></table>
 
-### **getBlocks**
+#### Output
 
-Retrieves a range of blocks.
+Returns the block object details.
 
-**Parameters**
+### `getBlocks`
 
-* `from`: The starting block height.
-* `to`: The ending block height.
+Retrieves a sequence range of blocks.
 
-### **getHashesInBlock**
+#### Parameters
 
-Retrieves a list of all transaction hashes contained within a specific block.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>from</code></td><td>The starting sequential block height.</td><td>integer</td></tr><tr><td><code>to</code></td><td>The ending sequential block height.</td><td>integer</td></tr></tbody></table>
 
-**Parameters**
+#### Output
 
-* `block`: The hash (digest) of the block to inspect.
+Returns an array of block objects.
 
-### **getTelemetry**
+### `getHashesInBlock`
 
-Retrieves network telemetry information about the node, such as its connection status and information about its peers.
+Retrieves all transaction hashes wrapped inside a specific block.
 
-## Understanding Blockchain and SafeUrChain
+#### Parameters Levin=
 
-At its core, a blockchain is a decentralized, distributed, and immutable digital ledger. Let's break that down:
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>block</code></td><td>The target block digest hash string.</td><td>string</td></tr></tbody></table>
 
-* Decentralized/Distributed: Instead of being stored in one central location (like a traditional database), the ledger is copied and spread across a network of computers (called nodes).
-* Immutable: Once a record (a "block") is added to the chain, it is cryptographically linked to the previous one. This makes it extremely difficult to alter or tamper with past transactions without being detected, creating a secure and trustworthy record of events.
+#### Output
 
-The SafeUrChain project leverages this technology to enhance security and traceability in manufacturing and supply chain networks. In modern production, a single product relies on many suppliers. A security breach or a manipulated component at any point in this chain can have significant consequences. SafeUrChain aims to solve this by creating a secure, shared ledger where production and product data can be recorded and exchanged between different participants (suppliers, logistics, manufacturers) in a way that is tamper-proof and verifiable by all.
+Returns an array of transaction hash strings.
 
-Please read [here](https://edocs.tib.eu/files/e01fb24/1881568261.pdf) for more details.
+### `getTelemetry`
+
+Retrieves network health information, node connection statuses, and active peer details.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns a network telemetry status object.
