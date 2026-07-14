@@ -2,33 +2,32 @@
 description: 7 Dec 2025
 ---
 
-# v89 — Look & feel
+# v89 – Look and feel
 
 <div align="left"><figure><img src="../.gitbook/assets/image (39).png" alt="" width="375"><figcaption></figcaption></figure></div>
 
 ## Features
 
-* Full [App Builder](https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/app-builder) UI revamp
-  * Upgrade of the internal engine (MUI)
-  * Very many changes to overall UI/UX improving usability
-  * Context aware popup menu for widget settings
-  * Context aware popup menu for input configurations
-  * WASD / QE control on the Backend Builder
-* New Card detail view in [Data Grid](../app-builder/build-frontend/widgets/display-widgets/data-grid.md)
-* New App Builder wide [settings](/broken/pages/pDUoPQsd9ZlFq3cdGCx6) menu to individualize behavior
-* Possibility to add [annotations](/broken/pages/9vKr7mso7EW9dCDhxV7Y#annotation) anywhere in the Backend Builder
-* Possibility to create invitation links from within an app (see [Users](../app-builder/build-backend/functions/utilities/users.md) class)
-* Professional installer tools for [Native Agents](../app-builder/build-backend/agents/)
-* New [Cron](../app-builder/build-backend/functions/utilities/cron.md) class allowing to schedule tasks
-* New [AllenBradley](../app-builder/build-backend/functions/connectors/allen-bradley.md) PLC connector
-* New [Stopwatch](../app-builder/build-backend/functions/utilities/stopwatch.md) class
-* New [Raspberry Pi](/broken/pages/GoyYK9mvJLsWmbTmzpyp) class allowing to read/write GPIOs
-* New [GPIO Counter](../app-builder/build-backend/functions/connectors/gpio-counter.md) class
+* Redesigned the entire [App Builder](../app-builder/overview.md) user interface:
+  * Upgraded the internal rendering engine to MUI.
+  * Implemented numerous UI/UX enhancements to improve usability across the platform.
+  * Added context-aware popup menus for configuring widget settings.
+  * Added context-aware popup menus for configuring function input settings.
+  * Enabled viewport navigation using WASD and QE keyboard controls in the [Backend Builder](../app-builder/build-backend.md).
+* Added a card detail view option in the [data grid](../app-builder/build-frontend/widgets/display-widgets/data-grid.md) widget.
+* Added a global settings menu in the [App Builder](../app-builder/overview.md) to customize workspace and editor behavior.
+* Added support for placing annotations anywhere on the canvas in the [Backend Builder](../app-builder/build-backend.md).
+* Added support for programmatically generating user invitation links inside your Apps using the [users](../app-builder/build-backend/functions/utilities/users.md) utility class.
+* Released professional installation tools for [Native Agents](../app-builder/build-backend/agents/native-agent.md).
+* Added the [cron](../app-builder/build-backend/functions/utilities/cron.md) utility class to schedule recurring tasks.
+* Introduced the [Allen-Bradley](../app-builder/build-backend/functions/connectors/allen-bradley.md) PLC connector.
+* Added the [stopwatch](../app-builder/build-backend/functions/utilities/stopwatch.md) utility class.
+* Introduced the [GPIO Counter](../app-builder/build-backend/functions/connectors/gpio-counter.md) connector to count digital pulses and track cycle intervals with Raspberry Pi.
 
 ## Fixes
 
-* The `createFolder` function of the [File](../app-builder/build-backend/functions/connectors/file-i-o.md) widget now recursively creates directories and does not fail on existing ones
-* The [Zebra Connector](../app-builder/build-backend/functions/connectors/zebra-rfid-iot.md) got a lot of fixes solving issues and incompatibilities with the latest Zebra Hardware
-* UI and drag / drop inaccuracies
-* Issues with Google Login on self-built apps
-* Hardening and performance improvments on timeseries database
+* The `createFolder` function of the [File I/O](../app-builder/build-backend/functions/connectors/file-i-o.md) connector now recursively creates directories and no longer fails if a directory already exists.
+* Resolved multiple bugs and hardware incompatibilities in the [Zebra RFID IoT](../app-builder/build-backend/functions/connectors/zebra-rfid-iot.md) connector to fully support recent Zebra hardware releases.
+* Fixed several user interface alignment and drag-and-drop inaccuracies inside the canvas.
+* Resolved Google authentication failures occurring on self-built [Production Apps](../production-apps/overview.md).
+* Improved performance and security hardening of the built-in [timeseries database](../app-builder/build-backend/functions/storage/timeseries-database.md).
