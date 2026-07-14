@@ -1,26 +1,176 @@
 # RAG AI
 
-RAG, or Retrieval-Augmented Generation, is a technique that makes Large Language Models (LLMs) smarter and more reliable by connecting them to your specific data. Instead of just answering from its general pre-trained knowledge, the AI first retrieves relevant information from a custom knowledge base. It then uses this retrieved information as context to generate a more accurate, fact-based answer.
+Retrieval-Augmented Generation (RAG) optimizes Large Language Model execution by pairing prompts with contextual documentation assets pulled from a local vector knowledge store. This process structures answers around validated company records or manuals, mitigating text hallucinations.
 
-{% hint style="warning" %}
-When loading this extension you MUST provide the environment variable `OPENAI_API_KEY` .
-
-![](<../../../../../.gitbook/assets/image (43).png>)
+{% hint style="danger" %}
+#### Environment configuration requirement
+You must append a valid `OPENAI_API_KEY` configuration argument inside environment parameters when launching this module.
 {% endhint %}
 
-## How We Implement RAG
+The RAG AI extension bundles two distinct classes to manage information retrieval pipelines: `KnowledgeBase` and `ChatWithData`.
 
-The [`KnowledgeBase`](knowledge-base.md) and [`ChatWithData`](chat-with-data.md) classes work together to create a complete RAG system:
+## Knowledge base
 
-* `KnowledgeBase` is the "Retrieval" component. Its job is to be the library or "textbook" for the AI. You use `KnowledgeBase.addKnowledge()` to ingest your documents (PDFs, websites, text files, etc.). The class automatically processes this information, breaks it down, and stores it in a way that makes it easy to search for relevant passages.
-* `ChatWithData` is the "Augmented Generation" component. This is the expert who consults the library before speaking. When you ask a question using `executePrompt()`, it first queries the `KnowledgeBase` to find the most relevant text snippets related to your question. It then combines your original question with this retrieved context and asks the AI to formulate an answer based _specifically_ on the provided information.
+The `KnowledgeBase` class processes documentation, splits text blocks into searchable segments, generates vector tokens, and tracks items inside an embedded database. This class provides static functions only and does not require an instance. The code class name is `KnowledgeBase`.
 
-This process grounds the AI's responses in your data, drastically reducing the chances of it making things up (hallucinating) and allowing it to answer questions about private or very recent information.
+### `addKnowledge`
 
-## Common Problems Solved
+Parses external source documents and indexes content assets into a specific target store category.
 
-With these two classes, you can build powerful AI applications to solve several common problems:
+#### Parameters
 
-* **Customer Support Chatbots**: Create a knowledge base from your product manuals, FAQs, and support articles. The chatbot can then provide instant, accurate answers to customer questions.
-* **Internal Knowledge Portals**: Ingest company policies, technical documentation, or project histories. Employees can then ask natural language questions like, "What is our company's vacation policy?" or "How do I set up the new development environment?"
-* **Document Analysis and Q\&A**: Load a long and complex document (like a legal contract, financial report, or scientific paper) into the `KnowledgeBase`. You can then ask specific questions about its contents, such as "What are the key risks mentioned in this report?" or "Summarize the termination clause of this contract."
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td></td><td>The name of the target vector destination store.</td><td>string</td></tr><tr><td><code>knowledge</code></td><td></td><td>The raw content source. Accepts web URLs, text strings, structured JSON, or absolute local file system path strings (supporting <code>pdf</code>, <code>txt</code>, <code>csv</code>, <code>docx</code>, <code>pptx</code>, or <code>html</code>).</td><td>any</td></tr><tr><td><code>name</code></td><td></td><td>Unique source identifier label used for subsequent document management.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>chunkSize</code></td><td>The maximum character size limit per single split segment. Default 2000.</td><td>integer</td></tr><tr><td></td><td><code>chunkOverlap</code></td><td>Character padding overlap length shared between adjacent data segments. Default 400.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` upon successful storage indexing completion.
+
+#### Examples
+
+**Index a file path**
+
+```yaml
+# store
+product-manuals
+# knowledge
+/path/to/files/ATR7000-manual.pdf
+# name
+ATR7000 Manual
+```
+
+**Index a website target**
+
+```yaml
+# store
+company-info
+# knowledge
+[https://heisenware.com/about-us](https://heisenware.com/about-us)
+# name
+About Heisenware
+```
+
+### `similaritySearch`
+
+Queries a selected destination store to extract the closest matching textual segments.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The targeted vector destination store name.</td><td>string</td></tr><tr><td><code>query</code></td><td>The query prompt text string to match.</td><td>string</td></tr><tr><td><code>nDocs</code></td><td>Maximum quantity limit of relevant text segments to return.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns an array containing the matched documentation text segment objects.
+
+### `getDocuments`
+
+Lists user-indexed document sources registered inside a specific vector store.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The targeted vector store name.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns an array tracking document information records.
+
+### `deleteDocument`
+
+Purges text segment elements tied to a specific named resource asset source from the store.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The targeted vector store name.</td><td>string</td></tr><tr><td><code>name</code></td><td>The asset reference name identifier assigned during ingestion.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
+
+### `getMetaData`
+
+Returns inner vector store metadata details.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td></td><td>The targeted vector store name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>showData</code></td><td>Appends raw segment text content payloads into debug profiles. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns an array containing chunk configuration descriptors.
+
+### `reset`
+
+Wipes all entries out of a chosen target vector destination store.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The name of the target store to empty.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
+
+---
+
+## Chat with data
+
+The `ChatWithData` class initiates interactive conversational bots linked to designated `KnowledgeBase` targets. It runs automated retrieval queries to supply language models with context. This class requires an instance. The code class name is `ChatWithData`.
+
+### `create`
+
+Instantiates an interactive AI chatbot conversation channel linked to an explicit source documentation store.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>storeName</code></td><td></td><td>The target vector documentation store name to reference.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>openAIApiKey</code></td><td>Your direct OpenAI credential key.</td><td>string</td></tr><tr><td></td><td><code>temperature</code></td><td>Creativity randomness variation constraint factor from 0.0 to 1.0. Default 0.1.</td><td>number</td></tr><tr><td></td><td><code>modelName</code></td><td>The deployment engine model string (such as <code>gpt-4</code>).</td><td>string</td></tr><tr><td></td><td><code>systemMessage</code></td><td>The primary system instruction rule context defining chatbot behaviors.</td><td>string</td></tr><tr><td></td><td><code>nDocuments</code></td><td>Max document count parameters passed per single query context block. Default 4.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the chatbot instance channel wrapper object.
+
+#### Examples
+
+```yaml
+# storeName
+product-manuals
+# options
+temperature: 0.2
+systemMessage: You are an expert on our products. Answer queries using the manuals.
+```
+
+### `executePrompt`
+
+Dispatches prompts through conversational workflows and returns model responses.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>question</code></td><td>The direct user question string payload.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns an execution payload detailing chat status updates.
+
+Example payload:
+```json
+{
+  "answer": "The maximum operating temperature threshold is 85°C.",
+  "history": [],
+  "sourceDocs": [],
+  "tokenUsage": {
+    "promptTokens": 1024,
+    "completionTokens": 56,
+    "totalTokens": 1080
+  }
+}
+```
+
+### `addKnowledge`
+
+Passes knowledge content inputs directly down into the associated storage mapping space.
+
+### `resetConversion`
+
+Wipes conversational thread history to clear past conversation memories. Store contents remain untouched.
+
+### `reinitialize`
+
+Reconfigures bot operational settings and parameters dynamically.
