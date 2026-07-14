@@ -38,4 +38,3 @@ Each execution generates a new document and populates the entire template in a s
 See the step-by-step tutorial to build a dynamic acceptance report from start to finish:
 
 [From Data to Document: Automating PDF Reports](../../../../tutorials/app-templates/automating-pdf-reports.md)
-```─
