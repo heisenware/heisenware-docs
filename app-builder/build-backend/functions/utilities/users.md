@@ -1,20 +1,14 @@
 # Users
 
-The `Users` class provides a service for managing users and applications within our authentication system.
+With the users utility, you manage users and App access programmatically: list available Apps, look up a specific App, list the users registered for an App, and generate invitation links to onboard users dynamically. All functions are static, so you do not need to create an instance.
 
-It is designed to help you programmatically manage access to your applications. You can use it to retrieve lists of available apps, get details about specific apps, list all users registered to an app, and—most importantly—generate access or invitation links to onboard users dynamically.
+## `getApplications`
 
-Since all methods in this class are static, you do not need to create an instance of it.
+Retrieves a list of all available Apps. This is useful for getting an overview or for populating selection lists in your UI.
 
-## Static Functions
+### Output
 
-### getApplications
-
-Retrieves a list of all applications currently configured in your tenant. This is useful for getting an overview of available apps or for populating selection lists in your UI.
-
-Output
-
-An array of application objects.
+An array of App objects.
 
 ```json
 [
@@ -34,24 +28,24 @@ An array of application objects.
 ]
 ```
 
-### getApplication
+## `getApplication`
 
-Retrieves details for a single, specific application. You can look up the application using its name or its ID.
+Retrieves details for a single, specific App.
 
-Parameters
+### Parameters
 
-* `app`: The name or the unique ID (UUID) of the application you want to find.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>app</code></td><td>The name, short id, or long id (UUID) of the App.</td><td>string</td></tr></tbody></table>
 
-Example
+### Example
 
 ```yaml
 # app
 My Dashboard App
 ```
 
-Output
+### Output
 
-A single application object, or `null` if not found.
+A single App object, or `null` if not found.
 
 ```json
 {
@@ -62,22 +56,22 @@ A single application object, or `null` if not found.
 }
 ```
 
-### getUsers
+## `getUsers`
 
-Retrieves a list of all users who are currently registered for a specific application.
+Retrieves a list of all users who are currently registered for a specific App.
 
-Parameters
+### Parameters
 
-* `app`: The name or the unique ID (UUID) of the application.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>app</code></td><td>The name, short id, or long id (UUID) of the App.</td><td>string</td></tr></tbody></table>
 
-Example
+### Example
 
 ```yaml
 # app
 Shopfloor Monitor
 ```
 
-Output
+### Output
 
 An array of user objects containing their profile and status details.
 
@@ -89,6 +83,8 @@ An array of user objects containing their profile and status details.
     "firstName": "Jane",
     "lastName": "Doe",
     "userId": "a1b2c3...",
+    "picture": "https://...",
+    "authenticationToken": "kY7x...",
     "roles": ["admin"],
     "lastLogin": 1678886400000,
     "active": true,
@@ -105,22 +101,21 @@ An array of user objects containing their profile and status details.
 ]
 ```
 
-### createAccessLink
+## `createAccessLink`
 
-Generates a specialized link that allows a user to access a specific application. This function is "smart" and handles three different scenarios automatically:
+Generates a link that allows a user to access a specific App. The function handles three scenarios automatically:
 
-1. New User: If the email doesn't exist, it creates the user and generates an invite link.
-2. Existing User (Password Reset Required): If the user exists but hasn't set a password (or needs to change it), it generates an invite link that prompts them to set a password.
-3. Existing User (Active): If the user exists and has a valid password, it generates a standard login link.
+1. New user: If the email doesn't exist, it creates the user and generates an invite link.
+2. Existing user without a password: If the user exists but hasn't set a password (or needs to change it), it generates an invite link that prompts them to set one.
+3. Existing active user: If the user exists and has a valid password, it generates a standard login link.
 
-This is the primary function used for building "Invite User" features in your apps.
+This is the primary function for building "invite user" features in your Apps.
 
-Parameters
+### Parameters
 
-* `app`: The name or unique ID of the application the user should access.
-* `email`: The email address of the user.
+<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>app</code></td><td>The name, short id, or long id (UUID) of the App the user should access.</td><td>string</td></tr><tr><td><code>email</code></td><td>The email address of the user.</td><td>string</td></tr></tbody></table>
 
-Example
+### Example
 
 ```yaml
 # app
@@ -129,15 +124,22 @@ My Dashboard App
 new.employee@company.com
 ```
 
-Output
+### Output
 
 An object containing the generated link and the user's status.
 
 ```json
 {
-  "link": "https://acme.heisenware.cloud/app/acme.default/387c2...?changePasswordId=...",
+  "link": "https://acme.heisenware.cloud/app/acme.default/387c2.../invite/?changePasswordId=...",
+  "login": "https://acme.heisenware.cloud/app/acme.default/387c2...",
   "userStatus": "created",
   "registrationStatus": "created",
   "passwordSetupRequired": true
 }
 ```
+
+* `link`: The link to send to the user. Depending on the scenario, this is an invite link or the standard login link.
+* `login`: The standard login link of the App, always included.
+* `userStatus`: `created` when a new user was created, `existed` otherwise.
+* `registrationStatus`: `created` when the user was newly registered for the App, `existed` otherwise.
+* `passwordSetupRequired`: `true` when the user still has to set a password via the invite link.
