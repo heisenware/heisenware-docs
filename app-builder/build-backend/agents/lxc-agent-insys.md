@@ -72,7 +72,7 @@ HW_PASSWORD=<your-vrpc-password>
 HW_AGENT_ID=<a-unique-id-for-this-gateway>
 ```
 
-Generate the username and password by creating a [VRPC integration](../../../app-manager/integrations-inbound-connections.md#vrpc-client) in the App Manager.
+Generate the username and password by creating a [VRPC integration](../../../app-manager/inbound-integrations.md) in the App Manager.
 {% endstep %}
 
 {% step %}
