@@ -2,7 +2,7 @@
 
 The event simulation class simulates various events to test and validate workflows. Generating mock events ensures that flows handle different scenarios and edge cases effectively. It also serves as a placeholder in a flow before you complete your App. To learn more about event handlers, see [callbacks](../#callbacks).
 
-To access the event simulation functions, open **Simulation** > **Events** in the Function Explorer. This class requires an instance.
+This class requires an instance.&#x20;
 
 ### `create`
 
