@@ -12,7 +12,7 @@ We designed Heisenware around the principle of loose coupling. By separating fro
 
 The platform consists of three decoupled pillars:
 
-* **Communication fabric** ([VRPC](vrpc.md) over MQTT): Our open-source Versatile RPC (VRPC) library runs over an MQTT message broker at the core of the system to provide a real-time, bidirectional communication layer. All frontend-to-backend and service-to-service interactions run as remote procedure calls, which makes the distributed platform function like a single, local application.
+* **Communication fabric** ([VRPC](../vrpc/) over MQTT): Our open-source Versatile RPC (VRPC) library runs over an MQTT message broker at the core of the system to provide a real-time, bidirectional communication layer. All frontend-to-backend and service-to-service interactions run as remote procedure calls, which makes the distributed platform function like a single, local application.
 * **Backend services** (Node.js): The backend uses modular services that connect to the VRPC domain as independent agents rather than a single monolith:
   * **App Builder Core**: The central orchestration service that manages the structure, logic, and state of all user-built Apps.
   * **Capability microservices**: Pluggable services (such as the `connector` service) that provide concrete features. They register specialized classes to interact with external systems like PLCs (Siemens S7, Modbus), databases (timeseries, relational), APIs (SAP, GraphQL), and industrial protocols (OPC UA, MQTT).
