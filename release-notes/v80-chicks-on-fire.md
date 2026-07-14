@@ -2,21 +2,21 @@
 description: May 15, 2024
 ---
 
-# v80 — Chicks on fire
+# v80 – Chicks on fire
 
-![](https://lh7-qw.googleusercontent.com/docsz/AD_4nXc0a72bTrXBx67PN1W3ULv1vBLUdTNv_Can7EPyQwms7AYwbk-8TW3RTP9XAMtz_yxaP9Si9-tyTKXo3A2lMCwW0N5sz9lR-MwVYoIjcJsyMKF0_oKSmbYg8pB9U-co7z4pT2XMsG5FpsPG1WMVJC0ko6dY?key=chRXiLUrI54Os_fCIQ1Z3w)
+<div align="left"><figure><img src="https://lh7-qw.googleusercontent.com/docsz/AD_4nXc0a72bTrXBx67PN1W3ULv1vBLUdTNv_Can7EPyQwms7AYwbk-8TW3RTP9XAMtz_yxaP9Si9-tyTKXo3A2lMCwW0N5sz9lR-MwVYoIjcJsyMKF0_oKSmbYg8pB9U-co7z4pT2XMsG5FpsPG1WMVJC0ko6dY?key=chRXiLUrI54Os_fCIQ1Z3w" alt=""><figcaption></figcaption></figure></div>
 
 ## Features
 
-* Agent and instance wildcards
-* Resizable textarea when used as single input item
-* RAG AI Vector DB using chroma and supporting CRUD operations
-* RAG AI with source indication
-* Single executable, but multi-host capable edge connectors using auto-generated and cached ids
-* SQL Database available as edge connector
+* Added support for [Agent](../app-builder/build-backend/agents.md) and instance wildcards.
+* Textareas are now resizable when used as a single input field in [input widgets](../app-builder/build-frontend/widgets/input-widgets.md).
+* Integrated a Chroma-based vector database with full CRUD operation support for the [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) extension.
+* Added source attribution indicators to the [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) extension.
+* Enabled single-executable, multi-host deployments for [Agents](../app-builder/build-backend/agents.md) and connectors using auto-generated, cached identifiers.
+* Added the [relational database](../app-builder/build-backend/functions/storage/relational-database.md) connector for the [Agent](../app-builder/build-backend/agents.md) to connect to SQL databases locally on your infrastructure.
 
 ## Fixes
 
-* Event-handling under same user/identity tab-duplication
-* Long deployment times when lots of data are already accumulated
-* Expensive internal re-renders of the media server files available
+* Resolved event-handling conflicts that occurred when a single user duplicated active browser tabs.
+* Optimized deployment routines in [Deploy and maintain](../app-builder/deploy-and-maintain.md) to eliminate long wait times when large amounts of App data are already accumulated.
+* Reduced expensive, redundant internal rendering cycles for files loaded from the media server in [Media view](../app-builder/build-frontend/widgets/display-widgets/media-view.md).
