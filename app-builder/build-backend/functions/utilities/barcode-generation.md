@@ -1,8 +1,8 @@
 # Barcode generation
 
-The `Barcode` class generates over 100 types of 1D and 2D barcodes and returns them as base64-encoded PNG images. It is a utility class with only static functions, so you do not need to create an instance.
+With barcode generation, you create over 100 types of 1D and 2D barcodes and receive them as base64-encoded PNG images. The class provides only static functions, so you do not need to create an instance.
 
-## generateBarcode
+## `generateBarcode`
 
 Creates a barcode image from the provided type, text, and options.
 
