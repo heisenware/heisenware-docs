@@ -7,57 +7,59 @@ description: >-
 
 # Connectivity setup guide
 
+Use this guide to determine the best way to connect your data sources to Heisenware. Follow the questions below and click the links to navigate to the exact setup that fits your use case.
+
 ## Do you need to connect an external data source?
 
-* _No, I am building an independent application that relies solely on the built-in databases and doesn't need external connectivity._ <i class="fa-arrow-right">:arrow-right:</i> You can skip this guide and start directly with the [overview.md](../../app-builder/overview.md "mention").
-* _Yes, my use case requires reading or writing data to an existing database, machine, IT system, scanner, API, or industrial protocol._ <i class="fa-arrow-right">:arrow-right:</i> Continue with [platform hosting](connectivity-setup-guide.md#how-is-your-heisenware-tenant-hosted).
+* **No** – If you are building an independent App that relies solely on built-in databases and does not require external connectivity, you can skip this guide and start directly with the [Overview](../../app-builder/overview.md).
+* **Yes** – If your use case requires reading or writing data to an existing database, machine, IT system, scanner, API, or industrial protocol, continue to [How is your Heisenware tenant hosted?](#how-is-your-heisenware-tenant-hosted).
 
 ## How is your Heisenware tenant hosted?
 
-The way you connect to external systems depends on where your Heisenware platform runs.
+Your connection method depends on where the Heisenware platform runs.
 
-* [Managed Cloud (SaaS)](connectivity-setup-guide.md#managed-cloud-saas-connectivity)
-* [Self-hosted (on-premise or private cloud)](connectivity-setup-guide.md#self-hosted-connectivity)
+* [Managed Cloud connectivity](#managed-cloud-connectivity)
+* [Self-hosted connectivity](#self-hosted-connectivity) (on-premise or private cloud)
 
-## Managed Cloud Connectivity
+## Managed Cloud connectivity
 
-Your tenant is hosted by Heisenware in the cloud. Is your data source accessible via the public internet, e.g., via API?
+Your tenant is hosted by Heisenware in the cloud. Is your data source accessible via the public internet (such as via an API)?
 
-* _Yes, the data source is reachable via the internet._ <i class="fa-arrow-right">:arrow-right:</i> You can use our [standard connectors](../../app-builder/build-backend/functions/connectors/) and don't need anything extra.
-* _No, the data source is in an isolated or local network_. <i class="fa-arrow-right">:arrow-right:</i> Continue with [connecting isolated data sources](connectivity-setup-guide.md#connecting-isolated-data-sources).
+* **Yes** – If the data source is reachable via the internet, you can use our standard [connectors](../../app-builder/build-backend/functions/connectors.md) directly.
+* **No** – If the data source resides in an isolated or local network, continue to [Connecting isolated data sources](#connecting-isolated-data-sources).
 
-## Self-Hosted Connectivity
+## Self-hosted connectivity
 
 Your tenant is hosted on-premise or in your private cloud. Is your data source accessible from the network where the platform is deployed?
 
-* _Yes, the data source is in the same network._ <i class="fa-arrow-right">:arrow-right:</i> You can use our [standard connectors](../../app-builder/build-backend/functions/connectors/) and don't need anything extra.
-* No, the data source is in an isolated network segment. <i class="fa-arrow-right">:arrow-right:</i> Continue with [connecting isolated data sources](connectivity-setup-guide.md#connecting-isolated-data-sources).
+* **Yes** – If the data source is in the same network, you can use our standard [connectors](../../app-builder/build-backend/functions/connectors.md) directly.
+* **No** – If the data source is in an isolated network segment, continue to [Connecting isolated data sources](#connecting-isolated-data-sources).
 
 ## Connecting isolated data sources
 
-Does Heisenware offer a [standard connector](../../app-builder/build-backend/functions/connectors/) for your specific data source?
+Does Heisenware offer a standard connector for your specific data source?
 
-* _Yes, a standard connector exists._ <i class="fa-arrow-right">:arrow-right:</i> Continue with choosing your [agent setup](connectivity-setup-guide.md#choose-your-edge-agent-setup).
-* _No, I need to connect a custom source._ <i class="fa-arrow-right">:arrow-right:</i> As an advanced user, you can use our [Code Adapter](../../account/hosting-and-architecture.md#custom-code-adapters) or build a [Custom Extension](https://docs.heisenware.com/app-builder/build-backend/functions-library/extensions#custom-extensions). These features allow you to wrap custom code and expose it as visual Function blocks to the platform. Alternatively, please contact our support team to discuss your specific requirements.
+* **Yes** – If a standard connector exists, continue to [Choose your Agent setup](#choose-your-agent-setup).
+* **No** – If you need to connect a custom source, you can use a [Code Adapter](../../account/hosting-and-architecture.md) or build a [Custom Extension](../../app-builder/build-backend/functions/extensions/custom-extensions.md). These features let you wrap custom code and expose it as visual function blocks inside the platform. Alternatively, contact our support team to discuss your requirements.
 
-## Choose your edge agent setup
+## Choose your Agent setup
 
-To access isolated networks, you need to deploy an agent. The agent is a secure tunnel that maps data and enables remote logic configuration. It runs locally to bridge isolated networks and buffers data via MQTTS.
+To access isolated networks, you must deploy an Agent. The Agent acts as a secure, outbound-only tunnel that maps data and enables remote logic configuration. It runs locally to bridge isolated networks and buffers data via MQTTS.
 
 What infrastructure is available in your local network?
 
-* Native Windows or Linux OS
-* Docker runtime
-* LXC runtime
+* [Native Agent](#native-agent)
+* [Docker Agent](#docker-agent)
+* [LXC Agent](#lxc-agent)
 
 ### Native Agent
 
-You can use the native binary. It runs as a highly efficient system service directly on your OS without requiring Docker. Continue to the [Native Agent setup documentation](../../app-builder/build-backend/agents/native-agent.md) for the next steps.
+Use the native binary to run the Agent as a highly efficient system service directly on your operating system without requiring Docker. For next steps, see the [Native Agent](../../app-builder/build-backend/agents/native-agent.md) documentation.
 
-### Docker agent
+### Docker Agent
 
-You can deploy the Docker container. This is the recommended approach for containerized environments on OT servers or edge devices. Continue to the [Docker agent setup documentation](../../app-builder/build-backend/agents/docker-agent.md) for the next steps.
+Deploy the Docker container for the Agent. This is the recommended approach for containerized environments on OT servers or edge devices. For next steps, see the [Docker Agent](../../app-builder/build-backend/agents/docker-agent.md) documentation.
 
-### LXC agent
+### LXC Agent
 
-You can deploy the LXC agent. This setup is suitable for specific edge devices running LXC runtimes, such as INSYS routers. Continue to the [LXC agent setup documentation](../../app-builder/build-backend/agents/lxc-agent-insys.md) for the next steps.
+Deploy the LXC container for the Agent. This setup is suitable for specific edge devices running LXC runtimes, such as INSYS routers. For next steps, see the [LXC Agent (Insys)](../../app-builder/build-backend/agents/lxc-agent-insys.md) documentation.
