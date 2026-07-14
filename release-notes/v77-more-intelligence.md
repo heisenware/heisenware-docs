@@ -2,24 +2,23 @@
 description: Dec 21, 2023
 ---
 
-# v77 — More intelligence
+# v77 – More intelligence
 
-![](https://lh7-qw.googleusercontent.com/docsz/AD_4nXdfcNVj5MARnW9Mz-s_4hi8IAhJnbMLq5D6csBh7AxAPNi3OJqi6pDXYfpvUxph23RHPRDspFNjTLAvs9uGfQ7OZlJQZ47dXsRfO2ArOaRV_DiDau_siRKvPsiEuR_0NbTKtIbzmasxIFdrWYbvFKBsLxiO?key=chRXiLUrI54Os_fCIQ1Z3w)
+<div align="left"><figure><img src="https://lh7-qw.googleusercontent.com/docsz/AD_4nXdfcNVj5MARnW9Mz-s_4hi8IAhJnbMLq5D6csBh7AxAPNi3OJqi6pDXYfpvUxph23RHPRDspFNjTLAvs9uGfQ7OZlJQZ47dXsRfO2ArOaRV_DiDau_siRKvPsiEuR_0NbTKtIbzmasxIFdrWYbvFKBsLxiO?key=chRXiLUrI54Os_fCIQ1Z3w" alt=""><figcaption></figcaption></figure></div>
 
 ## Features
 
-* Added “Artificial Intelligence” Agent, providing a conversational chat interface and an initial RAG AI implementation
-* Largely extended App Builders’s linkage highlighting. Highlighting in general works in all directions and across backend and frontend. Input items can now receive data from multiple (and even mixed) sources.
-* Data updates are now visible via animated item logos of the corresponding executors.
-* Low-Code Functions can be commented
-* Better UX support for large input objects
-* Automatic full-app snapshotting (backup) for each new deployed version
+* Introduced an artificial intelligence agent that provides a conversational [chat](../app-builder/build-frontend/widgets/display-widgets/chat.md) interface and an initial [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) implementation.
+* Expanded connection highlighting in the [App Builder](../app-builder/overview.md). Highlighting works in all directions across the [Backend Builder](../app-builder/build-backend.md) and [Frontend Builder](../app-builder/build-frontend.md). Inputs can now receive data from multiple and mixed sources.
+* Animated logos on [functions](../app-builder/build-backend/functions.md) now visualize active data updates in real time.
+* Added support for commenting on [functions](../app-builder/build-backend/functions.md).
+* Improved the user interface when working with large input objects.
+* Automatically creates a [tag](../app-builder/deploy-and-maintain.md) of your App for each new deployed version.
 
 ## Fixes
 
-* Snaplines are largely fixed. They react only on visible widgets and appear during resizing as well. Widgets can be resized in a 10px grid only, making it easier to align them.
-* Mobile and tablet screen scalings on production apps are fixed and the performance got optimized
-* Several fixes in SensorThings API Connector
-* App Installation message shows only on platforms that support PWAs
-* Entirely removed buggy undo/redo functionality
-
+* Improved snapline behavior: snaplines now react only to visible [widgets](../app-builder/build-frontend/widgets.md) and appear during resizing. Widgets now snap to a 10px grid for easier alignment.
+* Fixed screen scaling for mobile and tablet devices on [Production Apps](../production-apps/overview.md) and optimized rendering performance.
+* Resolved several issues in the [OGC SensorThings API](../app-builder/build-backend/functions/extensions/ogc-sensorthings-api.md) extension.
+* The App installation prompt now only appears on platforms that support Progressive Web Apps (PWAs).
+* Removed the buggy undo and redo features.
