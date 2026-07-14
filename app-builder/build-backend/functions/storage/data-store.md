@@ -1,8 +1,6 @@
 # Data store
 
-The data store class provides an in-memory store with an array-like interface. Use it to manage a collection of items (often objects) with methods for adding, removing, updating, and retrieving data.
-
-The data lives in memory only; it is not saved to disk.
+The data store class provides an in-memory storage array to manage collections of data items or objects. Add, remove, update, and retrieve data points dynamically within your flows. Data remains in memory only and does not persist to disk. This class requires an instance. The code class name is `DataStore`.
 
 ### `create`
 
@@ -12,31 +10,33 @@ Creates a new, empty data store instance.
 
 None.
 
+#### Output
+
+Returns the data store instance.
+
 ### `push`
 
 Adds an item to the end of the data store.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to add.</td><td>any</td></tr></tbody></table>
-
-#### Example
-
-```yaml
-# item
-{
-  "id": 1,
-  "name": "First Item"
-}
-```
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item or object to add to the data store.</td><td>any</td></tr></tbody></table>
 
 #### Output
 
-The new length of the data store.
+Returns the new total length of the data store as an integer.
+
+#### Examples
+
+```yaml
+# item
+id: 1
+name: First Item
+```
 
 ### `pop`
 
-Removes and returns the item from the end of the data store.
+Removes and returns the last item from the end of the data store.
 
 #### Parameters
 
@@ -44,7 +44,7 @@ None.
 
 #### Output
 
-The removed item.
+Returns the removed item or object.
 
 ### `pushFront`
 
@@ -52,15 +52,15 @@ Adds an item to the front of the data store.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to add.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item or object to add.</td><td>any</td></tr></tbody></table>
 
 #### Output
 
-The new length of the data store.
+Returns the new total length of the data store as an integer.
 
 ### `popFront`
 
-Removes and returns the item from the front of the data store.
+Removes and returns the first item from the front of the data store.
 
 #### Parameters
 
@@ -68,66 +68,70 @@ None.
 
 #### Output
 
-The removed item.
+Returns the removed item or object.
 
 ### `get`
 
-Gets the item at a specific index.
+Retrieves the item at a specific zero-based index.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to retrieve.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to retrieve.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-The item at the specified index.
+Returns the item at the specified index.
 
 ### `set`
 
-Sets or replaces the value of an item at a specific index.
+Replaces the value of an item at a specific zero-based index.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to update.</td><td>integer</td></tr><tr><td><code>value</code></td><td>The new value to set.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to update.</td><td>integer</td></tr><tr><td><code>value</code></td><td>The new value to assign to the index.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 ### `update`
 
-Updates an item by merging new data into it. The item is found either by a `where` condition or by a matching `id` property in the data.
+Updates an item by merging new properties into it. The function matches items using an explicit lookup condition or an implicit ID field.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>data</code></td><td>The new properties to set on the item.</td><td>object</td></tr><tr><td><code>where</code></td><td>Optional object with a single key-value pair acting as the condition to find the item.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>data</code></td><td></td><td>An object containing the new properties to merge into the item.</td><td>object</td></tr><tr><td></td><td><code>id</code></td><td>The unique identifier used to match the target item if you omit the <code>where</code> input.</td><td>any</td></tr><tr><td><code>where</code></td><td></td><td>An optional selection object containing a single key-value pair to locate the item.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
 
 #### Examples
 
-Example 1: Update using a where clause
+**Update with where condition**
 
-This finds the item whose `email` is `test@example.com` and updates its status:
+Finds the item where `email` equals `test@example.com` and modifies its status property.
 
 ```yaml
 # data
-{
-  "status": "archived"
-}
+status: archived
 # where
-email: 'test@example.com'
+email: test@example.com
 ```
 
-Example 2: Update using an id
+**Update with implicit ID**
 
-Without a `where` clause, the function looks for an item whose `id` matches the `id` in the data object:
+Matches the target item using the provided `id` property because no `where` input is defined.
 
 ```yaml
 # data
-{
-  "id": 123,
-  "status": "completed"
-}
+id: 123
+status: completed
 ```
 
 ### `length`
 
-Gets the current number of items in the data store.
+Returns the current number of items in the data store.
 
 #### Parameters
 
@@ -135,19 +139,19 @@ None.
 
 #### Output
 
-An integer with the number of items.
+Returns the total count of items as an integer.
 
 ### `indexOf`
 
-Returns the index of the first occurrence of a specific item.
+Returns the zero-based index of the first occurrence of a specific item.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to search for.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to search for.</td><td>any</td></tr></tbody></table>
 
 #### Output
 
-The index of the item, or `-1` if not found.
+Returns the zero-based index as an integer, or `-1` if the item does not exist.
 
 ### `includes`
 
@@ -155,27 +159,27 @@ Checks whether the data store contains a specific item.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to search for.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to search for.</td><td>any</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` if the item exists, otherwise `false`.
+Returns `true` if the item exists, or `false` if it does not.
 
 ### `removeAt`
 
-Removes the item at a specific index.
+Removes the item at a specific zero-based index.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The index of the item to remove.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to remove.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-An array containing the single removed item.
+Returns an array containing the removed item.
 
 ### `toArray`
 
-Returns a shallow copy of all items as a standard array.
+Returns a shallow copy of all data store items as a standard array.
 
 #### Parameters
 
@@ -183,7 +187,7 @@ None.
 
 #### Output
 
-An array containing all the items.
+Returns an array containing all stored items.
 
 ### `clear`
 
@@ -193,6 +197,24 @@ Removes all items from the data store.
 
 None.
 
+#### Output
+
+Returns nothing.
+
 ### `delete`
 
-Removes the instance. All stored data is lost.
+Removes the data store instance.
+
+#### Parameters
+
+None.
+
+#### Output Implies
+
+Returns nothing.
+
+{% hint style="danger" %}
+#### Permanent data loss
+
+Deleting removes the instance configuration, and all stored data is permanently lost.
+{% endhint %}
