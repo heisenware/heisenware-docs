@@ -1,6 +1,6 @@
 # Event simulation
 
-The event simulation class simulates various events to test and validate workflows. Generating mock events ensures that flows handle different scenarios and edge cases effectively. It also serves as a placeholder in a flow before you complete your App. To learn more about event handlers, see the [callbacks guide](../callbacks.md).
+The event simulation class simulates various events to test and validate workflows. Generating mock events ensures that flows handle different scenarios and edge cases effectively. It also serves as a placeholder in a flow before you complete your App. To learn more about event handlers, see [callbacks](../#callbacks).
 
 To access the event simulation functions, open **Simulation** > **Events** in the Function Explorer. This class requires an instance.
 
@@ -18,7 +18,7 @@ Returns the event simulation instance.
 
 #### Example
 
-<figure><img src="../../../../.gitbook/assets/create_instance.png" alt=""><figcaption>Create an event simulation instance</figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/create_instance.png" alt=""><figcaption><p>Create an event simulation instance</p></figcaption></figure>
 
 ### `triggerManually`
 
@@ -46,7 +46,7 @@ Returns a unique listener ID string.
 
 #### Example
 
-<figure><img src="../../../../.gitbook/assets/image (33).png" alt=""><figcaption>The listener outputs the timestamp after a manual trigger</figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (33).png" alt=""><figcaption><p>The listener outputs the timestamp after a manual trigger</p></figcaption></figure>
 
 ### `startAutoTrigger`
 
@@ -62,10 +62,11 @@ Returns nothing.
 
 ### `onAutoTrigger`
 
-Fires periodically when an automatic trigger is active. 
+Fires periodically when an automatic trigger is active.
 
 {% hint style="info" %}
 #### Initializing the listener
+
 You may need to trigger `onAutoTrigger` once to start reacting to automatically generated events after calling `startAutoTrigger`.
 {% endhint %}
 
@@ -79,7 +80,7 @@ Returns a unique listener ID string.
 
 #### Example
 
-<figure><img src="../../../../.gitbook/assets/image (34).png" alt=""><figcaption>React periodically to automatic events</figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (34).png" alt=""><figcaption><p>React periodically to automatic events</p></figcaption></figure>
 
 ### `stopAutoTrigger`
 
@@ -95,7 +96,7 @@ Returns nothing.
 
 #### Example
 
-<figure><img src="../../../../.gitbook/assets/stopautotrigger.png" alt=""><figcaption>Stop event generation</figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/stopautotrigger.png" alt=""><figcaption><p>Stop event generation</p></figcaption></figure>
 
 ### `triggerCallback`
 
@@ -103,7 +104,7 @@ Triggers an event that executes its own callback after a specified delay. To pre
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>timeout</code></td><td>The delay duration in milliseconds before the callback executes.</td><td>integer</td></tr><tr><td><code>listener</code></td><td>Callback that executes after the timeout delay. Payload: <code>&lt;callback&gt;</code>.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>timeout</code></td><td>The delay duration in milliseconds before the callback executes.</td><td>integer</td></tr><tr><td><code>listener</code></td><td>Callback that executes after the timeout delay. Payload: <code>&#x3C;callback></code>.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -111,7 +112,7 @@ Returns nothing.
 
 #### Example
 
-<figure><img src="../../../../.gitbook/assets/triggerCallback.png" alt=""><figcaption>Callback execution after a timeout delay</figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/triggerCallback.png" alt=""><figcaption><p>Callback execution after a timeout delay</p></figcaption></figure>
 
 ### `delete`
 
@@ -119,6 +120,7 @@ Removes the instance and clears its configuration.
 
 {% hint style="danger" %}
 #### Irreversible action
+
 Deleting an instance removes its configuration permanently.
 {% endhint %}
 
@@ -132,5 +134,6 @@ Returns `true` upon removal.
 
 #### Example
 
-<figure><img src="../../../../.gitbook/assets/delete_instance.png" alt=""><figcaption>Delete an event simulation instance</figcaption></figure>
-```
+<figure><img src="../../../../.gitbook/assets/delete_instance.png" alt=""><figcaption><p>Delete an event simulation instance</p></figcaption></figure>
+
+\`\`\`
