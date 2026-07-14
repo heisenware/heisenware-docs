@@ -1,10 +1,10 @@
 # Cron
 
-With cron, you schedule tasks that run automatically at specific times or intervals, defined in the standard cron expression format. This is useful for recurring jobs such as generating daily reports, performing nightly backups, or sending scheduled notifications.
+The cron class schedules automated tasks that run at specific times or intervals using standard cron expressions. It runs recurring jobs such as generating daily reports, performing nightly backups, or sending scheduled notifications. The code class name is `Cron`. This class requires an instance to schedule tasks, though it includes a static utility for verification.
 
 ## Understanding cron expressions
 
-A cron expression is a string of five or six fields separated by spaces, representing a time schedule. Each field specifies a different unit of time.
+A cron expression is a string of five or six fields separated by spaces that represents a time schedule. Each field specifies a unit of time:
 
 ```
 ┌─────────────── minute (0 - 59)
@@ -18,14 +18,12 @@ A cron expression is a string of five or six fields separated by spaces, represe
 
 ### Special characters
 
-* `*` represents "every". For example, `*` in the hour field means "every hour".
-* `,` specifies a list of values. For example, `1,15,30` in the minute field means "at minutes 1, 15, and 30".
-* `-` defines a range of values. For example, `9-17` in the hour field means "every hour from 9 AM to 5 PM".
-* `/` specifies step values. For example, `*/15` in the minute field means "every 15 minutes".
+* `*` represents "every" (such as every hour when used in the hour field).
+* `,` specifies a list of values (such as `1,15,30` to trigger at minutes 1, 15, and 30).
+* `-` defines a range of values (such as `9-17` to trigger every hour from 9 AM to 5 PM).
+* `/` specifies step values (such as `*/15` to trigger every 15 minutes).
 
 ## Static functions
-
-These functions are called directly on the class and do not require you to create an instance.
 
 ### `validate`
 
@@ -33,7 +31,11 @@ Checks if a cron expression string is syntactically valid.
 
 #### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>expression</code></td><td>The cron expression to validate.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>expression</code></td><td>The cron expression to validate.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` if the expression is valid, or `false` if invalid.
 
 #### Example
 
@@ -42,33 +44,35 @@ Checks if a cron expression string is syntactically valid.
 0 9 * * 1-5
 ```
 
-#### Output
-
-Returns `true` if the expression is valid, `false` otherwise.
-
 ## Instance functions
-
-You must create an instance to use these functions.
 
 ### `create`
 
-Creates a new, empty cron scheduler instance. The task itself is defined and started using the `schedule` function.
-
-### `schedule`
-
-Defines a task and schedules it to run based on a cron expression. The scheduler starts automatically when this function is called.
+Constructs a new, empty cron scheduler instance. Define and start the task using the `schedule` function.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>expression</code></td><td>A valid cron expression.</td><td>string</td></tr><tr><td><code>listener</code></td><td>The function that is executed each time the schedule is triggered.</td><td>function</td></tr><tr><td><code>options</code></td><td>Optional settings for advanced control. See below.</td><td>object</td></tr></tbody></table>
+None.
 
-Available options:
+#### Output
 
-<table><thead><tr><th width="150">Option</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>timezone</code></td><td>The timezone for the schedule, for example <code>America/New_York</code> or <code>Europe/Berlin</code>. If not set, the server's local timezone is used.</td><td>string</td></tr><tr><td><code>noOverlap</code></td><td>If <code>true</code>, prevents the task from starting a new execution while the previous one is still running. Default is <code>false</code>.</td><td>boolean</td></tr><tr><td><code>maxExecutions</code></td><td>Limits the total number of times the task runs.</td><td>integer</td></tr></tbody></table>
+Returns the cron instance.
+
+### `schedule`
+
+Defines a task and schedules it to run based on a cron expression. The scheduler starts automatically when you call this function.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>expression</code></td><td></td><td>A valid cron expression string.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>The callback that executes each time the schedule triggers. Payload: <code>&lt;callback&gt;</code>.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>timezone</code></td><td>The timezone for the schedule (such as <code>America/New_York</code> or <code>Europe/Berlin</code>). If omitted, the client uses the server's local timezone.</td><td>string</td></tr><tr><td></td><td><code>noOverlap</code></td><td>Prevents the task from starting a new execution while the previous execution is still running. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>maxExecutions</code></td><td>Limits the total number of times the task runs.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the string `scheduled`.
 
 #### Examples
 
-Run a task every 15 minutes:
+Example 1: Run a task every 15 minutes
 
 ```yaml
 # expression
@@ -77,7 +81,7 @@ Run a task every 15 minutes:
 <callback>
 ```
 
-Run a task at 9:00 AM and 5:00 PM every day:
+Example 2: Run a task at 9:00 AM and 5:00 PM every day
 
 ```yaml
 # expression
@@ -86,7 +90,7 @@ Run a task at 9:00 AM and 5:00 PM every day:
 <callback>
 ```
 
-Run a cleanup job at 1:30 AM every Saturday and Sunday:
+Example 3: Run a cleanup job at 1:30 AM every Saturday and Sunday
 
 ```yaml
 # expression
@@ -95,43 +99,85 @@ Run a cleanup job at 1:30 AM every Saturday and Sunday:
 <callback>
 ```
 
-#### Output
-
-Returns the string `scheduled`.
-
 ### `start`
 
-Starts the task scheduler. You only need to call this if you have previously called `stop`, since `schedule` starts the task automatically. Does nothing when already started.
+Starts the task scheduler. Call this function if you previously stopped the scheduler using `stop`. This function does nothing if the scheduler is already running.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns nothing.
 
 ### `stop`
 
-Stops the task scheduler. The scheduled task will not run again until `start` is called.
+Stops the task scheduler. The scheduled task does not run again until you call `start`.
 
-### `getStatus`
+#### Parameters
 
-Provides the current lifecycle state of the task. This is useful for monitoring or debugging.
+None.
 
 #### Output
 
-A string representing the current state:
-
-* `stopped`: The scheduler is not running.
-* `idle`: The scheduler is running, the task is not currently executing.
-* `running`: The task is actively executing.
-* `destroyed`: The task has been permanently removed.
-
-### `destroy`
-
-Permanently deactivates the task and cleans up all internal resources. A destroyed task cannot be restarted.
+Returns nothing.
 
 ### `execute`
 
-Manually executes the task's function immediately, outside of its regular schedule. This is useful for testing or triggering on-demand runs.
+Executes the task callback immediately outside of its regular schedule. Use this function for testing or triggering on-demand runs.
 
-### `getNextRun`
+#### Parameters
 
-Returns the next scheduled run time for the task.
+None.
 
 #### Output
 
-A date object representing the next run time, or `null` if the task is stopped or destroyed.
+Returns nothing.
+
+### `getStatus`
+
+Retrieves the current lifecycle state of the task.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns a string representing the current state:
+
+* `stopped`: The scheduler is not running.
+* `idle`: The scheduler is running, but the task is not executing.
+* `running`: The task is actively executing.
+* `destroyed`: The task is permanently removed.
+
+### `getNextRun`
+
+Retrieves the next scheduled run time for the task.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns a date object representing the next run time, or `null` if the task is stopped or destroyed.
+
+### `destroy`
+
+Permanently deactivates the task and cleans up internal resources. You cannot restart a destroyed task.
+
+{% hint style="danger" %}
+#### Irreversible action
+
+Destroying a task removes its configuration permanently.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns nothing.
