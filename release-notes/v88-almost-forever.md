@@ -13,7 +13,7 @@ description: 12 Oct 2025
 * [Extensions](../app-builder/build-backend/functions/extensions/) to power-up apps with any custom code running cloud or on-prem
 * [Industrial Blockchain](../app-builder/build-backend/functions/extensions/industrial-blockchain.md) Extension
 * [Process Simulator](../app-builder/build-backend/functions/extensions/process-simulations.md) Extension
-* [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai/) Extension
+* [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) Extension
 * One-command [on-premise installer](../tutorials/on-premise-installation.md)
 * [Docker Agent](/broken/pages/G4PEtPdTe3j9GRx6sLC6) allowing to run all our connectors on any hardware supporting Docker
 * The [File Uploader](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget can now directly upload photos as well
