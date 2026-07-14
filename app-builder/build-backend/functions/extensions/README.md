@@ -1,28 +1,28 @@
 # Docker Extensions
 
-Docker Extensions expand the platform's capabilities using Docker container technology. A Docker Extension is a standard Docker image that the Heisenware platform loads, executes, and exposes as functions within the App Builder.
+Docker Extensions expand platform capabilities using Docker container technology. A Docker Extension is a standard Docker image that the platform loads, executes, and exposes as functions inside the App Builder.
 
 {% hint style="info" %}
-#### Not to be confused with extension nodes
+#### Docker Extensions versus extension nodes
 
-Docker Extensions add whole new function classes to the platform. [Extension nodes](../../extension-nodes/) (modifiers, filters, recorders, and error handlers) are the small nodes that attach to a function's output on the canvas.
+Docker Extensions add completely new function classes to the platform. Do not confuse them with [extension nodes](../../extension-nodes/) (modifiers, filters, recorders, and error handlers), which are the small nodes that attach directly to a function output on the canvas.
 {% endhint %}
 
-There are two categories of Docker Extensions:
+The platform supports two categories of Docker Extensions:
 
-1. Official extensions (Heisenware made): Ready-to-use, managed modules maintained by us.
-2. [Custom Extensions](custom-extensions.md) (user made): Your own Docker images containing custom algorithms, drivers, or logic.
+1. **Official extensions**: Pre-built, managed modules maintained by Heisenware.
+2. **Custom Extensions**: User-created Docker images containing custom algorithms, drivers, or proprietary logic.
 
 ## Official extensions
 
-Pre-built modules provided by Heisenware to add advanced capabilities without any coding:
+Pre-built modules add advanced capabilities to the platform without manual coding:
 
-<table><thead><tr><th width="207.5927734375">Extension</th><th>Description</th></tr></thead><tbody><tr><td><a href="industrial-blockchain.md">Industrial blockchain</a></td><td>Immutable data logging and audit trails.</td></tr><tr><td><a href="rag-ai/">RAG AI</a></td><td>Retrieval-Augmented Generation for context-aware AI assistants.</td></tr><tr><td><a href="process-simulations.md">Process simulations</a></td><td>Simulates energy consumption, production and machine data, and silo fill levels.</td></tr><tr><td><a href="ogc-sensorthings-api.md">OGC SensorThings API</a></td><td>Accesses and manages IoT sensor data via the standardized OGC SensorThings API.</td></tr></tbody></table>
+<table><thead><tr><th width="220">Extension</th><th>Description</th></tr></thead><tbody><tr><td><a href="industrial-blockchain.md">Industrial blockchain</a></td><td>Provides immutable data logging and audit trails.</td></tr><tr><td><a href="rag-ai.md">RAG AI</a></td><td>Enables Retrieval-Augmented Generation for context-aware AI assistants.</td></tr><tr><td><a href="process-simulations.md">Process simulations</a></td><td>Simulates utilities consumption, CNC machine telemetry, and silo fill levels.</td></tr><tr><td><a href="ogc-sensorthings-api.md">OGC SensorThings API</a></td><td>Manages IoT sensor data via the standardized OGC SensorThings specification.</td></tr></tbody></table>
 
-Once installed, these extensions run alongside the standard platform functionality. They appear as new blocks in the [Function Explorer](../function-explorer.md) and can be used immediately in your flows.
+Once installed, these extensions run alongside standard platform services, appearing as selectable blocks in the Function Explorer.
 
-<div align="left"><figure><img src="../../../../.gitbook/assets/heisenware_extentions_looped.gif" alt="" width="485"><figcaption><p>Adding extensions to the App Builder</p></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../.gitbook/assets/heisenware_extentions_looped.gif" alt="" width="485"><figcaption>Adding extensions to the App Builder</figcaption></figure></div>
 
 ## Custom Extensions
 
-Build your own Docker Extension by wrapping plain Node.js code into a [Code Adapter](../../../../account/hosting-and-architecture.md#docker-custom-code-adapter) and loading it into the platform, or running it on your own infrastructure. See [Custom Extensions](custom-extensions.md) for the full guide.
+Build a custom Docker Extension by wrapping code inside a Code Adapter and loading the image into the platform or running it on your infrastructure. See the [Custom Extensions](custom-extensions.md) guide for deployment steps.
