@@ -1,43 +1,136 @@
 # Event simulation
 
-With event simulation, you generate mock events to test and validate your flows. This ensures your flows handle different scenarios and edge cases before real event sources are connected, and it also works as a placeholder while your App is still under construction.
+The event simulation class simulates various events to test and validate workflows. Generating mock events ensures that flows handle different scenarios and edge cases effectively. It also serves as a placeholder in a flow before you complete your App. To learn more about event handlers, see the [callbacks guide](../callbacks.md).
 
-To access the event simulator, unfold Simulation > Events in the Function Explorer.
+To access the event simulation functions, open **Simulation** > **Events** in the Function Explorer. This class requires an instance.
 
-## Instance management
+### `create`
 
-### Create an instance
+Constructs a new event simulation instance.
 
-Drag the `create` function onto the canvas, insert a unique name for your instance and trigger the function.
+#### Parameters
 
-<figure><img src="../../../../.gitbook/assets/create_instance.png" alt=""><figcaption><p>Creating an event simulator instance</p></figcaption></figure>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>A unique name for the event simulation instance.</td><td>string</td></tr></tbody></table>
 
-### Delete an instance
+#### Output
 
-Drag the `delete` function onto the canvas and insert the name of the instance you want to delete.
+Returns the event simulation instance.
 
-<figure><img src="../../../../.gitbook/assets/delete_instance.png" alt=""><figcaption><p>Deleting an event simulator instance</p></figcaption></figure>
+#### Example
 
-## Instance functions
+<figure><img src="../../../../.gitbook/assets/create_instance.png" alt=""><figcaption>Create an event simulation instance</figcaption></figure>
 
-### Reacting to a manually triggered event
+### `triggerManually`
 
-The `onManualTrigger` function catches a manual trigger of the `triggerManually` function in the same instance and outputs the payload, which is a Unix timestamp in this case. To try this, drag both functions onto the canvas and trigger the `triggerManually` function to generate the necessary event.
+Triggers a manual event within the instance to activate the `onManualTrigger` listener.
 
-<figure><img src="../../../../.gitbook/assets/image (33).png" alt=""><figcaption><p>After triggering the second function, the first outputs the timestamp</p></figcaption></figure>
+#### Parameters
 
-### Reacting to an automatically triggered event
+None.
 
-The `onAutoTrigger` function reacts to the automatic trigger set up by `startAutoTrigger` and outputs the Unix timestamp payload. You can set the interval in milliseconds after which the event repeats in the `interval` input box, the default is 1000. You might need to trigger `onAutoTrigger` once for it to start reacting to the automatically generated events after triggering `startAutoTrigger`.
+#### Output
 
-<figure><img src="../../../../.gitbook/assets/image (34).png" alt=""><figcaption><p>Reacting to periodically generated events</p></figcaption></figure>
+Returns nothing.
 
-You can stop the automatic trigger with the `stopAutoTrigger` function.
+### `onManualTrigger`
 
-<figure><img src="../../../../.gitbook/assets/stopautotrigger.png" alt=""><figcaption><p>Stopping the generation of events</p></figcaption></figure>
+Fires when you execute the `triggerManually` function within the same instance.
 
-### Reacting with a delayed callback
+#### Parameters
 
-The `triggerCallback` function reacts to an event triggered by itself. After triggering the function, there is a delay as set by the `timeout` input box in milliseconds, the default is 3000. It will not react to the output of the callback, to avoid an infinite loop.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that executes when the manual event triggers. Payload: a UNIX timestamp integer.</td><td>callback</td></tr></tbody></table>
 
-<figure><img src="../../../../.gitbook/assets/triggerCallback.png" alt=""><figcaption><p>Callback output as reaction to function generated event</p></figcaption></figure>
+#### Output
+
+Returns a unique listener ID string.
+
+#### Example
+
+<figure><img src="../../../../.gitbook/assets/image (33).png" alt=""><figcaption>The listener outputs the timestamp after a manual trigger</figcaption></figure>
+
+### `startAutoTrigger`
+
+Starts generating periodic automatic events at a specified interval.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The repetition interval in milliseconds.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
+
+### `onAutoTrigger`
+
+Fires periodically when an automatic trigger is active. 
+
+{% hint style="info" %}
+#### Initializing the listener
+You may need to trigger `onAutoTrigger` once to start reacting to automatically generated events after calling `startAutoTrigger`.
+{% endhint %}
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that executes when the automatic event triggers. Payload: a UNIX timestamp integer.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns a unique listener ID string.
+
+#### Example
+
+<figure><img src="../../../../.gitbook/assets/image (34).png" alt=""><figcaption>React periodically to automatic events</figcaption></figure>
+
+### `stopAutoTrigger`
+
+Stops the active automatic trigger and halts periodic event generation.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns nothing.
+
+#### Example
+
+<figure><img src="../../../../.gitbook/assets/stopautotrigger.png" alt=""><figcaption>Stop event generation</figcaption></figure>
+
+### `triggerCallback`
+
+Triggers an event that executes its own callback after a specified delay. To prevent infinite loops, the function does not react to the output of its own callback.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>timeout</code></td><td>The delay duration in milliseconds before the callback executes.</td><td>integer</td></tr><tr><td><code>listener</code></td><td>Callback that executes after the timeout delay. Payload: <code>&lt;callback&gt;</code>.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing.
+
+#### Example
+
+<figure><img src="../../../../.gitbook/assets/triggerCallback.png" alt=""><figcaption>Callback execution after a timeout delay</figcaption></figure>
+
+### `delete`
+
+Removes the instance and clears its configuration.
+
+{% hint style="danger" %}
+#### Irreversible action
+Deleting an instance removes its configuration permanently.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
+
+#### Example
+
+<figure><img src="../../../../.gitbook/assets/delete_instance.png" alt=""><figcaption>Delete an event simulation instance</figcaption></figure>
+```
