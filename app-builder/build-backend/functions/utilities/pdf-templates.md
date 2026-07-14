@@ -1,6 +1,6 @@
 # PDF templates
 
-PDF templates let you generate PDF documents by merging App data with layouts designed in the [PDF Template Editor](../../../build-frontend/pdf-template-editor.md). Each template operates as an instance that contains the `fillTemplate` function for its layout. This article describes how to use this function in backend logic. To design templates visually, see the editor documentation.
+The PDF template class generates PDF documents by merging App data with layouts designed in the [PDF Template Editor](../../../build-frontend/pdf-template-editor.md). Each template operates as an instance that contains the `fillTemplate` function for its layout. This class requires an instance. The code class name is `PdfTemplate`.
 
 ### `fillTemplate`
 
@@ -8,18 +8,7 @@ Merges data with the pre-designed layout and generates a completed document.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>values</code></td><td></td><td>A data object containing key-value pairs. The keys must exactly match the variable names configured for placeholders in the PDF Template Editor (such as <code>firstName</code> or <code>orderDate</code>). Supports nested objects.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>showEmptyVariables</code></td><td>Displays the variable name in angle brackets (such as <code>&lt;firstName&gt;</code>) for placeholders without a value. If false, leaves them empty. Default false.</td><td>boolean</td></tr></tbody></table>
-
-#### Example
-
-```yaml
-# values
-name: John
-surname: Doe
-signature: iVBORw0KGgoAAAANSUhEUg...
-# options
-showEmptyVariables: true
-```
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>values</code></td><td></td><td>A data object containing key-value pairs. The keys must exactly match the variable names configured for placeholders in the <a href="../../../build-frontend/pdf-template-editor.md">PDF Template Editor</a> (such as <code>firstName</code> or <code>orderDate</code>). Supports nested objects.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>showEmptyVariables</code></td><td>Displays the variable name in angle brackets (such as <code>&lt;firstName&gt;</code>) for placeholders without a value. If false, leaves them empty. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -32,6 +21,19 @@ Returns the populated PDF document as a base64-encoded string. During developmen
 
 Each execution generates a new document and populates the entire template in a single operation. For templates with multiple fields, assemble the required data into a single structured object before passing it to the function. Each output document remains isolated to the user session that triggered the function.
 {% endhint %}
+
+#### Example
+
+**Fill template layout**
+
+```yaml
+# values
+name: John
+surname: Doe
+signature: iVBORw0KGgoAAAANSUhEUg...
+# options
+showEmptyVariables: true
+```
 
 ## Full tutorial
 
