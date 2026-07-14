@@ -1,261 +1,240 @@
 # OGC SensorThings API
 
-{% hint style="danger" %}
-**This extension is currently taken out from the default list**
-
-If you feel that is exactly what you need, please [reach out to us](mailto:support@heisenware.com).
+{% hint style="info" %}
+#### Status notice
+This extension is currently hidden from the default listing. If your architecture requires OGC compliance, contact support@heisenware.com to enable it.
 {% endhint %}
 
-## Introduction to OGC SensorThings API
+The OGC SensorThings API extension provides an interoperability layer for managing Internet of Things (IoT) sensor devices, locations, datastreams, and observations using the open geospatial consortium standard. This class requires an instance. The code class name is `OgcSensorThings`.
 
-The OGC SensorThings API is a standard specification aiming to simplify and standardise the integration and communication of Internet of Things (IoT) sensor data. It enables seamless interoperability between different systems, devices, and applications by providing a unified way to access and share sensor data over the internet. This API is particularly useful for real-time data exchange and monitoring tasks in diverse and distributed sensor networks.
+## Things
 
-### **Example**
+### `getThings`
 
-**Environmental monitoring application**
+Retrieves available Thing entities from the server.
 
-Imagine an environmental monitoring application that collects data from various sensors deployed in a city. This application can utilise the OGC SensorThings API to access real-time data from sensors measuring air quality, temperature, humidity, and noise levels. By making API requests, the application:
+#### Parameters
 
-* Retrieves current air quality indexes from different areas within the city.
-* Gathers temperature and humidity readings to monitor weather conditions.
-* Accesses noise level data to identify and address noise pollution hotspots.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>An OGC-compliant filter expression (for example, <code>name eq 'WeatherStation1'</code>).</td><td>string</td></tr></tbody></table>
 
-This API enables the application to provide citizens and city officials with up-to-date environmental information, supporting better decision-making and urban planning.
+#### Output
 
-## Functions
+Returns an array of Thing resource objects.
 
-### getThings
+### `getThing`
 
-Retrieves all Things available on the server. A `$filter` expression can be applied for selective querying (e.g., filtering by name or description).
+Retrieves detailed properties for a single Thing by its ID, including locations and history.
 
-**Example Filter Expression:**\
-`name eq 'WeatherStation1'`
+#### Parameters
 
-### getThing
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The unique resource ID.</td><td>integer</td></tr></tbody></table>
 
-Retrieves detailed information about a single Thing by its ID, including its associated `Locations` and `HistoricalLocations`.
+#### Output
 
-### updateThing
+Returns a Thing resource object.
 
-Updates the specified properties of an existing Thing.\
-Possible updatable properties include:
+### `updateThing`
 
-* `name` (String): The name of the Thing.
-* `description` (String): Description text.
-* `properties` (Object): Additional metadata.
+Updates properties on an existing Thing.
 
-### deleteThing
+#### Parameters
 
-Deletes a Thing identified by its ID.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td></td><td>The target resource ID.</td><td>integer</td></tr><tr><td><code>properties</code></td><td><code>name</code></td><td>The updated name string.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>The updated description string.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom metadata object attributes.</td><td>object</td></tr></tbody></table>
 
-### linkLocations
+#### Output
 
-Associates one or more Location entities to a Thing.
+Returns nothing.
 
-### unlinkAllLocations
+### `deleteThing`
 
-Removes all Location links from a Thing.
+Deletes a Thing resource by its ID.
 
-### createLocation
+#### Parameters
 
-Creates a new Location.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The target resource ID.</td><td>integer</td></tr></tbody></table>
 
-**Options:**
+#### Output
 
-* `name` (String): Name of the Location.
-* `location` (Object): Geospatial data in the format of `encodingType`.
-* `description` (String): Description of the Location.
-* `properties` (Object): Custom attributes.
-* `encodingType` (String): Defaults to `'application/geo+json'`.
+Returns nothing.
 
-You may also link this Location directly to existing Things by providing their IDs.
+### `linkLocations`
 
-### getLocations
+Associates Location entities with a target Thing.
 
-Retrieves all Locations. Supports `$filter` expressions (e.g., `name eq 'SiteA'`).
+#### Parameters
 
-### getLocation
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The destination Thing resource ID.</td><td>integer</td></tr><tr><td><code>locationIds</code></td><td>An array of Location resource IDs to bind.</td><td>array</td></tr></tbody></table>
 
-Retrieves a specific Location by ID.
+#### Output
 
-### updateLocation
+Returns nothing.
 
-Updates an existing Location’s properties:
+### `unlinkAllLocations`
 
-* `name`
-* `description`
-* `properties`
-* `location`
-* `encodingType`
+Removes all associated Location links from a Thing.
 
-#### `deleteLocation`
+#### Parameters
 
-Deletes a Location by ID.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The target Thing resource ID.</td><td>integer</td></tr></tbody></table>
 
-#### `showLocationHistory`
+#### Output
 
-Returns the historical Locations of a Thing, aggregated over time based on a specified property found in the `properties`field of each Location.
+Returns nothing.
 
-### createObservedProperty
+## Locations
 
-Creates an ObservedProperty.
+### `createLocation`
 
-**Required options:**
+Creates a new Location entity.
 
-* `name` (String): Name of the ObservedProperty.
+#### Parameters
 
-**Optional options:**
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The name identifier for the location.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Description text.</td><td>string</td></tr><tr><td></td><td><code>location</code></td><td>GeoJSON geospatial coordinates data object.</td><td>object</td></tr><tr><td></td><td><code>encodingType</code></td><td>MIME type of the geo-data. Default <code>application/geo+json</code>.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom attribute metadata map.</td><td>object</td></tr><tr><td></td><td><code>thingIds</code></td><td>Optional array of Thing IDs to link instantly.</td><td>array</td></tr></tbody></table>
 
-* `description` (String): Description.
-* `properties` (Object): Custom metadata.
-* `definition` (String): URI of a controlled vocabulary term.
+#### Output
 
-### getObservedProperties
+Returns the created Location resource object.
 
-Retrieves all ObservedProperties. Supports `$filter` expressions (e.g., `name eq 'Temperature'`).
+### `getLocations`
 
-### getObservedProperty
+Retrieves Location entries. Supports standard filtering string arguments.
 
-Fetches a single ObservedProperty by ID.
+### `getLocation`
 
-### updateObservedProperty
+Fetches a single Location resource using its ID.
 
-Updates an existing ObservedProperty’s properties.
+### `updateLocation`
 
-### deleteObservedProperty
+Updates mutable fields on an existing Location entity.
 
-Deletes an ObservedProperty by ID.
+### `deleteLocation`
 
-### createSensor
+Deletes a Location resource using its ID.
 
-Creates a Sensor entity.
+### `showLocationHistory`
 
-**Required options:**
+Returns the chronological historical locations of a Thing, grouped by a metadata property key.
 
-* `name` (String): Name of the Sensor.
+## Observed properties
 
-**Optional options:**
+### `createObservedProperty`
 
-* `description` (String)
-* `properties` (Object)
-* `encodingType` (String): MIME type, e.g., `application/pdf`.
-* `metadata` (String): Metadata URI.
+Registers an environmental or physical property being monitored.
 
-### getSensors
+#### Parameters
 
-Retrieves all Sensors. Supports `$filter` expressions.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The property identifier name (such as <code>Temperature</code>).</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Text description.</td><td>string</td></tr><tr><td></td><td><code>definition</code></td><td>A URI reference string pointing to a controlled vocabulary term.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom metadata attributes map.</td><td>object</td></tr></tbody></table>
 
-### getSensor
+#### Output
 
-Fetches a Sensor by ID.
+Returns the created resource object.
 
-### updateSensor
+### `getObservedProperties`
 
-Updates a Sensor entity.
+Retrieves all recorded ObservedProperty resources. Supports filters.
 
-### deleteSensor
+### `getObservedProperty`
 
-Deletes a Sensor by ID.
+Retrieves a single ObservedProperty resource by its ID.
 
-## **Datastreams**
+### `updateObservedProperty`
 
-### createDatastream
+Updates an existing ObservedProperty resource configuration.
 
-Creates a Datastream entity.
+### `deleteObservedProperty`
 
-**Required options:**
+Deletes an ObservedProperty resource by its ID.
 
-* `name` (String)
-* `observationType` (String): URI or identifier of the observation type (e.g., `http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement`).
-* `unitOfMeasurement` (Object): Must include:
-  * `name` (e.g., `'Degree Celsius'`)
-  * `symbol` (e.g., `'°C'`)
-  * `definition` (URI string)
-* `thingId` (Integer)
-* `sensorId` (Integer)
-* `observedPropertyId` (Integer)
+## Sensors
 
-**Optional options:**
+### `createSensor`
 
-* `description` (String)
+Creates a Sensor entity profile.
 
-### getDatastreams
+#### Parameters
 
-Retrieves all Datastreams. Supports `$filter` expressions.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The sensor identifier name.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Text description.</td><td>string</td></tr><tr><td></td><td><code>encodingType</code></td><td>The metadata document format type (for example, <code>application/pdf</code>).</td><td>string</td></tr><tr><td></td><td><code>metadata</code></td><td>A URI string pointing to system or documentation metadata.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom attributes map.</td><td>object</td></tr></tbody></table>
 
-### getDatastream
+#### Output
 
-Fetches a specific Datastream by ID.
+Returns the created Sensor resource object.
 
-### updateDatastream
+### `getSensors`
 
-Updates an existing Datastream.
+Retrieves Sensors from the server. Supports filters.
 
-### deleteDatastream
+### `getSensor`
 
-Deletes a Datastream by ID.
+Fetches a specific Sensor by its ID.
 
-## **Observations**
+### `updateSensor`
 
-### createObservation
+Updates properties on an active Sensor resource.
 
-Creates an Observation.
+### `deleteSensor`
 
-**Required options:**
+Deletes a Sensor resource by its ID.
 
-* `result` (any type): The value/result of the observation.
-* `phenomenonTime` (String, ISO 8601 format): Timestamp of the observation.
+## Datastreams
 
-**Also requires:**
+### `createDatastream`
 
-* `datastreamId` (Integer)
+Groups a collection of Observations tracking a distinct ObservedProperty.
 
-### getObservations
+#### Parameters
 
-Retrieves all Observations. Supports `$filter` expressions (e.g., `phenomenonTime ge 2024-01-01T00:00:00Z`).
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The datastream identifier name.</td><td>string</td></tr><tr><td></td><td><code>observationType</code></td><td>Observation model type URI.</td><td>string</td></tr><tr><td></td><td><code>unitOfMeasurement</code></td><td>Object containing <code>name</code>, <code>symbol</code>, and <code>definition</code> URI.</td><td>object</td></tr><tr><td></td><td><code>thingId</code></td><td>The linked Thing resource ID.</td><td>integer</td></tr><tr><td></td><td><code>sensorId</code></td><td>The linked Sensor resource ID.</td><td>integer</td></tr><tr><td></td><td><code>observedPropertyId</code></td><td>The linked ObservedProperty resource ID.</td><td>integer</td></tr><tr><td></td><td><code>description</code></td><td>Optional text description.</td><td>string</td></tr></tbody></table>
 
-### getObservation
+#### Output
 
-Fetches a specific Observation by ID.
+Returns the created Datastream resource object.
 
-### updateObservation
+### `getDatastreams`
 
-Updates an Observation entity.
+Retrieves available Datastreams. Supports filter strings.
 
-### deleteObservation
+### `getDatastream`
 
-Deletes an Observation by ID.
+Fetches a single Datastream by its ID.
 
-### **Raw Requests**
+### `updateDatastream`
 
-For flexibility, raw request methods are also provided:
+Updates mutable fields on an existing Datastream.
 
-* `getRaw`
-* `postRaw`
-* `patchRaw`
-* `deleteRaw`
+### `deleteDatastream`
 
-These allow direct URL access to the API for custom operations.
+Deletes a Datastream resource by its ID.
 
-### **Filters and Queries**
+## Observations
 
-Many `get*` methods support OGC-compliant [filter expressions](https://fraunhoferiosb.github.io/FROST-Server/sensorthingsapi/requestingData/STA-Example-Queries.html), such as:
+### `createObservation`
 
-```
-pgsqlCopyEditname eq 'StationA'
-description ne 'Old station'
-properties/owner eq 'City Council'
-```
+Logs a single numerical or qualitative data point entry.
 
-### **Notes:**
+#### Parameters
 
-* All IDs refer to `@iot.id` properties from SensorThings resources.
-* All date/time values follow ISO 8601.
-* For geospatial data in Locations, the standard `GeoJSON` format is recommended (`encodingType: 'application/geo+json'`).
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>result</code></td><td>The captured measurement value payload.</td><td>any</td></tr><tr><td></td><td><code>phenomenonTime</code></td><td>ISO 8601 string timestamp of the physical event occurrence.</td><td>string</td></tr><tr><td></td><td><code>datastreamId</code></td><td>The destination Datastream target resource ID.</td><td>integer</td></tr></tbody></table>
 
-### **More information**
+#### Output
 
-[OGC SensorThings API Standard 1.0](https://docs.ogc.org/is/15-078r6/15-078r6.html)
+Returns the created Observation resource object.
 
-[FROST Server Documentation](https://fraunhoferiosb.github.io/FROST-Server/)
+### `getObservations`
 
+Retrieves observations matching optional filter arguments (such as `phenomenonTime ge 2024-01-01T00:00:00Z`).
+
+### `getObservation`
+
+Fetches a single Observation resource using its ID.
+
+### `updateObservation`
+
+Updates an existing Observation entity configuration.
+
+### `deleteObservation`
+
+Deletes an Observation resource using its ID.
+
+## Raw requests
+
+Execute unmanaged operations directly against endpoint structures using raw REST methods: `getRaw`, `postRaw`, `patchRaw`, and `deleteRaw`.
