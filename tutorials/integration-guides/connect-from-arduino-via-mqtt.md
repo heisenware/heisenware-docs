@@ -1,14 +1,13 @@
 # Connect from Arduino via MQTT
 
-Find below a short code snippet showing you how you could send data from your Arduino (ESP32) to your Heisenware account.
+Use this code snippet to send data from an Arduino (ESP32) device to your Heisenware account.
 
-For that to work replace the ALL\_CAPS variables in the code with your correct configuration.
-
-{% hint style="success" %}
-As you have an external device or application (here the Arduino Device) that needs to publish data _to_ the Heisenware broker, you must first create credentials for it or use smart onboarding. Please follow the guide on [Creating an MQTT Integration](../../app-manager/integrations-inbound-connections.md#mqtt-client) to do this.
+{% hint style="info" %}
+#### Create integration credentials first
+Because an external device must publish data directly to the Heisenware broker, you must generate client credentials first. Add an MQTT integration in the **App Manager** (see [Integrations (inbound)](../../app-manager/inbound-integrations.md#connecting-mqtt-and-vrpc-clients)).
 {% endhint %}
 
-For a regular account that calls `acme` with no extra workspaces the `ACCOUNT` is `acme` and the `DOMAIN` is `acme.default` .
+Replace the capitalized placeholder variables in the code below with your specific configuration details. For an account named `acme` with no custom workspaces, the `ACCOUNT` value is `acme` and the `DOMAIN` value is `acme.default`.
 
 ```cpp
 // Use <ESP8266WiFi.h> for ESP8266
@@ -145,5 +144,4 @@ void loop() {
     publishRandomValue();
   }
 }
-
 ```
