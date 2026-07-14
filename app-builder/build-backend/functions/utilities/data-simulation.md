@@ -1,16 +1,22 @@
 # Data simulation
 
-With data simulation, you generate a wide variety of random and mock data. This is invaluable for testing, prototyping, and creating realistic demonstrations without needing real data. The functions cover everything from simple numbers and strings to complex, structured data like personal information, geographic coordinates, and time series datasets. All functions are static, so you do not need to create an instance.
+The data simulation class generates random and mock data for testing, prototyping, and creating demonstrations without requiring real information. These functions create numbers, strings, and complex structured datasets such as personal profiles, geographic coordinates, and time-series logs. This class provides static functions only and does not require an instance.
 
-## `randomInteger`
+## Basic values
 
-Returns a random whole number between a minimum (inclusive) and a maximum (inclusive) value.
+### `randomInteger`
 
-### Parameters
+Returns a random whole number between a minimum and a maximum value.
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code>: the minimum possible integer, defaults to <code>0</code>. <code>max</code>: the maximum possible integer, defaults to <code>99999</code>.</td><td>object</td></tr></tbody></table>
+#### Parameters
 
-### Example
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The minimum possible integer. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The maximum possible integer. Default 99999.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns a random integer.
+
+#### Example
 
 ```yaml
 # options
@@ -18,19 +24,19 @@ min: 1
 max: 10
 ```
 
-### Output
+### `randomNumber`
 
-A random integer between 1 and 10, for example `7`.
+Returns a random floating-point number between a minimum and a maximum value.
 
-## `randomNumber`
+#### Parameters
 
-Returns a random floating-point number between a minimum (inclusive) and a maximum (exclusive) value.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The minimum possible number. Default 0.</td><td>number</td></tr><tr><td></td><td><code>max</code></td><td>The maximum possible number (exclusive). Default 1.</td><td>number</td></tr></tbody></table>
 
-### Parameters
+#### Output
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code>: the minimum possible number, defaults to <code>0</code>. <code>max</code>: the maximum possible number (not included in the output), defaults to <code>1</code>.</td><td>object</td></tr></tbody></table>
+Returns a random floating-point number.
 
-### Example
+#### Example
 
 ```yaml
 # options
@@ -38,44 +44,40 @@ min: 0
 max: 100
 ```
 
-### Output
+### `randomString`
 
-A random number between 0 and 99.99..., for example `42.123`.
+Generates a string of a specified length composed of random printable characters.
 
-## `randomString`
+#### Parameters
 
-Generates a string of a specified length, composed of random printable characters (`!` to `}`).
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the string. Maximum is 2^20. Default 10.</td><td>integer</td></tr></tbody></table>
 
-### Parameters
+#### Output
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the string. Defaults to <code>10</code>, maximum is 2^20.</td><td>integer</td></tr></tbody></table>
+Returns a random string.
 
-### Example
+#### Example
 
 ```yaml
 # length
 12
 ```
 
-### Output
+### `randomText`
 
-A random string like `A7b$p(qR_sT!`.
+Generates random placeholder text in a lorem ipsum style to populate text fields and layout paragraphs.
 
-## `randomText`
+#### Parameters
 
-Generates random "lorem ipsum" style text, useful for populating text fields and paragraphs.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>count</code></td><td>The number of units to generate. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>units</code></td><td>The type of unit to generate: <code>words</code>, <code>sentences</code>, or <code>paragraphs</code>. Default <code>sentences</code>.</td><td>string</td></tr><tr><td></td><td><code>format</code></td><td>The output format, either <code>plain</code> or <code>html</code>. Default <code>plain</code>.</td><td>string</td></tr><tr><td></td><td><code>sentenceLowerBound</code></td><td>The minimum number of words per sentence.</td><td>integer</td></tr><tr><td></td><td><code>sentenceUpperBound</code></td><td>The maximum number of words per sentence.</td><td>integer</td></tr><tr><td></td><td><code>paragraphLowerBound</code></td><td>The minimum number of sentences per paragraph.</td><td>integer</td></tr><tr><td></td><td><code>paragraphUpperBound</code></td><td>The maximum number of sentences per paragraph.</td><td>integer</td></tr></tbody></table>
 
-### Parameters
+#### Output
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td>Optional settings. See below.</td><td>object</td></tr></tbody></table>
+Returns a string of random text.
 
-Available options:
+#### Examples
 
-<table><thead><tr><th width="220">Option</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>count</code></td><td>The number of units to generate. Defaults to <code>1</code>.</td><td>integer</td></tr><tr><td><code>units</code></td><td>The type of unit to generate: <code>words</code>, <code>sentences</code>, or <code>paragraphs</code>. Defaults to <code>sentences</code>.</td><td>string</td></tr><tr><td><code>format</code></td><td>The output format, either <code>plain</code> (default) or <code>html</code>.</td><td>string</td></tr><tr><td><code>sentenceLowerBound</code>, <code>sentenceUpperBound</code></td><td>The minimum and maximum number of words per sentence.</td><td>number</td></tr><tr><td><code>paragraphLowerBound</code>, <code>paragraphUpperBound</code></td><td>The minimum and maximum number of sentences per paragraph.</td><td>number</td></tr></tbody></table>
-
-### Examples
-
-Generate 5 random words:
+Example 1: Generate words
 
 ```yaml
 # options
@@ -83,9 +85,7 @@ count: 5
 units: words
 ```
 
-Output: `lorem ipsum dolor sit amet`
-
-Generate 1 paragraph with HTML tags:
+Example 2: Generate paragraphs with HTML tags
 
 ```yaml
 # options
@@ -94,89 +94,109 @@ units: paragraphs
 format: html
 ```
 
-Output: `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. ...</p>`
+### `error`
 
-## `error`
+Throws an execution error with a specified or random message to test error-handling logic.
 
-Intentionally throws an error with a specified or random message. This is useful for testing error-handling logic.
+#### Parameters
 
-### Parameters
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>customMessage</code></td><td>An optional string to use as the error message. If omitted, the function uses a random text string.</td><td>string</td></tr></tbody></table>
 
-<table><thead><tr><th width="160">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>customMessage</code></td><td>An optional string to use as the error message. If omitted, a random text string is used.</td><td>string</td></tr></tbody></table>
+#### Output
 
-## `randomObject`
+Throws an execution error.
 
-Generates an object with a random number of keys and random values of various types.
+## Complex structures
 
-### Parameters
+### `randomObject`
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code>: minimum number of key-value pairs, defaults to <code>3</code>. <code>max</code>: maximum number of key-value pairs, defaults to <code>7</code>. <code>allowNesting</code>: if <code>true</code>, values can themselves be other random objects, defaults to <code>true</code>.</td><td>object</td></tr></tbody></table>
+Generates an object with a random number of keys and values of various types.
 
-### Output
+#### Parameters
 
-```json
-{
-  "mary": "Hic quisquam.",
-  "edward": [ 5, 8, 1, 9 ],
-  "margaret": 1234
-}
-```
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The minimum number of key-value pairs. Default 3.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The maximum number of key-value pairs. Default 7.</td><td>integer</td></tr><tr><td></td><td><code>allowNesting</code></td><td>Allows values to be other random objects. Default true.</td><td>boolean</td></tr></tbody></table>
 
-## `randomArrayOfIntegers`
+#### Output
+
+Returns a random object.
+
+### `randomArrayOfIntegers`
 
 Returns an array of random integers.
 
-### Parameters
+#### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the array. Defaults to <code>10</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The length of the array. Default 10.</td><td>integer</td></tr></tbody></table>
 
-## `randomArrayOfNumbers`
+#### Output
+
+Returns an array of integers.
+
+### `randomArrayOfNumbers`
 
 Returns an array of random floating-point numbers.
 
-### Parameters
+#### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the array. Defaults to <code>10</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The length of the array. Default 10.</td><td>integer</td></tr></tbody></table>
 
-## `randomArrayOfDigits`
+#### Output
+
+Returns an array of numbers.
+
+### `randomArrayOfDigits`
 
 Returns an array of random single digits (0 to 9).
 
-### Parameters
+#### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the array. Defaults to <code>10</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The length of the array. Default 10.</td><td>integer</td></tr></tbody></table>
 
-## `randomArrayOfStrings`
+#### Output
+
+Returns an array of integers.
+
+### `randomArrayOfStrings`
 
 Returns an array of random words.
 
-### Parameters
+#### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the array. Defaults to <code>10</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The length of the array. Default 10.</td><td>integer</td></tr></tbody></table>
 
-## `randomArrayOfObjects`
+#### Output
 
-Returns an array of random objects. Nesting is disabled, so all values are simple.
+Returns an array of strings.
 
-### Parameters
+### `randomArrayOfObjects`
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td>The desired length of the array. Defaults to <code>10</code>.</td><td>integer</td></tr><tr><td><code>options</code></td><td><code>min</code>: minimum number of entries per object, defaults to <code>3</code>. <code>max</code>: maximum number of entries per object, defaults to <code>7</code>.</td><td>object</td></tr></tbody></table>
+Returns an array of random objects with flat, non-nested values.
 
-## `randomNumericData`
+#### Parameters
 
-Generates numeric datasets, often used for charting. The data follows a Gaussian (normal) distribution, creating realistic-looking random fluctuations around a mean value.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>length</code></td><td></td><td>The length of the array. Default 10.</td><td>integer</td></tr><tr><td><code>options</code></td><td><code>min</code></td><td>The minimum number of entries per object. Default 3.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The maximum number of entries per object. Default 7.</td><td>integer</td></tr></tbody></table>
 
-### Parameters
+#### Output
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td>Optional settings. See below.</td><td>object</td></tr></tbody></table>
+Returns an array of objects.
 
-Available options:
+## Specialized datasets
 
-<table><thead><tr><th width="150">Option</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nDataSets</code></td><td>The number of separate datasets to generate. Defaults to <code>1</code>.</td><td>integer</td></tr><tr><td><code>nDataPoints</code></td><td>The number of data points in each dataset. Defaults to <code>100</code>.</td><td>integer</td></tr><tr><td><code>addTimeAxis</code></td><td>If <code>true</code>, adds a <code>date</code> field to each data point, incrementing by one second per point. Defaults to <code>false</code>.</td><td>boolean</td></tr><tr><td><code>timeFormat</code></td><td>The format of the <code>date</code> field when <code>addTimeAxis</code> is <code>true</code>: <code>epoch</code> (default), <code>iso</code>, <code>string</code>, or <code>object</code>.</td><td>string</td></tr></tbody></table>
+### `randomNumericData`
 
-### Examples
+Generates numeric datasets using a Gaussian distribution to create realistic random fluctuations around a mean value, typically used for charts.
 
-A single dataset as a simple array (only when <code>nDataSets</code> is 1 and <code>addTimeAxis</code> is off):
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>nDataSets</code></td><td>The number of separate datasets to generate. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>nDataPoints</code></td><td>The number of data points per dataset. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>addTimeAxis</code></td><td>Adds a <code>date</code> field to each data point, incrementing by one second per point. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>timeFormat</code></td><td>The format of the <code>date</code> field when <code>addTimeAxis</code> is true: <code>epoch</code>, <code>iso</code>, <code>string</code>, or <code>object</code>. Default <code>epoch</code>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns a single array of numbers if `nDataSets` is 1 and `addTimeAxis` is false, or an array of objects for multiple datasets or time-series tracking.
+
+#### Examples
+
+Example 1: Single dataset array
 
 ```yaml
 # options
@@ -184,13 +204,7 @@ nDataSets: 1
 nDataPoints: 5
 ```
 
-Output:
-
-```json
-[-0.5, 1.2, 0.8, -0.1, 0.3]
-```
-
-Multiple datasets with an ISO time axis:
+Example 2: Multiple datasets with an ISO time axis
 
 ```yaml
 # options
@@ -200,91 +214,87 @@ addTimeAxis: true
 timeFormat: iso
 ```
 
-Output:
+### `randomAddressData`
 
-```json
-[
-  { "dataset0": 65.4, "dataset1": -22.1, "date": "2025-08-29T12:46:00.000Z" },
-  { "dataset0": 66.1, "dataset1": -21.5, "date": "2025-08-29T12:46:01.000Z" },
-  { "dataset0": 65.9, "dataset1": -22.3, "date": "2025-08-29T12:46:02.000Z" }
-]
-```
+Returns an array of realistic address objects containing street, building number, city, state, and country fields.
 
-## `randomAddressData`
+#### Parameters
 
-Returns an array of realistic-looking, randomly generated address objects with the fields `street`, `buildingNumber`, `city`, `state`, and `country`.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>entries</code></td><td>The number of address objects to generate. Default 10.</td><td>integer</td></tr><tr><td></td><td><code>locale</code></td><td>The geographic locale format for the data: <code>DE</code> or <code>US</code>. Default <code>DE</code>.</td><td>string</td></tr></tbody></table>
 
-### Parameters
+#### Output
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>entries</code>: the number of address objects to generate, defaults to <code>10</code>. <code>locale</code>: the locale for the data, <code>DE</code> (default) or <code>US</code>.</td><td>object</td></tr></tbody></table>
+Returns an array of address objects.
 
-## `randomPersonData`
+### `randomPersonData`
 
-Returns an array of realistic-looking, randomly generated objects representing people.
+Returns an array of realistic personal identity records.
 
-### Parameters
+#### Parameters
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>entries</code>: the number of person objects to generate, defaults to <code>10</code>. <code>locale</code>: the locale for the data, <code>DE</code> (default) or <code>US</code>.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>entries</code></td><td>The number of person objects to generate. Default 10.</td><td>integer</td></tr><tr><td></td><td><code>locale</code></td><td>The regional locale format for names and data: <code>DE</code> or <code>US</code>. Default <code>DE</code>.</td><td>string</td></tr></tbody></table>
 
-### Output
+#### Output
 
-An array of objects with the fields `title`, `firstName`, `lastName`, `company`, `phone`, `verified`, `validUntil`, `note`, and an `avatar`, which is a base64-encoded random JPEG image.
+Returns an array of objects containing title, firstName, lastName, company, phone, verified, validUntil, note, and a base64-encoded random JPEG avatar image.
 
-## Dataset functions
+### `randomChatData`
 
-These functions return static, pre-defined JSON datasets that are useful for consistently testing and demonstrating UI components like charts, grids, and boards.
+Generates an array of simple chat message objects containing role and content keys to simulate a conversation.
 
-* `kanbanData`: Returns data structured for a kanban board.
-* `energyData`: Returns data about energy sources.
-* `populationDataset`: Returns population data.
-* `marketValueDataset`: Returns data about company market values.
-* `australianMedalsDataset`: Returns data about Olympic medals.
-* `populationVsAgeDataset`: Returns data correlating age and population.
+#### Parameters
 
-## `randomChatData`
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>messages</code></td><td>The total number of chat messages to generate. Default 10.</td><td>integer</td></tr></tbody></table>
 
-Generates an array of simple chat message objects (`role` and `content`) to simulate a conversation.
+#### Output
 
-### Parameters
+Returns an array of chat message objects.
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>messages</code></td><td>The total number of messages to generate. Defaults to <code>10</code>.</td><td>integer</td></tr></tbody></table>
+### `timelineData`
 
-## `timelineData`
+Generates randomized chronological timeline events spanning a specific duration and ending at the current time. This function supports tracking machine states, operator assignments, and work shifts.
 
-Generates randomized chronological timeline data spanning a specific time duration, ending at the current time. Each entry represents a change on one of the tracks (state, operator, shift) with a timestamp. This is ideal for testing timeline visualizations of machine states.
+#### Parameters
 
-### Parameters
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>totalDurationHours</code></td><td>The total duration of the generated data in hours. Default 24.</td><td>number</td></tr><tr><td></td><td><code>includeState</code></td><td>Includes the machine state track (values such as <code>Running</code>, <code>Idle</code>, <code>Maintenance</code>, or <code>Error</code>). Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeOperator</code></td><td>Includes the operator assignment track. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>includeShift</code></td><td>Includes the work shift track. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>timeFormat</code></td><td>The timestamp format: <code>epoch</code>, <code>iso</code>, <code>string</code>, or <code>object</code>. Default <code>epoch</code>.</td><td>string</td></tr></tbody></table>
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td>Optional settings. See below.</td><td>object</td></tr></tbody></table>
+#### Output
 
-Available options:
+Returns an array of timeline event objects with a timestamp and the enabled tracks.
 
-<table><thead><tr><th width="190">Option</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>totalDurationHours</code></td><td>Total duration of the generated data in hours. Defaults to <code>24</code>.</td><td>number</td></tr><tr><td><code>includeState</code></td><td>Whether to include the state track (values like <code>Running</code>, <code>Idle</code>, <code>Maintenance</code>, <code>Error</code>). Defaults to <code>true</code>.</td><td>boolean</td></tr><tr><td><code>includeOperator</code></td><td>Whether to include the operator track. Defaults to <code>false</code>.</td><td>boolean</td></tr><tr><td><code>includeShift</code></td><td>Whether to include the shift track. Defaults to <code>false</code>.</td><td>boolean</td></tr><tr><td><code>timeFormat</code></td><td>Format of the timestamps: <code>epoch</code> (default), <code>iso</code>, <code>string</code>, or <code>object</code>.</td><td>string</td></tr></tbody></table>
+### `randomPointInCircle`
 
-### Output
+Generates a random GPS coordinate within a specified radius of a central point.
 
-An array of timeline events, each with the enabled tracks and a `timestamp`.
+#### Parameters
 
-## `randomPointInCircle`
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>distance</code></td><td></td><td>The radius of the circle in meters. Default 5000.</td><td>integer</td></tr><tr><td><code>coord</code></td><td><code>lat</code></td><td>The latitude of the central coordinate point. Default coordinates point to Hamburg, Germany.</td><td>number</td></tr><tr><td></td><td><code>lng</code></td><td>The longitude of the central coordinate point. Default coordinates point to Hamburg, Germany.</td><td>number</td></tr></tbody></table>
 
-Generates a random GPS coordinate (latitude and longitude) that falls within a specified radius of a central point.
+#### Output
 
-### Parameters
+Returns a coordinate object containing `lat` and `lng` properties.
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>distance</code></td><td>The radius of the circle in meters. Defaults to <code>5000</code>.</td><td>integer</td></tr><tr><td><code>coord</code></td><td>The central coordinate object with <code>lat</code> and <code>lng</code>. Defaults to a location in Hamburg, Germany.</td><td>object</td></tr></tbody></table>
+### Predefined reference datasets
 
-### Output
+These functions require no parameters and return static, predefined JSON datasets to test layout configurations and UI components (such as charts, data grids, or kanban boards) consistently:
 
-A coordinate object, for example `{ "lat": 53.5583, "lng": 10.0121 }`.
+* `kanbanData`: Returns structured columns and cards for a kanban board.
+* `energyData`: Returns data tracking power metrics and energy sources.
+* `populationDataset`: Returns historical demographic population data.
+* `marketValueDataset`: Returns data tracking corporate market valuations.
+* `australianMedalsDataset`: Returns statistics on historical Olympic medals.
+* `populationVsAgeDataset`: Returns data correlating age groups and population distribution.
 
-## `longExecution`
+## Execution control
 
-Simulates a long-running asynchronous process by waiting for a specified amount of time.
+### `longExecution`
 
-### Parameters
+Simulates a long-running asynchronous process by pausing execution for a specified duration.
 
-<table><thead><tr><th width="120">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>time</code></td><td>The simulated execution time in milliseconds.</td><td>integer</td></tr></tbody></table>
+#### Parameters
 
-### Output
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>time</code></td><td>The simulated execution duration in milliseconds.</td><td>integer</td></tr></tbody></table>
 
-The provided execution time, after the delay.
+#### Output
+
+Returns the execution duration value after the specified delay.
