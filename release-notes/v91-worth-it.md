@@ -2,7 +2,7 @@
 description: 16 Mar 2026
 ---
 
-# v91 – Worth it
+# v91 — Worth It
 
 <div align="left"><figure><img src="../.gitbook/assets/image (525).png" alt=""><figcaption></figcaption></figure></div>
 
@@ -19,8 +19,8 @@ description: 16 Mar 2026
 
 ## Fixes
 
-* Fixed canvas widget transformations when zooming on pages with extended height in the [Frontend Builder](../app-builder/build-frontend.md).
+* Fixed canvas widget transformations when zooming on pages with extended height in the [Frontend Builder](../app-builder/build-frontend/).
 * Fixed an issue where [Production Apps](../production-apps/overview.md) performed incorrect automatic page switching after a new deployment.
 * Resolved a race condition that created zombie subscriptions on the broker, improving overall platform performance.
 * Fixed a CSS z-index layout bug that caused widgets to overflow the bottom navigation bar.
-* Fixed event-style function subscription losses that occurred when an [Agent](../app-builder/build-backend/agents) encountered network reconnections.
+* Fixed event-style function subscription losses that occurred when an [Agent](../app-builder/build-backend/agents/) encountered network reconnections.

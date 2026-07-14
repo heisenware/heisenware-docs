@@ -2,19 +2,19 @@
 description: Oct 15, 2024
 ---
 
-# v83 – Beauty treatment
+# v83 — Beauty treatment
 
 <div align="left"><figure><img src="../.gitbook/assets/Wendy.webp" alt="" width="175"><figcaption></figcaption></figure></div>
 
 ## Features
 
 * Improved the visual style of the login form for [Production Apps](../production-apps/overview.md).
-* Improved connection highlighting across the [Backend Builder](../app-builder/build-backend.md) and [Frontend Builder](../app-builder/build-frontend.md).
-* Added [Agent](../app-builder/build-backend/agents.md) selection as a field type inside the [form](../app-builder/build-frontend/widgets/input-widgets/form.md) widget.
+* Improved connection highlighting across the Backend Builder and Frontend Builder.
+* Added Agent selection as a field type inside the [form](../app-builder/build-frontend/widgets/input-widgets/form.md) widget.
 * Added the new [data tiles](../app-builder/build-frontend/widgets/display-widgets/data-tiles.md) widget.
-* Expanded features and improved the overall usability of the [Operating System (OS)](../app-builder/build-backend/functions/connectors/operating-system-os.md) connector.
+* Expanded features and improved the overall usability of the [operating system (OS)](../app-builder/build-backend/functions/connectors/operating-system-os.md) connector.
 * Added support for method calling and file I/O operations in the [OPC UA Client](../app-builder/build-backend/functions/connectors/opc-ua-client.md) connector.
-* Enabled Docker container monitoring in the [Operating System (OS)](../app-builder/build-backend/functions/connectors/operating-system-os.md) connector.
+* Enabled Docker container monitoring in the OS connector.
 * Added the new [pie chart](../app-builder/build-frontend/widgets/display-widgets/pie-chart.md) widget.
 
 ## Fixes

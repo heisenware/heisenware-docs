@@ -2,7 +2,7 @@
 description: 12 Oct 2025
 ---
 
-# v88 – Almost forever
+# v88 — Almost forever
 
 <div align="left"><figure><img src="../.gitbook/assets/image (49).png" alt="" width="285"><figcaption></figcaption></figure></div>
 
@@ -10,7 +10,7 @@ description: 12 Oct 2025
 
 * Added table management, direct writes, and automatic downsampling to the [timeseries database](../app-builder/build-backend/functions/storage/timeseries-database.md).
 * Configure photo resolution directly within the [photo](../app-builder/build-frontend/widgets/input-widgets/photo.md) widget.
-* Introduced [Docker Extensions](../app-builder/build-backend/functions/extensions.md) to run custom code for your Apps, both in the cloud or on-premises. (Made the [Industrial Blockchain](../app-builder/build-backend/functions/extensions/industrial-blockchain.md), [Process Simulations](../app-builder/build-backend/functions/extensions/process-simulations.md), and [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) Docker Extensions.
+* Introduced [Docker Extensions](../app-builder/build-backend/functions/extensions/) to run custom code for your Apps, both in the cloud or on-premises. (Made the [Industrial Blockchain](../app-builder/build-backend/functions/extensions/industrial-blockchain.md), [Process Simulations](../app-builder/build-backend/functions/extensions/process-simulations.md), and [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) Docker Extensions.
 * Added a single-command script for [on-premise installation](../tutorials/on-premise-installation.md).
 * Released the [Docker Agent](../app-builder/build-backend/agents/docker-agent.md), which lets you run connectors on any hardware that supports Docker.
 * The [upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget now directly supports uploading photos.
@@ -34,5 +34,5 @@ description: 12 Oct 2025
 
 ## Breaking changes
 
-* If your App uses a top bar or top bar and bottom tabs navigation layout, you may need to adjust your widget positions o align with the new layout rendering (see [Fixes](#fixes)).
+* If your App uses a top bar or top bar and bottom tabs navigation layout, you may need to adjust your widget positions o align with the new layout rendering (see [Fixes](v88-almost-forever.md#fixes)).
 * The `readXlsx` function in the [File I/O](../app-builder/build-backend/functions/connectors/file-i-o.md) connector no longer returns an object containing the sheet name as the sole key when processing a single sheet. It now returns the array of rows directly.
