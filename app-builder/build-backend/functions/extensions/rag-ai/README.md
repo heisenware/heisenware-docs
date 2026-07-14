@@ -5,6 +5,8 @@ Retrieval-Augmented Generation (RAG) optimizes Large Language Model execution by
 {% hint style="danger" %}
 #### Environment configuration requirement
 You must append a valid `OPENAI_API_KEY` configuration argument inside environment parameters when launching this module.
+
+![](<../../../../../.gitbook/assets/image (43).png>)
 {% endhint %}
 
 The RAG AI extension bundles two distinct classes to manage information retrieval pipelines: `KnowledgeBase` and `ChatWithData`.
@@ -108,8 +110,6 @@ Wipes all entries out of a chosen target vector destination store.
 #### Output
 
 Returns nothing.
-
----
 
 ## Chat with data
 
