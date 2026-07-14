@@ -1,106 +1,84 @@
 # Stopwatch
 
-The `Stopwatch` class provides a high-resolution timer for accurately measuring time intervals. You can create an instance of a stopwatch to start, stop, pause, and reset it. This is useful for timing operations, tracking user activity, or managing any time-based logic.
+With a stopwatch, you get a high-resolution timer for accurately measuring time intervals. You can start, stop, and reset it, and record laps: snapshots of the elapsed time at a specific moment without stopping the main timer. This is useful for timing operations, tracking activity, or managing any time-based logic.
 
-A key feature of the stopwatch is its ability to record "laps," which are snapshots of the elapsed time at a specific moment without stopping the main timer.
+The stopwatch also emits events (`start`, `stop`, `reset`, `tick`, and `lap`) that other parts of your App can listen to. This allows you to trigger other functions or flows automatically, for example updating a display every second while the stopwatch is running.
 
-The stopwatch also emits events (like `start`, `stop`, `lap`, and `tick`) that other parts of your application can listen to. This allows you to trigger other functions or flows automatically—for example, updating a display every second the stopwatch is running.
+## Static functions
 
-## Static Functions
+These functions work without creating an instance.
 
-### formatTime
+### `formatTime`
 
-Converts a duration in milliseconds into a human-readable, formatted string.
+Converts a duration in milliseconds into a human-readable, formatted string. This is helpful for displaying the output of `getElapsedTime` or `getLaps` in a friendly format.
 
-This is a static function, so you can use it directly without creating a `Stopwatch` instance first. It's helpful for displaying the output of `getElapsedTime()` or `getLaps()` in a friendly format.
+The `format` argument uses tokens that are replaced by time values:
 
-The `format` argument uses special tokens that are replaced by time values:
+* `HH`: Hours, padded with a zero (for example `08`)
+* `H`: Hours, not padded (for example `8`)
+* `mm`: Minutes, padded with a zero (for example `05`)
+* `m`: Minutes, not padded (for example `5`)
+* `ss`: Seconds, padded with a zero (for example `01`)
+* `s`: Seconds, not padded (for example `1`)
+* `ms`: Milliseconds, padded to 3 digits (for example `045`)
 
-* HH: Hours, padded with a zero (e.g., `08`)
-* H: Hours, not padded (e.g., `8`)
-* mm: Minutes, padded with a zero (e.g., `05`)
-* m: Minutes, not padded (e.g., `5`)
-* ss: Seconds, padded with a zero (e.g., `01`)
-* s: Seconds, not padded (e.g., `1`)
-* ms: Milliseconds, padded to 3 digits (e.g., `045`)
+{% hint style="warning" %}
+Every occurrence of a token letter in the format string is replaced, including inside literal text. A format like `m minutes` therefore produces mangled output. Use only separator characters such as `:`, `.`, or spaces between tokens.
+{% endhint %}
 
 #### Parameters
 
-1. `milliseconds`: The number of milliseconds you want to format.
-2. `format` (Optional): A string defining the output format. If you don't provide one, the default format is `HH:mm:ss.ms`.
+<table><thead><tr><th width="150">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>milliseconds</code></td><td>The duration to format.</td><td>number</td></tr><tr><td><code>format</code></td><td>A string defining the output format. Defaults to <code>HH:mm:ss.ms</code>.</td><td>string</td></tr></tbody></table>
 
-#### Example 1: Default Format
+#### Examples
 
-This example formats 125,500 milliseconds (2 minutes, 5 seconds, 500 ms) using the default format.
+Format 125,500 milliseconds (2 minutes, 5 seconds, 500 ms) using the default format:
 
 ```yaml
 # milliseconds
 125500
-# format (optional, default is 'HH:mm:ss.ms')
 ```
 
-#### Output
+Output: `00:02:05.500`
 
-```json
-"00:02:05.500"
-```
-
-#### Example 2: Custom Format
-
-This example formats 3,601,000 milliseconds (1 hour, 1 second) using a custom, descriptive string.
+Format 3,601,000 milliseconds (1 hour, 1 second) using a custom format:
 
 ```yaml
 # milliseconds
 3601000
 # format
-"H hour, m minutes, and s seconds"
+H:mm:ss
 ```
 
-#### Output
+Output: `1:00:01`
 
-```json
-"1 hour, 0 minutes, and 1 seconds"
-```
+## Instance functions
 
-## Constructor and Member Functions
+You must create an instance to use the following functions.
 
-### create
+### `create`
 
-This is the constructor. It creates a new, blank `Stopwatch` instance. The new stopwatch is initialized in a 'stopped' state with an elapsed time of 0.
+Creates a new stopwatch instance, initialized in the stopped state with an elapsed time of 0.
 
-#### Output
+### `start`
 
-> Returns a new `Stopwatch` instance. You must use this instance to call all the member functions listed below (like `start`, `stop`, etc.).
+Starts or resumes the stopwatch and triggers the `onStart` event. If the stopwatch is already running, this function does nothing.
 
-***
+### `stop`
 
-### start
+Stops (pauses) the stopwatch and triggers the `onStop` event. The current elapsed time is saved and held until `start` is called again. If the stopwatch is already stopped, this function does nothing.
 
-Starts or resumes the stopwatch. If the stopwatch is already running, this function does nothing. This function also triggers the `onStart` event.
+### `reset`
 
-***
+Stops the stopwatch (if it's running), resets its elapsed time and all recorded laps back to zero, and triggers the `onReset` event.
 
-### stop
+### `lap`
 
-Stops (pauses) the stopwatch. The current elapsed time is saved and will be held until `start` is called again. If the stopwatch is already stopped, this function does nothing. This function also triggers the `onStop` event.
+Records the current elapsed time as a lap without stopping the timer and triggers the `onLap` event. If the stopwatch is not running, this function does nothing.
 
-***
+### `getElapsedTime`
 
-### reset
-
-Stops the stopwatch (if it's running) and resets its elapsed time and all recorded laps back to zero. This function also triggers the `onReset` event.
-
-***
-
-### lap
-
-Records the current elapsed time as a "lap" without stopping the timer. If the stopwatch is not running, this function does nothing. This function also triggers the `onLap` event.
-
-***
-
-### getElapsedTime
-
-Returns the total elapsed time in milliseconds (as a number). This works whether the stopwatch is currently running or stopped.
+Returns the total elapsed time in milliseconds. This works whether the stopwatch is currently running or stopped.
 
 #### Output
 
@@ -108,11 +86,9 @@ Returns the total elapsed time in milliseconds (as a number). This works whether
 15320.5
 ```
 
-***
+### `getLaps`
 
-### getLaps
-
-Returns a list (an array) of all lap times that have been recorded using the `lap()` function.
+Returns an array of all lap times that have been recorded using the `lap` function.
 
 #### Output
 
@@ -124,98 +100,63 @@ Returns a list (an array) of all lap times that have been recorded using the `la
 ]
 ```
 
-***
+### `clearLaps`
 
-### clearLaps
+Clears all recorded laps. This does not stop or reset the main timer.
 
-Clears all recorded laps from the stopwatch's memory. This does not stop or reset the main timer.
-
-***
-
-### isRunning
+### `isRunning`
 
 Checks if the stopwatch is currently running.
 
 #### Output
 
-The output will be `true` if running, `false` if stopped
+`true` if running, `false` if stopped.
 
-***
+### `getState`
 
-### getState
-
-Returns the current state of the stopwatch as a text string.
+Returns the current state of the stopwatch.
 
 #### Output
 
-The output will be `"running"` or `"stopped"`
+A string, either `running` or `stopped`.
 
-***
+### `setTickInterval`
 
-### setTickInterval
-
-Sets the update interval (in milliseconds) for the 'tick' event. By default, the interval is `1000` (1 second). If the stopwatch is already running, the new interval will be applied immediately.
+Sets the update interval for the `tick` event. By default, the interval is `1000` (1 second). If the stopwatch is already running, the new interval is applied immediately.
 
 #### Parameters
 
-1. `intervalMs`: The new update interval in milliseconds.
+<table><thead><tr><th width="130">Parameter</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>intervalMs</code></td><td>The new update interval in milliseconds. Must be a positive integer, invalid values fall back to the default of <code>1000</code>.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
-This example sets the stopwatch to emit a 'tick' event every half-second.
+Emit a `tick` event every half second:
 
 ```yaml
 # intervalMs
 500
 ```
 
-***
+### `onStart`
 
-### onStart
+Subscribes to the `start` event. The listener is executed every time this stopwatch is started and receives the current elapsed time.
 
-Subscribes to the 'start' event. The listener flow you provide will be executed every time this stopwatch instance is started.
+### `onStop`
 
-***
+Subscribes to the `stop` event. The listener is executed every time this stopwatch is stopped and receives the final elapsed time.
 
-### onStop
+### `onReset`
 
-Subscribes to the 'stop' event. The listener flow you provide will be executed every time this stopwatch instance is stopped.
+Subscribes to the `reset` event. The listener is executed every time this stopwatch is reset.
 
-***
+### `onTick`
 
-### onReset
+Subscribes to the `tick` event. This event fires repeatedly while the stopwatch is running, at the interval set by `setTickInterval`. The listener receives the current elapsed time.
 
-Subscribes to the 'reset' event. The listener flow you provide will be executed every time this stopwatch instance is reset.
+### `onLap`
 
-***
+Subscribes to the `lap` event. This event fires every time the `lap` function is successfully called. The listener receives two arguments: `lapTime`, the time of the lap that was just recorded, and `allLaps`, a list of all laps recorded so far including the new one.
 
-### onTick
+### `removeAllListeners`
 
-Subscribes to the 'tick' event. This event fires repeatedly while the stopwatch is running, at the interval set by `setTickInterval`.
-
-***
-
-### onLap
-
-Subscribes to the 'lap' event. This event fires every time the `lap()` function is successfully called.
-
-#### Parameters
-
-1. `listener`: The flow to execute when the event fires. This flow will be triggered with an object containing the lap data.
-
-> Input to your Listener Flow: When this event fires, your listener flow will receive an object with two keys:
->
-> * `lapTime`: The time of the lap that was just recorded (e.g., `5012.3`).
-> * `allLaps`: A list of all laps recorded so far, including the new one (e.g., `[5012.3, 10050.1]`).
-
-***
-
-### removeAllListeners
-
-Unsubscribes all listeners (like `onStart`, `onStop`, `onTick`, etc.) that are currently attached to this specific stopwatch instance.
-
-#### Output
-
-```
-"unsubscribed"
-```
+Unsubscribes all listeners (`onStart`, `onStop`, `onReset`, `onTick`, and `onLap`) that are currently attached to this stopwatch instance.
