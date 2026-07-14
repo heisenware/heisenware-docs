@@ -10,7 +10,7 @@ description: 1 June 2025
 
 * Added support for creating [tags](../app-builder/deploy-and-maintain.md) and sharing your Apps.
 * The [Hydra MIP](../app-builder/build-backend/functions/connectors/hydra-mip.md) connector now supports PDM calls for Hydra 8.
-* Added more [utility functions](../app-builder/build-backend/functions/utilities.md).
+* Added more [utility functions](../app-builder/build-backend/functions/utilities/).
 * Enabled alphanumerical sorting for your Apps, widgets, and items inside the [Function Explorer](../app-builder/build-backend/functions/function-explorer.md) and Frontend Builder.
 
 ## Fixes

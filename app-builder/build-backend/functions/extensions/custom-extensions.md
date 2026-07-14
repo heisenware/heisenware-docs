@@ -1,6 +1,6 @@
 # Custom Extensions
 
-Custom Extensions let you extend the Heisenware platform to your specific needs. We provide a project setup into which you add your custom functionality in a completely non-intrusive fashion. Built on our [VRPC](../../../../advanced/vrpc.md) library, you write plain Node.js code (no APIs to learn) and make it ready for visual programming in minutes.
+Custom Extensions let you extend the Heisenware platform to your specific needs. We provide a project setup into which you add your custom functionality in a completely non-intrusive fashion. Built on our [VRPC](../../../../advanced/vrpc/) library, you write plain Node.js code (no APIs to learn) and make it ready for visual programming in minutes.
 
 {% hint style="info" %}
 We are actively working on the same idea for C++ and Python.

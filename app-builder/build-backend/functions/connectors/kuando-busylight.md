@@ -2,7 +2,7 @@
 
 The Kuando Busylight connector controls Kuando Busylight status indicators. It changes the light's color and brightness, makes it blink or pulse, and plays the device's built-in sounds.
 
-This connector requires [instance creation](./#instance-creation) before you can control a physical unit, though it includes a static utility for device scanning. Because a Busylight is a physical USB device on your premises, this function typically executes inside an [Agent](../../agents.md) installed on the local computer where the light is connected (see the [local connection scenario](../connectors.md#local-connection-via-agent)).
+This connector requires [instance creation](./#instance-creation) before you can control a physical unit, though it includes a static utility for device scanning. Because a Busylight is a physical USB device on your premises, this function typically executes inside an [Agent](../../agents/) installed on the local computer where the light is connected (see the [local connection scenario](./#local-connection-via-agent)).
 
 ## Device management
 

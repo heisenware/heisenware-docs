@@ -25,7 +25,7 @@ The [recorder](../../extension-nodes/recorder.md) extension node provides the fa
 To connect an external InfluxDB instance, use the [`create`](timeseries-database.md#create) function:
 
 * **Cloud or public database**: Connect directly if your InfluxDB server is accessible via the internet.
-* **Local database (via Agent)**: If your InfluxDB sits inside a private network, deploy an [Agent](../../agents.md) in that network first and create the database instance within that Agent.
+* **Local database (via Agent)**: If your InfluxDB sits inside a private network, deploy an [Agent](../../agents/) in that network first and create the database instance within that Agent.
 
 {% hint style="info" %}
 The functions for writing and querying data remain identical whether you use the managed `internal-influx` or a custom connection.

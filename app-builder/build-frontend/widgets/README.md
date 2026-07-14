@@ -1,6 +1,6 @@
 # Widgets
 
-Widgets are the interactive building blocks of your App's UI. Static elements set the context; widgets work with your backend logic to display live data, capture user input, and trigger functions and flows. See [Display widgets](display-widgets/), [Input widgets](input-widgets/), and [Trigger widgets](trigger-widgets/) for details.
+Widgets are the interactive building blocks of your App's UI. Static elements set the context; widgets work with your backend logic to display live data, capture user input, and trigger functions and flows. See [display widgets](display-widgets/), [input widgets](input-widgets/), and [trigger widgets](trigger-widgets/) for details.
 
 ## Configuration
 
@@ -28,7 +28,7 @@ A widget operates once you link it to the [Backend Builder](../../build-backend/
 ### How to link
 
 1. Select the widget in the [Frontend Builder](../) (optional).
-2. Drag a [function](../../build-backend/functions/) part (an input, trigger, or output) or a [modifier](../../build-backend/modifier.md) from the [Backend Builder](../../build-backend/) and drop it onto the widget.
+2. Drag a [function](../../build-backend/functions/) part (an input, trigger, or output) or a [modifier](../../build-backend/extension-nodes/modifier.md) from the [Backend Builder](../../build-backend/) and drop it onto the widget.
 3. Pick a widget property inside the menu. The platform selects the main property automatically.
 
 To break a link, click the `x` next to the property in the linked function, or use the widget's context menu to unlink all.
@@ -44,5 +44,5 @@ Drag from the function or extension node onto the widget. The selected slot dete
 {% hint style="info" %}
 #### Auto-triggering on input
 
-To execute a function automatically from UI input instead of a click, wire the input of the function to its own trigger. The incoming data feeds and executes the function without requiring a button.
+To execute a function automatically from UI input instead of a click, wire the input of the function to its trigger. The incoming data feeds and executes the function without requiring a button.
 {% endhint %}

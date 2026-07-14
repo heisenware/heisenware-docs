@@ -9,5 +9,5 @@ Utilities provide core data processing, timing, and asset generation features wi
 {% hint style="info" %}
 #### Testing with simulated data
 
-Use data and event simulation nodes to test logic during the initial development phase. This verifies that dashboards and databases work correctly before connecting to a physical PLC or sensor. Once the logic works, replace the simulation classes with actual [connectors](../connectors.md).
+Use data and event simulation nodes to test logic during the initial development phase. This verifies that dashboards and databases work correctly before connecting to a physical PLC or sensor. Once the logic works, replace the simulation classes with actual [connectors](../connectors/).
 {% endhint %}

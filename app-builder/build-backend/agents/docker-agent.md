@@ -35,7 +35,7 @@ heisenware/docker-agent:v91-slim
 
 ### Retrieving credentials
 
-To get `HW_USERNAME` and `HW_PASSWORD`, first add a [VRPC integration](../../../app-manager/integrations-inbound-connections.md#vrpc-client) in the App Manager.
+To get `HW_USERNAME` and `HW_PASSWORD`, first add a [VRPC integration](../../../app-manager/inbound-integrations.md#vrpc-client) in the App Manager.
 
 ### Example
 

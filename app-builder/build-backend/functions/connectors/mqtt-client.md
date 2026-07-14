@@ -1,8 +1,8 @@
-# MQTT client connector
+# MQTT Client
 
 The MQTT client connector manages client connections to an MQTT broker over various transport protocols, including standard TCP, TLS, and WebSockets. It automatically handles server keep-alive pings, Quality of Service (QoS) delivery flows, automated reconnection routines, and early message queuing.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can communicate with an external broker, though it includes a pre-initialized internal option.
+This connector requires [instance creation](./#instance-creation) before you can communicate with an external broker, though it includes a pre-initialized internal option.
 
 Heisenware provides a built-in, pre-configured instance named `internal-mqtt` connected directly to the platform's local broker. You can use `internal-mqtt` directly in your application logic to publish or subscribe to internal topics without defining connection configurations. To communicate with a distinct, external third-party broker, create a separate connector instance and use the connection management functions below.
 
@@ -14,60 +14,7 @@ Establishes an active connection to the specified MQTT broker. If the client is 
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>url</code></td>
-      <td></td>
-      <td>The destination broker URL endpoint including the transport protocol prefix (such as <code>mqtt://broker.hivemq.com</code> or <code>mqtts://test.mosquitto.org</code>).</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>clientId</code></td>
-      <td>A unique tracking string for the client session. Generates a random alphanumeric hash automatically if omitted.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>username</code></td>
-      <td>The authentication username credential required by the broker.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>password</code></td>
-      <td>The authentication password credential required by the broker.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>keepalive</code></td>
-      <td>The interval in seconds between successive server keep-alive ping messages. Default 60.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>connectTimeout</code></td>
-      <td>The connection threshold wait limit in milliseconds before a connection handshake fails. Default 30000.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>will</code></td>
-      <td>A last will and testament configuration object delivered automatically by the broker if the client terminates ungracefully.</td>
-      <td>object</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The destination broker URL endpoint including the transport protocol prefix (such as <code>mqtt://broker.hivemq.com</code> or <code>mqtts://test.mosquitto.org</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>clientId</code></td><td>A unique tracking string for the client session. Generates a random alphanumeric hash automatically if omitted.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The authentication username credential required by the broker.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The authentication password credential required by the broker.</td><td>string</td></tr><tr><td></td><td><code>keepalive</code></td><td>The interval in seconds between successive server keep-alive ping messages. Default 60.</td><td>integer</td></tr><tr><td></td><td><code>connectTimeout</code></td><td>The connection threshold wait limit in milliseconds before a connection handshake fails. Default 30000.</td><td>integer</td></tr><tr><td></td><td><code>will</code></td><td>A last will and testament configuration object delivered automatically by the broker if the client terminates ungracefully.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -94,22 +41,7 @@ Closes the active network channel link with the MQTT broker and removes all inst
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>force</code></td>
-      <td>When set to true, the client severs the network socket instantly without waiting for remaining in-flight message acknowledgments to complete. Default false.</td>
-      <td>boolean</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>force</code></td><td>When set to true, the client severs the network socket instantly without waiting for remaining in-flight message acknowledgments to complete. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -145,6 +77,7 @@ Removes the instance configuration from the execution scope and clears active me
 
 {% hint style="danger" %}
 #### Irreversible action
+
 Deleting an instance removes its configuration. To communicate with the broker again, you must trigger `create` anew.
 {% endhint %}
 
@@ -164,42 +97,7 @@ Transmits an alphanumeric text string payload directly to a specific topic chann
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>topic</code></td>
-      <td></td>
-      <td>The destination topic channel path string.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>message</code></td>
-      <td></td>
-      <td>The text message payload to transmit.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>qos</code></td>
-      <td>The Quality of Service (QoS) message delivery guarantee level (0, 1, or 2). Default 0.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>retain</code></td>
-      <td>When set to true, instructs the broker to persist the message as the last verified value for the target topic path. Default false.</td>
-      <td>boolean</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td></td><td>The destination topic channel path string.</td><td>string</td></tr><tr><td><code>message</code></td><td></td><td>The text message payload to transmit.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The Quality of Service (QoS) message delivery guarantee level (0, 1, or 2). Default 0.</td><td>integer</td></tr><tr><td></td><td><code>retain</code></td><td>When set to true, instructs the broker to persist the message as the last verified value for the target topic path. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -222,42 +120,7 @@ Transmits a structured data object straight to a specified topic channel. The co
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>topic</code></td>
-      <td></td>
-      <td>The destination topic channel path string.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>message</code></td>
-      <td></td>
-      <td>The structured data object payload to transmit.</td>
-      <td>object</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>qos</code></td>
-      <td>The Quality of Service (QoS) delivery guarantee tier (0, 1, or 2). Default 0.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>retain</code></td>
-      <td>When set to true, the broker stores the message record persistently. Default false.</td>
-      <td>boolean</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td></td><td>The destination topic channel path string.</td><td>string</td></tr><tr><td><code>message</code></td><td></td><td>The structured data object payload to transmit.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The Quality of Service (QoS) delivery guarantee tier (0, 1, or 2). Default 0.</td><td>integer</td></tr><tr><td></td><td><code>retain</code></td><td>When set to true, the broker stores the message record persistently. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -281,30 +144,7 @@ Registers a subscription across designated topic channels to begin intercepting 
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>topic</code></td>
-      <td></td>
-      <td>A standalone routing string, array of topic strings, or tracking map. Supports path wildcard characters (<code>+</code> for single-level and <code>#</code> for multi-level paths).</td>
-      <td>any</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>qos</code></td>
-      <td>The maximum requested Quality of Service (QoS) assignment matching tier. Default 0.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td></td><td>A standalone routing string, array of topic strings, or tracking map. Supports path wildcard characters (<code>+</code> for single-level and <code>#</code> for multi-level paths).</td><td>any</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The maximum requested Quality of Service (QoS) assignment matching tier. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -325,36 +165,7 @@ Attaches an event callback listener to intercept arriving message packets and de
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>listener</code></td>
-      <td></td>
-      <td>The callback function triggered on message arrival. Receives the payload string, destination topic, and raw packet metadata.</td>
-      <td>callback</td>
-    </tr>
-    <tr>
-      <td><code>topic</code></td>
-      <td></td>
-      <td>An optional path string or array of paths to filter subscriptions. If omitted, the callback monitors messages matching all active subscriptions on the connector.</td>
-      <td>any</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>qos</code></td>
-      <td>The subscription configuration matching QoS tier. Default 0.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td></td><td>The callback function triggered on message arrival. Receives the payload string, destination topic, and raw packet metadata.</td><td>callback</td></tr><tr><td><code>topic</code></td><td></td><td>An optional path string or array of paths to filter subscriptions. If omitted, the callback monitors messages matching all active subscriptions on the connector.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The subscription configuration matching QoS tier. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -375,36 +186,7 @@ Attaches an event callback listener to intercept incoming message streams and au
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>listener</code></td>
-      <td></td>
-      <td>The callback function executed on valid message arrival. Receives the parsed data object enhanced with a fallback <code>__topic__</code> text attribute.</td>
-      <td>callback</td>
-    </tr>
-    <tr>
-      <td><code>topic</code></td>
-      <td></td>
-      <td>An optional routing path or array of paths to filter subscriptions. If left blank, matches all active subscriptions on the instance.</td>
-      <td>any</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>qos</code></td>
-      <td>The subscription configuration matching QoS tier. Default 0.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td></td><td>The callback function executed on valid message arrival. Receives the parsed data object enhanced with a fallback <code>__topic__</code> text attribute.</td><td>callback</td></tr><tr><td><code>topic</code></td><td></td><td>An optional routing path or array of paths to filter subscriptions. If left blank, matches all active subscriptions on the instance.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>qos</code></td><td>The subscription configuration matching QoS tier. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -425,22 +207,7 @@ Instructs the connector to drop specific topic channels and halt related message
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>topic</code></td>
-      <td>A literal path string or an array of string channel paths to remove.</td>
-      <td>any</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>topic</code></td><td>A literal path string or an array of string channel paths to remove.</td><td>any</td></tr></tbody></table>
 
 #### Output
 

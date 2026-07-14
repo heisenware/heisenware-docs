@@ -172,7 +172,7 @@ Returns `true` upon removal.
 
 ## App Builder example
 
-In the example below, a [form](../../../../build-frontend/widgets/input-widgets/form.md) fills the subject and content, an [upload](../../../../build-frontend/widgets/input-widgets/upload.md) widget provides the attachments, and the recipient address is predefined. A button triggers the `send` function.
+In the example below, a [form](../../../build-frontend/widgets/input-widgets/form.md) fills the subject and content, an [upload](../../../build-frontend/widgets/input-widgets/upload.md) widget provides the attachments, and the recipient address is predefined. A button triggers the `send` function.
 
 <figure><img src="../../../../.gitbook/assets/image (418).png" alt=""><figcaption></figcaption></figure>
 

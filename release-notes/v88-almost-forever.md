@@ -24,7 +24,7 @@ description: 12 Oct 2025
 * Duplicating canvas sections now correctly clears all pre-existing widget connections.
 * Fixed an issue where the `onJsonMessage` and `onStringMessage` events inside the [MQTT Client](../app-builder/build-backend/functions/connectors/mqtt-client.md) connector failed to trigger correctly when registered multiple times.
 * Resolved a dependency issue with serial data transfer that caused the [Modbus](../app-builder/build-backend/functions/connectors/modbus.md) connector to crash on startup.
-* Fixed a rendering bug in the [Backend Builder](../app-builder/build-backend.md) flow interface where the connection arrow was missing when linking event handlers to function inputs.
+* Fixed a rendering bug in the [Backend Builder](../app-builder/build-backend/) flow interface where the connection arrow was missing when linking event handlers to function inputs.
 * Fixed an issue where the incorrect initial page loaded when an App used programmatic page switching.
 
 ## Changes
