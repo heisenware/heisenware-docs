@@ -1,6 +1,6 @@
 # Industrial Blockchain
 
-The industrial blockchain extension provides an interface to interact with a SafeUrChain blockchain node. This specialized ledger creates a secure, immutable record for tracking data across manufacturing and supply chain networks. 
+The industrial blockchain extension provides an interface to interact with a SafeUrChain blockchain node. This specialized ledger creates a secure, immutable record for tracking data across manufacturing and supply chain networks.
 
 Use this class to manage the node lifecycle, execute transaction writes, and query the ledger. This class requires an instance for ledger operations, but provides static functions for node process management. The code class name is `SafeUrChain`.
 
@@ -188,7 +188,7 @@ Returns an array of block objects.
 
 Retrieves all transaction hashes wrapped inside a specific block.
 
-#### Parameters Levin=
+#### Parameters
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>block</code></td><td>The target block digest hash string.</td><td>string</td></tr></tbody></table>
 

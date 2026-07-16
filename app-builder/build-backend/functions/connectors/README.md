@@ -57,18 +57,18 @@ The following table lists the available connectors and their required configurat
 | [Email](email.md)                                         | Sends emails via SMTP.                                                              | Instance creation required          |
 | [File I/O](file-i-o.md)                                   | Reads from and writes to files on a connected file system.                          | Static functions only               |
 | [GraphQL](graphql.md)                                     | Interacts with any GraphQL API for flexible data queries.                           | Static functions only               |
-| [GPIO Counter](gpio-counter.md)                           | Counts digital pulses on Raspberry Pi GPIO pins, with automatic run/stop detection. | Instance creation required          |
+| [GPIO counter](gpio-counter.md)                           | Counts digital pulses on Raspberry Pi GPIO pins, with automatic run/stop detection. | Instance creation required          |
 | [Heidenhain DNC](heidenhain-dnc.md)                       | Connects to Heidenhain DNC systems and requires a local connection scenario.        | Instance creation required          |
 | [Heidenhain OPC UA](heidenhain-opc-ua.md)                 | Connects to Heidenhain controllers using the OPC UA protocol.                       | Instance creation required          |
 | [HTTP / REST](http-rest.md)                               | Makes requests to standard web APIs and HTTP endpoints.                             | Mixed (Static and instance options) |
 | [Hydra MIP](hydra-mip.md)                                 | Integrates natively with the Manufacturing Integration Platform (MIP).              | Instance creation required          |
 | [Kuando Busylight](kuando-busylight.md)                   | Controls Kuando Busylight status indicators.                                        | Instance creation required          |
-| [Label Printer](label-printer.md)                         | Sends print commands to ZPL-compatible label printers.                              | Instance creation required          |
+| [Label printer](label-printer.md)                         | Sends print commands to ZPL-compatible label printers.                              | Instance creation required          |
 | [Modbus](modbus.md)                                       | Communicates with industrial devices using the Modbus protocol.                     | Instance creation required          |
 | [MQTT Client](mqtt-client.md)                             | Connects to an MQTT broker to publish and subscribe to topics.                      | Instance creation required          |
 | [OPC UA Client](opc-ua-client.md)                         | Connects to an OPC UA server for industrial automation data exchange.               | Instance creation required          |
 | [OPC UA Server](opc-ua-server.md)                         | Deploys an OPC UA server to expose data from the application.                       | Instance creation required          |
-| [Operating System (OS)](operating-system-os.md)           | Accesses statistics and information from the host operating system.                 | Static functions only               |
+| [Operating system (OS)](operating-system-os.md)           | Accesses statistics and information from the host operating system.                 | Static functions only               |
 | [Relational database](../storage/relational-database.md)  | Connects to external SQL databases.                                                 | Instance creation required          |
 | [RS-232/485](rs-232-485.md)                               | Communicates with devices over a serial port.                                       | Instance creation required          |
 | [SAP Digital Manufacturing](sap-digital-manufacturing.md) | Integrates natively with SAP Digital Manufacturing.                                 | Instance creation required          |

@@ -7,8 +7,6 @@ description: >-
 
 # Connectivity setup guide
 
-Use this guide to determine the best way to connect your data sources to Heisenware. Follow the questions below and click the links to navigate to the exact setup that fits your use case.
-
 ## Do you need to connect an external data source?
 
 * **No** – If you are building an independent App that relies solely on built-in databases and does not require external connectivity, you can skip this guide and start directly with the [Overview](../../app-builder/overview.md).

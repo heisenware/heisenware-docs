@@ -20,7 +20,7 @@ description: 12 Oct 2025
 
 * Fixed multi-file upload behavior in the [upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget when utilizing buffer storage.
 * Resolved a positioning discrepancy between the [App Builder](../app-builder/overview.md) preview and [Production Apps](../production-apps/overview.md) when using the Top Bar or Top Bar and Bottom Tabs in the [Page Explorer](../app-builder/build-frontend/page-explorer.md). Widgets in Production Apps no longer render too low on the y-axis.
-* Fixed a bug where the `fontSize` property on the [button](../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget did not apply correctly.
+* Fixed a bug where the `fontSize` property on the [button](../app-builder/build-frontend/widgets/trigger-widgets/button.md) did not apply correctly.
 * Duplicating canvas sections now correctly clears all pre-existing widget connections.
 * Fixed an issue where the `onJsonMessage` and `onStringMessage` events inside the [MQTT Client](../app-builder/build-backend/functions/connectors/mqtt-client.md) connector failed to trigger correctly when registered multiple times.
 * Resolved a dependency issue with serial data transfer that caused the [Modbus](../app-builder/build-backend/functions/connectors/modbus.md) connector to crash on startup.
@@ -29,7 +29,7 @@ description: 12 Oct 2025
 
 ## Changes
 
-* Renamed the File input widget to [Upload](../app-builder/build-frontend/widgets/input-widgets/upload.md), and added new filtering categories including photo.
+* Renamed the file widget to [upload](../app-builder/build-frontend/widgets/input-widgets/upload.md), and added new filtering categories including photo.
 * Configured backend event flows to only activate when running in test mode.
 
 ## Breaking changes

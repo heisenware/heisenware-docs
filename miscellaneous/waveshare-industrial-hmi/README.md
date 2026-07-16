@@ -1,3 +1,0 @@
-# Waveshare Industrial HMI
-
-###
