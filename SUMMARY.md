@@ -161,5 +161,5 @@
 ## Miscellaneous
 
 * [Waveshare Industrial HMI](miscellaneous/waveshare-industrial-hmi/README.md)
-  * [Display Fix for Trixie](miscellaneous/waveshare-industrial-hmi/display-fix-for-trixie.md)
-  * [Kiosk Setup](miscellaneous/waveshare-industrial-hmi/kiosk-setup.md)
+  * [Display fix for Trixie](miscellaneous/waveshare-industrial-hmi/display-fix-for-trixie.md)
+  * [Kiosk setup](miscellaneous/waveshare-industrial-hmi/kiosk-setup.md)
