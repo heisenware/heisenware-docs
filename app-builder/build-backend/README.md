@@ -17,7 +17,7 @@ Backend logic runs in the background, even when no user has the App open. This m
 
 ## Backend Builder
 
-Turn individual functions into automated flows inside the Backend Builder. Drag functions onto the endless canvas and wire them together: data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences.
+Turn individual functions into automated flows inside the Backend Builder. Drag functions onto the endless canvas and wire them together. Data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences. Each function on the canvas is a function node. Together with extension nodes, they form the building blocks of every flow.
 
 ### Adding functions
 
@@ -55,6 +55,14 @@ To bundle functions into a reusable custom function instead, use a [subflow](fun
 Place free-text notes anywhere on the canvas using the annotation tool, for example to document complex logic paths or leave instructions for other developers.
 
 <figure><img src="../../.gitbook/assets/Annotation_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
+
+### Tidying the canvas
+
+The Backend Builder previews layout changes before applying them: every moved node turns orange. Confirm the new layout with the check icon or revert it with the round arrow icon; both icons appear in the toolbar.
+
+* **Clear collisions** (snowplow): Moves functions, extension nodes, sections, and other canvas elements just enough to remove overlaps between nodes. Start it from the toolbar.
+* **Auto-format all**: Rebuilds the entire layout. An algorithm groups connected logic into islands and arranges all elements for readability. Start it from the toolbar.
+* **Placing new nodes**: When you drop a new function or extension node onto the canvas, nearby nodes shift automatically to make room. Confirm or revert the shift the same way.
 
 ### Navigating the canvas
 
