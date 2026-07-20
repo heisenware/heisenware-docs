@@ -6,27 +6,31 @@ This connector requires [instance creation](./#instance-creation) before you can
 
 ## Connection and lifecycle
 
-### `create`
+### `create` (instance)
 
 Creates a client instance configured to communicate with a specific MIP server.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>url</code></td><td>The endpoint URL of the target MIP server.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username used for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password used for authentication.</td><td>string</td></tr><tr><td></td><td><code>accessId</code></td><td>The access tracking credential string.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>url</code></td><td>The endpoint URL of the target MIP server.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username used for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password used for authentication.</td><td>string</td></tr><tr><td></td><td><code>accessId</code></td><td>An 8-digit ID identifying the client application, left-padded with zeros if necessary.</td><td>string</td></tr><tr><td></td><td><code>rejectUnauthorized</code></td><td>Set to false to temporarily disable rejection of untrusted server certificates. Default true.</td><td>boolean</td></tr><tr><td><code>caPath</code></td><td></td><td>An optional absolute path to a root CA <code>.pem</code> file for internal TLS.</td><td>string</td></tr></tbody></table>
+
+{% hint style="info" %}
+Right-click the `options` input and mark it as a secret to mask the password.
+{% endhint %}
 
 #### Example
 
 ```yaml
 # options
-url: [https://mpdv-mip-test05.mpdv.cloud:8080](https://mpdv-mip-test05.mpdv.cloud:8080)
-username: heisenware
-password: Samx1ngSeeCrt
-accessId: '302127'
+url: https://my-mip-server.com:8080
+username: myuser
+password: mysecretpassword
+accessId: '00123456'
 ```
 
 #### Output
 
-Returns the MIP client instance. Throws an error if configuration fails.
+Returns the name of the created instance.
 
 ### `canCommunicate`
 
@@ -66,7 +70,7 @@ Returns `true` if the backend supports MIP 2.0, or `false` if it does not.
 
 ### `logout`
 
-Terminates the open session on the MIP server and clears active cookies.
+Terminates the open session on the MIP server and clears active cookies. Without an explicit logout, open sessions terminate automatically after 30 minutes.
 
 #### Parameters
 
@@ -75,6 +79,24 @@ None.
 #### Output
 
 Returns `true` upon successful session termination, or `false` if it fails.
+
+### `delete` (instance)
+
+Removes the MIP client instance and its connection configuration. Not to be confused with [`delete` (record)](hydra-mip.md#delete-record), which removes a service record on the MIP server.
+
+{% hint style="danger" %}
+#### Irreversible action
+
+Deleting an instance removes its configuration. To communicate with the server again, you must trigger `create` anew.
+{% endhint %}
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
 
 ## Low-level service CRUD
 
@@ -90,9 +112,9 @@ None.
 
 Returns an array of service name strings.
 
-### `create`
+### `create` (record)
 
-Creates a new instance record for a given service type.
+Creates a new instance record for a given service type. Not to be confused with [`create` (instance)](hydra-mip.md#create-instance), which creates the connector instance.
 
 #### Parameters
 
@@ -159,12 +181,12 @@ unitsDesignation: Degree Celsius
 
 Returns `true` on a successful update. Throws an error if the operation fails.
 
-### `delete`
+### `delete` (record)
 
 Removes an existing service instance record.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes the service instance record from the server. You cannot undo this action.
 {% endhint %}
@@ -338,3 +360,166 @@ personId: '2998'
 #### Output
 
 Returns `true` on successful registration. Throws an error if the transaction fails.
+
+### `finishOperation`
+
+Finishes an operation (Arbeitsgang beenden/abmelden) and optionally posts produced quantities.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>The produced good quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>The produced scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>The reason code for scrap. Legacy acronym fallback: <code>eggAus</code>.</td><td>integer</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+orderId: '0004990701'
+operationId: '10'
+workplaceId: '4560'
+yield: 100
+scrap: 5
+scrapReason: 1
+```
+
+#### Output
+
+Returns `true` on success. Throws an error if the transaction fails.
+
+### `interruptOperation`
+
+Interrupts a registered operation (Arbeitsgang unterbrechen), for example for breaks or shift ends where the job is not yet complete. Optionally posts partial quantities.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>The partial yield quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>The partial scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+orderId: '0004990701'
+workplaceId: '4560'
+yield: 50
+```
+
+#### Output
+
+Returns `true` on success. Throws an error if the transaction fails.
+
+### `reportPartialQuantity`
+
+Posts produced part quantities (Teilrückmeldung), including good parts and scrap, for an active operation.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>The produced good quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>The produced scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>The reason code for scrap. Legacy acronym fallback: <code>eggAus</code>.</td><td>integer</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+orderId: 'AAA2100473100200'
+workplaceId: '60610'
+personId: '11111'
+yield: 100
+scrap: 2
+scrapReason: 1
+```
+
+#### Output
+
+Returns `true` on success. Throws an error if the transaction fails.
+
+## Workplaces, resources, and personnel
+
+### `getWorkplaces`
+
+Reads workplaces and machines. This high-level convenience function applies default fields, associations, and filtering on top of the generic `read` function.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="200">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>Additional user-defined filters.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>includeStatusAssignments</code></td><td>Includes corresponding status assignments. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>includeGroups</code></td><td>Includes corresponding capacity groups. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>skipNull</code></td><td>When true, omits null attributes from the return value. Default false.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns an array of workplace objects including identifiers, designations, and current status information.
+
+### `getResources`
+
+Reads resources such as tools, equipment, and gages. Without a `type`, the function returns all resources that are not workplaces.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>type</code></td><td>An optional specific resource type (such as <code>TOOL</code> or <code>GAGE</code>).</td><td>string</td></tr><tr><td></td><td><code>filter</code></td><td>Additional user-defined filters.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>When true, omits null attributes from the return value. Default false.</td><td>boolean</td></tr></tbody></table>
+
+#### Output
+
+Returns an array of resource objects matching the query.
+
+### `getPersons`
+
+Retrieves personnel details and aggregates data from multiple MIP-HR services into a single object per person, optionally enriched with qualifications and workplace assignments.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="200">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters for the person list.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Specific fields to retrieve for the person.</td><td>array</td></tr><tr><td></td><td><code>includeQualifications</code></td><td>Includes assigned qualifications. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeAssignments</code></td><td>Includes current workplace assignments. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeClockingStatus</code></td><td>Includes live attendance data. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>skipNull</code></td><td>When true, omits null attributes from the return value. Default false.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+filter: { personLastname: Smith }
+includeQualifications: true
+includeAssignments: false
+```
+
+#### Output
+
+Returns an array of person objects, or an empty array if no person matches.
+
+## Dialogs and raw calls
+
+### `runDialog`
+
+Runs a named dialog with a set of key-value pairs.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogName</code></td><td></td><td>The name of the dialog (such as <code>A_AN</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td></td><td>The key-value parameters for the dialog. Add <code>dryRun: true</code> to receive the generated dialog string without sending it.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the raw dialog response of the MIP server, or the generated dialog string when `dryRun` is set.
+
+### `rawServiceCall`
+
+Executes a raw service call for advanced use cases. The parameters map directly to the MIP Service Interface specification.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The service URL to call (such as <code>/data/MDUnits/list</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>params</code></td><td>A list of filter parameter objects with <code>acronym</code>, <code>operator</code>, and <code>value</code>.</td><td>array</td></tr><tr><td></td><td><code>columns</code></td><td>The selected columns.</td><td>array</td></tr><tr><td></td><td><code>requestId</code></td><td>The request ID.</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# url
+/data/MDUnits/list
+# options
+params: [{ acronym: units.unit, operator: EQUAL, value: C }]
+```
+
+#### Output
+
+Returns the raw response of the MIP server.
+
+### `rawDialogCall`
+
+Executes a raw dialog call by sending the complete dialog string.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogString</code></td><td>The complete dialog string to send.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the raw response of the MIP server.
