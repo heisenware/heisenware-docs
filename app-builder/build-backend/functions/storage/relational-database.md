@@ -4,9 +4,9 @@ The relational database connector communicates with SQL databases (PostgreSQL, M
 
 ## Quick start: the internal PostgreSQL instance
 
-Heisenware provides a pre-initialized instance called `internal-postgres`. It is globally available and ready for use. Select `internal-postgres` in your function's instance field to create tables and manage data.
+Heisenware provides a pre-initialized SQL database called `internal-postgres`. It is globally available and ready for use. Pick functions from inside `internal-postgres` to make use of it.
 
-<div align="center"><img src="../../../../.gitbook/assets/image (50).png" alt=""></div>
+<figure><img src="../../../../.gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
 
 ## Connecting an external database
 
@@ -276,21 +276,21 @@ Compound conditions combine conditions with `'and'` or `'or'`:
 
 Available operators:
 
-| Operator(s)                              | Description                                        | Example value              |
-| ---------------------------------------- | -------------------------------------------------- | -------------------------- |
-| `=`, `==`, `eq`, `equals`, `is`          | Equals                                             | `'John'` or `100`          |
-| `<>`, `!=`, `neq`, `notequals`, `isnot`  | Not equals                                         | `'John'` or `100`          |
-| `>`, `gt`                                | Greater than                                       | `99`                       |
-| `>=`, `gte`                              | Greater than or equal to                           | `100`                      |
-| `<`, `lt`                                | Less than                                          | `100`                      |
-| `<=`, `lte`                              | Less than or equal to                              | `100`                      |
-| `contains`                               | String field contains the value (case-insensitive) | `'oh'` (matches 'John')    |
-| `notcontains`                            | String field does not contain the value            | `'Peter'`                  |
-| `startswith`                             | String field starts with the value                 | `'J'`                      |
-| `endswith`                               | String field ends with the value                   | `'oe'` (matches 'Doe')     |
-| `between`                                | Value is between two values in an array            | `[18, 30]` or `['A', 'D']` |
-| `notbetween`                             | Value is not between two values in an array        | `[18, 30]` or `['A', 'D']` |
-| `in`                                     | Value is one of several possibilities in an array  | `['active', 'pending']`    |
+| Operator(s)                             | Description                                        | Example value              |
+| --------------------------------------- | -------------------------------------------------- | -------------------------- |
+| `=`, `==`, `eq`, `equals`, `is`         | Equals                                             | `'John'` or `100`          |
+| `<>`, `!=`, `neq`, `notequals`, `isnot` | Not equals                                         | `'John'` or `100`          |
+| `>`, `gt`                               | Greater than                                       | `99`                       |
+| `>=`, `gte`                             | Greater than or equal to                           | `100`                      |
+| `<`, `lt`                               | Less than                                          | `100`                      |
+| `<=`, `lte`                             | Less than or equal to                              | `100`                      |
+| `contains`                              | String field contains the value (case-insensitive) | `'oh'` (matches 'John')    |
+| `notcontains`                           | String field does not contain the value            | `'Peter'`                  |
+| `startswith`                            | String field starts with the value                 | `'J'`                      |
+| `endswith`                              | String field ends with the value                   | `'oe'` (matches 'Doe')     |
+| `between`                               | Value is between two values in an array            | `[18, 30]` or `['A', 'D']` |
+| `notbetween`                            | Value is not between two values in an array        | `[18, 30]` or `['A', 'D']` |
+| `in`                                    | Value is one of several possibilities in an array  | `['active', 'pending']`    |
 
 #### Examples
 
