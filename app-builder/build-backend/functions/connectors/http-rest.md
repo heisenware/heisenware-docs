@@ -2,7 +2,7 @@
 
 The HTTP / REST connector executes HTTP requests and interacts with REST APIs. It supports standard HTTP methods and works in two modes: as standalone static utilities for immediate, one-off calls, or as a persistent instance client configured with uniform base URLs, shared header contexts, and automated authentication handlers.
 
-This connector supports mixed execution options, meaning you can call static functions directly or use [instance creation](./#instance-creation).
+This connector supports mixed execution options, meaning you can call static functions directly or use [instance creation](./#instance-creation). See [Tips and tricks](http-rest.md#tips-and-tricks) for the error behavior and a shortcut for passing query parameters.
 
 ## Static functions
 
