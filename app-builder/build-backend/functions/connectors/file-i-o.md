@@ -6,7 +6,7 @@ The file I/O functions read data from multiple file formats (CSV, Excel, PDF, XM
 
 The file system these functions access depends on their execution environment:
 
-1. Platform: When executed directly on the platform, functions access the file system of the platform installation itself—the same content visible in the [File Explorer](../../file-explorer.md). The root path is `/shared`, meaning a file in the uploads folder uses the path `/shared/uploads/test.csv`.
+1. Platform: When executed directly on the platform, functions access the file system of the platform installation itself, the same content visible in the [File Explorer](../../file-explorer.md). The root path is `/shared`, meaning a file in the uploads folder uses the path `/shared/uploads/test.csv`.
 2. Local OS: To work with files on your premises, compile, download, and install an [Agent](../../agents/) containing this class. Functions executed via the Agent access the file system where the Agent runs, using standard local paths like `C:\Users\YourUserName\Documents\test.csv`.
 
 {% hint style="warning" %}
@@ -175,7 +175,7 @@ Writes one or more buffer-file objects to a directory. The function creates the 
 
 Returns `true` when all files are successfully written. Throws an error listing every file that failed.
 
-<figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This function integrates directly with the status lamp, photo, or upload widget when configured to use <code>Buffer</code> as the storage type.</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This function integrates directly with the <a href="../../../build-frontend/widgets/input-widgets/photo.md">photo</a> or <a href="../../../build-frontend/widgets/input-widgets/upload.md">upload</a> widget when configured to use <code>Buffer</code> as the storage type.</p></figcaption></figure>
 
 {% hint style="info" %}
 #### Local file sharing
@@ -253,7 +253,7 @@ Returns nothing on success. Throws an error on failure.
 Deletes a file.
 
 {% hint style="danger" %}
-#### Permanent deletion
+#### Irreversible action
 This permanently deletes the file from the file system. You cannot undo this action.
 {% endhint %}
 
@@ -312,7 +312,7 @@ Returns nothing on success. Throws an error on failure.
 Deletes a folder and all of its contents recursively. The function does not throw an error if the folder is missing.
 
 {% hint style="danger" %}
-#### Permanent deletion
+#### Irreversible action
 This permanently deletes the folder and all containing files and subfolders. You cannot undo this action.
 {% endhint %}
 
