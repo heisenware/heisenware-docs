@@ -48,9 +48,11 @@ The system automatically moves data through buckets as it ages, reducing resolut
 
 Data flows automatically through a series of stages. Write data only to the start of the pipeline.
 
+You never see the `+` buckets in the software. They are the internal stages of this pipeline. What you select instead, for example as the recording type of a [recorder](../../extension-nodes/recorder.md), is either a fixed retention (`H`, `D`, `W`, `M`, or `Y`, keeping raw data for 1 hour up to 1 year, matching the letter) or `DS` (downsampled), which feeds this pipeline for long-term storage without a fixed retention.
+
 ![](<../../../../.gitbook/assets/image (1).png>)
 
-<table><thead><tr><th width="102.66650390625">Bucket</th><th width="184.4444580078125">Resolution</th><th width="130.9261474609375">Retention</th><th>Typical use</th></tr></thead><tbody><tr><td><code>H+</code></td><td>Raw (every point)</td><td>1 day</td><td>Real-time monitoring, debugging recent events</td></tr><tr><td><code>D+</code></td><td>5 minutes</td><td>1 week</td><td>Zooming into last week's performance</td></tr><tr><td><code>W+</code></td><td>1 hour</td><td>1 month</td><td>Weekly trends and patterns</td></tr><tr><td><code>M+</code></td><td>1 day</td><td>1 year</td><td>Monthly analysis and seasonal trends</td></tr><tr><td><code>Y+</code></td><td>1 week</td><td>Forever</td><td>Long-term historical archiving</td></tr></tbody></table>
+<table><thead><tr><th width="102.66650390625">Bucket</th><th width="184.4444580078125">Resolution</th><th width="130.9261474609375">Retention</th><th>Typical use</th></tr></thead><tbody><tr><td><code>H+</code></td><td>Raw (every point)</td><td>1 day</td><td>Real-time monitoring, debugging recent events</td></tr><tr><td><code>D+</code></td><td>5 minutes</td><td>1 week</td><td>Zooming into last week's performance</td></tr><tr><td><code>W+</code></td><td>1 hour</td><td>1 week</td><td>Weekly trends and patterns</td></tr><tr><td><code>M+</code></td><td>1 day</td><td>1 month</td><td>Monthly analysis and seasonal trends</td></tr><tr><td><code>Y+</code></td><td>1 week</td><td>1 year</td><td>Yearly trends and seasonal patterns</td></tr><tr><td><code>F+</code></td><td>1 month</td><td>Forever</td><td>Long-term historical archiving</td></tr></tbody></table>
 
 #### How writing works
 
@@ -119,12 +121,16 @@ Skip this step for `internal-influx`. It is already instantiated for you.
 Right-click the `token` input and mark it as a secret to mask it.
 {% endhint %}
 
-### `delete`
+#### Output
 
-Removes the timeseries database client instance and its connection configuration.
+Returns the name of the created instance.
+
+### `delete` (instance)
+
+Removes the timeseries database client instance and its connection configuration. Not to be confused with [`delete` (data)](timeseries-database.md#delete-data), which deletes measurement data.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 Deleting an instance removes its configuration. To communicate with the database again, you must create a new instance.
 {% endhint %}
@@ -135,7 +141,7 @@ None.
 
 #### Output
 
-Returns `true` on successful deletion. Throws an error on failure.
+Returns `true` upon removal.
 
 ## Writing data
 
@@ -169,7 +175,7 @@ objectStorageType: fields
 
 #### Output
 
-Returns `true` when the write succeeds. Throws an error on failure.
+Returns `true` when the point is accepted for buffered writing, including when the data type is invalid (the connector then skips the write and logs a warning). Write failures surface in the logs, not as errors.
 
 {% hint style="info" %}
 #### Internal bucket names
@@ -201,7 +207,7 @@ vibration
 
 #### Output
 
-Returns `true` when the write succeeds. Throws an error on failure.
+Returns `true` when the points are accepted for buffered writing. Throws an error if `data` is not an array or the length of a tags array does not match the data array. Write failures surface in the logs, not as errors.
 
 ### `writeDownsampled`
 
@@ -228,7 +234,7 @@ machine: m1
 
 #### Output
 
-Returns `true` when the write succeeds. Throws an error on failure.
+Returns `true` when the data is accepted for buffered writing, including when no numeric fields remain after filtering (the connector then logs a warning).
 
 ## Reading data
 
@@ -472,7 +478,7 @@ Registers a callback executed whenever new data is written to a measurement.
 
 #### Parameters
 
-<table><thead><tr><th width="128.7037353515625">Input</th><th width="162.592529296875">Key</th><th width="359.7037353515625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to watch.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>The callback evaluated on every write. Receives the payload.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>Guarantees the handler fires at most once every X milliseconds. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>includeData</code></td><td>Includes the written data and tags in the payload when set to <code>true</code>. Default false.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="128.7037353515625">Input</th><th width="162.592529296875">Key</th><th width="359.7037353515625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td></td><td>The name of the measurement to watch.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>The callback evaluated on every write. Receives an object containing the measurement name, plus the written data and tags when <code>includeData</code> is enabled.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>Guarantees the handler fires at most once every X milliseconds. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>includeData</code></td><td>Includes the written data and tags in the payload when set to <code>true</code>. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -492,7 +498,7 @@ includeData: true
 
 ### `unsubscribeFromChange`
 
-Unregisters change handlers for a measurement.
+Unregisters change handlers. Call it without parameters to remove all handlers across all measurements.
 
 #### Parameters
 
@@ -512,7 +518,7 @@ Enables time-based caching of `read` and `readDownsampled` results for a specifi
 
 #### Output
 
-Returns `true` on successful caching activation.
+Returns nothing.
 
 #### Example
 
@@ -533,16 +539,16 @@ Disables caching for a specific measurement and purges all cached results.
 
 #### Output
 
-Returns `true` on success.
+Returns nothing.
 
 ## Database management
 
-### `delete`
+### `delete` (data)
 
-Deletes data from a measurement over a specified time range.
+Deletes data from a measurement over a specified time range. Not to be confused with [`delete` (instance)](timeseries-database.md#delete-instance), which removes the instance.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes the measurement data. You cannot undo this action.
 {% endhint %}
@@ -576,14 +582,14 @@ None.
 
 #### Output
 
-Returns `true` when the buffer flushes successfully.
+Returns nothing. Throws an error if flushing fails.
 
 ### `reset`
 
 Deletes all data from all measurements in all buckets. The buckets remain intact but empty.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes all data associated with the instance. You cannot undo this action.
 {% endhint %}
