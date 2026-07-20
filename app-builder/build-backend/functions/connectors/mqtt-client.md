@@ -1,8 +1,8 @@
-# MQTT client
+# MQTT Client
 
 The MQTT client connector manages client connections to an MQTT broker over various transport protocols, including standard TCP, TLS, and WebSockets. It automatically handles server keep-alive pings, Quality of Service (QoS) delivery flows, automatic reconnection, and message queuing before the connection is established.
 
-This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can communicate with an external broker, though it includes a pre-initialized internal option.
+This connector requires [instance creation](./#instance-creation) before you can communicate with an external broker, though it includes a pre-initialized internal option.
 
 Heisenware provides a built-in, pre-configured instance named `internal-mqtt` connected directly to the platform's local broker. You can use `internal-mqtt` directly in your application logic to publish or subscribe to internal topics without defining connection configurations. To communicate with a distinct, external third-party broker, create a separate connector instance and use the connection management functions below.
 
@@ -12,16 +12,16 @@ External devices and scripts can also connect the other way around: as MQTT clie
 
 To connect an external client:
 
-1. Generate credentials in the [Integrations panel](/app-manager/inbound-integrations.md#connecting-mqtt-and-vrpc-clients) of the App Manager.
+1. Generate credentials in the [Integrations panel](../../../../app-manager/inbound-integrations.md#connecting-mqtt-and-vrpc-clients) of the App Manager.
 2. Configure your client with these credentials and the broker endpoint: `<TODO: broker URL, port, and TLS requirement>`.
 
-For a complete walkthrough, including how to process the incoming data in an App, see [Connect an external MQTT client](/tutorials/integration-guides/connect-an-external-mqtt-client.md).
+For a complete walkthrough, including how to process the incoming data in an App, see [Connect an external MQTT client](../../../../tutorials/integration-guides/connect-an-external-mqtt-client.md).
 
 ## Connection management
 
 ### `create`
 
-Creates a new, named connector instance for communicating with an external broker. Instance creation works the same for all connectors; see [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation). The built-in `internal-mqtt` instance exists without this step.
+Creates a new, named connector instance for communicating with an external broker. Instance creation works the same for all connectors; see [instance creation](../connectors.md#instance-creation). The built-in `internal-mqtt` instance exists without this step.
 
 After creating an instance, use `connect` to establish the broker connection.
 
@@ -93,7 +93,6 @@ Returns `true` if a reconnection attempt is running, or `false` if it is not.
 Removes the instance configuration.
 
 {% hint style="danger" %}
-
 #### Irreversible action
 
 Deleting an instance removes its configuration. To communicate with the broker again, you must trigger `create` anew.
@@ -258,5 +257,3 @@ You can call `publishString` or `publishJson` before the client finishes its ini
 ## Video demo
 
 Watch the walkthrough example to learn how to create and manage external broker communication using custom instance flows.
-
-{% embed url="<https://www.youtube.com/watch?v=QG1Wsac2NbU>" %}
