@@ -135,7 +135,7 @@ Returns `true` upon removal.
 
 ### `publishString`
 
-Publishes a text string payload to a specific topic.
+Publishes a text string payload to a specific topic. Publishing works even before the connection is established, see [Pre-handshake publication queuing](mqtt-client.md#pre-handshake-publication-queuing).
 
 #### Parameters
 
@@ -182,7 +182,7 @@ Returns nothing for a QoS 0 publication and the broker acknowledgment packet for
 
 ### `subscribe`
 
-Subscribes to one or more topics so the client receives their message streams.
+Subscribes to one or more topics so the client receives their message streams. See [Topic wildcards](mqtt-client.md#topic-wildcards) for matching multiple topics.
 
 #### Parameters
 
