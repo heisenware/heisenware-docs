@@ -49,6 +49,10 @@ host: 'localhost'
 ssl: true
 ```
 
+#### Output
+
+Returns the name of the created instance.
+
 ### `isConnected`
 
 Checks whether the database connection is currently active.
@@ -78,7 +82,7 @@ Returns an array of table name strings.
 Drops and recreates the entire database.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes all tables and all data in the database. You cannot undo this action.
 {% endhint %}
@@ -96,7 +100,7 @@ Returns `true` if the reset succeeds.
 Removes the instance and its connection configuration.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 Deleting an instance removes its configuration. To communicate with the database again, you must create a new instance.
 {% endhint %}
@@ -107,7 +111,7 @@ None.
 
 #### Output
 
-Returns `true` on successful deletion. Throws an error on failure.
+Returns `true` upon removal.
 
 ## Schema and table definition
 
@@ -212,7 +216,7 @@ Returns an object containing schema details for each field, including `type`, `p
 Deletes an entire table.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes the table and all its data. You cannot undo this action.
 {% endhint %}
@@ -223,14 +227,14 @@ This permanently deletes the table and all its data. You cannot undo this action
 
 #### Output
 
-Returns `true` when deletion succeeds.
+Returns `true` when deletion succeeds. If the table has an audit log table, the function removes it as well.
 
 ### `enforceUniqueField`
 
 Retroactively enforces a UNIQUE and NOT NULL constraint on an existing field. It removes duplicate rows and rows with NULL values before applying both constraints.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes duplicate and null rows. You cannot undo this action.
 {% endhint %}
@@ -409,7 +413,7 @@ Finds and returns the first row matching the filter. Returns nothing if you do n
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The filter conditions.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>An optional array of fields to return.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The filter conditions.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>An optional array of fields to return.</td><td>array</td></tr><tr><td></td><td><code>autoJoin</code></td><td>Automatically includes related data when <code>true</code>. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -517,7 +521,7 @@ email: 'jane.doe@example.com'
 
 #### Output
 
-Returns an array containing the created/updated state and the primary key of the affected row.
+Returns the created or updated row as saved in the database. Throws an error if the upsert fails.
 
 ### `changeRow`
 
@@ -551,7 +555,7 @@ Updates specific fields of an existing row, identified by the `id` inside the `d
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -600,7 +604,7 @@ Patches a row with new data by merging nested JSON objects instead of replacing 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -648,7 +652,7 @@ Returns the patched row object. Throws an error if the row is not found.
 Deletes a single row from a table, identified by its primary key.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes the row. You cannot undo this action.
 {% endhint %}
@@ -675,7 +679,7 @@ Returns `true` if the row is deleted, or `false` if no row with that ID exists.
 Deletes all rows from a table, leaving the table structure intact.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 This permanently deletes all data in the table. You cannot undo this action.
 {% endhint %}
@@ -705,7 +709,7 @@ These functions define logical connections between tables to create a relational
 
 ### `optionallyHasOne`
 
-Creates a one-to-many relationship where the child record can exist without a parent. This adds a nullable foreign key column to the child table.
+Creates a one-to-many relationship where the child record can exist without a parent. This adds a nullable foreign key column to the child table. In short: a child has zero or one parent, a parent may have many children.
 
 #### Parameters
 
@@ -713,7 +717,7 @@ Creates a one-to-many relationship where the child record can exist without a pa
 
 ### `mandatorilyHasOne`
 
-Creates a one-to-many relationship where the child record cannot exist without a parent. This adds a non-nullable foreign key column to the child table.
+Creates a one-to-many relationship where the child record cannot exist without a parent. This adds a non-nullable foreign key column to the child table. In short: a child must have exactly one parent, a parent may have many children.
 
 #### Parameters
 
@@ -721,7 +725,7 @@ Creates a one-to-many relationship where the child record cannot exist without a
 
 ### `optionallyHasMany`
 
-Creates a many-to-many relationship between two tables. This automatically generates a hidden junction table to manage the associations.
+Creates a many-to-many relationship between two tables. This automatically generates a hidden junction table to manage the associations. In short: a child can have many parents, a parent can have many children.
 
 #### Parameters
 
@@ -1006,7 +1010,7 @@ The relational database connector (`RelationalDatabase`) features a built-in aud
 {% hint style="warning" %}
 #### Deprecation notice
 
-The `trackHistory` option in `defineTable` and the `getHistoricalData` function are deprecated. Use `auditLog` and `getAuditLog` instead.
+The `trackHistory` option in `defineTable` and the `getHistoricalData` function are deprecated as of February 2025. Use `auditLog` and `getAuditLog` instead.
 {% endhint %}
 
 ### Enabling audit logs
@@ -1167,7 +1171,7 @@ Returns `true` on success, or `false` if it fails. Errors are logged but not thr
 Executes a raw SQL statement with template variable substitution. Placeholders such as `{{customer.id}}` are safely replaced with values from the `variables` object. For `SELECT` statements, the query returns an array of row objects.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 Raw SQL can modify or delete database schemas and records. Run custom scripts with caution.
 {% endhint %}
@@ -1246,6 +1250,6 @@ The following functions are maintained for backward compatibility. Use their rec
 
 ### Referencing the current user with $USER
 
-The `$USER` variable references the authenticated user of your App. Define the username as a unique key (type `uniquestring`) when creating the table to allow `upsertRow` to update and insert rows based on that unique key.
+The `$USER` variable references the authenticated user of your App. Define the username as a unique key (type `uniquestring`) when creating the table to allow [`upsertRow`](relational-database.md#upsertrow) to update and insert rows based on that unique key.
 
 <div align="center"><figure><img src="../../../../.gitbook/assets/relationdat.png" alt=""><figcaption><p>$USER in combination with the upsertRow function</p></figcaption></figure></div>
