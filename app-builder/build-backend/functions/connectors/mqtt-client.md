@@ -1,27 +1,47 @@
-# MQTT Client
+# MQTT client
 
 The MQTT client connector manages client connections to an MQTT broker over various transport protocols, including standard TCP, TLS, and WebSockets. It automatically handles server keep-alive pings, Quality of Service (QoS) delivery flows, automatic reconnection, and message queuing before the connection is established.
 
-This connector requires [instance creation](./#instance-creation) before you can communicate with an external broker, though it includes a pre-initialized internal option.
+This connector requires [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation) before you can communicate with an external broker, though it includes a pre-initialized internal option.
 
 Heisenware provides a built-in, pre-configured instance named `internal-mqtt` connected directly to the platform's local broker. You can use `internal-mqtt` directly in your application logic to publish or subscribe to internal topics without defining connection configurations. To communicate with a distinct, external third-party broker, create a separate connector instance and use the connection management functions below.
 
+## Two ways to use MQTT
+
+Which setup you need depends on where the broker runs:
+
+* **Your devices or software act as MQTT clients** and should exchange data with Heisenware. You need no broker of your own and no connector instance. Your clients connect to your account's Heisenware broker, and inside the App Builder the built-in `internal-mqtt` instance handles the messages. See [Connecting an external client to Heisenware](#connecting-an-external-client-to-heisenware).
+* **You run your own MQTT broker** (or use a third-party broker such as HiveMQ). Create a connector instance with `create` and connect it to that broker with `connect`.
+
 ## Connecting an external client to Heisenware
 
-External devices and scripts can also connect the other way around: as MQTT clients of your tenant's broker. Data published this way arrives on the internal broker, where `internal-mqtt` can subscribe to it, and messages published through `internal-mqtt` reach the external client in turn.
+External devices and scripts connect as MQTT clients of your account's broker. Data published this way arrives on the internal broker, where `internal-mqtt` can subscribe to it, and messages published through `internal-mqtt` reach the external client in turn.
 
-To connect an external client:
+To connect an external client, first generate credentials in the [Integrations panel](/app-manager/inbound-integrations.md#connecting-mqtt-and-vrpc-clients) of the App Manager, then configure your client with these credentials and the following connection details:
 
-1. Generate credentials in the [Integrations panel](../../../../app-manager/inbound-integrations.md#connecting-mqtt-and-vrpc-clients) of the App Manager.
-2. Configure your client with these credentials and the broker endpoint: `<TODO: broker URL, port, and TLS requirement>`.
+* Hostname: `<account>.heisenware.cloud`
+* Port: `8884` (MQTTS, TLS encrypted)
+* Protocol version: MQTT 3.1.1 (the broker can refuse MQTT 5 connections)
+* Topic prefix: your domain, the combination of account and workspace
 
-For a complete walkthrough, including how to process the incoming data in an App, see [Connect an external MQTT client](../../../../tutorials/integration-guides/connect-an-external-mqtt-client.md).
+For example, an account named `my-company` publishes to a topic like `my-company.default/test`.
+
+{% hint style="info" %}
+
+#### Server certificate
+
+Standard CA certificates work, for example the system certificate store under `/etc/ssl/certs/`. If your environment does not trust the Heisenware certificate, enable your client's option to proceed without validating the server certificate.
+{% endhint %}
+
+For a complete walkthrough, including how to process the incoming data in an App, see [Connect an external MQTT client](/tutorials/integration-guides/connect-an-external-mqtt-client.md).
 
 ## Connection management
 
 ### `create`
 
-Creates a new, named connector instance for communicating with an external broker. Instance creation works the same for all connectors; see [instance creation](../connectors.md#instance-creation). The built-in `internal-mqtt` instance exists without this step.
+Creates a new, named connector instance for communicating with an external broker. Instance creation works the same for all connectors; see [instance creation](/app-builder/build-backend/functions/connectors.md#instance-creation).
+
+You need no instance to receive data from external clients. The built-in `internal-mqtt` instance covers that case; see [Connecting an external client to Heisenware](#connecting-an-external-client-to-heisenware).
 
 After creating an instance, use `connect` to establish the broker connection.
 
@@ -93,6 +113,7 @@ Returns `true` if a reconnection attempt is running, or `false` if it is not.
 Removes the instance configuration.
 
 {% hint style="danger" %}
+
 #### Irreversible action
 
 Deleting an instance removes its configuration. To communicate with the broker again, you must trigger `create` anew.
@@ -246,6 +267,13 @@ Returns an integer matching the identifier of the last sent packet.
 
 ## Tips and tricks
 
+### Connecting a Mosquitto bridge
+
+When bridging a local Mosquitto broker to Heisenware, add these options to the bridge configuration:
+
+* `notifications false`. Bridges try to publish their status to `$SYS` system topics by default. The Heisenware broker does not allow writing to `$SYS` topics and disconnects the client.
+* `try_private false`. The bridge then behaves like a regular client. The broker does not support the private bridge mode.
+
 ### Topic wildcards
 
 MQTT topic levels use forward slashes (`/`) as separators. When binding message listeners, use `+` to match any value at a single level, or a trailing `#` to capture all nested levels below that branch.
@@ -257,3 +285,5 @@ You can call `publishString` or `publishJson` before the client finishes its ini
 ## Video demo
 
 Watch the walkthrough example to learn how to create and manage external broker communication using custom instance flows.
+
+{% embed url="<https://www.youtube.com/watch?v=QG1Wsac2NbU>" %}
