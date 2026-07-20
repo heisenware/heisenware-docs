@@ -1,14 +1,14 @@
 # Data processing
 
-The data processing class provides static functions for data manipulation, transformation, and logical operations. These functions help you manage arrays, objects, JSON data, and value range mappings without creating an instance.
+The data processing utility class provides a collection of functions for common data manipulation, transformation, and logical operations. Use these functions to work with arrays and objects, handle JSON payloads, map numerical value ranges, and delay data flows. All functions in this class are static, meaning you do not need to create an instance before using them.
 
 ### `echo`
 
-Returns the input value exactly as provided.
+Returns the exact input value it receives.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The input value.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>Any input argument to return.</td><td>any</td></tr></tbody></table>
 
 #### Output
 
@@ -16,56 +16,55 @@ Returns the unchanged input value.
 
 ### `combine`
 
-Combines multiple arguments into a single array.
+Combines two or more arguments into a single array.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>An arbitrary number of arguments to combine.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>arg1</code>, <code>arg2</code>, ...</td><td>An arbitrary number of arguments to combine into an array.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
-# args
-  - 123
-  - hello
-  - key: value
+# arg1
+123
+# arg2
+"hello"
+# arg3
+{ "key": "value" }
 ```
 
 #### Output
 
-Returns the combined array.
+Returns the combined array:
 
 ```json
 [
   123,
   "hello",
-  {
-    "key": "value"
-  }
+  { "key": "value" }
 ]
 ```
 
 ### `mergeObjects`
 
-Merges multiple objects into a single new object. If a key exists in multiple objects, the value from the last object overrides previous values. The function ignores arguments that are not plain objects.
+Merges two or more objects into a single new object. If the same key exists in multiple objects, the value from the last object in the argument list overwrites the previous values. The function ignores any arguments that are not plain objects (including arrays).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Two or more objects to merge.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>arg1</code>, <code>arg2</code>, ...</td><td>Two or more objects to merge together.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
-# args
-  - name: John
-    status: active
-  - status: inactive
-    id: 123
+# arg1
+{ "name": "John", "status": "active" }
+# arg2
+{ "status": "inactive", "id": 123 }
 ```
 
 #### Output
 
-Returns the merged object.
+Returns the merged object:
 
 ```json
 {
@@ -77,48 +76,40 @@ Returns the merged object.
 
 ### `arrayPush`
 
-Pushes items to the end of an array. If an item is an array, the function flattens its elements and adds them individually.
+Pushes one or more items to the end of an array. If an item is itself an array, the function unpacks its elements and adds them individually to the base array.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>array</code></td><td>The input array.</td><td>array</td></tr><tr><td><code>items</code></td><td>The items to add to the end of the array.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>array</code></td><td>The destination input array.</td><td>array</td></tr><tr><td><code>items</code></td><td>Any number of items to push to the end of the array.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # array
-  - 1
-  - 2
+[1, 2]
 # items
-  - 3
-  - 4
-  - [5, 6]
+[ 3, 4, [5, 6] ]
 ```
 
 #### Output
 
-Returns the updated array.
+Returns the updated array:
 
 ```json
-[
-  1,
-  2,
-  3,
-  4,
-  5,
-  6
-]
+[1, 2, 3, 4, 5, 6]
 ```
 
 ### `mapRange`
 
-Maps a numerical value from an original range to a new range, rounding the result to the nearest integer.
+Maps a numerical value from an original range to a new range. The function rounds the final result to the nearest integer.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td></td><td>The number to map.</td><td>number</td></tr><tr><td><code>options</code></td><td><code>origMin</code></td><td>The minimum value of the original range.</td><td>number</td></tr><tr><td></td><td><code>origMax</code></td><td>The maximum value of the original range.</td><td>number</td></tr><tr><td></td><td><code>newMin</code></td><td>The minimum value of the new range.</td><td>number</td></tr><tr><td></td><td><code>newMax</code></td><td>The maximum value of the new range.</td><td>number</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td></td><td>The numerical value to map.</td><td>number</td></tr><tr><td><code>options</code></td><td><code>origMin</code></td><td>The minimum value of the original range.</td><td>number</td></tr><tr><td></td><td><code>origMax</code></td><td>The maximum value of the original range.</td><td>number</td></tr><tr><td></td><td><code>newMin</code></td><td>The minimum value of the new range.</td><td>number</td></tr><tr><td></td><td><code>newMax</code></td><td>The maximum value of the new range.</td><td>number</td></tr></tbody></table>
 
 #### Example
+
+Map a sensor value (0 to 1023) to a percentage scale (0 to 100):
 
 ```yaml
 # value
@@ -132,95 +123,103 @@ newMax: 100
 
 #### Output
 
-Returns the mapped integer value.
+Returns the mapped integer value: `50`
 
 ### `delay`
 
-Returns the provided value after a configurable delay.
+Returns the provided value after a configurable time delay. This function executes asynchronously.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td></td><td>The value to return after the delay.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>timeout</code></td><td>The delay duration in milliseconds. Default 1000.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td></td><td>The value to return after the delay.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>timeout</code></td><td>The delay duration in milliseconds. Default 1000.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
-Returns the unchanged input value after the specified delay.
+Returns the unchanged input value after the specified time delay.
 
 ### `areAllParamsTrue`
 
-Checks if all provided arguments are truthy (not `false`, `0`, `""`, `null`, or `undefined`).
+Applies a logical AND operation. This function checks if the exact number of specified arguments are all truthy (not `false`, `0`, `""`, `null`, or `undefined`).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nParams</code></td><td>The exact number of arguments that must be provided and evaluate to truthy.</td><td>integer</td></tr><tr><td><code>args</code></td><td>The arguments to check.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nParams</code></td><td>The exact number of arguments that must be provided and evaluate to truthy.</td><td>integer</td></tr><tr><td><code>args</code></td><td>The arguments to evaluate.</td><td>any</td></tr></tbody></table>
 
-#### Example
+#### Examples
+
+##### Scenario 1: All elements match and evaluate to truthy
 
 ```yaml
 # nParams
 3
 # args
-  - true
-  - hello
-  - 1
+[true, "hello", 1]
 ```
+
+Output: `true` (3 arguments were provided and all evaluate to truthy)
+
+##### Scenario 2: Insufficient truthy parameters provided
+
+```yaml
+# nParams
+3
+# args
+[true, ""]
+```
+
+Output: `false` (only 2 truthy arguments were provided instead of 3)
 
 #### Output
 
-Returns `true` if all arguments are truthy and match `nParams`, otherwise `false`.
+Returns `true` if all arguments match `nParams` and evaluate to truthy; otherwise, returns `false`.
 
 ### `isOneOrMoreParamTrue`
 
-Checks if at least one provided argument is truthy.
+Applies a logical OR operation. This function checks if at least one of the provided arguments evaluates to truthy.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>The input parameters to check.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Any number of input parameters to check.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # args
-  - false
-  - 0
-  - hello
-  - null
+[false, 0, "hello", null]
 ```
 
 #### Output
 
-Returns `true` if at least one argument is truthy, otherwise `false`.
+Returns `true` if at least one argument evaluates to truthy (because `"hello"` is truthy); otherwise, returns `false`.
 
 ### `jsonStringify`
 
-Converts a JavaScript value (such as an object or array) into a JSON string.
+Converts a JavaScript runtime value (such as an object or array) into a standard JSON string.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The value to convert.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The JavaScript object or array to convert.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # value
-name: John
-is_active: true
-roles:
-  - admin
-  - editor
+{ "name": "John", "is_active": true, "roles": ["admin", "editor"] }
 ```
 
 #### Output
 
-Returns the generated JSON string.
+Returns the generated JSON string:
+
+`'{"name":"John","is_active":true,"roles":["admin","editor"]}'`
 
 ### `jsonParse`
 
-Parses a JSON string into a JavaScript object or value.
+Converts a valid JSON string back into its corresponding JavaScript object or value representation.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>text</code></td><td>A valid JSON string.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>text</code></td><td>A valid JSON string to parse.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -231,43 +230,42 @@ Parses a JSON string into a JavaScript object or value.
 
 #### Output
 
-Returns the parsed JavaScript entity.
+Returns the parsed JavaScript entity:
 
 ```json
 {
   "name": "John",
   "is_active": true,
-  "roles": [
-    "admin",
-    "editor"
-  ]
+  "roles": ["admin", "editor"]
 }
 ```
 
 ### `flatten`
 
-Flattens a nested JavaScript object into a single level using dot-delimited keys.
+Takes a nested JavaScript object and flattens it into a single-level object structure by generating dot-delimited keys.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>target</code></td><td></td><td>The object to flatten.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>delimiter</code></td><td>A custom delimiter string to use instead of a dot.</td><td>string</td></tr><tr><td></td><td><code>safe</code></td><td>Preserves arrays and their contents instead of flattening them. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>maxDepth</code></td><td>The maximum number of nested levels to flatten.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>target</code></td><td></td><td>The nested target object to flatten.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>delimiter</code></td><td>A custom delimiter string to separate keys instead of the default dot <code>.</code>.</td><td>string</td></tr><tr><td></td><td><code>safe</code></td><td>If true, preserves arrays and their contents intact instead of flattening their indexes. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>maxDepth</code></td><td>The maximum number of nested levels to flatten.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # target
-user:
-  name: John
-  address:
-    city: New York
-tags:
-  - a
-  - b
+{
+  "user": {
+    "name": "John",
+    "address": {
+      "city": "New York"
+    }
+  },
+  "tags": ["a", "b"]
+}
 ```
 
 #### Output
 
-Returns the flattened object.
+Returns the flattened object:
 
 ```json
 {
@@ -280,23 +278,25 @@ Returns the flattened object.
 
 ### `unflatten`
 
-Converts a flat object with delimited keys back into a nested object structure.
+The inverse operation of `flatten`. Takes a flat object containing delimited keys and converts it back into a deeply nested object structure.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>target</code></td><td></td><td>The object to unflatten.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>delimiter</code></td><td>A custom delimiter string to use instead of a dot.</td><td>string</td></tr><tr><td></td><td><code>safe</code></td><td>Preserves arrays and their contents. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>object</code></td><td>Prevents automatic creation of arrays when unflattening. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>override</code></td><td>Overwrites existing keys if they cannot hold a newly encountered nested value. Default false.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>target</code></td><td></td><td>The flat target object to unflatten.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>delimiter</code></td><td>A custom delimiter string to identify nested breaks instead of a dot.</td><td>string</td></tr><tr><td></td><td><code>safe</code></td><td>If true, preserves arrays and their nested contents intact. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>object</code></td><td>If true, prevents the automatic instantiation of arrays when unflattening. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>override</code></td><td>If true, overwrites existing keys if they cannot accommodate a newly encountered nested object value. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # target
-user.name: John
-user.address.city: New York
+{
+  "user.name": "John",
+  "user.address.city": "New York"
+}
 ```
 
 #### Output
 
-Returns the unflattened nested object.
+Returns the unflattened nested object structure:
 
 ```json
 {
@@ -311,26 +311,25 @@ Returns the unflattened nested object.
 
 ### `mergeArrays`
 
-Merges multiple arrays by combining the objects at corresponding indexes. The function truncates the result to the length of the shortest input array.
+Merges multiple arrays by combining the objects located at corresponding indexes. The function truncates the final output array to match the length of the shortest provided input array.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>The arrays to merge.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Multiple arrays of objects to merge together.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # args
-  - - a: 1
-    - b: 2
-  - - c: 3
-    - d: 4
-      e: 5
+[
+  [ { "a": 1 }, { "b": 2 } ],
+  [ { "c": 3 }, { "d": 4, "e": 5 } ]
+]
 ```
 
 #### Output
 
-Returns the merged array.
+Returns the merged index array:
 
 ```json
 [
@@ -341,25 +340,25 @@ Returns the merged array.
 
 ### `combineArrays`
 
-Combines multiple arrays and appends an underscore and the array index to object keys to prevent collisions.
+Hop-combines multiple arrays similarly to `mergeArrays`, but explicitly appends an underscore `_` followed by the source array index to each object key. This convention systematically prevents key collisions during union merges.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>The arrays to combine.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Multiple arrays to combine.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # args
-  - - value: 10
-    - value: 20
-  - - value: 30
-    - value: 40
+[
+  [ { "value": 10 }, { "value": 20 } ],
+  [ { "value": 30 }, { "value": 40 } ]
+]
 ```
 
 #### Output
 
-Returns the combined array.
+Returns the indexed combination array:
 
 ```json
 [
@@ -370,31 +369,29 @@ Returns the combined array.
 
 ### `groupArrays`
 
-Groups and merges objects from multiple arrays based on a shared key or set of keys.
+Groups and merges objects compiled from multiple separate arrays based on a shared property key or an array of designated keys. This utility provides an efficient way to execute client-side joins across distinct data streams.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>keys</code></td><td>The key or array of keys to group by.</td><td>string or array</td></tr><tr><td><code>args</code></td><td>The arrays of objects to group and merge.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>keys</code></td><td>The property key string or array of key strings to group target data items by.</td><td>string or array</td></tr><tr><td><code>args</code></td><td>Multiple arrays composed of data objects to group and merge.</td><td>array</td></tr></tbody></table>
 
 #### Example
+
+Grouping distinct collections using a shared `id` key:
 
 ```yaml
 # keys
 id
 # args
-  - - id: 1
-      name: Alice
-    - id: 2
-      name: Bob
-  - - id: 1
-      age: 25
-    - id: 2
-      age: 30
+[
+  [ { "id": 1, "name": "Alice" }, { "id": 2, "name": "Bob" } ],
+  [ { "id": 1, "age": 25 }, { "id": 2, "age": 30 } ]
+]
 ```
 
 #### Output
 
-Returns the grouped and merged array.
+Returns the grouped and structurally merged array:
 
 ```json
 [
@@ -405,26 +402,24 @@ Returns the grouped and merged array.
 
 ### `renameObjectKeys`
 
-Creates a new object with renamed keys based on a specified mapping configuration.
+Generates a new object with renamed keys based on a specified mapping configuration layout.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>object</code></td><td>The target object.</td><td>object</td></tr><tr><td><code>keyMapping</code></td><td>An object mapping original key names to new key names.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>object</code></td><td>The target object whose keys require renaming.</td><td>object</td></tr><tr><td><code>keyMapping</code></td><td>A dictionary object where each key represents the original property string and its corresponding value defines the new key string identifier.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # object
-first_name: John
-last_name: Doe
+{ "first_name": "John", "last_name": "Doe" }
 # keyMapping
-first_name: firstName
-last_name: lastName
+{ "first_name": "firstName", "last_name": "lastName" }
 ```
 
 #### Output
 
-Returns the object with updated keys.
+Returns the object with updated keys:
 
 ```json
 {
@@ -435,11 +430,11 @@ Returns the object with updated keys.
 
 ### `base64Decode`
 
-Decodes a base64-encoded string back to its original text representation.
+Decodes a base64-encoded payload string back into its original text representation.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>base64String</code></td><td></td><td>The base64 string to decode.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>encoding</code></td><td>The character encoding of the returned string. Default <code>utf8</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>base64String</code></td><td></td><td>The base64 encoded source payload string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>encoding</code></td><td>The character encoding to apply to the generated output text string. Default <code>utf8</code>.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -450,15 +445,15 @@ SGVsbG8gV29ybGQ=
 
 #### Output
 
-Returns the decoded string.
+Returns the decoded text string: `Hello World`
 
 ### `base64Encode`
 
-Encodes a string or byte payload into a base64 string.
+Encodes a plain text string or binary byte collection into a base64 string representation.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bytes</code></td><td>The text or bytes to encode.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bytes</code></td><td>The input text string or raw bytes to encode.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
@@ -469,14 +464,14 @@ Hello World
 
 #### Output
 
-Returns the base64-encoded string.
+Returns the generated base64-encoded string: `SGVsbG8gV29ybGQ=`
 
 ### `memory`
 
-Outputs its input value immediately upon any input update. This function has an input and an output slot but no trigger action.
+Passes its input value directly to its output slot immediately upon any input update. This extension node features dedicated input and output slots but does not include an explicit trigger action.
 
 <figure><img src="../../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-The Backend Builder toolbar includes a shortcut to the memory function.
+The Backend Builder toolbar includes a shortcut to create a `memory` node directly.
 {% endhint %}
