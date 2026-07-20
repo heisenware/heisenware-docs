@@ -35,7 +35,7 @@ Returns the name of the created instance.
 
 ### `connect`
 
-Connects to the PLC and discovers all controller-scoped and program-scoped tags to make them available for reading, writing, and subscribing.
+Connects to the PLC and discovers all controller-scoped and program-scoped tags to make them available for reading, writing, and subscribing. See [Connection recovery](allen-bradley.md#connection-recovery) for the behavior after an unexpected session loss.
 
 #### Parameters
 
