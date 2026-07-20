@@ -6,7 +6,7 @@ This connector requires [instance creation](./#instance-creation) before you can
 
 ## Tags and user-defined types
 
-A tag is a PLC variable that represents a named piece of memory with a specific data type, such as `DINT` for a 32-bit integer, `REAL` for a floating-point number, or `BOOL` for a boolean. A user-defined type (UDT) is a structured tag that groups related values into a single unit, similar to an object. For example, a `Recipe` UDT can contain the members `Name` and `TempSetPoint`, which you address as `Recipe.Name` and `Recipe.TempSetPoint`.
+A tag is a PLC variable that represents a named piece of memory with a specific data type, such as `DINT` for a 32-bit integer, `REAL` for a floating-point number, or `BOOL` for a boolean. A user-defined type (UDT) is a structured tag that groups related values into a single unit, similar to an object. For example, a `Recipe` UDT can contain the members `Name` and `TempSetPoint`, which you address as `Recipe.Name` and `Recipe.TempSetPoint`. Reading a UDT returns an object with key-value pairs corresponding to its members.
 
 The connector discovers all tags and their types when you call `connect`, letting you address every tag by its name.
 
@@ -31,7 +31,7 @@ slot: 2
 
 #### Output
 
-Returns the controller instance. Throws an error if configuration fails.
+Returns the name of the created instance.
 
 ### `connect`
 
@@ -67,7 +67,7 @@ None.
 
 #### Output
 
-Returns `true` on a successful disconnection, including when no active connection exists.
+Returns `true` on a successful disconnection, including when no active connection exists. Throws an error if the disconnection fails.
 
 ### `delete`
 
@@ -125,7 +125,7 @@ Reads multiple tags in a single, optimized network request. This is more efficie
 
 #### Output
 
-Returns an object where each key is a tag name and each value is its current value:
+Returns an object where each key is a tag name and each value is its current value. Returns an empty object if none of the requested tags exist:
 
 ```json
 {
