@@ -249,7 +249,7 @@ Returns `true` on success. Throws an error on failure and rolls back all changes
 
 ## Querying and filtering data
 
-Filters can reference the currently logged-in App user, see [Referencing the current user with $USER](relational-database.md#referencing-the-current-user-with-usd-user).
+Filters can reference the currently logged-in App user, see [Referencing the current user with $USER](relational-database.md#referencing-the-current-user-with-usduser).
 
 ### `getTableData`
 
@@ -1034,7 +1034,7 @@ The database automatically creates a parallel table (such as `ordersAuditLog`) r
 
 ### Tracking the actor
 
-To record who made a change, all data manipulation functions accept an optional `actorId` within their options. In an App, bind this to the authenticated user via the `$USER` variable or their user ID.
+To record who made a change, all data manipulation functions accept an optional `actorId` within their options. In an App, bind this to the authenticated user via the [`$USER` variable](relational-database.md#referencing-the-current-user-with-usduser) or their user ID.
 
 ```yaml
 # table
