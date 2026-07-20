@@ -1,6 +1,6 @@
 # Siemens S7
 
-The Siemens S7 connector (`S7`) communicates directly with Siemens S7 programmable logic controllers (PLCs). It lets you read and write PLC memory areas using raw memory addresses or human-readable variable aliases.
+The Siemens S7 connector (`S7`) communicates directly with Siemens S7 programmable logic controllers (PLCs). It lets you read and write PLC memory areas using raw memory addresses or human-readable variable aliases. 
 
 This connector requires [instance creation](./#instance-creation) before you can manage connection states and configure variable polling.
 
@@ -109,7 +109,7 @@ Returns `true` upon removal.
 
 ## Variable addressing and dictionary
 
-The address dictionary is an optional convenience layer. Functions like `addItems` and `writeItems` accept aliases, raw PLC addresses, or a mix of both: the connector first checks whether a string is an alias in the dictionary and otherwise treats it as a direct address.
+The address dictionary is an optional convenience layer. Functions like `addItems` and `writeItems` accept aliases, raw PLC addresses, or a mix of both: the connector first checks whether a string is an alias in the dictionary and otherwise treats it as a direct address. See [Memory address syntax](siemens-s7.md#memory-address-syntax) for the address format.
 
 ### `setAddressDictionary`
 
@@ -291,10 +291,10 @@ true
 
 The following functions are maintained for backward compatibility. Update your App logic to use the recommended replacements.
 
-| Deprecated function  | Use instead  |
-| -------------------- | ------------ |
-| `initiateConnection` | `connect`    |
-| `dropConnection`     | `disconnect` |
+| Deprecated function | Use instead |
+| :--- | :--- |
+| `initiateConnection` | `connect` |
+| `dropConnection` | `disconnect` |
 
 ## Tips and tricks
 
@@ -303,14 +303,12 @@ The following functions are maintained for backward compatibility. Update your A
 Format memory address strings as `AREA,TYPE<BYTE_OFFSET>[.BIT_OR_LENGTH]`.
 
 #### Memory areas
-
 * `DB<number>` (Data Block) – Shared memory registers for logic, recipes, and process variables (such as `DB1,REAL4`).
 * `I` (Inputs) – Read-only registers tracking physical digital and analog inputs.
 * `Q` (Outputs) – Control registers driving physical outputs.
 * `M` (Merkers/Internal Memory) – Internal processor flags and global staging variables.
 
 #### Data layouts
-
 * Boolean (`X`) – Single-bit fields (such as `DB1,X0.0`).
 * Byte (`B`) – 8-bit integer values from 0 to 255.
 * Char Array (`C`) – Alphanumeric sequences (such as `DB1,C20.10` for 10 sequential characters).
