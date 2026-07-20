@@ -17,7 +17,7 @@ Heisenware connects external data three ways:
 
 ### MQTT client
 
-The standard choice for general IoT use cases. Use this for sensors or devices that push data to Heisenware's MQTT broker.
+The standard choice for general IoT use cases. Use this for sensors or devices that push data to Heisenware's MQTT broker. Inside your Apps, the [MQTT client connector](../app-builder/build-backend/functions/connectors/mqtt-client.md) handles these messages. For a full walkthrough, see [Connect an external MQTT client](../tutorials/integration-guides/connect-an-external-mqtt-client.md).
 
 ### [VRPC](../advanced/vrpc/) client
 
