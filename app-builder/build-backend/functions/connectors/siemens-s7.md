@@ -27,6 +27,22 @@ Configure the controller to permit PUT and GET communication:
 
 ## Connection management
 
+{% hint style="info" %}
+Typically you first install the Siemens S7 connector within an [Agent](../agents/). That way you can connect your cloud platform to your on-premises shopfloor PLCs.
+{% endhint %}
+
+### `create`
+
+Creates an S7 client instance. The connection details follow in `connect`.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns the name of the created instance.
+
 ### `connect`
 
 Establishes a connection to the target PLC.
@@ -59,7 +75,7 @@ None.
 
 #### Output
 
-Returns `true` on successful disconnection.
+Returns `true` on successful disconnection, including when no connection exists.
 
 ### `getStatus`
 
@@ -75,10 +91,10 @@ Returns `'disconnected'`, `'connecting'`, or `'connected'`.
 
 ### `delete`
 
-Removes the S7 client instance from the runtime configuration engine and purges all active item polling tracking queues.
+Removes the instance and its configuration.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 Deleting an instance removes its configuration. To communicate with the PLC again, you must create a new instance.
 {% endhint %}
@@ -89,9 +105,11 @@ None.
 
 #### Output
 
-Returns `true` on successful deletion. Throws an error if the operation fails.
+Returns `true` upon removal.
 
 ## Variable addressing and dictionary
+
+The address dictionary is an optional convenience layer. Functions like `addItems` and `writeItems` accept aliases, raw PLC addresses, or a mix of both: the connector first checks whether a string is an alias in the dictionary and otherwise treats it as a direct address.
 
 ### `setAddressDictionary`
 
@@ -220,7 +238,7 @@ None.
 
 #### Output
 
-Returns an object containing the current values of all registered variables. Keys map to the variable names or aliases.
+Returns an object containing the current values of all registered variables. Keys map to the variable names or aliases. Throws an error if reading fails.
 
 ```json
 {
@@ -300,6 +318,10 @@ Format memory address strings as `AREA,TYPE<BYTE_OFFSET>[.BIT_OR_LENGTH]`.
 * Double Int (`DINT`) – 32-bit signed integers.
 * DWord (`DWORD`) – 32-bit unsigned integers.
 * Real (`REAL`) – 32-bit floating-point decimals (such as `DB1,REAL14`).
+
+### Error "Object does not exist"
+
+This error means you are reading or writing a Data Block (`DB`) that either does not exist or is too small in the PLC. Ensure the DB number is correct and that its size in TIA Portal is large enough to hold all your variables.
 
 ### Handling scrambled strings
 
