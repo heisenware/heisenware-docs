@@ -147,7 +147,7 @@
 * [Integration guides](tutorials/integration-guides/README.md)
   * [Connectivity setup guide](tutorials/integration-guides/connectivity-setup-guide.md)
   * [Connect from Arduino via MQTT](tutorials/integration-guides/connect-from-arduino-via-mqtt.md)
-  * [Connect an External MQTT Client](tutorials/integration-guides/connect-an-external-mqtt-client.md)
+  * [Connect an external MQTT client](tutorials/integration-guides/connect-an-external-mqtt-client.md)
   * [Connect Heidenhain CNC with OPC UA support](tutorials/integration-guides/connect-heidenhain-cnc-with-opc-ua-support.md)
 * [On-premise installation](tutorials/on-premise-installation.md)
 
