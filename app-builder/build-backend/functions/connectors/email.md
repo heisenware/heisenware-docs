@@ -58,7 +58,7 @@ pass: another-password
 
 #### Output
 
-Returns the email client instance. Throws an error if configuration fails.
+Returns the name of the created instance.
 
 ### `send`
 
@@ -89,7 +89,19 @@ Regards,
 The Support Team
 ```
 
-Example 2: Attachment from a file path
+Example 2: HTML email
+
+```yaml
+# address
+to: 'customer@example.com'
+from: '"Sales" <sales@my-company.com>'
+# subject
+Your weekly newsletter
+# content
+'<h1>Our Top Story This Week</h1><p>Check out our latest product, now available for pre-order!</p><a href="https://my-company.com/products/new">Pre-order Now</a>'
+```
+
+Example 3: Attachment from a file path
 
 ```yaml
 # address
@@ -108,7 +120,7 @@ Please find the Q3 financial report attached.
 ]
 ```
 
-Example 3: Attachment from a base64 string
+Example 4: Attachment from a base64 string
 
 ```yaml
 # address
@@ -128,7 +140,7 @@ Your invoice is attached.
 ]
 ```
 
-Example 4: HTML email with an inline image
+Example 5: HTML email with an inline image
 
 ```yaml
 # address
@@ -150,7 +162,7 @@ Check out our new logo!
 
 #### Output
 
-Returns `true` on a successful send. If the send fails, the function logs the error and returns nothing without throwing an error.
+Returns `true` on a successful send. If the send fails, the function logs the error and returns nothing without throwing an error. The same applies when the instance was created with a failing configuration: the connector then skips sending and logs a warning.
 
 ### `delete`
 
