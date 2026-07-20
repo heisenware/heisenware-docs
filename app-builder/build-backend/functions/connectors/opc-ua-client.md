@@ -1,3 +1,8 @@
+---
+description: >-
+  Learn how to connect to an OPC UA server using the Heisenware OPC UA client.
+---
+
 # OPC UA client
 
 The OPC UA client connector (`OpcuaClient`) communicates with OPC UA servers. It manages secure connections, browses the server's address space, reads and writes variables, calls methods, monitors data for changes, and transfers files. 
@@ -56,7 +61,7 @@ These static functions manage secure connection setup.
 
 ### `createCertificates`
 
-Initializes the local PKI store and creates a client certificate for the application and a user certificate for authentication. By default, this function creates self-signed certificates. Run this function once.
+Initializes the local PKI store and creates a client certificate for the application and a user certificate for authentication. By default, this function creates self-signed certificates. Run this function once. Existing certificates are kept on repeated runs.
 
 #### Parameters
 
@@ -76,7 +81,7 @@ Adds a server's public certificate to the client's trust list to establish a sec
 
 #### Output
 
-Returns `true` when the certificate is saved successfully.
+Returns `true` when the certificate is saved successfully. Throws an error if the input is missing, the filename is missing for a PEM string, or saving fails.
 
 #### Examples
 
@@ -110,7 +115,7 @@ Adds a server's public CA certificate to the `issuers` directory of the PKI stor
 
 #### Output
 
-Returns `true` when the certificate is saved successfully.
+Returns `true` when the certificate is saved successfully. Throws an error if the input is missing, the filename is missing for a PEM string, or saving fails.
 
 ## Connection and lifecycle
 
@@ -123,10 +128,14 @@ Creates an OPC UA client instance. The security settings determine how the clien
 <table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>securityMode</code></td><td>The security mode to use (<code>None</code>, <code>Sign</code>, or <code>SignAndEncrypt</code>). Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>securityPolicy</code></td><td>The encryption algorithm to use (such as <code>Basic256Sha256</code>). Default <code>None</code>.</td><td>string</td></tr><tr><td></td><td><code>automaticallyAcceptUnknownCertificate</code></td><td>Disables server validation. Default false.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="danger" %}
-#### Destructive action
+#### Security risk
 
-Never set <code>automaticallyAcceptUnknownCertificate</code> to <code>true</code> in production. This disables server validation and exposes the system to man-in-the-middle attacks.
+Never set <code>automaticallyAcceptUnknownCertificate</code> to <code>true</code> in production. This disables server validation and exposes the system to man-in-the-middle attacks. Use it for debugging purposes only.
 {% endhint %}
+
+#### Output
+
+Returns the name of the created instance.
 
 #### Examples
 
@@ -146,7 +155,7 @@ securityPolicy: Basic256Sha256
 
 ### `connect`
 
-Connects to an OPC UA server.
+Connects to an OPC UA server. If a secure connection fails, see [Tips and tricks](#tips-and-tricks) for troubleshooting the chain of trust.
 
 #### Parameters
 
@@ -154,27 +163,51 @@ Connects to an OPC UA server.
 
 #### Output
 
-Returns `true` when the connection succeeds. Throws an error on failure.
+Returns `true` when the connection succeeds or the client is already connected. Returns the string `reconnect ongoing` if an automatic reconnection is in progress. Throws an error on failure.
 
 #### Examples
 
+Each scenario shows the inputs of both `create` and `connect`.
+
 **Example 1: Unsecured, anonymous connection**
 
+Requires no PKI setup and no user identity.
+
 ```yaml
+# (In create)
+# (No arguments)
+
+# (In connect)
 # endpointUrl
 opc.tcp://my-server.com:4840
 ```
 
 **Example 2: Secure, anonymous connection**
 
+Requires the PKI setup (`createCertificates` and `addServerCertificate`) but no user identity.
+
 ```yaml
+# (In create)
+# options
+securityMode: SignAndEncrypt
+securityPolicy: Basic256Sha256
+
+# (In connect)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 ```
 
 **Example 3: Secure connection with username and password**
 
+Requires the PKI setup for a secure channel, plus credentials for user authentication.
+
 ```yaml
+# (In create)
+# options
+securityMode: SignAndEncrypt
+securityPolicy: Basic256Sha256
+
+# (In connect)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 # userIdentity
@@ -184,7 +217,15 @@ password: mysecretpassword
 
 **Example 4: Secure connection with a user certificate**
 
+The most secure method, using certificates for both channel security and user authentication.
+
 ```yaml
+# (In create)
+# options
+securityMode: SignAndEncrypt
+securityPolicy: Basic256Sha256
+
+# (In connect)
 # endpointUrl
 opc.tcp://my-secure-server.com:4840
 # userIdentity
@@ -201,7 +242,7 @@ None.
 
 #### Output
 
-Returns `true` on successful disconnection.
+Returns `true` on successful disconnection, including when no connection exists.
 
 ### `isConnected`
 
@@ -220,7 +261,7 @@ Returns `true` if connected, or `false` if disconnected.
 Removes the client instance and closes the connection.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 Deleting an instance removes its configuration. To communicate with the server again, you must create a new instance.
 {% endhint %}
@@ -231,7 +272,7 @@ None.
 
 #### Output
 
-Returns `true` on successful deletion. Throws an error if the operation fails.
+Returns `true` upon removal.
 
 ## Browsing
 
@@ -260,7 +301,7 @@ Browses the server's Objects folder.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The browse path starting inside the Objects folder.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>An optional browse path starting inside the Objects folder, or a <code>nodeId</code>. Browses the Objects folder itself if omitted.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -394,7 +435,7 @@ Writes a new value to a server variable. Converts the value to the required OPC 
 
 #### Output
 
-Returns `null` on a successful write. Throws an error on failure.
+Returns nothing on a successful write. Throws an error on failure.
 
 #### Example
 
@@ -415,7 +456,7 @@ Invokes a method on an OPC UA object.
 
 #### Output
 
-Returns an array containing the output arguments from the method call.
+Returns an array containing the output arguments from the method call. Throws an error if the number of input values does not match the method definition or the call fails.
 
 #### Example
 
@@ -435,11 +476,11 @@ Subscribes to changes of an OPC UA node. Triggers the callback on every change.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. Receives a JSON object representing the node's <code>DataValue</code>.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. Receives a JSON object containing the variable's <code>dataType</code> and <code>value</code>.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns a unique monitored item ID string. Use this ID with `stopMonitor` to terminate the subscription.
+Returns the resolved `nodeId` of the monitored item. Use this ID with `stopMonitor` to terminate monitoring.
 
 #### Example
 
@@ -462,7 +503,7 @@ Subscribes to value changes of a variable. Triggers the callback with the new va
 
 #### Output
 
-Returns a unique monitored item ID string. Use this ID with `stopMonitor` to terminate the subscription.
+Returns the resolved `nodeId` of the monitored item. Use this ID with `stopMonitor` to terminate monitoring.
 
 #### Example
 
@@ -481,7 +522,7 @@ Stops an active subscription for a monitored item.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nodeId</code></td><td>The monitored item ID string returned by the monitoring function.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nodeId</code></td><td>The <code>nodeId</code> returned by <code>monitorNode</code> or <code>monitorVariable</code>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -555,7 +596,7 @@ SGVsbG8sIFdvcmxkIQ==
 Deletes a file on the server.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
 Deleting a file permanently removes it from the server. This action cannot be undone.
 {% endhint %}
@@ -566,7 +607,7 @@ Deleting a file permanently removes it from the server. This action cannot be un
 
 #### Output
 
-Returns `true` when the file is successfully deleted. Throws an error on failure.
+Returns `true` when the file is successfully deleted, or `false` if the deletion fails or the folder provides no delete capability. Throws an error if the file cannot be found.
 
 #### Example
 
@@ -581,11 +622,11 @@ report.txt
 
 ### `listenToEvents`
 
-Registers a callback to receive client lifecycle events (such as `Connected`, `Connection Lost`, or `Session Closed`).
+Registers a callback to receive client lifecycle events.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback evaluated on client lifecycle events. Receives a string representing the event type.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback evaluated on client lifecycle events. Receives one of the following event strings: <code>Connected</code>, <code>Connection Failed</code>, <code>Connection Lost</code>, <code>Started Reconnection</code>, <code>Connection Re-Established</code>, <code>Back Off</code>, <code>Security Token Renewed</code>, <code>Request Timed Out</code>, <code>Session Closed</code>, <code>Subscription Started</code>, <code>Subscription Keep Alive</code>, <code>Subscription Terminated</code>.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -606,7 +647,7 @@ Establishing a secure certificate-based connection is the primary point of failu
 
 ### Switch an existing instance to a secure connection
 
-To switch an unsecured instance to a secure connection, remove the instance and create it again. Right-click the existing active instance (green in the UI), click **Remove**, and then trigger the `create` function with your new security configuration.
+To switch an unsecured instance to a secure connection, remove the instance and create it again. Right-click the existing active instance (green in the UI), click **Remove**, and the instance turns yellow to indicate it is not available. Trigger the `create` function again to apply your new security configuration.
 
 ### Server rejects the client certificate
 
@@ -624,7 +665,7 @@ In CA mode, add the CA's public certificate (`heisenware_ca_cert.pem`) to the se
 
 ### Client rejects the server certificate
 
-If the client does not trust the server, it throws a certificate verification error.
+If the client does not trust the server, it fails with the error `server Certificate verification failed`.
 
 To resolve this, add the server's public certificate to the client's trust store:
 
@@ -653,7 +694,7 @@ These two certificate types serve distinct purposes:
 1. **Application certificate (`heisenware_opcua_client.pem`)**: Identifies the application to establish the secure, encrypted channel between client and server. This is mandatory for secure connections.
 2. **User certificate (`heisenware_opcua_user.pem`)**: Identifies the user to handle authentication and permissions after the secure channel is established. This is optional.
 
-User certificate authentication requires server-side configuration. The server administrator must create the user account and map it explicitly to the user's public certificate.
+User certificate authentication requires server-side configuration. The server administrator must create the user account and map it explicitly to the user's public certificate. For Prosys Simulation Server, this feature is only available in the Professional Edition.
 
 ### Server and client clocks out of sync
 
