@@ -4,7 +4,7 @@ Functions form the core building blocks of logic in your Apps. They visually rep
 
 Every function follows the same anatomy, represented by a colored box with a unique icon.
 
-<figure><img src="../../../.gitbook/assets/image (51).png" alt=""><figcaption>A function merging two or more objects</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (51).png" alt=""><figcaption><p>A function merging two or more objects</p></figcaption></figure>
 
 * [**Inputs**](./#inputs-and-data-configuration): Arguments the function requires to operate, such as a number to calculate or a string to send. The platform hides the input box if a function does not require inputs. Some functions let you add extra inputs. Click the pencil icon to modify input data via a form, or use YAML during development.
 * [**Trigger**](./#triggers-and-execution-logic): The signal that executes the function, such as a button click or a data change. Click the play icon to run the function manually during development.
@@ -68,7 +68,7 @@ Inputs determine function behavior. Provide data using three methods:
 2. **Dynamic logic**: Data passed from the output, modifier, or filter of a preceding function.
 3. **UI binding**: Live data mapped from a frontend widget (for example, a text field value).
 
-<figure><img src="../../../.gitbook/assets/image (37).png" alt=""><figcaption>Function with input in YAML format</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (37).png" alt=""><figcaption><p>Function with input in YAML format</p></figcaption></figure>
 
 ### YAML input
 
@@ -91,62 +91,62 @@ Enter simple data types without quotes.
 
 A collection of items.
 
-* **Block style**: Start each item on a new line with a hyphen.
+*   **Block style**: Start each item on a new line with a hyphen.
 
-  ```yaml
-  - Apple
-  - Orange
-  - Banana
-  ```
-* **Compact style**: Enclose items in square brackets.
+    ```yaml
+    - Apple
+    - Orange
+    - Banana
+    ```
+*   **Compact style**: Enclose items in square brackets.
 
-  ```yaml
-  [Apple, Orange, Banana]
-  ```
+    ```yaml
+    [Apple, Orange, Banana]
+    ```
 
 #### Objects (key-value maps)
 
 Data grouped under specific keys.
 
-* **Block style**: Place each key-value pair on its own line. Use indentation for nested properties.
+*   **Block style**: Place each key-value pair on its own line. Use indentation for nested properties.
 
-  ```yaml
-  user:
-    name: Alex
-    email: alex@example.com
-    permissions:
-      can_read: true
-      can_write: false
-  ```
-* **Compact style**: Enclose comma-separated key-value pairs in curly braces.
+    ```yaml
+    user:
+      name: Alex
+      email: alex@example.com
+      permissions:
+        can_read: true
+        can_write: false
+    ```
+*   **Compact style**: Enclose comma-separated key-value pairs in curly braces.
 
-  ```yaml
-  { name: Alex, email: alex@example.com }
-  ```
+    ```yaml
+    { name: Alex, email: alex@example.com }
+    ```
 
 #### Multiline strings
 
 Use multiline strings for large text blocks, code scripts, or templates.
 
-* **Literal style (`|`)**: Preserves all line breaks exactly. Use this style for raw code or printer layouts (for example, ZPL).
+*   **Literal style (`|`)**: Preserves all line breaks exactly. Use this style for raw code or printer layouts (for example, ZPL).
 
-  ```yaml
-  |
-    ^XA^FO30,80^BQN,2,3^FDLA,{{assetId}}#{{date}}^FS
-    ^FO120,140^A0N,22,22^FD{{assetId}}#{{date}}^FS
-    ^RFW,A^FD {{assetId}}^FS
-    ^XZ
-  ```
-* **Folded style (`>`)**: Converts single newlines into spaces, which creates a continuous sentence from multiple lines. Blank lines remain as newlines.
+    ```yaml
+    |
+      ^XA^FO30,80^BQN,2,3^FDLA,{{assetId}}#{{date}}^FS
+      ^FO120,140^A0N,22,22^FD{{assetId}}#{{date}}^FS
+      ^RFW,A^FD {{assetId}}^FS
+      ^XZ
+    ```
+*   **Folded style (`>`)**: Converts single newlines into spaces, which creates a continuous sentence from multiple lines. Blank lines remain as newlines.
 
-  ```yaml
-  description: >
-    This is a long description written across
-    multiple lines in the editor, but processed
-    as a single, continuous sentence.
+    ```yaml
+    description: >
+      This is a long description written across
+      multiple lines in the editor, but processed
+      as a single, continuous sentence.
 
-    A new paragraph starts after a blank line.
-  ```
+      A new paragraph starts after a blank line.
+    ```
 
 </details>
 
@@ -156,9 +156,9 @@ Right-click a function input to switch between the YAML and HTML views, or to ma
 
 ### Callbacks
 
-Functions with an `on` prefix (such as `onMessage`) use callbacks. They listen for external events, such as an incoming MQTT message, and deliver that data through a specific output nested inside the function input.
+Most functions that use callbacks have an `on` prefix – such as `onMessage`. These functions listen continuously for external events, like an incoming MQTT message, and deliver that data through a specific nested output inside the function input. Throughout the configuration examples in these docs, this special input argument is named `listener`.
 
-<figure><img src="../../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption>A function with a callback listening for incoming MQTT messages in binary format</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
 
 ## Triggers and execution logic
 
@@ -173,16 +173,16 @@ The trigger determines when a function runs.
 * **Page load**: Drag a page from the Page Explorer onto the trigger to execute the function when that page loads.
 * **Manual development**: Click the play icon inside the trigger to run the function manually during development.
 
-<figure><img src="../../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption>Use page load to execute a function</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a function</p></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption>Use a button click to execute a function</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption><p>Use a button click to execute a function</p></figcaption></figure>
 
 ### Sequential processing of arrays (looping)
 
 To process an array item by item:
 
 1. Right-click the trigger.
-2. Select *Process one by one*.
+2. Select _Process one by one_.
 3. Choose the input containing the target array. The trigger wire changes to a dotted line, indicating that the function executes once for each item in the list.
 
 <details>
@@ -234,7 +234,7 @@ Extension nodes attach to a function output to process data directly within the 
 
 * **Add**: Click the plus icon (`+`) on an output and select an extension node type. You can attach multiple parallel extension nodes to a single output.
 * **Chain**: Attach an extension node to the output of another extension node to create a multi-step data pipeline.
-* **Delete**: Right-click an extension node and select *Delete*.
+* **Delete**: Right-click an extension node and select _Delete_.
 
 ## Data binding (connecting to UI)
 
@@ -246,9 +246,9 @@ Functions communicate bidirectionally with frontend widgets through data binding
 
 ## Advanced addressing
 
-Every function targets its underlying backend code using a specific address structure. To view or edit this path, right-click the function name and select *Use dynamic address*.
+Every function targets its underlying backend code using a specific address structure. To view or edit this path, right-click the function name and select _Use dynamic address_.
 
-<figure><img src="../../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption>Right-click the function name and choose Use Dynamic Address</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right-click the function name and choose Use Dynamic Address</p></figcaption></figure>
 
 This action reveals the exact path to the code, consisting of up to three boxes:
 
@@ -258,7 +258,7 @@ This action reveals the exact path to the code, consisting of up to three boxes:
 * **Box 2 (class)**: The code class name, such as `Busylight`, `Barcode`, or `OpcuaClient`.
 * **Box 3 (instance)**: The specific instance name, such as `server1`. This box only appears for member functions. Static functions do not utilize an instance, so the platform hides this box.
 
-<figure><img src="../../../.gitbook/assets/image (25).png" alt=""><figcaption>Addresses of a static function and a member function</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static function and a member function</p></figcaption></figure>
 
 Edit this address directly in the boxes if required. The platform retains your changes if you switch back to the standard view.
 
