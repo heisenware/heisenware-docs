@@ -12,7 +12,9 @@ It also natively supports multi-field telemetry. When you log entire objects (su
 
 ## Quick start: the internal instance
 
-Heisenware provides a pre-initialized InfluxDB instance called `internal-influx`. It is globally available and ready for use. Select `internal-influx` in your function's instance field to log timeseries data immediately without creating an instance.
+Heisenware provides a pre-initialized InfluxDB instance called `internal-influx`. It is globally available and ready for use. Pick functions from inside `internal-influx` to make use of it.
+
+<figure><img src="../../../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 #### Direct data recording with the recorder
