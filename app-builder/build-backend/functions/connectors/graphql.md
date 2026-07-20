@@ -52,7 +52,7 @@ This queries a list of movies.
 
 ```yaml
 # url
-[https://api.example.com/graphql](https://api.example.com/graphql)
+https://api.example.com/graphql
 # document
 query {
   movies {
@@ -69,7 +69,7 @@ This fetches a single movie by its ID, passed as a variable.
 
 ```yaml
 # url
-[https://api.example.com/graphql](https://api.example.com/graphql)
+https://api.example.com/graphql
 # document
 query getMovieById($movieId: ID!) {
   movie(id: $movieId) {
@@ -89,7 +89,7 @@ This creates a new movie.
 
 ```yaml
 # url
-[https://api.example.com/graphql](https://api.example.com/graphql)
+https://api.example.com/graphql
 # document
 mutation createMovie($title: String!, $year: Int!) {
   createMovie(title: $title, releaseYear: $year) {
@@ -108,7 +108,7 @@ This sends an `Authorization` header with a Bearer token.
 
 ```yaml
 # url
-[https://api.example.com/graphql](https://api.example.com/graphql)
+https://api.example.com/graphql
 # document
 query {
   myPrivateData {
