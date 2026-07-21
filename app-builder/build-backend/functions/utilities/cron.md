@@ -1,6 +1,6 @@
 # Cron
 
-With cron, you schedule tasks that run automatically at specific times or intervals, defined in the standard cron expression format. This is useful for recurring jobs such as generating daily reports, performing nightly backups, or sending scheduled notifications. The code class name is `Cron`. This class requires an instance to schedule tasks, though it includes a static utility function for verification.
+With cron, you schedule tasks that run automatically at specific times or intervals, defined in the standard cron expression format of the underlying `node-cron` library. This is useful for recurring jobs such as generating daily reports, performing nightly backups, or sending scheduled notifications. The code class name is `Cron`. This class requires an instance to schedule tasks, though it includes a static utility function for verification.
 
 ## Understanding cron expressions
 
@@ -137,7 +137,7 @@ Defines a task and schedules it to run based on a cron expression. The scheduler
     <tr>
       <td></td>
       <td><code>maxExecutions</code></td>
-      <td>Limits the total number of times the task runs.</td>
+      <td>Limits the total number of times the task runs before it is automatically destroyed.</td>
       <td>integer</td>
     </tr>
   </tbody>
