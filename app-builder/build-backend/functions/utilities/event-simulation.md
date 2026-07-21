@@ -2,7 +2,7 @@
 
 The event simulation class simulates various events to test and validate workflows. Generating mock events ensures that flows handle different scenarios and edge cases effectively. It also serves as a placeholder in a flow before you complete your App. To learn more about event handlers, see [callbacks](../#callbacks).
 
-This class requires an instance.
+This class requires an instance. The code class name is `Trigger`.
 
 ### `create`
 
@@ -10,11 +10,11 @@ Constructs a new event simulation instance.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>A unique name for the event simulation instance.</td><td>string</td></tr></tbody></table>
+None.
 
 #### Output
 
-Returns the event simulation instance.
+Returns the name of the created instance.
 
 #### Example
 
@@ -30,7 +30,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 ### `onManualTrigger`
 
@@ -42,7 +42,7 @@ Fires when you execute the `triggerManually` function within the same instance.
 
 #### Output
 
-Returns a unique listener ID string.
+Returns the string `subscribed`.
 
 #### Example
 
@@ -54,11 +54,11 @@ Starts generating periodic automatic events at a specified interval.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The repetition interval in milliseconds.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>interval</code></td><td>The repetition interval in milliseconds. Default 1000.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the string `started`.
 
 ### `onAutoTrigger`
 
@@ -76,7 +76,7 @@ You may need to trigger `onAutoTrigger` once to start reacting to automatically 
 
 #### Output
 
-Returns a unique listener ID string.
+Returns the string `subscribed`.
 
 #### Example
 
@@ -92,7 +92,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 #### Example
 
@@ -104,11 +104,11 @@ Triggers an event that executes its own callback after a specified delay. To pre
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>timeout</code></td><td>The delay duration in milliseconds before the callback executes.</td><td>integer</td></tr><tr><td><code>listener</code></td><td>Callback that executes after the timeout delay. Payload: <code>&#x3C;callback></code>.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that executes after the timeout delay. <br>Payload: a Unix timestamp in milliseconds.</td><td>callback</td></tr><tr><td><code>timeout</code></td><td>The delay duration in milliseconds before the callback executes. Default 3000.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns a string stating when the callback will run, for example `Calling back in 3 seconds`.
 
 #### Example
 
