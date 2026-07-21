@@ -1,6 +1,6 @@
 # Barcode generation
 
-With barcode generation, you can create over 100 types of 1D and 2D barcodes and receive them as base64-encoded PNG images. The utility class provides static functions only, meaning you do not need to create an instance before calling them.
+With barcode generation, you can create over 100 types of 1D and 2D barcodes and receive them as base64-encoded PNG images. The utility class provides static functions only, meaning you do not need to create an instance before calling them. The code class name is `Barcode`.
 
 ### `generateBarcode`
 
@@ -35,7 +35,19 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
     <tr>
       <td><code>options</code></td>
       <td><code>scale</code></td>
-      <td>Sets both the x-axis and y-axis scaling factor. Must be an integer greater than 0. Default 2.</td>
+      <td>Sets both the x-axis and y-axis scaling factors. Must be an integer greater than 0.</td>
+      <td>integer</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>scaleX</code></td>
+      <td>The x-axis scaling factor. Must be an integer greater than 0. Default 2.</td>
+      <td>integer</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>scaleY</code></td>
+      <td>The y-axis scaling factor. Must be an integer greater than 0. Defaults to the value of <code>scaleX</code>.</td>
       <td>integer</td>
     </tr>
     <tr>
@@ -70,6 +82,12 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
     </tr>
     <tr>
       <td></td>
+      <td><code>binaryText</code></td>
+      <td>By default the text string is encoded as UTF-8 binary bytes. If the text is already 8-bit encoded, set this to true to disable that behavior. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
       <td><code>padding</code></td>
       <td>Space generated around the barcode.</td>
       <td>integer</td>
@@ -77,25 +95,25 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
     <tr>
       <td></td>
       <td><code>barColor</code></td>
-      <td>Bar color as a hex value, for example <code>0F7180</code>.</td>
+      <td>Bar color as an RGB, RRGGBB, or CCMMYYKK hex value, for example <code>0F7180</code>.</td>
       <td>string</td>
     </tr>
     <tr>
       <td></td>
       <td><code>textColor</code></td>
-      <td>Text color as a hex value.</td>
+      <td>Text color as an RGB, RRGGBB, or CCMMYYKK hex value.</td>
       <td>string</td>
     </tr>
     <tr>
       <td></td>
       <td><code>backgroundColor</code></td>
-      <td>Background color as a hex value.</td>
+      <td>Background color as an RGB, RRGGBB, or CCMMYYKK hex value.</td>
       <td>string</td>
     </tr>
     <tr>
       <td></td>
       <td><code>borderColor</code></td>
-      <td>Border color as a hex value.</td>
+      <td>Border color as an RGB, RRGGBB, or CCMMYYKK hex value.</td>
       <td>string</td>
     </tr>
   </tbody>
@@ -103,7 +121,7 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
 
 #### Output
 
-Returns a base64-encoded string representing the generated PNG image (for example, `iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACt...`).
+Returns a base64-encoded string representing the generated PNG image (for example, `iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACt...`). Throws an error if the type or text is invalid.
 
 #### Examples
 
@@ -114,6 +132,7 @@ Generates a standard QR code for a URL.
 ```yaml
 # type
 qrcode
+
 # text
 https://heisenware.com
 ```
@@ -125,13 +144,15 @@ Creates a `code128` barcode, scales it, includes the human-readable text, and ap
 ```yaml
 # type
 code128
+
 # text
 12345678
+
 # options
-  scale: 3
-  includeText: true
-  barColor: 0F7180
-  textColor: 0F7180
+scale: 3
+includeText: true
+barColor: 0F7180
+textColor: 0F7180
 ```
 
 ##### Rotated EAN-13 barcode
@@ -141,9 +162,11 @@ Generates an `ean13` barcode (which requires a 12-digit input) and rotates it 90
 ```yaml
 # type
 ean13
+
 # text
 123456789012
+
 # options
-  scale: 4
-  rotate: R
+scale: 4
+rotate: R
 ```
