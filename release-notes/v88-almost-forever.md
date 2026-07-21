@@ -34,5 +34,5 @@ description: 12 Oct 2025
 
 ## Breaking changes
 
-* If your App uses a top bar or top bar and bottom tabs navigation layout, you may need to adjust your widget positions o align with the new layout rendering (see [Fixes](v88-almost-forever.md#fixes)).
+* If your App uses a top bar or top bar and bottom tabs navigation layout, you may need to adjust your widget positions to align with the new layout rendering (see [Fixes](v88-almost-forever.md#fixes)).
 * The `readXlsx` function in the [File I/O](../app-builder/build-backend/functions/connectors/file-i-o.md) connector no longer returns an object containing the sheet name as the sole key when processing a single sheet. It now returns the array of rows directly.

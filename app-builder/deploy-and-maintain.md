@@ -1,6 +1,6 @@
 # Deploy and maintain
 
-[Building logic](build-backend/) and [designing the UI](build-frontend/) is only half the job. Heisenware also lets you test your work in real time, snapshot your progress, and deploy your [Apps to production](../production-apps/production-apps-overview.md).
+[Building logic](build-backend/) and [designing the UI](build-frontend/) is only half the job. Heisenware also lets you test your work in real time, snapshot your progress, and deploy your [Apps to production](https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/production-apps).
 
 ## App testing (test mode)
 

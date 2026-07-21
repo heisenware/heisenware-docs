@@ -6,7 +6,7 @@ description: >-
 
 # Connect Heidenhain CNC with OPC UA support
 
-This tutorial explains how to connect a Heidenhain controlled CNC machine to your App using OPC UA. 
+This tutorial explains how to connect a Heidenhain controlled CNC machine to your App using OPC UA.
 
 This guide uses a modern TNC7-based machine as an example, but the steps apply to any Heidenhain controller that supports OPC UA connectivity.
 
@@ -15,6 +15,7 @@ This guide uses a modern TNC7-based machine as an example, but the steps apply t
 {% stepper %}
 {% step %}
 ### Allow SSH access via password
+
 Temporarily enable password-based SSH access on your CNC machine.
 
 1. Open the settings (**Einstellungen**) menu on the controller.
@@ -40,14 +41,14 @@ Temporarily enable password-based SSH access on your CNC machine.
 
 {% step %}
 ### Download and start a Native Agent
+
 Open the App Builder on a computer that has network access to your CNC machine.
 
-1. Click the create Agent icon in the **Function Explorer** panel (see [Agents](../../app-builder/build-backend/agents.md)).
+1. Click the create Agent icon in the **Function Explorer** panel (see [Agents](../../app-builder/build-backend/agents/)).
 
 <figure><img src="../../.gitbook/assets/Screenshot (7).png" alt=""><figcaption></figcaption></figure>
 
-2. Check the checkboxes for both the [OPC UA Client](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) and the [Heidenhain OPC UA](../../app-builder/build-backend/functions/connectors/heidenhain-opc-ua.md) connectors. 
-
+2. Check the checkboxes for both the [OPC UA Client](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) and the [Heidenhain OPC UA](../../app-builder/build-backend/functions/connectors/heidenhain-opc-ua.md) connectors.
 3. Enter a prefix that identifies your workspace and click **Submit**.
 
 <figure><img src="../../.gitbook/assets/Screenshot (8).png" alt=""><figcaption></figcaption></figure>
@@ -58,6 +59,7 @@ Wait for the download dialog to open automatically in your browser.
 
 {% hint style="info" %}
 ### Re-downloading Agents
+
 You can access and download your compiled Native Agent executables at any time from the `native-agents` directory inside the [File Explorer](../../app-builder/build-backend/file-explorer.md).
 {% endhint %}
 
@@ -75,12 +77,14 @@ You can access and download your compiled Native Agent executables at any time f
 
 {% hint style="info" %}
 ### Troubleshooting Agent connectivity
+
 If the Agent fails to connect and repeatedly loops through reconnection attempts, verify that your network firewall permits outbound traffic on port `8883` to establish the secure MQTTS connection.
 {% endhint %}
 {% endstep %}
 
 {% step %}
 ### Set up certificates for the OPC UA connection
+
 To establish a secure connection to the Heidenhain OPC UA server, you must exchange certificates between the CNC machine and your host computer.
 
 Our Native Agent automates this file exchange. You only need to perform these configuration steps once per machine.
@@ -88,13 +92,11 @@ Our Native Agent automates this file exchange. You only need to perform these co
 <figure><img src="../../.gitbook/assets/Screenshot (16).png" alt=""><figcaption></figcaption></figure>
 
 1. Drag the `create` function from the [Heidenhain OPC UA](../../app-builder/build-backend/functions/connectors/heidenhain-opc-ua.md) connector onto the **Backend Builder** canvas.
-
 2. Define an instance name (such as `tnc7`) and enter your machine's IP address in the `machineIpAddress` input field. Trigger the function manually.
 
 <figure><img src="../../.gitbook/assets/Screenshot (21).png" alt=""><figcaption></figcaption></figure>
 
 3. Drag both the `prepareOpcUaAssistant` and `finalizeOpcUaAssistant` functions onto the canvas.
-
 4. Trigger the `prepareOpcUaAssistant` function. Once it returns successfully, return to your CNC machine.
 
 <figure><img src="../../.gitbook/assets/Screenshot (25).png" alt=""><figcaption></figcaption></figure>
@@ -102,6 +104,7 @@ Our Native Agent automates this file exchange. You only need to perform these co
 
 {% step %}
 ### Run the OPC UA Assistant on the machine
+
 Open the OPC UA Assistant interface on your CNC machine.
 
 1. On a TNC7 controller, navigate to **Settings** (**Einstellungen**) > **Network/Remote Access** (**Netzwerk/Fernzugriff**) > **OPC UA** > **OPC UA Connection Assistant** (**OPC UA Verbindungsassistent**). On a TNC640 controller, open this menu via the Heros interface.
@@ -136,8 +139,7 @@ Open the OPC UA Assistant interface on your CNC machine.
 
 <figure><img src="../../.gitbook/assets/Screenshot (38).png" alt=""><figcaption></figcaption></figure>
 
-9. Allow the system firewall to accept OPC UA traffic. Double-click the OPC UA method (**Methode**) option and set it to **Allow all** (**Allen erlauben**). 
-
+9. Allow the system firewall to accept OPC UA traffic. Double-click the OPC UA method (**Methode**) option and set it to **Allow all** (**Allen erlauben**).
 10. Click **Reload firewall configuration** (**Firewall-Konfiguration neu laden**) to apply the network rules.
 
 <figure><img src="../../.gitbook/assets/Screenshot (41).png" alt=""><figcaption></figcaption></figure>
@@ -147,6 +149,7 @@ Open the OPC UA Assistant interface on your CNC machine.
 
 {% step %}
 ### Connect to the OPC UA server
+
 Return to the **App Builder** in your browser to finalize the integration.
 
 1. Trigger the `finalizeOpcUaAssistant` function on your canvas. It should return a success message.

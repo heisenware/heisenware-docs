@@ -65,6 +65,12 @@ Drag a [signature](../../app-builder/build-frontend/widgets/input-widgets/signat
 
 Drag a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget below the signature widget and change its label setting to Submit.
 {% endstep %}
+
+{% step %}
+###
+
+
+{% endstep %}
 {% endstepper %}
 
 <figure><img src="../../.gitbook/assets/image (73).png" alt="" width="377"><figcaption></figcaption></figure>
@@ -72,8 +78,6 @@ Drag a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.
 ### Configure the submission logic
 
 Switch to the Backend Builder to define the flow when a user clicks the Submit button.
-
-
 
 \#### Format the signature The signature widget outputs a raw base64 string. Use an extension node to format it as an object for the database.
 

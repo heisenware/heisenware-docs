@@ -4,9 +4,10 @@ Retrieval-Augmented Generation (RAG) optimizes Large Language Model execution by
 
 {% hint style="danger" %}
 #### Environment configuration requirement
+
 You must append a valid `OPENAI_API_KEY` configuration argument inside environment parameters when launching this module.
 
-![](<../../../../../.gitbook/assets/image (43).png>)
+<img src="../../../../.gitbook/assets/image (43).png" alt="" data-size="original">
 {% endhint %}
 
 The RAG AI extension bundles two distinct classes to manage information retrieval pipelines: `KnowledgeBase` and `ChatWithData`.
@@ -46,7 +47,7 @@ ATR7000 Manual
 # store
 company-info
 # knowledge
-[https://heisenware.com/about-us](https://heisenware.com/about-us)
+https://heisenware.com/about-us
 # name
 About Heisenware
 ```
@@ -121,7 +122,7 @@ Instantiates an interactive AI chatbot conversation channel linked to an explici
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>storeName</code></td><td></td><td>The target vector documentation store name to reference.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>openAIApiKey</code></td><td>Your direct OpenAI credential key.</td><td>string</td></tr><tr><td></td><td><code>temperature</code></td><td>Creativity randomness variation constraint factor from 0.0 to 1.0. Default 0.1.</td><td>number</td></tr><tr><td></td><td><code>modelName</code></td><td>The deployment engine model string (such as <code>gpt-4</code>).</td><td>string</td></tr><tr><td></td><td><code>systemMessage</code></td><td>The primary system instruction rule context defining chatbot behaviors.</td><td>string</td></tr><tr><td></td><td><code>nDocuments</code></td><td>Max document count parameters passed per single query context block. Default 4.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="120.53875732421875">Input</th><th width="154.51171875">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>storeName</code></td><td></td><td>The target vector documentation store name to reference.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>openAIApiKey</code></td><td>Your direct OpenAI credential key.</td><td>string</td></tr><tr><td></td><td><code>temperature</code></td><td>Creativity randomness variation constraint factor from 0.0 to 1.0. Default 0.1.</td><td>number</td></tr><tr><td></td><td><code>modelName</code></td><td>The deployment engine model string (such as <code>gpt-4</code>).</td><td>string</td></tr><tr><td></td><td><code>systemMessage</code></td><td>The primary system instruction rule context defining chatbot behaviors.</td><td>string</td></tr><tr><td></td><td><code>nDocuments</code></td><td>Max document count parameters passed per single query context block. Default 4.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -150,6 +151,7 @@ Dispatches prompts through conversational workflows and returns model responses.
 Returns an execution payload detailing chat status updates.
 
 Example payload:
+
 ```json
 {
   "answer": "The maximum operating temperature threshold is 85°C.",
@@ -167,7 +169,7 @@ Example payload:
 
 Passes knowledge content inputs directly down into the associated storage mapping space.
 
-### `resetConversion`
+### `resetConversation`
 
 Wipes conversational thread history to clear past conversation memories. Store contents remain untouched.
 

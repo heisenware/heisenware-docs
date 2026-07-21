@@ -23,10 +23,11 @@ Modern Windows systems use the Windows Subsystem for Linux (WSL) to run Docker. 
 #### Step 1: Install WSL and Ubuntu
 
 1. Open **PowerShell** as an administrator (search for PowerShell in the Start menu, right-click, and select **Run as administrator**).
-2. Run the following command:
-   ```powershell
-   wsl --install
-   ```
+2.  Run the following command:
+
+    ```powershell
+    wsl --install
+    ```
 3. This command enables the required Windows features, downloads the Linux kernel, and installs Ubuntu as your default distribution.
 4. Restart your computer when prompted to complete the installation.
 
@@ -63,6 +64,7 @@ We will provide two files for your installation:
 Place both files in an empty directory on your machine. If you are on Windows, ensure you place these files inside your WSL Ubuntu environment (for example, `/home/<username>/heisenware/`).
 
 <details>
+
 <summary>Optional: Direct download using the terminal</summary>
 
 <figure><img src="../.gitbook/assets/hetzner-server-downloads.png" alt=""><figcaption></figcaption></figure>
@@ -73,6 +75,7 @@ You can download the files directly to your server terminal using a time-bound b
 
 {% hint style="warning" %}
 #### Download link quotes
+
 Always enclose the download URL in double quotes (`"`) when running the `wget` command.
 {% endhint %}
 
@@ -83,8 +86,9 @@ wget -O heisenware.tar.gz "<provided_download_link>"
 You can download the latest `install.sh` script at any time:
 
 ```bash
-wget "[https://downloads.heisenware.cloud/public/install.sh](https://downloads.heisenware.cloud/public/install.sh)"
+wget "https://downloads.heisenware.cloud/public/install.sh"
 ```
+
 </details>
 
 {% stepper %}
@@ -151,14 +155,16 @@ It may take a few minutes for all system services to initialize during the first
 The update process is safe and preserves your existing data. When a new version is released, download the latest application package and run the installer again.
 
 1. Place the new package file in your active installation directory, overwriting the old package.
-2. Execute the installer script:
-   ```bash
-   ./install.sh heisenware.tar.gz
-   ```
+2.  Execute the installer script:
+
+    ```bash
+    ./install.sh heisenware.tar.gz
+    ```
 
 The script automatically detects your existing installation and runs in update mode.
 
 #### Automatic backup
+
 Before applying any changes, the script creates a full archive of your platform data and stores it as a timestamped `.tar.gz` file inside the `backup/` directory.
 
 ## Rollback and restoring a backup
@@ -166,44 +172,53 @@ Before applying any changes, the script creates a full archive of your platform 
 If an update fails or causes unexpected issues, you can roll back your system to a previous backup state.
 
 1. Locate your desired backup archive inside the `backup/` directory.
-2. Run the installation script and pass the path to your backup archive:
-   ```bash
-   ./install.sh backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
-   ```
+2.  Run the installation script and pass the path to your backup archive:
+
+    ```bash
+    ./install.sh backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
+    ```
 3. The script enters restore mode. Confirm the prompt to stop the platform and overwrite the current data with the backup contents.
-4. Restart the platform services:
-   ```bash
-   docker compose up -d
-   ```
+4.  Restart the platform services:
+
+    ```bash
+    docker compose up -d
+    ```
 
 ## Basic application management
 
 {% hint style="info" %}
 #### Data persistence
+
 Your databases, configurations, and assets persist inside dedicated Docker volumes. Power-cycling your host machine or restarting individual containers will not cause data loss. If the platform becomes unresponsive, restarting the containers is the recommended troubleshooting step.
 {% endhint %}
 
 {% hint style="warning" %}
 #### Dynamic container isolation
+
 The platform spawns independent Docker containers at runtime for each active account to ensure process and command isolation. These dynamic containers are not managed by Docker Compose. Running `docker compose down` leaves these account containers running, which causes an inconsistent platform state. Use the shutdown commands listed below instead.
 {% endhint %}
 
 Execute these commands from your installation directory to manage your on-premise instance:
 
-* **Stop the platform:** Run the following command to force-stop and remove all active containers:
-  ```bash
-  docker rm -f $(docker ps -a -q)
-  ```
-  *Caution: This stops and removes all containers running on your host machine. Do not run this if you host other Docker-based applications alongside Heisenware.*
-* **Start the platform:**
-  ```bash
-  docker compose up -d
-  ```
-* **View live logs for all services:**
-  ```bash
-  docker compose logs -f
-  ```
-* **View live logs for a specific service:**
-  ```bash
-  docker logs -f <container_name>
-  ```
+*   **Stop the platform:** Run the following command to force-stop and remove all active containers:
+
+    ```bash
+    docker rm -f $(docker ps -a -q)
+    ```
+
+    _Caution: This stops and removes all containers running on your host machine. Do not run this if you host other Docker-based applications alongside Heisenware._
+*   **Start the platform:**
+
+    ```bash
+    docker compose up -d
+    ```
+*   **View live logs for all services:**
+
+    ```bash
+    docker compose logs -f
+    ```
+*   **View live logs for a specific service:**
+
+    ```bash
+    docker logs -f <container_name>
+    ```

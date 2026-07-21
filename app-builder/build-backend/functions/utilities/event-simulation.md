@@ -2,7 +2,7 @@
 
 The event simulation class simulates various events to test and validate workflows. Generating mock events ensures that flows handle different scenarios and edge cases effectively. It also serves as a placeholder in a flow before you complete your App. To learn more about event handlers, see [callbacks](../#callbacks).
 
-This class requires an instance.&#x20;
+This class requires an instance.
 
 ### `create`
 
@@ -135,5 +135,3 @@ Returns `true` upon removal.
 #### Example
 
 <figure><img src="../../../../.gitbook/assets/delete_instance.png" alt=""><figcaption><p>Delete an event simulation instance</p></figcaption></figure>
-
-\`\`\`
