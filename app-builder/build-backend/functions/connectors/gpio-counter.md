@@ -136,7 +136,7 @@ deviation: 10
 
 #### Output
 
-Returns the counter instance. Throws an error if initialization fails.
+Returns the name of the created instance.
 
 ### `start`
 
@@ -189,7 +189,7 @@ Resets the counter to its initial state by setting the count to 0, clearing all 
 stopFactor: 1.5
 ```
 
-#### Output '
+#### Output
 
 Returns nothing.
 
