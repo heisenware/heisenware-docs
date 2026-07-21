@@ -1,10 +1,10 @@
 # PDF processing
 
-The PDF processing class provides static utility functions that create and manipulate PDF documents. It generates PDFs from structured JSON (`pdfmake` format), converts HTML content into PDFs, and merges multiple documents (PDF, PNG, and JPG) into a single PDF file. This class contains static functions only and does not require an instance.
+The PDF processing class provides static utility functions that create and manipulate PDF documents. It generates PDFs from structured JSON (`pdfmake` format), converts HTML content into PDFs, and merges multiple documents (PDF, PNG, JPG, and HEIC) into a single PDF file. This class contains static functions only and does not require an instance. The code class name is `Pdf`.
 
 ### `mergeDocuments`
 
-Merges multiple source documents into a single PDF file. The function accepts PDFs, PNG images, or JPG images, and automatically converts the images to PDF pages before merging.
+Merges multiple source documents into a single PDF file. The function accepts PDFs, PNG images, or JPG images, and automatically converts the images to PDF pages before merging. HEIC images are supported when provided as file objects with a path. Entries that cannot be processed are skipped and logged.
 
 #### Parameters
 
@@ -12,7 +12,7 @@ Merges multiple source documents into a single PDF file. The function accepts PD
 
 #### Output
 
-Returns a file object representing the merged PDF file, including its path, name, size, and type.
+Returns a file object representing the merged PDF file, including its path, name, size, and type. Returns nothing if the input is not a non-empty array.
 
 #### Example
 
