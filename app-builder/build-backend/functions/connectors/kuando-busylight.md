@@ -16,7 +16,7 @@ None.
 
 #### Output
 
-Returns an array of device objects containing detailed schema and tracking properties for each connected Busylight.
+Returns an array of device objects containing details about each connected Busylight.
 
 ### `create`
 
@@ -30,12 +30,12 @@ Creates an instance to control a specific Kuando Busylight and establishes a con
 
 ```yaml
 # deviceIndex
-0
+1
 ```
 
 #### Output
 
-Returns the device control instance. Throws an error if configuration or connection fails.
+Returns the name of the created instance.
 
 ### `getName`
 
@@ -98,7 +98,7 @@ Turns on the light with a solid, continuous color.
 
 #### Output
 
-Returns nothing.
+Returns the raw result of the underlying device driver. The value is not meant for further processing.
 
 ### `pulse`
 
@@ -117,7 +117,7 @@ orange
 
 #### Output
 
-Returns nothing.
+Returns the raw result of the underlying device driver. The value is not meant for further processing.
 
 ### `blink`
 
@@ -140,7 +140,7 @@ red
 
 #### Output
 
-Returns nothing.
+Returns the raw result of the underlying device driver. The value is not meant for further processing.
 
 ### `setLightIntensity`
 
@@ -178,7 +178,7 @@ Plays one of the device's built-in sounds once.
 
 #### Output
 
-Returns nothing.
+Returns the raw result of the underlying device driver. The value is not meant for further processing.
 
 ### `setToneVolume`
 
@@ -194,3 +194,31 @@ Sets the default volume for all sounds played by the device.
 # value
 7
 ```
+
+#### Output
+
+Returns `true` once the volume is set.
+
+### `alert`
+
+Triggers a pre-configured alert sequence, combining a flashing red light and a tone to grab attention. The alert turns itself off automatically after a few seconds.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns nothing.
+
+### `off`
+
+Switches off the light and any playing sound immediately.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns the raw result of the underlying device driver. The value is not meant for further processing.
