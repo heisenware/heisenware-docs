@@ -63,7 +63,7 @@ Returns `true` if the expression is valid, or `false` if invalid.
 
 ## Instance functions
 
-You must create an instance to use these functions inside the [Function Explorer](../function-explorer.md).
+You must create an instance to use these functions. All functions except `create`, `delete`, and `schedule` require a previously scheduled task.
 
 ### `create`
 
@@ -75,7 +75,24 @@ None.
 
 #### Output
 
-Returns the cron instance.
+Returns the name of the created instance.
+
+### `delete`
+
+Deletes a cron instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
+
+{% hint style="danger" %}
+#### Irreversible action
+Deleting removes the instance configuration.
+{% endhint %}
 
 ### `schedule`
 
@@ -102,7 +119,7 @@ Defines a task and schedules it to run based on a cron expression. The scheduler
     <tr>
       <td><code>listener</code></td>
       <td></td>
-      <td>The callback function that executes each time the schedule triggers. Payload: <code>&lt;callback&gt;</code>.</td>
+      <td>The callback function that executes each time the schedule triggers.</td>
       <td>callback</td>
     </tr>
     <tr>
@@ -137,6 +154,7 @@ Returns the string `scheduled`.
 ```yaml
 # expression
 */15 * * * *
+
 # listener
 <callback>
 ```
@@ -146,6 +164,7 @@ Returns the string `scheduled`.
 ```yaml
 # expression
 0 9,17 * * *
+
 # listener
 <callback>
 ```
@@ -155,6 +174,7 @@ Returns the string `scheduled`.
 ```yaml
 # expression
 30 1 * * 6,0
+
 # listener
 <callback>
 ```
@@ -169,7 +189,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 ### `stop`
 
@@ -181,7 +201,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 ### `execute`
 
@@ -193,7 +213,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns the return value of the task function.
 
 ### `getStatus`
 
@@ -238,4 +258,4 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
