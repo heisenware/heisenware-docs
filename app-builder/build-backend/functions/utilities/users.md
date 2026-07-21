@@ -1,6 +1,6 @@
 # Users
 
-The users class manages users and App access programmatically. Use it to list available Apps, look up specific Apps, view registered users, and generate invitation links to onboard users dynamically. This class provides static functions only and does not require an instance.
+The users class manages users and App access programmatically. Use it to list available Apps, look up specific Apps, view registered users, and generate invitation links to onboard users dynamically. This class provides static functions only and does not require an instance. The code class name is `Users`.
 
 ### `getApplications`
 
@@ -12,25 +12,7 @@ None.
 
 #### Output
 
-Returns an array of App objects.
-
-```json
-[
-  {
-    "id": "387c2...",
-    "tenantId": "651a...",
-    "name": "My Dashboard App",
-    "active": true,
-    "roles": ["admin", "viewer"]
-  },
-  {
-    "id": "998d1...",
-    "tenantId": "651a...",
-    "name": "Shopfloor Monitor",
-    "active": true
-  }
-]
-```
+Returns an array of App objects, each containing `id` and the App's data fields such as `appName` and `appId`. Throws an error if the request fails.
 
 ### `getApplication`
 
@@ -42,16 +24,7 @@ Retrieves details for a specific App.
 
 #### Output
 
-Returns a single App object, or `null` if not found.
-
-```json
-{
-  "id": "387c2...",
-  "tenantId": "651a...",
-  "name": "My Dashboard App",
-  "active": true
-}
-```
+Returns a single App object, or nothing if not found.
 
 #### Examples
 
@@ -70,7 +43,7 @@ Retrieves a list of all users registered for a specific App.
 
 #### Output
 
-Returns an array of user objects containing profile and status details.
+Returns an array of user objects containing profile and status details. Returns an empty array if the App is not found. `lastLogin` is a Unix timestamp in milliseconds.
 
 ```json
 [
@@ -120,7 +93,8 @@ Use this function to build user invitation features in your Apps.
 
 #### Output
 
-Returns an object containing the generated link and user status details:
+Returns an object containing the generated link and user status details. Throws an error if the App is not found.
+
 * `link`: The invite or standard login link to send to the user depending on their scenario.
 * `login`: The standard login link for the App.
 * `userStatus`: Returns `created` if a new user was created, or `existed` if they already had an account.
@@ -129,8 +103,8 @@ Returns an object containing the generated link and user status details:
 
 ```json
 {
-  "link": "[https://acme.heisenware.cloud/app/acme.default/387c2.../invite/?changePasswordId=](https://acme.heisenware.cloud/app/acme.default/387c2.../invite/?changePasswordId=)...",
-  "login": "[https://acme.heisenware.cloud/app/acme.default/387c2](https://acme.heisenware.cloud/app/acme.default/387c2)...",
+  "link": "https://acme.heisenware.cloud/app/acme.default/387c2.../invite/?changePasswordId=...",
+  "login": "https://acme.heisenware.cloud/app/acme.default/387c2...",
   "userStatus": "created",
   "registrationStatus": "created",
   "passwordSetupRequired": true
