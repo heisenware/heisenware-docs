@@ -1,6 +1,6 @@
 # Operating system (OS)
 
-The Operating system connector provides static functions to retrieve live performance metrics and hardware information from the host operating system. Use it to monitor CPU utilization, memory allocation, disk storage, network throughput, and running Docker containers.
+The operating system connector provides static functions to retrieve live performance metrics and hardware information from the host operating system. Use it to monitor CPU utilization, memory allocation, disk storage, network throughput, and running Docker containers.
 
 Since all functions in this class are static, they do not manage state. You do not need to create an instance to use them.
 
@@ -208,13 +208,6 @@ Returns an array of objects detailing container execution statistics, processing
 ]
 ```
 
-#### Example
-
-```yaml
-# socketPath
-'/var/run/docker.sock'
-```
-
 ### `containerInfo`
 
 Retrieves configuration and state metadata profiles for all running Docker containers.
@@ -226,10 +219,3 @@ Retrieves configuration and state metadata profiles for all running Docker conta
 #### Output
 
 Returns an array of detailed inspection objects containing container configuration profiles, layer settings, storage volume bindings, and network maps.
-
-#### Example
-
-```yaml
-# socketPath
-'/var/run/docker.sock'
-```
