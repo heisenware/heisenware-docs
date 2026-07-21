@@ -1,3 +1,7 @@
+---
+description: This article lists and explains all available simulator functions.
+---
+
 # Data simulation
 
 The data simulation class generates random and mock data for testing, prototyping, and creating demonstrations without requiring real information. These functions create numbers, strings, and complex structured datasets such as personal profiles, geographic coordinates, and time-series logs. This class provides static functions only and does not require an instance. The code class name is `Simulator`.
