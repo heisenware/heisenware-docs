@@ -1,6 +1,6 @@
 # Data processing
 
-The data processing utility class provides a collection of functions for common data manipulation, transformation, and logical operations. Use these functions to work with arrays and objects, handle JSON payloads, map numerical value ranges, and delay data flows. All functions in this class are static, meaning you do not need to create an instance before using them.
+The data processing utility class provides a collection of functions for common data manipulation, transformation, and logical operations. Use these functions to work with arrays and objects, handle JSON payloads, map numerical value ranges, and delay data flows. All functions in this class are static, meaning you do not need to create an instance before using them. The code class name is `Tools`.
 
 ### `echo`
 
@@ -16,7 +16,7 @@ Returns the unchanged input value.
 
 ### `combine`
 
-Combines two or more arguments into a single array.
+Combines two or more arguments into a single array. Undefined values beyond the first two arguments are ignored.
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Returns the merged object:
 
 ### `arrayPush`
 
-Pushes one or more items to the end of an array. If an item is itself an array, the function unpacks its elements and adds them individually to the base array.
+Pushes one or more items to the end of an array. If an item is itself an array, the function unpacks its elements and adds them individually to the base array. If the first input is not an array, the function wraps it in one; `null` or an empty input starts a new array.
 
 #### Parameters
 
@@ -131,7 +131,7 @@ Returns the provided value after a configurable time delay. This function execut
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td></td><td>The value to return after the delay.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>timeout</code></td><td>The delay duration in milliseconds. Default 1000.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td></td><td>The value to return after the delay.</td><td>any</td></tr><tr><td><code>options</code></td><td><code>timeout</code></td><td>The delay duration in milliseconds. Default 1000.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -230,7 +230,7 @@ Converts a valid JSON string back into its corresponding JavaScript object or va
 
 #### Output
 
-Returns the parsed JavaScript entity:
+Returns the parsed JavaScript entity. Throws an error if the string is not valid JSON.
 
 ```json
 {
@@ -311,7 +311,7 @@ Returns the unflattened nested object structure:
 
 ### `mergeArrays`
 
-Merges multiple arrays by combining the objects located at corresponding indexes. The function truncates the final output array to match the length of the shortest provided input array.
+Merges multiple arrays by combining the objects located at corresponding indexes. The function truncates the final output array to match the length of the shortest provided input array. Non-object elements are included with a key of an underscore `_` followed by the source array index.
 
 #### Parameters
 
@@ -340,7 +340,7 @@ Returns the merged index array:
 
 ### `combineArrays`
 
-Hop-combines multiple arrays similarly to `mergeArrays`, but explicitly appends an underscore `_` followed by the source array index to each object key. This convention systematically prevents key collisions during union merges.
+Combines multiple arrays similarly to `mergeArrays`, but appends an underscore `_` followed by the source array index to each object key. This prevents key collisions when the arrays contain objects with identical keys.
 
 #### Parameters
 
@@ -402,7 +402,7 @@ Returns the grouped and structurally merged array:
 
 ### `renameObjectKeys`
 
-Generates a new object with renamed keys based on a specified mapping configuration layout.
+Generates a new object with renamed keys based on a specified mapping configuration. Keys not present in the mapping remain unchanged.
 
 #### Parameters
 
@@ -430,11 +430,11 @@ Returns the object with updated keys:
 
 ### `base64Decode`
 
-Decodes a base64-encoded payload string back into its original text representation.
+Decodes a base64-encoded string back into its original text representation.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>base64String</code></td><td></td><td>The base64 encoded source payload string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>encoding</code></td><td>The character encoding to apply to the generated output text string. Default <code>utf8</code>.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>base64String</code></td><td>The base64 encoded source string.</td><td>string</td></tr><tr><td><code>encoding</code></td><td>The character encoding of the returned string. Default <code>utf8</code>.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -468,10 +468,32 @@ Returns the generated base64-encoded string: `SGVsbG8gV29ybGQ=`
 
 ### `memory`
 
-Passes its input value directly to its output slot immediately upon any input update. This extension node features dedicated input and output slots but does not include an explicit trigger action.
+Passes its input value directly to its output immediately upon any input update. This function has input and output slots but no visible trigger; it behaves as if its trigger were permanently set to on input update.
 
 <figure><img src="../../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt=""><figcaption></figcaption></figure>
 
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>Any input argument to pass through.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns the unchanged input value.
+
+### `trigger`
+
+A function without inputs. Use it to start flows manually or on a schedule via its trigger.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns the current Unix timestamp in milliseconds.
+
 {% hint style="info" %}
-The Backend Builder toolbar includes a shortcut to create a `memory` node directly.
+#### Toolbar shortcuts
+
+The Backend Builder toolbar includes shortcuts to create `memory`, `echo`, `combine`, and `trigger` nodes directly.
 {% endhint %}
