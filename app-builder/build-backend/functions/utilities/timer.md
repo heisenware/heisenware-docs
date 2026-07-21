@@ -22,27 +22,27 @@ Returns the relative time as a string.
 
 **Past time**
 
-Formats a date string from the past.
+Formats an ISO date string.
 
 ```yaml
 # time
 2025-07-12T08:00:00.000Z
 # options
-locale: en-US
+locale: en
 ```
 
-Output: `3 hours ago`
+The output depends on the current time, for example `3 hours ago`.
 
 **Future time**
 
-Formats a Unix timestamp in the future.
+Formats a Unix timestamp in milliseconds.
 
 ```yaml
 # time
-1752367200000
+1783903200000
 ```
 
-Output: `in 2 years`
+The output depends on the current time, for example `in 2 years`.
 
 ## Instance functions
 
@@ -58,7 +58,7 @@ Creates a new timer instance with a configured duration and progress range.
 
 #### Output
 
-Returns the timer instance.
+Returns the name of the created instance.
 
 #### Example
 
@@ -68,6 +68,23 @@ totalSeconds: 60
 min: 0
 max: 100
 ```
+
+### `delete`
+
+Deletes a timer instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
+
+{% hint style="danger" %}
+#### Irreversible action
+Deleting removes the instance configuration.
+{% endhint %}
 
 ### `setTotalSeconds`
 
@@ -131,7 +148,7 @@ Returns a string representing the state: `stopped`, `started`, or `overdue`.
 
 ### `start`
 
-Starts the countdown timer. If called while a delayed stop is pending, this action cancels the stop command.
+Starts the countdown timer and sets the remaining time to the configured total. If called while a delayed stop is pending, this action only cancels the stop command.
 
 #### Parameters
 
@@ -139,7 +156,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns nothing. If the timer is already started, the function returns the difference between remaining and total seconds.
 
 ### `stop`
 
@@ -178,7 +195,7 @@ Subscribes to the tick event. The callback runs every second while the timer is 
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 #### Example
 
@@ -197,7 +214,7 @@ Subscribes to the timeup event. The callback runs once when the countdown reache
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 #### Example
 
