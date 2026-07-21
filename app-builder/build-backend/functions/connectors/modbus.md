@@ -9,13 +9,25 @@ This connector requires [instance creation](./#instance-creation) before you can
 
 ## Connection management
 
+### `create`
+
+Creates a Modbus client instance. The connection details follow in `connectTcp` or `connectRtu`.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns the name of the created instance.
+
 ### `connectTcp`
 
 Connects to a Modbus device over an Ethernet network.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>host</code></td><td>The hostname or IP address of the Modbus device.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The target network port. Default 1502.</td><td>integer</td></tr><tr><td></td><td><code>unitId</code></td><td>The unit identifier of the target hardware. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>socketTimeout</code></td><td>Network connection timeout threshold in milliseconds. Default 5000.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>host</code></td><td>The hostname or IP address of the Modbus device.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The target network port. Default 1502, see <a href="modbus.md#modbus-tcp-port-mapping">Modbus TCP port mapping</a>.</td><td>integer</td></tr><tr><td></td><td><code>unitId</code></td><td>The unit identifier of the target hardware. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>socketTimeout</code></td><td>The connection timeout in milliseconds. Default 5000.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -40,7 +52,7 @@ None.
 
 #### Output
 
-Returns `true` when the network socket closes successfully.
+Returns `true` when the network socket closes successfully, including when no connection exists.
 
 ### `connectRtu`
 
@@ -48,7 +60,7 @@ Connects to a Modbus device over a serial interface.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>path</code></td><td>The local platform file path of the serial port (such as <code>/dev/ttyUSB0</code> on Linux or <code>COM3</code> on Windows).</td><td>string</td></tr><tr><td></td><td><code>baudRate</code></td><td>The sequential serial communication speed. Default 9600.</td><td>integer</td></tr><tr><td></td><td><code>dataBits</code></td><td>The count of data bits per character packet (5, 6, 7, or 8). Default 8.</td><td>integer</td></tr><tr><td></td><td><code>stopBits</code></td><td>The spacing bit count at the end of each packet (1, 1.5, or 2). Default 1.</td><td>number</td></tr><tr><td></td><td><code>parity</code></td><td>Error check tracking bit configuration (none, even, odd). Default 'none'.</td><td>string</td></tr><tr><td></td><td><code>unitId</code></td><td>The serial bus unit station address. Default 1.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>path</code></td><td>The local platform file path of the serial port (such as <code>/dev/ttyUSB0</code> on Linux or <code>COM3</code> on Windows).</td><td>string</td></tr><tr><td></td><td><code>baudRate</code></td><td>The serial communication speed in bits per second. Default 9600.</td><td>integer</td></tr><tr><td></td><td><code>dataBits</code></td><td>The number of data bits per character frame (5, 6, 7, or 8). Default 8.</td><td>integer</td></tr><tr><td></td><td><code>stopBits</code></td><td>The number of stop bits at the end of each frame (1, 1.5, or 2). Default 1.</td><td>number</td></tr><tr><td></td><td><code>parity</code></td><td>The parity error-checking mode (none, even, or odd). Default 'none'.</td><td>string</td></tr><tr><td></td><td><code>unitId</code></td><td>The station address (unit ID) of the device on the serial bus. Default 1.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -102,7 +114,7 @@ Reads data from coils or registers on the connected Modbus device. The function 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>fc</code></td><td>The Modbus function code used to request data (1: Read Coils, 2: Read Discrete Inputs, 3: Read Holding Registers, 4: Read Input Registers).</td><td>integer</td></tr><tr><td></td><td><code>address</code></td><td>The zero-based starting register or element offset address.</td><td>integer</td></tr><tr><td></td><td><code>length</code></td><td>The total number of sequential elements or 16-bit registers to read.</td><td>integer</td></tr><tr><td></td><td><code>dataType</code></td><td>The target binary parser type used to interpret the raw incoming buffer elements (raw, string, boolean, doubleBE, doubleLE, floatBE, floatLE, int16BE, int16LE, int32BE, int32LE, uint16BE, uint16LE, uint32BE, uint32LE). Default 'raw'.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>fc</code></td><td>The Modbus function code used to request data (1: Read Coils, 2: Read Discrete Inputs, 3: Read Holding Registers, 4: Read Input Registers).</td><td>integer</td></tr><tr><td></td><td><code>address</code></td><td>The zero-based starting register or element offset address.</td><td>integer</td></tr><tr><td></td><td><code>length</code></td><td>The total number of sequential elements or 16-bit registers to read.</td><td>integer</td></tr><tr><td></td><td><code>dataType</code></td><td>The target binary parser type used to interpret the raw incoming buffer elements (raw, string, boolean, doubleBE, doubleLE, floatBE, floatLE, int16BE, int16LE, int32BE, int32LE, uint16BE, uint16LE, uint32BE, uint32LE). Unknown types fall back to raw with a logged warning. Default 'raw'.</td><td>string</td></tr></tbody></table>
 
 #### Examples
 
@@ -185,7 +197,7 @@ address: 40050
 
 #### Output
 
-Returns an object containing the response summary block returned by the underlying client layer. Throws an error if the write fails.
+Returns the raw response object of the underlying jsmodbus client, containing the request, the device response, and timing metrics. The relevant information for flows is that the call completed without throwing. Throws an error if the write fails.
 
 ## String helper functions
 
@@ -208,11 +220,11 @@ Reads register values sequentially from a specified holding register starting ad
 
 #### Output
 
-Returns the text string parsed from the targeted registers, with all empty trailing null padding characters removed automatically.
+Returns the text string parsed from the targeted registers, with all null padding characters removed. Throws an error if the read fails or no data is received.
 
 ### `writeString`
 
-Encodes an alphanumeric text string into binary format and writes the resulting character blocks across consecutive holding registers.
+Encodes a text string and writes it across consecutive holding registers. See [Text string encoding padding](modbus.md#text-string-encoding-padding) for how uneven byte lengths are handled.
 
 #### Parameters
 
@@ -229,7 +241,7 @@ New Product ID
 
 #### Output
 
-Returns the response structure returned by the internal Modbus communication engine. Throws an error if the operation fails.
+Returns the raw response object of the underlying jsmodbus client, like `write`. Throws an error if the operation fails or `text` is not a string.
 
 ## Tips and tricks
 
