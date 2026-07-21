@@ -20,11 +20,11 @@ Creates an unconnected OPC UA server instance and maps out its information model
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>objects</code></td><td>An array defining folders, objects, and variables inside the server information model. Each node requires a <code>path</code> and a <code>type</code> (<code>folder</code> or <code>object</code>), along with <code>getters</code>, <code>setters</code>, or <code>requestors</code> type maps.</td><td>array</td></tr><tr><td></td><td><code>port</code></td><td>The TCP port where the server listens for inbound connections. Separate parallel server instances must use distinct port numbers. Default 4840.</td><td>integer</td></tr><tr><td></td><td><code>allowAnonymous</code></td><td>Controls whether external clients can connect without validating credentials. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>objects</code></td><td>An array defining folders, objects, and variables inside the server information model. Each node requires a <code>path</code> and a <code>type</code> (<code>folder</code> or <code>object</code>), along with <code>getters</code>, <code>setters</code>, or <code>requestors</code> type maps. An object can optionally define an integer <code>offset</code> to assign fixed numeric nodeIds to the object and its getter variables.</td><td>array</td></tr><tr><td></td><td><code>port</code></td><td>The TCP port where the server listens for inbound connections. Separate parallel server instances must use distinct port numbers. Default 4840.</td><td>integer</td></tr><tr><td></td><td><code>allowAnonymous</code></td><td>Controls whether external clients can connect without credentials. When false, clients must authenticate with the credentials of an integration user. Default true. See <a href="opc-ua-server.md#protocol-and-encryption">Protocol and encryption</a> for the supported security level.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns the OPC UA server instance.
+Returns the name of the created instance.
 
 #### Example
 
@@ -56,7 +56,7 @@ None.
 
 #### Output
 
-Returns a string containing the primary endpoint connection URL (for example, `opc.tcp://localhost:4841/UA/HeisenwareOPCUAServer`).
+Returns a string containing the primary endpoint connection URL (for example, `opc.tcp://localhost:4841/UA/HeisenwareOPCUAServer`), including when the server is already running. Throws an error if starting fails.
 
 ### `stop`
 
@@ -68,7 +68,7 @@ None.
 
 #### Output
 
-Returns `true` on successful shutdown.
+Returns nothing on a successful shutdown. Throws an error if stopping fails.
 
 ### `isStarted`
 
@@ -84,12 +84,12 @@ Returns `true` if the server engine is active, or `false` if it is not.
 
 ### `delete`
 
-Removes the server instance from the runtime environment and deallocates address space configurations.
+Removes the instance and its configuration.
 
 {% hint style="danger" %}
-#### Destructive action
+#### Irreversible action
 
-Deleting an instance removes its configuration. To communicate with the device again, you must create a new instance.
+Deleting an instance removes its configuration. To run the server again, you must create a new instance.
 {% endhint %}
 
 #### Parameters
@@ -98,13 +98,13 @@ None.
 
 #### Output
 
-Returns `true` on successful deletion. Throws an error on failure.
+Returns `true` upon removal.
 
 ## Data operations and events
 
 ### `setValue`
 
-Sets a new data value for a specific variable node on the server. This function updates getter nodes and serves as the response within your custom `onSet` and `onRequest` event scripts.
+Sets a new data value for a specific variable node on the server. This function updates getter nodes and serves as the response within your custom `onSet` and `onRequest` event scripts. The value must match the declared type, see [Data type validation](opc-ua-server.md#data-type-validation).
 
 #### Parameters
 
@@ -112,7 +112,7 @@ Sets a new data value for a specific variable node on the server. This function 
 
 #### Output
 
-Returns `true` if the node variable updates successfully, or `false` if it fails.
+Returns `true` if the node variable updates successfully, or `false` if the path, variable, or data type is invalid (the reason logs as a warning).
 
 #### Example
 
@@ -167,7 +167,7 @@ Machine1/Status:uptime
 
 ### `onServerUpdate`
 
-Registers a global diagnostic event callback executed whenever any variable node value updates on the server via `setValue`.
+Registers a global diagnostic event callback executed whenever any variable node value updates on the server via `setValue`. Notifications are throttled, see [Server update throttling](opc-ua-server.md#server-update-throttling).
 
 #### Parameters
 
@@ -183,6 +183,63 @@ Returns `'subscribed'` when successfully registered.
 # listener
 <callback>
 ```
+
+## Complete usage example
+
+The steps show how to configure and run the server based on the model defined in the `create` example.
+
+{% stepper %}
+{% step %}
+#### Create the server
+
+Create the server instance with the desired information model, as shown in [`create`](opc-ua-server.md#create).
+{% endstep %}
+
+{% step %}
+#### Handle client writes (onSet)
+
+When a client sets a new `targetSpeed`, process it and confirm the change by calling `setValue`.
+
+```yaml
+# variablePath
+Machine1/Status:targetSpeed
+# listener
+<callback>
+```
+{% endstep %}
+
+{% step %}
+#### Handle on-demand reads (onRequest)
+
+When a client requests the `uptime`, calculate it inside the callback and provide it back via `setValue`.
+
+```yaml
+# variablePath
+Machine1/Status:uptime
+# listener
+<callback>
+```
+{% endstep %}
+
+{% step %}
+#### Update internal state (setValue)
+
+A flow that reads the machine's actual speed periodically updates the `currentSpeed` getter.
+
+```yaml
+# variablePath
+Machine1/Status:currentSpeed
+# value
+1498
+```
+{% endstep %}
+
+{% step %}
+#### Start the server
+
+After all handlers are configured, trigger `start`.
+{% endstep %}
+{% endstepper %}
 
 ## Tips and tricks
 
