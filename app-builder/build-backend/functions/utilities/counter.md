@@ -1,6 +1,6 @@
 # Counter
 
-With a counter, you maintain a numerical value, for example a production count or sequence number. You can increment, decrement, and reset the count. You must create an instance of the counter to use it.
+With a counter, you maintain a numerical value, for example a production count or sequence number. You can increment, decrement, and reset the count. You must create an instance of the counter to use it. The code class name is `Counter`.
 
 ### `create`
 
@@ -18,13 +18,8 @@ Creates a new counter instance, optionally starting from an initial value.
   </thead>
   <tbody>
     <tr>
-      <td><code>name</code></td>
-      <td>The unique name for the counter instance.</td>
-      <td>string</td>
-    </tr>
-    <tr>
       <td><code>initial</code></td>
-      <td>The number to start counting from. Defaults to <code>0</code>.</td>
+      <td>The number to start counting from. Default 0.</td>
       <td>integer</td>
     </tr>
   </tbody>
@@ -32,16 +27,31 @@ Creates a new counter instance, optionally starting from an initial value.
 
 #### Output
 
-Returns the counter instance.
+Returns the name of the created instance.
 
 #### Example
 
 ```yaml
-# name
-production_counter
 # initial
 10
 ```
+
+### `delete`
+
+Deletes a counter instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
+
+{% hint style="danger" %}
+#### Irreversible action
+Deleting removes the instance configuration.
+{% endhint %}
 
 ### `increment`
 
@@ -53,7 +63,7 @@ None.
 
 #### Output
 
-The new, incremented count as an integer.
+Returns the new count as an integer.
 
 ### `decrement`
 
@@ -65,11 +75,11 @@ None.
 
 #### Output
 
-The new, decremented count as an integer.
+Returns the new count as an integer.
 
 ### `reset`
 
-Resets the counter back to its initial value. You can optionally provide a new initial value to use for this and all future resets.
+Resets the counter back to its initial value. You can optionally provide a new initial value to use for this and all future resets. A value of 0 cannot be set as a new initial value; in that case the counter resets to the previously configured initial value.
 
 #### Parameters
 
@@ -92,7 +102,7 @@ Resets the counter back to its initial value. You can optionally provide a new i
 
 #### Output
 
-The reset count as an integer.
+Returns nothing.
 
 #### Example
 
@@ -111,4 +121,4 @@ None.
 
 #### Output
 
-The current count as an integer.
+Returns the current count as an integer.
