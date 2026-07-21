@@ -76,7 +76,24 @@ None.
 
 #### Output
 
-Returns the stopwatch instance.
+Returns the name of the created instance.
+
+### `delete`
+
+Deletes a stopwatch instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
+
+{% hint style="danger" %}
+#### Irreversible action
+Deleting removes the instance configuration.
+{% endhint %}
 
 ### `start`
 
@@ -124,7 +141,7 @@ None.
 
 #### Output
 
-Returns the recorded lap time in milliseconds.
+Returns nothing.
 
 ### `getElapsedTime`
 
@@ -235,7 +252,7 @@ Subscribes to the `start` event. The callback runs whenever you start the stopwa
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 ### `onStop`
 
@@ -247,7 +264,7 @@ Subscribes to the `stop` event. The callback runs whenever you stop the stopwatc
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 ### `onReset`
 
@@ -259,7 +276,7 @@ Subscribes to the `reset` event. The callback runs whenever you reset the stopwa
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 ### `onTick`
 
@@ -271,7 +288,7 @@ Subscribes to the `tick` event. This event fires repeatedly at the set interval 
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 ### `onLap`
 
@@ -279,11 +296,11 @@ Subscribes to the `lap` event. This event fires when you record a new lap.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: an object containing <code>lapTime</code> (the current lap time) and <code>allLaps</code> (an array of all lap times).</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the current lap time in milliseconds and an array of all lap times.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
 ### `removeAllListeners`
 
@@ -295,4 +312,4 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns the string `unsubscribed`.
