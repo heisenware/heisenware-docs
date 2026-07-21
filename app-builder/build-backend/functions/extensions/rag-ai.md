@@ -1,178 +1,275 @@
 # RAG AI
 
-Retrieval-Augmented Generation (RAG) optimizes Large Language Model execution by pairing prompts with contextual documentation assets pulled from a local vector knowledge store. This process structures answers around validated company records or manuals, mitigating text hallucinations.
+Retrieval-Augmented Generation (RAG) pairs a prompt with relevant content retrieved from a local vector knowledge store. Answers are grounded in your own documents and manuals, which reduces hallucinations.
 
-{% hint style="danger" %}
+{% hint style="info" %}
 #### Environment configuration requirement
+Provide a valid `OPENAI_API_KEY` as environment parameter when launching this module.
 
-You must append a valid `OPENAI_API_KEY` configuration argument inside environment parameters when launching this module.
-
-<img src="../../../../.gitbook/assets/image (43).png" alt="" data-size="original">
+![](<../../../../../.gitbook/assets/image (43).png>)
 {% endhint %}
 
-The RAG AI extension bundles two distinct classes to manage information retrieval pipelines: `KnowledgeBase` and `ChatWithData`.
+The RAG AI extension bundles two classes: `KnowledgeBase` and `ChatWithData`. You first populate a knowledge store using `KnowledgeBase`, then a `ChatWithData` instance uses that store to answer questions.
 
 ## Knowledge base
 
-The `KnowledgeBase` class processes documentation, splits text blocks into searchable segments, generates vector tokens, and tracks items inside an embedded database. This class provides static functions only and does not require an instance. The code class name is `KnowledgeBase`.
+The `KnowledgeBase` class creates, manages, and queries vectorized knowledge stores. It ingests information from various sources (files, URLs, text), splits it into searchable chunks, creates vector embeddings, and stores them in a vector database (ChromaDB). This class provides static functions only and does not require an instance. The code class name is `KnowledgeBase`.
 
 ### `addKnowledge`
 
-Parses external source documents and indexes content assets into a specific target store category.
+Adds information from a source into a specific knowledge store. The function automatically detects the source type, processes the content, splits it into chunks, creates vector embeddings, and stores them.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td></td><td>The name of the target vector destination store.</td><td>string</td></tr><tr><td><code>knowledge</code></td><td></td><td>The raw content source. Accepts web URLs, text strings, structured JSON, or absolute local file system path strings (supporting <code>pdf</code>, <code>txt</code>, <code>csv</code>, <code>docx</code>, <code>pptx</code>, or <code>html</code>).</td><td>any</td></tr><tr><td><code>name</code></td><td></td><td>Unique source identifier label used for subsequent document management.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>chunkSize</code></td><td>The maximum character size limit per single split segment. Default 2000.</td><td>integer</td></tr><tr><td></td><td><code>chunkOverlap</code></td><td>Character padding overlap length shared between adjacent data segments. Default 400.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td></td><td>The name of the knowledge store, for example <code>product-manuals</code>.</td><td>string</td></tr><tr><td><code>knowledge</code></td><td></td><td>The content to add. Accepts a URL string, a local file path string (supported extensions: <code>pdf</code>, <code>txt</code>, <code>csv</code>, <code>docx</code>, <code>pptx</code>, <code>html</code>), a plain text string, or a JSON object.</td><td>any</td></tr><tr><td><code>name</code></td><td></td><td>A name identifying this knowledge source, used for later management (for example <code>Product Manual v2</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>chunkSize</code></td><td>The maximum size of each text chunk. Default 2000.</td><td>integer</td></tr><tr><td></td><td><code>chunkOverlap</code></td><td>The number of characters to overlap between chunks. Default 400.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` upon successful storage indexing completion.
+Returns `true` once the knowledge has been added.
 
 #### Examples
 
-**Index a file path**
+**Adding knowledge from a PDF file**
 
 ```yaml
 # store
 product-manuals
+
 # knowledge
 /path/to/files/ATR7000-manual.pdf
+
 # name
 ATR7000 Manual
 ```
 
-**Index a website target**
+**Adding knowledge from a website**
 
 ```yaml
 # store
 company-info
+
 # knowledge
 https://heisenware.com/about-us
+
 # name
 About Heisenware
 ```
 
+**Adding knowledge from a plain text string**
+
+```yaml
+# store
+faq
+
+# knowledge
+'Question: What are the support hours? Answer: Support is available 24/7 via email.'
+
+# name
+Support Hours FAQ
+```
+
 ### `similaritySearch`
 
-Queries a selected destination store to extract the closest matching textual segments.
+Performs a similarity search against a knowledge store to find the text chunks most relevant to a given query.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The targeted vector destination store name.</td><td>string</td></tr><tr><td><code>query</code></td><td>The query prompt text string to match.</td><td>string</td></tr><tr><td><code>nDocs</code></td><td>Maximum quantity limit of relevant text segments to return.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The name of the knowledge store.</td><td>string</td></tr><tr><td><code>query</code></td><td>The text query to search for.</td><td>string</td></tr><tr><td><code>nDocs</code></td><td>The maximum number of relevant chunks to return.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns an array containing the matched documentation text segment objects.
+Returns an array of document objects relevant to the query.
 
 ### `getDocuments`
 
-Lists user-indexed document sources registered inside a specific vector store.
+Lists all named documents currently stored in a knowledge store.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The targeted vector store name.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The name of the knowledge store.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array tracking document information records.
+Returns an array of objects, one per added document source.
 
 ### `deleteDocument`
 
-Purges text segment elements tied to a specific named resource asset source from the store.
+Deletes all chunks associated with a specific named document from the knowledge store.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The targeted vector store name.</td><td>string</td></tr><tr><td><code>name</code></td><td>The asset reference name identifier assigned during ingestion.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The name of the knowledge store.</td><td>string</td></tr><tr><td><code>name</code></td><td>The name of the document source to delete (the same name provided in <code>addKnowledge</code>).</td><td>string</td></tr></tbody></table>
 
-#### Output
-
-Returns nothing.
+{% hint style="danger" %}
+#### Irreversible action
+Deleting permanently removes all chunks of the document from the store.
+{% endhint %}
 
 ### `getMetaData`
 
-Returns inner vector store metadata details.
+Retrieves detailed metadata for all chunks stored in a knowledge store, useful for debugging.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td></td><td>The targeted vector store name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>showData</code></td><td>Appends raw segment text content payloads into debug profiles. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td></td><td>The name of the knowledge store.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>showData</code></td><td>If <code>true</code>, includes the raw text content of each chunk. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns an array containing chunk configuration descriptors.
+Returns the metadata for all chunks stored in the knowledge store.
 
 ### `reset`
 
-Wipes all entries out of a chosen target vector destination store.
+Completely deletes all information in a given knowledge store.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The name of the target store to empty.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>store</code></td><td>The name of the knowledge store to reset.</td><td>string</td></tr></tbody></table>
 
-#### Output
-
-Returns nothing.
+{% hint style="danger" %}
+#### Irreversible action
+Resetting permanently deletes all information in the store.
+{% endhint %}
 
 ## Chat with data
 
-The `ChatWithData` class initiates interactive conversational bots linked to designated `KnowledgeBase` targets. It runs automated retrieval queries to supply language models with context. This class requires an instance. The code class name is `ChatWithData`.
+The `ChatWithData` class creates a conversational AI (chatbot) that answers questions based on the information held in a specific `KnowledgeBase` store. When you ask a question, it first searches the knowledge store for relevant information using [`similaritySearch`](#similaritysearch). It then combines your question, the chat history, and the retrieved context into a new prompt that it sends to an OpenAI model to generate a well-informed answer. This class requires an instance. The code class name is `ChatWithData`.
 
 ### `create`
 
-Instantiates an interactive AI chatbot conversation channel linked to an explicit source documentation store.
+Creates a chat instance linked to a specific knowledge store and configured with the desired AI behavior.
 
 #### Parameters
 
-<table><thead><tr><th width="120.53875732421875">Input</th><th width="154.51171875">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>storeName</code></td><td></td><td>The target vector documentation store name to reference.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>openAIApiKey</code></td><td>Your direct OpenAI credential key.</td><td>string</td></tr><tr><td></td><td><code>temperature</code></td><td>Creativity randomness variation constraint factor from 0.0 to 1.0. Default 0.1.</td><td>number</td></tr><tr><td></td><td><code>modelName</code></td><td>The deployment engine model string (such as <code>gpt-4</code>).</td><td>string</td></tr><tr><td></td><td><code>systemMessage</code></td><td>The primary system instruction rule context defining chatbot behaviors.</td><td>string</td></tr><tr><td></td><td><code>nDocuments</code></td><td>Max document count parameters passed per single query context block. Default 4.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>storeName</code></td><td></td><td>The name of the <code>KnowledgeBase</code> store this chat instance will use.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>openAIApiKey</code></td><td>Your OpenAI API key.</td><td>string</td></tr><tr><td></td><td><code>temperature</code></td><td>The model's creativity level, a value from 0 to 1. Default 0.1.</td><td>number</td></tr><tr><td></td><td><code>modelName</code></td><td>The OpenAI model to use, for example <code>gpt-4</code>.</td><td>string</td></tr><tr><td></td><td><code>systemMessage</code></td><td>A general instruction telling the chatbot how to behave.</td><td>string</td></tr><tr><td></td><td><code>nDocuments</code></td><td>The maximum number of documents to retrieve from the knowledge store for context. Default 4.</td><td>integer</td></tr></tbody></table>
+
+{% hint style="info" %}
+#### Mark the API key as a secret
+Right-click the input carrying the API key and mark it as a secret.
+{% endhint %}
 
 #### Output
 
-Returns the chatbot instance channel wrapper object.
+Returns the name of the created instance.
 
-#### Examples
+#### Example
 
 ```yaml
 # storeName
 product-manuals
+
 # options
 temperature: 0.2
-systemMessage: You are an expert on our products. Answer queries using the manuals.
+systemMessage: You are an expert on our products. Answer questions based on the provided manuals.
 ```
 
-### `executePrompt`
+### `delete`
 
-Dispatches prompts through conversational workflows and returns model responses.
+Deletes a chat instance.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>question</code></td><td>The direct user question string payload.</td><td>string</td></tr></tbody></table>
+None.
 
 #### Output
 
-Returns an execution payload detailing chat status updates.
+Returns `true` upon removal.
 
-Example payload:
+{% hint style="danger" %}
+#### Irreversible action
+Deleting removes the instance configuration. The underlying knowledge store remains unchanged.
+{% endhint %}
 
-```json
-{
-  "answer": "The maximum operating temperature threshold is 85°C.",
-  "history": [],
-  "sourceDocs": [],
-  "tokenUsage": {
-    "promptTokens": 1024,
-    "completionTokens": 56,
-    "totalTokens": 1080
-  }
-}
-```
+### `executePrompt`
+
+Sends a question to the chatbot and gets an answer. This is the primary function for interacting with the chat instance.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>question</code></td><td>The user's question or prompt.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns an object with the keys `answer` (the response string), `history` (the updated conversation history), `sourceDocs` (an array of the source document chunks used to generate the answer), and `tokenUsage` (information about the number of tokens used for the request).
 
 ### `addKnowledge`
 
-Passes knowledge content inputs directly down into the associated storage mapping space.
+Adds new information to the knowledge store associated with this chat instance. This is a convenience wrapper around [`addKnowledge`](#addknowledge) of the `KnowledgeBase` class.
 
-### `resetConversation`
+#### Parameters
 
-Wipes conversational thread history to clear past conversation memories. Store contents remain untouched.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>knowledge</code></td><td>The content to add. Accepts the same source types as the <code>KnowledgeBase</code> function.</td><td>any</td></tr></tbody></table>
+
+### `resetConversion`
+
+Clears the current conversation history. The chatbot forgets the previous conversation, but the underlying knowledge store remains unchanged.
+
+#### Parameters
+
+None.
 
 ### `reinitialize`
 
-Reconfigures bot operational settings and parameters dynamically.
+Reinitializes the chat instance with new configuration options.
+
+## Complete example
+
+A step-by-step workflow demonstrating how the two classes work together.
+
+{% stepper %}
+{% step %}
+#### Populate a knowledge store
+
+Use `addKnowledge` of the `KnowledgeBase` class to add information to a store.
+
+```yaml
+# store
+product-info
+
+# knowledge
+/path/to/our-product-spec-sheet.pdf
+
+# name
+Spec Sheet v1.2
+```
+{% endstep %}
+
+{% step %}
+#### Create a chat instance
+
+Create a `ChatWithData` instance linked to the store you just populated.
+
+```yaml
+# storeName
+product-info
+
+# options
+systemMessage: You are a helpful product support specialist.
+```
+{% endstep %}
+
+{% step %}
+#### Ask a question
+
+Use `executePrompt` to ask a question related to the document you added.
+
+```yaml
+# question
+What is the maximum operating temperature of our product?
+```
+
+The chatbot finds the relevant section in the PDF, uses it as context, and provides a specific answer.
+{% endstep %}
+
+{% step %}
+#### Ask a follow-up question
+
+The chatbot remembers the context of the conversation.
+
+```yaml
+# question
+And what about in Celsius?
+```
+
+The chatbot understands that the follow-up refers to the maximum operating temperature and answers in the requested unit.
+{% endstep %}
+{% endstepper %}
