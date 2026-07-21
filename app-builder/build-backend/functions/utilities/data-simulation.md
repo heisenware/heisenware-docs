@@ -1,12 +1,12 @@
 # Data simulation
 
-The data simulation class generates random and mock data for testing, prototyping, and creating demonstrations without requiring real information. These functions create numbers, strings, and complex structured datasets such as personal profiles, geographic coordinates, and time-series logs. This class provides static functions only and does not require an instance.
+The data simulation class generates random and mock data for testing, prototyping, and creating demonstrations without requiring real information. These functions create numbers, strings, and complex structured datasets such as personal profiles, geographic coordinates, and time-series logs. This class provides static functions only and does not require an instance. The code class name is `Simulator`.
 
 ## Basic values
 
 ### `randomInteger`
 
-Returns a random whole number between a minimum and a maximum value.
+Returns a random whole number between a minimum and a maximum value (both inclusive).
 
 #### Parameters
 
@@ -46,7 +46,7 @@ max: 100
 
 ### `randomString`
 
-Generates a string of a specified length composed of random printable characters.
+Generates a string of a specified length composed of random printable characters from `!` to `}` (character codes 33 to 125).
 
 #### Parameters
 
@@ -69,7 +69,7 @@ Generates random placeholder text in a lorem ipsum style to populate text fields
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>count</code></td><td>The number of units to generate. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>units</code></td><td>The type of unit to generate: <code>words</code>, <code>sentences</code>, or <code>paragraphs</code>. Default <code>sentences</code>.</td><td>string</td></tr><tr><td></td><td><code>format</code></td><td>The output format, either <code>plain</code> or <code>html</code>. Default <code>plain</code>.</td><td>string</td></tr><tr><td></td><td><code>sentenceLowerBound</code></td><td>The minimum number of words per sentence.</td><td>integer</td></tr><tr><td></td><td><code>sentenceUpperBound</code></td><td>The maximum number of words per sentence.</td><td>integer</td></tr><tr><td></td><td><code>paragraphLowerBound</code></td><td>The minimum number of sentences per paragraph.</td><td>integer</td></tr><tr><td></td><td><code>paragraphUpperBound</code></td><td>The maximum number of sentences per paragraph.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="180">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>count</code></td><td>The number of units to generate. Default 1.</td><td>integer</td></tr><tr><td></td><td><code>units</code></td><td>The type of unit to generate: <code>words</code>, <code>sentences</code>, or <code>paragraphs</code>. Default <code>sentences</code>.</td><td>string</td></tr><tr><td></td><td><code>format</code></td><td>The output format, either <code>plain</code> or <code>html</code>. Default <code>plain</code>.</td><td>string</td></tr><tr><td></td><td><code>sentenceLowerBound</code></td><td>The minimum number of words per sentence.</td><td>integer</td></tr><tr><td></td><td><code>sentenceUpperBound</code></td><td>The maximum number of words per sentence.</td><td>integer</td></tr><tr><td></td><td><code>paragraphLowerBound</code></td><td>The minimum number of sentences per paragraph.</td><td>integer</td></tr><tr><td></td><td><code>paragraphUpperBound</code></td><td>The maximum number of sentences per paragraph.</td><td>integer</td></tr><tr><td></td><td><code>suffix</code></td><td>The line ending used between units. Defaults to the system line break.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -100,7 +100,7 @@ Throws an execution error with a specified or random message to test error-handl
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>customMessage</code></td><td>An optional string to use as the error message. If omitted, the function uses a random text string.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>customMessage</code></td><td>An optional string to use as the error message. If omitted, the function uses a random lorem ipsum sentence.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -192,7 +192,7 @@ Generates numeric datasets using a Gaussian distribution to create realistic ran
 
 #### Output
 
-Returns a single array of numbers if `nDataSets` is 1 and `addTimeAxis` is false, or an array of objects for multiple datasets or time-series tracking.
+Returns a single array of numbers if `nDataSets` is 1 and `addTimeAxis` is false. Otherwise returns an array of objects with one key per dataset (`dataset0`, `dataset1`, ...) and, if enabled, the `date` field.
 
 #### Examples
 
@@ -236,11 +236,11 @@ Returns an array of realistic personal identity records.
 
 #### Output
 
-Returns an array of objects containing title, firstName, lastName, company, phone, verified, validUntil, note, and a base64-encoded random JPEG avatar image.
+Returns an array of objects containing `avatar` (a base64-encoded random JPEG image), `title`, `firstName`, `lastName`, `company`, `phone`, `verified` (always `true`), `validUntil` (a random ISO date within the next 30 hours), and `note` (always empty).
 
 ### `randomChatData`
 
-Generates an array of simple chat message objects containing role and content keys to simulate a conversation.
+Generates an array of simple chat message objects with alternating `role` values (`You` and `ChatBot`) and random `content` to simulate a conversation.
 
 #### Parameters
 
@@ -256,11 +256,11 @@ Generates randomized chronological timeline events spanning a specific duration 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>totalDurationHours</code></td><td>The total duration of the generated data in hours. Default 24.</td><td>number</td></tr><tr><td></td><td><code>includeState</code></td><td>Includes the machine state track (values such as <code>Running</code>, <code>Idle</code>, <code>Maintenance</code>, or <code>Error</code>). Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeOperator</code></td><td>Includes the operator assignment track. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>includeShift</code></td><td>Includes the work shift track. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>timeFormat</code></td><td>The timestamp format: <code>epoch</code>, <code>iso</code>, <code>string</code>, or <code>object</code>. Default <code>epoch</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="150">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>totalDurationHours</code></td><td>The total duration of the generated data in hours. Default 24.</td><td>number</td></tr><tr><td></td><td><code>includeState</code></td><td>Includes the machine state track (values <code>Running</code>, <code>Idle</code>, <code>Maintenance</code>, or <code>Error</code>). Default true.</td><td>boolean</td></tr><tr><td></td><td><code>includeOperator</code></td><td>Includes the operator assignment track. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>includeShift</code></td><td>Includes the work shift track. Default false.</td><td>boolean</td></tr><tr><td></td><td><code>timeFormat</code></td><td>The timestamp format: <code>epoch</code>, <code>iso</code>, <code>string</code>, or <code>object</code>. Default <code>epoch</code>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of timeline event objects with a timestamp and the enabled tracks.
+Returns an array of timeline event objects with a `timestamp` and the enabled tracks.
 
 ### `randomPointInCircle`
 
@@ -268,7 +268,7 @@ Generates a random GPS coordinate within a specified radius of a central point.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>distance</code></td><td></td><td>The radius of the circle in meters. Default 5000.</td><td>integer</td></tr><tr><td><code>coord</code></td><td><code>lat</code></td><td>The latitude of the central coordinate point. Default coordinates point to Hamburg, Germany.</td><td>number</td></tr><tr><td></td><td><code>lng</code></td><td>The longitude of the central coordinate point. Default coordinates point to Hamburg, Germany.</td><td>number</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>distance</code></td><td></td><td>The radius of the circle in meters. Default 5000.</td><td>integer</td></tr><tr><td><code>coord</code></td><td><code>lat</code></td><td>The latitude of the central coordinate point. Default 53.5511 (Hamburg, Germany).</td><td>number</td></tr><tr><td></td><td><code>lng</code></td><td>The longitude of the central coordinate point. Default 9.9937 (Hamburg, Germany).</td><td>number</td></tr></tbody></table>
 
 #### Output
 
