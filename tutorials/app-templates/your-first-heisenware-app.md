@@ -1,3 +1,7 @@
+---
+description: Copy the app from our demo and learn how to build faster with Heisenware.
+---
+
 # Your first Heisenware App
 
 ## Video
@@ -17,12 +21,12 @@
 
 ### HTTP
 
-1. Drag and drop the `get` function from the [HTTP / REST](../../app-builder/build-backend/functions/connectors/http-rest.md) connector onto the canvas.
+1. Drag and drop the `get` function from the [HTTP / REST](../../app-builder/build-backend/functions/connectors/http-rest.md#get) connector onto the canvas.
 2. Configure the function:
 
 ```yaml
 # url
-[http://www.randomnumberapi.com/api/v1.0/random](http://www.randomnumberapi.com/api/v1.0/random)
+http://www.randomnumberapi.com/api/v1.0/random
 # parameters
 min: 50
 max: 100
@@ -38,19 +42,19 @@ $average($)
 
 ### OPC UA
 
-1. Create an OPC UA client instance using the [`create`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) function from the [OPC UA Client](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) connector.
+1. Create an OPC UA client instance using the [`create`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#create) function from the [OPC UA client](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) connector.
 2. Enter `Demo` as the client name.
 3. Trigger the function.
-4. Connect to an OPC UA server using the [`connect`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) function on your new client. Configure the public server address:
+4. Connect to an OPC UA server using the [`connect`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#connect) function on your new client. Configure the public server address:
 
 ```yaml
 # endpointUrl
-opc.tcp://[opcua.demo-this.com:51210/UA/SampleServer](https://opcua.demo-this.com:51210/UA/SampleServer)
+opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
 ```
 
 5. Trigger the `connect` function.
-6. Verify the connection status using the [`isConnected`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) function.
-7. Use the [`readNode`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) function to read the data node:
+6. Verify the connection status using the [`isConnected`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#isconnected) function.
+7. Use the [`readNode`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#readnode) function to read the data node:
 
 ```yaml
 # nodeId
@@ -64,14 +68,14 @@ value.value
 ```
 
 {% hint style="info" %}
-As an alternative to steps 7 and 8, use the [`readVariableValue`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md) function to retrieve the value directly.
+As an alternative to steps 7 and 8, use the [`readVariableValue`](../../app-builder/build-backend/functions/connectors/opc-ua-client.md#readvariablevalue) function to retrieve the value directly.
 {% endhint %}
 
 ## Configure data flow
 
 ### Combine data points
 
-1. Drag and drop the [`combine`](../../app-builder/build-backend/functions/utilities/data-processing.md) function onto the canvas.
+1. Drag and drop the [`combine`](../../app-builder/build-backend/functions/utilities/data-processing.md#combine) function onto the canvas.
 2. Connect the modifier of the `get` function to argument 1 of the `combine` function, and the modifier of the `readNode` function to argument 2.
 3. Trigger the `combine` function.
 4. Add a [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) to the `combine` function and calculate the sum:
@@ -103,10 +107,10 @@ $sum($)
 
 ### Visualize recorded data
 
-1. Click the database icon on the recorder node to automatically generate the `read` function for the [timeseries database](../../app-builder/build-backend/functions/storage/timeseries-database.md).
+1. Click the database icon on the recorder node to automatically generate the `read` function for the [timeseries database](../../app-builder/build-backend/functions/storage/timeseries-database.md#read).
 2. Within the newly generated `read` function, change the tail value to 10.
 3. Trigger the `read` function.
-4. Create a [new page](../../app-builder/build-frontend/page-explorer.md) by right-clicking the existing page in the [Page Explorer](../../app-builder/build-frontend/page-explorer.md) and selecting **New Page**.
+4. Create a [new page](../../app-builder/build-frontend/page-explorer.md#add-and-delete) by right-clicking the existing page in the [Page Explorer](../../app-builder/build-frontend/page-explorer.md) and selecting **New Page**.
 5. Configure the App's main menu using the navigation menu settings. You can rename pages and add icons as needed.
 6. Select the new page.
 7. Add a [chart](../../app-builder/build-frontend/widgets/display-widgets/chart.md) widget to the page.
