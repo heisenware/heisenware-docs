@@ -5,7 +5,7 @@ description: >-
   function.
 ---
 
-# Write images from app to local server
+# Write images from App to server
 
 {% stepper %}
 {% step %}
@@ -23,7 +23,7 @@ Pick the [photo](../../app-builder/build-frontend/widgets/input-widgets/photo.md
 {% step %}
 #### Prepare the photo data
 
-Use a [data store](../../app-builder/build-backend/functions/storage/data-store.md) function to receive images from the photo widget by connecting the photo widget to the function's input. Add two JSONata [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) extension nodes to extract the base64 buffer string and to prepare the path and file name.
+Use a [memory](../../app-builder/build-backend/functions/utilities/data-processing.md#memory) function to receive images from the photo widget by connecting the photo widget to the function's input. Add two JSONata [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) extension nodes to extract the base64 buffer string and to prepare the path and file name.
 
 Use these JSONata snippets in your modifiers. Replace the path from the example with the path on your server where you want to store the images. Double all backslashes to work with the JSONata syntax.
 
@@ -35,7 +35,7 @@ Use these JSONata snippets in your modifiers. Replace the path from the example 
 base64
 ```
 
-After taking a photo in test mode, the data store function must look like the screenshot below.
+After taking a photo in test mode, the memory function must look like the screenshot below.
 
 <figure><img src="../../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
