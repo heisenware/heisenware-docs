@@ -79,8 +79,8 @@ Switch to the Backend Builder to define the flow when a user clicks the Submit b
 
 The signature widget outputs a raw base64 string, but the database expects an object.
 
-1. Drag a [data store](../../app-builder/build-backend/functions/storage/data-store.md) function onto the canvas and connect the output of the signature widget to its input.
-2. Add a [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) extension node after the data store function. Configure it with the following expression to wrap the signature string in an object whose key matches the database column:
+1. Drag a [memory](../../app-builder/build-backend/functions/utilities/data-processing.md#memory) function onto the canvas and connect the output of the signature widget to its input.
+2. Add a [modifier](../../app-builder/build-backend/extension-nodes/modifier.md) extension node after the memory function. Configure it with the following expression to wrap the signature string in an object whose key matches the database column:
 
 ```javascript
 {signature: x}
