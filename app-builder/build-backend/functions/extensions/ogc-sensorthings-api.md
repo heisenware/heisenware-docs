@@ -2,7 +2,8 @@
 
 {% hint style="info" %}
 #### Available as a Docker Extension
-This connector is not part of the default function list. It ships as a [Docker Extension](extensions.md), where the installation is explained.
+
+This connector is not part of the default function list. It ships as a [Docker Extension](./), where the installation is explained.
 {% endhint %}
 
 The OGC SensorThings API connector talks to an OGC SensorThings compliant server (such as a FROST server) and manages Things, Locations, ObservedProperties, Sensors, Datastreams, and Observations. This class requires an instance. The code class name is `SensorThings`.
@@ -23,6 +24,7 @@ Imagine an environmental monitoring application that collects data from various 
 
 {% hint style="danger" %}
 #### Irreversible action
+
 All delete functions (`deleteThing`, `deleteLocation`, `deleteObservedProperty`, `deleteSensor`, `deleteDatastream`, `deleteObservation`) permanently remove the resource from the server.
 {% endhint %}
 
@@ -64,6 +66,7 @@ Returns `true` upon removal.
 
 {% hint style="danger" %}
 #### Irreversible action
+
 Deleting removes the instance configuration.
 {% endhint %}
 
@@ -87,7 +90,7 @@ Retrieves all or a filtered set of Things.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="ogc-sensorthings-api.md#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -187,7 +190,7 @@ Retrieves all or a filtered set of Locations.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="ogc-sensorthings-api.md#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -261,7 +264,7 @@ Retrieves all or a filtered set of ObservedProperties.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="ogc-sensorthings-api.md#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -323,7 +326,7 @@ Retrieves all or a filtered set of Sensors.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="ogc-sensorthings-api.md#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -406,7 +409,7 @@ Retrieves all or a filtered set of Datastreams.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="ogc-sensorthings-api.md#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -479,7 +482,7 @@ Retrieves all or a filtered set of Observations, for example with the filter `ph
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="ogc-sensorthings-api.md#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
