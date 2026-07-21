@@ -1,240 +1,580 @@
 # OGC SensorThings API
 
 {% hint style="info" %}
-#### Status notice
-This extension is currently hidden from the default listing. If your architecture requires OGC compliance, contact support@heisenware.com to enable it.
+#### Available as a Docker Extension
+This connector is not part of the default function list. It ships as a [Docker Extension](extensions.md), where the installation is explained.
 {% endhint %}
 
-The OGC SensorThings API extension provides an interoperability layer for managing Internet of Things (IoT) sensor devices, locations, datastreams, and observations using the open geospatial consortium standard. This class requires an instance. The code class name is `OgcSensorThings`.
+The OGC SensorThings API connector talks to an OGC SensorThings compliant server (such as a FROST server) and manages Things, Locations, ObservedProperties, Sensors, Datastreams, and Observations. This class requires an instance. The code class name is `SensorThings`.
+
+## Example use case
+
+Imagine an environmental monitoring application that collects data from various sensors deployed in a city. Using the OGC SensorThings API, the application:
+
+* retrieves current air quality indexes from different areas within the city
+* gathers temperature and humidity readings to monitor weather conditions
+* accesses noise level data to identify noise pollution hotspots
+
+## General conventions
+
+* All IDs refer to the `@iot.id` property of SensorThings resources.
+* All date and time values follow ISO 8601.
+* For geospatial data in Locations, GeoJSON is recommended (`encodingType: 'application/geo+json'`).
+
+{% hint style="danger" %}
+#### Irreversible action
+All delete functions (`deleteThing`, `deleteLocation`, `deleteObservedProperty`, `deleteSensor`, `deleteDatastream`, `deleteObservation`) permanently remove the resource from the server.
+{% endhint %}
+
+## Filter expressions
+
+All `get*` list functions accept an optional OGC compliant [filter expression](https://fraunhoferiosb.github.io/FROST-Server/sensorthingsapi/requestingData/STA-Example-Queries.html), such as:
+
+```
+name eq 'StationA'
+description ne 'Old station'
+properties/owner eq 'City Council'
+```
+
+## Instance management
+
+### `create`
+
+Creates a SensorThings client instance.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>apiUrl</code></td><td>The URL of the SensorThings server, for example <code>https://server.de/FROST-Server/v1.1</code>. If omitted, the internal FROST server is used.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the name of the created instance.
+
+### `delete`
+
+Deletes a client instance.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
+
+{% hint style="danger" %}
+#### Irreversible action
+Deleting removes the instance configuration.
+{% endhint %}
 
 ## Things
 
-### `getThings`
+### `createThing`
 
-Retrieves available Thing entities from the server.
+Creates a Thing, an object of the physical or information world that can be identified and integrated into communication networks.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>An OGC-compliant filter expression (for example, <code>name eq 'WeatherStation1'</code>).</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>Name of the Thing.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Description of the Thing. Default empty.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Any further properties of the Thing. Default <code>{}</code>.</td><td>object</td></tr><tr><td></td><td><code>uniqueName</code></td><td>If <code>true</code>, an existing Thing with the same name is updated instead of creating a duplicate. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns an array of Thing resource objects.
+Returns the numeric ID of the created Thing. If `uniqueName` is set and a Thing with the same name exists, that Thing is updated and the server answer of the update is returned instead.
+
+### `getThings`
+
+Retrieves all or a filtered set of Things.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the server result object with a `value` array of Things. Locations are expanded.
 
 ### `getThing`
 
-Retrieves detailed properties for a single Thing by its ID, including locations and history.
+Reads all information of a single Thing.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The unique resource ID.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Thing ID.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns a Thing resource object.
+Returns the Thing object with expanded Locations and HistoricalLocations.
 
 ### `updateThing`
 
-Updates properties on an existing Thing.
+Updates a Thing.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td></td><td>The target resource ID.</td><td>integer</td></tr><tr><td><code>properties</code></td><td><code>name</code></td><td>The updated name string.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>The updated description string.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom metadata object attributes.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Thing ID.</td><td>integer</td></tr><tr><td><code>changes</code></td><td>An object containing only the fields to change, for example <code>name</code>, <code>description</code>, or <code>properties</code>.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the server answer to the update request.
 
 ### `deleteThing`
 
-Deletes a Thing resource by its ID.
+Deletes a Thing.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The target resource ID.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Thing ID.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the server answer to the delete request.
 
 ### `linkLocations`
 
-Associates Location entities with a target Thing.
+Links Locations to a Thing.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The destination Thing resource ID.</td><td>integer</td></tr><tr><td><code>locationIds</code></td><td>An array of Location resource IDs to bind.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The Thing ID.</td><td>integer</td></tr><tr><td><code>locationIds</code></td><td>Array of Location IDs to link.</td><td>array</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns nothing. The update runs without waiting for the server, so errors are not reported back.
 
 ### `unlinkAllLocations`
 
-Removes all associated Location links from a Thing.
+Removes all Location links from a Thing.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The target Thing resource ID.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The Thing ID.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the server answer to the update request.
 
 ## Locations
 
 ### `createLocation`
 
-Creates a new Location entity.
+Creates a Location. The Location locates the Thing or Things it is associated with; a Thing's Location is defined as its last known location.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The name identifier for the location.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Description text.</td><td>string</td></tr><tr><td></td><td><code>location</code></td><td>GeoJSON geospatial coordinates data object.</td><td>object</td></tr><tr><td></td><td><code>encodingType</code></td><td>MIME type of the geo-data. Default <code>application/geo+json</code>.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom attribute metadata map.</td><td>object</td></tr><tr><td></td><td><code>thingIds</code></td><td>Optional array of Thing IDs to link instantly.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>Name of the Location.</td><td>string</td></tr><tr><td></td><td><code>location</code></td><td>Location data in the format defined by <code>encodingType</code>, typically a GeoJSON object.</td><td>any</td></tr><tr><td></td><td><code>description</code></td><td>Description of the Location. Default empty.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Any further properties of the Location. Default <code>{}</code>.</td><td>object</td></tr><tr><td></td><td><code>encodingType</code></td><td>Encoding type of the location data. Default <code>application/geo+json</code>.</td><td>string</td></tr><tr><td></td><td><code>uniqueName</code></td><td>If <code>true</code>, an existing Location with the same name is updated instead of creating a duplicate. Default <code>false</code>.</td><td>boolean</td></tr><tr><td><code>thingIds</code></td><td></td><td>Array of Thing IDs to link the Location to. Default <code>[]</code>.</td><td>array</td></tr></tbody></table>
 
 #### Output
 
-Returns the created Location resource object.
+Returns the numeric ID of the created Location. If `uniqueName` is set and a Location with the same name exists, that Location is updated and its ID is returned.
+
+#### Example
+
+```yaml
+# options
+name: Warehouse A
+description: Main storage site
+location:
+  type: Point
+  coordinates: [9.99, 53.55]
+
+# thingIds
+[12, 13]
+```
 
 ### `getLocations`
 
-Retrieves Location entries. Supports standard filtering string arguments.
+Retrieves all or a filtered set of Locations.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the server result object with a `value` array of Locations. Things are expanded.
 
 ### `getLocation`
 
-Fetches a single Location resource using its ID.
+Retrieves a single Location.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Location ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the Location object with expanded Things.
 
 ### `updateLocation`
 
-Updates mutable fields on an existing Location entity.
+Updates a Location.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Location ID.</td><td>integer</td></tr><tr><td><code>changes</code></td><td>An object containing only the fields to change, for example <code>name</code>, <code>description</code>, <code>properties</code>, <code>location</code>, or <code>encodingType</code>.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the update request.
 
 ### `deleteLocation`
 
-Deletes a Location resource using its ID.
+Deletes a Location.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Location ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the delete request.
 
 ### `showLocationHistory`
 
-Returns the chronological historical locations of a Thing, grouped by a metadata property key.
+Aggregates the historical Locations of a Thing by time and a selected property.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>thingId</code></td><td>The Thing ID.</td><td>integer</td></tr><tr><td><code>property</code></td><td>A key found in the <code>properties</code> section of each Location.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns an array with one entry per historical location record, each containing a `time` string (minute resolution) and one key per Location name holding the value of the selected property.
 
 ## Observed properties
 
 ### `createObservedProperty`
 
-Registers an environmental or physical property being monitored.
+Creates an ObservedProperty, which specifies the phenomenon of an Observation.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The property identifier name (such as <code>Temperature</code>).</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Text description.</td><td>string</td></tr><tr><td></td><td><code>definition</code></td><td>A URI reference string pointing to a controlled vocabulary term.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom metadata attributes map.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>Name of the ObservedProperty.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Description of the ObservedProperty. Default empty.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Any further properties. Default <code>{}</code>.</td><td>object</td></tr><tr><td></td><td><code>definition</code></td><td>URI of a controlled vocabulary term. Default empty.</td><td>string</td></tr><tr><td></td><td><code>uniqueName</code></td><td>If <code>true</code>, an existing ObservedProperty with the same name is updated instead of creating a duplicate. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns the created resource object.
+Returns the numeric ID of the created or updated ObservedProperty.
 
 ### `getObservedProperties`
 
-Retrieves all recorded ObservedProperty resources. Supports filters.
+Retrieves all or a filtered set of ObservedProperties.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the server result object with a `value` array of ObservedProperties.
 
 ### `getObservedProperty`
 
-Retrieves a single ObservedProperty resource by its ID.
+Retrieves a single ObservedProperty.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The ObservedProperty ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the ObservedProperty object.
 
 ### `updateObservedProperty`
 
-Updates an existing ObservedProperty resource configuration.
+Updates an ObservedProperty.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The ObservedProperty ID.</td><td>integer</td></tr><tr><td><code>changes</code></td><td>An object containing only the fields to change.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the update request.
 
 ### `deleteObservedProperty`
 
-Deletes an ObservedProperty resource by its ID.
+Deletes an ObservedProperty.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The ObservedProperty ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the delete request.
 
 ## Sensors
 
 ### `createSensor`
 
-Creates a Sensor entity profile.
+Creates a Sensor, an instrument that observes a property or phenomenon to estimate its value.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The sensor identifier name.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Text description.</td><td>string</td></tr><tr><td></td><td><code>encodingType</code></td><td>The metadata document format type (for example, <code>application/pdf</code>).</td><td>string</td></tr><tr><td></td><td><code>metadata</code></td><td>A URI string pointing to system or documentation metadata.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Custom attributes map.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>Name of the Sensor.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Description of the Sensor. Default empty.</td><td>string</td></tr><tr><td></td><td><code>properties</code></td><td>Any further properties. Default <code>{}</code>.</td><td>object</td></tr><tr><td></td><td><code>encodingType</code></td><td>Encoding type of the metadata document, for example <code>application/pdf</code>. Default empty.</td><td>string</td></tr><tr><td></td><td><code>metadata</code></td><td>Metadata URI in the specified encoding type. Default empty.</td><td>string</td></tr><tr><td></td><td><code>uniqueName</code></td><td>If <code>true</code>, an existing Sensor with the same name is updated instead of creating a duplicate. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns the created Sensor resource object.
+Returns the numeric ID of the created Sensor.
 
 ### `getSensors`
 
-Retrieves Sensors from the server. Supports filters.
+Retrieves all or a filtered set of Sensors.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the server result object with a `value` array of Sensors.
 
 ### `getSensor`
 
-Fetches a specific Sensor by its ID.
+Retrieves a single Sensor.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Sensor ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the Sensor object.
 
 ### `updateSensor`
 
-Updates properties on an active Sensor resource.
+Updates a Sensor.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Sensor ID.</td><td>integer</td></tr><tr><td><code>changes</code></td><td>An object containing only the fields to change.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the update request.
 
 ### `deleteSensor`
 
-Deletes a Sensor resource by its ID.
+Deletes a Sensor.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Sensor ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the delete request.
 
 ## Datastreams
 
 ### `createDatastream`
 
-Groups a collection of Observations tracking a distinct ObservedProperty.
+Creates a Datastream, which groups a collection of Observations measuring the same ObservedProperty and produced by the same Sensor.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>The datastream identifier name.</td><td>string</td></tr><tr><td></td><td><code>observationType</code></td><td>Observation model type URI.</td><td>string</td></tr><tr><td></td><td><code>unitOfMeasurement</code></td><td>Object containing <code>name</code>, <code>symbol</code>, and <code>definition</code> URI.</td><td>object</td></tr><tr><td></td><td><code>thingId</code></td><td>The linked Thing resource ID.</td><td>integer</td></tr><tr><td></td><td><code>sensorId</code></td><td>The linked Sensor resource ID.</td><td>integer</td></tr><tr><td></td><td><code>observedPropertyId</code></td><td>The linked ObservedProperty resource ID.</td><td>integer</td></tr><tr><td></td><td><code>description</code></td><td>Optional text description.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="180">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>name</code></td><td>Name of the Datastream.</td><td>string</td></tr><tr><td></td><td><code>description</code></td><td>Description of the Datastream. Default empty.</td><td>string</td></tr><tr><td></td><td><code>observationType</code></td><td>URI of the observation type used to encode observations, for example <code>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement</code>.</td><td>string</td></tr><tr><td></td><td><code>unitOfMeasurement</code></td><td>Object with three keys: <code>name</code> (full name of the unit), <code>symbol</code> (textual form of the unit symbol), and <code>definition</code> (URI defining the unit).</td><td>object</td></tr><tr><td></td><td><code>uniqueName</code></td><td>If <code>true</code>, an existing Datastream with the same name is updated instead of creating a duplicate. Default <code>false</code>.</td><td>boolean</td></tr><tr><td><code>thingId</code></td><td></td><td>A Thing ID to link to.</td><td>integer</td></tr><tr><td><code>sensorId</code></td><td></td><td>A Sensor ID to link to.</td><td>integer</td></tr><tr><td><code>observedPropertyId</code></td><td></td><td>An ObservedProperty ID to link to.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns the created Datastream resource object.
+Returns the numeric ID of the created or updated Datastream.
+
+#### Example
+
+```yaml
+# options
+name: Temperature outdoor
+observationType: http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement
+unitOfMeasurement:
+  name: Degree Celsius
+  symbol: °C
+  definition: http://unitsofmeasure.org/ucum.html
+
+# thingId
+1
+
+# sensorId
+2
+
+# observedPropertyId
+3
+```
 
 ### `getDatastreams`
 
-Retrieves available Datastreams. Supports filter strings.
+Retrieves all or a filtered set of Datastreams.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the server result object with a `value` array of Datastreams.
 
 ### `getDatastream`
 
-Fetches a single Datastream by its ID.
+Retrieves a single Datastream.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Datastream ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the Datastream object.
 
 ### `updateDatastream`
 
-Updates mutable fields on an existing Datastream.
+Updates a Datastream.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Datastream ID.</td><td>integer</td></tr><tr><td><code>changes</code></td><td>An object containing only the fields to change.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the update request.
 
 ### `deleteDatastream`
 
-Deletes a Datastream resource by its ID.
+Deletes a Datastream.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Datastream ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the delete request.
 
 ## Observations
 
 ### `createObservation`
 
-Logs a single numerical or qualitative data point entry.
+Creates an Observation, the act of measuring or otherwise determining the value of a property.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>result</code></td><td>The captured measurement value payload.</td><td>any</td></tr><tr><td></td><td><code>phenomenonTime</code></td><td>ISO 8601 string timestamp of the physical event occurrence.</td><td>string</td></tr><tr><td></td><td><code>datastreamId</code></td><td>The destination Datastream target resource ID.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="160">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>result</code></td><td>The measured or estimated value of the observation.</td><td>any</td></tr><tr><td></td><td><code>phenomenonTime</code></td><td>The time instant or period of the observation, in ISO 8601 format.</td><td>string</td></tr><tr><td><code>datastreamId</code></td><td></td><td>A Datastream ID to link to.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns the created Observation resource object.
+Returns the numeric ID of the created Observation.
+
+#### Example
+
+```yaml
+# options
+result: 21.4
+phenomenonTime: 2024-01-01T12:00:00Z
+
+# datastreamId
+4
+```
 
 ### `getObservations`
 
-Retrieves observations matching optional filter arguments (such as `phenomenonTime ge 2024-01-01T00:00:00Z`).
+Retrieves all or a filtered set of Observations, for example with the filter `phenomenonTime ge 2024-01-01T00:00:00Z`.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filter</code></td><td>Optional filter expression, see <a href="#filter-expressions">Filter expressions</a>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the server result object with a `value` array of Observations.
 
 ### `getObservation`
 
-Fetches a single Observation resource using its ID.
+Retrieves a single Observation.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Observation ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the Observation object.
 
 ### `updateObservation`
 
-Updates an existing Observation entity configuration.
+Updates an Observation.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Observation ID.</td><td>integer</td></tr><tr><td><code>changes</code></td><td>An object containing only the fields to change.</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the update request.
 
 ### `deleteObservation`
 
-Deletes an Observation resource using its ID.
+Deletes an Observation.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>id</code></td><td>The Observation ID.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the server answer to the delete request.
 
 ## Raw requests
 
-Execute unmanaged operations directly against endpoint structures using raw REST methods: `getRaw`, `postRaw`, `patchRaw`, and `deleteRaw`.
+For custom operations, four raw request functions provide direct URL access to the API.
+
+### `getRaw`
+
+Sends a raw GET request.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The path or full URL to request.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the raw server response.
+
+### `postRaw`
+
+Sends a raw POST request. No request body can be provided.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The path or full URL to request.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the raw server response.
+
+### `patchRaw`
+
+Sends a raw PATCH request. No request body can be provided.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The path or full URL to request.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the raw server response.
+
+### `deleteRaw`
+
+Sends a raw DELETE request.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The path or full URL to request.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the raw server response.
+
+## More information
+
+[OGC SensorThings API Standard 1.0](https://docs.ogc.org/is/15-078r6/15-078r6.html)
+
+[FROST Server Documentation](https://fraunhoferiosb.github.io/FROST-Server/)
