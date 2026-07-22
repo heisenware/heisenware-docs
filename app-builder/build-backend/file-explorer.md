@@ -27,6 +27,8 @@ Right-click any file to open the context menu. Here you can:
 <figure><img src="../../.gitbook/assets/image (520).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="danger" %}
+**Irreversible action**
+
 Be careful when renaming or deleting a file. If a function (like `readCsv`) or a PDF template already uses that file path, your logic breaks.
 {% endhint %}
 

@@ -69,5 +69,7 @@ The prefix option changes how an Agent identifies itself. Use it to manage a fle
 * **With a prefix**: The Agent generates a new, unique ID on its first launch in a specific directory. Deploy the exact same installer on multiple machines and each one connects as a separate entry in your Function Explorer (e.g., `milling-machine-abc123`, `milling-machine-xyz789`).
 
 {% hint style="danger" %}
+**Irreversible action**
+
 Do not move an Agent folder that was created with a prefix after it has run for the first time. It relies on a hidden ID file in its directory to maintain its unique identity.
 {% endhint %}

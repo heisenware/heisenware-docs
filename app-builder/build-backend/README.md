@@ -17,7 +17,7 @@ Backend logic runs in the background, even when no user has the App open. This m
 
 ## Backend Builder
 
-Turn individual functions into automated flows inside the Backend Builder. Drag functions onto the endless canvas and wire them together. Data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences. Each function on the canvas is a function node. Together with extension nodes, they form the building blocks of every flow.
+Turn individual functions into automated flows inside the Backend Builder. Drag functions onto the infinite canvas and wire them together. Data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences. Each function on the canvas is a function node. Together with extension nodes, they form the building blocks of every flow.
 
 ### Adding functions
 
