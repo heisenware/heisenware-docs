@@ -31,7 +31,7 @@ Use the `true` and `false` states of the filter to trigger separate logic paths.
 {% hint style="warning" %}
 #### Falsy values halt the flow
 
-A filter condition that evaluates to a falsy value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow. This is the only way to interrupt a flow and is essential when building complex backend logic.
+A filter condition that evaluates to a falsy value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow.
 {% endhint %}
 
 ## Filter examples

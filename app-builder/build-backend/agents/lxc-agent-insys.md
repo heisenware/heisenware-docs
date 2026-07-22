@@ -45,7 +45,7 @@ In the container's network settings, map it to an internal network bridge (e.g.,
 {% hint style="warning" %}
 #### Port 8883 required
 
-Like every Agent, the LXC container needs outbound internet access on port 8883 to connect to the Heisenware Cloud. Make sure the router's firewall allows this traffic for the container's IP address.
+Like every Agent, the LXC container needs outbound internet access on port 8883 to connect to the Heisenware platform. Make sure the router's firewall allows this traffic for the container's IP address.
 {% endhint %}
 {% endstep %}
 

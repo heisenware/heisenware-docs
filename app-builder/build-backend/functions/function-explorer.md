@@ -17,7 +17,7 @@ In addition to the categories, every installed and started [Agent](../agents/) a
 
 The icons at the top of the panel extend your function library:
 
-* **Create Agent** (<i class="fa-cloud">:cloud:</i>): Build and download a new [Agent](../agents/).
+* **Create Agent** (<i class="fa-cloud-arrow-down">:cloud-arrow-down:</i>): Build and download a new [Agent](../agents/).
 * **Install extension** (<i class="fa-puzzle-piece">:puzzle-piece:</i>): Add official or Custom [Extensions](extensions/) to your library.
 * **Smart onboarding** (<i class="fa-screencast">:screencast:</i>): Pair external clients, such as IoT devices, with your account. See [smart onboarding](connectors/#smart-onboarding).
 * **Collapse** (<i class="fa-chevrons-up">:chevrons-up:</i>): Collapse all open entries.

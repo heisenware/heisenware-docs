@@ -6,9 +6,9 @@ To add a modifier:
 
 1. Click the + icon on the right side of a function output, filter, or existing modifier.
 2. Select Modifier from the list.
-3. Click the new modifier node (_Click to edit..._) to open the code editor and write your expression.
+3. Click the new modifier node (Click to edit...) to open the code editor and write your expression.
 
-A modifier uses either JSONata or a JavaScript expression. Switch between types by right-clicking the modifier and selecting _Jsonata_ or _Expression_. Adjust the default type in the [App Builder settings](../../overview.md#app-builder-settings).
+A modifier uses either JSONata or a JavaScript expression. Switch between types by right-clicking the modifier and selecting JSONata or Expression. Adjust the default type in the [App Builder settings](../../overview.md#app-builder-settings).
 
 Click the modifier icon on the left to evaluate the modifier manually during development. The last result appears below the expression. Right-click also lets you add a comment to the modifier or delete it.
 
@@ -514,7 +514,7 @@ Sometimes you want to extract items of an array in a round-robin fashion. Use a 
 
 Data:
 
-```json
+```yaml
 [a, b, c]
 ```
 
@@ -532,7 +532,7 @@ Modifier content:
 
 Return of the modifier:
 
-```json
+```
 a // when triggered first time
 b // second time
 c // third time

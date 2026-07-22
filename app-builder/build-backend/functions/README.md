@@ -235,7 +235,7 @@ Extension nodes attach to a function output to process data directly within the 
 
 * **Add**: Click the plus icon (`+`) on an output and select an extension node type. You can attach multiple parallel extension nodes to a single output.
 * **Chain**: Attach an extension node to the output of another extension node to create a multi-step data pipeline.
-* **Delete**: Right-click an extension node and select _Delete_.
+* **Delete**: Right-click an extension node and select Delete.
 
 ## Data binding (connecting to UI)
 
