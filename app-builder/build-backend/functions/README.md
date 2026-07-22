@@ -168,8 +168,9 @@ The trigger determines when a function runs.
 
 * **Data-driven**: Connect a function trigger to an output, modifier, or filter. The default execution mode is update (`on output update`). Click the mode text to switch to change or true.
 * **UI events**: Connect a widget event (such as a button's `on button click`) to the trigger.
-* **App lifecycle**: Right-click the trigger to set execution to `on App Start` or `on App Stop`.
-* **Periodically**: Right-click the trigger to set a recurring execution interval.
+* **App lifecycle**: Right-click the trigger and select App start > once on deploy, or select App stop. The trigger then displays `once when app starts` or `once when app stops`.
+* **Page load and reload**: Right-click the trigger and select App start > once on (re-)load to execute the function whenever a user loads or reloads (refreshes) the App in the browser.
+* **Periodically**: Right-click the trigger and select an interval under App start, from every 0.1s to every 1d.
 * **Page load**: Drag a page from the Page Explorer onto the trigger to execute the function when that page loads.
 * **Manual development**: Click the play icon inside the trigger to run the function manually during development.
 
@@ -182,7 +183,7 @@ The trigger determines when a function runs.
 To process an array item by item:
 
 1. Right-click the trigger.
-2. Select _Process one by one_.
+2. Select Process one by one.
 3. Choose the input containing the target array. The trigger wire changes to a dotted line, indicating that the function executes once for each item in the list.
 
 <details>
