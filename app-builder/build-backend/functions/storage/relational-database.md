@@ -137,6 +137,10 @@ When running inside an Agent, the database disables the automatic `createdAt` an
 Use English and camelCase for table and field names (such as `firstName` or `dateOfBirth`). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the `jsonb` type for JSON data: it is more efficient and allows nested properties in filter expressions.
 {% endhint %}
 
+
+#### Output
+
+Returns the resulting table description: an object with one entry per column.
 #### Examples
 
 **Example 1: Simple table**
@@ -486,11 +490,11 @@ Returns the number of rows added.
 
 ### `upsertRow`
 
-Atomically updates or inserts a row. The function checks whether the row exists and either updates it or creates a new one. By default, the check uses the primary key (`id`). The optional `uniqueKey` parameter lets you check against another business key (such as an email) instead.
+Atomically updates or inserts a row. The function looks for an existing row and either updates it or creates a new one. It identifies the row by the first of these that applies: the `uniqueKey` object, the primary key (`id`) inside `data`, or any unique field present in `data`. If none of them matches an existing row, the function creates one. To key rows on the logged-in user, see [Referencing the current user with $USER](relational-database.md#referencing-the-current-user-with-usduser).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object specifying a unique business key for the existence check.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
 
 #### Examples
 
@@ -509,7 +513,7 @@ age: 36
 
 **Example 2: Upsert using a custom unique key**
 
-Find a user by email. If they exist, update their age; if not, create them:
+Find a user by email. If the user exists, update the age; if not, create the user. Passing `email` inside `data` has the same effect, as long as the field is unique:
 
 ```yaml
 # table
@@ -517,8 +521,9 @@ users
 # data
 name: Jane Doe
 age: 35
-# uniqueKey
-email: 'jane.doe@example.com'
+# options
+uniqueKey:
+  email: 'jane.doe@example.com'
 ```
 
 #### Output
@@ -557,7 +562,7 @@ Updates specific fields of an existing row, identified by the `id` inside the `d
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -598,7 +603,7 @@ The `name` field stayed untouched, but the `theme` key in the JSON is gone.
 
 #### Output
 
-Returns the updated row object. Throws an error if the row is not found.
+Returns the updated row object. Throws an error if the row is not found. Changing the primary key to a value that already exists throws an error naming the conflicting value.
 
 ### `patchRow`
 
@@ -606,7 +611,7 @@ Patches a row with new data by merging nested JSON objects instead of replacing 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The new values. Must contain the <code>id</code> unless using <code>uniqueKey</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -717,6 +722,10 @@ Creates a one-to-many relationship where the child record can exist without a pa
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>posts</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional PascalCase string (such as <code>Owner</code>) to create a distinct relationship.</td><td>string</td></tr></tbody></table>
 
+#### Output
+
+Returns `true` when the relationship is created.
+
 ### `mandatorilyHasOne`
 
 Creates a one-to-many relationship where the child record cannot exist without a parent. This adds a non-nullable foreign key column to the child table. In short: a child must have exactly one parent, a parent may have many children.
@@ -725,6 +734,10 @@ Creates a one-to-many relationship where the child record cannot exist without a
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>employees</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>companies</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional PascalCase string (such as <code>Manager</code>) to create a distinct relationship.</td><td>string</td></tr></tbody></table>
 
+#### Output
+
+Returns `true` when the relationship is created.
+
 ### `optionallyHasMany`
 
 Creates a many-to-many relationship between two tables. This automatically generates a hidden junction table to manage the associations. In short: a child can have many parents, a parent can have many children.
@@ -732,6 +745,10 @@ Creates a many-to-many relationship between two tables. This automatically gener
 #### Parameters
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The first table in the relationship.</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The second table in the relationship.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the relationship is created.
 
 ### `associateRow`
 
@@ -1144,11 +1161,11 @@ These functions create and alter tables on the fly. Use them for rapid prototypi
 
 ### `autoUpsertRow`
 
-Upserts a row. If the table or columns do not exist, the function creates them automatically based on the provided data.
+Upserts a row. If the table or columns do not exist, the function creates them automatically based on the provided data. To key rows on the logged-in user, see [Referencing the current user with $USER](relational-database.md#referencing-the-current-user-with-usduser).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>uniqueKey</code></td><td>An optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -1160,7 +1177,7 @@ Bulk-inserts data. Like `autoUpsertRow`, it creates or alters the table schema a
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of data objects to insert. The schema is derived from the first object.</td><td>array</td></tr><tr><td><code>uniqueKey</code></td><td>An optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>An array of data objects to insert. The schema is derived from the first object.</td><td>array</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional unique key for the existence check.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -1180,7 +1197,7 @@ Raw SQL can modify or delete database schemas and records. Run custom scripts wi
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The SQL string containing <code>{{double.curly.braces}}</code> placeholders.</td><td>string</td></tr><tr><td><code>variables</code></td><td></td><td>The object containing the data for the placeholders. Nested values are addressed with dot notation.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>type</code></td><td>Forces a specific query type (such as <code>SELECT</code>, <code>UPDATE</code>, or <code>INSERT</code>).</td><td>string</td></tr><tr><td></td><td><code>locale</code></td><td>Formats dates and times in the result using local representation (such as <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>).</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>).</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The SQL string containing <code>{{double.curly.braces}}</code> placeholders.</td><td>string</td></tr><tr><td><code>variables</code></td><td></td><td>The object containing the data for the placeholders. Nested values are addressed with dot notation.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>type</code></td><td>Forces a specific query type (such as <code>SELECT</code>, <code>UPDATE</code>, or <code>INSERT</code>). If omitted, the function derives the type from the statement.</td><td>string</td></tr><tr><td></td><td><code>locale</code></td><td>Formats dates and times in the result using local representation (such as <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>).</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>).</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -1202,7 +1219,7 @@ Fills a template string with data from the first record matching a given conditi
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The template string containing placeholders.</td><td>string</td></tr><tr><td><code>condition</code></td><td></td><td>An object mapping table names to their filter conditions.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>locale</code></td><td>The locale for date and time formatting (such as <code>en-US</code> or <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>). Default <code>medium</code>.</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, or <code>short</code>). Default <code>medium</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The template string containing placeholders.</td><td>string</td></tr><tr><td><code>condition</code></td><td></td><td>An object mapping table names to their filter conditions.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>locale</code></td><td>The locale for date and time formatting (such as <code>en-US</code> or <code>de-DE</code>).</td><td>string</td></tr><tr><td></td><td><code>dateStyle</code></td><td>The formatting style for dates (<code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>). Default <code>medium</code>.</td><td>string</td></tr><tr><td></td><td><code>timeStyle</code></td><td>The formatting style for times (<code>full</code>, <code>long</code>, <code>medium</code>, <code>short</code>, or <code>hidden</code>). Default <code>medium</code>.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -1235,6 +1252,10 @@ Registers a callback executed whenever the specified table changes (insert, upda
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table to subscribe to.</td><td>string</td></tr><tr><td><code>handler</code></td><td>The callback evaluated on every change to the table.</td><td>callback</td></tr></tbody></table>
 
+#### Callback payload
+
+The callback receives the affected row as an object. Bulk inserts deliver an array of rows.
+
 #### Output
 
 Returns `'subscribed'` to confirm registration.
@@ -1253,5 +1274,19 @@ The following functions are maintained for backward compatibility. Use their rec
 ### Referencing the current user with $USER
 
 The `$USER` variable references the authenticated user of your App. Define the username as a unique key (type `uniquestring`) when creating the table to allow [`upsertRow`](relational-database.md#upsertrow) to update and insert rows based on that unique key.
+
+Pass the variable inside `uniqueKey` in the `options` input box. The key name matches the column you defined as unique:
+
+```yaml
+# table
+preferences
+# data
+theme: dark
+# options
+uniqueKey:
+  username: $USER
+```
+
+The same syntax applies to [`updateRow`](relational-database.md#updaterow), [`patchRow`](relational-database.md#patchrow), and [`autoUpsertRow`](relational-database.md#autoupsertrow).
 
 <div align="center"><figure><img src="../../../../.gitbook/assets/relationdat.png" alt=""><figcaption><p>$USER in combination with the upsertRow function</p></figcaption></figure></div>
