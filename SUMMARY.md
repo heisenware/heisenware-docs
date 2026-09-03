@@ -86,6 +86,7 @@
   * [Agents](app-builder/build-backend/agents/README.md)
     * [Native Agent](app-builder/build-backend/agents/native-agent.md)
     * [Docker Agent](app-builder/build-backend/agents/docker-agent.md)
+    * [MCP Server](app-builder/build-backend/agents/mcp-server.md)
     * [LXC Agent (Insys)](app-builder/build-backend/agents/lxc-agent-insys.md)
   * [File Explorer](app-builder/build-backend/file-explorer.md)
 * [Build frontend](app-builder/build-frontend/README.md)
