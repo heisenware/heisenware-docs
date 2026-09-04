@@ -76,12 +76,22 @@ For read-only access append `"--read-only"` to `args`.
 
 Any other MCP client is configured the same way: the command, its arguments and the four variables.
 
+## Start every session with the platform law
+
+The tools describe themselves, but building a good app on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The embedded assistant in the App Builder knows these rules by heart. Give them to your own agent as the first thing in a session:
+
+* **Claude Code**: type `/mcp__heisenware__platform-law` as your first message. The server offers the law as a prompt, and Claude Code turns it into that slash command.
+* **Claude Desktop**: open the attachment menu (**+**) in the chat, pick the `heisenware` server and its `platform-law` prompt.
+* **Any other client**: read the resource `heisenware://law/platform-law` if the client supports resources, or paste the text of the law into your first message.
+
+The server also tells every client about the law in its connection instructions, so a capable agent reads it by itself. Widget contracts are available the same way, as resources named `heisenware://widgets/<type>/manifest`.
+
 ## Checking the connection
 
 On startup the server prints one line to its error output, which your client shows in its MCP log:
 
 ```
-heisenware-mcp 93.0.0: connected to my-company.default as agentRunner via mqtts://... - platform v93-server, 60 tools, read-write
+heisenware-mcp 93.0.0: connected to my-company.default as agentRunner via mqtts://... - platform v93-server, 60 tools, read-write, law served as prompt + resource
 ```
 
 A version mismatch between the package and the platform is reported as a warning. Download the package your platform serves to resolve it.
@@ -94,7 +104,13 @@ A version mismatch between the package and the platform is reported as a warning
 npx playwright-core install chromium
 ```
 
-Without it, both tools stay listed and answer with this instruction. Screenshots of apps whose access mode requires a login are not available on this surface yet: the integration credential can connect to the workspace, but it cannot sign in to the app as a user. Public apps render fine.
+Without it, both tools stay listed and answer with this instruction.
+
+{% hint style="warning" %}
+#### Screenshots show geometry, not live values yet
+
+`layout_lint` works fully. `screenshot` currently renders the page without the widgets' live values: the app player signs in as a user, and an integration credential is not a user. The embedded assistant in the App Builder does not have this limitation. Until a member login is available on this surface, verify values with `read_value`.
+{% endhint %}
 
 {% hint style="info" %}
 #### Which tools are there?
