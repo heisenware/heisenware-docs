@@ -6,7 +6,7 @@ The Heisenware MCP server lets you drive the platform from **your own AI agent**
 
 * **Bring your own agent**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an Agent uses. Your AI client talks to the server over stdio.
 * **Your integration's authority**: the connector is an [integration](../../../app-manager/inbound-integrations.md) of your workspace and can do exactly what that integration is allowed to do — nothing more. Deactivate or delete it in the App Manager and the connector stops.
-* **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `release_app`) only run with an explicit `confirm: true` that your agent has to ask you for. A `--read-only` mode exposes no mutating tool at all.
+* **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `deploy_app`) only run with an explicit `confirm: true` that your agent has to ask you for. `deploy_app` is the builder's Deploy button: it tags a version and the platform brings the production backend up within about a minute; `test_app` is the Test button and starts nothing in production. A `--read-only` mode exposes no mutating tool at all.
 * **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `npx` keeps the file after the first run, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
 
 ## Getting your connector
