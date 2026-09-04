@@ -60,7 +60,7 @@ claude mcp add heisenware \
 
 The download link looks like `https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-<version>.tgz?t=<ticket>`.
 
-`--no-audit` matters: without it npm asks the public registry for a security report before the first start, which can take a minute or more; with it the first start takes a few seconds and every later one about one.
+The package is self-contained: it carries its dependencies, so the first start needs no access to the npm registry and works on-premise without internet. `--no-audit` keeps npm from asking the public registry for a security report anyway; the first start takes a few seconds, every later one about one.
 
 `claude mcp list` should now show `heisenware` as connected. Then, in every session:
 
