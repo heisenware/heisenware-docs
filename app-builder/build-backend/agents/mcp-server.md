@@ -5,24 +5,32 @@ The Heisenware MCP server lets you drive the platform from **your own AI agent**
 ## How it works
 
 * **Bring your own agent**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an Agent uses. Your AI client talks to the server over stdio.
-* **Your integration's authority**: the server logs in as a [VRPC integration](../../../app-manager/inbound-integrations.md#vrpc-client). It can do exactly what that integration is allowed to do — nothing more.
+* **Your integration's authority**: the connector is an [integration](../../../app-manager/inbound-integrations.md) of your workspace and can do exactly what that integration is allowed to do — nothing more. Deactivate or delete it in the App Manager and the connector stops.
 * **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `release_app`) only run with an explicit `confirm: true` that your agent has to ask you for. A `--read-only` mode exposes no mutating tool at all.
 * **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `npx` keeps the file after the first run, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
 
-## Retrieving credentials
+## Getting your connector
 
-Create a [VRPC integration](../../../app-manager/inbound-integrations.md#vrpc-client) in the App Manager's Integrations panel. Its username and password are the `HW_USERNAME` and `HW_PASSWORD` below.
+Open the [Integrations panel](../../../app-manager/inbound-integrations.md) of the App Manager and add an **MCP connector**. Give it a name (it logs in under that name) and tick _read-only_ if it is meant for production support. The platform builds a package with the credentials inside and shows it right away; later, click the package on the integration's row. The view gives you:
 
-## Configuration
+* the `claude mcp add` line for Claude Code,
+* the JSON block for Claude Desktop,
+* the download link itself, to copy or to download, for any other client.
 
-The server reads the same four variables as the [Docker Agent](docker-agent.md):
+The link carries an access ticket valid for twelve hours. `npx` keeps the package after the first run, so an expired link only matters on a new machine; open the view again for a fresh one. Changing the integration's password builds the package again; deleting the integration deletes the package and stops the connector at its next login.
+
+Nothing else is needed: no variables, no npm registry (the package carries its dependencies), no installation on your side beyond Node.js 18 or newer.
+
+## Configuration by hand (advanced)
+
+For CI or a checkout of the platform, the server also reads the same four variables as the [Docker Agent](docker-agent.md); they win over the baked-in configuration:
 
 | Variable      | Value                                                        |
 | ------------- | ------------------------------------------------------------ |
 | `HW_DOMAIN`   | `<account>.<workspace>`, e.g. `my-company.default`           |
 | `HW_BROKER`   | `mqtts://<account>.heisenware.cloud:8883`                    |
-| `HW_USERNAME` | username of the VRPC integration                             |
-| `HW_PASSWORD` | password of the VRPC integration                             |
+| `HW_USERNAME` | username of a VRPC integration                               |
+| `HW_PASSWORD` | its password                                                 |
 
 Optional:
 
@@ -47,18 +55,23 @@ The server also points every client at the law in its connection instructions, s
 
 ## Claude Code
 
-Register the server once:
+Register the server once with the line from the executable's view in the App Manager; it looks like this:
 
 ```bash
-claude mcp add heisenware \
-  -e HW_DOMAIN=my-company.default \
-  -e HW_BROKER=mqtts://my-company.heisenware.cloud:8883 \
-  -e HW_USERNAME=agentRunner \
-  -e HW_PASSWORD=secret \
-  -- npx -y --no-audit "<download link from the App Manager>"
+claude mcp add --scope user heisenware -- npx -y --no-audit "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>"
 ```
 
-The download link looks like `https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-<version>.tgz?t=<ticket>`.
+`--scope user` registers the server for you in every folder. Without it, Claude Code binds the server to the folder the line was run in, and a session started elsewhere does not see it.
+
+Claude Code refuses a name that is already registered (`MCP server heisenware already exists`), for example from an earlier link that has since expired. Remove the old entry and register again:
+
+```bash
+claude mcp remove --scope user heisenware
+```
+
+`claude mcp list` shows what is registered.
+
+Then start a **new** session: Claude Code connects its servers when a session starts, and the package takes about ten seconds to start the first time. `/mcp` inside the session shows the server as connected; from then on the law is available as the command `/mcp__heisenware__platform-law` (the `/` menu lists it as `/heisenware:platform-law (MCP)`).
 
 The package is self-contained: it carries its dependencies, so the first start needs no access to the npm registry and works on-premise without internet. `--no-audit` keeps npm from asking the public registry for a security report anyway; the first start takes a few seconds, every later one about one.
 
@@ -69,7 +82,7 @@ The package is self-contained: it carries its dependencies, so the first start n
 
 ## Claude Desktop
 
-Add the server to `claude_desktop_config.json`:
+Add the block from the Connect dialog to `claude_desktop_config.json`:
 
 ```json
 {
@@ -79,24 +92,18 @@ Add the server to `claude_desktop_config.json`:
       "args": [
         "-y",
         "--no-audit",
-        "<download link from the App Manager>"
-      ],
-      "env": {
-        "HW_DOMAIN": "my-company.default",
-        "HW_BROKER": "mqtts://my-company.heisenware.cloud:8883",
-        "HW_USERNAME": "agentRunner",
-        "HW_PASSWORD": "secret"
-      }
+        "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>"
+      ]
     }
   }
 }
 ```
 
-For read-only access append `"--read-only"` to `args`. Then, in every chat: open the attachment menu (**+**), pick the `heisenware` server and its `platform-law` prompt as the first message, and ask.
+A read-only connector is its own integration, ticked _read-only_ when created; no flag needed. Then, in every chat: open the attachment menu (**+**), pick the `heisenware` server and its `platform-law` prompt as the first message, and ask.
 
 ## Other MCP clients
 
-Any other client is configured the same way: the command, its arguments and the four variables. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
+Any other client is configured the same way: `npx -y --no-audit "<download link>"` as the command. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
 
 ## Checking the connection
 
@@ -110,19 +117,13 @@ A version mismatch between the package and the platform is reported as a warning
 
 ## Visual verification
 
-`layout_lint` and `screenshot` render your app in a headless browser on your machine. They need `HW_PUBLIC_HOST` and a local Chromium:
+`layout_lint` and `screenshot` render your app in a headless browser on your machine, signed in as your connector, so a screenshot shows the widgets with their live values. A package built by the App Manager knows your platform's address; all that is needed on your machine is a Chromium:
 
 ```bash
-npx playwright-core install chromium
+npx playwright-core install --with-deps chromium
 ```
 
-Without it, both tools stay listed and answer with this instruction.
-
-{% hint style="warning" %}
-#### Screenshots show geometry, not live values yet
-
-`layout_lint` works fully. `screenshot` currently renders the page without the widgets' live values: the app player signs in as a user, and an integration credential is not a user. The embedded assistant in the App Builder does not have this limitation. Until a member login is available on this surface, verify values with `read_value`.
-{% endhint %}
+On Linux the `--with-deps` part installs system libraries through the package manager and needs root, so run it with `sudo` there; on macOS and Windows it needs nothing more. Without a working Chromium, both tools stay listed and answer with this instruction — run the line yourself rather than letting the agent improvise around missing libraries.
 
 {% hint style="info" %}
 #### Which tools are there?
