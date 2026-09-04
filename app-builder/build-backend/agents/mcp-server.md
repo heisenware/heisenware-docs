@@ -7,7 +7,7 @@ The Heisenware MCP server lets you drive the platform from **your own AI agent**
 * **Bring your own agent**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an Agent uses. Your AI client talks to the server over stdio.
 * **Your integration's authority**: the server logs in as a [VRPC integration](../../../app-manager/inbound-integrations.md#vrpc-client). It can do exactly what that integration is allowed to do — nothing more.
 * **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `release_app`) only run with an explicit `confirm: true` that your agent has to ask you for. A `--read-only` mode exposes no mutating tool at all.
-* **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The file is `https://<host>/<domain>/resources/download/mcp/heisenware-mcp-<version>.tgz`; the App Manager shows the version your platform runs. Register that exact file, not the `heisenware-mcp-latest.tgz` next to it: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
+* **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `npx` keeps the file after the first run, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
 
 ## Retrieving credentials
 
@@ -55,8 +55,10 @@ claude mcp add heisenware \
   -e HW_BROKER=mqtts://my-company.heisenware.cloud:8883 \
   -e HW_USERNAME=agentRunner \
   -e HW_PASSWORD=secret \
-  -- npx -y --no-audit https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-<version>.tgz
+  -- npx -y --no-audit "<download link from the App Manager>"
 ```
+
+The download link looks like `https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-<version>.tgz?t=<ticket>`.
 
 `--no-audit` matters: without it npm asks the public registry for a security report before the first start, which can take a minute or more; with it the first start takes a few seconds and every later one about one.
 
@@ -77,7 +79,7 @@ Add the server to `claude_desktop_config.json`:
       "args": [
         "-y",
         "--no-audit",
-        "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-<version>.tgz"
+        "<download link from the App Manager>"
       ],
       "env": {
         "HW_DOMAIN": "my-company.default",
