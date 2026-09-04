@@ -6,7 +6,7 @@ Retrieval-Augmented Generation (RAG) pairs a prompt with relevant content retrie
 #### Environment configuration requirement
 Provide a valid `OPENAI_API_KEY` as environment parameter when launching this module.
 
-![](<../../../../../.gitbook/assets/image (43).png>)
+![](<../../../../.gitbook/assets/image (43).png>)
 {% endhint %}
 
 The RAG AI extension bundles two classes: `KnowledgeBase` and `ChatWithData`. You first populate a knowledge store using `KnowledgeBase`, then a `ChatWithData` instance uses that store to answer questions.
