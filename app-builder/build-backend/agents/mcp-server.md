@@ -35,7 +35,19 @@ Optional:
 
 Flag: `--read-only` — production-support mode. No mutating tool is offered and live values cannot be read.
 
+## The platform law comes first
+
+The tools describe themselves, but building a good app on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The embedded assistant in the App Builder knows these rules by heart. Your own agent gets them from the server as the **platform law**, and the first message of every session should load it. The server offers the law three ways:
+
+* as a **prompt** named `platform-law` (Claude Code turns it into the slash command `/mcp__heisenware__platform-law`, Claude Desktop lists it in the attachment menu),
+* as the **resource** `heisenware://law/platform-law`, for clients that read resources,
+* as plain text you can paste into your first message, for clients that support neither.
+
+The server also points every client at the law in its connection instructions, so a capable agent reads it by itself. Widget contracts are available the same way, as resources named `heisenware://widgets/<type>/manifest`.
+
 ## Claude Code
+
+Register the server once:
 
 ```bash
 claude mcp add heisenware \
@@ -46,7 +58,10 @@ claude mcp add heisenware \
   -- npx -y https://my-company.heisenware.cloud/my-company.default/resources/download/native-agents/heisenware-mcp-<version>.tgz
 ```
 
-Start a session and ask, for example: _"List my apps and describe the one called Dashboard."_ The tools appear as `mcp__heisenware__<tool>`.
+`claude mcp list` should now show `heisenware` as connected. Then, in every session:
+
+1. Make `/mcp__heisenware__platform-law` your first message. It loads the law.
+2. Ask in your own words, for example: _"List my apps and describe the one called Dashboard."_ The tools appear as `mcp__heisenware__<tool>`.
 
 ## Claude Desktop
 
@@ -72,19 +87,11 @@ Add the server to `claude_desktop_config.json`:
 }
 ```
 
-For read-only access append `"--read-only"` to `args`.
+For read-only access append `"--read-only"` to `args`. Then, in every chat: open the attachment menu (**+**), pick the `heisenware` server and its `platform-law` prompt as the first message, and ask.
 
-Any other MCP client is configured the same way: the command, its arguments and the four variables.
+## Other MCP clients
 
-## Start every session with the platform law
-
-The tools describe themselves, but building a good app on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The embedded assistant in the App Builder knows these rules by heart. Give them to your own agent as the first thing in a session:
-
-* **Claude Code**: type `/mcp__heisenware__platform-law` as your first message. The server offers the law as a prompt, and Claude Code turns it into that slash command.
-* **Claude Desktop**: open the attachment menu (**+**) in the chat, pick the `heisenware` server and its `platform-law` prompt.
-* **Any other client**: read the resource `heisenware://law/platform-law` if the client supports resources, or paste the text of the law into your first message.
-
-The server also tells every client about the law in its connection instructions, so a capable agent reads it by itself. Widget contracts are available the same way, as resources named `heisenware://widgets/<type>/manifest`.
+Any other client is configured the same way: the command, its arguments and the four variables. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
 
 ## Checking the connection
 
