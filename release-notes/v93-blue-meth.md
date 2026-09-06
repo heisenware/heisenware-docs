@@ -4,7 +4,7 @@ description: Unreleased
 
 # v93 — Blue Meth
 
-<div align="left"><figure><img src="../.gitbook/assets/v93-blue-meth.png" alt="" width="375"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../.gitbook/assets/v93-blue-meth.webp" alt="" width="375"><figcaption></figcaption></figure></div>
 
 ## Features
 
