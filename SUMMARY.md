@@ -2,6 +2,7 @@
 
 * [Welcome](README.md)
 * [Release notes](release-notes/README.md)
+  * [v93 — Blue Meth](release-notes/v93-blue-meth.md)
   * [v92 — Hotel](release-notes/v92-hotel.md)
   * [v91 — Worth It](release-notes/v91-worth-it.md)
   * [v90 — Grouped periodically](release-notes/v90-grouped-periodically.md)
@@ -87,6 +88,7 @@
     * [Native Agent](app-builder/build-backend/agents/native-agent.md)
     * [Docker Agent](app-builder/build-backend/agents/docker-agent.md)
     * [MCP Server](app-builder/build-backend/agents/mcp-server.md)
+      * [Claude Code cheat sheet](app-builder/build-backend/agents/mcp-cheat-sheet.md)
     * [LXC Agent (Insys)](app-builder/build-backend/agents/lxc-agent-insys.md)
   * [File Explorer](app-builder/build-backend/file-explorer.md)
 * [Build frontend](app-builder/build-frontend/README.md)

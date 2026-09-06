@@ -55,6 +55,8 @@ The server also points every client at the law in its connection instructions, s
 
 ## Claude Code
 
+The terminal commands around the connector - register, check, approve tools, replace, repair - are collected on the [Claude Code cheat sheet](mcp-cheat-sheet.md).
+
 Register the server once with the line from the executable's view in the App Manager; it looks like this:
 
 ```bash
