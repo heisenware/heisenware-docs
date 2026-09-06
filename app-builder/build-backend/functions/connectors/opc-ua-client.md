@@ -5,7 +5,7 @@ description: >-
 
 # OPC UA client
 
-The OPC UA client connector (`OpcuaClient`) communicates with OPC UA servers. It manages secure connections, browses the server's address space, reads and writes variables, calls methods, monitors data for changes, and transfers files. 
+The OPC UA client connector (`OpcuaClient`) communicates with OPC UA servers. It manages secure connections, browses the server's address space, reads and writes variables, calls methods, monitors single nodes or whole parameter sets for changes, and transfers files.
 
 This connector requires [instance creation](./#instance-creation) before you can manage the connection and session with a server. For secure connections, generate certificates using `createCertificates`.
 
@@ -51,7 +51,7 @@ Manage this process using `createCertificates` and `addServerCertificate`.
 
 The location of the `pki` folder depends on where the client runs:
 
-* **Agent**: The folder resides in the same directory as your Agent executable.
+* **Agent**: The folder resides in the directory the Agent is started from, which is the directory of the executable when you start it from there.
 * **Platform**: The folder resides under `/shared/certificates`. Click the refresh icon in the File Explorer to view it.
 {% endhint %}
 
@@ -356,7 +356,7 @@ Returns an array of objects representing each node found.
 
 ### `readNode`
 
-Reads all attributes of an OPC UA node.
+Reads the value of an OPC UA node as a full data value: the value with its data type, the status code, and the timestamps.
 
 #### Parameters
 
@@ -427,7 +427,7 @@ ns=2;s=Demo.Dynamic.Int32
 
 ### `writeVariable`
 
-Writes a new value to a server variable. Converts the value to the required OPC UA data type before writing. If the variable is read-only, this function throws an error.
+Writes a new value to a server variable. Converts the value to the variable's OPC UA data type before writing; enumerations and other custom data types are written as their built-in base type. If the variable is read-only or holds a structured value, this function throws an error.
 
 #### Parameters
 
@@ -470,19 +470,27 @@ ns=2;s=Demo.Methods.Multiply
 
 ## Monitoring
 
+Monitoring subscribes to changes on the server and delivers them to a callback. `monitorNode` and `monitorVariable` accept a single address or a list of addresses. A list is registered with a single server request (split only where the server limits the number of items per request), so a machine's whole parameter set fits into one block, and every change of a listed node arrives tagged with the address it belongs to.
+
+{% hint style="info" %}
+Monitoring a node that is already monitored reuses the existing subscription and never registers the callback twice, so you can extend a list and run the block again. Nodes that are already monitored keep their original options.
+{% endhint %}
+
 ### `monitorNode`
 
-Subscribes to changes of an OPC UA node. Triggers the callback on every change.
+Subscribes to changes of one or many OPC UA nodes. Triggers the callback on every change.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. Receives a JSON object containing the variable's <code>dataType</code> and <code>value</code>.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the node, or a list of them.</td><td>string or array</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. For a single address it receives a JSON object containing the node's <code>dataType</code> and <code>value</code>. For a list it receives <code>{ address, nodeId, value }</code>, where <code>value</code> is that object and <code>address</code> is the entry of your list the change belongs to.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns the resolved `nodeId` of the monitored item. Use this ID with `stopMonitor` to terminate monitoring.
+Returns the resolved `nodeId`, or for a list the `nodeId`s in the order of the list. Use them with `stopMonitor` to terminate monitoring. A list is all-or-nothing: if an address does not resolve or the server refuses a node, nothing is monitored and the error names every failing address.
 
-#### Example
+#### Examples
+
+**Example 1: Monitor a single node**
 
 ```yaml
 # address
@@ -491,21 +499,47 @@ ns=2;s=Demo.Dynamic.UInt16
 <callback>
 # options
 samplingInterval: 5000
+```
+
+**Example 2: Monitor a list of nodes**
+
+```yaml
+# address
+- ns=2;s=Demo.Dynamic.UInt16
+- ns=2;s=Demo.Dynamic.Int32
+- /0:Objects/2:Demo/2:Dynamic/2:Double
+# listener
+<callback>
+```
+
+Every change then reaches the callback as one object:
+
+```json
+{
+  "address": "/0:Objects/2:Demo/2:Dynamic/2:Double",
+  "nodeId": "ns=2;s=Demo.Dynamic.Double",
+  "value": {
+    "dataType": "Double",
+    "value": 3.14
+  }
+}
 ```
 
 ### `monitorVariable`
 
-Subscribes to value changes of a variable. Triggers the callback with the new value on every change.
+Subscribes to value changes of one or many variables. Triggers the callback with the new value on every change.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the variable.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. Receives the raw value of the variable.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the variable, or a list of them.</td><td>string or array</td></tr><tr><td><code>listener</code></td><td></td><td>Callback evaluated on every change. For a single address it receives the raw value of the variable. For a list it receives <code>{ address, nodeId, value }</code>, where <code>value</code> is the raw value and <code>address</code> is the entry of your list the change belongs to.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>samplingInterval</code></td><td>How often the server checks for changes, in milliseconds. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>Maximum number of queued notifications on the server. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>discardOldest</code></td><td>If <code>true</code>, drops the oldest notification when the queue is full. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
-Returns the resolved `nodeId` of the monitored item. Use this ID with `stopMonitor` to terminate monitoring.
+Returns the resolved `nodeId`, or for a list the `nodeId`s in the order of the list. Use them with `stopMonitor` to terminate monitoring. A list is all-or-nothing: if an address does not resolve or the server refuses a node, nothing is monitored and the error names every failing address.
 
-#### Example
+#### Examples
+
+**Example 1: Monitor a single variable**
 
 ```yaml
 # address
@@ -516,23 +550,56 @@ ns=2;s=Demo.Dynamic.UInt16
 samplingInterval: 5000
 ```
 
+**Example 2: Monitor a machine's parameter set**
+
+```yaml
+# address
+- ns=2;s=Demo.Dynamic.UInt16
+- ns=2;s=Demo.Dynamic.Int32
+- /0:Objects/2:Demo/2:Dynamic/2:Double
+# listener
+<callback>
+# options
+samplingInterval: 500
+```
+
+Every change then reaches the callback as one object, ready to be routed by `nodeId` or `address`:
+
+```json
+{
+  "address": "ns=2;s=Demo.Dynamic.Int32",
+  "nodeId": "ns=2;s=Demo.Dynamic.Int32",
+  "value": 42
+}
+```
+
 ### `stopMonitor`
 
-Stops an active subscription for a monitored item.
+Stops monitoring one or many items. Accepts whatever `monitorNode` and `monitorVariable` accept or return: `nodeId`s, browse paths, or a list of them. Items that are not monitored are ignored.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nodeId</code></td><td>The <code>nodeId</code> returned by <code>monitorNode</code> or <code>monitorVariable</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the item, or a list of them.</td><td>string or array</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` when the subscription terminates successfully. Throws an error on failure.
+Returns `true` once the items are no longer monitored.
 
-#### Example
+#### Examples
+
+**Example 1: Stop a single item**
 
 ```yaml
-# nodeId
+# address
 ns=2;s=Demo.Dynamic.UInt16
+```
+
+**Example 2: Stop a list of items**
+
+```yaml
+# address
+- ns=2;s=Demo.Dynamic.UInt16
+- ns=2;s=Demo.Dynamic.Int32
 ```
 
 ## File transfer
