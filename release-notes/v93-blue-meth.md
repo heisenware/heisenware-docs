@@ -66,6 +66,7 @@ description: Unreleased
 * The experimental assistant and its activation switch are gone; the new assistant is on for every member.
 * Removed the widget import/export action from the App Builder.
 * Self-hosted installations: `HW_AUTH_CLIENT_TOKEN` is now `HW_PLATFORM_PUBLISHABLE_KEY`, and the assistant reads `HW_ANTHROPIC_API_KEY`.
+* [**On-premise**](../tutorials/on-premise-installation.md) **installations**: release packages no longer carry secrets in `docker-compose.yml`; they live in `.env`, and the package ships `start.sh`, the same front door every other installation mode has: it generates missing secrets, validates, and starts. The installer migrates an existing v92 installation's secrets on the way ([upgrade guide](../tutorials/upgrading-from-v92-to-v93.md)), the broker now carries the platform's API key, and the auth service keeps its client cache on a named volume.
 
 ## Breaking changes
 

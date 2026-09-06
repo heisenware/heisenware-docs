@@ -126,19 +126,21 @@ Run the installer script and pass the application package as an argument:
 ./install.sh heisenware.tar.gz
 ```
 
-The script guides you through the process with a series of prompts. It unpacks the necessary files, imports the Docker images, and configures your environment.
+The script guides you through the process with a series of prompts. It unpacks the necessary files, imports the Docker images, configures your environment, and starts the platform.
+
+The platform keeps its secrets in a file named `.env` next to `docker-compose.yml`, readable by its owner only. The installer creates and maintains it; you never need to edit it for a standard installation. Keep it: a backup without it cannot be restored on another machine (the installer's own backups include it).
 {% endstep %}
 
 {% step %}
 #### Start the platform
 
-Start the platform services in the background:
+The installer starts the platform when it finishes. To start it again later, for example after a reboot, run the platform's front door from your installation directory:
 
 ```bash
-docker compose up -d
+./start.sh
 ```
 
-It may take a few minutes for all system services to initialize during the first startup.
+It checks every configuration value the platform needs, generates internal secrets that are missing, and then starts the services in the background. `./start.sh status` shows the same report without starting anything. It may take a few minutes for all system services to initialize during the first startup.
 
 {% hint style="info" %}
 #### Platform access and initial setup
@@ -161,7 +163,11 @@ The update process is safe and preserves your existing data. When a new version 
     ./install.sh heisenware.tar.gz
     ```
 
-The script automatically detects your existing installation and runs in update mode.
+The script automatically detects your existing installation and runs in update mode, and starts the new version when it is done. Coming from a version before v93, the update also moves your secrets out of the old `docker-compose.yml` into `.env` — see [Upgrading from v92 to v93](upgrading-from-v92-to-v93.md).
+
+{% hint style="info" %}
+Always use the latest `install.sh` (it is not tied to a platform version) together with the release package you were given.
+{% endhint %}
 
 #### Automatic backup
 
@@ -177,11 +183,11 @@ If an update fails or causes unexpected issues, you can roll back your system to
     ```bash
     ./install.sh backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
     ```
-3. The script enters restore mode. Confirm the prompt to stop the platform and overwrite the current data with the backup contents.
+3. The script enters restore mode. Confirm the prompt to stop the platform and overwrite the current data with the backup contents. The backup carries the `docker-compose.yml` and the `.env` of its time, so data, version and secrets roll back together.
 4.  Restart the platform services:
 
     ```bash
-    docker compose up -d
+    ./start.sh
     ```
 
 ## Basic application management
@@ -210,8 +216,10 @@ Execute these commands from your installation directory to manage your on-premis
 *   **Start the platform:**
 
     ```bash
-    docker compose up -d
+    ./start.sh
     ```
+
+    _`./start.sh status` shows what the platform needs and what is set, without starting anything._
 *   **View live logs for all services:**
 
     ```bash
