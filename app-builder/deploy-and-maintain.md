@@ -34,12 +34,12 @@ Tags do not store external files (from the [File Explorer](build-backend/file-ex
 
 * **Manual creation**: Click the tag icon and give your snapshot a name.
 * **Auto-tags**: Heisenware automatically creates a tag every time you deploy an App.
-* **Import/export**: Use the Download and Import icons in the tag history to move `.hwt` files between your computer and the platform.
+* **Import/export**: Use the Download and Import icons in the tag history to move `.hwt` files between your computer and the platform. An imported file appears as a new tag named after the file; your App does not change until you click that tag and confirm the switch.
 
 {% hint style="info" %}
 #### Recommendation
 
-Before importing, create a new tag of your current App state. This gives you a rollback point if the imported tag isn't what you expected.
+Before switching to an imported tag, create a tag of your current App state. It is your way back if the import isn't what you expected.
 {% endhint %}
 
 ### Video demo
