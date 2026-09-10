@@ -21,6 +21,7 @@ description: Unreleased
 * **New database functions**: The [relational database](../app-builder/build-backend/functions/storage/relational-database.md) gains `dumpDatabase`, `importDatabase`, `duplicateTable`, `getTableRowCount`, and `generateFakeRelationalData`. The [timeseries database](../app-builder/build-backend/functions/storage/timeseries-database.md) gains `deletePoint`, `updatePoint`, `exportAppData`, `importAppData`, `exportMeasurementData`, and `generateFakeInfluxData`; `writePoint` accepts a timestamp, and `read` supports `offset` and `sortDesc`.
 * **OPC UA client monitors parameter sets**: `monitorVariable` and `monitorNode` of the [OPC UA client](../app-builder/build-backend/functions/connectors/opc-ua-client.md) accept a list of addresses. One block subscribes to a machine's whole parameter set with a single server request, and every change arrives tagged with its address and `nodeId`. `stopMonitor` takes the same list.
 * **"All updated" trigger mode**: A [trigger](../app-builder/build-backend/functions/#trigger-sources) with several sources can now wait until every source has delivered, then fire once.
+* **AI usage per account**: The [App Manager](../app-manager/overview.md)'s Plan & Billing page shows what the assistant did for your account and what it costs: this month's tokens and charge, the charge over the last months, and the members who spent it. The assistant is part of your plan and billed by use; every run is booked to the account it ran in, in EUR.
 
 ## Improvements
 
@@ -65,7 +66,7 @@ description: Unreleased
 
 * The experimental assistant and its activation switch are gone; the new assistant is on for every member.
 * Removed the widget import/export action from the App Builder.
-* Self-hosted installations: `HW_AUTH_CLIENT_TOKEN` is now `HW_PLATFORM_PUBLISHABLE_KEY`, and the assistant reads `HW_ANTHROPIC_API_KEY`.
+* Self-hosted installations: `HW_AUTH_CLIENT_TOKEN` is now `HW_PLATFORM_PUBLISHABLE_KEY`, and the assistant reads `HW_ANTHROPIC_API_KEY`. AI usage is priced for accounts by `HW_AI_PRICE_MARGIN` (default `0.2`) and `HW_AI_PRICE_EUR_PER_USD` (default `0.9`); a month keeps the pricing it started with. The assistant keeps a per-account, per-month ledger of its runs on its data volume and re-sends any run the auth service missed at every start; `npm run replay-usage` inside the assistant container does the same on demand.
 * [**On-premise**](../tutorials/on-premise-installation.md) **installations**: release packages no longer carry secrets in `docker-compose.yml`; they live in `.env`, and the package ships `start.sh`, the same front door every other installation mode has: it generates missing secrets, validates, and starts. The installer migrates an existing v92 installation's secrets on the way ([upgrade guide](../tutorials/upgrading-from-v92-to-v93.md)), the broker now carries the platform's API key, and the auth service keeps its client cache on a named volume.
 
 ## Breaking changes
