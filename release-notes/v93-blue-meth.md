@@ -25,6 +25,7 @@ description: Unreleased
 
 ## Improvements
 
+* **Complete `.hwt` bundles**: an exported App now carries the uploaded files it references, so it looks and works the same after [import](../app-builder/deploy-and-maintain.md) on another server. Secrets stay behind, and the import summary lists what still has to be entered.
 * **Section colors**: Tint [sections](../app-builder/build-backend/#grouping-sections) on the flow board from a palette in the section header.
 * **Settings panel overhaul**: Range settings combine a slider with a number input, long tabs fold into collapsible sections, labels use sentence case, and every widget's data tab is *Content* and its appearance tab *Look & feel*. Text and chat widgets get a settings panel.
 * **Automatic colors everywhere**: Every color field, including chart axes and palettes, map markers, kanban, and status lamps, accepts *Automatic* and previews the theme color it resolves to. The color keyword `gray` becomes `auto`; the old keyword keeps working.
