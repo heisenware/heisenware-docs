@@ -199,20 +199,20 @@ Your databases, configurations, and assets persist inside dedicated Docker volum
 {% endhint %}
 
 {% hint style="warning" %}
-#### Dynamic container isolation
+#### Dynamic containers
 
-The platform spawns independent Docker containers at runtime for each active account to ensure process and command isolation. These dynamic containers are not managed by Docker Compose. Running `docker compose down` leaves these account containers running, which causes an inconsistent platform state. Use the shutdown commands listed below instead.
+The platform spawns Docker containers at runtime for each active account (backend, media server, databases) to ensure process and command isolation. They belong to the `heisenware` Compose project as one-off containers, which a plain `docker compose down` skips by Compose's own rules. Stop the platform through `./stop.sh` (below): it takes the services and the account containers down together, including account containers spawned by a platform version before v93, which carry no project labels yet.
 {% endhint %}
 
 Execute these commands from your installation directory to manage your on-premise instance:
 
-*   **Stop the platform:** Run the following command to force-stop and remove all active containers:
+*   **Stop the platform:** stops and removes all platform containers, including the account containers spawned at runtime. Data stays in the volumes:
 
     ```bash
-    docker rm -f $(docker ps -a -q)
+    ./stop.sh
     ```
 
-    _Caution: This stops and removes all containers running on your host machine. Do not run this if you host other Docker-based applications alongside Heisenware._
+    _`./stop.sh --now` skips the grace period and kills the processes outright._
 *   **Start the platform:**
 
     ```bash
