@@ -13,7 +13,7 @@ The chart widget displays data arrays as line, bar, area, scatter, bubble, or fi
 | **Property**    | **Description**                                                                                                                                                                                | **Type**       |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
 | `data`          | An array of data objects or values to plot on the chart. The chart automatically flattens nested objects using a hyphen delimiter (for example, `sensor: { temp: 21 }` becomes `sensor-temp`). | array          |
-| `constantLines` | An array of dynamic constant lines fed from the backend to display indicator lines across matching axis indices.                                                                               | array\<object> |
+| `constantLines` | An array of dynamic constant lines fed from the backend to display indicator lines across matching axis indices. Each line carries `value`, optional `label`, `width`, `dashStyle`, `color`, `displayBehindSeries`, `valueAxisIndex`, and the label placement `labelPosition` (`inside`/`outside`), `labelHorizontalAlignment` (`left`/`center`/`right`) and `labelVerticalAlignment` (`top`/`bottom`). | array\<object> |
 
 #### Automatic configuration
 
@@ -29,7 +29,8 @@ Set the widget's defaults in the settings panel.
 | ---------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | `showTooltips`         | Show value tooltips     | Displays a detailed informational popup when hovering over a data point. Formats dates and numbers automatically based on system locale.             | boolean  |
 | `zoomAndPan`           | Zoom and pan            | Controls chart interactivity. Set to `enabled` (always active), `selectable` (adds an on-chart button to lock scrolling and unlock zoom), or `none`. | string   |
-| `scaleToConstantLines` | Scale to constant lines | Adds an 8% padding margin to the top and bottom of the value scales to prevent constant line labels from clipping.                                   | boolean  |
+| `scaleToConstantLines` | Scale to constant lines | Extends every value axis to include its constant lines (static and bound) and adds an 8% padding margin to the top and bottom of the value scales to prevent constant line labels from clipping. | boolean  |
+| `synchronizeMultiAxes` | Synchronize value axes  | Twin value axes in one pane share tick positions so their grid lines coincide; a range may stretch beyond its data to match (a 0–100 % axis can end at 150 %). Switch off to give each axis its own honest range. | boolean  |
 | `adjustOnZoom`         | Adjust on zoom          | Recalculates the value axis range dynamically when zooming into an argument range.                                                                   | boolean  |
 | `autoHidePointMarkers` | Auto hide point markers | Hides point markers automatically when the density of data points clutters the view.                                                                 | boolean  |
 | `enableCrosshair`      | Enable crosshair        | Displays crosshair tracking lines that follow the user cursor to map intersections on the axes.                                                      | boolean  |
@@ -60,7 +61,7 @@ Configure the value axes for the chart. You can add multiple axes and distribute
 | `inverted`        | Inverted       | Flips the direction of values along the scale.                                                                  | boolean        |
 | `label`           | Label          | Configuration object for axis labels, including `visible`, `fontSize`, `fontWeight`, `fontColor`, and `format`. | object         |
 | `grid`            | Grid and ticks | Configuration object managing major and minor grid lines, line colors, and tick visibility.                     | object         |
-| `constantLines`   | Constant lines | An array of static indicator lines to draw across this axis, supporting custom labels, dash styles, and colors. | array\<object> |
+| `constantLines`   | Constant lines | An array of static indicator lines to draw across this axis, supporting custom labels, dash styles, colors, and label placement (position inside or outside the plot, horizontal and vertical alignment). | array\<object> |
 
 ### Argument axis settings
 
