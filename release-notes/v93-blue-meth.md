@@ -45,6 +45,7 @@ description: Unreleased
 * [**On-premise**](../tutorials/on-premise-installation.md) **rollback**: Backups include the platform version, so a restore rolls back data and version together and warns when old images were pruned.
 
 ## Fixes
+* [**On-premise**](../tutorials/on-premise-installation.md) **backup upload**: `./install.sh upload` sends a backup to a private S3-compatible bucket with nothing but `curl` and `openssl` — the request is presigned locally, the key support hands out is upload-only.
 
 * **Multiple tabs**: Closing or reloading one browser tab no longer silences live data in another tab of the same user; every tab holds its own connection.
 * **Deployed App integrity**: Deleting a page in the App Builder no longer removes widgets of the deployed twin.

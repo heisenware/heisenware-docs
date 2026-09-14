@@ -173,6 +173,22 @@ Always use the latest `install.sh` (it is not tied to a platform version) togeth
 
 Before applying any changes, the script creates a full archive of your platform data and stores it as a timestamped `.tar.gz` file inside the `backup/` directory.
 
+#### Sending a backup to Heisenware
+
+When support asks for a copy of your data, the installer uploads a backup straight from your machine — only `curl` and `openssl` are needed, no client tooling:
+
+```bash
+./install.sh upload
+```
+
+Without a file name the newest archive in `backup/` is sent (one is created first if there is none); name a file to send a specific one. The script asks for one secret — support hands it to you. It is upload-only: it can write into the bucket and nothing else, and the upload lands under a folder named after your machine. To run it unattended, pass the secret as an environment variable:
+
+```bash
+HW_UPLOAD_SECRET_KEY=... ./install.sh upload backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
+```
+
+`HW_UPLOAD_PREFIX` (default: the host name), `HW_UPLOAD_ENDPOINT`, `HW_UPLOAD_ACCESS_KEY`, `HW_UPLOAD_BUCKET` and `HW_UPLOAD_REGION` override the folder, server, key name, bucket and region — only needed when support tells you so.
+
 ## Rollback and restoring a backup
 
 If an update fails or causes unexpected issues, you can roll back your system to a previous backup state.
