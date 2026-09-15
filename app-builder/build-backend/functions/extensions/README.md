@@ -17,7 +17,7 @@ The platform supports two categories of Docker Extensions:
 
 Pre-built modules add advanced capabilities to the platform without manual coding:
 
-<table><thead><tr><th width="220">Extension</th><th>Description</th></tr></thead><tbody><tr><td><a href="industrial-blockchain.md">Industrial blockchain</a></td><td>Provides immutable data logging and audit trails.</td></tr><tr><td><a href="rag-ai.md">RAG AI</a></td><td>Enables Retrieval-Augmented Generation for context-aware AI assistants.</td></tr><tr><td><a href="process-simulations.md">Process simulations</a></td><td>Simulates utilities consumption, CNC machine telemetry, and silo fill levels.</td></tr><tr><td><a href="ogc-sensorthings-api.md">OGC SensorThings API</a></td><td>Manages IoT sensor data via the standardized OGC SensorThings specification.</td></tr></tbody></table>
+<table><thead><tr><th width="220">Extension</th><th>Description</th></tr></thead><tbody><tr><td><a href="industrial-blockchain.md">Industrial blockchain</a></td><td>Provides immutable data logging and audit trails.</td></tr><tr><td><a href="rag-ai.md">RAG AI</a></td><td>Enables Retrieval-Augmented Generation for context-aware AI assistants.</td></tr><tr><td><a href="process-simulations.md">Process simulations</a></td><td>Simulates utilities consumption and CNC machine telemetry.</td></tr><tr><td><a href="ogc-sensorthings-api.md">OGC SensorThings API</a></td><td>Manages IoT sensor data via the standardized OGC SensorThings specification.</td></tr></tbody></table>
 
 Once installed, these extensions run alongside standard platform services, appearing as selectable blocks in the Function Explorer.
 

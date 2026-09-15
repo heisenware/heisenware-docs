@@ -74,3 +74,4 @@ description: Unreleased
 ## Breaking changes
 
 * A quoted `"$USER"` inside modifier or filter expressions no longer expands. Use the bare `$USER` binding instead.
+* The `SiloSimulator` utility class is gone. Create a `SignalSimulator` with the `silo` preset instead; it produces the same draining and refilling `level` signal, deterministically under a seed.
