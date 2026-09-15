@@ -2,7 +2,7 @@
 
 The stopwatch class manages a high-resolution timer to measure time intervals. Start, stop, and reset the timer, or record lap snapshots of the elapsed time without stopping the main timer. Use this class to time operations, track activity, or manage time-based logic.
 
-The class emits events (including `start`, `stop`, `reset`, `tick`, and `lap`) to trigger other functions or flows automatically in your Apps. This class requires an instance, but also provides static utility functions. The code class name is `Stopwatch`.
+The class emits events (`start`, `stop`, `reset`, `tick`, and `lap`) to trigger other functions or flows automatically in your Apps. The tick interval is set when you create the instance; `setTickInterval` changes it at runtime. This class requires an instance, but also provides static utility functions. The code class name is `Stopwatch`.
 
 ## Static functions
 
@@ -72,11 +72,18 @@ Creates a new stopwatch instance initialized in the stopped state with an elapse
 
 #### Parameters
 
-None.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>tickInterval</code></td><td>The time in milliseconds between <code>tick</code> events while running, at least 1. Default 1000.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
 Returns the name of the created instance.
+
+#### Example
+
+```yaml
+# options
+tickInterval: 100
+```
 
 ### `delete`
 
@@ -105,7 +112,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true` when the stopwatch started, `false` when it was running already.
 
 ### `stop`
 
@@ -117,7 +124,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true` when the stopwatch stopped, `false` when it was not running.
 
 ### `reset`
 
@@ -129,11 +136,11 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 ### `lap`
 
-Records the current elapsed time as a lap without stopping the stopwatch and triggers the `lap` event. If the stopwatch is not running, this function does nothing.
+Records the current elapsed time as a lap and triggers the `lap` event. If the stopwatch is not running, this function does nothing.
 
 #### Parameters
 
@@ -141,11 +148,11 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns the lap time in milliseconds, or `null` when the stopwatch is not running.
 
 ### `getElapsedTime`
 
-Returns the total elapsed time in milliseconds. This function works whether the stopwatch is running or stopped.
+Retrieves the total elapsed time, live while the stopwatch runs.
 
 #### Parameters
 
@@ -153,16 +160,11 @@ None.
 
 #### Output
 
-Returns the elapsed time in milliseconds.
-
-Example payload:
-```json
-15320.5
-```
+Returns the elapsed time in milliseconds as a number.
 
 ### `getLaps`
 
-Returns an array of all recorded lap times.
+Retrieves all recorded lap times.
 
 #### Parameters
 
@@ -170,20 +172,11 @@ None.
 
 #### Output
 
-Returns an array of lap times in milliseconds.
-
-Example payload:
-```json
-[
-  5012.3,
-  10050.1,
-  15320.5
-]
-```
+Returns an array of lap times in milliseconds, in recording order.
 
 ### `clearLaps`
 
-Clears all recorded laps. This action does not stop or reset the main timer.
+Clears all recorded laps without stopping or resetting the stopwatch.
 
 #### Parameters
 
@@ -191,11 +184,11 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 ### `isRunning`
 
-Checks whether the stopwatch is running.
+Checks whether the stopwatch is currently running.
 
 #### Parameters
 
@@ -203,11 +196,11 @@ None.
 
 #### Output
 
-Returns `true` if the stopwatch is running, or `false` if it is stopped.
+Returns `true` if running, otherwise `false`.
 
 ### `getState`
 
-Returns the current state of the stopwatch.
+Retrieves the current state of the stopwatch.
 
 #### Parameters
 
@@ -215,32 +208,30 @@ None.
 
 #### Output
 
-Returns `running` if the stopwatch is running, or `stopped` if it is stopped.
+Returns `running` or `stopped`.
 
 ### `setTickInterval`
 
-Sets the update interval for the `tick` event. If the stopwatch is running, the new interval applies immediately.
+Sets the time between `tick` events. If the stopwatch is running, the new interval applies at once.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>intervalMs</code></td><td>The update interval in milliseconds. Invalid values fall back to the default. Default 1000.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>intervalMs</code></td><td>The time in milliseconds between ticks, at least 1.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the interval set as an integer.
 
 #### Example
 
-Emit a `tick` event every half second.
-
 ```yaml
 # intervalMs
-500
+100
 ```
 
 ## Event listeners
 
-These functions let you subscribe callbacks to the stopwatch instance events.
+These functions let you subscribe callbacks to the stopwatch instance events. Every `on` function has an `off` twin that removes exactly the listener given to it and answers `true` when it was subscribed, otherwise `false`.
 
 ### `onStart`
 
@@ -248,7 +239,7 @@ Subscribes to the `start` event. The callback runs whenever you start the stopwa
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the current elapsed time in milliseconds.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>elapsedTime</code>, the elapsed time in milliseconds resumed from.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -260,7 +251,7 @@ Subscribes to the `stop` event. The callback runs whenever you stop the stopwatc
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the final elapsed time in milliseconds.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>elapsedTime</code>, the elapsed time in milliseconds paused at.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -272,7 +263,7 @@ Subscribes to the `reset` event. The callback runs whenever you reset the stopwa
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: none.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: none.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -280,11 +271,11 @@ Returns the string `subscribed`.
 
 ### `onTick`
 
-Subscribes to the `tick` event. This event fires repeatedly at the set interval while the stopwatch is running.
+Subscribes to the `tick` event. The callback runs at every tick interval while the stopwatch is running.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the current elapsed time in milliseconds.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>elapsedTime</code>, the elapsed time in milliseconds.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
@@ -292,19 +283,31 @@ Returns the string `subscribed`.
 
 ### `onLap`
 
-Subscribes to the `lap` event. This event fires when you record a new lap.
+Subscribes to the `lap` event. The callback runs whenever you record a lap.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the current lap time in milliseconds and an array of all lap times.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>lapTime</code>, the lap time in milliseconds, and <code>laps</code>, an array of all laps so far.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
 Returns the string `subscribed`.
 
+### `offStart`, `offStop`, `offReset`, `offTick`, `offLap`
+
+Remove a listener given to the matching `on` function.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the listener was subscribed, otherwise `false`.
+
 ### `removeAllListeners`
 
-Unsubscribes all active listeners from this stopwatch instance.
+Removes every listener from every event of this stopwatch, including those other flows subscribed. Prefer the `off` functions.
 
 #### Parameters
 

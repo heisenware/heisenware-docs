@@ -1,10 +1,10 @@
 # Cron
 
-With cron, you schedule tasks that run automatically at specific times or intervals, defined in the standard cron expression format of the underlying `node-cron` library. This is useful for recurring jobs such as generating daily reports, performing nightly backups, or sending scheduled notifications. The code class name is `Cron`. This class requires an instance to schedule tasks, though it includes a static utility function for verification.
+With cron, you run flows automatically at specific times or intervals, defined in the standard cron expression format. This is useful for recurring jobs such as generating daily reports, performing nightly backups, or sending scheduled notifications. Give the instance its schedule when you create it and tap its `onTick` event: the schedule runs from then on, also after a restart. The code class name is `Cron`. This class requires an instance, though it includes a static utility function for verification.
 
 ## Understanding cron expressions
 
-A cron expression is a string of five or six fields separated by spaces that represents a time schedule. Each field specifies a different unit of time:
+A cron expression is a string of five fields separated by spaces that represents a time schedule; an optional sixth field in front gives seconds (0 - 59). Each field specifies a different unit of time:
 
 ```text
 ┌─────────────── minute (0 - 59)
@@ -63,23 +63,33 @@ Returns `true` if the expression is valid, or `false` if invalid.
 
 ## Instance functions
 
-You must create an instance to use these functions. All functions except `create`, `delete`, and `schedule` require a previously scheduled task.
+You must create an instance to use these functions.
 
 ### `create`
 
-Creates a new, empty cron scheduler instance. The task itself is defined and started using the `schedule` function.
+Creates a cron instance. With an expression, the schedule is set and running from creation on; without one, the instance waits for `schedule`.
 
 #### Parameters
 
-None.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>expression</code></td><td>The cron expression. Omitted leaves the instance unscheduled.</td><td>string</td></tr><tr><td></td><td><code>timezone</code></td><td>The IANA timezone the expression is read in (such as <code>Europe/Berlin</code>). If omitted, the server's local timezone is used.</td><td>string</td></tr><tr><td></td><td><code>noOverlap</code></td><td>Skips a scheduled moment while the previous one is still being handled. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>maxExecutions</code></td><td>The number of moments after which the schedule ends.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns the name of the created instance.
+Returns the name of the created instance. Fails when the expression or the timezone is invalid.
+
+#### Example
+
+Every weekday at 9:00 in Berlin.
+
+```yaml
+# options
+expression: 0 9 * * 1-5
+timezone: Europe/Berlin
+```
 
 ### `delete`
 
-Deletes a cron instance.
+Deletes a cron instance and its schedule.
 
 #### Parameters
 
@@ -96,92 +106,42 @@ Deleting removes the instance configuration.
 
 ### `schedule`
 
-Defines a task and schedules it to run based on a cron expression. The scheduler starts automatically when you call this function.
+Sets the schedule and starts it. A previous schedule is replaced; listeners subscribed through `onTick` stay subscribed.
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th width="150">Input</th>
-      <th width="120">Key</th>
-      <th>Description</th>
-      <th width="100">Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>expression</code></td>
-      <td></td>
-      <td>A valid cron expression string.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td><code>listener</code></td>
-      <td></td>
-      <td>The callback function that executes each time the schedule triggers.</td>
-      <td>callback</td>
-    </tr>
-    <tr>
-      <td><code>options</code></td>
-      <td><code>timezone</code></td>
-      <td>The timezone for the schedule (such as <code>America/New_York</code> or <code>Europe/Berlin</code>). If omitted, the system uses the server's local timezone.</td>
-      <td>string</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>noOverlap</code></td>
-      <td>Prevents the task from starting a new execution while the previous execution is still running. Default false.</td>
-      <td>boolean</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>maxExecutions</code></td>
-      <td>Limits the total number of times the task runs before it is automatically destroyed.</td>
-      <td>integer</td>
-    </tr>
-  </tbody>
-</table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>expression</code></td><td></td><td>A valid cron expression string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>timezone</code></td><td>The IANA timezone the expression is read in.</td><td>string</td></tr><tr><td></td><td><code>noOverlap</code></td><td>Skips a scheduled moment while the previous one is still being handled. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>maxExecutions</code></td><td>The number of moments after which the schedule ends.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns the string `scheduled`.
+Returns the string `scheduled`. Fails when the expression or the timezone is invalid; the old schedule stays.
 
 #### Examples
 
-##### Example 1: Run a task every 15 minutes
+##### Example 1: Every 15 minutes
 
 ```yaml
 # expression
 */15 * * * *
-
-# listener
-<callback>
 ```
 
-##### Example 2: Run a task at 9:00 AM and 5:00 PM every day
+##### Example 2: At 9:00 AM and 5:00 PM every day
 
 ```yaml
 # expression
 0 9,17 * * *
-
-# listener
-<callback>
 ```
 
-##### Example 3: Run a cleanup job at 1:30 AM every Saturday and Sunday
+##### Example 3: A cleanup job at 1:30 AM every Saturday and Sunday
 
 ```yaml
 # expression
 30 1 * * 6,0
-
-# listener
-<callback>
 ```
 
 ### `start`
 
-Starts the task scheduler. You only need to call this if you have previously stopped the scheduler using `stop`, since `schedule` starts the task automatically. This function does nothing if the scheduler is already running.
+Resumes a stopped schedule. This function does nothing if the schedule is running already.
 
 #### Parameters
 
@@ -189,11 +149,11 @@ None.
 
 #### Output
 
-Returns `true`.
+Returns `true`. Fails with `Nothing is scheduled` when there is no schedule.
 
 ### `stop`
 
-Stops the task scheduler. The scheduled task does not run again until you call `start`.
+Pauses the schedule. No moment fires until you call `start`.
 
 #### Parameters
 
@@ -201,11 +161,11 @@ None.
 
 #### Output
 
-Returns `true`.
+Returns `true`. Fails with `Nothing is scheduled` when there is no schedule.
 
 ### `execute`
 
-Manually executes the task's function immediately, outside of its regular schedule. This is useful for testing or triggering on-demand runs.
+Fires the scheduled moment now, outside of the regular schedule. This is useful for testing or on-demand runs.
 
 #### Parameters
 
@@ -213,11 +173,11 @@ None.
 
 #### Output
 
-Returns the return value of the task function.
+Returns `true`. Fails with `Nothing is scheduled` when there is no schedule.
 
 ### `getStatus`
 
-Retrieves the current lifecycle state of the task.
+Retrieves the current state of the schedule.
 
 #### Parameters
 
@@ -226,14 +186,14 @@ None.
 #### Output
 
 Returns a string representing the current state:
-* `stopped`: The scheduler is not running.
-* `idle`: The scheduler is running, but the task is not executing.
-* `running`: The task is actively executing.
-* `destroyed`: The task is permanently removed.
+* `unscheduled`: Nothing is scheduled.
+* `stopped`: The schedule is paused.
+* `idle`: The schedule is running and waiting for the next moment.
+* `running`: A moment is being handled.
 
-### `getNextRun`
+### `getExpression`
 
-Retrieves the next scheduled run time for the task.
+Retrieves the cron expression in force.
 
 #### Parameters
 
@@ -241,16 +201,35 @@ None.
 
 #### Output
 
-Returns a date object representing the next run time, or `null` if the task is stopped or destroyed.
+Returns the expression as a string, or `null` when nothing is scheduled.
+
+### `getNextRun`
+
+Retrieves the next scheduled moment.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns the next moment as an ISO 8601 timestamp, or `null` when the schedule is stopped or nothing is scheduled.
+
+### `getNextRuns`
+
+Retrieves the next scheduled moments.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>count</code></td><td>How many moments to return. Default 5.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns an array of ISO 8601 timestamps, empty when nothing is scheduled.
 
 ### `destroy`
 
-Permanently deactivates the task and cleans up all internal resources. You cannot restart a destroyed task.
-
-{% hint style="danger" %}
-#### Irreversible action
-Destroying a task removes its configuration permanently.
-{% endhint %}
+Ends the schedule. The instance stays and can be scheduled again with `schedule`.
 
 #### Parameters
 
@@ -259,3 +238,29 @@ None.
 #### Output
 
 Returns `true`.
+
+## Event listeners
+
+### `onTick`
+
+Subscribes to the scheduled moments. The callback runs at every moment while the schedule runs, and on `execute`.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>time</code>, the Unix timestamp in milliseconds of the moment, <code>localTime</code>, the moment as ISO text in the schedule's timezone, and <code>expression</code>, the expression that fired.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns the string `subscribed`.
+
+### `offTick`
+
+Removes a listener given to `onTick`.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the listener was subscribed, otherwise `false`.

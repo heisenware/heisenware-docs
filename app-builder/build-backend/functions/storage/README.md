@@ -20,7 +20,10 @@ To connect an external InfluxDB server instead, open the Function Explorer, sele
 
 ## In-memory storage
 
-For temporary data that lives only during a session and does not save to disk, use these lightweight classes:
+For the working memory of your flows, data that lives in the running App and does not save to disk, use these lightweight classes. Each holds one shape of memory and announces every change as an event, so a widget or a flow reacts the moment a value arrives, with no query and no polling:
 
-* [Data store](data-store.md): Simple state management.
-* [Circular buffer](circular-buffer.md): Rolling data, such as the last 100 values for a live chart.
+* [Buffer](buffer.md): A bounded stream, such as the last 100 values for a live chart, sliding and tumbling windows, queues.
+* [Data store](data-store.md): A list of items, addressable by index or condition, shared between Apps by instance name.
+* [Accumulator](accumulator.md): One record assembled from values that arrive separately.
+
+When data must survive a restart or be queried later, it belongs in a database; the in-memory classes are the step before it.

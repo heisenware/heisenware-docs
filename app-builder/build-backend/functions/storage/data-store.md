@@ -1,6 +1,18 @@
 # Data store
 
-The data store class provides an in-memory storage array to manage collections of data items or objects. Add, remove, update, and retrieve data points dynamically within your flows. Data remains in memory only and does not persist to disk. This class requires an instance. The code class name is `DataStore`.
+The data store class keeps an in-memory list of items in insertion order. Address items by position (index), or records — items that are objects — by a `where` condition, and react to every change with `onChange`. A named instance is the data bus between Apps: every App that targets the same instance sees the same list. Data remains in memory only and is gone after a restart. This class requires an instance. The code class name is `DataStore`.
+
+## The `where` condition
+
+`find`, `filter`, `update`, and `remove` select records with a `where` condition: an object of field values. A record matches when every listed field strictly equals the given value; all fields must match (AND). Only top-level fields are compared, there are no operators such as greater-than or pattern matching, and an item that is not an object never matches. `find` answers the first match; `filter`, `update`, and `remove` act on every match. For anything beyond equality, use `toArray` with a [filter](../../extension-nodes/filter.md) or a [modifier](../../extension-nodes/modifier.md), or store the data in a [relational database](relational-database.md).
+
+```yaml
+# where
+status: open
+line: 3
+```
+
+matches every record whose `status` is `open` **and** whose `line` is `3`.
 
 ### `create`
 
@@ -14,19 +26,39 @@ None.
 
 Returns the data store instance.
 
-### `push`
+### `delete`
 
-Adds an item to the end of the data store.
+Removes the data store instance.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item or object to add to the data store.</td><td>any</td></tr></tbody></table>
+None.
 
 #### Output
 
-Returns the new total length of the data store as an integer.
+Returns nothing.
 
-#### Examples
+{% hint style="danger" %}
+#### Permanent data loss
+
+Deleting removes the instance configuration, and all stored data is permanently lost.
+{% endhint %}
+
+## By position
+
+### `pushBack`
+
+Adds an item at the back of the data store.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item or record to add. A missing item is refused.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns the new total number of items as an integer.
+
+#### Example
 
 ```yaml
 # item
@@ -34,9 +66,21 @@ id: 1
 name: First Item
 ```
 
-### `pop`
+### `pushFront`
 
-Removes and returns the last item from the end of the data store.
+Adds an item at the front of the data store.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item or record to add. A missing item is refused.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns the new total number of items as an integer.
+
+### `popBack`
+
+Removes and returns the last item.
 
 #### Parameters
 
@@ -44,23 +88,11 @@ None.
 
 #### Output
 
-Returns the removed item or object.
-
-### `pushFront`
-
-Adds an item to the front of the data store.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item or object to add.</td><td>any</td></tr></tbody></table>
-
-#### Output
-
-Returns the new total length of the data store as an integer.
+Returns the removed item. Fails with `Store is empty` when there is none.
 
 ### `popFront`
 
-Removes and returns the first item from the front of the data store.
+Removes and returns the first item.
 
 #### Parameters
 
@@ -68,68 +100,116 @@ None.
 
 #### Output
 
-Returns the removed item or object.
+Returns the removed item. Fails with `Store is empty` when there is none.
 
 ### `get`
 
-Retrieves the item at a specific zero-based index.
+Retrieves the item at a zero-based position.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to retrieve.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based position of the item.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns the item at the specified index.
+Returns the item at the position. Fails when the index is not an integer between 0 and `size - 1`.
 
 ### `set`
 
-Replaces the value of an item at a specific zero-based index.
+Replaces the item at a zero-based position.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to update.</td><td>integer</td></tr><tr><td><code>value</code></td><td>The new value to assign to the index.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based position of the item to replace.</td><td>integer</td></tr><tr><td><code>item</code></td><td>The new item.</td><td>any</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the new item. Fails when the index is out of bounds or the item is missing.
+
+### `removeAt`
+
+Removes the item at a zero-based position.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based position of the item to remove.</td><td>integer</td></tr></tbody></table>
+
+#### Output
+
+Returns the removed item. Fails when the index is out of bounds.
+
+## By condition
+
+### `find`
+
+Returns the first record matching a condition.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>where</code></td><td>The <a href="#the-where-condition">condition</a>: an object of field values the record must have (all of them).</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns the record, or `null` when none matches.
+
+#### Example
+
+```yaml
+# where
+status: open
+machine: M1
+```
+
+### `filter`
+
+Returns all records matching a condition.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>where</code></td><td>The <a href="#the-where-condition">condition</a>: an object of field values the records must have (all of them).</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns an array of the matching records in store order, empty when none matches.
 
 ### `update`
 
-Updates an item by merging new properties into it. The function matches items using an explicit lookup condition or an implicit ID field.
+Merges fields into every record matching a condition. A field that exists is overwritten, the others are kept.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>data</code></td><td></td><td>An object containing the new properties to merge into the item.</td><td>object</td></tr><tr><td></td><td><code>id</code></td><td>The unique identifier used to match the target item if you omit the <code>where</code> input.</td><td>any</td></tr><tr><td><code>where</code></td><td></td><td>An optional selection object containing a single key-value pair to locate the item.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>where</code></td><td>The <a href="#the-where-condition">condition</a>: an object of field values the records must have (all of them).</td><td>object</td></tr><tr><td><code>fields</code></td><td>The fields to merge, at least one.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns an array of the updated records in store order, empty when none matched.
 
-#### Examples
+#### Example
 
-**Update with where condition**
-
-Finds the item where `email` equals `test@example.com` and modifies its status property.
+Finds every record whose `email` is `test@example.com` and sets its status.
 
 ```yaml
-# data
-status: archived
 # where
 email: test@example.com
+# fields
+status: archived
 ```
 
-**Update with implicit ID**
+### `remove`
 
-Matches the target item using the provided `id` property because no `where` input is defined.
+Removes all records matching a condition.
 
-```yaml
-# data
-id: 123
-status: completed
-```
+#### Parameters
 
-### `length`
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>where</code></td><td>The <a href="#the-where-condition">condition</a>: an object of field values the records must have (all of them).</td><td>object</td></tr></tbody></table>
+
+#### Output
+
+Returns an array of the removed records in store order, empty when none matched.
+
+## The whole list
+
+### `getSize`
 
 Returns the current number of items in the data store.
 
@@ -141,45 +221,9 @@ None.
 
 Returns the total count of items as an integer.
 
-### `indexOf`
+### `isEmpty`
 
-Returns the zero-based index of the first occurrence of a specific item.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to search for.</td><td>any</td></tr></tbody></table>
-
-#### Output
-
-Returns the zero-based index as an integer, or `-1` if the item does not exist.
-
-### `includes`
-
-Checks whether the data store contains a specific item.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>item</code></td><td>The item to search for.</td><td>any</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` if the item exists, or `false` if it does not.
-
-### `removeAt`
-
-Removes the item at a specific zero-based index.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>index</code></td><td>The zero-based index of the item to remove.</td><td>integer</td></tr></tbody></table>
-
-#### Output
-
-Returns an array containing the removed item.
-
-### `toArray`
-
-Returns a shallow copy of all data store items as a standard array.
+Checks whether the data store holds no item.
 
 #### Parameters
 
@@ -187,7 +231,19 @@ None.
 
 #### Output
 
-Returns an array containing all stored items.
+Returns `true` when empty, otherwise `false`.
+
+### `toArray`
+
+Returns a copy of all data store items as a standard array.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns an array containing all stored items in store order.
 
 ### `clear`
 
@@ -199,22 +255,30 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
-### `delete`
+## Event listeners
 
-Removes the data store instance.
+### `onChange`
+
+Subscribes to the `change` event. The callback runs after every mutation with the whole list, so a table widget bound to it always shows the current state, also when another App changed it.
 
 #### Parameters
 
-None.
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>items</code>, all items in store order, and <code>action</code>, one of <code>pushBack</code>, <code>pushFront</code>, <code>popBack</code>, <code>popFront</code>, <code>set</code>, <code>removeAt</code>, <code>update</code>, <code>remove</code>, <code>clear</code>.</td><td>callback</td></tr></tbody></table>
 
-#### Output Implies
+#### Output
 
-Returns nothing.
+Returns the string `subscribed`.
 
-{% hint style="danger" %}
-#### Permanent data loss
+### `offChange`
 
-Deleting removes the instance configuration, and all stored data is permanently lost.
-{% endhint %}
+Removes a listener given to `onChange`.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the listener was subscribed, otherwise `false`.

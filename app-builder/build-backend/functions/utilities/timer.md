@@ -1,6 +1,6 @@
 # Timer
 
-The timer class introduces countdowns into your flows, maps countdown progress to a custom range, and reacts to ticks and finished countdowns. It also provides a static utility function to format human-readable relative time differences. This class requires an instance for countdown features. The code class name is `Timer`.
+The timer class introduces countdowns with one-second resolution into your flows, maps countdown progress to a custom range, and reacts to ticks and finished countdowns. The duration and the progress range are set when you create the instance; `setTotalSeconds` changes the duration for the next start. It also provides a static utility function to format human-readable relative time differences. This class requires an instance for countdown features. The code class name is `Timer`.
 
 ## Static functions
 
@@ -54,7 +54,7 @@ Creates a new timer instance with a configured duration and progress range.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The value representing the start of the timer progress. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The value representing the end of the timer progress. Default 100.</td><td>integer</td></tr><tr><td></td><td><code>totalSeconds</code></td><td>The total duration of the countdown in seconds. Default 10.</td><td>integer</td></tr><tr><td></td><td><code>autoStop</code></td><td>Automatically stops the timer when it reaches zero. If <code>false</code>, the timer keeps running and its state becomes <code>overdue</code>. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The progress value at the start. Default 0.</td><td>number</td></tr><tr><td></td><td><code>max</code></td><td>The progress value when time is up. Default 100.</td><td>number</td></tr><tr><td></td><td><code>totalSeconds</code></td><td>The total duration of the countdown in seconds, at least 1. Default 10.</td><td>integer</td></tr><tr><td></td><td><code>autoStop</code></td><td>Automatically stops the timer when it reaches zero. If <code>false</code>, the timer keeps ticking past zero (negative seconds left, progress beyond <code>max</code>) and its state becomes <code>overdue</code> until stopped. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -88,19 +88,19 @@ Deleting removes the instance configuration.
 
 ### `setTotalSeconds`
 
-Sets the total duration of the timer.
+Sets the countdown length for the next start. A running countdown keeps its current length.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>seconds</code></td><td>The total number of seconds for the countdown.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>seconds</code></td><td>The countdown length in seconds, at least 1.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns the length set as an integer.
 
 ### `getTotalSeconds`
 
-Returns the total duration of the timer in seconds.
+Retrieves the countdown length.
 
 #### Parameters
 
@@ -112,7 +112,7 @@ Returns the total seconds as an integer.
 
 ### `getSecondsLeft`
 
-Returns the remaining seconds on the timer. When the timer is stopped, this returns the total seconds configuration.
+Retrieves the seconds left on the running countdown: the full length when stopped, negative when overdue.
 
 #### Parameters
 
@@ -124,7 +124,7 @@ Returns the seconds left as an integer.
 
 ### `getProgress`
 
-Returns the current progress of the timer, mapped to the defined `min` and `max` range. When the timer is stopped, this returns the `min` value.
+Retrieves the progress of the running countdown, mapped from `min` at the start to `max` when time is up: `min` when stopped, beyond `max` when overdue.
 
 #### Parameters
 
@@ -132,11 +132,11 @@ None.
 
 #### Output
 
-Returns the progress value as an integer.
+Returns the progress as a number with up to three decimals.
 
 ### `getState`
 
-Returns the current state of the timer.
+Retrieves the current state of the timer.
 
 #### Parameters
 
@@ -144,11 +144,11 @@ None.
 
 #### Output
 
-Returns a string representing the state: `stopped`, `started`, or `overdue`.
+Returns `stopped`, `started`, or `overdue`.
 
 ### `start`
 
-Starts the countdown timer and sets the remaining time to the configured total. If called while a delayed stop is pending, this action only cancels the stop command.
+Starts the countdown from the full length. If called while the countdown runs, this action only cancels a pending delayed stop and changes nothing else.
 
 #### Parameters
 
@@ -156,25 +156,23 @@ None.
 
 #### Output
 
-Returns nothing. If the timer is already started, the function returns the difference between remaining and total seconds.
+Returns the state after the call: `started` or `overdue`.
 
 ### `stop`
 
-Stops the timer.
+Stops the countdown, at once or after a waiting period. During the waiting period a `start` cancels the stop, and further `stop` calls are ignored. A stopped timer reports the full length and `min` progress.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>waitingPeriod</code></td><td>An optional delay in milliseconds before the timer stops. If you call <code>start</code> during this period, the stop command is cancelled. Subsequent <code>stop</code> calls during this period are ignored. Default 0.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>waitingPeriod</code></td><td>The time in milliseconds to wait before stopping. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns nothing.
+Returns `true`.
 
 #### Example
 
-**Delayed stop**
-
-Stops the timer after a 5-second delay.
+Stops the timer after a five-second delay, unless the timer is started again in the meantime.
 
 ```yaml
 # waitingPeriod
@@ -187,38 +185,48 @@ These functions let you subscribe callbacks to the timer instance events.
 
 ### `onTick`
 
-Subscribes to the tick event. The callback runs every second while the timer is running.
+Subscribes to the tick event. The callback runs every second while the countdown runs.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: <code>secondsLeft</code> (integer) and <code>currentProgress</code> (integer).</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>secondsLeft</code> (integer, negative when overdue) and <code>progress</code> (number between <code>min</code> and <code>max</code>, beyond <code>max</code> when overdue).</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
 Returns the string `subscribed`.
 
-#### Example
+### `offTick`
 
-```yaml
-# callback
-<callback>
-```
+Removes a listener given to `onTick`.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the listener was subscribed, otherwise `false`.
 
 ### `onTimeup`
 
-Subscribes to the timeup event. The callback runs once when the countdown reaches zero.
+Subscribes to the timeup event. The callback runs once per start, when the countdown reaches zero.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>callback</code></td><td>The callback function. <br>Payload: the Unix timestamp in milliseconds when the countdown finished.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>time</code>, the Unix timestamp in milliseconds when the countdown finished.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
 Returns the string `subscribed`.
 
-#### Example
+### `offTimeup`
 
-```yaml
-# callback
-<callback>
-```
+Removes a listener given to `onTimeup`.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the listener was subscribed, otherwise `false`.
