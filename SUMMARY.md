@@ -113,6 +113,7 @@
       * [Data list](app-builder/build-frontend/widgets/display-widgets/data-list.md)
       * [Data tiles](app-builder/build-frontend/widgets/display-widgets/data-tiles.md)
       * [Iframe](app-builder/build-frontend/widgets/display-widgets/iframe.md)
+      * [Image](app-builder/build-frontend/widgets/display-widgets/image.md)
       * [Kanban](app-builder/build-frontend/widgets/display-widgets/kanban.md)
       * [Linear gauge](app-builder/build-frontend/widgets/display-widgets/linear-gauge.md)
       * [Map](app-builder/build-frontend/widgets/display-widgets/map.md)

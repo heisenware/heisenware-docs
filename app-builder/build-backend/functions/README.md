@@ -156,7 +156,11 @@ Right-click a function input to switch between the YAML and HTML views, or to ma
 
 ### Callbacks
 
-Most functions that use callbacks have an `on` prefix – such as `onMessage`. These functions listen continuously for external events, like an incoming MQTT message, and deliver that data through a specific nested output inside the function input. Throughout the configuration examples in these docs, this special input argument is named `listener`.
+Some functions take a function as an argument: a **callback** the function calls once, or an **event listener** it calls again and again. Most functions with a listener have an `on` prefix – such as `onMessage` – and listen continuously for external events, like an incoming MQTT message. Throughout the configuration examples in these docs, this special input argument is named `listener`.
+
+The input shows the handler's kind. Everything the function hands the handler arrives as **values**: output pills drawn directly below the function's output, one row per handler, one pill per argument. Each value works like the output: it shows the last value, you wire it to inputs, triggers, or widgets, and you attach extension nodes to it. The function's own output of an `on` function only confirms the subscription; the data comes through the values.
+
+If the function's documentation names the handler's arguments, the values carry their names. Otherwise right-click the handler and choose the number of values.
 
 <figure><img src="../../../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
 
@@ -231,9 +235,9 @@ Link an output directly to the frontend to drive user interface components:
 
 ## Extension nodes
 
-Extension nodes attach to a function output to process data directly within the flow. Modifiers transform data, filters gate execution, recorders store information, and error handlers catch exceptions.
+Extension nodes attach to a function output – or to one of a handler's [values](./#callbacks) – to process data directly within the flow. Modifiers transform data, filters gate execution, recorders store information, and error handlers catch exceptions.
 
-* **Add**: Click the plus icon (`+`) on an output and select an extension node type. You can attach multiple parallel extension nodes to a single output.
+* **Add**: Click the plus icon (`+`) on an output or a value and select an extension node type. You can attach multiple parallel extension nodes to a single output.
 * **Chain**: Attach an extension node to the output of another extension node to create a multi-step data pipeline.
 * **Delete**: Right-click an extension node and select Delete.
 

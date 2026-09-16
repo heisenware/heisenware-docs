@@ -12,6 +12,8 @@ The linear gauge widget displays a single numeric value or a pair of values on a
 | ------------ | ----------------------------------------------------------------- | -------- |
 | `value`      | Sets the value for the primary indicator on the gauge.            | number   |
 | `subValue`   | Sets the value for the secondary subvalue indicator on the gauge. | number   |
+| `frame`      | Overrides the orientation and color sections (`ranges`) at runtime; merged over the configured frame. | object   |
+| `scale`      | Overrides scale boundaries, intervals, and labels at runtime; merged over the configured scale.      | object   |
 
 ## Configuration
 
@@ -76,3 +78,10 @@ These configuration fields apply inside both the `valueIndicator` and `subvalueI
 | `backgroundColor` | Background color         | Sets the background fill color strictly when `type` is configured as a `Range Bar`.                                                 | string   |
 | `size`            | Size                     | Enforces the tracking bar thickness dimension strictly when `type` is configured as a `Range Bar`.                                  | number   |
 | `arrowLength`     | Arrow length             | Sets the extension tail structural length when displaying a callout `Text Cloud`.                                                   | integer  |
+
+## Tips and tricks
+
+{% hint style="info" %}
+#### Coloring a gauge per row
+Bind `frame` to a value such as `{ "ranges": [{ "startValue": 0, "endValue": 60, "color": "#19914b" }, { "startValue": 60, "endValue": 100, "color": "#dc2828" }] }` — every field you leave out keeps its configured value. Inside a group, each row's binding paints its own gauge; the same contract applies to the circular gauge.
+{% endhint %}

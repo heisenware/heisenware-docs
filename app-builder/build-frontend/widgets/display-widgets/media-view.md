@@ -35,5 +35,6 @@ Set the widget's defaults in the settings panel.
 
 | **Property** | **Label** | **Description** | **Type** |
 | :--- | :--- | :--- | :--- |
-| `objectFit` | Image fitting | Controls how the media stretches or scales to match its layout container boundaries (options include `Contain`, `Cover`, or `Fill`). | string |
-| `borderRadius` | Rounded corners % | Applies a border radius frame curvature to the media canvas outer edges as a percentage of the smaller layout dimension. | integer |
+| `objectFit` | Image fitting | How the image meets its box: `contain` (whole image, bars if needed - the default), `cover` (fill the box, crop the rest), `fill` (stretch), `none` (natural size, clipped) or `scale-down` (never enlarge). | string |
+| `objectPosition` | Focal point | Which part of the image stays visible when `cover` or `none` crops it: `center`, `top`, `bottom`, `left`, `right` or a corner. | string |
+| `borderRadius` | Corner radius | `theme` (the app theme's radius), a preset from square to circle, or any CSS length. The same setting as on the card and image widgets. Apps built before v93 stored a percent number here; it is migrated on first start. | string |

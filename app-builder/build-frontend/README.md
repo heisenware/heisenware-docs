@@ -76,12 +76,18 @@ Right-click any element to open a menu for quick layout actions and layer manage
 * **Scaling**: Use the scaling bar to zoom the current preview in or out. This serves as a design-time aid only and does not change the App's actual size for the user.
 * **Extend height**: Use the page height icon (<i class="fa-arrows-up-down">:arrows-up-down:</i>) in the toolbar to add vertical space and enable scrolling for the selected device size. This lets you scroll on mobile while keeping a fixed dashboard on desktop. If a page height does not change when you reduce it, a widget is likely positioned outside the valid area. Move or delete that widget first.
 
+### Pin a setting to one screen
+
+Position and size are always saved per screen. Every other widget setting is shared across screens until you pin it: hover a field in the widget's settings and click the pin (<i class="fa-thumbtack">:thumbtack:</i>) to give the selected screen its own value for that one field. A solid pin marks a field that is pinned on the screen you are editing; a faded pin marks one that is pinned on another screen, and its tooltip names them. Click a solid pin to share the field again.
+
+Some settings are pinned by nature because their right value depends on the screen, not on the data: column counts, font sizes, spacing, legend placement, chart orientation. These always belong to the screen you set them on, and the other screens keep the widget's default until you set them there. They show a pin you cannot switch off.
+
+One of them is on every widget: the **Visible** switch at the top of the General tab. Switch it off to drop the widget from the screen you are editing; it stays on every other screen. A hidden widget takes no space in the deployed App, and in the builder it stays as a faded ghost you can still select and switch back on. Hiding a group hides its members with it; a member inside a group follows its group.
+
 {% hint style="info" %}
-#### Mobile-first workflow best practices
+#### Workflow best practices
 
-By default, Heisenware inherits changes upward: changes configured on a smaller screen propagate to larger ones.
-
-1. **Start with phone**: Design your layout for the phone first to ensure your basic structure is solid.
-2. **Scale up**: Switch to tablet or laptop views and arrange the widgets to utilize the extra horizontal space.
-3. **Fine-tune**: Adjustments on a larger screen stay local to that view, letting you optimize control-room monitors down to the pixel without breaking the mobile experience.
+1. **Start on the reference screen**: Design the layout on the screen the App is mainly used on. Every other screen follows it automatically.
+2. **Visit each enabled screen**: Move and resize where the automatic layout is not good enough; that screen keeps its own layout from then on.
+3. **Pin what differs**: Where a phone needs one column and a large font while the desktop needs three and a small one, the setting is pinned by nature - set it on each screen. Pin any other field yourself when one screen needs its own value.
 {% endhint %}

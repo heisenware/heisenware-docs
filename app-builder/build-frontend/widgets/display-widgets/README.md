@@ -19,6 +19,7 @@ The platform groups widgets by their primary purpose, though many serve multiple
 * [**Data tiles**](data-tiles.md): Arranges items into responsive tile layouts.
 * [**Dynamic group**](../dynamic-group.md): Bundles multiple widgets together to act as a repeated container driven by data.
 * [**Iframe**](iframe.md): Embeds external web pages or applications inside the interface.
+* [**Image**](image.md): Shows a picture from the media library, fitted to its box.
 * [**Kanban**](kanban.md): Arranges items on an interactive board to track process stages.
 * [**Linear gauge**](linear-gauge.md): Displays a primary value and a secondary sub-value on a linear bar.
 * [**Map**](map.md): Displays geographic data points on an interactive map.

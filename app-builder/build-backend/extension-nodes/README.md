@@ -1,6 +1,6 @@
 # Extension nodes
 
-Extension nodes process data directly within a flow without requiring a full function node. They attach to a function output or to another extension node to act on the data passing through. This lets you build processing pipelines by chaining nodes together, such as connecting a filter to a modifier, or a modifier to another modifier.
+Extension nodes process data directly within a flow without requiring a full function node. They attach to a function output, to one of a handler's [values](../functions/#callbacks), or to another extension node to act on the data passing through. This lets you build processing pipelines by chaining nodes together, such as connecting a filter to a modifier, or a modifier to another modifier.
 
 Except for recorders, extension nodes operate as their own output. You can wire them to function inputs, triggers, or widgets exactly like a standard function output.
 
@@ -12,7 +12,7 @@ To branch a single data source into multiple concurrent paths, attach multiple e
 
 ## Working with extension nodes
 
-* **Add**: Click the + icon on a function's output or on an existing extension node and select the desired type. You can add multiple parallel extension nodes to the same output.
+* **Add**: Click the + icon on a function's output, on a handler value, or on an existing extension node and select the desired type. You can add multiple parallel extension nodes to the same output.
 * **Chain**: Add an extension node to the output of another extension node to create a multi-step pipeline (e.g., filter data, then modify it).
 * **Test**: Extension nodes show their last result directly below them. Click the icon of a modifier or filter to evaluate it manually during development.
 * **Delete**: Right-click an extension node and select Delete.
