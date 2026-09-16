@@ -33,7 +33,7 @@ Secure OPC UA communication (`Sign` or `SignAndEncrypt`) requires a Public Key I
 OPC UA security requires a two-way trust model:
 
 * **The server trusts the client**: Configure the server to accept the client's public certificate.
-* **The client trusts the server**: Add the server's public certificate to the client's trust list to prevent man-in-the-middle attacks.
+* **The client trusts the server**: Add the server's public certificate with `addServerCertificate`. It lands in the workspace's [Trusted certificates](trusted-certificates.md), the one list every connector consults.
 
 Manage this process using `createCertificates` and `addServerCertificate`.
 
@@ -43,8 +43,8 @@ Manage this process using `createCertificates` and `addServerCertificate`.
 
 * `pki/own/certs/`: The client's public certificates (for example, `heisenware_opcua_client.pem`). Provide this file to the server administrator.
 * `pki/own/private/`: The client's private keys. Keep these keys secret. The client automatically restricts access permissions.
-* `pki/trusted/certs/`: The client's trust list. Place the public certificates of trusted OPC UA servers in this folder. Use `addServerCertificate` to automate this.
-* `pki/issuers/certs/`: In CA mode, this folder holds the public certificate of the CA that issues certificates. If an external CA signed the server certificate, add the server's public CA certificate here using `addCertificateAuthority`.
+* `pki/trusted/certs/`: The trusted servers, shared with every connector as [Trusted certificates](trusted-certificates.md). `addServerCertificate` puts a server's certificate here.
+* `pki/issuers/certs/`: The trusted authorities. In CA mode, this folder also holds the client's own CA. If a company CA signed the server certificate, add it with `addCertificateAuthority`.
 
 {% hint style="info" %}
 #### PKI store location
@@ -73,15 +73,15 @@ Returns `true` when the PKI structure and certificates are successfully created.
 
 ### `addServerCertificate`
 
-Adds a server's public certificate to the client's trust list to establish a secure connection.
+Trusts one OPC UA server by its certificate, for a secure connection. The certificate is what the server shows in its own settings, usually available as a file there. The server lands in the workspace's [Trusted certificates](trusted-certificates.md), so every connector accepts it from then on; `TrustStore.list` shows what is trusted, `TrustStore.remove` takes it out again.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The server's public certificate, specified as a file path or PEM string.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>An optional filename for the certificate. Required if providing a PEM string.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificate</code></td><td>The server's certificate as text (<code>-----BEGIN CERTIFICATE-----</code> ...) or the path to a certificate file (PEM or DER).</td><td>string</td></tr><tr><td><code>name</code></td><td>A name for the stored certificate. Optional, taken from the file name or the certificate itself when omitted.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` when the certificate is saved successfully. Throws an error if the input is missing, the filename is missing for a PEM string, or saving fails.
+What is trusted now: `{ name, kind, subject, issuer, selfSigned, validFrom, validTo, fingerprint }`. A file or text that is not a certificate is refused with the reason.
 
 #### Examples
 
@@ -92,30 +92,30 @@ If the client runs on the platform (not in Agent mode), upload the server certif
 {% endhint %}
 
 ```yaml
-# certificateInput
-/path/to/downloaded/server_cert.pem
+# certificate
+/shared/uploads/machine-server.der
 ```
 
 **Example 2: Add a certificate from a string**
 
 ```yaml
-# certificateInput
+# certificate
 '-----BEGIN CERTIFICATE-----\nMIIC...etc...\n-----END CERTIFICATE-----'
-# certificateName
-my_trusted_server.pem
+# name
+machine-server
 ```
 
 ### `addCertificateAuthority`
 
-Adds a server's public CA certificate to the `issuers` directory of the PKI store. Use this if a Certificate Authority signed the server certificate.
+Trusts every server whose certificate was issued by this authority. Use it when the servers carry certificates your company made: add the company's certificate once, and all of them are trusted. Same list as `addServerCertificate`, shared by every connector.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificateInput</code></td><td>The CA's public certificate, specified as a file path or PEM string.</td><td>string</td></tr><tr><td><code>certificateName</code></td><td>An optional filename for the CA certificate. Required if providing a PEM string.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>certificate</code></td><td>The authority's certificate as text or the path to its file (PEM or DER).</td><td>string</td></tr><tr><td><code>name</code></td><td>A name for the stored certificate. Optional, taken from the file name or the certificate itself when omitted.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns `true` when the certificate is saved successfully. Throws an error if the input is missing, the filename is missing for a PEM string, or saving fails.
+What is trusted now, as for `addServerCertificate`, with `kind: authority`.
 
 ## Connection and lifecycle
 

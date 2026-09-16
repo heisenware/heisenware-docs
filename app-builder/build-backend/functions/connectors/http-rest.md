@@ -191,7 +191,7 @@ token: <access id>
 authHeader: X-Access-Id
 ```
 
-Internal API with a self-signed certificate:
+Internal API with a self-signed certificate: trust the server once for the whole workspace with [Trusted certificates](trusted-certificates.md) (`TrustStore.trustServer`), then no `tls` setting is needed here. The `tls` option is for the exceptions, for example switching the check off while testing:
 
 ```yaml
 # baseUrl
@@ -278,11 +278,15 @@ Mixing query parameters with option keys (`timeout: 1000` next to `latitude: 53.
 
 ### Self-signed and internal certificates
 
-Servers in internal networks often use self-signed certificates or certificates signed by a company CA. By default such a certificate is refused (`... failed: self-signed certificate`). The `tls` option, per call or per instance, controls this:
+Servers in internal networks often show a certificate they made themselves, or one made by a company authority. By default such a certificate is refused (`... failed: self-signed certificate`).
 
-<table><thead><tr><th width="200">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>rejectUnauthorized</code></td><td>Set to <code>false</code> to accept any server certificate. Default: <code>true</code>.</td><td>boolean</td></tr><tr><td><code>ca</code></td><td>Certificate(s) to trust instead of the system's, as PEM text or a path to a PEM file. Pass the server's own certificate or its issuing CA.</td><td>string</td></tr><tr><td><code>cert</code></td><td>Client certificate for mutual TLS, as PEM text or a path to a PEM file.</td><td>string</td></tr><tr><td><code>key</code></td><td>Private key of the client certificate, as PEM text or a path to a PEM file.</td><td>string</td></tr><tr><td><code>passphrase</code></td><td>Passphrase of the private key.</td><td>string</td></tr></tbody></table>
+The fix for the whole workspace: trust the server once with [Trusted certificates](trusted-certificates.md). `TrustStore.trustServer('https://plc-gateway.plant.local')` looks at the certificate the server shows and stores it; from then on every call and every connector accepts that server. A company certificate from your IT goes in with `TrustStore.addCertificateAuthority`.
 
-Prefer trusting the certificate over switching the check off:
+The `tls` option, per call or per instance, is for the exceptions. It rides on top of what the workspace trusts:
+
+<table><thead><tr><th width="200">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>rejectUnauthorized</code></td><td>Set to <code>false</code> to accept any server certificate, trusted or not. Default: <code>true</code>.</td><td>boolean</td></tr><tr><td><code>ca</code></td><td>An authority to trust for this call or client only, as PEM text or a path to a PEM file, on top of the system's and the workspace's.</td><td>string</td></tr><tr><td><code>cert</code></td><td>Client certificate for mutual TLS, as PEM text or a path to a PEM file.</td><td>string</td></tr><tr><td><code>key</code></td><td>Private key of the client certificate, as PEM text or a path to a PEM file.</td><td>string</td></tr><tr><td><code>passphrase</code></td><td>Passphrase of the private key.</td><td>string</td></tr></tbody></table>
+
+An authority for one client only:
 
 ```yaml
 # options

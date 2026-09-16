@@ -54,6 +54,7 @@ The following table lists the available connectors and their required configurat
 | Connector                                                 | Description                                                                         | Type                                |
 | --------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------- |
 | [Allen-Bradley](allen-bradley.md)                         | Connects directly to Allen-Bradley PLCs for machine data acquisition and control.   | Instance creation required          |
+| [ctrlX Data Layer](ctrlx-data-layer.md)                   | Reads, writes and subscribes to the Data Layer of a Bosch Rexroth ctrlX CORE.       | Instance creation required          |
 | [Email](email.md)                                         | Sends emails via SMTP.                                                              | Instance creation required          |
 | [File I/O](file-i-o.md)                                   | Reads from and writes to files on a connected file system.                          | Static functions only               |
 | [GraphQL](graphql.md)                                     | Interacts with any GraphQL API for flexible data queries.                           | Static functions only               |
@@ -74,4 +75,5 @@ The following table lists the available connectors and their required configurat
 | [SAP Digital Manufacturing](sap-digital-manufacturing.md) | Integrates natively with SAP Digital Manufacturing.                                 | Instance creation required          |
 | [Siemens S7](siemens-s7.md)                               | Connects directly to Siemens S7 PLCs for data acquisition and control.              | Instance creation required          |
 | [Timeseries database](../storage/timeseries-database.md)  | Connects to external InfluxDB databases.                                            | Instance creation required          |
+| [Trusted certificates](trusted-certificates.md)           | Trusts the machines and servers on your own network once, for every connector.      | Static functions only               |
 | [Zebra RFID IoT](zebra-rfid-iot.md)                       | Interacts with Zebra RFID readers and devices.                                      | Instance creation required          |

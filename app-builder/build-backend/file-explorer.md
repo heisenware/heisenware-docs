@@ -37,4 +37,4 @@ Be careful when renaming or deleting a file. If a function (like `readCsv`) or a
 * **Data ingestion**: Upload `.csv` or `.json` files for your logic to process.
 * **UI assets**: Store images and illustrations to drag into the UI of your App.
 * **Document generation**: Store the PDF master files that serve as backgrounds in the [PDF Template Editor](../build-frontend/pdf-template-editor.md).
-* **Agent backups**: Every [Native Agent](agents/native-agent.md) you build lands in the `native-agents` folder, ready to download again.
+* **Agent backups**: Every [Native Agent](agents/native-agent.md) you build lands in the `native-agents` folder, ready to download again, or to delete when you no longer need it.

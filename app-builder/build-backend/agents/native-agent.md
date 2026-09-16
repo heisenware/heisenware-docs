@@ -18,7 +18,7 @@ In the [Function Explorer](../functions/function-explorer.md), click the create 
 
 * **Connectors**: Select the connectors (e.g., S7, SQL) this Agent should carry.
 * **Target OS**: Choose the operating system of the machine where the Agent will run.
-* **Prefix (optional)**: Enter a [prefix](native-agent.md#using-a-prefix-for-fleet-deployment) if you plan to deploy the same file to multiple machines (e.g., `milling-machine`). Each instance then generates its own unique ID (e.g., `milling-machine-abc123`).
+* **Prefix (optional)**: Enter a [prefix](native-agent.md#using-a-prefix-for-fleet-deployment) if you plan to deploy the same file to multiple machines (e.g., `milling`). Lowercase letters and digits only. Each instance then generates its own unique ID (e.g., `milling-edge-connect-abc12`).
 * Click _Prepare for download_ to compile and download your installer package.
 
 <figure><img src="../../../.gitbook/assets/native_agent_connecters_looped.gif" alt="" width="375"><figcaption></figcaption></figure>
@@ -26,7 +26,7 @@ In the [Function Explorer](../functions/function-explorer.md), click the create 
 {% hint style="info" %}
 #### Lost your file?
 
-All Agents you have built are backed up on the [file server](../file-explorer.md) in the `native-agents` folder.
+All Agents you have built are backed up on the [file server](../file-explorer.md) in the `native-agents` folder. Delete a file there, or in the App Manager's Integrations panel, when you no longer need it; machines that already installed it keep running.
 {% endhint %}
 {% endstep %}
 
@@ -66,7 +66,7 @@ The Agent runs as a service and has no user interface window. Manage its state w
 The prefix option changes how an Agent identifies itself. Use it to manage a fleet of similar machines or devices.
 
 * **Without a prefix (default)**: The Agent has a built-in, unique ID. You can move the installer to different computers, but they are all recognized as the same single Agent.
-* **With a prefix**: The Agent generates a new, unique ID on its first launch in a specific directory. Deploy the exact same installer on multiple machines and each one connects as a separate entry in your Function Explorer (e.g., `milling-machine-abc123`, `milling-machine-xyz789`).
+* **With a prefix**: The Agent generates a new, unique ID on its first launch in a specific directory. Deploy the exact same installer on multiple machines and each one connects as a separate entry in your Function Explorer (e.g., `milling-edge-connect-abc12`, `milling-edge-connect-xyz78`).
 
 {% hint style="danger" %}
 **Irreversible action**

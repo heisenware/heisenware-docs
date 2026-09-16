@@ -25,7 +25,7 @@ An advanced method for connecting custom code and proprietary libraries, the mos
 
 ### Native agent
 
-An [Agent](../app-builder/build-backend/agents/README.md) built for your machines: choose the connectors it should carry, the target operating system and, for a fleet, a prefix. Compiling takes a minute or two; the archive appears next to the integration as soon as it is ready. The same builder is available in the App Builder's Function Explorer.
+An [Agent](../app-builder/build-backend/agents/README.md) built for your machines: choose the connectors it should carry, the target operating system and, for a fleet, a prefix. Compiling takes a minute or two; the archive appears next to the integration as soon as it is ready. A prefix may contain lowercase letters and digits only. The same builder is available in the App Builder's Function Explorer.
 
 A fleet built with a prefix has no row of its own: every machine that starts the executable is onboarded on its first login and appears as its own integration, named `<prefix>-edge-connect-<id>`. The executable itself is listed under **Executables**.
 
@@ -37,7 +37,7 @@ Lets your own AI agent — Claude Code, Claude Desktop, any MCP client — drive
 
 Native agents and MCP connectors are integrations with an executable attached. The **Executable** column shows the file the platform built; click it to see its size and build time, download it, or copy a link with a twelve-hour access ticket — an MCP connector also shows the lines to paste into the client.
 
-The **Executables** list below the integrations shows every file the platform serves from its download zones, `native-agents` and `mcp`, whether or not an integration claims it: agents built from the App Builder's Function Explorer, or archives whose integration has since been deleted. Each can be shown and downloaded from there. An MCP connector's view also offers **Rebuild**: after a platform update the package is built again from the current connector, with the same credentials, so the client only needs a fresh link. Changing the password rebuilds an MCP connector (a native agent asks for a manual rebuild), deleting the integration deletes its MCP package, and deactivating the integration stops the executable at its next login. Every integration holds one authority, shown in the **Access** column: full access to its workspace.
+The **Executables** list below the integrations shows every file the platform serves from its download zones, `native-agents` and `mcp`, whether or not an integration claims it: agents built from the App Builder's Function Explorer, or archives whose integration has since been deleted. Each can be shown, downloaded and deleted from there; deleting a file does not touch the machines that already installed it, and it can be built again. An MCP connector's view also offers **Rebuild**: after a platform update the package is built again from the current connector, with the same credentials, so the client only needs a fresh link. Changing the password rebuilds an MCP connector (a native agent asks for a manual rebuild), deleting the integration deletes its MCP package, and deactivating the integration stops the executable at its next login. Every integration holds one authority, shown in the **Access** column: full access to its workspace.
 
 ## Connecting MQTT and VRPC clients
 
