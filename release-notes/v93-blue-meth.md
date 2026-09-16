@@ -69,6 +69,7 @@ description: Unreleased
 
 ## Changes
 
+* **Native agents are named native-agent**: a new agent logs in as `native-agent-<id>@<domain>`, a fleet as `<prefix>-native-agent-<id>@<domain>`. Agents built before v93 keep their `edge-connect` names, keep logging in and keep onboarding, and a rebuild keeps the name the account has. A fleet prefix is lowercase letters and digits only.
 * The experimental assistant and its activation switch are gone; the new assistant is on for every member.
 * Removed the widget import/export action from the App Builder.
 * Self-hosted installations: `HW_AUTH_CLIENT_TOKEN` is now `HW_PLATFORM_PUBLISHABLE_KEY`, and the assistant reads `HW_ANTHROPIC_API_KEY`. AI usage is priced for accounts by `HW_AI_PRICE_MARGIN` (default `0.2`) and `HW_AI_PRICE_EUR_PER_USD` (default `0.9`); a month keeps the pricing it started with. The assistant keeps a per-account, per-month ledger of its runs on its data volume and re-sends any run the auth service missed at every start; `npm run replay-usage` inside the assistant container does the same on demand.

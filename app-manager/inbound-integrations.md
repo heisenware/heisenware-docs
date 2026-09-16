@@ -27,7 +27,7 @@ An advanced method for connecting custom code and proprietary libraries, the mos
 
 An [Agent](../app-builder/build-backend/agents/README.md) built for your machines: choose the connectors it should carry, the target operating system and, for a fleet, a prefix. Compiling takes a minute or two; the archive appears next to the integration as soon as it is ready. A prefix may contain lowercase letters and digits only. The same builder is available in the App Builder's Function Explorer.
 
-A fleet built with a prefix has no row of its own: every machine that starts the executable is onboarded on its first login and appears as its own integration, named `<prefix>-edge-connect-<id>`. The executable itself is listed under **Executables**.
+A fleet built with a prefix has no row of its own: every machine that starts the executable is onboarded on its first login and appears as its own integration, named `<prefix>-native-agent-<id>`. The executable itself is listed under **Executables**.
 
 ### MCP connector
 
