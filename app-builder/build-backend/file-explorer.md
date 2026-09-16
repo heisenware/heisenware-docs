@@ -14,10 +14,17 @@ Leave the advanced areas outside `uploads` untouched unless you know what you ar
 2. Drag and drop a file or click to select one from your computer.
 3. Click Upload. The file is now ready to be used by your functions.
 
+## Viewing files
+
+Double-click a file to open it in a tab next to the flow board. Text and code files (CSV, JSON, YAML, scripts), Markdown (rendered, with a toggle to its source), images and PDFs show right there; any other file type offers a download instead. The view is read-only and follows the file: when a function or the assistant rewrites it, the tab reloads. Close a tab with its cross, or switch back to the flow board with the Flow tab. The download icon in the tab's header saves the file to your computer.
+
+Files in the platform's own areas outside `uploads`, `project` and the artifact folders can be viewed, not downloaded.
+
 ## Managing files
 
 Right-click any file to open the context menu. Here you can:
 
+* Open the file in a tab (what a double-click does).
 * Download the file.
 * Create a new folder to organize your assets.
 * Rename a file or folder.
