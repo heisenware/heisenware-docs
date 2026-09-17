@@ -15,7 +15,7 @@ description: 19 Feb 2026
 * **Configurable backgrounds for icons**: Improved the icon component in [Text, icons and images](../app-builder/build-frontend/text-icons-and-images.md) to support optional background shapes.
 * **Runtime properties**: Added support for configuring multiple new properties at runtime across various [widgets](../app-builder/build-frontend/widgets).
 * **Database audit logging**: Added database audit logging to the [relational database](../app-builder/build-backend/functions/storage/relational-database.md#audit-logging) connector.
-* **Machine simulator option**: Added the machine simulator option to the [Process Simulations](../app-builder/build-backend/functions/extensions/process-simulations.md) extension.
+* **Machine simulator option**: Added the machine simulator option to the Process Simulations extension.
 * **AI assistant (beta)**: Released the first experimental version of the AI assistant.
 * **Experimental subflows**: Released the first experimental support for [subflows](../app-builder/build-backend/functions/subflows.md).
 
