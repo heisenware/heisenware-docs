@@ -24,6 +24,7 @@ The button widget captures a user click to trigger backend logic. You can also d
 | `enable` | Enables the button when `true`. Use this to re-enable a button that starts as initially disabled. | boolean |
 | `toggle` | Dynamically enables or disables the button based on the incoming boolean value. | boolean |
 | `done` | Displays an active loading indicator on the button when connected to a running function. The loading state clears automatically when the function returns its output. | any |
+| `color` | Repaints the button in any valid CSS color, for example `#dc2828`. Overrides the configured color; `auto` restores the color the type gives. | string |
 
 ## Configuration
 
@@ -39,6 +40,7 @@ Set the widget's defaults in the settings panel.
 | `iconSize` | Icon size | Sets the layout size of the button icon in pixels. | integer |
 | `type` | Type | Controls the button color scheme configuration based on the theme, supporting `default`, `normal`, `success`, `danger`, `back`, or `transparent`. | string |
 | `stylingMode` | Styling mode | Controls the visual container rendering style, supporting `text`, `contained`, or `outlined`. | string |
+| `color` | Color | Sets a custom button color. Contained buttons fill with it and pick black or white text for readability; outlined and text buttons draw with it. Hover and pressed shades derive from it. Automatic keeps the color the type gives. | string |
 | `hint` | Hover text | Sets the tooltip text displayed when a user hovers over the button. | string |
 | `disabled` | Initially disabled | Disables the button when the App first loads when set to `true`. | boolean |
 | `requiresConfirmation` | Requires confirmation | Opens an interactive confirmation modal dialog before executing actions when set to `true`. | boolean |
