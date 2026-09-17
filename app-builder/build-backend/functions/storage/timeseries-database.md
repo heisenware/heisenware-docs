@@ -155,7 +155,7 @@ When you pass an object as data, the engine fans it out into native InfluxDB fie
 
 #### Parameters
 
-<table><thead><tr><th width="123.14794921875">Input</th><th width="506.4072265625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket to write to.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement (such as <code>temperature</code> or <code>production_line</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The value to record. Accepts a number, string, boolean, or object (such as <code>{ temp: 45, status: "ok" }</code>).</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value pairs to tag the data. To force the object storage behavior, add <code>objectStorageType: 'fields'</code> or <code>objectStorageType: 'json'</code>. The database strips this control flag before saving.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="123.14794921875">Input</th><th width="506.4072265625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket to write to.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement (such as <code>temperature</code> or <code>production_line</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The value to record. Accepts a number, string, boolean, or object (such as <code>{ temp: 45, status: "ok" }</code>).</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value pairs to tag the data. To force the object storage behavior, add <code>objectStorageType: 'fields'</code> or <code>objectStorageType: 'json'</code>. The database strips this control flag before saving.</td><td>object</td></tr><tr><td><code>options</code></td><td>Optional. <code>timestamp</code> stores the point at that time instead of the write time: a date string, epoch milliseconds, or a Date. Use it for events that carry their own time, such as a buffered edge device replaying after a connection loss.</td><td>object</td></tr></tbody></table>
 
 <div align="left"><figure><img src="../../../../.gitbook/assets/image (4).png" alt="" width="375"><figcaption><p>Measurement vs. tags vs. fields</p></figcaption></figure></div>
 
@@ -173,6 +173,8 @@ yield: 150
 location: warehouse
 line_id: A1
 objectStorageType: fields
+# options
+timestamp: 2026-09-17T10:00:00.250Z
 ```
 
 #### Output
@@ -189,9 +191,11 @@ When using the internal database, bucket names indicate retention: `F` (forever)
 
 Writes multiple data points to a specific bucket and measurement. This is more efficient than calling `writePoint` in a loop.
 
+Data that arrives in batches with its own timing, such as a machine sending 10 ms samples in 100 ms MQTT packets, keeps that timing when you pass one timestamp per point in `options.timestamps`. Without it, every point is stamped at the write time.
+
 #### Parameters
 
-<table><thead><tr><th width="128.7037353515625">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of values or objects to record.</td><td>array</td></tr><tr><td><code>tags</code></td><td>Optional tags. If specified as an array, the length must match the <code>data</code> array (one tag object per point). If specified as a single object, the tags apply to all points.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="128.7037353515625">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of values or objects to record.</td><td>array</td></tr><tr><td><code>tags</code></td><td>Optional tags. If specified as an array, the length must match the <code>data</code> array (one tag object per point). If specified as a single object, the tags apply to all points.</td><td>any</td></tr><tr><td><code>options</code></td><td>Optional. <code>timestamps</code> is an array with one entry per point (same length as <code>data</code>): a date string, epoch milliseconds, or a Date each. A <code>null</code> entry stamps that point at the write time.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -207,9 +211,31 @@ vibration
 - 0.8
 ```
 
+#### Example with timestamps
+
+A 100 ms packet of 10 ms samples, stored with the time each sample was measured:
+
+```yaml
+# bucket
+W
+# measurement
+highSpeed
+# data
+- { pressure: 101.2, temperature: 210.1 }
+- { pressure: 101.4, temperature: 210.3 }
+- { pressure: 101.3, temperature: 210.6 }
+# options
+timestamps:
+  - 2026-09-17T10:00:00.000Z
+  - 2026-09-17T10:00:00.010Z
+  - 2026-09-17T10:00:00.020Z
+```
+
+Reading the measurement back returns the samples 10 ms apart, in their original order.
+
 #### Output
 
-Returns `true` when the points are accepted for buffered writing. Throws an error if `data` is not an array or the length of a tags array does not match the data array. Write failures surface in the logs, not as errors.
+Returns `true` when the points are accepted for buffered writing. Throws an error if `data` is not an array, the length of a tags or timestamps array does not match the data array, or a timestamp cannot be parsed. Write failures surface in the logs, not as errors.
 
 ### `writeDownsampled`
 
@@ -219,7 +245,7 @@ When you pass an object containing both numbers and strings (such as `{ speed: 1
 
 #### Parameters
 
-<table><thead><tr><th width="139.8148193359375">Input</th><th width="489.4813232421875">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>The numeric value, object, or array to store.</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional tags to associate with the data.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="139.8148193359375">Input</th><th width="489.4813232421875">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>measurement</code></td><td>The name of the measurement.</td><td>string</td></tr><tr><td><code>data</code></td><td>The numeric value, object, or array to store.</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional tags to associate with the data.</td><td>object</td></tr><tr><td><code>options</code></td><td>Optional. <code>timestamps</code> works as in <code>writePoints</code>: one entry per element of <code>data</code>. The downsampling pipeline aggregates the points at their own time.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
