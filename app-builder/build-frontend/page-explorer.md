@@ -53,23 +53,39 @@ Enable **Different navigation menus per screen** in the App menu settings to giv
 
 <figure><img src="../../.gitbook/assets/image (20).png" alt=""><figcaption><p>Different menu per screen</p></figcaption></figure>
 
-## Other ways to switch pages
+## App actions
 
-### Widget links
+Some things a user wants are not pages, functions, or widgets: leave the App, start it over, go back a step. Heisenware calls these **App actions**. They act on the App itself in the browser, they carry no data, and they are wired exactly like pages: you drag them and drop them.
 
-Turn any [button](widgets/trigger-widgets/button.md) or [icon](text-icons-and-images.md) into a page-switch trigger.
+The App actions sit in a row at the foot of the Page Explorer:
 
-* **How to link**: Drag a page from the Page Explorer and drop it directly onto a button or icon on your UI canvas.
-* **Use case**: The primary way to let users open subpages (e.g., a "Machine Details" button opening the corresponding detail view) or to navigate in Apps that have no main menu.
+* **Back**: returns to the page shown before the current one. Does nothing at the start of the visit history.
+* **Reload**: restarts the App in this tab with cleared caches.
+* **Logout**: forgets this device's credentials for the App and starts the App afresh. Apps with [individual registration](../../app-manager/users-and-access.md) land on the sign-in screen, Apps with a master password ask for it again, public Apps continue as a new anonymous user. Use it for shared devices and shift changes.
 
-### Logic-driven navigation
+Switching pages is an App action too. Its chip is the page itself.
 
-Your backend logic can also switch pages on its own.
+### On a widget
 
-* **How to link**: Drag a page from the Page Explorer onto a function's output.
-* **Use case**: If a function detects an error or a successful form submission, the backend pushes the user to an error or success page automatically.
+Turn any [button](widgets/trigger-widgets/button.md), [icon](text-icons-and-images.md), or image into a page-switch or action trigger.
+
+* **How to link**: Drag a page or an App action from the Page Explorer and drop it directly onto a button, icon, or image on your UI canvas.
+* **Use case**: The primary way to let users open subpages (e.g., a "Machine Details" button opening the corresponding detail view), to navigate in Apps that have no main menu, or to offer a Logout button wherever you like. No top bar is required.
+* **Order**: A click fires the functions linked to the button first. Logout and Reload wait for them, so a button that saves and logs out saves first.
+
+### From your logic
+
+Your backend logic can also switch pages and run actions on its own.
+
+* **How to link**: Drag a page or an App action from the Page Explorer onto a function's output, modifier, filter, or error handler.
+* **Use case**: If a function detects an error or a successful form submission, the backend pushes the user to an error or success page automatically. A Timer output with Logout ends a session after a fixed time; a filter that detects an alarm switches to the alarm page.
+* **What fires it**: Every truthy value the output produces after the App has loaded. Falsy values, such as a filter that blocks, never fire.
+* **Who is reached**: The action reaches the users the value reaches. When a user's click started the flow, only that user: a Timer that the user started ticks for that user alone, so "logout after ten minutes" is per user with nothing to configure. When no user started the flow, a poll or a listener fired by the backend, every connected user: an alarm switches every screen, a backend-fired Logout ends every session.
+* **Back** cannot be dropped on an output. Walking every user's history at once makes no sense, so it lives on widgets only.
 
 <figure><img src="../../.gitbook/assets/image (32).png" alt=""><figcaption><p>Switch page link</p></figcaption></figure>
+
+The browser's back and forward buttons, and the back gesture of a phone, walk your App's pages the same way the Back action does. The App's URL never changes.
 
 {% hint style="info" %}
 Need more vertical space on a page? Use the page height setting in the [Frontend Builder toolbar](./#the-toolbar).

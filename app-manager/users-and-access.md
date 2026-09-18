@@ -33,7 +33,7 @@ You can change these settings at any time, but each change instantly affects all
 
 * **Option**: _Users have to sign up_
 * **Details**: Heisenware manages user accounts automatically. Users can register with an email/password or their Google account.
-* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache.
+* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache. To offer a logout, drop the Logout [App action](../app-builder/build-frontend/page-explorer.md#app-actions) onto a button, or onto a function output to log out from your logic.
 
 ### Dual authentication
 

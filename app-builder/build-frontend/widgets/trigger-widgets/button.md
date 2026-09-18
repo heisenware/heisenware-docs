@@ -1,6 +1,6 @@
 # Button
 
-The button widget captures a user click to trigger backend logic. You can also drive its appearance and operational state from your logic to provide live visual feedback.
+The button widget captures a user click to trigger backend logic, switch pages, or run an [App action](../../page-explorer.md#app-actions) such as Logout. You can also drive its appearance and operational state from your logic to provide live visual feedback.
 
 ## Data binding
 
@@ -15,6 +15,10 @@ The button widget captures a user click to trigger backend logic. You can also d
 | **Property** | **Description** | **Type** |
 | :--- | :--- | :--- |
 | `onClick` | Fires when a user clicks the button and passes the configured button text string directly into a function input. | string |
+
+### Pages and App actions
+
+Drag a page or an App action (Back, Reload, Logout) from the Page Explorer onto the button. A click switches to the page or runs the action after the linked functions have fired; see [App actions](../../page-explorer.md#app-actions).
 
 ### Function output or modifier to widget
 
@@ -46,7 +50,6 @@ Set the widget's defaults in the settings panel.
 | `requiresConfirmation` | Requires confirmation | Opens an interactive confirmation modal dialog before executing actions when set to `true`. | boolean |
 | `confirmationTitle` | Confirmation title | Sets the title text displayed on the confirmation modal dialog. | string |
 | `confirmationText` | Confirmation text | Sets the main description message displayed inside the confirmation modal dialog. | string |
-| `reload` | Reload | Reloads the active App automatically upon a user click when set to `true`. | boolean |
 | `width` | Width | Sets the layout width dimension of the button in pixels. | integer |
 | `height` | Height | Sets the layout height dimension of the button in pixels. | integer |
 
