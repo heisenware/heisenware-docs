@@ -58,6 +58,7 @@ description: Unreleased
 * **Multiple tabs**: Closing or reloading one browser tab no longer silences live data in another tab of the same user; every tab holds its own connection.
 * **Deployed App integrity**: Deleting a page in the App Builder no longer removes widgets of the deployed twin.
 * **Connector instances**: Instances created in the Function Explorer survive a restart of the connector service.
+* **Event functions after a restart**: A function that listens to backend events (`on...`) keeps listening after a restart of the platform or of a deployed App. It used to stay silent until triggered again.
 * **Audit tables**: Tables with a custom primary key create their audit log correctly, and a failing `auditLog` reports the error instead of blocking writes.
 * **Boot window clicks**: Clicking a widget while a Production App is still loading no longer crashes it.
 * **Buttons in groups**: Buttons inside group widgets trigger their function in deployed Apps.
