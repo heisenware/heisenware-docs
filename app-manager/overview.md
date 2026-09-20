@@ -6,12 +6,13 @@ The App Manager is the administrative center of your Heisenware account. Here yo
 
 ## Key features
 
-The App Manager has four main areas:
+The App Manager has five main areas:
 
 * [**Apps**](overview.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
 * [**Dashboard**](overview.md#dashboard): A real-time summary of account-wide performance and user metrics.
 * [**Members**](members.md): The interface for inviting and managing your members.
-* [**Integrations (inbound)**](inbound-integrations.md): Monitor and authorize data from [Agents](../app-builder/build-backend/agents/), MQTT, and VRPC clients.
+* [**Agents**](agents.md): Build, update, restart and roll out builds to the [Agents](../app-builder/build-backend/agents/) installed on your hosts.
+* [**Integrations (inbound)**](inbound-integrations.md): Monitor and authorize data from MQTT and VRPC clients and MCP connectors.
 
 ## Apps
 
