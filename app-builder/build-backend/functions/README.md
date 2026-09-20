@@ -74,6 +74,8 @@ Inputs determine function behavior. Provide data using three methods:
 
 The platform uses YAML for configuration because it provides a human-readable format for complex data structures.
 
+Type a value and click away to save it. The platform shows every saved value in block style, whatever style you typed: nested keys indent and list items start with a hyphen. A value longer than a few lines collapses to a one-line preview in the input. Click the preview to edit the value in a popup editor, the same one modifiers and filters use. Closing the popup saves the value.
+
 <details>
 
 <summary><strong>YAML cheat sheet</strong></summary>
