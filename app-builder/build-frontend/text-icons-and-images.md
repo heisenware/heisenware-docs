@@ -7,7 +7,10 @@ Text, icons, and images add visual design, branding, and instructions to your in
 Use text boxes for titles, labels, and detailed instructions.
 
 * **Add**: Click the text box icon in the Frontend Builder toolbar and click the canvas to place it.
-* **Edit**: Double-click the text box to open the text editor, where you type, format text, and insert static tables.
+* **Edit**: Double-click the text box to open its settings. The *Content* tab is the text editor, where you type and format text, insert static tables, quotes, code, and rules; *Look & feel* sets the vertical alignment.
+* **Look**: Headings, lists, tables, quotes, and code render in one consistent style that takes its colors from the App theme, so a text box looks right in light and dark themes alike.
+
+The AI assistant writes text boxes in Markdown, including tables. Pictures belong to the [image widget](widgets/display-widgets/image.md).
 
 <figure><img src="../../.gitbook/assets/image (518).png" alt=""><figcaption></figcaption></figure>
 
