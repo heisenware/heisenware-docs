@@ -35,6 +35,7 @@ description: Unreleased
 
 * **Complete `.hwt` bundles**: an exported App now carries the uploaded files it references, so it looks and works the same after [import](../app-builder/deploy-and-maintain.md) on another server. Secrets stay behind, and the import summary lists what still has to be entered.
 * **Section colors**: Tint [sections](../app-builder/build-backend/#grouping-sections) on the flow board from a palette in the section header.
+* **Annotation cards**: [Annotations](../app-builder/build-backend/#annotations) on the flow board become documentation cards with headings, tables, pictures, and Mermaid diagrams, a color palette, and a gentler zoom behavior that never overlaps neighbors. The AI assistant writes them in Markdown.
 * **Settings panel overhaul**: Range settings combine a slider with a number input, long tabs fold into collapsible sections, labels use sentence case, and every widget's data tab is *Content* and its appearance tab *Look & feel*. Text and chat widgets get a settings panel.
 * **Automatic colors everywhere**: Every color field, including chart axes and palettes, map markers, kanban, and status lamps, accepts *Automatic* and previews the theme color it resolves to. The color keyword `gray` becomes `auto`; the old keyword keeps working.
 * [**Progress bar**](../app-builder/build-frontend/widgets/display-widgets/progress-bar.md): Configure the bar width, and bind `min`, `max`, and `showStatus` individually.

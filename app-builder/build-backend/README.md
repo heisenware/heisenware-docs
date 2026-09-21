@@ -52,7 +52,11 @@ To bundle functions into a reusable custom function instead, use a [subflow](fun
 
 ### Annotations
 
-Place free-text notes anywhere on the canvas using the annotation tool, for example to document complex logic paths or leave instructions for other developers.
+Place documentation cards anywhere on the canvas using the annotation tool, for example to sketch the architecture of an App, explain a logic path that spans several functions, or leave instructions for other developers.
+
+A card holds rich text: headings, lists, tables, quotes, code blocks, links, and pictures from the media library. Double-click a card to edit it in the panel; a code block in the `mermaid` language is drawn as a diagram. The palette in the panel header tints the card, for example in the color of the section it explains. Cards keep the width you give them and grow with their content. Zoomed out, the text lifts a little to stay legible but never leaves its card.
+
+The AI assistant writes annotations in Markdown, including tables, images, and Mermaid diagrams.
 
 <figure><img src="../../.gitbook/assets/Annotation_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
 
