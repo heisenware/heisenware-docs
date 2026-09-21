@@ -38,7 +38,7 @@ Set the widget's defaults in the settings panel.
 | **Property** | **Label** | **Description** | **Type** |
 | :--- | :--- | :--- | :--- |
 | `timeField` | Time field | Specifies the property key name in the data objects containing the event timestamp string or epoch number. Defaults to `timestamp`. | string |
-| `endTime` | End time | Controls the calculation rule for ending the final active data block. Set to `current time` to dynamically stretch the final block to the present moment. | string |
+| `endTime` | End time | Where each track's last block ends. `current time` stretches it to the present moment (live monitoring); `last point` ends it just past the last data point, padded by 2 % of the data span (historical snapshot). | string |
 | `zoomAndPan` | Zoom and pan | Configures chart navigation interactivity. Options include `enabled` (always zoomable), `selectable` (toggled via an on-chart lock button), or `none`. | string |
 | `rotated` | Rotated | Inverts the vertical and horizontal orientation layouts of the chart axes. | boolean |
 | `gridVisible` | Show grid | Toggles the layout visibility of grid lines running along the value axis. | boolean |

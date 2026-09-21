@@ -62,7 +62,7 @@ Set the widget's defaults in the settings panel.
 
 | **Property**       | **Label**                | **Description**                                                                                           | **Type** |
 | ------------------ | ------------------------ | --------------------------------------------------------------------------------------------------------- | -------- |
-| `defaultCenter`    | Default center           | Sets the initial latitude and longitude center coordinate point of the map view.                          | string   |
+| `defaultCenter`    | Default center           | Latitude and longitude pair the map shows at start, e.g. `[53.55, 9.78]`; markers recenter it while center on markers is on. | number[] |
 | `defaultZoom`      | Default zoom             | Sets the initial magnification zoom level of the map canvas.                                              | integer  |
 | `defaultIcon`      | Default icon             | Sets the default icon style class applied to all plotted location markers.                                | string   |
 | `defaultIconSize`  | Default icon size        | Sets the default display text or icon size dimension for the markers in pixels.                           | integer  |
