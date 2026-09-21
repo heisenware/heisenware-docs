@@ -28,7 +28,7 @@ Click the small pencil icon inside a page's representation to open its settings,
 
 * The page name shown in the menu
 * The menu icon
-* The app bar title shown at the top of the screen
+* The app bar title, shown in the bar of the expandable menu drawer
 
 Subpages inherit the app bar title from their parent page, so users always know which section they are in.
 
@@ -39,11 +39,11 @@ The App menu is the navigation users see across all pages and subpages. To confi
 ### Menu types
 
 * **None**: No navigation menu.
-* **Top bar**: A bar at the top showing the app bar title and menu icons.
-* **Top bar and bottom tabs**: Combines a top bar with a fixed tab bar at the bottom, for a standard mobile App feel.
-* **Bottom tabs only**: A fixed tab bar at the bottom of the screen.
-* **Expandable menu drawer**: A classic burger menu that opens and closes.
+* **Bottom tabs**: A fixed tab bar at the bottom of the screen, for a standard mobile App feel.
+* **Expandable menu drawer**: A classic burger menu that opens and closes, with a bar showing the app bar title.
 * **Fixed left menu**: A permanent side menu on the left.
+
+There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](widgets/display-widgets/card.md) as the band, an [image](widgets/display-widgets/image.md) for the logo, a text widget for the title, and a [button](widgets/trigger-widgets/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, then copy the group to the other pages.
 
 <figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 212421.png" alt=""><figcaption></figcaption></figure>
 
