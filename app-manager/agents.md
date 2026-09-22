@@ -24,7 +24,7 @@ Every row shows the agent's alias or name, whether it is online, its build, its 
 
 ## Building an Agent
 
-Click **Build agent**, choose the connectors, the target operating system and, for a fleet, its name, and add a note that says what the build is for. Below the connectors the dialog lists what each one can do on the host: these sentences also end up in the requirements for IT. Compiling takes a minute or two; the build appears under **Builds** as soon as it is ready and its requirements sheet opens.
+Click **Build agent**, choose the connectors, the target operating system, for a Linux target the **package** (a Debian package for a host with systemd, or a **ctrlX OS app** to install on a ctrlX CORE as a snap, see [Running on a ctrlX CORE](../app-builder/build-backend/agents/native-agent.md#running-on-a-ctrlx-core)) and, for a fleet, its name, and add a note that says what the build is for. Below the connectors the dialog lists what each one can do on the host: these sentences also end up in the requirements for IT. Compiling takes a minute or two; the build appears under **Builds** as soon as it is ready and its requirements sheet opens.
 
 Every build has a number within its fleet, `b1`, `b2`, and so on. The newest build is the fleet's **current** build: the one an update or a rollout installs unless you pick another. Under **Builds** you can make an older build current, download the installer of any build, read its requirements for IT, or delete builds you no longer need. **Rebuild** compiles a fleet again with its connectors on the platform's current version, for example after a platform update.
 
@@ -43,6 +43,8 @@ Agents already need outbound TCP 8883 to the platform host for their data channe
 ## Updating agents
 
 Select the agents that are behind and click **Update to current**, or click **Update fleet** on a fleet's line. Either way a **rollout** starts: the platform tells each agent which build to take, the agent downloads it from the platform, verifies it, installs it next to the running executable and restarts. An agent that is offline waits in the rollout until it connects.
+
+An agent installed as a ctrlX OS app is the exception: its executable is read-only inside the app, so it takes no remote update and the rollout dialog lists it as not ready. The panel still shows which build it runs; the next build is installed on the device under **Apps**, as the first one was.
 
 Before the rollout starts, the dialog shows each agent's readiness: whether it can reach the update channel, has enough disk, runs as a service, and can write its executable. Agents that are not ready are left out by default, with the reason.
 

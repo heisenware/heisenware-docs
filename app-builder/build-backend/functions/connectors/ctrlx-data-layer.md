@@ -44,6 +44,7 @@ Every app on the device publishes what it has into one shared tree, the **Data L
 * **A ctrlX user.** The connector logs in with a name and password. The user's permissions on the device decide which nodes you may read and write.
 * **Trust the device once.** A ctrlX CORE shows a certificate it made itself, so the first connection is refused. Run `TrustStore.trustServer` with the device's address, see [Trusted certificates](trusted-certificates.md). From then on the connector accepts the device.
 * **Addresses** are Data Layer node paths as the ctrlX Data Layer app shows them, for example `framework/metrics/system/cpu-utilisation-percent` or `plc/app/Application/sym/GVL/counter`.
+* **Where the connector runs.** On the platform or on any host with a [Native Agent](../../agents/native-agent.md) that reaches the device over the network, or on the ctrlX itself: build the Agent as a [ctrlX OS app](../../agents/native-agent.md#running-on-a-ctrlx-core) with this connector on board, then the device's address is `https://localhost`.
 
 ## Instance creation
 
