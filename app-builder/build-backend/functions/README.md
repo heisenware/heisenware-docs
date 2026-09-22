@@ -269,6 +269,8 @@ This action reveals the exact path to the code, consisting of up to three boxes:
 
 Edit this address directly in the boxes if required. The platform retains your changes if you switch back to the standard view.
 
+Each box is an input like any other: type a `$variable` token to take the name from a variable, or drop a function result onto the box to set it from the flow. The agent and instance boxes also accept a list of names. Combined with the zip loop (see _Sequential processing of arrays_), row _i_ of the arguments then runs on agent _i_ or instance _i_ - one function serving ten machines from a table of names, whether that is one instance name on ten agents or ten instances on one agent. Without a loop, a list calls every named target in parallel and collects one result per target; a glob such as `edge-*` in the agent box addresses every matching live agent, and `*` in the instance box every live instance of the class. A list is always a live value: switching back to the fixed address keeps the last single name a box held, never a list.
+
 {% hint style="info" %}
 #### Swap Agents across environments
 
