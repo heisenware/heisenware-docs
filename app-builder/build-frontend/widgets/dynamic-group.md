@@ -46,6 +46,7 @@ When you wire a dataset to the group's `data` property, the data settings panel 
 ## Tips and tricks
 
 * **Design a single tile template**: Arrange your child widgets inside the single visible container layout on the canvas to configure your base appearance. The platform automatically duplicates this layout template for every item in your array.
+* **One tile, every screen**: The tile is the same on every screen; a narrow screen shows it zoomed down. Child widgets therefore have no [per-screen pins](../README.md#pin-a-setting-to-one-screen): every setting of a child, font sizes and label modes included, is shared across screens. When you group widgets, the values pinned on the screen you group on become the children's shared values.
 * **Track child widget names**: Monitor auto-generated child component designations like `text1` or `button1`. These code identifiers specify which component triggered an action or receives information during data binding setups and `onButtonClick` event handling routines.
 
 ## Video demo

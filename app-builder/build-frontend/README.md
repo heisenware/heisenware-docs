@@ -84,6 +84,8 @@ Some settings are pinned by nature because their right value depends on the scre
 
 One of them is on every widget: the **Visible** switch at the top of the General tab. Switch it off to drop the widget from the screen you are editing; it stays on every other screen. A hidden widget takes no space in the deployed App, and in the builder it stays as a faded ghost you can still select and switch back on. Hiding a group hides its members with it; a member inside a group follows its group.
 
+Widgets inside a [group](widgets/dynamic-group.md) have no pins: the group's tile is one thing on every screen (a narrow screen shows it zoomed down), so every setting of a member is shared, the ones pinned by nature included, and their fields show no pin. Grouping keeps what you see: the values pinned on the screen you group on become the members' shared values, and pins on other screens go.
+
 {% hint style="info" %}
 #### Workflow best practices
 
