@@ -41,7 +41,7 @@ The platform classifies functions into four types based on how they manage state
 * **Sequence**: Create a flow by drawing a wire between nodes. See [Sequencing functions](../#sequencing-functions).
 * **Configure**: Click a function to open its configuration panel. Use YAML for static data or data binding for dynamic data from other functions or widgets.
 * **Documentation**: Click the info icon next to a function name to open its documentation panel.
-* **Comment**: Right-click a function and select comment to add context.
+* **Comment**: Right-click a function and select comment to add your note on the node: what this function does in this flow. The documentation shown when you hover a function is the function's own (its JSDoc or docstring) and is not edited in the builder.
 * **Delete**: Select the function and press the Delete key, or click the trash icon.
 
 {% hint style="danger" %}
