@@ -6,7 +6,7 @@ The App Builder is a core component of the Heisenware platform: a visual develop
 
 The App Builder splits into four areas that cover the App lifecycle and development workflow.
 
-* **Top Bar (top)**: Opens the [Theme Editor](build-frontend/theme-editor.md) and [PDF Template Editor](build-frontend/pdf-template-editor.md), and gives access to App Builder settings, language, and help. It also shows the current App version and holds the controls to [test and deploy](deploy-and-maintain.md).
+* **Top Bar (top)**: Opens the [Theme Editor](build-frontend/theme-editor.md) and [PDF Template Editor](build-frontend/pdf-template-editor.md), gives access to App Builder settings and help, and shows the App's language (set in the [App Manager](../app-manager/overview.md#app-settings)). It also shows the current App version and holds the controls to [test and deploy](deploy-and-maintain.md).
 * **Explorers (left)**: Switch between the [Function Explorer](build-backend/functions/function-explorer.md) for backend logic, the [Page Explorer](build-frontend/page-explorer.md) for frontend structure, and the [File Explorer](build-backend/file-explorer.md) for resources needed during app development.
 * **Backend Builder (center)**: An infinite drawing area where you create the [business logic](build-backend/) of your entire App by wiring up selected functions into automated flows.
 * **Frontend Builder (right)**: A page-specific design canvas for composing user interfaces for all screen sizes. This is where you [build user interfaces (UI)](build-frontend/) using text, images, and interactive widgets.

@@ -57,7 +57,7 @@ An App beyond the plan's quota cannot be opened by anyone: the platform refuses 
 * **Name**: The visible title on desktops, home screens, and browser tabs. Keep this under 10 characters for the best mobile display.
 * **Description**: Optional internal notes. These are not visible to users.
 * **Icon**: The logo used for the favicon and home screen icon. Works best as a square image. Leave padding around the logo, since mobile devices often apply a circular cutout.
-* **Language (Beta)**: Heisenware can automatically translate your App using AI. Supported reference languages include English, German, French, Turkish, Italian, and Spanish. [Contact us](mailto:support@heisenware.com) for access to this feature.
+* **Language**: The one language the App speaks: the texts of its widgets (grid messages, editors, validation), the player's own screens (sign-in, connection notices, the install prompt) and the document language. The browser's language plays no role once the App is known. Every language DevExtreme ships a dictionary for is available; the setting lives here only, the App Builder shows it. To offer an App in several languages, create one App per language: export the reference App as a bundle, import it as a new App with its own URL and translate its texts (the AI assistant can help), then link the Apps to each other.
 
 ### App status and control
 
