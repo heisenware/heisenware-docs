@@ -48,6 +48,8 @@ Click Start App Builder on the App card to open the development environment in a
 
 {% hint style="info" %}
 The total number of Apps you can create depends on your plan. [Contact us](mailto:support@heisenware.com) if you need additional Apps for your plan.
+
+An App beyond the plan's quota cannot be opened by anyone: the platform refuses to register it for access, and its page says so instead of loading. The App Manager's create button and the AI assistant's `create_app` refuse at the quota, naming the plan and the limit; delete an App or raise the plan under Plan & Billing, and the platform registers the waiting App within a minute.
 {% endhint %}
 
 ### App settings
