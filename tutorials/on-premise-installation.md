@@ -246,3 +246,7 @@ Execute these commands from your installation directory to manage your on-premis
     ```bash
     docker logs -f <container_name>
     ```
+
+## Remote support
+
+Heisenware can help with your installation remotely, through one outbound connection you switch on and off: see [Remote support](on-premise-remote-support.md).

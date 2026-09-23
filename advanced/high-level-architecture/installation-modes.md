@@ -39,4 +39,4 @@ Key responsibilities of upstream servers include:
 
 An on-premise installation functions as a single-node setup running on local hardware or a private cloud. This deployment completely isolates the platform from the public internet.
 
-To set up a local server, see the [On-premise installation](../../tutorials/on-premise-installation.md) setup guide.
+To set up a local server, see the [On-premise installation](../../tutorials/on-premise-installation.md) setup guide. For help from Heisenware without a way in, the installation can dial out to Heisenware's support tenant for the duration of a session: [Remote support](../../tutorials/on-premise-remote-support.md).

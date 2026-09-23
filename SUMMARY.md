@@ -159,6 +159,7 @@
   * [Connect Heidenhain CNC with OPC UA support](tutorials/integration-guides/connect-heidenhain-cnc-with-opc-ua-support.md)
 * [On-premise installation](tutorials/on-premise-installation.md)
   * [Upgrading from v92 to v93](tutorials/upgrading-from-v92-to-v93.md)
+  * [Remote support](tutorials/on-premise-remote-support.md)
 
 ## Advanced
 
