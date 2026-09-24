@@ -62,6 +62,7 @@ The App actions sit in a row at the foot of the Page Explorer:
 * **Back**: returns to the page shown before the current one. Does nothing at the start of the visit history.
 * **Reload**: restarts the App in this tab with cleared caches.
 * **Logout**: forgets this device's credentials for the App and starts the App afresh. Apps with [individual registration](../../app-manager/users-and-access.md) land on the sign-in screen, Apps with a master password ask for it again, public Apps continue as a new anonymous user. Use it for shared devices and shift changes.
+* **Open link**: opens a URL fixed when you drop the chip: the same App in another language (`/app/<domain>/<appId>`), a manual, an external site. In this tab the App is left; with "Open in a new tab" the App stays open next to the link.
 
 Switching pages is an App action too. Its chip is the page itself.
 

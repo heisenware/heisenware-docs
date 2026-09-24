@@ -18,7 +18,7 @@ The button widget captures a user click to trigger backend logic, switch pages, 
 
 ### Pages and App actions
 
-Drag a page or an App action (Back, Reload, Logout) from the Page Explorer onto the button. A click switches to the page or runs the action after the linked functions have fired; see [App actions](../../page-explorer.md#app-actions).
+Drag a page or an App action (Back, Reload, Logout, Open link) from the Page Explorer onto the button. A click switches to the page or runs the action after the linked functions have fired; see [App actions](../../page-explorer.md#app-actions).
 
 ### Function output or modifier to widget
 
