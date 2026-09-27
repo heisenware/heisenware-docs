@@ -5,7 +5,7 @@ The terminal side of the [MCP server](mcp-server.md): everything you type to reg
 ## Register once
 
 ```bash
-claude mcp add --scope user heisenware -- npx -y --no-audit "<link from the App Manager>"
+claude mcp add --scope user heisenware -- npx -y --no-audit -p "<link from the App Manager>" heisenware-mcp
 ```
 
 `--scope user` registers the server for you in every folder. Without it Claude Code binds the server to the folder you ran the line in, and a session started elsewhere does not see it. The link carries an access ticket valid for twelve hours; `npx` keeps the package after the first start, so the link only matters on a new machine.
@@ -48,7 +48,7 @@ After a platform update, a new password, or an expired link: open the executable
 
 ```bash
 claude mcp remove --scope user heisenware
-claude mcp add --scope user heisenware -- npx -y --no-audit "<fresh link>"
+claude mcp add --scope user heisenware -- npx -y --no-audit -p "<fresh link>" heisenware-mcp
 ```
 
 and start a new session.

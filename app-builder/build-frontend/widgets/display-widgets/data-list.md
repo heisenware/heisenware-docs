@@ -11,6 +11,7 @@ The data list widget displays a collection of data objects inside a scrollable l
 | **Property**  | **Description**                                                                  | **Type** |
 | ------------- | -------------------------------------------------------------------------------- | -------- |
 | `data`        | The array of data objects to populate within the list items.                     | array    |
+| `options`     | Provides dropdown and tag options per field at runtime, `{ <dataField>: [<options>] }`; an option is a value or a `[label, value]` pair. Replaces the statically configured options of that field. | object   |
 | `searchValue` | Programmatically sets the search filter string value to filter list contents.    | string   |
 | `editable`    | Programmatically toggles whether the fields within the list items can be edited. | boolean  |
 
@@ -55,7 +56,6 @@ These settings control the interactive features and payload tracking rules for t
 | `allowSearching`      | Allow searching         | Embeds an integrated search box panel above the list to filter items based on visible data fields.          | boolean  |
 | `allowUpdating`       | Allow updating          | Lets users modify input fields directly within individual list items inline.                                | boolean  |
 | `allowDeleting`       | Allow deleting          | Exposes interactive removal tools to delete items out of the list layout.                                   | boolean  |
-| `showAllFieldsOnEdit` | Show all fields on edit | Forces the updated data payload to contain all item properties instead of only modified fields.             | boolean  |
 
 ### Data fields
 
@@ -77,15 +77,13 @@ Configure sub-properties nested inside your fields based on your selected `widge
 | ------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------- |
 | `min`               | Minimum              | (`number` and `slider` only) The lowest numeric value bound allowed for entry.                              | number           |
 | `max`               | Maximum              | (`number` and `slider` only) The highest numeric value bound allowed for entry.                             | number           |
-| `defaultValue`      | Default value        | (`number`, `slider`, `dropdown`, `tags` variants) The initial value used inside empty entries.              | string or number |
 | `precision`         | Precision            | (`number` only) Caps the maximum count of fixed decimal fraction places shown.                              | number           |
 | `currency`          | Currency             | (`number` only) Prepends currency identifier tags (such as `EUR` or `$`) ahead of values.                   | string           |
 | `handleLargeNumber` | Handle large numbers | (`number` only) Downsamples massive integers into condensed unit string variations (such as `1.2M`).        | boolean          |
-| `discover`          | Discover options     | (`dropdown` and `tags` only) Automatically extracts unique choices directly from historical dataset values. | boolean          |
-| `options`           | Options              | (`dropdown` and `tags` only) A comma-separated list mapping hardcoded selection options.                    | string           |
+| `discover`          | Discover options     | (`dropdown` and `tags` only) Adds the values the items already carry in this field to the options.         | boolean          |
+| `options`           | Options              | (`dropdown` and `tags` only) Comma-separated options; `label:value` shows the label and writes the value. The `options` input replaces them at runtime. | string           |
 | `switchedOnText`    | Switched on text     | (`switch` only) The active label text displayed when the toggle is toggled true.                            | string           |
 | `switchedOffText`   | Switched off text    | (`switch` only) The inactive label text displayed when the toggle is toggled false.                         | string           |
 | `dateType`          | Date type            | (`dateTime` only) Adjusts picker depths, choosing between `date`, `time`, or combining into `datetime`.     | string           |
 | `formatDescription` | Format description   | (`dateTime` only) Selects specific formatting options driven by preset properties or explicit tokens.       | string           |
-| `isCentralElement`  | Is central element   | (`media` only) Scales asset displays into massive core preview positions across forms.                      | boolean          |
 | `thumbnailSize`     | Thumbnail size       | (`media` only) Defines the pixel height for preview imagery rendered inside list fields.                    | integer          |

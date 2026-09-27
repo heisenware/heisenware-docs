@@ -60,7 +60,7 @@ The terminal commands around the connector - register, check, approve tools, rep
 Register the server once with the line from the executable's view in the App Manager; it looks like this:
 
 ```bash
-claude mcp add --scope user heisenware -- npx -y --no-audit "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>"
+claude mcp add --scope user heisenware -- npx -y --no-audit -p "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>" heisenware-mcp
 ```
 
 `--scope user` registers the server for you in every folder. Without it, Claude Code binds the server to the folder the line was run in, and a session started elsewhere does not see it.
@@ -94,7 +94,9 @@ Add the block from the Connect dialog to `claude_desktop_config.json`:
       "args": [
         "-y",
         "--no-audit",
-        "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>"
+        "-p",
+        "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>",
+        "heisenware-mcp"
       ]
     }
   }
@@ -105,7 +107,7 @@ A read-only connector is its own integration, ticked _read-only_ when created; n
 
 ## Other MCP clients
 
-Any other client is configured the same way: `npx -y --no-audit "<download link>"` as the command. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
+Any other client is configured the same way: `npx -y --no-audit -p "<download link>" heisenware-mcp` as the command. The package carries two executables (the connector and the support agent of an on-premise installation), so the line names the one to run. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
 
 ## Checking the connection
 

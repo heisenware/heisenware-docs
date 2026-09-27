@@ -1,0 +1,14 @@
+{
+  "name": "heisenware-docs-media",
+  "private": true,
+  "description": "Records the screenshots and GIFs in .gitbook/assets from the running platform",
+  "scripts": {
+    "record": "node record.js",
+    "postinstall": "playwright install chromium"
+  },
+  "dependencies": {
+    "gifenc": "^1.0.3",
+    "playwright": "1.63.0",
+    "pngjs": "^7.0.0"
+  }
+}

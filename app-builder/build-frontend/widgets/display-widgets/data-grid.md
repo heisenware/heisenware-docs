@@ -14,14 +14,15 @@ The data grid widget displays tabular data inside a flexible, interactive table 
 | `rowFilter`          | Applies a row-level column filter matching criteria directly from backend logic.            | object         |
 | `headerFilter`       | Applies a selection list filtering rule to designated column header paths.                  | object         |
 | `rowFilterOperation` | Dictates matching operations (such as contains or equals) enforced across your row filters. | object         |
+| `options`            | Provides dropdown and tag options per column at runtime, `{ <dataField>: [<options>] }`; an option is a value or a `[label, value]` pair. Replaces the statically configured options of that column. | object         |
 
 ### Widget to function input
 
 | **Property**        | **Description**                                                                                                                                            | **Type**                 |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `onChange`          | Fires when a row is updated, sending the modified values along with the row identifier.                                                                    | object                   |
+| `onChange`          | Fires when a row is saved after an edit, sending the whole row with the changes applied. In batch mode, one event per changed row.                          | object                   |
 | `onInsert`          | Fires when a user inserts a new record row, sending the newly created data object.                                                                         | object                   |
-| `onDelete`          | Fires when a row record is deleted, sending the unique primary key identifier of that row.                                                                 | string or number         |
+| `onDelete`          | Fires when a row record is deleted, sending the row's key: its `id`, or its `index` when the rows carry none.                                              | string or number         |
 | `onSelectionChange` | Fires when active row selection highlighting changes. Sends a single row object, or an array of objects if multi-selection is enabled.                     | object or array\<object> |
 | `onRowClick`        | Fires when a user clicks anywhere inside a grid row body, sending that row's data object.                                                                  | object                   |
 | `onLinkClick`       | Fires when a cell marked as clickable is selected. Sends the row values and appends an `__origin__` tracking property containing the clicked column field. | object                   |
@@ -47,7 +48,10 @@ Set the widget's defaults in the settings panel.
 | `showRowLines`          | Show horizontal lines | Toggles thin border divider lines separating consecutive rows.                                                | boolean  |
 | `rowAlternationEnabled` | Alternate row color   | Toggles zebra-striping style background shifts on alternating table rows.                                     | boolean  |
 | `columnAutoWidth`       | Column auto width     | Dynamically scales widths across columns to prevent text truncation based on row text volumes.                | boolean  |
+| `wordWrapEnabled`       | Wrap long text        | Wraps cell text onto several lines instead of cutting it off.                                                 | boolean  |
+| `noDataText`            | Empty text            | Text shown when there are no rows; empty keeps the theme's default.                                           | string   |
 | `detailMode`            | Detail mode           | Controls the display layout flow orientation inside expanded master-detail rows (`horizontal` or `vertical`). | string   |
+| `detailColCount`        | Detail card columns   | Columns for the fields of the detail card (`vertical` detail mode): `1` stacks them, `auto` fits as many as the width allows. | string   |
 | `labelMode`             | Label mode            | Selects structural label styling patterns for fields built inside form edit sheets.                           | string   |
 | `fontSizeContent`       | Font size content     | Adjusts the typography point text size for cell contents across rows.                                         | integer  |
 | `fontSizeLabel`         | Font size label       | Adjusts the typography point text size for header categories and field labels.                                | integer  |
@@ -73,11 +77,11 @@ Set the widget's defaults in the settings panel.
 
 | **Property**          | **Label**               | **Description**                                                                                                     | **Type** |
 | --------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------- | -------- |
-| `mode`                | Mode                    | Chooses the interaction layout style when modifying cell values (`cell`, `row`, inline `form`, or a modal `popup`). | string   |
-| `allowAdding`         | Allow adding            | Exposes creation shortcuts and empty field sheets to insert fresh records.                                          | boolean  |
-| `allowUpdating`       | Allow updating          | Toggles entry modifiers letting users modify historical row items.                                                  | boolean  |
-| `allowDeleting`       | Allow deleting          | Exposes row context tools to drop records out of the array dataset.                                                 | boolean  |
-| `showAllFieldsOnEdit` | Show all fields on edit | Forces editing forms to display all data properties, bypassing normal row column exclusions.                        | boolean  |
+| `mode`                | Mode                    | Chooses how values are modified: `cell` saves each cell as it is left, `batch` collects cell edits until the member saves them all, `row` edits a whole row inline, `form` expands the row into a form, `popup` opens a full-screen form. | string   |
+| `startEditAction`     | Start editing on        | In `cell` and `batch` mode: a `click` or a `dblClick` opens the cell editor. Double click keeps a click free for selecting the row.              | string   |
+| `allowAdding`         | Allow adding            | Exposes creation shortcuts and empty field sheets to insert fresh records. A new row starts with the columns' default values.                  | boolean  |
+| `allowUpdating`       | Allow updating          | Lets members edit rows; saving emits `onChange` with the whole row and the changes applied.                                                     | boolean  |
+| `allowDeleting`       | Allow deleting          | Adds a delete button to each row; deleting emits `onDelete` with the row's key.                                                                 | boolean  |
 
 ### Data export
 
@@ -86,8 +90,10 @@ Set the widget's defaults in the settings panel.
 | `allowPdfExport`          | Allow PDF export            | Exposes a toolbar option generating structured vector PDF sheets from grid datasets. | boolean  |
 | `allowExcelExport`        | Allow Excel export          | Exposes a toolbar option compiling rows into native spreadsheet documents (.xlsx).   | boolean  |
 | `allowCsvExport`          | Allow CSV export            | Exposes a toolbar option writing contents to flat comma-separated values files.      | boolean  |
-| `allowExportSelectedData` | Allow export data selection | Restricts generated document prints exclusively to active highlighted rows.          | boolean  |
 | `exportHint`              | Hint text                   | Customizes the prefix string prompt rendered inside file export toolbar buttons.     | string   |
+| `fileName`                | File name                   | Name of the downloaded file, without extension.                                      | string   |
+
+With `multiple` selection and rows selected, an export takes the selected rows only; otherwise every row.
 
 ### Data settings
 
@@ -98,8 +104,12 @@ Map object parameters from your database arrays into discrete grid columns.
 | `dataField`  | Data field    | The raw object key mapping path extracted out of the row array dataset.                                      | string   |
 | `caption`    | Column name   | The friendly header name string displayed at the top of the column row.                                      | string   |
 | `visibility` | Visibility    | Controls layout visibility levels (`visible`, `hidden`, inside `detail` sheets, or completely `removed`).    | string   |
-| `editing`    | Editing       | Enforces modification parameters for row edits (`optional`, `required` validation, `disabled`, or `hidden`). | string   |
+| `editing`    | Editing       | `optional` lets members edit the value, `required` refuses to save without one, `disabled` locks the value, `hidden` leaves it out of the edit form and locks it in place. | string   |
 | `widget`     | Editor widget | Dictates the interactive control interface loaded inside row modification sheets.                            | string   |
+| `width`      | Width         | Width of the column in px; empty sizes it to its content.                                                    | integer  |
+| `fixed`      | Pinned        | Pins the column to the `left` or `right` edge so it stays while the grid scrolls sideways; the row buttons follow to the right edge. | string   |
+| `sortOrder`  | Initial sort  | Sorts the rows by this column when the grid opens (`asc` or `desc`); members can still re-sort.              | string   |
+| `summary`    | Footer summary | Shows a total for the column in the footer, formatted like the column: `sum`, `avg`, `min`, `max` or `count`. | string   |
 
 ### Editor widget options
 
@@ -110,11 +120,12 @@ Configure input fields inside your editing panels based on your selected `widget
 | `isClickable`       | Is clickable         | (`text` only) Renders values as selectable link text to run downstream actions.                         | boolean          |
 | `min`               | Minimum              | (`number` and `slider` only) The lowest numeric value bound allowed for entry.                          | number           |
 | `max`               | Maximum              | (`number` and `slider` only) The highest numeric value bound allowed for entry.                         | number           |
-| `defaultValue`      | Default value        | (`number`, `slider`, `dropdown`, `tags` variants) The initial value used inside empty entries.          | string or number |
+| `defaultValue`      | Default value        | (`number`, `slider`, `dropdown`, `tags` variants) The value a new row starts with; for tags a comma-separated list. | string or number |
 | `precision`         | Precision            | (`number` only) Caps the maximum count of fixed decimal fraction places shown.                          | number           |
 | `currency`          | Currency             | (`number` only) Prepends currency identifier tags (such as `EUR` or `$`) ahead of values.               | string           |
 | `handleLargeNumber` | Handle large numbers | (`number` only) Downsamples massive integers into condensed unit string variations (such as `1.2M`).    | boolean          |
-| `options`           | Options              | (`dropdown`, `tags`, `slider`) A comma-separated selection configuration list mapping literal choices.  | string           |
+| `options`           | Options              | (`dropdown`, `tags`) Comma-separated options; `label:value` shows the label and writes the value. The `options` input replaces them at runtime. | string           |
+| `discover`          | Discover options     | (`dropdown`, `tags`) Adds the values the rows already carry in this column to the options, so every stored value can be picked again. | boolean          |
 | `switchedOnText`    | Switched on text     | (`switch` only) The active label text displayed when the toggle is toggled true.                        | string           |
 | `switchedOffText`   | Switched off text    | (`switch` only) The inactive label text displayed when the toggle is toggled false.                     | boolean          |
 | `dateType`          | Date type            | (`dateTime` only) Adjusts picker depths, choosing between `date`, `time`, or combining into `datetime`. | string           |
@@ -137,4 +148,5 @@ Configure input fields inside your editing panels based on your selected `widget
 ### User experience and layout
 
 * **Master-detail sections**: Expand row footprints smoothly by designating secondary column groups to `detail` visibility. When users toggle the row, hidden row fields load into sub-panels, creating clean dashboard layouts.
-* **Column curation**: Keep interactions user-centric. Enable column choosing and column resizing options so developers or app users can adjust visual widths and hide columns to suit unique workspaces.
+* **Column curation**: Keep interactions user-centric. Enable column choosing and column resizing options so developers or app users can adjust visual widths and hide columns to suit unique workspaces. The browser remembers only what the member may change: widths with resizing on, order with reordering on, visibility with choosing on, pinning with pinning on, plus the member's own sorting and filters. A filter the app presets through `rowFilter` or `headerFilter` always wins.
+* **Wide tables in cell mode**: Pin the key column to the left (`fixed`) and give long technical strings a `width`; the delete button then stays at the right edge while the grid scrolls sideways. Set `startEditAction` to double click when the grid also selects rows.
