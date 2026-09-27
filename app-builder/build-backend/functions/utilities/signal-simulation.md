@@ -1,5 +1,5 @@
 ---
-description: One class for every simulated source: a seeded, declarative time-series engine with ready-made presets.
+description: "One class for every simulated source: a seeded, declarative time-series engine with ready-made presets."
 ---
 
 # Signal simulation
