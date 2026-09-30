@@ -5,7 +5,7 @@ description: >-
 
 # Data Grid
 
-<figure><img src="../../../.gitbook/assets/widget-data-grid.png" alt="Data grid of production orders with search, header filters, footer sums, delayed orders in red and finished orders in green"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/widget-data-grid.png" alt="Data grid of production orders with search, header filters, footer sums, delayed orders in red and finished orders in green" width="1048"><figcaption></figcaption></figure>
 
 A data grid shows rows as a table that users work with: they sort and filter by any column, search, group rows by dragging a column header into the group panel, and read totals in the footer. Rules color cells or whole rows by their values. With editing on, users add, change and delete rows, and every change reaches your logic as an event carrying the row. The rows export to PDF, Excel or CSV.
 

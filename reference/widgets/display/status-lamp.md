@@ -5,7 +5,7 @@ description: >-
 
 # Status Lamp
 
-<figure><img src="../../../.gitbook/assets/widget-status-lamp.png" alt="Status lamps showing four machine states, and a strip of eight station lamps"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/widget-status-lamp.png" alt="Status lamps showing four machine states, and a strip of eight station lamps" width="548"><figcaption></figcaption></figure>
 
 A status lamp shows a state at a glance: running, setup, fault, idle, or whatever states your machines know. You decide which value lights which color. Link it to an executor's status and it tells whether that executor can run. Give it a list of states and the rectangle shape turns it into a strip, one bar per state, so a whole line fits in one row. A click can hand a value back to your logic, for example to open the machine's detail page.
 

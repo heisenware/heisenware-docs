@@ -5,9 +5,9 @@ description: >-
 
 # Chart
 
-<figure><img src="../../../.gitbook/assets/widget-chart-line.png" alt="Spline chart of two oven temperatures over a shift, with a dashed limit line at 180 °C"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/widget-chart-line.png" alt="Spline chart of two oven temperatures over a shift, with a dashed limit line at 180 °C" width="948"><figcaption></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/widget-chart-bar.png" alt="Bar chart comparing the output of three lines per weekday"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/widget-chart-bar.png" alt="Bar chart comparing the output of three lines per weekday" width="948"><figcaption></figcaption></figure>
 
 A chart draws rows of data as lines, areas, bars, points or bubbles: over time, or across categories such as lines, shifts or products. One chart holds several series, stacked panes and more than one value axis. Constant lines mark targets and limits, and they can come from your logic, so a limit changes with the product. Users hover for exact values, and zoom and pan through long time ranges; aggregation keeps a dense series readable.
 
