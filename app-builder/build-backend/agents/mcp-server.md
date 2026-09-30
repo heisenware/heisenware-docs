@@ -60,16 +60,18 @@ The terminal commands around the connector - register, check, approve tools, rep
 Register the server once with the line from the executable's view in the App Manager; it looks like this:
 
 ```bash
-claude mcp add --scope user heisenware -- npx -y --no-audit -p "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>" heisenware-mcp
+claude mcp add heisenware -- npx -y --no-audit -p "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>" heisenware-mcp
 ```
 
-`--scope user` registers the server for you in every folder. Without it, Claude Code binds the server to the folder the line was run in, and a session started elsewhere does not see it.
+Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope), so each project folder can point at its own platform under the same name. To have the server in every folder instead, add `--scope user`.
 
 Claude Code refuses a name that is already registered (`MCP server heisenware already exists`), for example from an earlier link that has since expired. Remove the old entry and register again:
 
 ```bash
-claude mcp remove --scope user heisenware
+claude mcp remove heisenware
 ```
+
+Without a scope, `remove` takes the entry from whichever scope holds it, also one registered with `--scope user` by an earlier line.
 
 `claude mcp list` shows what is registered.
 

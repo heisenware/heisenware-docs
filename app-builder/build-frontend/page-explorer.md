@@ -28,9 +28,8 @@ Click the small pencil icon inside a page's representation to open its settings,
 
 * The page name shown in the menu
 * The menu icon
-* The app bar title, shown in the bar of the expandable menu drawer
 
-Subpages inherit the app bar title from their parent page, so users always know which section they are in.
+Both are shared across screen sizes until you pin one: hover the field and click the pin to give the selected screen its own value. A page has no title of its own: a page heading is a text widget on the page.
 
 ## App menu
 
@@ -40,18 +39,18 @@ The App menu is the navigation users see across all pages and subpages. To confi
 
 * **None**: No navigation menu.
 * **Bottom tabs**: A fixed tab bar at the bottom of the screen, for a standard mobile App feel.
-* **Expandable menu drawer**: A classic burger menu that opens and closes, with a bar showing the app bar title.
+* **Burger menu**: A burger button in a top corner of every page; the menu slides in over the page and dims it (or pushes the page aside, from the left or the right, as wide as you like). There is no bar: the page keeps its full height, so a title bar is your own band of widgets laid under the burger.
 * **Fixed left menu**: A permanent side menu on the left.
 
-There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](widgets/display-widgets/card.md) as the band, an [image](widgets/display-widgets/image.md) for the logo, a text widget for the title, and a [button](widgets/trigger-widgets/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, then copy the group to the other pages.
+There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](widgets/display-widgets/card.md) as the band, an [image](widgets/display-widgets/image.md) for the logo, a text widget for the title, and a [button](widgets/trigger-widgets/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
+
+**Sticky widgets.** Every widget on a page has a *Sticky* switch on its General tab. A sticky widget stays where the screen puts it while the page scrolls: a band at the top is a header, a bar at the bottom of the screen a footer, a small button in a corner a "back to top". Sticky widgets draw above the page's content, and the page scrolls under them. The builder marks a sticky widget with a badge and keeps it in place on the canvas, which is where it will sit on the screen; the test run and the deployed App are where it sticks. Like other settings, *Sticky* is shared across screens until you pin it on one. A widget inside a group follows its group, so the group is what you make sticky.
 
 <figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 212421.png" alt=""><figcaption></figcaption></figure>
 
 ### Per-screen menu type
 
-Enable **Different navigation menus per screen** in the App menu settings to give each activated screen size its own menu type. Fixed left menu is often a good choice for large screens, while Bottom tabs only or Expandable menu drawer works well on smaller screens. Switch to the screen size you want to configure in the [Frontend Builder](./), then set the menu type.
-
-<figure><img src="../../.gitbook/assets/image (20).png" alt=""><figcaption><p>Different menu per screen</p></figcaption></figure>
+The menu settings are shared across all activated screen sizes until you pin one. Switch to the screen size you want to configure in the [Frontend Builder](./), open the menu settings, hover a field and click the pin to give that screen its own value for the field alone: a fixed left menu on large screens and bottom tabs on the phone is one shared menu type plus one pin. A faded pin shows the field is pinned on another screen; click a solid pin to share the field again. This is the same pin you know from widget settings and page settings.
 
 ## App actions
 

@@ -68,7 +68,7 @@ Right-click any element to open a menu for quick layout actions and layer manage
 
 <figure><img src="../../.gitbook/assets/image (516).png" alt=""><figcaption></figcaption></figure>
 
-* **Enable or disable screens**: Right-click any device icon to enable or disable specific screen sizes. By default, only the phone, tablet, and laptop are active. When a user opens your App on a disabled screen size, Heisenware scales the layout from the nearest active device size.
+* **Enable or disable screens**: Right-click any device icon to enable or disable specific screen sizes. By default, only the phone, tablet, and laptop are active. When a user opens your App on a disabled screen size, Heisenware scales the layout from the nearest active device size. The preview never stays on a disabled screen: disable the one you are editing and the builder moves to the App's reference screen, or to the nearest enabled one.
 * **Content alignment (L and XL)**: On large monitors, decide how the overall content sits on the screen. Right-click the L or XL icons to choose between left-aligned or centered layouts.
 
 <figure><img src="../../.gitbook/assets/image (517).png" alt=""><figcaption></figcaption></figure>
