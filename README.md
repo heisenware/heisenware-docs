@@ -1,7 +1,6 @@
 ---
 description: >-
-  Overview of the Heisenware platform, architecture, core concepts, and key
-  terminology.
+  What Heisenware is, its three parts, where to start, and the ideas behind it.
 layout:
   width: default
   title:
@@ -24,71 +23,62 @@ layout:
 
 # Welcome
 
-**Heisenware is an industrial application platform.** You build software visually and deploy it to production without writing boilerplate or setting up infrastructure. Underneath sits a distributed architecture, so your Apps scale from a single machine to a whole plant. When you need to go deeper, you reach the code and configuration directly.
+**Heisenware is an industrial application platform where AI builds the software with you.** You describe what your shop floor needs. The assistant plans the Apps with you, builds the logic and the pages, and shows every step as it goes. You check, change or undo anything, by asking or by hand. Underneath runs a distributed platform, so an App grows from one machine to a whole plant.
 
 ## The platform at a glance
 
-Three core components cover the entire application lifecycle:
+Heisenware has three parts:
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td><strong>App Manager</strong></td><td>Admin dashboard to create and manage Apps, members, and integrations.</td><td><a href="app-manager/README.md">overview.md</a></td><td><a href=".gitbook/assets/App Manager in Browser preview.png">App Manager in Browser preview.png</a></td></tr><tr><td><strong>App Builder</strong></td><td>Visual programming interface to build and test custom software applications.</td><td><a href="app-builder/README.md">overview.md</a></td><td><a href=".gitbook/assets/658shots_so.png">658shots_so.png</a></td></tr><tr><td><strong>App Player</strong></td><td>Runs your Apps for their users, in the browser or installed on a device.</td><td><a href="app-player/README.md">overview.md</a></td><td><a href=".gitbook/assets/tracking.jpg">tracking.jpg</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="image">Cover image</th></tr></thead><tbody><tr><td><strong>App Manager</strong></td><td>Plan Apps with the assistant, run them, and manage members, agents and integrations.</td><td><a href="app-manager/README.md">overview.md</a></td><td><a href=".gitbook/assets/welcome-app-manager.png">welcome-app-manager.png</a></td></tr><tr><td><strong>App Builder</strong></td><td>Build and test an App: its logic on the Flowboard, its pages in the Page editor, with the assistant at your side.</td><td><a href="app-builder/README.md">overview.md</a></td><td><a href=".gitbook/assets/658shots_so.png">658shots_so.png</a></td></tr><tr><td><strong>App Player</strong></td><td>Runs your Apps for their users, in the browser or installed on a device.</td><td><a href="app-player/README.md">overview.md</a></td><td><a href=".gitbook/assets/tracking.jpg">tracking.jpg</a></td></tr></tbody></table>
 
-## Hosting and architecture
+## Where to start
 
-The [Heisenware architecture](self-hosting/README.md) consists of the central platform and optional [Agents](concepts/agents-and-where-code-runs.md). Each account runs in isolation and supports two deployment modes:
+* **Your first App**: [build one step by step](getting-started/first-app-by-hand.md).
+* **How it works**: the concepts explain one idea per page, starting with [executors and instances](concepts/executors-and-instances.md).
+* **Look something up**: every [function](reference/functions/README.md) and [widget](reference/widgets/README.md) in the reference, and the words in the [glossary](reference/glossary.md).
+* **Use your own AI**: connect Claude or another AI client through the [MCP server](assistant/mcp-server.md).
 
-* **Cloud deployment**: The recommended way to use Heisenware. We host your Apps on [Hetzner](https://www.hetzner.com/) in Germany.
-* **On-premises deployment**: You run the entire platform as a Docker application on your local servers or private cloud.
+## How Heisenware thinks
 
-Whichever mode you choose, [Agents](concepts/agents-and-where-code-runs.md) bridge separated networks for you. For example, when you host the platform in a corporate data center (IT) and need to reach machines in a secured shopfloor network (OT), an Agent opens the secure tunnel.
+### AI builds with you
 
-## See it in action
+The assistant knows the rules of the platform, the platform law, and builds by them: logic on the Flowboard, pages, links, variables. It works in the open. You see every step, it asks before it deletes or deploys anything, and its checkpoints let you go back at any time. Prefer your own AI client? The [MCP server](assistant/mcp-server.md) gives it the same tools.
 
-Watch how to build and operate industrial apps in Heisenware.
+<figure><img src=".gitbook/assets/welcome-ai-builds.png" alt="The assistant adds a status lamp for the capper: it saves a checkpoint, creates the executor and the widget, links them, then tests the App and checks the page" width="560"><figcaption></figcaption></figure>
 
-{% embed url="https://www.youtube.com/watch?v=MM4teGtbB7k" %}
+### See and change everything
 
-## Engineering philosophy and core concepts
+Nothing is hidden behind the pictures. Every executor shows its inputs, its trigger and its outputs. Where clicking is not enough, you write an [expression](app-builder/flowboard/modifier.md) in JavaScript or JSONata, and your own code joins as an [add-on](reference/functions/add-ons/README.md).
 
-Heisenware is a visual programming environment. A few engineering concepts, all kept visible and under your control, make it click.
+<figure><img src=".gitbook/assets/welcome-see-and-change.png" alt="An executor reading the filler every two seconds, with the JavaScript expression of its modifier open" width="600"><figcaption></figcaption></figure>
 
-### Transparency and flexibility
+### Build once, use for every machine
 
-Heisenware keeps the underlying complexity visible and reachable. When you need custom logic, it is there.
+A class is a blueprint, for example the OPC UA client. An instance is one living copy of it, with its own name and settings, such as `opcua-filler`. You build the logic once and point it at the next machine by its instance name. See [executors and instances](concepts/executors-and-instances.md).
 
-* **Visual with full code access:** You build logic visually in the [Flowboard](app-builder/flowboard/README.md) and still reach developer tools directly, like JavaScript expressions for data transformation and YAML for configuration.
-* **Extensible**: When the built-in [functions](concepts/executors-and-instances.md) fall short, you wrap your own code (Node.js, Python, C++) into Custom Extensions that become native functions.
+<figure><img src=".gitbook/assets/welcome-classes-instances.png" alt="The Functions explorer with the Signal Simulator class and its three instances filler, capper and labeler" width="220"><figcaption></figcaption></figure>
 
-### Object-oriented scalability
+### Reacts when something happens
 
-Heisenware uses an object-oriented model. You build logic once and instantiate it across an entire fleet of devices.
+Nothing runs in an endless loop. An executor runs when one of its triggers fires: the App starts, a value arrives, a user clicks, a timer ticks. Until then it waits, and the rest of the App keeps running. See the [Flowboard](app-builder/flowboard/README.md).
 
-* **Classes (the blueprint)**: Reusable logic definitions, e.g. the [OPC UA client connector](reference/functions/connectors/opc-ua-client.md) or an [email connector](reference/functions/connectors/email.md).
-* **Instances (the asset)**: Living, stateful copies of a class. You don't write code for machine A. You create an instance of the OPC UA client, name it `opcua-machine-a`, and give it the machine's IP and credentials.
-* **Stateful context**: Instance functions carry their own context, e.g. which server to use, so you pass no global variables.
+<figure><img src=".gitbook/assets/welcome-triggers.png" alt="An executor whose trigger runs it every 2 seconds once the App starts" width="400"><figcaption></figcaption></figure>
 
-### Native event-driven architecture
+### Reaches machines behind the firewall
 
-Industrial systems are asynchronous. Sensors spike, users click, and machines stop at unpredictable times. Heisenware Apps handle this natively.
+Your machines sit in a protected network, while the platform may run in the cloud. An [agent](concepts/agents-and-where-code-runs.md) inside that network connects out to the platform, with no VPN and no open port, and runs the connectors right next to the machines.
 
-* **Reactive logic**: [Backend flows](app-builder/flowboard/README.md) do not run in a linear loop. They sit dormant until a specific trigger (an event) fires.
-* **Event sources**: A trigger can be a user interaction (a UI event), a data change (e.g. a PLC tag update), or a system lifecycle event.
-* **Non-blocking**: Your UI stays responsive while backend logic handles complex tasks asynchronously.
+<figure><img src=".gitbook/assets/welcome-agent.png" alt="Machines and a database in the plant network connect to an agent, which connects out through the firewall to Heisenware" width="600"><figcaption></figcaption></figure>
 
-### Distributed connectivity
+### Widgets linked straight to your logic
 
-Heisenware closes the "OT vs. IT" network gap by treating local hardware as a first-class citizen of the cloud platform.
+Drop an executor's output onto a widget, and the widget shows its value, live. A button runs an executor, a form fills its inputs. There is no code in between. See the [widgets](reference/widgets/README.md).
 
-* **The bridge**: [Native Agents](app-manager/agents/native-agent.md) and [Docker Agents](app-manager/agents/docker-agent.md) securely connect local, private networks (OT/shopfloor) to the cloud without VPNs.
-* **Local execution**: You push backend logic ([connectors](reference/functions/connectors/README.md)) to run locally on the edge device, and the platform treats these remote functions exactly like cloud functions.
+<figure><img src=".gitbook/assets/welcome-widget-links.png" alt="The settings of a circular gauge: its General tab shows the linked value with its live value, next to the gauge on the page" width="560"><figcaption></figcaption></figure>
 
-### Unified data binding
+## Hosting
 
-Heisenware removes the "glue code" you would normally write to connect a frontend to a backend.
-
-* **Direct linking**: In the [App Builder](app-builder/README.md), you connect a backend function's output straight to a frontend [widget's](reference/widgets/README.md) property.
-* **Reactive UI**: When backend data changes (e.g. a new sensor reading), the bound widget re-renders to reflect the new state.
-
-<figure><img src=".gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
+Heisenware runs in the Heisenware cloud, hosted in Germany, or on your own servers. [Cloud or on-prem](self-hosting/README.md) compares the two.
 
 ## Glossary
 
