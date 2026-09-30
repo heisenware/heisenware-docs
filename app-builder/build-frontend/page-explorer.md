@@ -42,7 +42,7 @@ The App menu is the navigation users see across all pages and subpages. To confi
 * **Burger menu**: A burger button in a top corner of every page; the menu slides in over the page and dims it (or pushes the page aside, from the left or the right, as wide as you like). There is no bar: the page keeps its full height, so a title bar is your own band of widgets laid under the burger.
 * **Fixed left menu**: A permanent side menu on the left.
 
-There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](widgets/display-widgets/card.md) as the band, an [image](widgets/display-widgets/image.md) for the logo, a text widget for the title, and a [button](widgets/trigger-widgets/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
+There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](../../reference/widgets/display/card.md) as the band, an [image](../../reference/widgets/trigger/image.md) for the logo, a text widget for the title, and a [button](../../reference/widgets/trigger/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
 
 **Sticky widgets.** Every widget on a page has a *Sticky* switch on its General tab. A sticky widget stays where the screen puts it while the page scrolls: a band at the top is a header, a bar at the bottom of the screen a footer, a small button in a corner a "back to top". Sticky widgets draw above the page's content, and the page scrolls under them. The builder marks a sticky widget with a badge and keeps it in place on the canvas, which is where it will sit on the screen; the test run and the deployed App are where it sticks. Like other settings, *Sticky* is shared across screens until you pin it on one. A widget inside a group follows its group, so the group is what you make sticky.
 
@@ -67,7 +67,7 @@ Switching pages is an App action too. Its chip is the page itself.
 
 ### On a widget
 
-Turn any [button](widgets/trigger-widgets/button.md), [icon](text-icons-and-images.md), or image into a page-switch or action trigger.
+Turn any [button](../../reference/widgets/trigger/button.md), [icon](text-icons-and-images.md), or image into a page-switch or action trigger.
 
 * **How to link**: Drag a page or an App action from the Page Explorer and drop it directly onto a button, icon, or image on your UI canvas.
 * **Use case**: The primary way to let users open subpages (e.g., a "Machine Details" button opening the corresponding detail view), to navigate in Apps that have no main menu, or to offer a Logout button wherever you like. No top bar is required.

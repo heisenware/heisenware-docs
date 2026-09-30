@@ -8,10 +8,10 @@ description: Dec 4, 2023
 
 ## Features
 
-* All upload widgets – including [Upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) and [Barcode / QR](../app-builder/build-frontend/widgets/input-widgets/barcode-qr.md) – now display uploaded data in a popover. This keeps widget sizes constant instead of expanding their height as users upload more data.
-* Configure the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md) to display groups of input elements as tabs.
-* The `validate` command is now available for the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md).
-* Widgets now support individual `default-detached` properties. Currently, the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md) supports two properties: `tabView` and `colCount`.
+* All upload widgets – including [Upload](../reference/widgets/input/upload.md) and [Barcode / QR](../reference/widgets/input/barcode-qr.md) – now display uploaded data in a popover. This keeps widget sizes constant instead of expanding their height as users upload more data.
+* Configure the [form widget](../reference/widgets/input/form.md) to display groups of input elements as tabs.
+* The `validate` command is now available for the [form widget](../reference/widgets/input/form.md).
+* Widgets now support individual `default-detached` properties. Currently, the [form widget](../reference/widgets/input/form.md) supports two properties: `tabView` and `colCount`.
 
 ## Fixes
 

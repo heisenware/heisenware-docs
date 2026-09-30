@@ -19,4 +19,4 @@ description: May 15, 2024
 
 * Resolved event-handling conflicts that occurred when a single user duplicated active browser tabs.
 * Optimized deployment routines to eliminate long wait times when large amounts of App data are already accumulated.
-* Reduced expensive, redundant internal rendering cycles for files loaded from the media server in [Media view](../app-builder/build-frontend/widgets/display-widgets/media-view.md).
+* Reduced expensive, redundant internal rendering cycles for files loaded from the media server in [Media view](../reference/widgets/display/media-view.md).

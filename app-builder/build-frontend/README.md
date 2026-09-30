@@ -10,7 +10,7 @@ The UI is optional. You can build headless Apps that use pure backend logic, lik
 
 ## Core UI components
 
-* [**Widgets**](widgets/): The functional components of your App. They display live data, capture user input, or trigger logic.
+* [**Widgets**](../../reference/widgets/README.md): The functional components of your App. They display live data, capture user input, or trigger logic.
 * [**Pages**](page-explorer.md): The individual screens of your App. Create multiple pages and subpages to structure your App logically, then configure navigation elements so users can move between them.
 * [**Text, icons, and images**](text-icons-and-images.md): Mostly static elements used for branding, instructions, and non-interactive content.
 * [**PDF templates**](pdf-template-editor.md): Visual layouts for generating dynamic documents. Map variables onto a document background, then populate them from your backend logic.
@@ -84,7 +84,7 @@ Some settings are pinned by nature because their right value depends on the scre
 
 One of them is on every widget: the **Visible** switch at the top of the General tab. Switch it off to drop the widget from the screen you are editing; it stays on every other screen. A hidden widget takes no space in the deployed App, and in the builder it stays as a faded ghost you can still select and switch back on. Hiding a group hides its members with it; a member inside a group follows its group.
 
-Widgets inside a [group](widgets/dynamic-group.md) have no pins: the group's tile is one thing on every screen (a narrow screen shows it zoomed down), so every setting of a member is shared, the ones pinned by nature included, and their fields show no pin. Grouping keeps what you see: the values pinned on the screen you group on become the members' shared values, and pins on other screens go.
+Widgets inside a [group](../../reference/widgets/layout/group.md) have no pins: the group's tile is one thing on every screen (a narrow screen shows it zoomed down), so every setting of a member is shared, the ones pinned by nature included, and their fields show no pin. Grouping keeps what you see: the values pinned on the screen you group on become the members' shared values, and pins on other screens go.
 
 {% hint style="info" %}
 #### Workflow best practices

@@ -17,7 +17,7 @@ Download an [Agent](../../app-builder/build-backend/agents/) with the [File I/O]
 {% step %}
 #### Add and configure the photo widget
 
-Pick the [photo](../../app-builder/build-frontend/widgets/input-widgets/photo.md) widget from the input widgets and place it into the user interface of your App. Switch the storage type of the photo widget from file to buffer.
+Pick the [photo](../../reference/widgets/input/photo.md) widget from the input widgets and place it into the user interface of your App. Switch the storage type of the photo widget from file to buffer.
 {% endstep %}
 
 {% step %}

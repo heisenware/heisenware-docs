@@ -19,4 +19,4 @@ description: Jan 24, 2024
 
 * Entirely removed the buggy undo and redo features.
 * Deleting a [page](../app-builder/build-frontend/page-explorer.md) now cleans up all its connected resources.
-* Fixed an issue where default-detached properties (such as `colCount` on the [form widget](../app-builder/build-frontend/widgets/input-widgets/form.md)) failed to apply correctly.
+* Fixed an issue where default-detached properties (such as `colCount` on the [form widget](../reference/widgets/input/form.md)) failed to apply correctly.

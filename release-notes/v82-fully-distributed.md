@@ -14,9 +14,9 @@ description: Aug 28, 2024
 * Updated the core UI libraries and implemented license key validation.
 * Added a new default fluent theme in the [Theme Editor](../app-builder/build-frontend/theme-editor.md) that aligns with the Heisenware brand identity.
 * Automatically detects and re-establishes services when cloud slave nodes restart.
-* Added the [kanban](../app-builder/build-frontend/widgets/display-widgets/kanban.md) widget.
-* Added the [data list](../app-builder/build-frontend/widgets/display-widgets/data-list.md) widget.
-* Added a new [chart](../app-builder/build-frontend/widgets/display-widgets/chart.md) widget.
+* Added the [kanban](../reference/widgets/display/kanban.md) widget.
+* Added the [data list](../reference/widgets/display/data-list.md) widget.
+* Added a new [chart](../reference/widgets/display/chart.md) widget.
 * Improved the text box widget in input widgets to support local configuration.
 * Enabled reordering functions across different sections in the Backend Builder.
 * Introduced the [Heidenhain DNC](../app-builder/build-backend/functions/connectors/heidenhain-dnc.md) connector.

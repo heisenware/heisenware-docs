@@ -10,7 +10,7 @@ Use text boxes for titles, labels, and detailed instructions.
 * **Edit**: Double-click the text box to open its settings. The *Content* tab is the text editor, where you type and format text, insert static tables, quotes, code, and rules; *Look & feel* sets the vertical alignment.
 * **Look**: Headings, lists, tables, quotes, and code render in one consistent style that takes its colors from the App theme, so a text box looks right in light and dark themes alike.
 
-The AI assistant writes text boxes in Markdown, including tables. Pictures belong to the [image widget](widgets/display-widgets/image.md).
+The AI assistant writes text boxes in Markdown, including tables. Pictures belong to the [image widget](../../reference/widgets/trigger/image.md).
 
 <figure><img src="../../.gitbook/assets/image (518).png" alt=""><figcaption></figcaption></figure>
 

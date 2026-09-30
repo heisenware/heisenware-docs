@@ -51,19 +51,19 @@ Add the widgets for the form in the Frontend Builder.
 {% step %}
 #### Add the form widget
 
-Drag a [form](../../app-builder/build-frontend/widgets/input-widgets/form.md) widget onto the canvas. Configure its fields so the field names exactly match your database columns (`customerName`, `projectID`, `acceptanceDate`, `comments`). Define custom, user-friendly labels for each field.
+Drag a [form](../../reference/widgets/input/form.md) widget onto the canvas. Configure its fields so the field names exactly match your database columns (`customerName`, `projectID`, `acceptanceDate`, `comments`). Define custom, user-friendly labels for each field.
 {% endstep %}
 
 {% step %}
 #### Add the signature widget
 
-Drag a [signature](../../app-builder/build-frontend/widgets/input-widgets/signature.md) widget onto the canvas and place it below the form.
+Drag a [signature](../../reference/widgets/input/signature.md) widget onto the canvas and place it below the form.
 {% endstep %}
 
 {% step %}
 #### Add the submit button
 
-Drag a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget below the signature widget and change its label setting to Submit.
+Drag a [button](../../reference/widgets/trigger/button.md) widget below the signature widget and change its label setting to Submit.
 {% endstep %}
 {% endstepper %}
 

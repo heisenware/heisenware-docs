@@ -13,9 +13,9 @@ description: 28 Aug 2025
 * Redesigned and improved invitation emails sent to new users.
 * Added enterprise-grade PKI (public-key infrastructure) security support for the [OPC UA Client](../app-builder/build-backend/functions/connectors/opc-ua-client.md) connector.
 * Directly drag and drop backend [functions](../app-builder/build-backend/functions/) onto widgets to connect them instantly.
-* Expand [widgets](../app-builder/build-frontend/widgets/) to full width on the canvas with a single click.
+* Expand [widgets](../reference/widgets/README.md) to full width on the canvas with a single click.
 * Introduced the [Modbus](../app-builder/build-backend/functions/connectors/modbus.md) connector.
-* Configure conditional runtime visibility for fields inside the [form](../app-builder/build-frontend/widgets/input-widgets/form.md) widget.
+* Configure conditional runtime visibility for fields inside the [form](../reference/widgets/input/form.md) widget.
 * Extract data from a [relational database](../app-builder/build-backend/functions/storage/relational-database.md) across multiple tables on the fly.
 * Deregister users directly in [Users and access](../app-manager/users-and-access.md) inside the [App Manager](../app-manager/overview.md).
 * Introduced the [SAP Digital Manufacturing](../app-builder/build-backend/functions/connectors/sap-digital-manufacturing.md) connector.

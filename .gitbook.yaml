@@ -1,0 +1,36 @@
+# GitBook reads the defaults for everything not set here (root ./, README.md,
+# SUMMARY.md). Redirects keep old page URLs working after a page moved.
+
+redirects:
+  app-builder/build-frontend/widgets: reference/widgets/README.md
+  app-builder/build-frontend/widgets/display-widgets: reference/widgets/display/README.md
+  app-builder/build-frontend/widgets/display-widgets/card: reference/widgets/display/card.md
+  app-builder/build-frontend/widgets/display-widgets/chart: reference/widgets/display/chart.md
+  app-builder/build-frontend/widgets/display-widgets/chat: reference/widgets/display/chat.md
+  app-builder/build-frontend/widgets/display-widgets/circular-gauge: reference/widgets/display/circular-gauge.md
+  app-builder/build-frontend/widgets/display-widgets/data-grid: reference/widgets/display/data-grid.md
+  app-builder/build-frontend/widgets/display-widgets/data-list: reference/widgets/display/data-list.md
+  app-builder/build-frontend/widgets/display-widgets/data-tiles: reference/widgets/display/data-tiles.md
+  app-builder/build-frontend/widgets/display-widgets/iframe: reference/widgets/display/iframe.md
+  app-builder/build-frontend/widgets/display-widgets/image: reference/widgets/trigger/image.md
+  app-builder/build-frontend/widgets/display-widgets/kanban: reference/widgets/display/kanban.md
+  app-builder/build-frontend/widgets/display-widgets/linear-gauge: reference/widgets/display/linear-gauge.md
+  app-builder/build-frontend/widgets/display-widgets/map: reference/widgets/display/map.md
+  app-builder/build-frontend/widgets/display-widgets/media-view: reference/widgets/display/media-view.md
+  app-builder/build-frontend/widgets/display-widgets/pie-chart: reference/widgets/display/pie-chart.md
+  app-builder/build-frontend/widgets/display-widgets/progress-bar: reference/widgets/display/progress-bar.md
+  app-builder/build-frontend/widgets/display-widgets/sankey: reference/widgets/display/sankey-chart.md
+  app-builder/build-frontend/widgets/display-widgets/sparkline: reference/widgets/display/sparkline.md
+  app-builder/build-frontend/widgets/display-widgets/status-lamp: reference/widgets/display/status-lamp.md
+  app-builder/build-frontend/widgets/display-widgets/timeline: reference/widgets/display/timeline.md
+  app-builder/build-frontend/widgets/display-widgets/toast: reference/widgets/display/toast.md
+  app-builder/build-frontend/widgets/display-widgets/value-box: reference/widgets/display/value-box.md
+  app-builder/build-frontend/widgets/dynamic-group: reference/widgets/layout/group.md
+  app-builder/build-frontend/widgets/input-widgets: reference/widgets/input/README.md
+  app-builder/build-frontend/widgets/input-widgets/barcode-qr: reference/widgets/input/barcode-qr.md
+  app-builder/build-frontend/widgets/input-widgets/form: reference/widgets/input/form.md
+  app-builder/build-frontend/widgets/input-widgets/photo: reference/widgets/input/photo.md
+  app-builder/build-frontend/widgets/input-widgets/signature: reference/widgets/input/signature.md
+  app-builder/build-frontend/widgets/input-widgets/upload: reference/widgets/input/upload.md
+  app-builder/build-frontend/widgets/trigger-widgets: reference/widgets/trigger/README.md
+  app-builder/build-frontend/widgets/trigger-widgets/button: reference/widgets/trigger/button.md

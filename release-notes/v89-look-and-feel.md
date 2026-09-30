@@ -14,7 +14,7 @@ description: 7 Dec 2025
   * Added context-aware popup menus for configuring widget settings.
   * Added context-aware popup menus for configuring function input settings.
   * Enabled viewport navigation using WASD and QE keyboard controls in the Backend Builder.
-* Added a card detail view option in the [data grid](../app-builder/build-frontend/widgets/display-widgets/data-grid.md) widget.
+* Added a card detail view option in the [data grid](../reference/widgets/display/data-grid.md) widget.
 * Added a global settings menu in the [App Builder](../app-builder/overview.md) to customize workspace and editor behavior.
 * Added support for placing annotations anywhere on the canvas in the [Backend Builder](../app-builder/build-backend/).
 * Added support for programmatically generating user invitation links inside your Apps using the [users](../app-builder/build-backend/functions/utilities/users.md) utility class.

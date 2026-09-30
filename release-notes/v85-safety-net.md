@@ -17,5 +17,5 @@ description: 1 June 2025
 
 * Fixed an issue in the [relational database](../app-builder/build-backend/functions/storage/relational-database.md) connector that prevented establishing multiple one-to-many associations on the same tables.
 * Fixed the `onBrowserRefresh` event to trigger reliably inside the [App Builder](../app-builder/overview.md).
-* Fixed an issue where [input widgets](../app-builder/build-frontend/widgets/input-widgets/) lost focus while a user was typing.
+* Fixed an issue where [input widgets](../reference/widgets/input/README.md) lost focus while a user was typing.
 * Optimized the performance of the underlying persistence infrastructure.

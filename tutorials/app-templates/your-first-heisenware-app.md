@@ -100,7 +100,7 @@ $sum($)
 
 1. Upload your logo or another image to the [File Explorer](../../app-builder/build-backend/file-explorer.md).
 2. Drag and drop the image onto the **Frontend Builder** canvas.
-3. Select a [circular gauge](../../app-builder/build-frontend/widgets/display-widgets/circular-gauge.md) from the display widgets list and click the canvas to place it.
+3. Select a [circular gauge](../../reference/widgets/display/circular-gauge.md) from the display widgets list and click the canvas to place it.
 4. Configure the start value, end value (0 to 500), and color sections of the circular gauge in its configuration panel.
 5. Drag the modifier of the `combine` function onto the circular gauge. Ensure you select the circular gauge first.
 6. Run the App in [test mode](../../app-builder/deploy-and-maintain.md) to view live data.
@@ -113,10 +113,10 @@ $sum($)
 4. Create a [new page](../../app-builder/build-frontend/page-explorer.md#add-and-delete) by right-clicking the existing page in the [Page Explorer](../../app-builder/build-frontend/page-explorer.md) and selecting **New Page**.
 5. Configure the App's main menu using the navigation menu settings. You can rename pages and add icons as needed.
 6. Select the new page.
-7. Add a [chart](../../app-builder/build-frontend/widgets/display-widgets/chart.md) widget to the page.
+7. Add a [chart](../../reference/widgets/display/chart.md) widget to the page.
 8. Drag and drop the output array of the `read` function onto the chart. Ensure you select the chart first.
 9. Resize and configure the chart in its settings panel.
-10. Add a [button](../../app-builder/build-frontend/widgets/trigger-widgets/button.md) widget and customize its label.
+10. Add a [button](../../reference/widgets/trigger/button.md) widget and customize its label.
 11. Drag and drop the button trigger onto the `read` function to link them.
 12. Run the App in [test mode](../../app-builder/deploy-and-maintain.md) to test the action.
 

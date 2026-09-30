@@ -165,7 +165,7 @@ Writes one or more buffer-file objects to a directory. The function creates the 
     </tr>
     <tr>
       <td><code>bufferData</code></td>
-      <td>A single object or an array of objects, each containing at least the <code>name</code> and <code>base64</code> properties. See the <a href="../../../build-frontend/widgets/input-widgets/photo.md#file-object-structure">file object structure</a>.</td>
+      <td>A single object or an array of objects, each containing at least the <code>name</code> and <code>base64</code> properties. See the <a href="../../../../reference/widgets/input/photo.md">file object structure</a>.</td>
       <td>object or array</td>
     </tr>
   </tbody>
@@ -175,7 +175,7 @@ Writes one or more buffer-file objects to a directory. The function creates the 
 
 Returns `true` when all files are successfully written. Throws an error listing every file that failed.
 
-<figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This function integrates directly with the <a href="../../../build-frontend/widgets/input-widgets/photo.md">photo</a> or <a href="../../../build-frontend/widgets/input-widgets/upload.md">upload</a> widget when configured to use <code>Buffer</code> as the storage type.</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This function integrates directly with the <a href="../../../../reference/widgets/input/photo.md">photo</a> or <a href="../../../../reference/widgets/input/upload.md">upload</a> widget when configured to use <code>Buffer</code> as the storage type.</p></figcaption></figure>
 
 {% hint style="info" %}
 #### Local file sharing

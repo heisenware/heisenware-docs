@@ -1,6 +1,6 @@
 # CRUD operations with the data grid
 
-Connect a [data grid](../../app-builder/build-frontend/widgets/display-widgets/data-grid.md) widget to a table from a [relational database](../../app-builder/build-backend/functions/storage/relational-database.md) (either an internal Postgres or external SQL database) to perform create, read, update, and delete (CRUD) operations directly from the UI. The provided template contains all necessary widget bindings, logic functions, and UI feedback configurations out of the box.
+Connect a [data grid](../../reference/widgets/display/data-grid.md) widget to a table from a [relational database](../../app-builder/build-backend/functions/storage/relational-database.md) (either an internal Postgres or external SQL database) to perform create, read, update, and delete (CRUD) operations directly from the UI. The provided template contains all necessary widget bindings, logic functions, and UI feedback configurations out of the box.
 
 Reference videos: [Part 1](#part-1-data-grid-widget-and-crud-operations) | [Part 2](#part-2-toast-widget-configuration)
 
@@ -41,9 +41,9 @@ Understand the underlying wiring to adapt the template for more complex requirem
 
 <figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
-* **Data population:** The output of the [`getTableData`](../../app-builder/build-backend/functions/storage/relational-database.md#gettabledata) function binds directly to the data property of the [data grid](../../app-builder/build-frontend/widgets/display-widgets/data-grid.md) widget to populate the UI.
-* **Data grid interactions:** Users interact directly with the [data grid](../../app-builder/build-frontend/widgets/display-widgets/data-grid.md). The widget's native `onInsert`, `onChange`, and `onDelete` events bind directly to the inputs of the [`addRow`](../../app-builder/build-backend/functions/storage/relational-database.md#addrow), [`updateRow`](../../app-builder/build-backend/functions/storage/relational-database.md#updaterow), and [`deleteRow`](../../app-builder/build-backend/functions/storage/relational-database.md#deleterow) functions.
-* **User feedback:** [Modifiers](../../app-builder/build-backend/extension-nodes/modifier.md) trigger when CRUD functions execute, passing customizable strings to a [toast](../../app-builder/build-frontend/widgets/display-widgets/toast.md) widget to display immediate confirmation or error messages.
+* **Data population:** The output of the [`getTableData`](../../app-builder/build-backend/functions/storage/relational-database.md#gettabledata) function binds directly to the data property of the [data grid](../../reference/widgets/display/data-grid.md) widget to populate the UI.
+* **Data grid interactions:** Users interact directly with the [data grid](../../reference/widgets/display/data-grid.md). The widget's native `onInsert`, `onChange`, and `onDelete` events bind directly to the inputs of the [`addRow`](../../app-builder/build-backend/functions/storage/relational-database.md#addrow), [`updateRow`](../../app-builder/build-backend/functions/storage/relational-database.md#updaterow), and [`deleteRow`](../../app-builder/build-backend/functions/storage/relational-database.md#deleterow) functions.
+* **User feedback:** [Modifiers](../../app-builder/build-backend/extension-nodes/modifier.md) trigger when CRUD functions execute, passing customizable strings to a [toast](../../reference/widgets/display/toast.md) widget to display immediate confirmation or error messages.
 
 ## Reference videos
 

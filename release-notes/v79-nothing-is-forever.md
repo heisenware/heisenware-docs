@@ -15,10 +15,10 @@ description: May 10, 2024
 * Added support for many-to-many associations between tables in [relational databases](../app-builder/build-backend/functions/storage/relational-database.md).
 * Added support for converting non-history tables to history tables, including tracking for all associations in [relational databases](../app-builder/build-backend/functions/storage/relational-database.md).
 * The [Kuando Busylight](../app-builder/build-backend/functions/connectors/kuando-busylight.md) driver is now available as a local connector running on an Agent.
-* Added thousands separators for number input fields inside [form](../app-builder/build-frontend/widgets/input-widgets/form.md) widgets.
+* Added thousands separators for number input fields inside [form](../reference/widgets/input/form.md) widgets.
 
 ## Fixes
 
-* Fixed the tag box component inside the [form](../app-builder/build-frontend/widgets/input-widgets/form.md) widget.
+* Fixed the tag box component inside the [form](../reference/widgets/input/form.md) widget.
 * Fixed an issue where default configuration values for the [email](../app-builder/build-backend/functions/connectors/email.md) connector failed to load properly.
-* Fixed image rotation issues and optimized file sizes when combining the [upload](../app-builder/build-frontend/widgets/input-widgets/upload.md) widget with the [photo](../app-builder/build-frontend/widgets/input-widgets/photo.md) widget.
+* Fixed image rotation issues and optimized file sizes when combining the [upload](../reference/widgets/input/upload.md) widget with the [photo](../reference/widgets/input/photo.md) widget.

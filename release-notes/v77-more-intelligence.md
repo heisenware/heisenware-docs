@@ -8,7 +8,7 @@ description: Dec 21, 2023
 
 ## Features
 
-* Introduced an artificial intelligence agent that provides a conversational [chat](../app-builder/build-frontend/widgets/display-widgets/chat.md) interface and an initial [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) implementation.
+* Introduced an artificial intelligence agent that provides a conversational [chat](../reference/widgets/display/chat.md) interface and an initial [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) implementation.
 * Expanded connection highlighting in the [App Builder](../app-builder/overview.md). Highlighting works in all directions across the Backend Builder and Frontend Builder. Inputs can now receive data from multiple and mixed sources.
 * Animated logos on [functions](../app-builder/build-backend/functions/) now visualize active data updates in real time.
 * Added support for commenting on functions.
