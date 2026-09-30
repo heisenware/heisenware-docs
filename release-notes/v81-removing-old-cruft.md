@@ -8,7 +8,7 @@ description: Jul 28, 2024
 
 ## Features
 
-* Introduced the [App Manager](../app-manager/overview.md).
+* Introduced the [App Manager](../app-manager/README.md).
 * Upgraded user identity services: integrated FusionAuth as the built-in [user management](../app-manager/users-and-access.md) engine.
 * Added support for multiple deployment modes: you can now select between cloud, server, and container options.
 * Added configuration options to customize the title and icon displayed in the app bar title.

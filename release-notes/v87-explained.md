@@ -9,21 +9,21 @@ description: 28 Aug 2025
 ## Features
 
 * Major documentation improvements on our [Product Docs](https://docs.heisenware.com/) portal.
-* Added interactive, in-app onboarding to help new developers get started inside the [App Builder](../app-builder/overview.md).
+* Added interactive, in-app onboarding to help new developers get started inside the [App Builder](../app-builder/README.md).
 * Redesigned and improved invitation emails sent to new users.
-* Added enterprise-grade PKI (public-key infrastructure) security support for the [OPC UA Client](../app-builder/build-backend/functions/connectors/opc-ua-client.md) connector.
-* Directly drag and drop backend [functions](../app-builder/build-backend/functions/) onto widgets to connect them instantly.
+* Added enterprise-grade PKI (public-key infrastructure) security support for the [OPC UA Client](../reference/functions/connectors/opc-ua-client.md) connector.
+* Directly drag and drop backend [functions](../concepts/executors-and-instances.md) onto widgets to connect them instantly.
 * Expand [widgets](../reference/widgets/README.md) to full width on the canvas with a single click.
-* Introduced the [Modbus](../app-builder/build-backend/functions/connectors/modbus.md) connector.
+* Introduced the [Modbus](../reference/functions/connectors/modbus.md) connector.
 * Configure conditional runtime visibility for fields inside the [form](../reference/widgets/input/form.md) widget.
-* Extract data from a [relational database](../app-builder/build-backend/functions/storage/relational-database.md) across multiple tables on the fly.
-* Deregister users directly in [Users and access](../app-manager/users-and-access.md) inside the [App Manager](../app-manager/overview.md).
-* Introduced the [SAP Digital Manufacturing](../app-builder/build-backend/functions/connectors/sap-digital-manufacturing.md) connector.
+* Extract data from a [relational database](../reference/functions/storage/relational-database.md) across multiple tables on the fly.
+* Deregister users directly in [Users and access](../app-manager/users-and-access.md) inside the [App Manager](../app-manager/README.md).
+* Introduced the [SAP Digital Manufacturing](../reference/functions/connectors/sap-digital-manufacturing.md) connector.
 
 ## Fixes
 
-* Optimized [App Builder](../app-builder/overview.md) performance when designing very large Apps.
-* Fixed the [text box](../app-builder/build-frontend/text-icons-and-images.md) component to always stay on top of other elements on the canvas while building.
+* Optimized [App Builder](../app-builder/README.md) performance when designing very large Apps.
+* Fixed the [text box](../app-builder/page-editor.md) component to always stay on top of other elements on the canvas while building.
 * Prevents widgets from being dragged outside the canvas boundary in the Frontend Builder.
 * Resolved access and permission issues with invite-only options in [Users and access](../app-manager/users-and-access.md).
-* Fixed addressing issues when using dictionary variable names inside the [Siemens S7](../app-builder/build-backend/functions/connectors/siemens-s7.md) connector.
+* Fixed addressing issues when using dictionary variable names inside the [Siemens S7](../reference/functions/connectors/siemens-s7.md) connector.

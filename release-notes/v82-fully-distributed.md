@@ -8,18 +8,18 @@ description: Aug 28, 2024
 
 ## Features
 
-* Released the first fully distributed deployment option. See [Hosting and architecture](../account/hosting-and-architecture.md).
-* Introduced an initial implementation of the [OPC UA server](../app-builder/build-backend/functions/connectors/opc-ua-server.md) connector.
-* Persists [MQTT client](../app-builder/build-backend/functions/connectors/mqtt-client.md) connections to allow seamless restarts of the authentication server.
+* Released the first fully distributed deployment option. See [Hosting and architecture](../self-hosting/README.md).
+* Introduced an initial implementation of the [OPC UA server](../reference/functions/connectors/opc-ua-server.md) connector.
+* Persists [MQTT client](../reference/functions/connectors/mqtt-client.md) connections to allow seamless restarts of the authentication server.
 * Updated the core UI libraries and implemented license key validation.
-* Added a new default fluent theme in the [Theme Editor](../app-builder/build-frontend/theme-editor.md) that aligns with the Heisenware brand identity.
+* Added a new default fluent theme in the [Theme Editor](../app-builder/theme-editor.md) that aligns with the Heisenware brand identity.
 * Automatically detects and re-establishes services when cloud slave nodes restart.
 * Added the [kanban](../reference/widgets/display/kanban.md) widget.
 * Added the [data list](../reference/widgets/display/data-list.md) widget.
 * Added a new [chart](../reference/widgets/display/chart.md) widget.
 * Improved the text box widget in input widgets to support local configuration.
 * Enabled reordering functions across different sections in the Backend Builder.
-* Introduced the [Heidenhain DNC](../app-builder/build-backend/functions/connectors/heidenhain-dnc.md) connector.
+* Introduced the [Heidenhain DNC](../reference/functions/connectors/heidenhain-dnc.md) connector.
 * Hides void input arguments on the canvas to declutter the workspace.
 * Visualizes connections to linked widgets even when their layout sections are closed.
 

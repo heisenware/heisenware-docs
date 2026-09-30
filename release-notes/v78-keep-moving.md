@@ -8,15 +8,15 @@ description: Jan 24, 2024
 
 ## Features
 
-* Improved the organization of available remote functionality in the [Function Explorer](../app-builder/build-backend/functions/function-explorer.md).
+* Improved the organization of available remote functionality in the [Function Explorer](../app-builder/explorers/functions.md).
 * Implemented traffic shaping to optimize data polling.
 * Added support for duplicating layout sections inside the canvas.
-* Added support for duplicating a [page or subpage](../app-builder/build-frontend/page-explorer.md).
+* Added support for duplicating a [page or subpage](../app-builder/explorers/pages.md).
 * The reverse proxy now resolves all CORS issues by intercepting corresponding HTTP headers.
 * Added a configurable delay setting to pause function execution, designed for sequential, one-by-one API processing.
 
 ## Fixes
 
 * Entirely removed the buggy undo and redo features.
-* Deleting a [page](../app-builder/build-frontend/page-explorer.md) now cleans up all its connected resources.
+* Deleting a [page](../app-builder/explorers/pages.md) now cleans up all its connected resources.
 * Fixed an issue where default-detached properties (such as `colCount` on the [form widget](../reference/widgets/input/form.md)) failed to apply correctly.

@@ -1,0 +1,83 @@
+# App Builder tour
+
+The App Builder is a core component of the Heisenware platform: a visual development environment where you build, test, and deploy Apps. You open it straight from the App Manager, and it focuses on one App at a time.
+
+## Main interfaces
+
+The App Builder splits into four areas that cover the App lifecycle and development workflow.
+
+* **Top Bar (top)**: Opens the [Theme Editor](theme-editor.md) and [PDF Template Editor](template-editor.md), and gives access to App Builder settings and help. It also shows the current App version and holds the controls to [test and deploy](test-and-deploy.md).
+* **Explorers (left)**: Switch between the [Function Explorer](explorers/functions.md) for backend logic, the [Page Explorer](explorers/pages.md) for frontend structure, and the [File Explorer](explorers/files.md) for resources needed during app development.
+* **Backend Builder (center)**: An infinite drawing area where you create the [business logic](flowboard/README.md) of your entire App by wiring up selected functions into automated flows.
+* **Frontend Builder (right)**: A page-specific design canvas for composing user interfaces for all screen sizes. This is where you [build user interfaces (UI)](page-editor.md) using text, images, and interactive widgets.
+
+The footer along the bottom shows who is signed in, the App and domain you are working in, the App's language, which is set in the [App Manager](../app-manager/README.md#app-settings), and the base theme the [Theme Editor](theme-editor.md) compiles the App's look from.
+
+<figure><img src="../.gitbook/assets/image (512).png" alt=""><figcaption></figcaption></figure>
+
+## How it works
+
+Heisenware uses a highly integrated development process. Rather than working in isolated stages, you build logic, design interfaces, and configure data connections simultaneously within a single environment.
+
+### Build backend
+
+In the [Backend Builder](flowboard/README.md) you create event-driven logic by dragging [functions](../concepts/executors-and-instances.md) from the [Function Explorer](explorers/functions.md) onto the canvas and wiring them into flows. Functions are the atomic building blocks of an App: standard utility blocks, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
+
+This logic runs in a global scope. It persists and runs independently of the active UI page, which makes the backend the central hub for continuous data processing or system monitoring. To reach machines and databases in isolated networks, you configure [Native Agents](../app-manager/agents/native-agent.md) or [Docker Agents](../app-manager/agents/docker-agent.md) that tunnel data from local systems directly into your App's logic.
+
+### Build frontend
+
+The [Frontend Builder](page-editor.md) is a canvas on which you design your UI per page and across different screen sizes, similar to popular presentation tools such as Google Slides or PowerPoint. You use the [Page Explorer](explorers/pages.md) to create, nest, and organize your pages, then switch to the page you want to edit.
+
+You compose each page from widgets, functional components like gauges, charts, and input fields that you drag onto the canvas. To keep every page and widget visually consistent, the Theme Editor defines the styles and colors that apply across the whole App.
+
+### Unified data binding
+
+The App Builder's core strength is data binding: connect almost any element to any other and data flows between the App's interface and its logic in both directions.
+
+* **Connect anything to everything**: Link a button to a function trigger, bind an input field to a function's input parameters, or feed a function's output into a widget to visualize data, toggle a button's state, or update a gauge's value.
+* **Property and event binding**: A property is anything about a widget that can change, its value, scale, visibility, color, and more. Bind backend logic to any property, or to a widget's events, to drive the UI dynamically.
+* **Reactive synchronization**: No manual glue code. Interface and logic stay in sync in real time as data flows through the App.
+
+<figure><img src="../.gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
+
+## App Builder settings
+
+Customize how the App Builder behaves and how you control the canvas. To access these preferences, click the settings icon in the Top Bar.
+
+<figure><img src="../.gitbook/assets/image (31).png" alt="" width="367"><figcaption></figcaption></figure>
+
+### Viewport controls
+
+Defines the navigation logic of the Backend Builder canvas. Choose between two modes:
+
+* **Design-tool-like**: Mimics the behavior of tools like Figma or Miro.
+* **Google-maps-tool**: Navigation behaves like an interactive map.
+
+### Grid and snapping
+
+* **Grid size**: Defines the size of the canvas grid.
+* **Snap to grid**: When enabled, function blocks align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
+
+### Navigation (WASD)
+
+Fine-tune keyboard navigation on the canvas:
+
+* **Invert WASD controls**: Switches the direction of the W, A, S, and D keys. By default, W is up and S is down.
+* **Pan speed**: Controls how fast the camera moves across the canvas when using WASD.
+* **Zoom speed**: Controls the sensitivity of the Q (zoom out) and E (zoom in) keys.
+
+### Default modifier type
+
+Every time you add a [modifier](flowboard/modifier.md), Heisenware defaults to a specific type. Choose which one appears first:
+
+* **JSONata**: Ideal for data transformation and querying.
+* **JavaScript**: Use this if you prefer writing standard JS logic for your modifiers.
+
+### Debug backend
+
+Enables advanced backend debugging.
+
+{% hint style="danger" %}
+This setting should typically remain off. It is intended for support cases when working directly with the Heisenware technical team.
+{% endhint %}

@@ -11,9 +11,9 @@ description: 15 April 2025
 * Redesigned the Backend Builder to use a flow-based visualization with nodes and edges/wires.
 * Added support for the iPhone-specific `.heic` image format in the [upload](../reference/widgets/input/upload.md) and [photo](../reference/widgets/input/photo.md) widgets.
 * Enabled clickable text links inside the [kanban](../reference/widgets/display/kanban.md) and [data grid](../reference/widgets/display/data-grid.md) widgets.
-* Optimized rendering and layout scaling for [Production Apps](../production-apps/overview.md) across different devices and screens.
+* Optimized rendering and layout scaling for [Production Apps](../app-player/README.md) across different devices and screens.
 * Added an invite-only option in [Users and access](../app-manager/users-and-access.md) to manage access control for Apps.
-* Introduced the [Hydra MIP](../app-builder/build-backend/functions/connectors/hydra-mip.md) connector.
+* Introduced the [Hydra MIP](../reference/functions/connectors/hydra-mip.md) connector.
 
 ## Fixes
 

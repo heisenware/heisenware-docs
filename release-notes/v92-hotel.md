@@ -8,32 +8,32 @@ description: 12 July 2026
 
 ## Features
 
-* **Finalized** [**subflows**](../app-builder/build-backend/functions/subflows.md): Completed the core subflows feature within the [Backend Builder](../app-builder/build-backend/).
+* **Finalized** [**subflows**](../concepts/subflows.md): Completed the core subflows feature within the [Backend Builder](../app-builder/flowboard/README.md).
 * **Data Visualizer (beta)**: Introduced the Data Visualizer tool to let members inspect connected database tables and data entries directly without building an App.
 * **Introduced the** [**timeline**](../reference/widgets/display/timeline.md) **widget**: Display chronological data series dynamically inside your Apps.
 * **Introduced the** [**iframe**](../reference/widgets/display/iframe.md) **widget**: Cleanly embed external web content inside your frontend layouts.
-* **Released the** [**Heidenhain DNC**](../app-builder/build-backend/functions/connectors/heidenhain-dnc.md) **Agent**: Run a native Heidenhain DNC Agent to establish direct edge connectivity with supported CNC systems.
-* **Released the** [**LXC Agent**](../app-builder/build-backend/agents/lxc-agent-insys.md): Package your local connector system within an Insys-compatible LXC Agent container.
+* **Released the** [**Heidenhain DNC**](../reference/functions/connectors/heidenhain-dnc.md) **Agent**: Run a native Heidenhain DNC Agent to establish direct edge connectivity with supported CNC systems.
+* **Released the** [**LXC Agent**](../app-manager/agents/lxc-agent.md): Package your local connector system within an Insys-compatible LXC Agent container.
 
 ## Improvements
 
 * **Restructured product documentation**: Completely rebuilt the [documentation](https://docs.heisenware.com/) to improve readability and user navigation.
 * **Explicit data schema re-scanning**: Added an explicit data re-scan option for bound [widgets](../reference/widgets/README.md). A widget – such as a [data grid](../reference/widgets/display/data-grid.md) – now checks if its underlying data structure or keys have changed, and then automatically updates its properties and visual layout to match.
-* **Overhauled** [**Page Explorer**](../app-builder/build-frontend/page-explorer.md): Integrated the navigation menu editor directly into the Page Explorer panel. You can configure the name, icon, and app bar title of each page using an edit icon next to the page name. Menu layouts can now vary based on screen size, using layouts like Bottom tabs only for mobile screens or Fixed left menu for large desktop monitors.
-* **Fixed menu drawer**: Added a fixed-size left menu as a new navigation option in the [Page Explorer](../app-builder/build-frontend/page-explorer.md).
-* **Independent** [**extension nodes**](../app-builder/build-backend/extension-nodes/): Converted extensions – including modifiers, filters, recorders, and error handlers – into distinct visual nodes on the canvas.
-* **Anti-node-collision ("snowplow")**: Implemented automated node separation in the [Backend Builder](../app-builder/build-backend/) to prevent overlapping logic blocks.
-* **Backend auto-formatting**: Introduced an auto-formatting layout tool for backend flows in the [Backend Builder](../app-builder/build-backend/).
-* **Event flow spotlight**: Added a visual spotlight effect to backend [functions](../app-builder/build-backend/functions/) to clearly trace active event paths during live execution.
+* **Overhauled** [**Page Explorer**](../app-builder/explorers/pages.md): Integrated the navigation menu editor directly into the Page Explorer panel. You can configure the name, icon, and app bar title of each page using an edit icon next to the page name. Menu layouts can now vary based on screen size, using layouts like Bottom tabs only for mobile screens or Fixed left menu for large desktop monitors.
+* **Fixed menu drawer**: Added a fixed-size left menu as a new navigation option in the [Page Explorer](../app-builder/explorers/pages.md).
+* **Independent** [**extension nodes**](../concepts/extensions-branching-and-errors.md): Converted extensions – including modifiers, filters, recorders, and error handlers – into distinct visual nodes on the canvas.
+* **Anti-node-collision ("snowplow")**: Implemented automated node separation in the [Backend Builder](../app-builder/flowboard/README.md) to prevent overlapping logic blocks.
+* **Backend auto-formatting**: Introduced an auto-formatting layout tool for backend flows in the [Backend Builder](../app-builder/flowboard/README.md).
+* **Event flow spotlight**: Added a visual spotlight effect to backend [functions](../concepts/executors-and-instances.md) to clearly trace active event paths during live execution.
 * **Visual data truncation**: Implemented automatic visual data truncation for large data payloads to keep the frontend responsive.
 * **Custom** [**data list**](../reference/widgets/display/data-list.md) **spacing**: Added custom vertical spacing options in the data list widget configuration.
 * **Enhanced** [**chart**](../reference/widgets/display/chart.md) **interaction**: Improved zoom and pan responsiveness for the chart widget.
 * **Upgraded MQTT broker**: Updated and optimized the internal MQTT broker configuration to increase overall message resilience.
-* **Application-wide client caching**: Implemented client-side caching to reduce browser reload times drastically for deployed [Production Apps](../production-apps/overview.md).
+* **Application-wide client caching**: Implemented client-side caching to reduce browser reload times drastically for deployed [Production Apps](../app-player/README.md).
 
 ## Fixes
 
 * **Initial backend state**: Fixed a synchronization issue where the correct backend state did not display immediately after account creation.
 * **Alias persistence**: Fixed an issue where custom alias names did not save or persist correctly.
 * **Widget highlighting**: Fixed intermittent visual bugs that broke selection and hover highlighting for [widgets](../reference/widgets/README.md) on the canvas.
-* **Multi-monitor scaling**: Fixed a layout scaling bug in deployed [Production Apps](../production-apps/overview.md) when a browser window spans multiple monitors.
+* **Multi-monitor scaling**: Fixed a layout scaling bug in deployed [Production Apps](../app-player/README.md) when a browser window spans multiple monitors.

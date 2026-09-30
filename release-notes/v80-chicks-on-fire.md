@@ -10,10 +10,10 @@ description: May 15, 2024
 
 * Added support for Agent and instance wildcards.
 * Textareas are now resizable when used as a single input field in input widgets.
-* Integrated a Chroma-based vector database with full CRUD operation support for the [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) extension.
-* Added source attribution indicators to the [RAG AI](../app-builder/build-backend/functions/extensions/rag-ai.md) extension.
+* Integrated a Chroma-based vector database with full CRUD operation support for the [RAG AI](../reference/functions/add-ons/README.md) extension.
+* Added source attribution indicators to the [RAG AI](../reference/functions/add-ons/README.md) extension.
 * Enabled single-executable, multi-host deployments for Agents and connectors using auto-generated, cached identifiers.
-* Added the [relational database](../app-builder/build-backend/functions/storage/relational-database.md) connector for the Agent to connect to SQL databases locally on your infrastructure.
+* Added the [relational database](../reference/functions/storage/relational-database.md) connector for the Agent to connect to SQL databases locally on your infrastructure.
 
 ## Fixes
 

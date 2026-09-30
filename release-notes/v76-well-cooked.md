@@ -17,8 +17,8 @@ description: Dec 4, 2023
 
 * Linking an output to an input now always triggers an event, even if the corresponding value remains unchanged. This fixes intermittent rendering issues on UI widgets where linked inputs previously only triggered events when values actually changed.
 * Improved document recognition in the document scan widget.
-* Improved the RFID tag recognition algorithm in the [Zebra RFID IoT](../app-builder/build-backend/functions/connectors/zebra-rfid-iot.md) connector.
-* Cleared the URL on [Production Apps](../production-apps/overview.md) to remove the Auth0-injected `code` parameter.
-* Resolved rendering slowdowns in [Production Apps](../production-apps/overview.md) when switching between pages of different heights.
-* Fixed initial scrollbar rendering issues that occurred when selecting a large screen size in [Production Apps](../production-apps/overview.md).
+* Improved the RFID tag recognition algorithm in the [Zebra RFID IoT](../reference/functions/connectors/zebra-rfid-iot.md) connector.
+* Cleared the URL on [Production Apps](../app-player/README.md) to remove the Auth0-injected `code` parameter.
+* Resolved rendering slowdowns in [Production Apps](../app-player/README.md) when switching between pages of different heights.
+* Fixed initial scrollbar rendering issues that occurred when selecting a large screen size in [Production Apps](../app-player/README.md).
 * Removed the experimental Jupyter integration.

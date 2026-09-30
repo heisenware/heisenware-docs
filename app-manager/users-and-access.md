@@ -1,4 +1,4 @@
-# Users and access
+# App users and access
 
 Heisenware gives you granular control over who can access your Apps. Each App can have its own security settings, even when several sit in the same workspace.
 
@@ -33,7 +33,7 @@ You can change these settings at any time, but each change instantly affects all
 
 * **Option**: _Users have to sign up_
 * **Details**: Heisenware manages user accounts automatically. Users can register with an email/password or their Google account.
-* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache. To offer a logout, drop the Logout [App action](../app-builder/build-frontend/page-explorer.md#app-actions) onto a button, or onto a function output to log out from your logic.
+* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache. To offer a logout, drop the Logout [App action](../app-builder/explorers/pages.md#app-actions) onto a button, or onto a function output to log out from your logic.
 
 ### Dual authentication
 
@@ -44,7 +44,7 @@ You can change these settings at any time, but each change instantly affects all
 
 * **Option**: _Only previously invited users can log in_
 * **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
-* **Programmatic invite:** With the [`users` class](../app-builder/build-backend/functions/utilities/users.md) in the backend, you can also invite users programmatically from another App.
+* **Programmatic invite:** With the [`users` class](../reference/functions/utilities/users.md) in the backend, you can also invite users programmatically from another App.
 
 ## User management
 
@@ -53,7 +53,7 @@ The Users card in each App gives you a real-time view of who is accessing your s
 {% hint style="info" %}
 #### Managing users programmatically
 
-You can also manage users from within an App using the [`users` class](../app-builder/build-backend/functions/utilities/users.md).
+You can also manage users from within an App using the [`users` class](../reference/functions/utilities/users.md).
 {% endhint %}
 
 ### Anonymized sessions

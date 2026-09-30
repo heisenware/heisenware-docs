@@ -8,17 +8,17 @@ description: May 10, 2024
 
 ## Features
 
-* Introduced the first version of [PDF templates](../app-builder/build-backend/functions/utilities/pdf-templates.md) and the [PDF Template Editor](../app-builder/build-frontend/pdf-template-editor.md).
-* The entire platform is now available as an [on-premise installation](../tutorials/on-premise-installation.md), supporting single-container deployments on edge hardware such as IPCs with x86 or arm64 architectures.
+* Introduced the first version of [PDF templates](../reference/functions/utilities/pdf-templates.md) and the [PDF Template Editor](../app-builder/template-editor.md).
+* The entire platform is now available as an [on-premise installation](../self-hosting/install.md), supporting single-container deployments on edge hardware such as IPCs with x86 or arm64 architectures.
 * Added tenancy selection for input widgets, allowing inputs to be explicitly shared.
-* Added a built-in mailing service to the [email](../app-builder/build-backend/functions/connectors/email.md) connector.
-* Added support for many-to-many associations between tables in [relational databases](../app-builder/build-backend/functions/storage/relational-database.md).
-* Added support for converting non-history tables to history tables, including tracking for all associations in [relational databases](../app-builder/build-backend/functions/storage/relational-database.md).
-* The [Kuando Busylight](../app-builder/build-backend/functions/connectors/kuando-busylight.md) driver is now available as a local connector running on an Agent.
+* Added a built-in mailing service to the [email](../reference/functions/connectors/email.md) connector.
+* Added support for many-to-many associations between tables in [relational databases](../reference/functions/storage/relational-database.md).
+* Added support for converting non-history tables to history tables, including tracking for all associations in [relational databases](../reference/functions/storage/relational-database.md).
+* The [Kuando Busylight](../reference/functions/connectors/kuando-busylight.md) driver is now available as a local connector running on an Agent.
 * Added thousands separators for number input fields inside [form](../reference/widgets/input/form.md) widgets.
 
 ## Fixes
 
 * Fixed the tag box component inside the [form](../reference/widgets/input/form.md) widget.
-* Fixed an issue where default configuration values for the [email](../app-builder/build-backend/functions/connectors/email.md) connector failed to load properly.
+* Fixed an issue where default configuration values for the [email](../reference/functions/connectors/email.md) connector failed to load properly.
 * Fixed image rotation issues and optimized file sizes when combining the [upload](../reference/widgets/input/upload.md) widget with the [photo](../reference/widgets/input/photo.md) widget.
