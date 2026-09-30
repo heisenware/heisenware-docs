@@ -1,6 +1,6 @@
 # Theme editor
 
-The Theme Editor lets you set the visual appearance and color scheme of each App individually, so every App matches your corporate branding or specific design requirements.
+The Theme editor lets you set the visual appearance and color scheme of each App individually, so every App matches your corporate branding or specific design requirements.
 
 ## How to apply a theme
 
@@ -8,9 +8,9 @@ To set your App's theme:
 
 {% stepper %}
 {% step %}
-#### Open Theme Editor
+#### Open the Theme editor
 
-From the App Builder's Top Bar, open the Theme Editor (<i class="fa-palette">:palette:</i>).
+From the App Builder's top bar, open the Theme editor (<i class="fa-palette">:palette:</i>).
 {% endstep %}
 
 {% step %}
@@ -28,13 +28,13 @@ Choose a predefined scheme from the left menu or manually adjust individual colo
 {% step %}
 #### Apply changes
 
-Click Apply to refresh the UI preview with your new theme.
+Click **Apply** to refresh the UI preview with your new theme.
 {% endstep %}
 
 {% step %}
 #### Exit
 
-Click the App Editing icon (<i class="fa-mobile">:mobile:</i>) in the Top Bar to return.
+Click the App Editing icon (<i class="fa-mobile">:mobile:</i>) in the top bar to return.
 {% endstep %}
 {% endstepper %}
 

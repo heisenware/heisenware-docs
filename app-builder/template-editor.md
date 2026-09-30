@@ -1,9 +1,9 @@
 # Template editor
 
-The PDF Template Editor gives you a visual workflow for designing dynamic documents. You build a template by placing dynamic placeholders onto an uploaded PDF background.
+The Template editor gives you a visual workflow for designing dynamic documents. You build a template by placing dynamic placeholders onto an uploaded PDF background.
 
 {% hint style="info" %}
-The editor works exclusively with the [PDF Templates class](../reference/functions/utilities/pdf-templates.md). Each template you create becomes an instance in this class, carrying the `fillTemplate` function that populates your document with data.
+The editor works exclusively with the [PDF Templates class](../reference/functions/utilities/pdf-templates.md). Each template you create becomes an instance of this class, carrying the `fillTemplate` function that populates your document with data.
 
 To see the complete process in action, follow our [step-by-step guide](../labs/automating-pdf-reports.md).
 {% endhint %}
@@ -14,7 +14,7 @@ To see the complete process in action, follow our [step-by-step guide](../labs/a
 {% step %}
 #### Open the editor
 
-Open the PDF Template Editor from the Top Bar. <img src="../.gitbook/assets/image (86).png" alt="" data-size="line">
+Open the Template editor from the top bar. <img src="../.gitbook/assets/image (86).png" alt="" data-size="line">
 {% endstep %}
 
 {% step %}
@@ -26,7 +26,7 @@ Enter a unique name for your template and choose a standard page size (`A4`, `A5
 {% step %}
 #### Generate instance
 
-Click Create Template. Heisenware generates the corresponding instance in your Function Explorer.
+Click **Create Template**. Heisenware creates the corresponding instance in the Functions explorer.
 {% endstep %}
 {% endstepper %}
 
@@ -38,7 +38,7 @@ Once your template is created, set up the visual background and place your dynam
 
 ### Managing pages and backgrounds
 
-To use an existing document as a layout, first upload its pages as separate PDF files to the [File Explorer](explorers/files.md).
+To use an existing document as a layout, first upload its pages as separate PDF files to the [Files explorer](explorers/files.md).
 
 {% stepper %}
 {% step %}
@@ -50,13 +50,13 @@ Add a blank page for each page of your source document using the Add Page icon (
 {% step %}
 #### Set background
 
-Drag each page file from the File Explorer onto the corresponding blank page. This sets the file as a static background.
+Drag each page file from the Files explorer onto the corresponding blank page. This sets the file as a static background.
 {% endstep %}
 
 {% step %}
 #### Organize
 
-Right-click a page to open the context menu, where you move pages up or down or manage the layering (Bring to Front / Send to Back).
+Right-click a page to open the context menu, where you move pages up or down or manage the layering (**Bring to Front** / **Send to Back**).
 {% endstep %}
 {% endstepper %}
 
@@ -100,23 +100,23 @@ The variable name you enter (e.g., `invoiceNumber`) must exactly match the key i
 
 ## Populating the template
 
-To bring your PDF to life, call the [`fillTemplate`](../reference/functions/utilities/pdf-templates.md#filltemplate) function in your backend logic. It is the engine: it takes a data object (say, a JSON object from a database), merges the values into your placeholders, and outputs the finished PDF. For detailed input and output specifications, see the [PDF Templates class documentation](../reference/functions/utilities/pdf-templates.md).
+To bring your PDF to life, use the [`fillTemplate`](../reference/functions/utilities/pdf-templates.md#filltemplate) function in an executor on your Flowboard. It takes a data object (e.g., a JSON object from a database), merges the values into your placeholders, and outputs the finished PDF. For detailed input and output specifications, see the [PDF Templates class documentation](../reference/functions/utilities/pdf-templates.md).
 
 To see these concepts in action, follow our step-by-step guide on [automating PDF reports](../labs/automating-pdf-reports.md).
 
 ## Deleting a template
 
-To permanently remove a PDF template and its associated function:
+To permanently remove a PDF template and its instance:
 
-1. Navigate to the [Function Explorer](explorers/functions.md).
+1. Open the [Functions explorer](explorers/functions.md).
 2. Open the PDF Templates class.
 3. Right-click the specific template instance.
-4. Select Remove.
+4. Select **Remove**.
 
 {% hint style="danger" %}
 #### This action is irreversible
 
-Deleting an instance removes it completely. Any logic on your Flowboard that refers to this template will break.
+Deleting an instance removes it completely. Any executor on your Flowboard that uses this template will break.
 {% endhint %}
 
 <figure><img src="../.gitbook/assets/deleting_template_looped.gif" alt=""><figcaption></figcaption></figure>

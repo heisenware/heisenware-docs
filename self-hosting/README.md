@@ -1,12 +1,12 @@
 # Cloud or on-prem
 
-Heisenware is flexible. Whether you want a hassle-free cloud setup or strict data sovereignty on your own servers, we support the deployment model that fits your IT strategy.
+Heisenware runs in our managed cloud or, for strict data sovereignty, on your own servers. Choose the deployment model that fits your IT strategy.
 
 ## Managed cloud (SaaS)
 
 This is the standard, recommended deployment for most customers. You focus entirely on building Apps and optimizing processes, while we handle maintenance like updates, security patching, and backups.
 
-* **Provider**: We rely on [Hetzner](https://www.hetzner.com/), a leading high-performance cloud provider.
+* **Provider**: We rely on the cloud provider [Hetzner](https://www.hetzner.com/).
 * **Location**: All data and servers sit exclusively in Germany (EU).
 * **Compliance**: Fully GDPR (DSGVO) compliant.
 
@@ -16,51 +16,51 @@ Here, every essential component of the platform runs in the cloud. Once you buil
 
 <figure><img src="../.gitbook/assets/image (487).png" alt=""><figcaption><p>Simplified architecture of the Heisenware ecosystem in a cloud deployment.</p></figcaption></figure>
 
-### Connectivity (Agents)
+### Connectivity (agents)
 
-The platform runs in the cloud, but your machines usually sit in a local, protected network (OT). To bridge that gap securely, Heisenware uses Agents.
+The platform runs in the cloud, but your machines usually sit in a local, protected network (OT). To bridge that gap securely, Heisenware uses agents.
 
-An Agent is a piece of software that runs on your local hardware and opens a secure tunnel to the cloud platform. Through it, you connect your devices from inside your local network using industrial protocols like S7, Modbus, OPC UA, and MQTT.
+An agent is a piece of software that runs on your local hardware and opens a secure tunnel to the cloud platform. Through it, you connect your devices from inside your local network using industrial protocols like S7, Modbus, OPC UA, and MQTT.
 
-#### Native Agent
+#### Native agent
 
-The Native Agent is a single binary executable (Linux/macOS) or a Windows `.exe` that starts with one click. It must run on local hardware that can reach the device you want to connect.
+The native agent is a single binary executable (Linux/macOS) or a Windows `.exe` that starts with one click. It must run on local hardware that can reach the device you want to connect.
 
-Security is built in. When you download the Agent from your Heisenware account, Heisenware compiles it fresh, just for you, with your own credentials embedded directly in the binary. An Agent downloaded from a different account will not work with yours. For details on using the Native Agent, [see the Agents documentation](../concepts/agents-and-where-code-runs.md#native-agent).
+Security is built in. When you download the agent from your Heisenware account, Heisenware compiles it fresh, just for you, with your own credentials embedded directly in the binary. An agent downloaded from a different account will not work with yours. For details on using the native agent, [see the agents documentation](../concepts/agents-and-where-code-runs.md#native-agent).
 
-#### Docker Agent
+#### Docker agent
 
-The Docker Agent works much like the Native Agent, but packed into a Docker container. Docker is especially useful for vendors that offer edge-connectivity hardware, such as Siemens, WAGO, Hilscher, Welotec, or Weidmüller.
+The Docker agent works much like the native agent, but packed into a Docker container. Docker is especially useful for vendors that offer edge-connectivity hardware, such as Siemens, WAGO, Hilscher, Welotec, or Weidmüller.
 
-We offer the Docker Agent for all relevant architectures (amd64, arm64, arm/v7). To get started quickly, pass the necessary credentials as environment variables to the container. For details, [see the Agents documentation](../concepts/agents-and-where-code-runs.md#docker-agent).
+We offer the Docker agent for all relevant architectures (amd64, arm64, arm/v7). To get started quickly, pass the necessary credentials as environment variables to the container. For details, [see the agents documentation](../concepts/agents-and-where-code-runs.md#docker-agent).
 
-### Code Adapters (Custom Extensions)
+### Code adapters (add-ons)
 
-Standard Agents ship with pre-made code for industrial protocols. Code Adapters go further: they wrap your own source code and expose it as visual building blocks ([functions](../concepts/executors-and-instances.md)) in the cloud platform. Think of a Code Adapter as a Heisenware-specific wrapper for your algorithms.
+Standard agents ship with pre-made code for industrial protocols. Code adapters go further: they wrap your own source code and expose it as [functions](../concepts/executors-and-instances.md) in the cloud platform. Think of a code adapter as a Heisenware-specific wrapper for your algorithms.
 
-Like Agents, Code Adapters come as both a native application and a containerized version, which the platform calls [Custom Extensions](../reference/functions/add-ons/README.md#custom-extensions).
+Like agents, code adapters come as both a native application and a containerized version, which the platform calls [add-ons](../reference/functions/add-ons/README.md#custom-add-ons).
 
-#### Native Code Adapter
+#### Native code adapter
 
-The Native Code Adapter lets you integrate custom code running natively on your OS. It relies on language-specific versions of our [VRPC library](../developers/vrpc/README.md).
+The native code adapter lets you integrate custom code running natively on your OS. It relies on language-specific versions of our [VRPC library](../developers/vrpc/README.md).
 
-#### Docker Code Adapter
+#### Docker code adapter
 
-We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as a [Custom Extension](../reference/functions/add-ons/README.md#custom-extensions). From there, you have two options for where to run the container:
+We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as an [add-on](../reference/functions/add-ons/README.md#custom-add-ons). From there, you have two options for where to run the container:
 
-1. **Inside the platform (cloud)**: You load your image as an extension. The platform handles its lifecycle (hosting, restarting) and persists files into the central `shared` folder automatically. Your code effectively runs as part of the Heisenware cloud.
+1. **Inside the platform (cloud)**: You load your image as an add-on. The platform handles its lifecycle (hosting, restarting) and persists files into the central `shared` folder automatically. Your code effectively runs as part of the Heisenware cloud.
 2. **Outside the platform (edge)**: Useful for bridging a private or local network. You run the container on your own hardware and secure the connection with environment variables. Your code can talk to local devices while you still control everything from the cloud platform.
 
 ## Self-hosted (on-premises)
 
-For organizations with strict internal compliance requirements or air-gapped networks, you can deploy Heisenware directly on your infrastructure, whether that's a private cloud or an industrial PC.
+For organizations with strict internal compliance requirements or air-gapped networks, you can install Heisenware directly on your infrastructure, whether that's a private cloud or an industrial PC.
 
-### On-premises architecture
+### On-premise architecture
 
-In an on-premises deployment, the entire platform runs on your local servers. It moves every cloud component one level down into your infrastructure.
+In an on-premise installation, the entire platform runs on your local servers. It moves every cloud component one level down into your infrastructure.
 
-* **Direct connectivity**: The platform connects directly to local devices, with no Agent required.
-* **Network segmentation**: In large shopfloor setups with segmented networks, you can still use [Agents](../concepts/agents-and-where-code-runs.md) (Native or Docker) to bridge lower-level subnets securely.
+* **Direct connectivity**: The platform connects directly to local devices, with no agent required.
+* **Network segmentation**: In large shopfloor setups with segmented networks, you can still use [agents](../concepts/agents-and-where-code-runs.md) (native or Docker) to bridge lower-level subnets securely.
 
 <figure><img src="../.gitbook/assets/image (488).png" alt=""><figcaption></figcaption></figure>
 
@@ -78,7 +78,7 @@ When you self-host, you are the platform operator. Improper configuration can le
 
 #### Getting started
 
-If you have an Enterprise license and are ready to deploy, see our [technical guide](install.md).
+If you have an Enterprise license and are ready to install, see our [technical guide](install.md).
 
 ## Installation modes
 
@@ -115,7 +115,7 @@ Upstream servers are dedicated hosts (such as `walter-white` or `hank-schrader`)
 
 Key responsibilities of upstream servers include:
 * **App-layer routing:** Performing granular, path-based routing to the microservices that make up an account's Apps (such as `/app`, `/connectors`, or `/manager`).
-* **Service abstraction:** Providing a stable endpoint for the master proxy, which abstracts the underlying containerized services (such as `manager` or `app-frontend`).
+* **Service abstraction:** Providing a stable target for the master proxy, which abstracts the underlying containerized services (such as `manager` or `app-frontend`).
 
 ### On-premise installation
 

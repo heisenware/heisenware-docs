@@ -1,12 +1,12 @@
 # MCP server
 
-The Heisenware MCP server lets you drive the platform from **your own AI agent** — Claude Desktop, Claude Code, or any client that speaks the [Model Context Protocol](https://modelcontextprotocol.io). The agent gets the same tools the embedded assistant uses: creating apps, wiring backend functions, placing widgets, verifying the result. You spend your own AI subscription; nothing runs through Heisenware's models.
+The Heisenware MCP server lets you drive the platform from **your own AI client** — Claude Desktop, Claude Code, or any client that speaks the [Model Context Protocol](https://modelcontextprotocol.io). The client gets the same tools the assistant uses: creating Apps, wiring executors, placing widgets, verifying the result. You spend your own AI subscription; nothing runs through Heisenware's models.
 
 ## How it works
 
-* **Bring your own agent**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an Agent uses. Your AI client talks to the server over stdio.
-* **Your integration's authority**: the connector is an [integration](../app-manager/integrations.md) of your workspace and can do exactly what that integration is allowed to do — nothing more. Deactivate or delete it in the App Manager and the connector stops.
-* **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `deploy_app`) only run with an explicit `confirm: true` that your agent has to ask you for. `deploy_app` is the builder's Deploy button: it tags a version and the platform brings the production backend up within about a minute; `test_app` is the Test button and starts nothing in production; `stop_app` ends that test run. Apps travel as bundles too: `export_app` writes the builder's `.hwt` export next to your agent and `import_app` adds one to an app as a version that `rollback` applies, so an agent derives one app from another without the builder. An App in another language is another App: `list_app_texts` reads every text people read in the reference App, your agent translates the table, and `translate_app` makes the copy from it or refreshes it later. A `--read-only` mode exposes no mutating tool at all.
+* **Bring your own client**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an agent uses. Your AI client talks to the server over stdio.
+* **Your integration's authority**: the MCP connector is an [integration](../app-manager/integrations.md) of your workspace and can do exactly what that integration is allowed to do — nothing more. Deactivate or delete it in the App Manager and the connector stops.
+* **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `deploy_app`) only run with an explicit `confirm: true` that your AI client has to ask you for. `deploy_app` is the App Builder's **Deploy** button: it makes the current version the one users get, and the platform brings it up within about a minute; `test_app` is the **Test** button and changes nothing for users; `stop_app` ends that test run. Apps travel as bundles too: `export_app` writes the App as a `.hwt` bundle next to your AI client and `import_app` adds one to an App as a version that `rollback` applies, so your client derives one App from another without the App Builder. An App in another language is another App: `list_app_texts` reads every text people read in the reference App, your client translates the table, and `translate_app` makes the copy from it or refreshes it later. A `--read-only` mode exposes no mutating tool at all.
 * **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `npx` keeps the file after the first run, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
 
 ## Getting your connector
@@ -19,11 +19,11 @@ Open the [Integrations panel](../app-manager/integrations.md) of the App Manager
 
 The link carries an access ticket valid for twelve hours. `npx` keeps the package after the first run, so an expired link only matters on a new machine; open the view again for a fresh one. Changing the integration's password builds the package again; deleting the integration deletes the package and stops the connector at its next login.
 
-Nothing else is needed: no variables, no npm registry (the package carries its dependencies), no installation on your side beyond Node.js 18 or newer.
+Nothing else is needed: no environment variables, no npm registry (the package carries its dependencies), no installation on your side beyond Node.js 18 or newer.
 
 ## Configuration by hand (advanced)
 
-For CI or a checkout of the platform, the server also reads the same four variables as the [Docker Agent](../app-manager/agents/docker-agent.md); they win over the baked-in configuration:
+For CI or a checkout of the platform, the server also reads the same four environment variables as the [Docker agent](../app-manager/agents/docker-agent.md); they win over the baked-in configuration:
 
 | Variable      | Value                                                        |
 | ------------- | ------------------------------------------------------------ |
@@ -45,17 +45,17 @@ Flag: `--read-only` — production-support mode. No mutating tool is offered and
 
 ## The platform law comes first
 
-The tools describe themselves, but building a good app on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The embedded assistant in the App Builder knows these rules by heart. Your own agent gets them from the server as the **platform law**, and the first message of every session should load it. The server offers the law three ways:
+The tools describe themselves, but building a good App on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The assistant in the App Builder knows these rules by heart. Your AI client gets them from the server as the **platform law**, and the first message of every session should load it. The server offers the law three ways:
 
 * as a **prompt** named `platform-law` (Claude Code turns it into the slash command `/mcp__heisenware__platform-law`, Claude Desktop lists it in the attachment menu),
 * as the **resource** `heisenware://law/platform-law`, for clients that read resources,
 * as plain text you can paste into your first message, for clients that support neither.
 
-The server also points every client at the law in its connection instructions, so a capable agent reads it by itself. Widget contracts are available the same way, as resources named `heisenware://widgets/<type>/manifest`.
+The server also points every client at the law in its connection instructions, so a capable client reads it by itself. Widget contracts are available the same way, as resources named `heisenware://widgets/<type>/manifest`.
 
 ## Claude Code
 
-The terminal commands around the connector - register, check, approve tools, replace, repair - are collected on the [Claude Code cheat sheet](claude-code-cheat-sheet.md).
+The terminal commands around the MCP connector - register, check, approve tools, replace, repair - are collected on the [Claude Code cheat sheet](claude-code-cheat-sheet.md).
 
 Register the server once with the line from the executable's view in the App Manager; it looks like this:
 
@@ -82,11 +82,11 @@ The package is self-contained: it carries its dependencies, so the first start n
 `claude mcp list` should now show `heisenware` as connected. Then, in every session:
 
 1. Make `/mcp__heisenware__platform-law` your first message. It loads the law.
-2. Ask in your own words, for example: _"List my apps and describe the one called Dashboard."_ The tools appear as `mcp__heisenware__<tool>`.
+2. Ask in your own words, for example: _"List my Apps and describe the one called Line status."_ The tools appear as `mcp__heisenware__<tool>`.
 
 ## Claude Desktop
 
-Add the block from the Connect dialog to `claude_desktop_config.json`:
+Add the block from the executable's view in the App Manager to `claude_desktop_config.json`:
 
 ```json
 {
@@ -123,16 +123,16 @@ A version mismatch between the package and the platform is reported as a warning
 
 ## Visual verification
 
-`layout_lint` and `screenshot` render your app in a headless browser on your machine, signed in as your connector, so a screenshot shows the widgets with their live values. A package built by the App Manager knows your platform's address; all that is needed on your machine is a Chromium:
+`layout_lint` and `screenshot` render your App in a headless browser on your machine, signed in as your connector, so a screenshot shows the widgets with their live values. A package built by the App Manager knows your platform's address; all that is needed on your machine is a Chromium:
 
 ```bash
 npx playwright-core install --with-deps chromium
 ```
 
-On Linux the `--with-deps` part installs system libraries through the package manager and needs root, so run it with `sudo` there; on macOS and Windows it needs nothing more. Without a working Chromium, both tools stay listed and answer with this instruction — run the line yourself rather than letting the agent improvise around missing libraries.
+On Linux the `--with-deps` part installs system libraries through the package manager and needs root, so run it with `sudo` there; on macOS and Windows it needs nothing more. Without a working Chromium, both tools stay listed and answer with this instruction — run the line yourself rather than letting your AI client improvise around missing libraries.
 
 {% hint style="info" %}
 #### Which tools are there?
 
-Ask your agent to list them — every tool carries its own description of what it does and how the platform expects it to be used. The embedded assistant in the App Builder uses exactly the same tools.
+Ask your AI client to list them — every tool carries its own description of what it does and how the platform expects it to be used. The assistant in the App Builder uses exactly the same tools.
 {% endhint %}

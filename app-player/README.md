@@ -1,10 +1,10 @@
 # Open and install an App
 
-The App Player runs the deployed version of your App for its users. Because Heisenware Apps run on modern web standards, they feel seamless across all devices, with no app store required.
+The App Player runs the deployed version of your App for its users. Heisenware Apps are built on web standards, so they run on any device without an app store.
 
 ## Progressive Web App (PWA) technology
 
-Every Heisenware App is a Progressive Web App. It combines the reach of a website with the performance and feel of a native mobile or desktop app.
+Every Heisenware App is a Progressive Web App. It opens like a website and installs like a native mobile or desktop app.
 
 * **Installable**: Users add the App to their home screen or desktop.
 * **Cross-platform**: A single URL works on iOS, Android, and desktop.
@@ -37,10 +37,10 @@ The URL in the address bar doesn't change when you switch pages, so you can't li
 
 ### Responsive experience
 
-The [Page editor](../app-builder/page-editor.md) lets you design for five screen sizes (XS to XL).
+The [Page editor](../app-builder/page-editor.md) lets you design for five screens (XS to XL).
 
-* **Automatic scaling**: When a user opens the App on a size you didn't design for, Heisenware scales the closest layout to fit the screen.
-* **Optimization**: For the best result, check your layout in all five previews before deploying, so it fits phones, tablets, and desktops down to the pixel.
+* **Automatic scaling**: When a user opens the App on a screen you didn't enable, Heisenware scales the closest layout to fit.
+* **Optimization**: Check your layout in all five screen previews before deploying, so it fits phones, tablets, and desktops.
 
 ## Installing the App
 

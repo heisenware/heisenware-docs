@@ -1,6 +1,6 @@
 # Recorder
 
-The recorder captures a [function](../../concepts/executors-and-instances.md)'s output and stores it as timeseries data in the [internal InfluxDB](../../reference/functions/storage/timeseries-database.md#quick-start-the-internal-instance). Use it to record a data stream, visualize it in your Apps, or analyze it later. It records during build time (in test mode) and during the App's runtime.
+The recorder captures an [executor](../../concepts/executors-and-instances.md)'s output and stores it as timeseries data in the [internal InfluxDB](../../reference/functions/storage/timeseries-database.md#quick-start-the-internal-instance). Use it to record a data stream, visualize it in your Apps, or analyze it later. It records while you test the App in the App Builder and while the deployed App runs.
 
 ## Settings
 
@@ -10,9 +10,9 @@ The recorder captures a [function](../../concepts/executors-and-instances.md)'s 
 <figure><img src="../../.gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-If the [Industrial Blockchain](../../reference/functions/add-ons/industrial-blockchain.md) extension is available in your account, an additional Blockchain (BC) recording type appears. It stores the data in the blockchain instead of InfluxDB.
+If the [Industrial Blockchain](../../reference/functions/add-ons/industrial-blockchain.md) add-on is available in your account, an additional Blockchain (BC) recording type appears. It stores the data in the blockchain instead of InfluxDB.
 {% endhint %}
 
 ## Reading recorded data
 
-Click the letter icon inside the recorder to generate a matching readout function directly on the canvas. Depending on the recording type, this is the `read` or `readDownsampled` function of the internal InfluxDB (or the blockchain `read` function), preconfigured with your measurement name.
+Click the letter icon inside the recorder to generate a matching readout executor directly on the Flowboard, preconfigured with your measurement name. Depending on the recording type, it calls the `read` or `readDownsampled` function of the internal InfluxDB (or the blockchain `read` function).

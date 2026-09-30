@@ -94,7 +94,7 @@ The signature widget outputs a raw base64 string, but the database expects an ob
 
 Merge the main form data with the signature object.
 
-1. Drag the [`mergeObjects`](../reference/functions/utilities/data-processing.md#merging-objects) function onto the canvas.
+1. Drag the [`mergeObjects`](../reference/functions/utilities/data-processing.md#mergeobjects) function onto the canvas.
 2. Connect the form widget to the first input of `mergeObjects`.
 3. Connect the signature modifier to the second input of `mergeObjects`.
 4. Connect both inputs to the trigger of `mergeObjects` to trigger the function `on input update`.
@@ -259,7 +259,7 @@ This creates a data-driven workflow: whenever `fillTemplate` generates a new PDF
 
 Congratulations! 🥳 You have built a complete App that captures user input, saves it to a database, generates a customized PDF, and emails it as an attachment.
 
-Click the Deploy button in the App Builder's Top Bar to publish the latest version and make it live.
+Click the Deploy button in the App Builder's top bar to publish the latest version and make it live.
 
 Once deployed, open the App and test the full workflow. After you fill out and submit the report, the email address you configured in Step 4 receives an email with the PDF attachment, similar to the image below.
 

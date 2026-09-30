@@ -4,15 +4,15 @@ The filter acts as a conditional gate for your flow. It branches logic or halts 
 
 To add a filter:
 
-1. Click the + icon on the right side of a function output, modifier, or existing filter.
-2. Select Filter from the list.
+1. Click the + icon on the right side of an executor's output, modifier, or existing filter.
+2. Select **Filter** from the list.
 3. Click the new filter box (_Click to edit…_) to open the code editor and write your condition.
 
-<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption><p>randomInteger function with filter extension node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption><p>randomInteger executor with filter extension node</p></figcaption></figure>
 
 ## How filters work
 
-A filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The input value from the preceding output is available as the reserved variable `x`.
+A filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The value from the preceding output is available as `x`.
 
 Click the filter icon on the left to evaluate the filter manually during development. The last result appears below the expression.
 
@@ -24,7 +24,7 @@ If the result is `true`, the data passes on to the next node following the filte
 
 ### Branching logic
 
-Use the `true` and `false` states of the filter to trigger separate logic paths. For example, use the `true` state to trigger another function.
+Use the `true` and `false` states of the filter to trigger separate logic paths. For example, use the `true` state to trigger another executor.
 
 <figure><img src="../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
 

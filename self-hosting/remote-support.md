@@ -1,10 +1,10 @@
 # Remote support
 
-Heisenware can support your on-premise installation remotely: build an app with you, fix one, look at a screenshot of it. No way into your network is needed for this, and you decide when it happens, for how long, and how much Heisenware may do.
+Heisenware can support your on-premise installation remotely: build an App with you, fix one, look at a screenshot of it. No way into your network is needed for this, and you decide when it happens, for how long, and how much Heisenware may do.
 
 ## How it works
 
-Your installation runs a **support agent**. Switched on, it opens one outbound TLS connection to `support.heisenware.cloud` on port 8883, the same door a [Native Agent](../app-manager/agents/native-agent.md) uses, and offers Heisenware the App Builder tools of one workspace over it. Every tool runs inside your installation; only the request and its result travel. Nothing listens for incoming connections, and the connection ends when you switch the agent off.
+Your installation runs a **support agent**. Switched on, it opens one outbound TLS connection to `support.heisenware.cloud` on port 8883, the same door a [native agent](../app-manager/agents/native-agent.md) uses, and offers Heisenware the App Builder tools of one workspace over it. Every tool runs inside your installation; only the request and its result travel. Nothing listens for incoming connections, and the connection ends when you switch the agent off.
 
 ```
   Heisenware                  support.heisenware.cloud             Your installation
@@ -20,8 +20,8 @@ Your installation runs a **support agent**. Switched on, it opens one outbound T
 
 | Leaves your installation | Stays inside |
 | --- | --- |
-| The tool calls Heisenware makes and their results, screenshots included | Your broker, engine, builder and player |
-| The list of tools and your platform version | Your apps' data, events and MQTT feeds |
+| The tool calls Heisenware makes and their results, screenshots included | Your broker, engine, App Builder and App Player |
+| The list of tools and your platform version | Your Apps' data, events and MQTT feeds |
 | | Every credential of your installation |
 
 ## Before you start
@@ -71,9 +71,9 @@ docker compose logs -f supportAgent
 ## What you control
 
 * **Expiry.** `HW_SUPPORT_EXPIRES_AT` (ISO 8601, UTC): the agent disconnects by itself at that time.
-* **Read-only.** `HW_SUPPORT_READ_ONLY=true`: Heisenware can look (apps, executors, logs, screenshots) but change nothing.
-* **Live values.** `HW_SUPPORT_VALUE_READS=false`: no values of your running apps, screenshots without them.
-* **Irreversible operations.** Deleting an entity or a page and deploying an app need an explicit confirmation on Heisenware's side, per call.
+* **Read-only.** `HW_SUPPORT_READ_ONLY=true`: Heisenware can look (Apps, executors, logs, screenshots) but change nothing.
+* **Live values.** `HW_SUPPORT_VALUE_READS=false`: no values of your running Apps, screenshots without them.
+* **Irreversible operations.** Deleting an entity or a page and deploying an App need an explicit confirmation on Heisenware's side, per call.
 * **Audit.** Every call is one line in the container log: `docker compose logs supportAgent`.
 
 ## Switch it off

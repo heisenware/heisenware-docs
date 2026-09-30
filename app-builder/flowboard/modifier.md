@@ -1,11 +1,11 @@
 # Modifier
 
-Modifiers transform data on the fly within a flow. Apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before it reaches the next function, a database, the frontend, or a subsequent extension node (such as another modifier or a filter).
+Modifiers transform data on the fly within a flow. Apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before it reaches the next executor, a database, the frontend, or a subsequent extension (such as another modifier or a filter).
 
 To add a modifier:
 
-1. Click the + icon on the right side of a function output, filter, or existing modifier.
-2. Select Modifier from the list.
+1. Click the + icon on the right side of an executor's output, filter, or existing modifier.
+2. Select **Modifier** from the list.
 3. Click the new modifier node (Click to edit...) to open the code editor and write your expression.
 
 A modifier uses either JSONata or a JavaScript expression. Switch between types by right-clicking the modifier and selecting JSONata or Expression. Adjust the default type in the [App Builder settings](../README.md#app-builder-settings).
@@ -152,7 +152,7 @@ Return of the modifier:
 
 ## JavaScript expressions
 
-This modifier type accepts any standard JavaScript expression that evaluates to a new value. Reference the reserved variable `x` to access the preceding data output. For more information, see the MDN documentation on [JavaScript expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators).
+This modifier type accepts any standard JavaScript expression that evaluates to a new value. Use `x` to access the value from the preceding output. For more information, see the MDN documentation on [JavaScript expressions and operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators).
 
 ### JavaScript expression examples
 
@@ -475,7 +475,7 @@ Return of the modifier:
 
 #### 5. Converting UTC sensor data to local time
 
-IoT devices typically send data in UTC. Convert this to a readable local format for UI dashboards.
+IoT devices typically send data in UTC. Convert this to a readable local format for your pages.
 
 Data:
 
@@ -508,7 +508,7 @@ Return of the modifier:
 
 <summary><strong>Example 7: Round robin (using <code>combine</code>)</strong></summary>
 
-Sometimes you want to extract items of an array in a round-robin fashion. Use a `combine` function in which you link the modifier's output back to the second argument:
+Sometimes you want to extract items of an array in a round-robin fashion. Use a `combine` executor and wire the modifier's output back to its second input:
 
 <figure><img src="../../.gitbook/assets/image (503).png" alt=""><figcaption></figcaption></figure>
 

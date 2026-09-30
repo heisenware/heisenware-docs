@@ -37,7 +37,7 @@ Install a [Native Agent](../app-manager/agents/native-agent.md) on the computer 
 {% step %}
 #### Import the template
 1. Open the **App Builder**.
-2. Click the tags menu in the [Top Bar](../app-builder/test-and-deploy.md).
+2. Click the tags menu in the [top bar](../app-builder/test-and-deploy.md).
 3. Select **Import** and upload the `minimal-photo-uploader.hwt` file.
 4. Select the imported template and confirm the import.
 {% endstep %}

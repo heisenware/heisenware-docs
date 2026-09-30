@@ -1,6 +1,6 @@
 # Integrations
 
-The Integrations panel gives you a central overview of every inbound data connection from external systems: an IoT sensor, a custom Python script, or an MCP client. Native Agents have their own panel, [Agents](agents/README.md), where they are built, updated and restarted.
+The Integrations panel gives you a central overview of every inbound data connection from external systems: an IoT sensor, a custom Python script, or an MCP client. Native agents have their own panel, [Agents](agents/README.md), where they are built, updated and restarted.
 
 <figure><img src="../.gitbook/assets/Integrations.png" alt=""><figcaption><p>Integrations panel</p></figcaption></figure>
 
@@ -8,12 +8,12 @@ The Integrations panel gives you a central overview of every inbound data connec
 
 Heisenware connects external data three ways:
 
-### Native or Docker Agent
+### Native or Docker agent
 
 [Agents](../concepts/agents-and-where-code-runs.md) securely bridge data from private networks (on-premises servers, local databases) to the cloud.
 
-* **Setup**: You create and deploy Native Agents directly in the App Builder. You download and deploy Docker Agents via Docker.
-* **Management**: Once deployed, an Agent entry appears in the Integrations panel for monitoring. No manual credentials required.
+* **Setup**: You create and deploy native agents directly in the App Builder. You download and deploy Docker agents via Docker.
+* **Management**: Once deployed, an agent entry appears in the Integrations panel for monitoring. No manual credentials required.
 
 ### MQTT client
 
@@ -25,11 +25,11 @@ An advanced method for connecting custom code and proprietary libraries, the mos
 
 ### Native agent
 
-Native Agents are built, listed and updated in the [Agents panel](agents/README.md). Their accounts are created there too; this panel does not show them.
+Native agents are built, listed and updated in the [Agents panel](agents/README.md). Their credentials are created there too; this panel does not show them.
 
 ### MCP connector
 
-Lets your own AI agent — Claude Code, Claude Desktop, any MCP client — drive the platform; see [MCP Server](../assistant/mcp-server.md). The panel builds a package with the integration's credentials inside and hands you the lines to paste. Tick _read-only_ for a production-support connector that cannot change anything.
+Lets your own AI client (Claude Code, Claude Desktop, any MCP client) drive the platform; see [MCP server](../assistant/mcp-server.md). The panel builds a package with the integration's credentials inside and hands you the lines to paste. Tick _read-only_ for a production-support connector that cannot change anything.
 
 ## The integration and its executable
 
@@ -73,11 +73,11 @@ Paste these credentials into your external client's configuration.
 
 ### Method 2: Smart onboarding
 
-The preferred, passwordless method. The external client sends a request, and you approve it in the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/explorers/functions.md#smart-onboarding).
+The preferred, passwordless method. The external client sends a request, and you approve it in the App Builder. For a detailed guide, see the [smart onboarding section](../app-builder/explorers/functions.md).
 
 ## Integrate custom code via VRPC
 
-To integrate your code, write a [Code Adapter](../self-hosting/README.md#custom-code-adapters) around your existing functions, then load it as a Custom Extension.
+To integrate your code, write a [code adapter](../self-hosting/README.md#code-adapters-add-ons) around your existing functions, then load it as a custom add-on.
 
 * **Supported languages**: Arduino (ESP32), C++, Node.js, and Python.
 * **Use cases**: Integrating legacy systems, running complex algorithms, or using specialized software libraries.

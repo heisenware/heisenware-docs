@@ -1,6 +1,6 @@
 # Claude Code cheat sheet
 
-The terminal side of the [MCP server](mcp-server.md): everything you type to register, check, use and repair the Heisenware connector in Claude Code. The App Manager's Integrations panel gives you the link and the lines; this page is what you do with them.
+The terminal side of the [MCP server](mcp-server.md): everything you type to register, check, use and repair the Heisenware MCP connector in Claude Code. The App Manager's Integrations panel gives you the link and the lines; this page is what you do with them.
 
 ## Register once
 
@@ -21,7 +21,7 @@ Run the line in the project folder where you work with this platform. Claude Cod
 ## Use
 
 * **Start a new session after registering.** Claude Code connects its servers when a session starts; a session that was already open never learns about a new server. The connector needs about ten seconds on its first start.
-* **Load the law first, every session:** `/mcp__heisenware__platform-law` - the `/` menu lists it as `/heisenware:platform-law (MCP)`. It is the rulebook the agent builds by.
+* **Load the law first, every session:** `/mcp__heisenware__platform-law` - the `/` menu lists it as `/heisenware:platform-law (MCP)`. It is the rulebook Claude builds by.
 * **Tools** are named `mcp__heisenware__<tool>`, e.g. `mcp__heisenware__create_app`. Claude Code asks before the first use of each; "always allow" remembers it for the project.
 
 ## Approve tools without the prompts
@@ -61,6 +61,6 @@ and start a new session.
 | `Unknown command: /mcp__heisenware__platform-law` | The server is not connected in this session: it was registered after the session started, in another folder, or it is still starting. Start a new session, wait ten seconds, check `/mcp`. |
 | `✘ Failed to connect` in `claude mcp list` | Run the stored command yourself (`claude mcp get heisenware` shows it). A `401` means the link's ticket has expired: fetch a fresh line from the App Manager. A login error means the integration was deactivated, deleted, or its password changed: rebuild the package in the App Manager. |
 | The connector was fine yesterday, dead today | Same as above: the platform was updated or the integration changed. Rebuild from the executable's view and register the fresh line. |
-| `layout_lint` / `screenshot` answer with an install instruction | Your machine lacks a Chromium: `npx playwright-core install --with-deps chromium`, with `sudo` on Linux. Run it yourself; do not let the agent work around missing libraries. |
+| `layout_lint` / `screenshot` answer with an install instruction | Your machine lacks a Chromium: `npx playwright-core install --with-deps chromium`, with `sudo` on Linux. Run it yourself; do not let Claude work around missing libraries. |
 | Slow or timing out at start | `MCP_TIMEOUT=60000 claude` gives the first `npx` start a minute. |
 | You want to see what happens | `claude --debug mcp` prints the connection log. |

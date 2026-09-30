@@ -1,6 +1,6 @@
 # Install
 
-Set up and run a private, on-premise instance of the Heisenware platform (see [Installation modes](README.md)).
+Set up and run a private, on-premise installation of the Heisenware platform (see [Cloud or on-prem](README.md)).
 
 ## Prerequisites: Docker installation
 
@@ -69,9 +69,9 @@ Place both files in an empty directory on your machine. If you are on Windows, e
 
 <figure><img src="../.gitbook/assets/hetzner-server-downloads.png" alt=""><figcaption></figcaption></figure>
 
-Your server requires outbound internet access to `downloads.heisenware.cloud` (Germany, static IP: `128.140.88.150`) to retrieve the application bundles and installation scripts. Ensure your network firewall permits this traffic.
+Your server requires outbound internet access to `downloads.heisenware.cloud` (Germany, static IP: `128.140.88.150`) to retrieve the release packages and installation scripts. Ensure your network firewall permits this traffic.
 
-You can download the files directly to your server terminal using a time-bound bundle link. Download the package using `wget`:
+You can download the files directly to your server terminal using a time-bound download link. Download the package using `wget`:
 
 {% hint style="warning" %}
 #### Download link quotes
@@ -206,7 +206,7 @@ If an update fails or causes unexpected issues, you can roll back your system to
     ./start.sh
     ```
 
-## Basic application management
+## Platform management
 
 {% hint style="info" %}
 #### Data persistence
@@ -220,7 +220,7 @@ Your databases, configurations, and assets persist inside dedicated Docker volum
 The platform spawns Docker containers at runtime for each active account (backend, media server, databases) to ensure process and command isolation. They belong to the `heisenware` Compose project as one-off containers, which a plain `docker compose down` skips by Compose's own rules. Stop the platform through `./stop.sh` (below): it takes the services and the account containers down together, including account containers spawned by a platform version before v93, which carry no project labels yet.
 {% endhint %}
 
-Execute these commands from your installation directory to manage your on-premise instance:
+Execute these commands from your installation directory to manage your on-premise installation:
 
 *   **Stop the platform:** stops and removes all platform containers, including the account containers spawned at runtime. Data stays in the volumes:
 

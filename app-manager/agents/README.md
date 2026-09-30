@@ -1,14 +1,14 @@
 # Agents
 
-The Agents panel shows every [Agent](../../concepts/agents-and-where-code-runs.md) connected to your workspace: what runs on which host, which build it carries, and the rollouts that update it. Native Agents are built here, updated from here, and restarted from here. The App Manager owns the machine; the [App Builder](../../app-builder/explorers/functions.md) uses the Agent's functions.
+The Agents panel shows every [agent](../../concepts/agents-and-where-code-runs.md) connected to your workspace: what runs on which host, which build it carries, and the rollouts that update it. Native agents are built here, updated from here, and restarted from here. The App Manager owns the machine; the [App Builder](../../app-builder/explorers/functions.md) uses the agent's functions.
 
 <figure><img src="../../.gitbook/assets/agents-panel.png" alt=""><figcaption><p>Agents panel</p></figcaption></figure>
 
 ## What you see
 
-* **Fleets**: Native Agents built with a fleet name, grouped. The group line shows the fleet's current build, how many agents run it, how many are behind, and how many are legacy.
-* **Single agents**: Native Agents built without a fleet name, each with builds of its own.
-* **Unmanaged agents**: everything else that connects to the workspace as an agent, for example a [Docker Agent](docker-agent.md) or your own [VRPC](../../developers/vrpc/README.md) adapter. The panel shows their status and when they were last seen; their software is not built here, so nothing updates them.
+* **Fleets**: Native agents built with a fleet name, grouped. The group line shows the fleet's current build, how many agents run it, how many are behind, and how many are legacy.
+* **Single agents**: Native agents built without a fleet name, each with builds of its own.
+* **Unmanaged agents**: everything else that connects to the workspace as an agent, for example a [Docker agent](docker-agent.md) or your own [VRPC](../../developers/vrpc/README.md) adapter. The panel shows their status and when they were last seen; their software is not built here, so nothing updates them.
 
 Every row shows the agent's alias or name, whether it is online, its build, its host and the connectors it carries. Click a row for the details: the build it runs, host facts (load, memory, disk), the readiness checks for an update, the connectors, a timeline of what happened to the agent (online, offline, restarts, updates), and the tail of its log.
 
@@ -22,13 +22,13 @@ Every row shows the agent's alias or name, whether it is online, its build, its 
 | **legacy** | The agent was built before builds could be updated remotely. Install the current build on its host by hand once; every build after that arrives remotely. |
 | **unmanaged** | Not built by this platform. Status and last seen only. |
 
-## Building an Agent
+## Building an agent
 
 Click **Build agent**, choose the connectors, the target operating system, for a Linux target the **package** (a Debian package for a host with systemd, or a **ctrlX OS app** to install on a ctrlX CORE as a snap, see [Running on a ctrlX CORE](native-agent.md#running-on-a-ctrlx-core)) and, for a fleet, its name, and add a note that says what the build is for. Below the connectors the dialog lists what each one can do on the host: these sentences also end up in the requirements for IT. Compiling takes a minute or two; the build appears under **Builds** as soon as it is ready and its requirements sheet opens.
 
 Every build has a number within its fleet, `b1`, `b2`, and so on. The newest build is the fleet's **current** build: the one an update or a rollout installs unless you pick another. Under **Builds** you can make an older build current, download the installer of any build, read its requirements for IT, or delete builds you no longer need. **Rebuild** compiles a fleet again with its connectors on the platform's current version, for example after a platform update.
 
-The first build of a fleet is installed by hand on every host, exactly as before (see [Native Agent](native-agent.md)). Every build after that reaches the hosts remotely.
+The first build of a fleet is installed by hand on every host, exactly as before (see [native agent](native-agent.md)). Every build after that reaches the hosts remotely.
 
 ## Requirements for IT
 
@@ -68,8 +68,8 @@ The **Rollouts** tab shows every rollout with its progress, each agent's phase, 
 
 ## Restart and log
 
-**Restart** stops the agent process; the service manager starts it again within seconds, and a counter or connector state survives it. **Show log** fetches the last lines of the agent's log from its host. Both also exist in the App Builder's Function Explorer, in the agent's context menu, for a developer whose connector hangs.
+**Restart** stops the agent process; the service manager starts it again within seconds, and a counter or connector state survives it. **Show log** fetches the last lines of the agent's log from its host. Both also exist in the App Builder's Functions explorer, in the agent's context menu, for a member whose connector hangs.
 
 ## Removing an agent
 
-An offline agent can be removed: its account, its records and its retained information on the platform go. A host that still runs it cannot connect any more. Deleting a fleet under **Builds** removes every build and the fleet's account; agents that run its builds keep running until they are removed.
+An offline agent can be removed: its credentials, its records and its retained information on the platform go. A host that still runs it cannot connect any more. Deleting a fleet under **Builds** removes every build and the fleet's credentials; agents that run its builds keep running until they are removed.

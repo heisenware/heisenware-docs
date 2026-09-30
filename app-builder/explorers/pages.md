@@ -1,8 +1,8 @@
 # Pages explorer
 
-Pages are the individual screens that organize your App's functionality. Heisenware uses a hierarchy of pages and subpages to keep your App structured and easy to navigate. The Page Explorer is also where you configure the App's navigation menu.
+Pages are the individual screens that organize your App's functionality. Heisenware uses a hierarchy of pages and subpages to keep your App structured and easy to navigate. The Pages and actions explorer is also where you configure the App's navigation menu.
 
-Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
+Open the Pages and actions explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
 
 <figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
@@ -10,7 +10,7 @@ Open the Page Explorer by clicking the navigator icon (<i class="fa-location-arr
 
 ### Page types
 
-* **Pages**: Your top-level screens. By default, they appear in the App's main navigation menu.
+* **Pages**: Your top-level pages. By default, they appear in the App's main navigation menu.
 * **Subpages**: Nested under a page. They do not appear in the main menu automatically, and are typically used for detail views, settings, or pop-up style content that you link to manually.
 
 ### Creating and deleting pages
@@ -29,11 +29,11 @@ Click the small pencil icon inside a page's representation to open its settings,
 * The page name shown in the menu
 * The menu icon
 
-Both are shared across screen sizes until you pin one: hover the field and click the pin to give the selected screen its own value. A page has no title of its own: a page heading is a text widget on the page.
+Both are shared across screen sizes until you pin one: hover the field and click the pin to give the selected screen its own value. A page has no title of its own: a page heading is a text box on the page.
 
 ## App menu
 
-The App menu is the navigation users see across all pages and subpages. To configure it, click the pencil icon next to the `PAGES` label at the top of the Page Explorer.
+The App menu is the navigation users see across all pages and subpages. To configure it, click the pencil icon next to the `PAGES` label at the top of the Pages and actions explorer.
 
 ### Menu types
 
@@ -42,9 +42,9 @@ The App menu is the navigation users see across all pages and subpages. To confi
 * **Burger menu**: A burger button in a top corner of every page; the menu slides in over the page and dims it (or pushes the page aside, from the left or the right, as wide as you like). There is no bar: the page keeps its full height, so a title bar is your own band of widgets laid under the burger.
 * **Fixed left menu**: A permanent side menu on the left.
 
-There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](../../reference/widgets/display/card.md) as the band, an [image](../../reference/widgets/trigger/image.md) for the logo, a text widget for the title, and a [button](../../reference/widgets/trigger/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
+There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](../../reference/widgets/display/card.md) as the band, an [image](../../reference/widgets/trigger/image.md) for the logo, a text box for the title, and a [button](../../reference/widgets/trigger/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
 
-**Sticky widgets.** Every widget on a page has a *Sticky* switch on its General tab. A sticky widget stays where the screen puts it while the page scrolls: a band at the top is a header, a bar at the bottom of the screen a footer, a small button in a corner a "back to top". Sticky widgets draw above the page's content, and the page scrolls under them. The builder marks a sticky widget with a badge and keeps it in place on the canvas, which is where it will sit on the screen; the test run and the deployed App are where it sticks. Like other settings, *Sticky* is shared across screens until you pin it on one. A widget inside a group follows its group, so the group is what you make sticky.
+**Sticky widgets.** Every widget on a page has a *Sticky* switch on its General tab. A sticky widget stays where the screen puts it while the page scrolls: a band at the top is a header, a bar at the bottom of the screen a footer, a small button in a corner a "back to top". Sticky widgets draw above the page's content, and the page scrolls under them. The Page editor marks a sticky widget with a badge and keeps it in place on the page, which is where it will sit on the screen; the test run and the deployed App are where it sticks. Like other settings, *Sticky* is shared across screens until you pin it on one. A widget inside a group follows its group, so the group is what you make sticky.
 
 <figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 212421.png" alt=""><figcaption></figcaption></figure>
 
@@ -54,9 +54,9 @@ The menu settings are shared across all activated screen sizes until you pin one
 
 ## App actions
 
-Some things a user wants are not pages, functions, or widgets: leave the App, start it over, go back a step. Heisenware calls these **App actions**. They act on the App itself in the browser, they carry no data, and they are wired exactly like pages: you drag them and drop them.
+Some things a user wants are not pages, functions, or widgets: leave the App, start it over, go back a step. Heisenware calls these **App actions**. They act on the App itself in the browser, they carry no data, and they are linked exactly like pages: you drag them and drop them.
 
-The App actions sit in a row at the foot of the Page Explorer:
+The App actions sit in a row at the foot of the Pages and actions explorer:
 
 * **Back**: returns to the page shown before the current one. Does nothing at the start of the visit history.
 * **Reload**: restarts the App in this tab with cleared caches.
@@ -69,16 +69,16 @@ Switching pages is an App action too. Its chip is the page itself.
 
 Turn any [button](../../reference/widgets/trigger/button.md), [icon](../page-editor.md), or image into a page-switch or action trigger.
 
-* **How to link**: Drag a page or an App action from the Page Explorer and drop it directly onto a button, icon, or image on your UI canvas.
+* **How to link**: Drag a page or an App action from the Pages and actions explorer and drop it directly onto a button, icon, or image on your page.
 * **Use case**: The primary way to let users open subpages (e.g., a "Machine Details" button opening the corresponding detail view), to navigate in Apps that have no main menu, or to offer a Logout button wherever you like. No top bar is required.
-* **Order**: A click fires the functions linked to the button first. Logout and Reload wait for them, so a button that saves and logs out saves first.
+* **Order**: A click fires the executors linked to the button first. Logout and Reload wait for them, so a button that saves and logs out saves first.
 
 ### From your logic
 
 Your backend logic can also switch pages and run actions on its own.
 
-* **How to link**: Drag a page or an App action from the Page Explorer onto a function's output, modifier, filter, or error handler.
-* **Use case**: If a function detects an error or a successful form submission, the backend pushes the user to an error or success page automatically. A Timer output with Logout ends a session after a fixed time; a filter that detects an alarm switches to the alarm page.
+* **How to link**: Drag a page or an App action from the Pages and actions explorer onto an executor's output, modifier, filter, or error handler.
+* **Use case**: If an executor detects an error or a successful form submission, the backend pushes the user to an error or success page automatically. A Timer output with Logout ends a session after a fixed time; a filter that detects an alarm switches to the alarm page.
 * **What fires it**: Every truthy value the output produces after the App has loaded. Falsy values, such as a filter that blocks, never fire.
 * **Who is reached**: The action reaches the users the value reaches. When a user's click started the flow, only that user: a Timer that the user started ticks for that user alone, so "logout after ten minutes" is per user with nothing to configure. When no user started the flow, a poll or a listener fired by the backend, every connected user: an alarm switches every screen, a backend-fired Logout ends every session.
 * **Back** cannot be dropped on an output. Walking every user's history at once makes no sense, so it lives on widgets only.

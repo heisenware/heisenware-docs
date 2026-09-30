@@ -68,7 +68,7 @@ value.value
 ```
 
 {% hint style="info" %}
-As an alternative to steps 7 and 8, use the [`readVariableValue`](../reference/functions/connectors/opc-ua-client.md#readvariablevalue) function to retrieve the value directly.
+As an alternative to steps 7 and 8, use the [`readVariableValue`](../reference/functions/connectors/opc-ua-client.md#readvariable) function to retrieve the value directly.
 {% endhint %}
 
 ## Configure data flow
@@ -110,7 +110,7 @@ $sum($)
 1. Click the database icon on the recorder node to automatically generate the `read` function for the [timeseries database](../reference/functions/storage/timeseries-database.md#read).
 2. Within the newly generated `read` function, change the tail value to 10.
 3. Trigger the `read` function.
-4. Create a [new page](../app-builder/explorers/pages.md#add-and-delete) by right-clicking the existing page in the [Page Explorer](../app-builder/explorers/pages.md) and selecting **New Page**.
+4. Create a [new page](../app-builder/explorers/pages.md#creating-and-deleting-pages) by right-clicking the existing page in the [Page Explorer](../app-builder/explorers/pages.md) and selecting **New Page**.
 5. Configure the App's main menu using the navigation menu settings. You can rename pages and add icons as needed.
 6. Select the new page.
 7. Add a [chart](../reference/widgets/display/chart.md) widget to the page.
@@ -122,7 +122,7 @@ $sum($)
 
 ### Adjust all screens
 
-1. Select a screen size preview (such as rotated phone, tablet, rotated tablet, or desktop) from the Top Bar.
+1. Select a screen size preview (such as rotated phone, tablet, rotated tablet, or desktop) from the top bar.
 2. Adjust the size and position of each widget to optimize the layout for every device.
 
 ### Modify App theme
@@ -133,6 +133,6 @@ $sum($)
 
 ## Publish and open the App
 
-1. Deploy the App by clicking **Deploy** in the Top Bar (see [Deploy and maintain](../app-builder/test-and-deploy.md)).
+1. Deploy the App by clicking **Deploy** in the top bar (see [Deploy and maintain](../app-builder/test-and-deploy.md)).
 2. Scan the QR code to launch the App on your mobile device, or click the provided URL to open the desktop version.
 3. Optionally, install the App directly onto your device as a Progressive Web App.

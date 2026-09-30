@@ -1,17 +1,17 @@
 # Docker agent
 
-The Docker Agent provides the same functionality as the [Native Agent](native-agent.md) but runs in an isolated Docker container. It is the right choice for edge gateways or servers where you already manage your infrastructure with Docker.
+The Docker agent provides the same functionality as the [native agent](native-agent.md) but runs in an isolated Docker container. It is the right choice for edge gateways or servers where you already manage your infrastructure with Docker.
 
 ## Key differences
 
 * **Containerized execution**: Runs in an isolated Docker container instead of directly on the host operating system.
-* **Environment configuration**: Unlike the Native Agent, the Docker Agent does not include built-in credentials. Provide them as environment variables at startup.
+* **Environment configuration**: Unlike the native agent, the Docker agent does not include built-in credentials. Provide them as environment variables at startup.
 * **Hardware and network access**: To reach local networks, USB devices, or persist data, use standard Docker features like host networking or volume mounting.
 * **Platform independent**: Runs on any platform that supports Docker.
 
 ## Where to get it
 
-The Docker Agent is available as a publicly downloadable image:
+The Docker agent is available as a publicly downloadable image:
 
 ```
 heisenware/docker-agent:<version>
@@ -51,7 +51,7 @@ docker run -it \
 heisenware/docker-agent:v91-slim
 ```
 
-Once the connection is established, the console shows a confirmation screen indicating the Agent is online and connected to the workspace.
+Once the connection is established, the terminal shows a confirmation screen indicating the agent is online and connected to the workspace.
 
 <figure><img src="../../.gitbook/assets/image (489).png" alt=""><figcaption></figcaption></figure>
 

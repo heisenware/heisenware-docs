@@ -8,9 +8,9 @@ The UI is what users of your Apps see and interact with. It ranges from simple d
 The UI is optional. You can build headless Apps that use pure backend logic, like a data bridge between a PLC and a SQL database, running silently with no visual frontend.
 {% endhint %}
 
-## Core UI components
+## Core UI elements
 
-* [**Widgets**](../reference/widgets/README.md): The functional components of your App. They display live data, capture user input, or trigger logic.
+* [**Widgets**](../reference/widgets/README.md): The functional elements of your App. They display live data, capture user input, or trigger logic.
 * [**Pages**](explorers/pages.md): The individual screens of your App. Create multiple pages and subpages to structure your App logically, then configure navigation elements so users can move between them.
 * [**Text, icons, and images**](page-editor.md): Mostly static elements used for branding, instructions, and non-interactive content.
 * [**PDF templates**](template-editor.md): Visual layouts for generating dynamic documents. Map variables onto a document background, then populate them from your backend logic.
@@ -35,9 +35,9 @@ The toolbar serves as your main kit for composing the interface. It holds button
 
 ### Placing and moving elements
 
-Add an element by selecting it from the toolbar and clicking anywhere on the canvas. Once placed, you can:
+Add an element by selecting it from the toolbar and clicking anywhere on the page. Once placed, you can:
 
-* **Move**: Drag the element to a new position on the canvas.
+* **Move**: Drag the element to a new position on the page.
 * **Resize or rotate**: Use the grab markers on the corners and edges to change the element's dimensions or orientation.
 * **Open settings**: Double-click the widget, or select it and click the pen icon in the toolbar.
 * **Align with snaplines**: Snaplines appear automatically to help align widgets and other UI elements with each other.
@@ -49,7 +49,7 @@ Add an element by selecting it from the toolbar and clicking anywhere on the can
 {% hint style="warning" %}
 #### Screen-specific layout saving
 
-Heisenware saves changes to an element's position or size per device size. Always check other screen previews to ensure the layout stays clean across all hardware.
+Heisenware saves changes to an element's position or size per screen. Always check the other screen previews to ensure the layout stays clean everywhere.
 {% endhint %}
 
 ### Context menu tools
@@ -62,19 +62,19 @@ Right-click any element to open a menu for quick layout actions and layer manage
 
 ### Screen preview and responsive behavior
 
-[Heisenware Apps](https://app.gitbook.com/s/E5Ketpww1s7TauSAJrJ8/production-apps) are responsive by nature and adapt to different screen sizes automatically. Control exactly how your App behaves on different hardware using these toolbar tools:
+[Heisenware Apps](../app-player/README.md) are responsive by nature and adapt to different screens automatically. Control exactly how your App behaves on each screen using these toolbar tools:
 
-* **Switching previews**: Click the screens icon (<i class="fa-laptop-mobile">:laptop-mobile:</i>) and click a device icon to switch to the corresponding UI editor and adapt your layout.
+* **Switching previews**: Click the screens icon (<i class="fa-laptop-mobile">:laptop-mobile:</i>) and click a screen icon to switch the Page editor to that screen and adapt your layout.
 
 <figure><img src="../.gitbook/assets/image (516).png" alt=""><figcaption></figcaption></figure>
 
-* **Enable or disable screens**: Right-click any device icon to enable or disable specific screen sizes. By default, only the phone, tablet, and laptop are active. When a user opens your App on a disabled screen size, Heisenware scales the layout from the nearest active device size. The preview never stays on a disabled screen: disable the one you are editing and the builder moves to the App's reference screen, or to the nearest enabled one.
+* **Enable or disable screens**: Right-click any screen icon to enable or disable that screen. By default, only the phone, tablet, and laptop are active. When a user opens your App on a disabled screen, Heisenware scales the layout from the nearest enabled screen. The preview never stays on a disabled screen: disable the one you are editing and the Page editor moves to the App's reference screen, or to the nearest enabled one.
 * **Content alignment (L and XL)**: On large monitors, decide how the overall content sits on the screen. Right-click the L or XL icons to choose between left-aligned or centered layouts.
 
 <figure><img src="../.gitbook/assets/image (517).png" alt=""><figcaption></figcaption></figure>
 
 * **Scaling**: Use the scaling bar to zoom the current preview in or out. This serves as a design-time aid only and does not change the App's actual size for the user.
-* **Extend height**: Use the page height icon (<i class="fa-arrows-up-down">:arrows-up-down:</i>) in the toolbar to add vertical space and enable scrolling for the selected device size. This lets you scroll on mobile while keeping a fixed dashboard on desktop. If a page height does not change when you reduce it, a widget is likely positioned outside the valid area. Move or delete that widget first.
+* **Extend height**: Use the page height icon (<i class="fa-arrows-up-down">:arrows-up-down:</i>) in the toolbar to add vertical space and enable scrolling for the selected screen. This lets you scroll on mobile while keeping a fixed dashboard on desktop. If a page height does not change when you reduce it, a widget is likely positioned outside the valid area. Move or delete that widget first.
 
 ### Pin a setting to one screen
 
@@ -82,9 +82,9 @@ Position and size are always saved per screen. Every other widget setting is sha
 
 Some settings are pinned by nature because their right value depends on the screen, not on the data: column counts, font sizes, spacing, legend placement, chart orientation. These always belong to the screen you set them on, and the other screens keep the widget's default until you set them there. They show a pin you cannot switch off.
 
-One of them is on every widget: the **Visible** switch at the top of the General tab. Switch it off to drop the widget from the screen you are editing; it stays on every other screen. A hidden widget takes no space in the deployed App, and in the builder it stays as a faded ghost you can still select and switch back on. Hiding a group hides its members with it; a member inside a group follows its group.
+One of them is on every widget: the **Visible** switch at the top of the General tab. Switch it off to drop the widget from the screen you are editing; it stays on every other screen. A hidden widget takes no space in the deployed App, and in the Builder it stays as a faded ghost you can still select and switch back on. Hiding a group hides its children with it; a child inside a group follows its group.
 
-Widgets inside a [group](../reference/widgets/layout/group.md) have no pins: the group's tile is one thing on every screen (a narrow screen shows it zoomed down), so every setting of a member is shared, the ones pinned by nature included, and their fields show no pin. Grouping keeps what you see: the values pinned on the screen you group on become the members' shared values, and pins on other screens go.
+Widgets inside a [group](../reference/widgets/layout/group.md) have no pins: the group's tile is one thing on every screen (a narrow screen shows it zoomed down), so every setting of a child is shared, the ones pinned by nature included, and their fields show no pin. Grouping keeps what you see: the values pinned on the screen you group on become the children's shared values, and pins on other screens go.
 
 {% hint style="info" %}
 #### Workflow best practices
@@ -102,7 +102,7 @@ Text, icons, and images add visual design, branding, and instructions to your in
 
 Use text boxes for titles, labels, and detailed instructions.
 
-* **Add**: Click the text box icon in the Page editor toolbar and click the canvas to place it.
+* **Add**: Click the text box icon in the Page editor toolbar and click the page to place it.
 * **Edit**: Double-click the text box to open its settings. The *Content* tab is the text editor, where you type and format text, insert static tables, quotes, code, and rules; *Look & feel* sets the vertical alignment.
 * **Look**: Headings, lists, tables, quotes, and code render in one consistent style that takes its colors from the App theme, so a text box looks right in light and dark themes alike.
 
@@ -114,9 +114,9 @@ The AI assistant writes text boxes in Markdown, including tables. Pictures belon
 
 Use icons as visual cues or navigation shortcuts.
 
-* **Add**: Click the icon button in the Page editor toolbar, pick an icon from the library, and click the canvas to place it.
+* **Add**: Click the icon button in the Page editor toolbar, pick an icon from the library, and click the page to place it.
 * **Style**: Double-click the icon to open its settings, where you switch styles (solid, regular, light, thin, duotone), change the color, and apply a background.
-* **Navigation**: Turn an icon into a button by dragging a page from the Page Explorer directly onto it.
+* **Navigation**: Turn an icon into a button by dragging a page from the Pages and actions explorer directly onto it.
 
 <figure><img src="../.gitbook/assets/image (519).png" alt=""><figcaption></figcaption></figure>
 
@@ -124,10 +124,10 @@ Use icons as visual cues or navigation shortcuts.
 
 Use images for machine photos, company logos, or other visual elements.
 
-* **Upload**: Upload your image file to the [File Explorer](explorers/files.md).
-* **Place**: Drag the file from the File Explorer and drop it onto the UI canvas.
+* **Upload**: Upload your image file to the [Files explorer](explorers/files.md).
+* **Place**: Drag the file from the Files explorer and drop it onto the page.
 
-<figure><img src="../.gitbook/assets/Add Image.gif" alt=""><figcaption><p>Add Image to UI</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Add Image.gif" alt=""><figcaption><p>Add an image to a page</p></figcaption></figure>
 
 {% hint style="info" %}
 ##### Dynamic use

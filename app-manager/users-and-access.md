@@ -1,6 +1,6 @@
 # App users and access
 
-Heisenware gives you granular control over who can access your Apps. Each App can have its own security settings, even when several sit in the same workspace.
+You control who can access your Apps. Each App can have its own security settings, even when several sit in the same workspace.
 
 {% hint style="info" %}
 #### Users vs. members
@@ -21,7 +21,7 @@ You can change these settings at any time, but each change instantly affects all
 ### Public access
 
 * **Option**: _Anyone can use the app_
-* **Details**: The App is open. Anyone with the URL or QR code can access the interface immediately. No login is required.
+* **Details**: The App is open. Anyone with the URL or QR code can open the App immediately. No login is required.
 
 ### Shared security
 
@@ -33,7 +33,7 @@ You can change these settings at any time, but each change instantly affects all
 
 * **Option**: _Users have to sign up_
 * **Details**: Heisenware manages user accounts automatically. Users can register with an email/password or their Google account.
-* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache. To offer a logout, drop the Logout [App action](../app-builder/explorers/pages.md#app-actions) onto a button, or onto a function output to log out from your logic.
+* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache. To offer a logout, drop the Logout [App action](../app-builder/explorers/pages.md#app-actions) onto a button, or onto an executor's output to log out from your logic.
 
 ### Dual authentication
 
@@ -44,11 +44,11 @@ You can change these settings at any time, but each change instantly affects all
 
 * **Option**: _Only previously invited users can log in_
 * **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
-* **Programmatic invite:** With the [`users` class](../reference/functions/utilities/users.md) in the backend, you can also invite users programmatically from another App.
+* **Programmatic invite:** With the [`users` class](../reference/functions/utilities/users.md) on the Flowboard, you can also invite users programmatically from another App.
 
 ## User management
 
-The Users card in each App gives you a real-time view of who is accessing your software.
+The Users card in each App gives you a real-time view of who is using your App.
 
 {% hint style="info" %}
 #### Managing users programmatically
@@ -75,9 +75,9 @@ To remove a user, registered account or anonymous session alike, click the trash
 {% hint style="info" %}
 #### Leveraging user data in logic
 
-Once a user is authenticated, your logic reads their information from the `$USER` variable. Use it to personalize the UI (e.g. "Welcome, \[Name]"), filter database queries so users see only their own data, or log exactly who performed an action in your backend.
+Once a user is authenticated, your logic reads their information from the `$USER` variable. Use it to personalize the UI (e.g. "Welcome, \[Name]"), filter database queries so users see only their own data, or log exactly who performed an action.
 
-For example, if a table stores each row's owner in an `email` field, a `getTableData` function can filter for the logged-in user's own rows:
+For example, if a table stores each row's owner in an `email` field, a `getTableData` executor can filter for the logged-in user's own rows:
 
 ```yaml
 # name

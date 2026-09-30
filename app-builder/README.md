@@ -6,44 +6,44 @@ The App Builder is a core component of the Heisenware platform: a visual develop
 
 The App Builder splits into four areas that cover the App lifecycle and development workflow.
 
-* **Top Bar (top)**: Opens the [Theme Editor](theme-editor.md) and [PDF Template Editor](template-editor.md), and gives access to App Builder settings and help. It also shows the current App version and holds the controls to [test and deploy](test-and-deploy.md).
-* **Explorers (left)**: Switch between the [Function Explorer](explorers/functions.md) for backend logic, the [Page Explorer](explorers/pages.md) for frontend structure, and the [File Explorer](explorers/files.md) for resources needed during app development.
-* **Flowboard (center)**: An infinite drawing area where you create the [business logic](flowboard/README.md) of your entire App by wiring up selected functions into automated flows.
-* **Page editor (right)**: A page-specific design canvas for composing user interfaces for all screen sizes. This is where you [build user interfaces (UI)](page-editor.md) using text, images, and interactive widgets.
+* **Top bar (top)**: Opens the [Theme editor](theme-editor.md) and [Template editor](template-editor.md), and gives access to App Builder settings and help. It also shows the current App version and holds the controls to [test and deploy](test-and-deploy.md).
+* **Explorers (left)**: Switch between the [Functions explorer](explorers/functions.md) for backend logic, the [Pages and actions explorer](explorers/pages.md) for frontend structure, and the [Files explorer](explorers/files.md) for resources needed during App development.
+* **Flowboard (center)**: An infinite drawing area where you create the [business logic](flowboard/README.md) of your entire App by wiring executors into automated flows.
+* **Page editor (right)**: Where you [build the user interface (UI)](page-editor.md) of each page for all screen sizes, from text, images, and interactive widgets.
 
-The footer along the bottom shows who is signed in, the App and domain you are working in, the App's language, which is set in the [App Manager](../app-manager/README.md#app-settings), and the base theme the [Theme Editor](theme-editor.md) compiles the App's look from.
+The footer along the bottom shows who is signed in, the App and domain you are working in, the App's language, which is set in the [App Manager](../app-manager/README.md#app-settings), and the base theme the [Theme editor](theme-editor.md) compiles the App's look from.
 
 <figure><img src="../.gitbook/assets/image (512).png" alt=""><figcaption></figcaption></figure>
 
 ## How it works
 
-Heisenware uses a highly integrated development process. Rather than working in isolated stages, you build logic, design interfaces, and configure data connections simultaneously within a single environment.
+Heisenware uses an integrated development process. Rather than working in isolated stages, you build logic, design interfaces, and configure data connections simultaneously within a single environment.
 
 ### Build backend
 
-On the [Flowboard](flowboard/README.md) you create event-driven logic by dragging [functions](../concepts/executors-and-instances.md) from the [Function Explorer](explorers/functions.md) onto the canvas and wiring them into flows. Functions are the atomic building blocks of an App: standard utility blocks, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
+On the [Flowboard](flowboard/README.md) you create event-driven logic by dragging [functions](../concepts/executors-and-instances.md) from the [Functions explorer](explorers/functions.md) onto it, where each becomes an executor, and wiring the executors into flows. Functions are the atomic building blocks of an App: standard utility functions, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
 
-This logic runs in a global scope. It persists and runs independently of the active UI page, which makes the backend the central hub for continuous data processing or system monitoring. To reach machines and databases in isolated networks, you configure [Native Agents](../app-manager/agents/native-agent.md) or [Docker Agents](../app-manager/agents/docker-agent.md) that tunnel data from local systems directly into your App's logic.
+This logic runs in a global scope. It persists and runs independently of the active UI page, which makes the backend the central hub for continuous data processing or system monitoring. To reach machines and databases in isolated networks, you configure [native agents](../app-manager/agents/native-agent.md) or [Docker agents](../app-manager/agents/docker-agent.md) that tunnel data from local systems directly into your App's logic.
 
 ### Build frontend
 
-The [Page editor](page-editor.md) is a canvas on which you design your UI per page and across different screen sizes, similar to popular presentation tools such as Google Slides or PowerPoint. You use the [Page Explorer](explorers/pages.md) to create, nest, and organize your pages, then switch to the page you want to edit.
+In the [Page editor](page-editor.md) you design your UI per page and across different screen sizes, much like in presentation tools such as Google Slides or PowerPoint. You use the [Pages and actions explorer](explorers/pages.md) to create, nest, and organize your pages, then switch to the page you want to edit.
 
-You compose each page from widgets, functional components like gauges, charts, and input fields that you drag onto the canvas. To keep every page and widget visually consistent, the Theme Editor defines the styles and colors that apply across the whole App.
+You compose each page from widgets, such as gauges, charts, and input fields, that you drag onto the page. To keep every page and widget visually consistent, the Theme editor defines the styles and colors that apply across the whole App.
 
-### Unified data binding
+### Linking widgets and logic
 
-The App Builder's core strength is data binding: connect almost any element to any other and data flows between the App's interface and its logic in both directions.
+At the heart of the App Builder are links: connect almost any element to any other and data flows between the App's interface and its logic in both directions.
 
-* **Connect anything to everything**: Link a button to a function trigger, bind an input field to a function's input parameters, or feed a function's output into a widget to visualize data, toggle a button's state, or update a gauge's value.
-* **Property and event binding**: A property is anything about a widget that can change, its value, scale, visibility, color, and more. Bind backend logic to any property, or to a widget's events, to drive the UI dynamically.
+* **Connect anything to everything**: Link a button to an executor's trigger, an input field to an executor's inputs, or an executor's output to a widget to visualize data, toggle a button's state, or update a gauge's value.
+* **Property and event links**: A property is anything about a widget that can be linked, such as its value, scale, visibility, or color. Link logic to any property, or to a widget's events, to drive the UI.
 * **Reactive synchronization**: No manual glue code. Interface and logic stay in sync in real time as data flows through the App.
 
 <figure><img src="../.gitbook/assets/Data Binding Basics.gif" alt=""><figcaption></figcaption></figure>
 
 ## App Builder settings
 
-Customize how the App Builder behaves and how you control the canvas. To access these preferences, click the settings icon in the Top Bar.
+Customize how the App Builder behaves and how you move around the Flowboard. To access these preferences, click the settings icon in the top bar.
 
 <figure><img src="../.gitbook/assets/image (31).png" alt="" width="367"><figcaption></figcaption></figure>
 
@@ -56,15 +56,15 @@ Defines the navigation logic of the Flowboard. Choose between two modes:
 
 ### Grid and snapping
 
-* **Grid size**: Defines the size of the canvas grid.
-* **Snap to grid**: When enabled, function blocks align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
+* **Grid size**: Defines the size of the Flowboard grid.
+* **Snap to grid**: When enabled, nodes align to the grid for a cleaner layout. Setting the grid size to 0 disables snapping entirely.
 
 ### Navigation (WASD)
 
-Fine-tune keyboard navigation on the canvas:
+Fine-tune keyboard navigation on the Flowboard:
 
 * **Invert WASD controls**: Switches the direction of the W, A, S, and D keys. By default, W is up and S is down.
-* **Pan speed**: Controls how fast the camera moves across the canvas when using WASD.
+* **Pan speed**: Controls how fast the camera moves across the Flowboard when using WASD.
 * **Zoom speed**: Controls the sensitivity of the Q (zoom out) and E (zoom in) keys.
 
 ### Default modifier type
