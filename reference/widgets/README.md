@@ -1,5 +1,6 @@
 ---
-description: Every widget, what it receives and emits, and its settings.
+description: >-
+  Every widget, what it receives and emits, and its settings.
 ---
 
 # Widgets

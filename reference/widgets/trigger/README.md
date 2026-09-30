@@ -1,5 +1,6 @@
 ---
-description: Trigger widgets start something: run executors, switch pages, run App actions.
+description: >-
+  Trigger widgets start something: run executors, switch pages, run App actions.
 ---
 
 # Trigger widgets

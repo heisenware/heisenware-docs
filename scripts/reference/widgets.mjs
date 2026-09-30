@@ -367,7 +367,7 @@ function categoryPage (category, widgets, existing) {
     '',
     END
   ].join('\n')
-  const head = ['---', `description: ${lead}`, '---', '', `# ${title}`, ''].join('\n')
+  const head = ['---', 'description: >-', `  ${lead}`, '---', '', `# ${title}`, ''].join('\n')
   let before = '\n'
   let after = '\n'
   if (existing && existing.includes(START)) {
@@ -393,7 +393,7 @@ function overviewPage (byCategory, existing) {
     ]),
     END
   ].join('\n')
-  const head = ['---', 'description: Every widget, what it receives and emits, and its settings.', '---', '', '# Widgets', ''].join('\n')
+  const head = ['---', 'description: >-', '  Every widget, what it receives and emits, and its settings.', '---', '', '# Widgets', ''].join('\n')
   let before = '\n'
   let after = '\n'
   if (existing && existing.includes(START)) {

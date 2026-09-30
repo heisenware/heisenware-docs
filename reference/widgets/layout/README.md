@@ -1,5 +1,6 @@
 ---
-description: Layout widgets hold other widgets.
+description: >-
+  Layout widgets hold other widgets.
 ---
 
 # Layout widgets

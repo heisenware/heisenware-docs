@@ -1,5 +1,6 @@
 ---
-description: Input widgets let users enter data: forms, files, photos, codes, signatures.
+description: >-
+  Input widgets let users enter data: forms, files, photos, codes, signatures.
 ---
 
 # Input widgets

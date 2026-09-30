@@ -1,5 +1,6 @@
 ---
-description: Display widgets show data: values, lists, charts, media.
+description: >-
+  Display widgets show data: values, lists, charts, media.
 ---
 
 # Display widgets
