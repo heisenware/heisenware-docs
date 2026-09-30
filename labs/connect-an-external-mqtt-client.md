@@ -1,13 +1,13 @@
 ---
 description: >-
   This guide explains how to connect an external MQTT client to your Heisenware
-  tenant. You will learn to send data to Heisenware and receive data from
+  workspace. You will learn to send data to Heisenware and receive data from
   Heisenware via MQTT.
 ---
 
 # Connect an external MQTT client
 
-Learn how to connect an external MQTT client to your Heisenware tenant to send data to and receive data from your Apps.
+Learn how to connect an external MQTT client to your Heisenware workspace to send data to and receive data from your Apps.
 
 ## Initial setup and sending data (ingest)
 
@@ -35,7 +35,7 @@ Publish test data to a specific topic from your external client. This provides l
 
 {% step %}
 #### Subscribe using the internal MQTT client
-Each Heisenware tenant includes a default internal MQTT client.
+Each Heisenware workspace includes a default internal MQTT client.
 
 1. Open the **App Builder** for your App.
 2. Locate the [`onJsonMessage`](../reference/functions/connectors/mqtt-client.md#onjsonmessage) or [`onStringMessage`](../reference/functions/connectors/mqtt-client.md#onstringmessage) function of the internal client in the **Function Explorer** and drag it onto the canvas.
@@ -64,7 +64,7 @@ Ensure you complete steps 1 through 3 of the initial setup to configure your cli
 {% stepper %}
 {% step %}
 #### Publish data to the internal broker
-Use the [`publishJson`](../reference/functions/connectors/mqtt-client.md#publishjson) or [`publishString`](../reference/functions/connectors/mqtt-client.md#publishstring) function in the Backend Builder to publish data to a specific topic.
+Use the [`publishJson`](../reference/functions/connectors/mqtt-client.md#publishjson) or [`publishString`](../reference/functions/connectors/mqtt-client.md#publishstring) function on the Flowboard to publish data to a specific topic.
 
 You can enter a static message manually or bind dynamic data to the input box.
 

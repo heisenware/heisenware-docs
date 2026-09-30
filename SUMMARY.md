@@ -134,6 +134,7 @@
     * [Image](reference/widgets/trigger/image.md)
   * [Layout widgets](reference/widgets/layout/README.md)
     * [Group](reference/widgets/layout/group.md)
+* [Glossary](reference/glossary.md)
 
 ## Self-hosting
 

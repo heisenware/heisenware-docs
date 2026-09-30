@@ -1,6 +1,6 @@
 # Open and install an App
 
-Production Apps are the live, deployed versions of your work that your users interact with. Because Heisenware Apps run on modern web standards, they feel seamless across all devices, with no app store required.
+The App Player runs the deployed version of your App for its users. Because Heisenware Apps run on modern web standards, they feel seamless across all devices, with no app store required.
 
 ## Progressive Web App (PWA) technology
 
@@ -37,7 +37,7 @@ The URL in the address bar doesn't change when you switch pages, so you can't li
 
 ### Responsive experience
 
-The [Frontend Builder](../app-builder/page-editor.md) lets you design for five screen sizes (XS to XL).
+The [Page editor](../app-builder/page-editor.md) lets you design for five screen sizes (XS to XL).
 
 * **Automatic scaling**: When a user opens the App on a size you didn't design for, Heisenware scales the closest layout to fit the screen.
 * **Optimization**: For the best result, check your layout in all five previews before deploying, so it fits phones, tablets, and desktops down to the pixel.

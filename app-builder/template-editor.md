@@ -116,7 +116,7 @@ To permanently remove a PDF template and its associated function:
 {% hint style="danger" %}
 #### This action is irreversible
 
-Deleting an instance removes it completely. Any logic in your Backend Builder referencing this template will break.
+Deleting an instance removes it completely. Any logic on your Flowboard that refers to this template will break.
 {% endhint %}
 
 <figure><img src="../.gitbook/assets/deleting_template_looped.gif" alt=""><figcaption></figcaption></figure>

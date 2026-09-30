@@ -8,7 +8,7 @@ Before you deploy, test mode verifies your logic and UI directly inside the App 
 
 * **How to start**: Click the Test button in the Top Bar.
 * **Behavior**: The App starts polling data from connected sources or writing to databases. Form inputs become clickable, and buttons trigger their connected flows.
-* **Manual triggers**: Even in test mode, click a trigger on any function block in the [Backend Builder](flowboard/README.md) to force-start a sequence.
+* **Manual triggers**: Even in test mode, click a trigger on any function block in the [Flowboard](flowboard/README.md) to force-start a sequence.
 
 <div align="center"><figure><img src="../.gitbook/assets/deploy_bottom.png" alt=""><figcaption><p>TEST button</p></figcaption></figure></div>
 

@@ -16,9 +16,9 @@ The UI is optional. You can build headless Apps that use pure backend logic, lik
 * [**PDF templates**](template-editor.md): Visual layouts for generating dynamic documents. Map variables onto a document background, then populate them from your backend logic.
 * [**Theme**](theme-editor.md): The global visual DNA of your App. Ensures a consistent look across all widgets and pages.
 
-## Frontend Builder
+## Working in the Page editor
 
-Turn backend logic into a functional, user-facing App inside the Frontend Builder. Place static elements for context and dynamic widgets on each page, then configure them using backend logic.
+Turn backend logic into a functional, user-facing App inside the Page editor. Place static elements for context and dynamic widgets on each page, then configure them using backend logic.
 
 Build Apps for any screen size and switch the preview as you go to verify that your layout holds up on everything from a smartphone to a large desktop monitor.
 
@@ -44,7 +44,7 @@ Add an element by selecting it from the toolbar and clicking anywhere on the can
 * **Pixel-perfect positioning**: Hold the Shift key while moving an element to temporarily disable snaplines for precise placement.
 * **Adjust layers and layout**: Right-click any element to adjust the stacking order of overlapping items, stretch it to full width, or toggle tile view.
 
-<figure><img src="../.gitbook/assets/Widgets.gif" alt="" width="563"><figcaption><p>Frontend Builder basics</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Widgets.gif" alt="" width="563"><figcaption><p>Page editor basics</p></figcaption></figure>
 
 {% hint style="warning" %}
 #### Screen-specific layout saving
@@ -102,7 +102,7 @@ Text, icons, and images add visual design, branding, and instructions to your in
 
 Use text boxes for titles, labels, and detailed instructions.
 
-* **Add**: Click the text box icon in the Frontend Builder toolbar and click the canvas to place it.
+* **Add**: Click the text box icon in the Page editor toolbar and click the canvas to place it.
 * **Edit**: Double-click the text box to open its settings. The *Content* tab is the text editor, where you type and format text, insert static tables, quotes, code, and rules; *Look & feel* sets the vertical alignment.
 * **Look**: Headings, lists, tables, quotes, and code render in one consistent style that takes its colors from the App theme, so a text box looks right in light and dark themes alike.
 
@@ -114,7 +114,7 @@ The AI assistant writes text boxes in Markdown, including tables. Pictures belon
 
 Use icons as visual cues or navigation shortcuts.
 
-* **Add**: Click the icon button in the Frontend Builder toolbar, pick an icon from the library, and click the canvas to place it.
+* **Add**: Click the icon button in the Page editor toolbar, pick an icon from the library, and click the canvas to place it.
 * **Style**: Double-click the icon to open its settings, where you switch styles (solid, regular, light, thin, duotone), change the color, and apply a background.
 * **Navigation**: Turn an icon into a button by dragging a page from the Page Explorer directly onto it.
 

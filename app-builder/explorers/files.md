@@ -16,7 +16,7 @@ Leave the advanced areas outside `uploads` untouched unless you know what you ar
 
 ## Viewing files
 
-Double-click a file to open it in a tab next to the flow board. Text and code files (CSV, JSON, YAML, scripts), Markdown (rendered, with a toggle to its source), images and PDFs show right there; any other file type offers a download instead. The view is read-only and follows the file: when a function or the assistant rewrites it, the tab reloads. Close a tab with its cross, or switch back to the flow board with the Flow tab. The download icon in the tab's header saves the file to your computer.
+Double-click a file to open it in a tab next to the Flowboard. Text and code files (CSV, JSON, YAML, scripts), Markdown (rendered, with a toggle to its source), images and PDFs show right there; any other file type offers a download instead. The view is read-only and follows the file: when a function or the assistant rewrites it, the tab reloads. Close a tab with its cross, or switch back to the Flowboard with the Flow tab. The download icon in the tab's header saves the file to your computer.
 
 The platform's own areas, such as your Apps' design records in the `builder-backend` folder, open and download like any other file. They are read-only.
 

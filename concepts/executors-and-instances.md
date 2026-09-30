@@ -25,14 +25,14 @@ Available functions reside in the Function Explorer on the left side of the canv
 
 The platform classifies functions into four types based on how they manage state or context.
 
-<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static functions</strong></td><td>Standalone utilities that process data without context (for example, <code>mergeObjects</code>, <code>mapRange</code>, or <code>echo</code>).</td></tr><tr><td><strong>Member functions</strong></td><td>Actions linked to a specific instance. They use the unique configuration and connection settings stored in that instance (for example, <code>read</code>, <code>write</code>, or <code>publish</code>).</td></tr><tr><td><strong>Constructor functions</strong></td><td>Functions named <code>create</code> that configure and initialize a new instance.</td></tr><tr><td><strong>Destructor functions</strong></td><td>Functions named <code>delete</code> that remove an instance to free system resources.</td></tr></tbody></table>
+<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static functions</strong></td><td>Standalone utilities that process data without context (for example, <code>mergeObjects</code>, <code>mapRange</code>, or <code>echo</code>).</td></tr><tr><td><strong>Instance functions</strong></td><td>Actions linked to a specific instance. They use the unique configuration and connection settings stored in that instance (for example, <code>read</code>, <code>write</code>, or <code>publish</code>).</td></tr><tr><td><strong>Constructor functions</strong></td><td>Functions named <code>create</code> that configure and initialize a new instance.</td></tr><tr><td><strong>Destructor functions</strong></td><td>Functions named <code>delete</code> that remove an instance to free system resources.</td></tr></tbody></table>
 
 {% hint style="info" %}
 #### Concept example: OPC UA client
 
 * **Class**: The generic blueprint for the OPC UA client.
 * **Create a specific instance**: Use the `create` function to set an instance name and authorization details, which creates an instance such as `myMachine`.
-* **Member functions**: Use the `connect` function of `myMachine` to establish a connection to a server endpoint URL, then use `read` to retrieve data. All member functions of `myMachine` share this connection.
+* **Instance functions**: Use the `connect` function of `myMachine` to establish a connection to a server endpoint URL, then use `read` to retrieve data. All instance functions of `myMachine` share this connection.
 {% endhint %}
 
 ## Work with functions on the canvas
@@ -263,9 +263,9 @@ This action reveals the exact path to the code, consisting of up to three boxes:
 
 * **Box 1 (Agent/Service)**: The runtime or program executing the function. This can be a generic internal service or a specific Agent running on local infrastructure.
 * **Box 2 (class)**: The code class name, such as `Busylight`, `Barcode`, or `OpcuaClient`.
-* **Box 3 (instance)**: The specific instance name, such as `server1`. This box only appears for member functions. Static functions do not utilize an instance, so the platform hides this box.
+* **Box 3 (instance)**: The specific instance name, such as `server1`. This box only appears for instance functions. Static functions do not utilize an instance, so the platform hides this box.
 
-<figure><img src="../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static function and a member function</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static function and an instance function</p></figcaption></figure>
 
 Edit this address directly in the boxes if required. The platform retains your changes if you switch back to the standard view.
 

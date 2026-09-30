@@ -80,7 +80,7 @@ http://localhost:7878
 
 ## Writing and reading data
 
-Use these member functions to interact with the ledger.
+Use these instance functions to interact with the ledger.
 
 ### `write`
 

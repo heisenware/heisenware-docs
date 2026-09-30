@@ -75,7 +75,7 @@ To remove a user, registered account or anonymous session alike, click the trash
 {% hint style="info" %}
 #### Leveraging user data in logic
 
-Once a user is authenticated, the Backend Builder exposes their information through the `$USER` system variable. Use it to personalize the UI (e.g. "Welcome, \[Name]"), filter database queries so users see only their own data, or log exactly who performed an action in your backend.
+Once a user is authenticated, your logic reads their information from the `$USER` variable. Use it to personalize the UI (e.g. "Welcome, \[Name]"), filter database queries so users see only their own data, or log exactly who performed an action in your backend.
 
 For example, if a table stores each row's owner in an `email` field, a `getTableData` function can filter for the logged-in user's own rows:
 

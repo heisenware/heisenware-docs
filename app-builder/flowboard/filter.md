@@ -101,19 +101,19 @@ Return of the filter: `false`
 
 ## Using AI for filters
 
-Use AI chatbots like ChatGPT, Claude, or Gemini to generate complex filter logic. Filters use standard JavaScript, so provide the AI with your data structure to get an immediate result.
+The assistant in the App Builder writes filters for you. Tell it what data arrives and when the flow should go on, and it adds the filter to the output.
 
-For best results, copy this article as context for the AI. Use the Copy button at the top of the page or the Open in ChatGPT / Open in Claude buttons in the top navigation bar.
+Another AI tool needs this page as context: use the Copy button at the top of the page, or the Open in ChatGPT and Open in Claude buttons in the top navigation bar.
 
 #### Recommended AI prompt
 
-Copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
+Or paste this prompt into the other AI tool, so it knows how filters work in Heisenware.
 
 ```
 I am working in Heisenware, a node-based visual programming tool for industrial applications. 
-I need a "Filter" expression that acts as a conditional gate in a flow.
+I need a filter expression that acts as a conditional gate in a flow.
 
-Full documentation: https://docs.heisenware.com/app-builder/build-backend/extension-nodes/filter.md
+Full documentation: https://docs.heisenware.com/app-builder/flowboard/filter.md
 
 Rules:
 * A filter is a single JavaScript expression that must return true or false. JSONata is not supported here.

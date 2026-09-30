@@ -18,7 +18,7 @@ You can build the App from scratch by following this guide, or start with the fi
 
 Create a table in the internal [relational database](../reference/functions/storage/relational-database.md) to store the submitted reports.
 
-In the Backend Builder, drag the [`defineTable`](../reference/functions/storage/relational-database.md#definetable) function onto the canvas and configure the inputs:
+On the Flowboard, drag the [`defineTable`](../reference/functions/storage/relational-database.md#definetable) function onto the canvas and configure the inputs:
 
 ```yaml
 # name
@@ -45,7 +45,7 @@ Build the user interface for data entry, then configure the backend logic to sav
 
 ### Build the user interface
 
-Add the widgets for the form in the Frontend Builder.
+Add the widgets for the form in the Page editor.
 
 {% stepper %}
 {% step %}
@@ -71,7 +71,7 @@ Drag a [button](../reference/widgets/trigger/button.md) widget below the signatu
 
 ### Configure the submission logic
 
-Switch to the Backend Builder to define the flow when a user clicks the Submit button.
+Switch to the Flowboard to define the flow when a user clicks the Submit button.
 
 {% stepper %}
 {% step %}
@@ -173,7 +173,7 @@ Configure each placeholder with the correct variable name in its settings. Optio
 
 ### Configure the PDF generation logic
 
-Return to the Backend Builder to connect the template to your existing logic.
+Return to the Flowboard to connect the template to your existing logic.
 
 {% stepper %}
 {% step %}
@@ -203,7 +203,7 @@ The flow is now complete up to the point of generating the PDF. The final step i
 
 Automatically email the generated PDF report using the `send` function of the internal [email](../reference/functions/connectors/email.md) connector, triggered whenever a new report is created.
 
-Return to the Backend Builder to add the final piece of logic to your flow.
+Return to the Flowboard to add the final piece of logic to your flow.
 
 {% stepper %}
 {% step %}

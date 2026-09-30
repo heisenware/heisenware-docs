@@ -23,7 +23,7 @@ The platform consists of three decoupled pillars:
 The App Builder Core operates on three primary object-oriented abstractions:
 
 * `Application`: The top-level container for a user-built App. It orchestrates the lifecycle of its pages, widgets, and logic blocks.
-* `Executor`: The atomic unit of computation, representing a single function node in the visual editor. Each `Executor` is a reactive object with defined inputs, outputs, and triggers. It can call any function registered within the VRPC domain, whether inside the App Builder Core or a connected microservice.
+* `Executor`: The atomic unit of computation, one executor on the Flowboard. Each `Executor` is a reactive object with defined inputs, outputs, and triggers. It can call any function registered within the VRPC domain, whether inside the App Builder Core or a connected microservice.
 * `Widget`: A Backend-for-Frontend (BFF) representation of a UI component. It holds the widget state and links the visual user interface to the backend `Executor` logic.
 
 ## Strengths and strategic advantages

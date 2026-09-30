@@ -12,9 +12,9 @@ Merges data with the pre-designed layout and generates a completed document.
 
 #### Output
 
-Returns the populated PDF document as a base64-encoded string. If rendering fails, the function returns nothing and the error appears in the log. During development, the function node displays a preview of the rendered PDF layout. Store the output in a [database](../storage/relational-database.md), display it in a media view widget, or send it as an [email](../connectors/email.md) attachment.
+Returns the populated PDF document as a base64-encoded string. If rendering fails, the function returns nothing and the error appears in the log. During development, the executor displays a preview of the rendered PDF layout. Store the output in a [database](../storage/relational-database.md), display it in a media view widget, or send it as an [email](../connectors/email.md) attachment.
 
-<figure><img src="../../../.gitbook/assets/Screenshot 2025-02-20 at 16.10.48.png" alt=""><figcaption>The fillTemplate function node preview</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Screenshot 2025-02-20 at 16.10.48.png" alt=""><figcaption>The fillTemplate executor preview</figcaption></figure>
 
 {% hint style="info" %}
 #### Document generation

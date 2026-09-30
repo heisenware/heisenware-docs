@@ -91,7 +91,7 @@ Our Native Agent automates this file exchange. You only need to perform these co
 
 <figure><img src="../.gitbook/assets/Screenshot (16).png" alt=""><figcaption></figcaption></figure>
 
-1. Drag the `create` function from the [Heidenhain OPC UA](../reference/functions/connectors/heidenhain-opc-ua.md) connector onto the **Backend Builder** canvas.
+1. Drag the `create` function from the [Heidenhain OPC UA](../reference/functions/connectors/heidenhain-opc-ua.md) connector onto the **Flowboard**.
 2. Define an instance name (such as `tnc7`) and enter your machine's IP address in the `machineIpAddress` input field. Trigger the function manually.
 
 <figure><img src="../.gitbook/assets/Screenshot (21).png" alt=""><figcaption></figcaption></figure>

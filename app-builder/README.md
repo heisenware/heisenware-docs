@@ -8,8 +8,8 @@ The App Builder splits into four areas that cover the App lifecycle and developm
 
 * **Top Bar (top)**: Opens the [Theme Editor](theme-editor.md) and [PDF Template Editor](template-editor.md), and gives access to App Builder settings and help. It also shows the current App version and holds the controls to [test and deploy](test-and-deploy.md).
 * **Explorers (left)**: Switch between the [Function Explorer](explorers/functions.md) for backend logic, the [Page Explorer](explorers/pages.md) for frontend structure, and the [File Explorer](explorers/files.md) for resources needed during app development.
-* **Backend Builder (center)**: An infinite drawing area where you create the [business logic](flowboard/README.md) of your entire App by wiring up selected functions into automated flows.
-* **Frontend Builder (right)**: A page-specific design canvas for composing user interfaces for all screen sizes. This is where you [build user interfaces (UI)](page-editor.md) using text, images, and interactive widgets.
+* **Flowboard (center)**: An infinite drawing area where you create the [business logic](flowboard/README.md) of your entire App by wiring up selected functions into automated flows.
+* **Page editor (right)**: A page-specific design canvas for composing user interfaces for all screen sizes. This is where you [build user interfaces (UI)](page-editor.md) using text, images, and interactive widgets.
 
 The footer along the bottom shows who is signed in, the App and domain you are working in, the App's language, which is set in the [App Manager](../app-manager/README.md#app-settings), and the base theme the [Theme Editor](theme-editor.md) compiles the App's look from.
 
@@ -21,13 +21,13 @@ Heisenware uses a highly integrated development process. Rather than working in 
 
 ### Build backend
 
-In the [Backend Builder](flowboard/README.md) you create event-driven logic by dragging [functions](../concepts/executors-and-instances.md) from the [Function Explorer](explorers/functions.md) onto the canvas and wiring them into flows. Functions are the atomic building blocks of an App: standard utility blocks, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
+On the [Flowboard](flowboard/README.md) you create event-driven logic by dragging [functions](../concepts/executors-and-instances.md) from the [Function Explorer](explorers/functions.md) onto the canvas and wiring them into flows. Functions are the atomic building blocks of an App: standard utility blocks, industrial drivers, and custom Code Adapters written in Node.js, Python, or C++.
 
 This logic runs in a global scope. It persists and runs independently of the active UI page, which makes the backend the central hub for continuous data processing or system monitoring. To reach machines and databases in isolated networks, you configure [Native Agents](../app-manager/agents/native-agent.md) or [Docker Agents](../app-manager/agents/docker-agent.md) that tunnel data from local systems directly into your App's logic.
 
 ### Build frontend
 
-The [Frontend Builder](page-editor.md) is a canvas on which you design your UI per page and across different screen sizes, similar to popular presentation tools such as Google Slides or PowerPoint. You use the [Page Explorer](explorers/pages.md) to create, nest, and organize your pages, then switch to the page you want to edit.
+The [Page editor](page-editor.md) is a canvas on which you design your UI per page and across different screen sizes, similar to popular presentation tools such as Google Slides or PowerPoint. You use the [Page Explorer](explorers/pages.md) to create, nest, and organize your pages, then switch to the page you want to edit.
 
 You compose each page from widgets, functional components like gauges, charts, and input fields that you drag onto the canvas. To keep every page and widget visually consistent, the Theme Editor defines the styles and colors that apply across the whole App.
 
@@ -49,7 +49,7 @@ Customize how the App Builder behaves and how you control the canvas. To access 
 
 ### Viewport controls
 
-Defines the navigation logic of the Backend Builder canvas. Choose between two modes:
+Defines the navigation logic of the Flowboard. Choose between two modes:
 
 * **Design-tool-like**: Mimics the behavior of tools like Figma or Miro.
 * **Google-maps-tool**: Navigation behaves like an interactive map.

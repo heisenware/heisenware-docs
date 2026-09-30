@@ -50,7 +50,7 @@ There is no top bar menu type. A title bar of your own, with a logo, a title, or
 
 ### Per-screen menu type
 
-The menu settings are shared across all activated screen sizes until you pin one. Switch to the screen size you want to configure in the [Frontend Builder](../page-editor.md), open the menu settings, hover a field and click the pin to give that screen its own value for the field alone: a fixed left menu on large screens and bottom tabs on the phone is one shared menu type plus one pin. A faded pin shows the field is pinned on another screen; click a solid pin to share the field again. This is the same pin you know from widget settings and page settings.
+The menu settings are shared across all activated screen sizes until you pin one. Switch to the screen size you want to configure in the [Page editor](../page-editor.md), open the menu settings, hover a field and click the pin to give that screen its own value for the field alone: a fixed left menu on large screens and bottom tabs on the phone is one shared menu type plus one pin. A faded pin shows the field is pinned on another screen; click a solid pin to share the field again. This is the same pin you know from widget settings and page settings.
 
 ## App actions
 
@@ -88,5 +88,5 @@ Your backend logic can also switch pages and run actions on its own.
 The browser's back and forward buttons, and the back gesture of a phone, walk your App's pages the same way the Back action does. The App's URL never changes.
 
 {% hint style="info" %}
-Need more vertical space on a page? Use the page height setting in the [Frontend Builder toolbar](../page-editor.md#the-toolbar).
+Need more vertical space on a page? Use the page height setting in the [Page editor toolbar](../page-editor.md#the-toolbar).
 {% endhint %}

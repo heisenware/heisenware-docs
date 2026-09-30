@@ -1,6 +1,6 @@
 # Functions explorer
 
-The Function Explorer is the panel on the left that holds all functions available to your App. It organizes them into categories and hierarchies (classes and instances) and lets you drag them directly onto the Backend Builder canvas.
+The Function Explorer is the panel on the left that holds all functions available to your App. It organizes them into categories and hierarchies (classes and instances) and lets you drag them directly onto the Flowboard.
 
 <figure><img src="../../.gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
 

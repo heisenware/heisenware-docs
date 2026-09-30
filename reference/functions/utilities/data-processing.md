@@ -495,5 +495,5 @@ Returns the current Unix timestamp in milliseconds.
 {% hint style="info" %}
 #### Toolbar shortcuts
 
-The Backend Builder toolbar includes shortcuts to create `memory`, `echo`, `combine`, and `trigger` nodes directly.
+The Flowboard toolbar includes shortcuts to create `memory`, `echo`, `combine`, and `trigger` nodes directly.
 {% endhint %}

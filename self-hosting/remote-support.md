@@ -10,7 +10,7 @@ Your installation runs a **support agent**. Switched on, it opens one outbound T
   Heisenware                  support.heisenware.cloud             Your installation
  ┌───────────────┐           ┌────────────────┐    ║        ┌────────────────────────┐
  │ App Builder   │           │    support     │    ║  8883  │  support agent         │
- │ tools         ├──────────►│    tenant      │◄───╫────────┤  (dials out)           │
+ │ tools         ├──────────►│    account     │◄───╫────────┤  (dials out)           │
  └───────────────┘           └────────────────┘    ║        │        │               │
                                                    ║        │        ▼               │
                                               your firewall │ broker, engine,        │

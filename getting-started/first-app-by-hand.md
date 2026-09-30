@@ -99,7 +99,7 @@ $sum($)
 ### Visualize live data
 
 1. Upload your logo or another image to the [File Explorer](../app-builder/explorers/files.md).
-2. Drag and drop the image onto the **Frontend Builder** canvas.
+2. Drag and drop the image onto the page in the **Page editor**.
 3. Select a [circular gauge](../reference/widgets/display/circular-gauge.md) from the display widgets list and click the canvas to place it.
 4. Configure the start value, end value (0 to 500), and color sections of the circular gauge in its configuration panel.
 5. Drag the modifier of the `combine` function onto the circular gauge. Ensure you select the circular gauge first.

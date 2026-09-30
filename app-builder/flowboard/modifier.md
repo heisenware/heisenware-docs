@@ -17,7 +17,7 @@ Click the modifier icon on the left to evaluate the modifier manually during dev
 {% hint style="info" %}
 #### Need help writing modifiers?
 
-Read how to [use AI for modifiers](modifier.md#using-ai-for-modifiers) to generate JSONata or JavaScript logic with your favorite chatbot.
+Let the assistant write it: see [using AI for modifiers](modifier.md#using-ai-for-modifiers).
 {% endhint %}
 
 ## JSONata
@@ -543,19 +543,19 @@ a // fourth time
 
 ## Using AI for modifiers
 
-Use AI chatbots (ChatGPT, Claude, Gemini) to generate or optimize your modifiers. This helps especially with complex transformations where you need to reshape large JSON objects on the fly.
+The assistant in the App Builder writes modifiers for you. Tell it what data arrives and what you need, and it adds the modifier to the output. This helps most with complex transformations that reshape large JSON objects.
 
-For best results, copy this article as context for the AI. Use the Copy button at the top of the page or the Open in ChatGPT / Open in Claude buttons in the top navigation bar.
+Another AI tool needs this page as context: use the Copy button at the top of the page, or the Open in ChatGPT and Open in Claude buttons in the top navigation bar.
 
 #### Recommended AI prompt
 
-Alternatively, copy and paste this prompt into your AI so it understands the Heisenware environment and its variable references.
+Or paste this prompt into the other AI tool, so it knows how modifiers work in Heisenware.
 
 ```
 I am working in Heisenware, a node-based visual programming tool for industrial applications. 
-I need a "modifier" expression that transforms data on the fly between functions.
+I need a modifier expression that transforms data on the fly between functions.
 
-Full documentation: https://docs.heisenware.com/app-builder/build-backend/extension-nodes/modifier.md
+Full documentation: https://docs.heisenware.com/app-builder/flowboard/modifier.md
 
 Rules:
 * A modifier is a single expression that returns the transformed value. No statements or variable declarations.

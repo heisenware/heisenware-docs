@@ -45,7 +45,7 @@ General RPC **response** payload pattern:
 {% hint style="info" %}
 **NOTE 1**
 
-* if `<function>` refers to a member function, `<context>` must reflect the corresponding **instance name**
+* if `<function>` refers to an instance function, `<context>` must reflect the corresponding **instance name**
 * if `<function>` refers to a static function, `<context>` must reflect the corresponding **class name**
 * if `<function>` refers to a global function, `<context>` must have the value `__global__`
 {% endhint %}
@@ -140,7 +140,7 @@ The `meta` property is optional and only available if meta information could be 
     <domain>/<agent>/<class>/__static__/__createIsolated__
     ```
 
-    VRPC creates and names a new instance, iterates all of its member functions and **subscribes** to each one using:
+    VRPC creates and names a new instance, iterates all of its instance functions and **subscribes** to each one using:
 
     ```xml
     <domain>/<agent>/<class>/<instance>/<method>

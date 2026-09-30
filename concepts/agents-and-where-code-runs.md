@@ -32,9 +32,9 @@ Every [Native Agent](../app-manager/agents/native-agent.md) you build is also st
 ### Do you need to connect an external data source?
 
 * **No** – If you are building an independent App that relies solely on built-in databases and does not require external connectivity, you can skip this guide and start directly with the [Overview](../app-builder/README.md).
-* **Yes** – If your use case requires reading or writing data to an existing database, machine, IT system, scanner, API, or industrial protocol, continue to [How is your Heisenware tenant hosted?](agents-and-where-code-runs.md#how-is-your-heisenware-tenant-hosted).
+* **Yes** – If your use case requires reading or writing data to an existing database, machine, IT system, scanner, API, or industrial protocol, continue to [Where does your Heisenware account run?](agents-and-where-code-runs.md#where-does-your-heisenware-account-run).
 
-### How is your Heisenware tenant hosted?
+### Where does your Heisenware account run?
 
 Your connection method depends on where the Heisenware platform runs.
 
@@ -43,14 +43,14 @@ Your connection method depends on where the Heisenware platform runs.
 
 ### Managed Cloud connectivity
 
-Your tenant is hosted by Heisenware in the cloud. Is your data source accessible via the public internet (such as via an API)?
+Your account runs in the Heisenware cloud. Is your data source accessible via the public internet (such as via an API)?
 
 * **Yes** – If the data source is reachable via the internet, you can use our standard [connectors](../reference/functions/connectors/README.md) directly.
 * **No** – If the data source resides in an isolated or local network, continue to [Connecting isolated data sources](agents-and-where-code-runs.md#connecting-isolated-data-sources).
 
 ### Self-hosted connectivity
 
-Your tenant is hosted on-premise or in your private cloud. Is your data source accessible from the network where the platform is deployed?
+Your account runs on your own servers or in your private cloud. Is your data source accessible from the network where the platform is deployed?
 
 * **Yes** – If the data source is in the same network, you can use our standard [connectors](../reference/functions/connectors/README.md) directly.
 * **No** – If the data source is in an isolated network segment, continue to [Connecting isolated data sources](agents-and-where-code-runs.md#connecting-isolated-data-sources).

@@ -44,7 +44,7 @@ Move the package to the target machine, unzip, and run the installer. This is th
 {% step %}
 #### Automatic discovery
 
-The service starts immediately after installation. The Agent appears in the App Manager's Agents panel and, with its connectors, in the [Function Explorer](../../app-builder/explorers/functions.md). Drag these functions onto the Backend Builder canvas. In production Apps, they execute locally on the machine running the Agent.
+The service starts immediately after installation. The Agent appears in the App Manager's Agents panel and, with its connectors, in the [Function Explorer](../../app-builder/explorers/functions.md). Drag these functions onto the Flowboard. In deployed Apps, they execute locally on the machine running the Agent.
 {% endstep %}
 {% endstepper %}
 

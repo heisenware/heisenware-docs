@@ -15,9 +15,9 @@ Backend logic runs in the background, even when no user has the App open. This m
 * [**Agents**](../../concepts/agents-and-where-code-runs.md): Standalone gateways that execute logic (like connectors) directly inside a local network, for example on a factory floor, and tunnel the data securely into your backend.
 * [**Files**](../explorers/files.md): CSVs, PDFs, images, and other resources your logic or UI reads from and writes to. Manage them in the File Explorer.
 
-## Backend Builder
+## Working on the Flowboard
 
-Turn individual functions into automated flows inside the Backend Builder. Drag functions onto the infinite canvas and wire them together. Data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences. Each function on the canvas is a function node. Together with extension nodes, they form the building blocks of every flow.
+Turn individual functions into automated flows on the Flowboard. Drag functions onto the infinite canvas and wire them together. Data moves directly from one function's output to the next function's input, creating reactive, event-driven sequences. Each function on the canvas is an executor. Together with extension nodes, they form the building blocks of every flow.
 
 ### Adding functions
 
@@ -62,7 +62,7 @@ The AI assistant writes annotations in Markdown, including tables, images, and M
 
 ### Tidying the canvas
 
-The Backend Builder previews layout changes before applying them: every moved node turns orange. Confirm the new layout with the check icon or revert it with the round arrow icon; both icons appear in the toolbar.
+The Flowboard previews layout changes before applying them: every moved node turns orange. Confirm the new layout with the check icon or revert it with the round arrow icon; both icons appear in the toolbar.
 
 * **Clear collisions** (snowplow): Moves functions, extension nodes, sections, and other canvas elements just enough to remove overlaps between nodes. Start it from the toolbar.
 * **Auto-format all**: Rebuilds the entire layout. An algorithm groups connected logic into islands and arranges all elements for readability. Start it from the toolbar.
