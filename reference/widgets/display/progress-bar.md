@@ -10,26 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `value` | output | `number` | The current progress value (between the configured `min` and `max`). |
-| `min` | output | `number` | Lower bound of the scale. |
-| `max` | output | `number` | Upper bound of the scale. |
-| `showStatus` | output | `boolean` | Show the percentage status text. |
-| `color` | output | `string` | Any valid CSS color for the bar (overrides the configured color). |
-| `props` | output | `object` | Facilitates setting several properties at once, e.g. `{ "min": 0, "max": 200, "showStatus": true, "color": "#dc2828" }`. The bundle wins over the individually linked channels. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`value`** (from an output, `number`): The current progress value (between the configured `min` and `max`).
 
 <details>
 
-<summary><code>value</code></summary>
+<summary>Example</summary>
 
 ```json
 67
@@ -37,9 +26,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`min`** (from an output, `number`): Lower bound of the scale.
+
 <details>
 
-<summary><code>min</code></summary>
+<summary>Example</summary>
 
 ```json
 0
@@ -47,9 +38,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`max`** (from an output, `number`): Upper bound of the scale.
+
 <details>
 
-<summary><code>max</code></summary>
+<summary>Example</summary>
 
 ```json
 200
@@ -57,9 +50,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`showStatus`** (from an output, `boolean`): Show the percentage status text.
+
 <details>
 
-<summary><code>showStatus</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -67,9 +62,11 @@ true
 
 </details>
 
+**`color`** (from an output, `string`): Any valid CSS color for the bar (overrides the configured color).
+
 <details>
 
-<summary><code>color</code></summary>
+<summary>Example</summary>
 
 ```json
 "#dc2828"
@@ -77,9 +74,11 @@ true
 
 </details>
 
+**`props`** (from an output, `object`): Facilitates setting several properties at once, e.g. `{ "min": 0, "max": 200, "showStatus": true, "color": "#dc2828" }`. The bundle wins over the individually linked channels.
+
 <details>
 
-<summary><code>props</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -91,18 +90,24 @@ true
 
 </details>
 
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Minimum | Value at which the bar is empty (0%). | `0` |
-| Maximum | Value at which the bar is full (100%). | `1` |
-| Show status | Shows the percentage text next to the bar. | on |
-| Bar width | Thickness of the bar in px. Range 2 to 40. *Set per screen.* | `4` |
-| Color | Fill color of the bar; empty or auto keeps the theme's accent. | automatic |
+<summary>Look &amp; feel</summary>
+
+* **Minimum**: Value at which the bar is empty (0%).
+* **Maximum**: Value at which the bar is full (100%).
+* **Show status**: Shows the percentage text next to the bar.
+* **Bar width**: Thickness of the bar in px. Range 2 to 40. *Set per screen.*
+* **Color**: Fill color of the bar; empty or auto keeps the theme's accent.
+
+</details>
 
 <!-- /generated -->

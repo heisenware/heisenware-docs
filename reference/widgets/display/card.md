@@ -10,28 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `variant` | output | `'elevation'\|'outlined'` | The global appearance of the card. |
-| `backgroundColor` | output | `string` | Any valid CSS color defining the background. |
-| `opacity` | output | `number` | Transparency from 0 (transparent) to 1 (opaque) |
-| `borderRadius` | output | `string\|number` | Any valid CSS identifier to define the border radius. |
-| `border` | output | `object` | An object, defining the border. |
-| `elevation` | output | `'theme'\|'flat'\|'low'\|'medium'\|'high'` | The visual height above the background. |
-| `style` | output | `object` | Arbitrary CSS key / value instructions. |
-| `props` | output | `object` | Facilitates setting several properties at once. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`variant`** (from an output, `'elevation' | 'outlined'`): The global appearance of the card.
 
 <details>
 
-<summary><code>variant</code></summary>
+<summary>Example</summary>
 
 ```json
 "outlined"
@@ -39,9 +26,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`backgroundColor`** (from an output, `string`): Any valid CSS color defining the background.
+
 <details>
 
-<summary><code>backgroundColor</code></summary>
+<summary>Example</summary>
 
 ```json
 "#f5f7fa"
@@ -49,9 +38,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`opacity`** (from an output, `number`): Transparency from 0 (transparent) to 1 (opaque)
+
 <details>
 
-<summary><code>opacity</code></summary>
+<summary>Example</summary>
 
 ```json
 0.9
@@ -59,9 +50,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`borderRadius`** (from an output, `string | number`): Any valid CSS identifier to define the border radius.
+
 <details>
 
-<summary><code>borderRadius</code></summary>
+<summary>Example</summary>
 
 ```json
 12
@@ -69,9 +62,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`border`** (from an output, `object`): An object, defining the border.
+
 <details>
 
-<summary><code>border</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -83,9 +78,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`elevation`** (from an output, `'theme' | 'flat' | 'low' | 'medium' | 'high'`): The visual height above the background.
+
 <details>
 
-<summary><code>elevation</code></summary>
+<summary>Example</summary>
 
 ```json
 "medium"
@@ -93,9 +90,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`style`** (from an output, `object`): Arbitrary CSS key / value instructions.
+
 <details>
 
-<summary><code>style</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -105,9 +104,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`props`** (from an output, `object`): Facilitates setting several properties at once.
+
 <details>
 
-<summary><code>props</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -118,24 +119,31 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Surface style | Elevation raises the card with a shadow (see elevation); outlined draws a border instead (see border). Choices: `elevation`, `outlined`. | `elevation` |
-| Background color | Fill color of the card as a CSS color; auto or empty keeps the theme's tile color. | automatic |
-| Opacity | Transparency of the whole card from 0 (invisible) to 1 (solid). Range 0 to 1. | `1` |
-| Corner radius | Rounding of the corners, from square to circle; theme keeps the theme's radius. Choices: Theme, Square, Low, Medium, High, Circle. | Theme |
-| Custom CSS overrides | Raw CSS properties applied to the card. |  |
-| Custom CSS overrides › Property | CSS property in camelCase, e.g. zIndex or cursor. |  |
-| Custom CSS overrides › Value | Value of that property, e.g. 100 or pointer. |  |
-| Elevation | Shadow depth under the card, from flat (none) to high; theme keeps the theme's shadow. Choices: Theme, Flat, Low, Medium, High. Only when Surface style is `elevation`. | Theme |
-| Border › Width | Line width in px. Only when Surface style is `outlined`. | `1` |
-| Border › Color | Line color; auto or empty keeps the theme's border color. Only when Surface style is `outlined`. | automatic |
-| Border › Style | Solid, dashed or dotted line. Choices: `solid`, `dashed`, `dotted`. Only when Surface style is `outlined`. | `solid` |
+<summary>Look &amp; feel</summary>
+
+* **Surface style**: Elevation raises the card with a shadow (see elevation); outlined draws a border instead (see border). Choices: `elevation`, `outlined`.
+* **Background color**: Fill color of the card as a CSS color; auto or empty keeps the theme's tile color.
+* **Opacity**: Transparency of the whole card from 0 (invisible) to 1 (solid). Range 0 to 1.
+* **Corner radius**: Rounding of the corners, from square to circle; theme keeps the theme's radius. Choices: Theme, Square, Low, Medium, High, Circle.
+* **Custom CSS overrides**: Raw CSS properties applied to the card.
+  * **Property**: CSS property in camelCase, e.g. zIndex or cursor.
+  * **Value**: Value of that property, e.g. 100 or pointer.
+* **Elevation**: Shadow depth under the card, from flat (none) to high; theme keeps the theme's shadow. Choices: Theme, Flat, Low, Medium, High. Only when Surface style is `elevation`.
+* **Border**: Line drawn around an outlined card. Only when Surface style is `outlined`.
+  * **Width**: Line width in px. Only when Surface style is `outlined`.
+  * **Color**: Line color; auto or empty keeps the theme's border color. Only when Surface style is `outlined`.
+  * **Style**: Solid, dashed or dotted line. Choices: `solid`, `dashed`, `dotted`. Only when Surface style is `outlined`.
+
+</details>
 
 <!-- /generated -->

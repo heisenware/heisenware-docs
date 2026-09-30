@@ -10,24 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `value` | output | `number` | The main indicator value. |
-| `subValue` | output | `number\|Array<number>` | A sub-value or an array of sub-values to visualize next to the value. |
-| `scale` | output | `object` | Settings regarding the value range. |
-| `frame` | output | `object` | Allows you to configure the appearance of the frame. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`value`** (from an output, `number`): The main indicator value.
 
 <details>
 
-<summary><code>value</code></summary>
+<summary>Example</summary>
 
 ```json
 42
@@ -35,9 +26,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`subValue`** (from an output, `number | Array<number>`): A sub-value or an array of sub-values to visualize next to the value.
+
 <details>
 
-<summary><code>subValue</code></summary>
+<summary>Example</summary>
 
 ```json
 [
@@ -48,9 +41,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`scale`** (from an output, `object`): Settings regarding the value range.
+
 <details>
 
-<summary><code>scale</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -61,9 +56,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`frame`** (from an output, `object`): Allows you to configure the appearance of the frame.
+
 <details>
 
-<summary><code>frame</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -86,71 +83,88 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs.
 
-### Frame
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| frame › Start angle | Where the scale starts, in degrees: 0 is 9 o'clock, positive turns the start clockwise (upward), negative counter-clockwise. Range -180 to 180. | `-45` |
-| frame › Circle size | Length of the arc in degrees, drawn clockwise from the start angle; 360 closes the circle. Range 0 to 360. | `270` |
-| frame › Width | Thickness of the ring in px. Range 1 to 20. | `5` |
-| frame › Background color | Color of the ring where no colored section covers it; empty or auto keeps the theme's. | automatic |
-| frame › ranges | Colored sections of the ring, each from a start value to an end value. |  |
-| frame › ranges › Start value | Scale value where the section begins. |  |
-| frame › ranges › End value | Scale value where the section ends. |  |
-| frame › ranges › Color | Color of the section; empty takes the next color of the gauge's palette. |  |
+<summary>Frame</summary>
 
-### Indicator
+* **frame**: The ring around the scale: its angles, thickness, background and colored sections.
+  * **Start angle**: Where the scale starts, in degrees: 0 is 9 o'clock, positive turns the start clockwise (upward), negative counter-clockwise. Range -180 to 180.
+  * **Circle size**: Length of the arc in degrees, drawn clockwise from the start angle; 360 closes the circle. Range 0 to 360.
+  * **Width**: Thickness of the ring in px. Range 1 to 20.
+  * **Background color**: Color of the ring where no colored section covers it; empty or auto keeps the theme's.
+  * **ranges**: Colored sections of the ring, each from a start value to an end value.
+    * **Start value**: Scale value where the section begins.
+    * **End value**: Scale value where the section ends.
+    * **Color**: Color of the section; empty takes the next color of the gauge's palette.
 
-| Setting | What it does | Default |
-|---|---|---|
-| Primary indicator › Type | Shape of the pointer that marks the value on the scale; each shape unlocks its own settings below. Choices: Rectangle needle, Two-Color needle, Triangle needle, Range bar, Triangle marker, Text cloud. | Rectangle needle |
-| Primary indicator › Width | Width of a needle or triangle marker in px; range bar and text cloud ignore it. | `2` |
-| Primary indicator › Offset | Distance between the pointer and the scale line in px; empty keeps the shape's default. |  |
-| Primary indicator › Color | Color of the pointer; empty or auto keeps the theme's. | automatic |
-| Primary indicator › Indent from center | Gap between the center of the gauge and the start of the needle in px; negative extends the needle past the center. Only when Type is Rectangle needle. | `0` |
-| Primary indicator › Spindle size | Diameter of the hub disc at the center of the needle in px. Only when Type is Rectangle needle. | `14` |
-| Primary indicator › Spindle gap size | Inner diameter of the hub in px, leaving a hole that turns it into a ring. Only when Type is Rectangle needle. | `10` |
-| Primary indicator › Secondary color | Color of the needle tip on a two-color needle; empty or auto keeps the theme's. Only when Type is Two-Color needle. | `#ddcc88` |
-| Primary indicator › Color fraction | Share of the needle length painted in the secondary color, from the tip, 0 to 1. Only when Type is Two-Color needle. | `0.4` |
-| Primary indicator › Background color | Color of the bar's track where the bar does not reach; none leaves it transparent. Only when Type is Range bar. | `none` |
-| Primary indicator › Size | Thickness of the range bar in px. Only when Type is Range bar. | `10` |
-| Primary indicator › Base value | Value the range bar grows from; empty grows it from the start of the scale. Only when Type is Range bar. |  |
-| Primary indicator › Length | Length of the triangle marker in px, from its base to the tip pointing at the scale. Only when Type is Triangle marker. | `15` |
-| Primary indicator › Arrow length | Length of the arrow that joins the text cloud to the scale in px. Only when Type is Text cloud. | `5` |
-| Subvalue indicator › Type | Shape of the pointer that marks the value on the scale; each shape unlocks its own settings below. Choices: Rectangle needle, Two-Color needle, Triangle needle, Range bar, Triangle marker, Text cloud. | Triangle marker |
-| Subvalue indicator › Width | Width of a needle or triangle marker in px; range bar and text cloud ignore it. | `2` |
-| Subvalue indicator › Offset | Distance between the pointer and the scale line in px; empty keeps the shape's default. |  |
-| Subvalue indicator › Color | Color of the pointer; empty or auto keeps the theme's. | automatic |
-| Subvalue indicator › Indent from center | Gap between the center of the gauge and the start of the needle in px; negative extends the needle past the center. Only when Type is Rectangle needle. | `0` |
-| Subvalue indicator › Spindle size | Diameter of the hub disc at the center of the needle in px. Only when Type is Rectangle needle. | `14` |
-| Subvalue indicator › Spindle gap size | Inner diameter of the hub in px, leaving a hole that turns it into a ring. Only when Type is Rectangle needle. | `10` |
-| Subvalue indicator › Secondary color | Color of the needle tip on a two-color needle; empty or auto keeps the theme's. Only when Type is Two-Color needle. | `#ddcc88` |
-| Subvalue indicator › Color fraction | Share of the needle length painted in the secondary color, from the tip, 0 to 1. Only when Type is Two-Color needle. | `0.4` |
-| Subvalue indicator › Background color | Color of the bar's track where the bar does not reach; none leaves it transparent. Only when Type is Range bar. | `none` |
-| Subvalue indicator › Size | Thickness of the range bar in px. Only when Type is Range bar. | `10` |
-| Subvalue indicator › Base value | Value the range bar grows from; empty grows it from the start of the scale. Only when Type is Range bar. |  |
-| Subvalue indicator › Length | Length of the triangle marker in px, from its base to the tip pointing at the scale. Only when Type is Triangle marker. | `15` |
-| Subvalue indicator › Arrow length | Length of the arrow that joins the text cloud to the scale in px. Only when Type is Text cloud. | `5` |
+</details>
 
-### Scale
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Scale › Start value | Value at the start of the scale. | `0` |
-| Scale › End value | Value at the end of the scale. | `100` |
-| Scale › Label › Visible | Shows the numbers along the scale. | on |
-| Scale › Label › Size | Font size of the scale numbers in px. | `12` |
-| Scale › Label › Weight | Font weight of the scale numbers, 100 (thin) to 900 (black). Range 100 to 900. | `400` |
-| Scale › Label › Color | Color of the scale numbers; empty or auto keeps the theme's. | automatic |
-| Scale › Major tick › Visible | Shows the major tick marks. | on |
-| Scale › Major tick › Interval | Distance between major ticks in scale units; empty lets the gauge choose. |  |
-| Scale › Major tick › Length | Length of each major tick in px. | `5` |
-| Scale › Minor tick › Visible | Shows the minor tick marks. | off |
-| Scale › Minor tick › Interval | Distance between minor ticks in scale units; empty lets the gauge choose. |  |
-| Scale › Minor tick › Length | Length of each minor tick in px. | `3` |
+<summary>Indicator</summary>
+
+* **Primary indicator**: The pointer that marks the bound value.
+  * **Type**: Shape of the pointer that marks the value on the scale; each shape unlocks its own settings below. Choices: Rectangle needle, Two-Color needle, Triangle needle, Range bar, Triangle marker, Text cloud.
+  * **Width**: Width of a needle or triangle marker in px; range bar and text cloud ignore it.
+  * **Offset**: Distance between the pointer and the scale line in px; empty keeps the shape's default.
+  * **Color**: Color of the pointer; empty or auto keeps the theme's.
+  * **Indent from center**: Gap between the center of the gauge and the start of the needle in px; negative extends the needle past the center. Only when Type is Rectangle needle.
+  * **Spindle size**: Diameter of the hub disc at the center of the needle in px. Only when Type is Rectangle needle.
+  * **Spindle gap size**: Inner diameter of the hub in px, leaving a hole that turns it into a ring. Only when Type is Rectangle needle.
+  * **Secondary color**: Color of the needle tip on a two-color needle; empty or auto keeps the theme's. Only when Type is Two-Color needle.
+  * **Color fraction**: Share of the needle length painted in the secondary color, from the tip, 0 to 1. Only when Type is Two-Color needle.
+  * **Background color**: Color of the bar's track where the bar does not reach; none leaves it transparent. Only when Type is Range bar.
+  * **Size**: Thickness of the range bar in px. Only when Type is Range bar.
+  * **Base value**: Value the range bar grows from; empty grows it from the start of the scale. Only when Type is Range bar.
+  * **Length**: Length of the triangle marker in px, from its base to the tip pointing at the scale. Only when Type is Triangle marker.
+  * **Arrow length**: Length of the arrow that joins the text cloud to the scale in px. Only when Type is Text cloud.
+* **Subvalue indicator**: The pointer used for every bound sub-value.
+  * **Type**: Shape of the pointer that marks the value on the scale; each shape unlocks its own settings below. Choices: Rectangle needle, Two-Color needle, Triangle needle, Range bar, Triangle marker, Text cloud.
+  * **Width**: Width of a needle or triangle marker in px; range bar and text cloud ignore it.
+  * **Offset**: Distance between the pointer and the scale line in px; empty keeps the shape's default.
+  * **Color**: Color of the pointer; empty or auto keeps the theme's.
+  * **Indent from center**: Gap between the center of the gauge and the start of the needle in px; negative extends the needle past the center. Only when Type is Rectangle needle.
+  * **Spindle size**: Diameter of the hub disc at the center of the needle in px. Only when Type is Rectangle needle.
+  * **Spindle gap size**: Inner diameter of the hub in px, leaving a hole that turns it into a ring. Only when Type is Rectangle needle.
+  * **Secondary color**: Color of the needle tip on a two-color needle; empty or auto keeps the theme's. Only when Type is Two-Color needle.
+  * **Color fraction**: Share of the needle length painted in the secondary color, from the tip, 0 to 1. Only when Type is Two-Color needle.
+  * **Background color**: Color of the bar's track where the bar does not reach; none leaves it transparent. Only when Type is Range bar.
+  * **Size**: Thickness of the range bar in px. Only when Type is Range bar.
+  * **Base value**: Value the range bar grows from; empty grows it from the start of the scale. Only when Type is Range bar.
+  * **Length**: Length of the triangle marker in px, from its base to the tip pointing at the scale. Only when Type is Triangle marker.
+  * **Arrow length**: Length of the arrow that joins the text cloud to the scale in px. Only when Type is Text cloud.
+
+</details>
+
+<details>
+
+<summary>Scale</summary>
+
+* **Scale**: The value axis of the gauge: its bounds, numbers and tick marks.
+  * **Start value**: Value at the start of the scale.
+  * **End value**: Value at the end of the scale.
+  * **Label**: The numbers written along the scale.
+    * **Visible**: Shows the numbers along the scale.
+    * **Size**: Font size of the scale numbers in px.
+    * **Weight**: Font weight of the scale numbers, 100 (thin) to 900 (black). Range 100 to 900.
+    * **Color**: Color of the scale numbers; empty or auto keeps the theme's.
+  * **Major tick**: The main tick marks on the scale, one per labeled step.
+    * **Visible**: Shows the major tick marks.
+    * **Interval**: Distance between major ticks in scale units; empty lets the gauge choose.
+    * **Length**: Length of each major tick in px.
+  * **Minor tick**: The small tick marks between two major ticks.
+    * **Visible**: Shows the minor tick marks.
+    * **Interval**: Distance between minor ticks in scale units; empty lets the gauge choose.
+    * **Length**: Length of each minor tick in px.
+
+</details>
 
 <!-- /generated -->

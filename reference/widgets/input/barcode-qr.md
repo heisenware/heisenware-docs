@@ -10,28 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `clear` | output | `any` | Clears all captured barcodes on truthy values. |
-| `button` | output | `object` | Configures the scan button. |
-
-### Emits
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `text` | input | `string\|Array<string>` | The scanned result: a single barcode text in `single` scan mode, or an array of all captured texts when saving in `multiple` mode. Writes `''` when cleared. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`clear`** (from an output, `any`): Clears all captured barcodes on truthy values.
 
 <details>
 
-<summary><code>clear</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -39,9 +26,11 @@ true
 
 </details>
 
+**`button`** (from an output, `object`): Configures the scan button.
+
 <details>
 
-<summary><code>button</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -53,22 +42,34 @@ true
 
 </details>
 
+{% endtab %}
+
+{% tab title="Emits" %}
+**`text`** (into an input, `string | Array<string>`): The scanned result: a single barcode text in `single` scan mode, or an array of all captured texts when saving in `multiple` mode. Writes `''` when cleared.
+
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Scan mode | Single writes the first code read and closes the camera; multiple collects codes until the check button writes them as an array. Choices: Single, Multiple. | Single |
-| button › Button Text | Label shown on the button; empty shows none. | `Scan Now` |
-| button › Icon | Font Awesome class of an icon shown left of the label, e.g. fa-light fa-camera; empty shows none. |  |
-| button › Text Size | Font size of the label in px. Range 8 to 40. *Set per screen.* | `14` |
-| button › Icon Size | Size of the icon in px. Range 20 to 100. *Set per screen.* | `20` |
-| button › Button Type | Color scheme: default uses the accent color, normal is neutral, success green, danger red. Choices: `default`, `normal`, `success`, `danger`. | `default` |
-| button › Styling Mode | Contained fills the button with its color, outlined draws only a border, text shows the label alone. Choices: `text`, `contained`, `outlined`. | `contained` |
-| button › Hover Text | Tooltip shown while the pointer rests on the button; empty shows the label or nothing. |  |
-| button › Initially Disabled | Starts the button greyed out and unclickable until a bound button value enables it. | off |
+<summary>Look &amp; feel</summary>
+
+* **Scan mode**: Single writes the first code read and closes the camera; multiple collects codes until the check button writes them as an array. Choices: Single, Multiple.
+* **button**: The button members press to scan, upload or take a photo.
+  * **Button Text**: Label shown on the button; empty shows none.
+  * **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-camera; empty shows none.
+  * **Text Size**: Font size of the label in px. Range 8 to 40. *Set per screen.*
+  * **Icon Size**: Size of the icon in px. Range 20 to 100. *Set per screen.*
+  * **Button Type**: Color scheme: default uses the accent color, normal is neutral, success green, danger red. Choices: `default`, `normal`, `success`, `danger`.
+  * **Styling Mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone. Choices: `text`, `contained`, `outlined`.
+  * **Hover Text**: Tooltip shown while the pointer rests on the button; empty shows the label or nothing.
+  * **Initially Disabled**: Starts the button greyed out and unclickable until a bound button value enables it.
+
+</details>
 
 <!-- /generated -->

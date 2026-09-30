@@ -10,22 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `message` | output | `string\|object` | Shows a toast once per received value. Strings display as-is; objects display as `message` (plus `, because: <cause>` when present). |
-| `message` | error handler | `object` | Receives the linked executor's error and shows it as a toast: `<message>, because: <cause>`. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`message`** (from an output, `string | object`): Shows a toast once per received value. Strings display as-is; objects display as `message` (plus `, because: <cause>` when present).
 
 <details>
 
-<summary><code>message</code> (output)</summary>
+<summary>Example</summary>
 
 ```json
 "Order saved"
@@ -33,9 +26,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`message`** (from an error handler, `object`): Receives the linked executor's error and shows it as a toast: `<message>, because: <cause>`.
+
 <details>
 
-<summary><code>message</code> (error handler)</summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -46,16 +41,22 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Type | Color and icon of the notification: info grey, warning yellow, error red, success green. Choices: Info, Warning, Error, Success. | Info |
-| Display time | How long the notification stays on screen in ms. Range 100 to 10000. | `3000` |
-| Position | Edge or corner of the screen where the notification appears. Choices: Bottom left, Bottom center, Bottom right, Top left, Top center, Top right. *Set per screen.* | Top center |
+<summary>Look &amp; feel</summary>
+
+* **Type**: Color and icon of the notification: info grey, warning yellow, error red, success green. Choices: Info, Warning, Error, Success.
+* **Display time**: How long the notification stays on screen in ms. Range 100 to 10000.
+* **Position**: Edge or corner of the screen where the notification appears. Choices: Bottom left, Bottom center, Bottom right, Top left, Top center, Top right. *Set per screen.*
+
+</details>
 
 <!-- /generated -->

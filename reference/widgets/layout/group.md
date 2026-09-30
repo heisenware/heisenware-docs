@@ -10,29 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `data` | output | `Array<object>\|object` | The rows to render: one tile (with the full set of child widgets) per row. A single object becomes one tile; the binding editor maps row fields to child properties. A row field may itself hold an **array of points** — bind it to a chart, sparkline or timeline child. |
-
-### Emits
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `onChange` | input | `object` | Writes the tile's row augmented with the changed child value whenever an input child changes. |
-| `onButtonClick` | input | `object` | Writes an event envelope when a button child is clicked. Pending child input values of the same tile are merged in. |
-| `onGroupClick` | input | `object` | Writes the tile's row (plus pending child input values) when the tile is clicked. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`data`** (from an output, `Array<object> | object`): The rows to render: one tile (with the full set of child widgets) per row. A single object becomes one tile; the binding editor maps row fields to child properties. A row field may itself hold an **array of points** — bind it to a chart, sparkline or timeline child.
 
 <details>
 
-<summary><code>data</code></summary>
+<summary>Example</summary>
 
 ```json
 [
@@ -81,9 +67,14 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% tab title="Emits" %}
+**`onChange`** (into an input, `object`): Writes the tile's row augmented with the changed child value whenever an input child changes.
+
 <details>
 
-<summary><code>onChange</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -98,9 +89,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`onButtonClick`** (into an input, `object`): Writes an event envelope when a button child is clicked. Pending child input values of the same tile are merged in.
+
 <details>
 
-<summary><code>onButtonClick</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -114,9 +107,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`onGroupClick`** (into an input, `object`): Writes the tile's row (plus pending child input values) when the tile is clicked.
+
 <details>
 
-<summary><code>onGroupClick</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -128,18 +123,34 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Horizontal axis › Justification | Where the tiles of a row sit across the width; left, center and right keep the spacing, the space variants spread the tiles over the width. Choices: Left, Center, Right, Space between, Space around, Space evenly. *Set per screen.* | Center |
-| Horizontal axis › Spacing | Margin in px on both sides of every tile, so neighbours sit twice this apart. Range 0 to 80. Only when Justification is Left, Center or Right. | `0` |
-| Vertical axis › Justification | Where the rows of tiles sit down the height; top, center and bottom keep the spacing, the space variants spread the rows over the height. Choices: Top, Center, Bottom, Space between, Space around, Space evenly. *Set per screen.* | Top |
-| Vertical axis › Spacing | Margin in px below every tile. Range 0 to 80. Only when Justification is Top, Center or Bottom. | `0` |
+<summary>Data binding</summary>
+
+* **null**: Per member (by id), the row fields that feed its properties; set through the binding editor or set_group_bindings.
+
+</details>
+
+<details>
+
+<summary>Look &amp; feel</summary>
+
+* **Horizontal axis**: How the tiles line up left to right.
+  * **Justification**: Where the tiles of a row sit across the width; left, center and right keep the spacing, the space variants spread the tiles over the width. Choices: Left, Center, Right, Space between, Space around, Space evenly. *Set per screen.*
+  * **Spacing**: Margin in px on both sides of every tile, so neighbours sit twice this apart. Range 0 to 80. Only when Justification is Left, Center or Right.
+* **Vertical axis**: How the rows of tiles stack top to bottom.
+  * **Justification**: Where the rows of tiles sit down the height; top, center and bottom keep the spacing, the space variants spread the rows over the height. Choices: Top, Center, Bottom, Space between, Space around, Space evenly. *Set per screen.*
+  * **Spacing**: Margin in px below every tile. Range 0 to 80. Only when Justification is Top, Center or Bottom.
+
+</details>
 
 ## Good to know
 

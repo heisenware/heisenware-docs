@@ -10,40 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `disable` | output | `any` | When truthy, the button gets disabled. Falsy values are ignored. |
-| `enable` | output | `any` | When truthy, the button gets enabled. Falsy values are ignored. |
-| `toggle` | output | `any` | When truthy, the button is enabled, when falsy it is disabled. |
-| `disabled` | output | `any` | When truthy, the button is disabled, when falsy it is enabled. |
-| `done` | output | `any` | When linked, the button plays a loading animation until a value update is received. |
-| `text` | output | `string` | The button's text. |
-| `fontSize` | output | `integer` | The size of the button's text. |
-| `iconSize` | output | `integer` | The size of the button's icon. |
-| `type` | output | `'default'\|'normal'\|'success'\|'danger'` | The type of the button. |
-| `stylingMode` | output | `'text'\|'contained'\|'outlined'` | The styling mode of the button. |
-| `color` | output | `string` | Any valid CSS color for the button (overrides the configured color); `auto` restores the color the type gives. |
-
-### Emits
-
-| Property | Linked to | What it does |
-|---|---|---|
-| `onClick` | input | Fires the linked executor when the button is clicked (no value is written). |
-| `onClick` | trigger | Triggers the linked executor when the button is clicked. |
-| `onClick` | page | Switches to the linked page when the button is clicked. |
-| `onClick` | App action | Runs the linked app action (logout, reload, back) when the button is clicked. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`disable`** (from an output, `any`): When truthy, the button gets disabled. Falsy values are ignored.
 
 <details>
 
-<summary><code>disable</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -51,9 +26,11 @@ true
 
 </details>
 
+**`enable`** (from an output, `any`): When truthy, the button gets enabled. Falsy values are ignored.
+
 <details>
 
-<summary><code>enable</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -61,9 +38,11 @@ true
 
 </details>
 
+**`toggle`** (from an output, `any`): When truthy, the button is enabled, when falsy it is disabled.
+
 <details>
 
-<summary><code>toggle</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -71,9 +50,11 @@ true
 
 </details>
 
+**`disabled`** (from an output, `any`): When truthy, the button is disabled, when falsy it is enabled.
+
 <details>
 
-<summary><code>disabled</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -81,9 +62,11 @@ true
 
 </details>
 
+**`done`** (from an output, `any`): When linked, the button plays a loading animation until a value update is received.
+
 <details>
 
-<summary><code>done</code></summary>
+<summary>Example</summary>
 
 ```json
 true
@@ -91,9 +74,11 @@ true
 
 </details>
 
+**`text`** (from an output, `string`): The button's text.
+
 <details>
 
-<summary><code>text</code></summary>
+<summary>Example</summary>
 
 ```json
 "Start pump"
@@ -101,9 +86,11 @@ true
 
 </details>
 
+**`fontSize`** (from an output, `integer`): The size of the button's text.
+
 <details>
 
-<summary><code>fontSize</code></summary>
+<summary>Example</summary>
 
 ```json
 16
@@ -111,9 +98,11 @@ true
 
 </details>
 
+**`iconSize`** (from an output, `integer`): The size of the button's icon.
+
 <details>
 
-<summary><code>iconSize</code></summary>
+<summary>Example</summary>
 
 ```json
 22
@@ -121,9 +110,11 @@ true
 
 </details>
 
+**`type`** (from an output, `'default' | 'normal' | 'success' | 'danger'`): The type of the button.
+
 <details>
 
-<summary><code>type</code></summary>
+<summary>Example</summary>
 
 ```json
 "success"
@@ -131,9 +122,11 @@ true
 
 </details>
 
+**`stylingMode`** (from an output, `'text' | 'contained' | 'outlined'`): The styling mode of the button.
+
 <details>
 
-<summary><code>stylingMode</code></summary>
+<summary>Example</summary>
 
 ```json
 "outlined"
@@ -141,9 +134,11 @@ true
 
 </details>
 
+**`color`** (from an output, `string`): Any valid CSS color for the button (overrides the configured color); `auto` restores the color the type gives.
+
 <details>
 
-<summary><code>color</code></summary>
+<summary>Example</summary>
 
 ```json
 "#dc2828"
@@ -151,26 +146,43 @@ true
 
 </details>
 
+{% endtab %}
+
+{% tab title="Emits" %}
+**`onClick`** (into an input): Fires the linked executor when the button is clicked (no value is written).
+
+**`onClick`** (fires a trigger): Triggers the linked executor when the button is clicked.
+
+**`onClick`** (switches to a page): Switches to the linked page when the button is clicked.
+
+**`onClick`** (runs an App action): Runs the linked app action (logout, reload, back) when the button is clicked.
+
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Button text | Label shown on the button; empty shows only the icon. An input link receives it on click. | `Trigger` |
-| Icon | Font Awesome class of an icon shown left of the label, e.g. fa-light fa-play; empty shows none. |  |
-| Font size | Font size of the label in px. Range 14 to 100. *Set per screen.* | `14` |
-| Icon size | Size of the icon in px. Range 20 to 100. *Set per screen.* | `20` |
-| Type | Color scheme: default accent, normal neutral, success green, danger red; transparent makes it an invisible click area. Choices: `default`, `normal`, `success`, `danger`, `transparent`. | `default` |
-| Styling mode | Contained fills the button with its color, outlined draws only a border, text shows the label alone; transparent ignores it. Choices: `text`, `contained`, `outlined`. | `contained` |
-| Color | Custom button color; auto keeps the color the type gives. | automatic |
-| Hover text | Tooltip shown while the pointer rests on the button; empty shows none. |  |
-| Initially disabled | Starts the button greyed out and unclickable until a bound enable, toggle or disabled value changes it. | off |
-| Requires confirmation | Asks for confirmation in a dialog before the click fires; cancelling does nothing. | off |
-| Confirmation title | Heading of the confirmation dialog; empty shows none. Only when Requires confirmation is on. |  |
-| Confirmation text | Question shown in the confirmation dialog. Only when Requires confirmation is on. |  |
+<summary>Look &amp; feel</summary>
+
+* **Button text**: Label shown on the button; empty shows only the icon. An input link receives it on click.
+* **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-play; empty shows none.
+* **Font size**: Font size of the label in px. Range 14 to 100. *Set per screen.*
+* **Icon size**: Size of the icon in px. Range 20 to 100. *Set per screen.*
+* **Type**: Color scheme: default accent, normal neutral, success green, danger red; transparent makes it an invisible click area. Choices: `default`, `normal`, `success`, `danger`, `transparent`.
+* **Styling mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone; transparent ignores it. Choices: `text`, `contained`, `outlined`.
+* **Color**: Custom button color; auto keeps the color the type gives.
+* **Hover text**: Tooltip shown while the pointer rests on the button; empty shows none.
+* **Initially disabled**: Starts the button greyed out and unclickable until a bound enable, toggle or disabled value changes it.
+* **Requires confirmation**: Asks for confirmation in a dialog before the click fires; cancelling does nothing.
+* **Confirmation title**: Heading of the confirmation dialog; empty shows none. Only when Requires confirmation is on.
+* **Confirmation text**: Question shown in the confirmation dialog. Only when Requires confirmation is on.
+
+</details>
 
 ## Good to know
 

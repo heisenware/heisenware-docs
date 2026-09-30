@@ -10,18 +10,22 @@ description: >-
 
 ## Settings
 
-Double-click the widget in the Page editor to open its settings.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs.
 
-### Content
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Text | The text: markdown (headings, lists, tables, quotes, code, links) or HTML. Titles, labels, instructions, static tables - pictures belong to the image widget. |  |
+<summary>Content</summary>
 
-### Look & feel
+* **Text**: The text: markdown (headings, lists, tables, quotes, code, links) or HTML. Titles, labels, instructions, static tables - pictures belong to the image widget.
 
-| Setting | What it does | Default |
-|---|---|---|
-| Vertical alignment | Where the text sits within the box height when it is shorter than the box. Choices: Top, Center, Bottom. | Center |
+</details>
+
+<details>
+
+<summary>Look &amp; feel</summary>
+
+* **Vertical alignment**: Where the text sits within the box height when it is shorter than the box. Choices: Top, Center, Bottom.
+
+</details>
 
 <!-- /generated -->

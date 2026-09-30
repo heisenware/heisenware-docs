@@ -50,16 +50,16 @@ const CATEGORIES = {
   layout: { title: 'Layout widgets', lead: 'Layout widgets hold other widgets.' }
 }
 
-/** What a property is linked to, in the glossary's words. */
+/** How a property is linked, in the glossary's words. */
 const KIND = {
-  output: 'output',
-  status: 'status',
-  errorHandler: 'error handler',
-  file: 'file',
-  input: 'input',
-  trigger: 'trigger',
-  page: 'page',
-  action: 'App action'
+  output: 'from an output',
+  status: "from an executor's status",
+  errorHandler: 'from an error handler',
+  file: 'from a file',
+  input: 'into an input',
+  trigger: 'fires a trigger',
+  page: 'switches to a page',
+  action: 'runs an App action'
 }
 const RECEIVES = ['output', 'status', 'errorHandler', 'file']
 const EMITS = ['input', 'trigger', 'page', 'action']
@@ -111,25 +111,22 @@ const slugify = label => label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace
  * Rendering
  * ------------------------------------------------------------------ */
 
-/** One table cell: no line breaks, no bare pipes. */
-const cell = text => String(text ?? '').replace(/\s*\n\s*/g, ' ').replace(/\|/g, '\\|').trim()
+/** One line of running text. */
+const oneLine = text => String(text ?? '').replace(/\s*\n\s*/g, ' ').trim()
 
 const sentence = text => {
-  const t = cell(text)
+  const t = oneLine(text)
   return t && !/[.!?:)]$/.test(t) ? t + '.' : t
 }
 
-function formatValue (value) {
-  if (value === true) return 'on'
-  if (value === false) return 'off'
-  if (value === 'auto') return 'automatic'
-  if (value === null || value === undefined || value === '') return ''
-  if (typeof value === 'object') {
-    const json = JSON.stringify(value)
-    return json.length <= 40 ? `\`${json}\`` : ''
-  }
-  return `\`${value}\``
-}
+/** Text inside an HTML element (a summary). */
+const html = text => String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+/** A compact type: 'string | Array<string>'. */
+const typeText = (schemaTypeText, schema) => schemaTypeText(schema).replace(/\|/g, ' | ')
+
+/** An expandable block, the way GitBook writes one. */
+const expandable = (summary, body) => ['<details>', '', `<summary>${summary}</summary>`, '', ...body, '', '</details>', '']
 
 /** The labeled choices of a setting ('Infinite scrolling', not 'virtual'). */
 function choices (schema) {
@@ -139,21 +136,6 @@ function choices (schema) {
   }
   if (Array.isArray(s.enum)) return s.enum.map(v => `\`${v}\``)
   return null
-}
-
-/** A value of the manifest's drop-in defaults by settings path ('appearance.fontSizeContent'). */
-const atPath = (obj, p) => p.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj)
-
-function defaultOf (schema, fallback) {
-  if (schema.default === undefined) {
-    if (fallback === undefined) return ''
-    schema = { ...schema, default: fallback }
-  }
-  if (Array.isArray(schema.oneOf)) {
-    const hit = schema.oneOf.find(o => o.const === schema.default)
-    if (hit?.title) return hit.title
-  }
-  return formatValue(schema.default)
 }
 
 /** "Show min/max is on", "Type is Line or Spline". */
@@ -179,9 +161,10 @@ function conditionText (props, siblings) {
 }
 
 /**
- * The settings of an object schema, flattened in panel order:
- * { path, name, schema, condition }. Nested objects and lists of
- * objects add their title as a prefix ("Appearance › Font size").
+ * The settings of an object schema in panel order:
+ * { path, name, depth, schema, condition, group }. An object or a list
+ * of objects is a group row followed by its own settings one level
+ * deeper.
  */
 function settingRows (schema, prefix = [], basePath = '', condition = '') {
   const rows = []
@@ -190,14 +173,16 @@ function settingRows (schema, prefix = [], basePath = '', condition = '') {
     for (const [key, sub] of Object.entries(entries)) {
       if (!sub || typeof sub !== 'object') continue
       const p = basePath ? `${basePath}.${key}` : key
-      const name = [...prefix, sub.title ?? key]
+      const name = sub.title ?? key
+      const depth = prefix.length
       if (sub.type === 'object' && sub.properties) {
-        rows.push(...settingRows(sub, name, p, cond))
+        rows.push({ path: p, name, depth, schema: sub, condition: cond, group: true })
+        rows.push(...settingRows(sub, [...prefix, name], p, cond))
       } else if (sub.type === 'array' && sub.items?.properties) {
-        rows.push({ path: p, name, schema: sub, condition: cond, list: true })
-        rows.push(...settingRows(sub.items, name, `${p}[]`, cond))
+        rows.push({ path: p, name, depth, schema: sub, condition: cond, group: true })
+        rows.push(...settingRows(sub.items, [...prefix, name], `${p}[]`, cond))
       } else {
-        rows.push({ path: p, name, schema: sub, condition: cond })
+        rows.push({ path: p, name, depth, schema: sub, condition: cond })
       }
     }
   }
@@ -224,16 +209,15 @@ function settingRows (schema, prefix = [], basePath = '', condition = '') {
 
 function settingsSection (widget) {
   const pins = new Set(widget.manifest.features?.pin ?? [])
-  const out = []
+  const blocks = []
   let pinned = false
   for (const tab of widget.tabs) {
     const rows = settingRows(tab.schema)
     if (rows.length === 0) continue
-    out.push(`### ${tab.title}`, '', '| Setting | What it does | Default |', '|---|---|---|')
-    for (const r of rows) {
+    const items = rows.map(r => {
       const bits = [sentence(r.schema.description)]
       const c = choices(r.schema)
-      if (c && !r.list) bits.push(`Choices: ${c.join(', ')}.`)
+      if (c && !r.group) bits.push(`Choices: ${c.join(', ')}.`)
       if (r.schema.minimum !== undefined && r.schema.maximum !== undefined) {
         bits.push(`Range ${r.schema.minimum} to ${r.schema.maximum}.`)
       }
@@ -242,19 +226,19 @@ function settingsSection (widget) {
         bits.push('*Set per screen.*')
         pinned = true
       }
-      const fallback = r.path.includes('[]') ? undefined : atPath(widget.manifest.defaults ?? {}, r.path)
-      out.push(`| ${cell(r.name.join(' › '))} | ${bits.filter(Boolean).join(' ')} | ${r.list ? '' : defaultOf(r.schema, fallback)} |`)
-    }
-    out.push('')
+      const text = bits.filter(Boolean).join(' ')
+      return `${'  '.repeat(r.depth)}* **${oneLine(r.name)}**${text ? ': ' + text : ''}`
+    })
+    blocks.push(...expandable(html(tab.title), items))
   }
-  if (out.length === 0) return []
+  if (blocks.length === 0) return []
   return [
     '## Settings',
     '',
-    'Double-click the widget in the Page editor to open its settings.' +
+    'Double-click the widget in the Page editor to open its settings, grouped in these tabs.' +
       (pinned ? ' Settings marked *set per screen* are pinned by nature: every screen keeps its own value.' : ''),
     '',
-    ...out
+    ...blocks
   ]
 }
 
@@ -264,51 +248,27 @@ function propertiesSection (widget, schemaTypeText) {
   const receives = rowsOf(RECEIVES)
   const emits = rowsOf(EMITS)
   if (receives.length === 0 && emits.length === 0) return []
-  const table = (rows, withValue) => [
-    withValue ? '| Property | Linked to | Value | What it does |' : '| Property | Linked to | What it does |',
-    withValue ? '|---|---|---|---|' : '|---|---|---|',
-    ...rows.map(({ kind, entry }) => {
-      const hasValue = entry.valueSchema && Object.keys(entry.valueSchema).length > 0
-      const value = hasValue || RECEIVES.includes(kind) ? `\`${cell(schemaTypeText(entry.valueSchema))}\`` : ''
-      return withValue
-        ? `| \`${entry.property}\` | ${KIND[kind]} | ${value} | ${sentence(entry.description)} |`
-        : `| \`${entry.property}\` | ${KIND[kind]} | ${sentence(entry.description)} |`
-    }),
-    ''
-  ]
-  const out = [
+  const entries = rows => rows.flatMap(({ kind, entry }) => {
+    const hasValue = entry.valueSchema && Object.keys(entry.valueSchema).length > 0
+    const type = hasValue || RECEIVES.includes(kind) ? `, \`${typeText(schemaTypeText, entry.valueSchema)}\`` : ''
+    const out = [`**\`${entry.property}\`** (${KIND[kind]}${type}): ${sentence(entry.description)}`, '']
+    if (entry.example !== undefined) {
+      out.push(...expandable('Example', ['```json', JSON.stringify(entry.example, null, 2), '```']))
+    }
+    return out
+  })
+  const tab = (title, rows) => [`{% tab title="${title}" %}`, ...entries(rows), '{% endtab %}', '']
+  return [
     '## Properties',
     '',
-    "The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.",
+    "The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.",
+    '',
+    '{% tabs %}',
+    ...(receives.length ? tab('Receives', receives) : []),
+    ...(emits.length ? tab('Emits', emits) : []),
+    '{% endtabs %}',
     ''
   ]
-  if (receives.length) out.push('### Receives', '', ...table(receives, true))
-  if (emits.length) {
-    const withValue = emits.some(({ entry }) => entry.valueSchema && Object.keys(entry.valueSchema).length > 0)
-    out.push('### Emits', '', ...table(emits, withValue))
-  }
-  const examples = [...receives, ...emits].filter(({ entry }) => entry.example !== undefined)
-  if (examples.length) {
-    out.push('### Example values', '', 'The same values fill an unlinked widget as demo data in the App Builder.', '')
-    const names = [...receives, ...emits].map(({ entry }) => entry.property)
-    const repeated = name => names.filter(n => n === name).length > 1
-    for (const { kind, entry } of examples) {
-      const label = repeated(entry.property) ? ` (${KIND[kind]})` : ''
-      out.push(
-        `<details>`,
-        '',
-        `<summary><code>${entry.property}</code>${label}</summary>`,
-        '',
-        '```json',
-        JSON.stringify(entry.example, null, 2),
-        '```',
-        '',
-        '</details>',
-        ''
-      )
-    }
-  }
-  return out
 }
 
 function goodToKnow (widget) {
@@ -339,7 +299,7 @@ function page (widget, schemaTypeText, existing) {
   const head = [
     '---',
     `description: >-`,
-    `  ${cell(widget.manifest.description)}`,
+    `  ${oneLine(widget.manifest.description)}`,
     '---',
     '',
     `# ${widget.manifest.label}`,

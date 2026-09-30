@@ -10,30 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `cards` | output | `Array<object>` | The cards to display, grouped into columns by their stage field (`props.stageKey`). At design time the first cards configure the board: stage, title and subtitle keys and the stages (rescan from the canvas menu to redo it). |
-
-### Emits
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `onCardChange` | input | `object` | Writes the moved card (with its stage field updated) after a drag between columns. |
-| `onColumnClick` | input | `string` | Writes the clicked column's stage value. |
-| `onCardClick` | input | `object` | Writes the clicked card. |
-| `onTitleClick` | input | `object` | Writes the card whose title was clicked. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`cards`** (from an output, `Array<object>`): The cards to display, grouped into columns by their stage field (`props.stageKey`). At design time the first cards configure the board: stage, title and subtitle keys and the stages (rescan from the canvas menu to redo it).
 
 <details>
 
-<summary><code>cards</code></summary>
+<summary>Example</summary>
 
 ```json
 [
@@ -66,27 +51,46 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% tab title="Emits" %}
+**`onCardChange`** (into an input, `object`): Writes the moved card (with its stage field updated) after a drag between columns.
+
+**`onColumnClick`** (into an input, `string`): Writes the clicked column's stage value.
+
+**`onCardClick`** (into an input, `object`): Writes the clicked card.
+
+**`onTitleClick`** (into an input, `object`): Writes the card whose title was clicked.
+
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs.
 
-### Content
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Stage key | Card field whose value names the stage column the card sits in. |  |
-| Title key | Card field shown as the card's bold title. |  |
-| Subtitle key | Card field shown under the title; cards without it show none. |  |
-| Status key | Card field matched against the status mappings to color the card's left edge. |  |
-| Status mappings | Status values and the color each gives a card's left edge. |  |
-| Status mappings › Status | Value of the status field this mapping applies to, compared as text. |  |
-| Status mappings › Color | Color of the card's left edge for this status; auto or empty takes the theme's tile color. | `#000000` |
+<summary>Content</summary>
 
-### Look & feel
+* **Stage key**: Card field whose value names the stage column the card sits in.
+* **Title key**: Card field shown as the card's bold title.
+* **Subtitle key**: Card field shown under the title; cards without it show none.
+* **Status key**: Card field matched against the status mappings to color the card's left edge.
+* **Status mappings**: Status values and the color each gives a card's left edge.
+  * **Status**: Value of the status field this mapping applies to, compared as text.
+  * **Color**: Color of the card's left edge for this status; auto or empty takes the theme's tile color.
 
-| Setting | What it does | Default |
-|---|---|---|
-| Stages | Stage names, one column each in this order; dropping a card in a column writes that name to its stage field and emits onCardChange. |  |
-| Card title is clickable | Renders the title as a link; a click on it emits onTitleClick with the card instead of onCardClick. | off |
+</details>
+
+<details>
+
+<summary>Look &amp; feel</summary>
+
+* **Stages**: Stage names, one column each in this order; dropping a card in a column writes that name to its stage field and emits onCardChange.
+* **Card title is clickable**: Renders the title as a link; a click on it emits onTitleClick with the card instead of onCardClick.
+
+</details>
 
 <!-- /generated -->

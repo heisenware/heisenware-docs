@@ -16,30 +16,15 @@ A status lamp shows a state at a glance: running, setup, fault, idle, or whateve
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `value` | output | `string\|Array<string>` | A single state, or an array of those. |
-| `color` | output | `string\|Array<string>` | The direct color that should be applied to the lamp. |
-| `context` | output | `any` | Any context that will be provided back, when clicked. |
-| `value` | status | `string` | The linked executor's status drives the lamp state. |
-
-### Emits
-
-| Property | Linked to | What it does |
-|---|---|---|
-| `onClick` | input | Writes the bound context value when the lamp is clicked. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`value`** (from an output, `string | Array<string>`): A single state, or an array of those.
 
 <details>
 
-<summary><code>value</code> (output)</summary>
+<summary>Example</summary>
 
 ```json
 "running"
@@ -47,9 +32,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`color`** (from an output, `string | Array<string>`): The direct color that should be applied to the lamp.
+
 <details>
 
-<summary><code>color</code></summary>
+<summary>Example</summary>
 
 ```json
 "#19914b"
@@ -57,9 +44,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`context`** (from an output, `any`): Any context that will be provided back, when clicked.
+
 <details>
 
-<summary><code>context</code></summary>
+<summary>Example</summary>
 
 ```json
 {
@@ -69,9 +58,11 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`value`** (from an executor's status, `string`): The linked executor's status drives the lamp state.
+
 <details>
 
-<summary><code>value</code> (status)</summary>
+<summary>Example</summary>
 
 ```json
 "ok"
@@ -79,19 +70,30 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+{% endtab %}
+
+{% tab title="Emits" %}
+**`onClick`** (into an input): Writes the bound context value when the lamp is clicked.
+
+{% endtab %}
+
+{% endtabs %}
+
 ## Settings
 
-Double-click the widget in the Page editor to open its settings. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| Shape | circle draws round lamps sized to the short side; rectangle splits the long side into rounded bars. Choices: `circle`, `rectangle`. | `circle` |
-| Status mappings | Colors by status: a bound value is matched against these entries; no match shows a dim grey lamp. |  |
-| Status mappings › Value | Status this entry matches, compared as text; an object is matched by its status field. |  |
-| Status mappings › Color | Lamp color for this status; transparent hides the lamp, empty or auto keeps the theme's. |  |
-| Context | Value sent with the click to the linked input; a bound context replaces it. |  |
-| Spacing | Gap between the bars in px when several states show in rectangle shape. *Set per screen.* | `5` |
+<summary>Look &amp; feel</summary>
+
+* **Shape**: circle draws round lamps sized to the short side; rectangle splits the long side into rounded bars. Choices: `circle`, `rectangle`.
+* **Status mappings**: Colors by status: a bound value is matched against these entries; no match shows a dim grey lamp.
+  * **Value**: Status this entry matches, compared as text; an object is matched by its status field.
+  * **Color**: Lamp color for this status; transparent hides the lamp, empty or auto keeps the theme's.
+* **Context**: Value sent with the click to the linked input; a bound context replaces it.
+* **Spacing**: Gap between the bars in px when several states show in rectangle shape. *Set per screen.*
+
+</details>
 
 <!-- /generated -->

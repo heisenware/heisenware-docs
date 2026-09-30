@@ -10,22 +10,15 @@ description: >-
 
 ## Properties
 
-The widget's General tab lists these properties. Drop an executor's output, input or trigger onto a row to link it.
+The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
 
-### Receives
-
-| Property | Linked to | Value | What it does |
-|---|---|---|---|
-| `data` | output | `Array<object>` | The conversation to display, oldest first. |
-| `clear` | output | `any` | Truthy values clear the conversation. |
-
-### Example values
-
-The same values fill an unlinked widget as demo data in the App Builder.
+{% tabs %}
+{% tab title="Receives" %}
+**`data`** (from an output, `Array<object>`): The conversation to display, oldest first.
 
 <details>
 
-<summary><code>data</code></summary>
+<summary>Example</summary>
 
 ```json
 [
@@ -50,14 +43,20 @@ The same values fill an unlinked widget as demo data in the App Builder.
 
 </details>
 
+**`clear`** (from an output, `any`): Truthy values clear the conversation.
+
 <details>
 
-<summary><code>clear</code></summary>
+<summary>Example</summary>
 
 ```json
 true
 ```
 
 </details>
+
+{% endtab %}
+
+{% endtabs %}
 
 <!-- /generated -->

@@ -10,13 +10,15 @@ description: >-
 
 ## Settings
 
-Double-click the widget in the Page editor to open its settings.
+Double-click the widget in the Page editor to open its settings, grouped in these tabs.
 
-### Look & feel
+<details>
 
-| Setting | What it does | Default |
-|---|---|---|
-| URL | Address of the page shown inside the frame; must start with http:// or https://, otherwise a hint asks for one. |  |
-| Show border | Draws a thin grey line around the frame. | on |
+<summary>Look &amp; feel</summary>
+
+* **URL**: Address of the page shown inside the frame; must start with http:// or https://, otherwise a hint asks for one.
+* **Show border**: Draws a thin grey line around the frame.
+
+</details>
 
 <!-- /generated -->
