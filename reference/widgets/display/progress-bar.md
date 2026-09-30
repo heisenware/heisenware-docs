@@ -5,6 +5,12 @@ description: >-
 
 # Progress Bar
 
+<figure><img src="../../../.gitbook/assets/widget-progress-bar.png" alt="Three progress bars showing how far three production orders are, one of them complete in green" width="608"><figcaption></figcaption></figure>
+
+A progress bar fills between a minimum and a maximum and can show the percentage below. Link a count to it and set the maximum to the target, and users see how far an order, a batch or a shift has come. Your logic can change the bounds and the color on the fly, for example to green when an order is done.
+
+**Good for:** order and batch progress, shift targets, uploads and long-running jobs.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/progress. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

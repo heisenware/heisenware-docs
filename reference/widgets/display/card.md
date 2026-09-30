@@ -5,6 +5,12 @@ description: >-
 
 # Card
 
+<figure><img src="../../../.gitbook/assets/widget-card.png" alt="Three cards: an elevated card for line 1, an outlined card for line 3, and a red dashed card for line 2 in fault" width="1008"><figcaption></figcaption></figure>
+
+A card is a surface behind other widgets that groups them into one panel. It can lift off the page with a shadow or sit flat with an outline, and it takes any background color, border and corner radius. Your logic can change its look while the App runs, for example to turn a line's card red while that line is in fault.
+
+**Good for:** panels and tiles on dashboards, framing groups of inputs, highlighting alarms.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/card. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

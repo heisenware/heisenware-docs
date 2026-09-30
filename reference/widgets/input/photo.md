@@ -5,6 +5,12 @@ description: >-
 
 # Photo
 
+<figure><img src="../../../.gitbook/assets/widget-photo.png" alt="Damage report panel with a Take photo button" width="568"><figcaption></figcaption></figure>
+
+The photo widget takes pictures with the device camera, cropped to a fixed aspect ratio and in the quality you choose. After each picture, the full list of photos goes to your logic, which can store them or attach them to a record. For new Apps, use the upload widget instead: it takes photos as well as files, and it replaces this widget.
+
+**Good for:** damage and quality photos in existing Apps.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/photo. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

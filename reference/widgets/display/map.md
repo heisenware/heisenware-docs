@@ -5,6 +5,12 @@ description: >-
 
 # Map
 
+<figure><img src="../../../.gitbook/assets/widget-map.png" alt="Map of Germany with four acme sites as factory markers in their status colors: Hamburg, Berlin, Düsseldorf and Munich" width="688"><figcaption></figcaption></figure>
+
+A map shows places on a Google map: plants, warehouses, vehicles or machines in the field. Your logic delivers the markers with their coordinates, and each marker can bring its own icon, color and label, for example the status color of a site. The map can center itself on the markers, and users zoom and pan as they know it from Google Maps.
+
+**Good for:** site and fleet overviews, tracking vehicles and containers, service calls in the field.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/map. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

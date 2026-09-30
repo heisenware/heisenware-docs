@@ -5,6 +5,12 @@ description: >-
 
 # Timeline
 
+<figure><img src="../../../.gitbook/assets/widget-timeline.png" alt="Timeline of filler, capper and labeler states over a shift, with bars for setup, running, fault and idle" width="1048"><figcaption></figcaption></figure>
+
+A timeline shows states over time, one track per machine or signal: when it was running, in setup, in fault or idle. Each state value gets its own color, and the legend explains them. Tracks can come from up to six data sources, so machines recorded apart still share one time axis. Users hover for exact times and can zoom into a stretch of the shift.
+
+**Good for:** machine state histories, downtime analysis, shift and batch sequences.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/timeline. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

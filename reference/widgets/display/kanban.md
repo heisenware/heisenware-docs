@@ -5,6 +5,12 @@ description: >-
 
 # Kanban
 
+<figure><img src="../../../.gitbook/assets/widget-kanban.png" alt="Kanban board of maintenance tasks in Planned, In progress and Done, each card with a colored edge for its priority" width="1048"><figcaption></figcaption></figure>
+
+A Kanban board groups cards into columns by their stage. Users drag a card to the next column, and the moved card goes to your logic, which stores the new stage. A status field colors the card's edge, for example by priority. Clicks on a card, its title or a column go to your logic too, for example to open the task's details.
+
+**Good for:** maintenance and repair tasks, order and job tracking, shift handover lists.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/kanban. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

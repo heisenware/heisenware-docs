@@ -5,6 +5,12 @@ description: >-
 
 # Polar Chart
 
+<figure><img src="../../../.gitbook/assets/widget-polar-chart.png" alt="Spider-web polar chart comparing six scores of line 1 and line 2: availability, performance, quality, energy, safety and delivery" width="648"><figcaption></figcaption></figure>
+
+A polar chart plots values around a circle instead of along an axis. As a spider web it compares several scores at once, such as the scores of two lines, and shows which one is strong where. With directions as categories it becomes a wind rose. Series are drawn as lines, areas, bars or points, and a click on a point hands it to your logic.
+
+**Good for:** comparing lines, shifts or sites on several scores, wind and direction data, cyclic patterns over a day or a week.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/polar-chart. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

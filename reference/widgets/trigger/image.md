@@ -5,6 +5,12 @@ description: >-
 
 # Image
 
+<figure><img src="../../../.gitbook/assets/widget-image.png" alt="Floor plan of the acme bottling plant, hall 1, with lines 1 to 3, the warehouse, the ovens and the syrup room" width="808"><figcaption></figcaption></figure>
+
+An image shows a picture from your media library: a logo, a machine photo, a floor plan, a wiring diagram. Drop the file on the widget and choose how it fits its box, where it sits and how round the corners are. A click on the image can run your logic, switch to a page or run an App action, so a floor plan can lead to the page of each line.
+
+**Good for:** logos and headers, machine photos, clickable floor plans and overviews.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/image. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

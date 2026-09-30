@@ -5,6 +5,12 @@ description: >-
 
 # Icon
 
+<figure><img src="../../../.gitbook/assets/widget-icon.png" alt="Six round icons for plant areas: lines, ovens, energy, alarms, maintenance and warehouse, each in its own color" width="688"><figcaption></figcaption></figure>
+
+An icon shows a symbol from the Font Awesome set, in any color, alone or on a round or square background. Use icons to label areas and states at a glance, or make them clickable: a click runs your logic, switches to a page or runs an App action, just like a button does.
+
+**Good for:** navigation tiles, area and machine symbols, compact tool bars on tablets and phones.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/icon. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

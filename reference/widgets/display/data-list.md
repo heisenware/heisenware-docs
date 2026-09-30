@@ -5,6 +5,12 @@ description: >-
 
 # Data List
 
+<figure><img src="../../../.gitbook/assets/widget-data-list.png" alt="Data list of four machines on line 2 with a search box, each item showing machine, status, speed and next service date" width="1048"><figcaption></figcaption></figure>
+
+A data list shows records as a list of small forms: each item lays out its fields with labels, in as many columns as you like. Users search the list, select items, and, when you allow it, edit or delete them in place; every change goes to your logic. Each field chooses its editor, from text and numbers to dates, dropdowns and switches.
+
+**Good for:** machine and device lists, maintenance and inspection records, lists users work through on a tablet.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/data-list. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

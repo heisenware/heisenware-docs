@@ -5,6 +5,12 @@ description: >-
 
 # Upload
 
+<figure><img src="../../../.gitbook/assets/widget-upload.png" alt="Attach documents panel with an Add files button" width="568"><figcaption></figcaption></figure>
+
+The upload widget lets users add files: from the file picker, or on phones and tablets straight from the camera. You decide which file types it takes and how many, and it can show thumbnails of what was added. After every change, the list of files goes to your logic, as paths on the file server or as the file content itself.
+
+**Good for:** delivery notes and certificates, photos for damage or quality reports, importing lists and recipes.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/file. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

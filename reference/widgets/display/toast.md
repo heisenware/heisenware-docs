@@ -5,6 +5,12 @@ description: >-
 
 # Toast
 
+<figure><img src="../../../.gitbook/assets/widget-toast.png" alt="Three toasts stacked in the corner: an error that the label printer is not reachable, a warning about low cherry syrup, and a success message that an order was saved" width="394"><figcaption></figcaption></figure>
+
+A toast pops up a short message and fades away again: a success, a warning, an error or an info. Each value it receives becomes one toast, so your logic can report what happened, such as a saved order or a low tank. Link it to an executor's error handler, and every error of that executor reaches users as a toast with its cause. The toast itself takes no place on the page.
+
+**Good for:** confirmations after saving, warnings about limits, showing errors to users.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/toast. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

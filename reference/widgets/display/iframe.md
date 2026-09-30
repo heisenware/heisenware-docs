@@ -5,6 +5,12 @@ description: >-
 
 # Iframe
 
+<figure><img src="../../../.gitbook/assets/widget-iframe.png" alt="Iframe showing a live wind and weather map around the Hamburg plant" width="808"><figcaption></figcaption></figure>
+
+An iframe embeds another web page into your App page: a weather map, a camera stream, a machine's own web interface, a supplier portal or another App. You give it the address and decide whether it shows a border. The embedded page stays what it is; it exchanges no values with your logic. Many websites forbid being embedded; check that the page you want allows it.
+
+**Good for:** machine web interfaces and camera streams, external dashboards, weather and traffic maps.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/iframe. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

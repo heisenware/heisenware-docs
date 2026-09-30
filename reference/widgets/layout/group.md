@@ -5,6 +5,12 @@ description: >-
 
 # Group
 
+<figure><img src="../../../.gitbook/assets/widget-group.png" alt="A group repeated as four machine tiles, each with a name, a status lamp, the current speed and a sparkline of the last hour" width="1048"><figcaption></figcaption></figure>
+
+A group holds several widgets as one unit, and it is the platform's repeater: link a list to it and it draws one tile per row. You design one tile, for example a card with a name, a status lamp, a value and a sparkline, and map the row's fields to its widgets. Four machines give four tiles, forty give forty, with no extra work. Clicks and inputs inside a tile come back to your logic together with that tile's row.
+
+**Good for:** machine and station overviews, order and job cards, any list that deserves more than a table row.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/group. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

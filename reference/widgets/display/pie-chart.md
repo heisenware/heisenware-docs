@@ -5,6 +5,12 @@ description: >-
 
 # Pie Chart
 
+<figure><img src="../../../.gitbook/assets/widget-pie-chart.png" alt="Doughnut chart of reject reasons on the early shift, with labels for fill level, label position, cap torque, foreign matter and other" width="608"><figcaption></figcaption></figure>
+
+A pie chart shows how a whole splits into parts: which reject reasons dominate, which lines use the most energy, which products fill the week. Draw it as a pie or a doughnut, with labels, a legend and tooltips. It takes rows of data; you pick the field that names a slice and the field that sizes it.
+
+**Good for:** reject and downtime reasons, shares of output or energy, product mix.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/pie-chart. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

@@ -5,6 +5,12 @@ description: >-
 
 # Linear Gauge
 
+<figure><img src="../../../.gitbook/assets/widget-linear-gauge.png" alt="Three vertical linear gauges showing syrup tank levels, with colored ranges and a reorder mark at 20 %" width="488"><figcaption></figcaption></figure>
+
+A linear gauge shows a value on a straight scale, upright or lying. It fits a tank level, a fill height or anything with a natural top and bottom, and several gauges side by side compare at a glance. Colored ranges mark the zones, and a sub-value marker shows a limit or a target, such as the level at which to reorder.
+
+**Good for:** tank and silo levels, fill heights, compact limit displays in narrow spaces.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/linear-gauge. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

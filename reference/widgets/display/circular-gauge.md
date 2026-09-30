@@ -5,6 +5,12 @@ description: >-
 
 # Circular Gauge
 
+<figure><img src="../../../.gitbook/assets/widget-circular-gauge.png" alt="Two circular gauges: filler speed with a target marker at 40,000 bottles per hour, and oven A with its setpoint at 180 °C" width="688"><figcaption></figcaption></figure>
+
+A circular gauge shows a value on a dial, the way an instrument panel does. Colored ranges mark what is good, what needs attention and what is too much; a sub-value adds markers for a target or a setpoint. You pick the needle or marker style, the scale and the arc. Scale and ranges can also come from your logic, so a gauge adapts to the product that runs.
+
+**Good for:** speeds, temperatures and pressures against their limits, machine cockpits, andon boards.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/circular-gauge. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

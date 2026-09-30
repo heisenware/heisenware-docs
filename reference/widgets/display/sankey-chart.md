@@ -5,6 +5,12 @@ description: >-
 
 # Sankey Chart
 
+<figure><img src="../../../.gitbook/assets/widget-sankey-chart.png" alt="Sankey chart of a day's energy flow from grid and solar roof through the main switchboard to lines, compressed air, building, ovens and filling" width="948"><figcaption></figcaption></figure>
+
+A Sankey chart shows flows: where something comes from, where it goes and how much of it. The width of each band is its weight, so the big consumers and the big losses stand out at once. It takes one row per flow, with a source, a target and a weight.
+
+**Good for:** energy and media flows, material flows through a plant, yield and loss analysis.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/sankey-chart. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

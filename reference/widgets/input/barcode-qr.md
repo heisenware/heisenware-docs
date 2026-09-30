@@ -5,6 +5,12 @@ description: >-
 
 # Barcode / QR
 
+<figure><img src="../../../.gitbook/assets/widget-barcode-qr.png" alt="Goods receipt panel with a Scan pallet button and the last scanned pallet label next to it" width="568"><figcaption></figcaption></figure>
+
+The barcode widget is a scan button: a tap opens the device camera, and the code it reads goes to your logic as text. It reads barcodes and QR codes. In single mode one scan finishes the job; in multiple mode users scan several codes in a row and save them as a list. Your logic can clear the scans and restyle the button.
+
+**Good for:** goods receipt and picking, identifying machines, containers and batches, quick lookups on the shop floor.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/barcode. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

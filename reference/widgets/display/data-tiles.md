@@ -5,6 +5,12 @@ description: >-
 
 # Data Tiles
 
+<figure><img src="../../../.gitbook/assets/widget-data-tiles.png" alt="Data tiles showing six upcoming production orders, each tile with order number, product, quantity, line and due date" width="1048"><figcaption></figcaption></figure>
+
+Data tiles show records as a wall of cards, one tile per record with a title and its fields. Tiles wrap to fill the width, so the same data fits a wide dashboard and a phone. As with the data list, each field picks its editor, and with editing allowed users change a tile in place and hand the change to your logic.
+
+**Good for:** order and job overviews, machine or product cards, touch-friendly boards.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/data-tiles. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

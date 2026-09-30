@@ -5,6 +5,12 @@ description: >-
 
 # Chat
 
+<figure><img src="../../../.gitbook/assets/widget-chat.png" alt="Chat with two questions about line 2 and the answers of a bot, each answer with a source document icon" width="688"><figcaption></figcaption></figure>
+
+A chat shows a conversation between users and a bot, oldest message first. Messages take Markdown, so answers can hold bold words, lists and links, and each answer can list its sources, such as the page of a manual it was taken from. Your logic delivers the conversation, for example from an AI model that answers questions from your shift logs and work instructions, and can clear it again.
+
+**Good for:** assistants that answer from plant documents, support and help desks, message histories.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/chat. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

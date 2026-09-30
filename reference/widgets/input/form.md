@@ -5,6 +5,12 @@ description: >-
 
 # Form
 
+<figure><img src="../../../.gitbook/assets/widget-form.png" alt="Fault report form with line and machine dropdowns, fault time, downtime, a description, a line stopped switch and a Send report button" width="688"><figcaption></figcaption></figure>
+
+A form collects structured input: text, numbers, dates, dropdowns, tags, switches, sliders and more, laid out in columns, sections or tabs. Every edit goes to your logic as one object, the form data, so a button next to the form only has to send it on. Fields can be required and are validated on request. Your logic can prefill the form, fill its dropdowns, add fields on the fly or lock the whole form.
+
+**Good for:** fault and quality reports, order entry, settings and recipes, checklists.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/form. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

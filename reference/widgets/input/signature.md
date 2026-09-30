@@ -5,6 +5,12 @@ description: >-
 
 # Signature
 
+<figure><img src="../../../.gitbook/assets/widget-signature.png" alt="Shift handover panel with a signed signature pad and Accept and Clear buttons" width="568"><figcaption></figcaption></figure>
+
+The signature widget lets users sign with a finger, a pen or the mouse, right on the page or in a popup. When they accept, the signature goes to your logic as a PNG image, ready to be stored with the record or printed into a report. You choose the pen and pad colors and the button texts.
+
+**Good for:** shift handovers, delivery and acceptance notes, approvals and sign-offs.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/signature. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

@@ -5,6 +5,12 @@ description: >-
 
 # Button
 
+<figure><img src="../../../.gitbook/assets/widget-button.png" alt="Buttons for line 2 in several styles: start, stop, changeover, report fault, order details, print label, and a disabled release batch button" width="762"><figcaption></figcaption></figure>
+
+A button is how users make things happen: a click runs your logic, switches to another page, or runs an App action such as logout. Pick a type (success, danger, normal), a style (filled, outlined, text only), a color and an icon. A button can ask for confirmation before it acts, and it can show a spinner until your logic reports back. Your logic can also disable a button, relabel it or change its color, for example when a batch is not ready for release.
+
+**Good for:** starting and stopping machines, confirming steps, saving forms, moving between pages.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/button. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

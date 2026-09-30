@@ -5,6 +5,12 @@ description: >-
 
 # Sparkline
 
+<figure><img src="../../../.gitbook/assets/widget-sparkline.png" alt="Three sparklines of the last hour: filler speed with its minimum and maximum marked, energy use as an area, and rejects as bars" width="608"><figcaption></figcaption></figure>
+
+A sparkline is a small chart without axes: it shows the shape of a trend in the space of a line of text. Draw it as a line, an area, bars or win-loss bars, and mark the minimum and maximum or the first and last point. Put one next to each figure and users see not only where a value is, but where it is heading.
+
+**Good for:** trends next to key figures, compact machine lists, dense overview pages.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/sparkline. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 

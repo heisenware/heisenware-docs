@@ -5,6 +5,12 @@ description: >-
 
 # Value Box
 
+<figure><img src="../../../.gitbook/assets/widget-value-box.png" alt="Value boxes showing bottles filled, OEE and an oven temperature in red, and a value box rendering the current order as a JSON tree" width="1258"><figcaption></figcaption></figure>
+
+A value box shows one live value, big and clear: a count, a percentage, a temperature, a text. Numbers and dates take a format, a prefix and a suffix, so 18460 reads as 18,460 and 193.6 as 193.6 °C. Your logic can change the text color, for example to red when a limit is crossed. Hand it an object or a list and it renders a JSON tree the user can fold, which helps while you build and test.
+
+**Good for:** key figures on dashboards, current setpoints and readings, a quick look at what an executor returns.
+
 <!-- generated -->
 <!-- Source: heisenware-cloud/packages/widgets/value-box. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
 
