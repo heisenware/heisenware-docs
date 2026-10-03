@@ -9,6 +9,8 @@ description: >-
 
 A data grid shows rows as a table that users work with: they sort and filter by any column, search, group rows by dragging a column header into the group panel, and read totals in the footer. Rules color cells or whole rows by their values. With editing on, users add, change and delete rows, and every change reaches your logic as an event carrying the row. The rows export to PDF, Excel or CSV.
 
+**Dates** in edited rows leave as `2026-10-01` (a date), `08:30:00` (a time of day) or `2026-10-01T06:30:00Z` (date and time, in UTC), the same forms the form writes. A date stored as midnight UTC shows as that day everywhere.
+
 **Good for:** order and stock lists, master data maintenance, logs and reports.
 
 <!-- generated -->

@@ -9,6 +9,8 @@ description: >-
 
 A data list shows records as a list of small forms: each item lays out its fields with labels, in as many columns as you like. Users search the list, select items, and, when you allow it, edit or delete them in place; every change goes to your logic. Each field chooses its editor, from text and numbers to dates, dropdowns and switches.
 
+**Dates** in edited records leave as `2026-10-01` (a date), `08:30:00` (a time of day) or `2026-10-01T06:30:00Z` (date and time, in UTC), the same forms the form writes. A date stored as midnight UTC shows as that day everywhere.
+
 **Good for:** machine and device lists, maintenance and inspection records, lists users work through on a tablet.
 
 <!-- generated -->

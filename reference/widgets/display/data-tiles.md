@@ -9,6 +9,8 @@ description: >-
 
 Data tiles show records as a wall of cards, one tile per record with a title and its fields. Tiles wrap to fill the width, so the same data fits a wide dashboard and a phone. As with the data list, each field picks its editor, and with editing allowed users change a tile in place and hand the change to your logic.
 
+**Dates** in edited records leave as `2026-10-01` (a date), `08:30:00` (a time of day) or `2026-10-01T06:30:00Z` (date and time, in UTC), the same forms the form writes. A date stored as midnight UTC shows as that day everywhere.
+
 **Good for:** order and job overviews, machine or product cards, touch-friendly boards.
 
 <!-- generated -->
