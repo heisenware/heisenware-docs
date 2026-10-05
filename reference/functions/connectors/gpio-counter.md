@@ -39,11 +39,11 @@ The first pulse after a start or a stop is the reference for the next one: it is
 
 ### Persistence across restarts
 
-The counter writes its state, count and averages to a state file on disk after every change. When an instance is created and a state file for that GPIO pin exists - the agent restarted, the host lost power - the counter restores it and counts on in the state it was in: no pulse is ignored because of a restart. It records a `restart` event, and if it was counting, it arms the watchdog at once, so a machine that stopped meanwhile shows as stopped soon.
+The counter writes its state, count and averages to a state file on disk after every change; the journal (below) is the truth and the state file its snapshot. When an instance is created and a state file or journal for that GPIO pin exists - the agent restarted, the host lost power - the counter restores the snapshot, brings it up to the journal, and counts on in the state it was in: no pulse is ignored because of a restart. It records a `restart` event, and if it was counting, it arms the watchdog at once, so a machine that stopped meanwhile shows as stopped soon.
 
 ### The event journal
 
-Every event carries `seq`, a number that counts all events of the counter without gaps, and is appended to a journal file next to the state file before anyone hears of it. The journal keeps at least `journalSize` events (50,000 by default, several days of production at one pulse per few seconds). A consumer remembers the last `seq` it handled; when an event arrives with a `seq` that skips numbers, or the agent comes back online, it calls `getEvents` with that `seq` and receives exactly what it missed. Handling an event twice is harmless when the consumer keys what it stores by `seq`.
+Every event carries `seq`, a number that counts all events of the counter without gaps, and is appended to a journal file next to the state file and forced onto the disk before anyone hears of it: a power cut can take a pulse that was just being written, never an event a listener already received, so a restarted counter never issues a `seq` twice. The journal keeps at least `journalSize` events (50,000 by default, several days of production at one pulse per few seconds). A consumer remembers the last `seq` it handled; when an event arrives with a `seq` that skips numbers, or the agent comes back online, it calls `getEvents` with that `seq` and receives exactly what it missed. Handling an event twice is harmless when the consumer keys what it stores by `seq`.
 
 ## Static functions
 
@@ -244,7 +244,7 @@ Returns `true` upon removal.
 
 ### `onEvent`
 
-Registers a callback that fires for every event of the counter, in the order they happen: each counted pulse, each state change, and a restart. This is the primary method for receiving data from the counter.
+Registers a callback that fires for every event of the counter, in the order they happen, as soon as the event is on the disk (a few milliseconds after it happened): each counted pulse, each state change, and a restart. This is the primary method for receiving data from the counter.
 
 #### Parameters
 
