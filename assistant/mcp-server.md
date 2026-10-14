@@ -7,17 +7,17 @@ The Heisenware MCP server lets you drive the platform from **your own AI client*
 * **Bring your own client**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an agent uses. Your AI client talks to the server over stdio.
 * **Your integration's authority**: the MCP connector is an [integration](../app-manager/integrations.md) of your workspace and can do exactly what that integration is allowed to do — nothing more. Deactivate or delete it in the App Manager and the connector stops.
 * **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `deploy_app`) only run with an explicit `confirm: true` that your AI client has to ask you for. `deploy_app` is the App Builder's **Deploy** button: it makes the current version the one users get, and the platform brings it up within about a minute; `test_app` is the **Test** button and changes nothing for users; `stop_app` ends that test run. Apps travel as bundles too: `export_app` writes the App as a `.hwt` bundle next to your AI client and `import_app` adds one to an App as a version that `rollback` applies, so your client derives one App from another without the App Builder. An App in another language is another App: `list_app_texts` reads every text people read in the reference App, your client translates the table, and `translate_app` makes the copy from it or refreshes it later. A `--read-only` mode exposes no mutating tool at all.
-* **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `npx` keeps the file after the first run, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
+* **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
 
 ## Getting your connector
 
 Open the [Integrations panel](../app-manager/integrations.md) of the App Manager and add an **MCP connector**. Give it a name (it logs in under that name) and tick _read-only_ if it is meant for production support. The platform builds a package with the credentials inside and shows it right away; later, click the package on the integration's row. The view gives you:
 
-* the `claude mcp add` line for Claude Code,
+* the `claude mcp add` line for Claude Code, and its variant for Windows,
 * the JSON block for Claude Desktop,
 * the download link itself, to copy or to download, for any other client.
 
-The link carries an access ticket valid for twelve hours. `npx` keeps the package after the first run, so an expired link only matters on a new machine; open the view again for a fresh one. Changing the integration's password builds the package again; deleting the integration deletes the package and stops the connector at its next login.
+The link carries an access ticket valid for twelve hours. `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine; open the view again for a fresh one. Changing the integration's password builds the package again; deleting the integration deletes the package and stops the connector at its next login.
 
 Nothing else is needed: no environment variables, no npm registry (the package carries its dependencies), no installation on your side beyond Node.js 18 or newer.
 
@@ -60,7 +60,13 @@ The terminal commands around the MCP connector - register, check, approve tools,
 Register the server once with the line from the executable's view in the App Manager; it looks like this:
 
 ```bash
-claude mcp add heisenware -- npx -y --no-audit -p "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>" heisenware-mcp
+claude mcp add heisenware -- npx -y --no-audit --prefer-offline -p "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>" heisenware-mcp
+```
+
+On Windows, start `npx` through `cmd` - the App Manager shows this line too - and run it in PowerShell or cmd: Git Bash turns `/c` into a path.
+
+```bash
+claude mcp add heisenware -- cmd /c npx -y --no-audit --prefer-offline -p "<link>" heisenware-mcp
 ```
 
 Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope), so each project folder can point at its own platform under the same name. To have the server in every folder instead, add `--scope user`.
@@ -96,6 +102,7 @@ Add the block from the executable's view in the App Manager to `claude_desktop_c
       "args": [
         "-y",
         "--no-audit",
+        "--prefer-offline",
         "-p",
         "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>",
         "heisenware-mcp"
@@ -109,7 +116,7 @@ A read-only connector is its own integration, ticked _read-only_ when created; n
 
 ## Other MCP clients
 
-Any other client is configured the same way: `npx -y --no-audit -p "<download link>" heisenware-mcp` as the command. The package carries two executables (the connector and the support agent of an on-premise installation), so the line names the one to run. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
+Any other client is configured the same way: `npx -y --no-audit --prefer-offline -p "<download link>" heisenware-mcp` as the command. The package carries two executables (the connector and the support agent of an on-premise installation), so the line names the one to run. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
 
 ## Checking the connection
 

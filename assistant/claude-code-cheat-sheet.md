@@ -5,10 +5,12 @@ The terminal side of the [MCP server](mcp-server.md): everything you type to reg
 ## Register once
 
 ```bash
-claude mcp add heisenware -- npx -y --no-audit -p "<link from the App Manager>" heisenware-mcp
+claude mcp add heisenware -- npx -y --no-audit --prefer-offline -p "<link from the App Manager>" heisenware-mcp
 ```
 
-Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope), so each project folder can point at its own platform under the same name; `--scope user` registers it for every folder instead. The link carries an access ticket valid for twelve hours; `npx` keeps the package after the first start, so the link only matters on a new machine.
+On Windows: `claude mcp add heisenware -- cmd /c npx …` (the App Manager shows this line too), run in PowerShell or cmd - Git Bash turns `/c` into a path.
+
+Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope), so each project folder can point at its own platform under the same name; `--scope user` registers it for every folder instead. The link carries an access ticket valid for twelve hours; `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine.
 
 ## Check
 
@@ -44,11 +46,11 @@ Put `--allowedTools` before the prompt or feed the prompt through stdin as above
 
 ## Replace the connector
 
-After a platform update, a new password, or an expired link: open the executable in the App Manager, take the fresh line, then
+After a platform update or a new password: open the executable in the App Manager, take the fresh line, then
 
 ```bash
 claude mcp remove heisenware
-claude mcp add heisenware -- npx -y --no-audit -p "<fresh link>" heisenware-mcp
+claude mcp add heisenware -- npx -y --no-audit --prefer-offline -p "<fresh link>" heisenware-mcp
 ```
 
 and start a new session.
@@ -59,7 +61,7 @@ and start a new session.
 | --- | --- |
 | `MCP server heisenware already exists` | The name is taken, usually by an earlier registration. `claude mcp remove heisenware` takes it from whichever scope holds it; then add again. |
 | `Unknown command: /mcp__heisenware__platform-law` | The server is not connected in this session: it was registered after the session started, in another folder, or it is still starting. Start a new session, wait ten seconds, check `/mcp`. |
-| `✘ Failed to connect` in `claude mcp list` | Run the stored command yourself (`claude mcp get heisenware` shows it). A `401` means the link's ticket has expired: fetch a fresh line from the App Manager. A login error means the integration was deactivated, deleted, or its password changed: rebuild the package in the App Manager. |
+| `✘ Failed to connect` in `claude mcp list` | Run the stored command yourself (`claude mcp get heisenware` shows it). A `401` means the link's ticket has expired and `npx` asked for it again - a line registered without `--prefer-offline`, or a cleared npm cache: register a fresh line from the App Manager. A login error means the integration was deactivated, deleted, or its password changed: rebuild the package in the App Manager. |
 | The connector was fine yesterday, dead today | Same as above: the platform was updated or the integration changed. Rebuild from the executable's view and register the fresh line. |
 | `layout_lint` / `screenshot` answer with an install instruction | Your machine lacks a Chromium: `npx playwright-core install --with-deps chromium`, with `sudo` on Linux. Run it yourself; do not let Claude work around missing libraries. |
 | Slow or timing out at start | `MCP_TIMEOUT=60000 claude` gives the first `npx` start a minute. |
