@@ -37,13 +37,13 @@ myusername/myimage:1.0.0
 
 To retrieve a valid username and password, add a VRPC integration under [Integrations (inbound)](../app-manager/integrations.md) in the App Manager.
 
-Example: For an account named `my-company`, an integration with username `agentRunner`, and a password `secret`, the call would be:
+Example: For an account named `my-company`, an integration named `agentRunner` in its `default` workspace (username `agentRunner@my-company.default`), and a password `secret`, the call would be:
 
 ```bash
 docker run -it \
 -e HW_DOMAIN=my-company.default \
 -e HW_BROKER=mqtts://my-company.heisenware.cloud \
--e HW_USERNAME=agentRunner \
+-e HW_USERNAME=agentRunner@my-company.default \
 -e HW_PASSWORD=secret \
 myusername/myimage:1.0.0
 ```

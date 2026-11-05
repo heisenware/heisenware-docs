@@ -177,3 +177,28 @@ console.log(result); // Outputs: 30
 ```
 {% endstep %}
 {% endstepper %}
+
+## Declare what changes nothing
+
+A function whose call changes nothing another caller, a device or storage could observe - no instance state, no stored record, no output of a device, no message to others - says so in its documentation. Reading a sensor counts as changing nothing; calibrating it while reading does not.
+
+| Language | Declaration |
+| --- | --- |
+| JavaScript and TypeScript | the JSDoc tag `@nosideeffects` |
+| Python | a `:nosideeffects:` field in the docstring |
+| C++ | a `const` member function, by the language's own promise |
+
+```javascript
+class Calculator {
+  /**
+   * The sum of two numbers
+   *
+   * @nosideeffects
+   */
+  add(a, b) {
+    return a + b;
+  }
+}
+```
+
+The class info then carries `"nosideeffects": true` for the function, and a connection that may only observe - a read-only local MCP server, for example - can call it. A function without the declaration counts as having side effects and stays out of such a connection's reach. Declare only what holds. For code whose source you cannot change, declare at registration: `VrpcAdapter.register(Vendor, { meta: { read: { nosideeffects: true } } });`.

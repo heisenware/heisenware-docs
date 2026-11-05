@@ -22,8 +22,10 @@
     * [Docker agent](app-manager/agents/docker-agent.md)
     * [LXC agent (Insys)](app-manager/agents/lxc-agent.md)
   * [Integrations](app-manager/integrations.md)
+  * [AI clients](app-manager/ai-clients.md)
   * [Members](app-manager/members.md)
-  * [Account and workspaces](app-manager/account-and-workspaces.md)
+  * [Workspaces](app-manager/workspaces.md)
+  * [Account](app-manager/account.md)
 
 ## App Builder
 

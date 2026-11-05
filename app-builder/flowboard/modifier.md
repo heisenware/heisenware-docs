@@ -541,6 +541,45 @@ a // fourth time
 
 </details>
 
+<details>
+
+<summary><strong>Example 8: Dates and numbers in the App's language (using <code>$LOCALE</code> and <code>$TIMEZONE</code>)</strong></summary>
+
+Text a modifier produces for people should follow the App, not a language or time zone written into the code. Two built-in variables carry both: `$LOCALE` is the App's language (such as `de-DE`), `$TIMEZONE` the time zone of the user's browser (such as `Europe/Berlin`). The server does not sit in the user's time zone, so a time printed without `$TIMEZONE` shows the wrong hour.
+
+Data:
+
+```json
+{ "measuredAt": "2026-10-01T06:30:00Z", "weight": 1234.5 }
+```
+
+Modifier content:
+
+```javascript
+({
+  // 01.10.2026, 08:30 in a German App opened in Berlin
+  measuredAt: new Intl.DateTimeFormat($LOCALE, {
+    timeZone: $TIMEZONE ?? 'UTC',
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  }).format(new Date(x.measuredAt)),
+  // 1.234,5 in German, 1,234.5 in English
+  weight: x.weight.toLocaleString($LOCALE)
+})
+```
+
+Return of the modifier:
+
+```json
+{ "measuredAt": "01.10.2026, 08:30", "weight": "1.234,5" }
+```
+
+{% hint style="info" %}
+`$TIMEZONE` is empty in a run without a user, such as an app start or a polling trigger, hence the fallback `?? 'UTC'`. `$LOCALE` is always set. In a translated copy of an App, the same modifier speaks the copy's language.
+{% endhint %}
+
+</details>
+
 ## Using AI for modifiers
 
 The assistant in the App Builder writes modifiers for you. Tell it what data arrives and what you need, and it adds the modifier to the output. This helps most with complex transformations that reshape large JSON objects.

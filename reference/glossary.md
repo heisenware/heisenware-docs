@@ -22,6 +22,10 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 
 **Member**: a person who belongs to the account and builds or manages Apps in the Manager and the Builder.
 
+**Owner**: a member who decides who else takes part. An owner of the account holds the plan and the members and reaches every workspace. An owner of a workspace builds there and chooses who else does.
+
+**Editor**: a member who builds in a workspace.
+
 **User**: a person who uses an App in the Player.
 *Also called:* App user.
 
@@ -42,7 +46,9 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 **Assistant**: the AI built into Heisenware. In the Manager it plans Apps with you; in the Builder it builds with you. It follows the platform law.
 *Also called:* AI assistant.
 
-**MCP server**: gives your own AI client (Claude Code, Claude Desktop, …) the same tools the assistant uses, through an MCP connector.
+**MCP server**: a workspace's tools for your own AI client. Reached by the workspace's MCP address (AI clients), or as a local MCP server on your computer (Integrations).
+
+**Local MCP server**: a package a member installs on their own computer for an AI client there (Claude Code, Claude Desktop, Cursor): the same tools, with the member's local files.
 
 **Platform law**: the rulebook for how Heisenware works and how Apps are built well. The assistant follows it, and these docs agree with it.
 
@@ -135,6 +141,10 @@ Widget events run in the user's scope, while App start, polling and backend even
 
 **`$USER`**: the built-in variable naming the user whose scope a run happens in; empty in the shared scope.
 
+**`$LOCALE`**: the built-in variable holding the App's language as a locale tag (`de-DE`); the same in every scope.
+
+**`$TIMEZONE`**: the built-in variable holding the time zone of the user's browser (`Europe/Berlin`); empty in the shared scope.
+
 **Endpoint**: an executor published under a stable public name so that other Apps and external systems can run it. Endpoints are the actions; variables are the values.
 
 **Section**: a titled, colored frame around executors that form one stage of the logic. It is purely visual.
@@ -220,9 +230,9 @@ Widget events run in the user's scope, while App start, polling and backend even
 
 **Connector**: a class that talks to an external system or protocol (OPC UA, S7, MQTT, databases, …).
 
-**Add-on**: an optional module that runs as its own container and brings new classes (RAG AI, SensorThings, your own code).
+**Add-on**: an optional module that runs as its own container and brings new classes (RAG AI, your own code).
 
-**Integration**: a login for something outside that connects to a workspace: an MQTT client, a VRPC client or an MCP connector.
+**Integration**: a login for something outside that connects to a workspace: an MQTT client, a VRPC client, a local MCP server or a Microsoft 365 Copilot agent.
 
 **Access mode**: who can open an App:
 - anyone

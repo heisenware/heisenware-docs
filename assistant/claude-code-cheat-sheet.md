@@ -1,6 +1,6 @@
 # Claude Code cheat sheet
 
-The terminal side of the [MCP server](mcp-server.md): everything you type to register, check, use and repair the Heisenware MCP connector in Claude Code. The App Manager's Integrations panel gives you the link and the lines; this page is what you do with them.
+The terminal side of the [MCP server](mcp-server.md): everything you type to register, check, use and repair the Heisenware local MCP server in Claude Code. The App Manager's Integrations panel gives you the link and the lines; this page is what you do with them.
 
 ## Register once
 

@@ -30,7 +30,6 @@ description: >-
 | [Status Lamp](status-lamp.md) | LED-style indicator mapping bound values or executor status to colors, as circle or rectangle. |
 | [Text](text.md) | Static rich text - titles, labels, instructions, static tables; htmlText takes markdown (headings, lists, tables, quotes, code, links) or HTML, styled by the app theme. |
 | [Timeline](timeline.md) | State-over-time bars per field across up to six bound data sources, with category colors. |
-| [Toast](toast.md) | Pops a transient notification for each bound message or executor error — invisible at runtime. |
 | [Value Box](value-box.md) | Displays a single live value with number/date formatting and JSON tree rendering for objects. |
 
 <!-- /generated -->

@@ -39,13 +39,13 @@ To get `HW_USERNAME` and `HW_PASSWORD`, first add a [VRPC integration](../integr
 
 ### Example
 
-For an account named `my-company`, an integration with the username `agentRunner`, and the password `secret`:
+For an account named `my-company`, an integration named `agentRunner` in its `default` workspace (username `agentRunner@my-company.default`), and the password `secret`:
 
 ```bash
 docker run -it \
 -e HW_DOMAIN=my-company.default \
 -e HW_BROKER=mqtts://my-company.heisenware.cloud \
--e HW_USERNAME=agentRunner \
+-e HW_USERNAME=agentRunner@my-company.default \
 -e HW_PASSWORD=secret \
 -e HW_AGENT_ID=my-agent-1 \
 heisenware/docker-agent:v91-slim

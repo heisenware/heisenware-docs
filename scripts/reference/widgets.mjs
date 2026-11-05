@@ -91,6 +91,9 @@ async function loadWidgets () {
   for (const folder of folders) {
     const manifest = JSON.parse(fs.readFileSync(path.join(WIDGETS, folder, 'manifest.json'), 'utf8'))
     if (!CATEGORIES[manifest.category]) continue
+    // a widget retired into an App action (the toast) is no widget
+    // members place: its page is written by hand and says where it went
+    if (manifest.retiredInto) continue
     const config = path.join(WIDGETS, folder, 'config.js')
     const tabs = []
     if (fs.existsSync(config)) {

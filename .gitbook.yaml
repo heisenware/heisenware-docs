@@ -35,8 +35,8 @@ redirects:
   app-builder/build-frontend/widgets/trigger-widgets: reference/widgets/trigger/README.md
   app-builder/build-frontend/widgets/trigger-widgets/button: reference/widgets/trigger/button.md
   # 2026-09-30 restructure: App Manager, App Builder, App Player, Concepts, Reference, Self-hosting, Labs, Developers
-  account/account-management: app-manager/account-and-workspaces.md
-  account/account-management/account-structure: app-manager/account-and-workspaces.md
+  account/account-management: app-manager/account.md
+  account/account-management/account-structure: app-manager/workspaces.md
   account/hosting-and-architecture: self-hosting/README.md
   advanced/high-level-architecture: developers/README.md
   advanced/high-level-architecture/installation-modes: self-hosting/README.md

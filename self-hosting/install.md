@@ -126,7 +126,7 @@ Run the installer script and pass the application package as an argument:
 ./install.sh heisenware.tar.gz
 ```
 
-The script guides you through the process with a series of prompts. It unpacks the necessary files, imports the Docker images, configures your environment, and starts the platform.
+The script guides you through the process with a series of prompts. It unpacks the necessary files, imports the Docker images, configures your environment, and starts the platform. On the first install it also generates this machine's own self-signed TLS certificate, which needs `openssl` (present on most Linux distributions, in Ubuntu on Windows and on macOS).
 
 The platform keeps its secrets in a file named `.env` next to `docker-compose.yml`, readable by its owner only. The installer creates and maintains it; you never need to edit it for a standard installation. Keep it: a backup without it cannot be restored on another machine (the installer's own backups include it).
 {% endstep %}
@@ -146,7 +146,7 @@ It checks every configuration value the platform needs, generates internal secre
 #### Platform access and initial setup
 
 * **Access:** The platform is available at `http://localhost` (or `http://localhost/manager`). Because the system uses self-signed certificates, your browser will display a security warning. You can safely proceed past this warning.
-* **Certificates:** If you have custom domain certificates, place them in the `certs` folder. Maintain the default filenames, and restart the proxy service to apply them: `docker restart heisenware-ingress-1`.
+* **Certificates:** The installer generates a self-signed certificate for this machine on the first install and never replaces the pair in the `certs` folder afterwards. If you have custom domain certificates, place them in the `certs` folder. Maintain the default filenames, and restart the proxy service to apply them: `docker restart heisenware-ingress-1`.
 * **Account creation:** You must register a new local administrator account on your fresh installation. Click the registration link on the login page to set up your email and password. External providers like Google do not function on local offline servers.
 {% endhint %}
 {% endstep %}
@@ -246,6 +246,29 @@ Execute these commands from your installation directory to manage your on-premis
     ```bash
     docker logs -f <container_name>
     ```
+
+#### Logs
+
+Every platform container, including the account containers, keeps its log in rotating files on the host: Docker's `local` log driver, at most five compressed files of 20 MB per container. A container's log is removed together with the container, for example by `./stop.sh` or an update.
+
+To keep the logs in your own log system instead, set the Docker log driver in `.env` and the driver's settings in the host's Docker configuration:
+
+1.  Configure the driver in `/etc/docker/daemon.json` and restart Docker. For example, sending everything to a syslog server:
+
+    ```json
+    {
+      "log-driver": "syslog",
+      "log-opts": { "syslog-address": "udp://logs.example.com:514" }
+    }
+    ```
+2.  Name the same driver in `.env`:
+
+    ```
+    HW_LOG_DRIVER=syslog
+    ```
+3.  Restart the platform with `./stop.sh` and `./start.sh`.
+
+Any driver Docker supports works (`journald`, `syslog`, `gelf`, `fluentd`, `splunk`, ...); the settings in `daemon.json` apply to every container of the platform. With `journald`, `local` and `json-file`, `docker logs` keeps working; with a remote driver, Docker keeps a local copy for `docker logs` by default.
 
 ## Remote support
 

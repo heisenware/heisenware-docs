@@ -1,68 +1,19 @@
 ---
 description: >-
-  Pops a transient notification for each bound message or executor error — invisible at runtime
+  The toast is an App action now: drop it on an output or an error handler, or on a button
 ---
 
 # Toast
 
 <figure><img src="../../../.gitbook/assets/widget-toast.png" alt="Three toasts stacked in the corner: an error that the label printer is not reachable, a warning about low cherry syrup, and a success message that an order was saved" width="394"><figcaption></figcaption></figure>
 
-A toast pops up a short message and fades away again: a success, a warning, an error or an info. Each value it receives becomes one toast, so your logic can report what happened, such as a saved order or a low tank. Link it to an executor's error handler, and every error of that executor reaches users as a toast with its cause. The toast itself takes no place on the page.
+A toast pops up a short message and fades away again: a success, a warning, an error or an info. It is no longer a widget you place on a page. It is an [App action](../../../app-builder/explorers/pages.md#app-actions), like Logout or Open link: drag the **Toast** chip from the foot of the Pages and actions explorer.
 
-**Good for:** confirmations after saving, warnings about limits, showing errors to users.
+* **On an output or an error handler**: every value the output produces pops one toast, whatever page the user is on. Switch on *Take message from the live value* and the value becomes the message: an error handler's error reads "message, because: cause". With the switch off, the toast shows the message you typed, and the value only decides that it pops.
+* **On a button, icon or image**: a click pops the toast with the message you typed.
 
-<!-- generated -->
-<!-- Source: heisenware-cloud/packages/widgets/toast. Regenerate with scripts/reference/widgets.mjs; edit outside this block only. -->
+Type, display time and position are set in the same dialog. Click the toast's chip on the flow board to change them later.
 
-## Properties
-
-The widget's General tab lists these properties under Receives and Emits. Drop an executor's output, input or trigger onto a row to link it. An example also fills an unlinked widget as demo data in the App Builder.
-
-{% tabs %}
-{% tab title="Receives" %}
-**`message`** (from an output, `string | object`): Shows a toast once per received value. Strings display as-is; objects display as `message` (plus `, because: <cause>` when present).
-
-<details>
-
-<summary>Example</summary>
-
-```json
-"Order saved"
-```
-
-</details>
-
-**`message`** (from an error handler, `object`): Receives the linked executor's error and shows it as a toast: `<message>, because: <cause>`.
-
-<details>
-
-<summary>Example</summary>
-
-```json
-{
-  "message": "Saving failed",
-  "cause": "connection lost"
-}
-```
-
-</details>
-
-{% endtab %}
-
-{% endtabs %}
-
-## Settings
-
-Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
-
-<details>
-
-<summary>Look &amp; feel</summary>
-
-* **Type**: Color and icon of the notification: info grey, warning yellow, error red, success green. Choices: Info, Warning, Error, Success.
-* **Display time**: How long the notification stays on screen in ms. Range 100 to 10000.
-* **Position**: Edge or corner of the screen where the notification appears. Choices: Bottom left, Bottom center, Bottom right, Top left, Top center, Top right. *Set per screen.*
-
-</details>
-
-<!-- /generated -->
+{% hint style="info" %}
+Apps built with a toast widget keep working: the App Builder turns every toast widget into a Toast action on the output or error handler it was linked to, and removes the widget. A toast that was copied to several pages becomes one action and pops once.
+{% endhint %}

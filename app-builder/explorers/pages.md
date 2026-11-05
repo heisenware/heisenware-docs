@@ -54,16 +54,19 @@ The menu settings are shared across all activated screen sizes until you pin one
 
 ## App actions
 
-Some things a user wants are not pages, functions, or widgets: leave the App, start it over, go back a step. Heisenware calls these **App actions**. They act on the App itself in the browser, they carry no data, and they are linked exactly like pages: you drag them and drop them.
+Some things a user wants are not pages, functions, or widgets: leave the App, start it over, go back a step, see a short message. Heisenware calls these **App actions**. They act on the App itself in the browser, they take no place on a page, and they are linked exactly like pages: you drag them and drop them.
 
 The App actions sit in a row at the foot of the Pages and actions explorer:
 
 * **Back**: returns to the page shown before the current one. Does nothing at the start of the visit history.
 * **Reload**: restarts the App in this tab with cleared caches.
 * **Logout**: forgets this device's credentials for the App and starts the App afresh. Apps with [individual registration](../../app-manager/users-and-access.md) land on the sign-in screen, Apps with a master password ask for it again, public Apps continue as a new anonymous user. Use it for shared devices and shift changes.
-* **Open link**: opens a URL fixed when you drop the chip: the same App in another language (`/app/<domain>/<appId>`), a manual, an external site. In this tab the App is left; with "Open in a new tab" the App stays open next to the link.
+* **Open link**: opens a URL: the same App in another language (`/app/<domain>/<appId>`), a manual, an external site, an e-mail (`mailto:`). In this tab the App is left; with "Open in a new tab" the App stays open next to the link.
+* **Toast**: pops a short message over whatever page is shown, as info, warning, error or success, then fades away. See [Toast](../../reference/widgets/display/toast.md) for Apps that still had the toast widget.
 
 Switching pages is an App action too. Its chip is the page itself.
+
+An action that needs settings (the URL of Open link, the message of Toast) asks for them in a dialog when you drop it. On the flow board, click the action's chip to open the dialog again; on a page link, click *switch page* to pick another page.
 
 ### On a widget
 
@@ -82,6 +85,16 @@ Your backend logic can also switch pages and run actions on its own.
 * **What fires it**: Every truthy value the output produces after the App has loaded. Falsy values, such as a filter that blocks, never fire.
 * **Who is reached**: The action reaches the users the value reaches. When a user's click started the flow, only that user: a Timer that the user started ticks for that user alone, so "logout after ten minutes" is per user with nothing to configure. When no user started the flow, a poll or a listener fired by the backend, every connected user: an alarm switches every screen, a backend-fired Logout ends every session.
 * **Back** cannot be dropped on an output. Walking every user's history at once makes no sense, so it lives on widgets only.
+
+#### The value as the action's setting
+
+Toast, Open link and Switch page have one main setting: the message, the URL, the page. Dropped on an output, the dialog offers *Take … from the live value* above that setting. Switched on, the value the output produces becomes the setting, and the field in the dialog goes grey:
+
+* A **Toast** on an error handler shows the error itself: "Saving failed, because: connection lost". On an output it shows the text (or number) your logic produced.
+* An **Open link** opens the URL your logic built. Only web addresses (`https://`), `mailto:` and addresses on this platform open; anything else does not.
+* A **Switch page** opens the page your logic named, by its id or its name.
+
+The other settings (type, position, new tab) still come from the dialog. A value that does not fit, such as a list for a toast or a page that does not exist, opens nothing; the browser console of the App says why. With the switch off, the value only decides that the action runs.
 
 <figure><img src="../../.gitbook/assets/image (32).png" alt=""><figcaption><p>Switch page link</p></figcaption></figure>
 

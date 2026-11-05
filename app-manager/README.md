@@ -6,13 +6,16 @@ The App Manager is the administrative center of your Heisenware account. Here yo
 
 ## Key features
 
-The App Manager has five main areas:
+The App Manager has six main areas:
 
 * [**Apps**](README.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
 * [**Dashboard**](README.md#dashboard): A real-time summary of account-wide performance and user metrics.
 * [**Members**](members.md): The interface for inviting and managing your members.
 * [**Agents**](agents/README.md): Build, update, restart and roll out builds to the [agents](../concepts/agents-and-where-code-runs.md) installed on your hosts.
-* [**Integrations**](integrations.md): Monitor and authorize data from MQTT and VRPC clients and MCP connectors.
+* [**Integrations**](integrations.md): Monitor and authorize data from MQTT and VRPC clients, local MCP servers and Microsoft 365 Copilot agents.
+* [**AI clients**](ai-clients.md): Connect your own AI - Claude, ChatGPT, Microsoft Copilot and more - by the workspace's MCP address, and see or end every connection.
+
+The workspace switcher at the top of the menu shows the [workspace](workspaces.md) you are in, and moves you to another.
 
 ## Apps
 

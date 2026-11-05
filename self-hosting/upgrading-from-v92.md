@@ -7,6 +7,7 @@ How an on-premise installation moves from v92 to v93, what changes underneath, a
 Up to v92, the `docker-compose.yml` of a release package carried every secret of your installation as a literal value: the database passwords, the FusionAuth API key, the platform's tokens. From v93 on, the compose file carries references only, and the values live in a file named `.env` next to it, readable by its owner. Two things come with that:
 
 * **`start.sh`**, the platform's front door, ships inside every release package. It knows which values the platform needs, generates the internal ones that are missing, refuses to start when a required value is absent, and runs the services. Starting the platform is `./start.sh` from now on.
+* **Members become owners of the account.** At its first start, v93 gives every member of an account the [owner](../app-manager/members.md) role and deletes the v92 roles. Check your members afterwards.
 * **`install.sh` stays the one installer for every version.** It recognizes what it is handed and what is installed, and when it updates a v92 installation it moves the secrets out of the old compose file into `.env` before anything else, so your data keeps the credentials it was created with.
 
 ## Upgrading
@@ -47,5 +48,7 @@ That is all. The platform comes up with your existing data, users, and Apps.
 * Keep `.env` with your backups. The installer includes it from now on; if you copy an installation to another machine, copy `.env` too.
 
 ## Rolling back
+
+The first start of v93 changes the member roles for good, so an installation that has run v93 returns to v92 only through a backup.
 
 Restore the backup the installer wrote before the upgrade, exactly as described in [Rollback and restoring a backup](install.md#rollback-and-restoring-a-backup). The backup carries the v92 compose file with its values, so the restored installation starts as it did before, with `docker compose up -d`.

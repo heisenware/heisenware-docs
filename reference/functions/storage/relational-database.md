@@ -261,7 +261,7 @@ Retrieves rows from one or more tables, with options for filtering, joining, sor
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table, or an array of table names for a multi-table join query.</td><td>string or array</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The conditions rows must meet. For multi-table queries, this must include the join conditions.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>Selects specific columns. For multi-table queries, use dot notation (such as <code>users.name</code>).</td><td>array</td></tr><tr><td></td><td><code>order</code></td><td>The sort order specified as <code>['fieldName', 'DIRECTION']</code>, where direction is <code>ASC</code> or <code>DESC</code>.</td><td>array</td></tr><tr><td></td><td><code>limit</code></td><td>The maximum number of rows to return.</td><td>integer</td></tr><tr><td></td><td><code>offset</code></td><td>The number of rows to skip, useful for pagination.</td><td>integer</td></tr><tr><td></td><td><code>autoJoin</code></td><td>Automatically includes data from related tables for single-table queries. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table, or an array of table names for a multi-table join query.</td><td>string or array</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The conditions rows must meet. For multi-table queries, this must include the join conditions. A condition names a column, or a JSON column followed by its nested keys in dot notation (letters, digits, <code>_</code> and <code>-</code>); a read naming anything else, in a condition, <code>fields</code> or <code>order</code>, is refused.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>Selects specific columns. For multi-table queries, use dot notation (such as <code>users.name</code>).</td><td>array</td></tr><tr><td></td><td><code>order</code></td><td>The sort order specified as <code>['fieldName', 'DIRECTION']</code>, where direction is <code>ASC</code> or <code>DESC</code>.</td><td>array</td></tr><tr><td></td><td><code>limit</code></td><td>The maximum number of rows to return.</td><td>integer</td></tr><tr><td></td><td><code>offset</code></td><td>The number of rows to skip, useful for pagination.</td><td>integer</td></tr><tr><td></td><td><code>autoJoin</code></td><td>Automatically includes data from related tables for single-table queries. Default <code>true</code>.</td><td>boolean</td></tr></tbody></table>
 
 ### Filtering explained
 
@@ -1187,7 +1187,7 @@ Returns `true` on success, or `false` if it fails. Errors are logged but not thr
 
 ### `executeSql`
 
-Executes a raw SQL statement with template variable substitution. Placeholders such as `{{customer.id}}` are safely replaced with values from the `variables` object. For `SELECT` statements, the query returns an array of row objects.
+Executes a raw SQL statement with bound parameters. A placeholder such as `{{customer.id}}` names a value of the `parameters` object. The value is bound, never written into the SQL text: quotes, types and dates come out right, and the value cannot change the statement. To use a variable such as `$customerName`, give it as a value of `parameters`. A `$variable` written in the template itself becomes SQL text. For `SELECT` statements, the query returns an array of row objects.
 
 {% hint style="danger" %}
 #### Irreversible action
@@ -1197,15 +1197,15 @@ Raw SQL can modify or delete database schemas and records. Run custom scripts wi
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The SQL string containing <code>{{double.curly.braces}}</code> placeholders.</td><td>string</td></tr><tr><td><code>variables</code></td><td></td><td>The object containing the data for the placeholders. Nested values are addressed with dot notation.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>type</code></td><td>Forces a specific query type (such as <code>SELECT</code>, <code>UPDATE</code>, or <code>INSERT</code>). If omitted, the function derives the type from the statement.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>template</code></td><td></td><td>The SQL string containing <code>{{double.curly.braces}}</code> placeholders.</td><td>string</td></tr><tr><td><code>parameters</code></td><td></td><td>The values the placeholders name, bound into the statement. Nested values are addressed with dot notation.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>type</code></td><td>Forces a specific query type (such as <code>SELECT</code>, <code>UPDATE</code>, or <code>INSERT</code>). If omitted, the function derives the type from the statement.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # template
 SELECT name, email FROM users WHERE "companyId" = {{company.id}} AND age > {{minAge}}
-# variables
-company: { id: 'a1b2c3d4' }
+# parameters
+company: { id: $companyId }
 minAge: 30
 ```
 

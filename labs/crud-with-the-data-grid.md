@@ -43,7 +43,7 @@ Understand the underlying wiring to adapt the template for more complex requirem
 
 * **Data population:** The output of the [`getTableData`](../reference/functions/storage/relational-database.md#gettabledata) function binds directly to the data property of the [data grid](../reference/widgets/display/data-grid.md) widget to populate the UI.
 * **Data grid interactions:** Users interact directly with the [data grid](../reference/widgets/display/data-grid.md). The widget's native `onInsert`, `onChange`, and `onDelete` events bind directly to the inputs of the [`addRow`](../reference/functions/storage/relational-database.md#addrow), [`updateRow`](../reference/functions/storage/relational-database.md#updaterow), and [`deleteRow`](../reference/functions/storage/relational-database.md#deleterow) functions.
-* **User feedback:** [Modifiers](../app-builder/flowboard/modifier.md) trigger when CRUD functions execute, passing customizable strings to a [toast](../reference/widgets/display/toast.md) widget to display immediate confirmation or error messages.
+* **User feedback:** [Modifiers](../app-builder/flowboard/modifier.md) trigger when CRUD functions execute, passing customizable strings to a [Toast](../reference/widgets/display/toast.md) App action that displays immediate confirmation or error messages. The video still shows the toast widget it replaced.
 
 ## Reference videos
 
