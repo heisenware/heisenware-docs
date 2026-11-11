@@ -111,13 +111,15 @@ During downsampling, the pipeline preserves four key statistics for each window:
 
 Creates an InfluxDB client instance.
 
+An InfluxDB on `https` with a self-made or company certificate is refused until it is trusted. Trust it once for the whole workspace with the [Trusted certificates](../connectors/trusted-certificates.md) function `trustServer`. The next call accepts it.
+
 {% hint style="info" %}
 Skip this step for `internal-influx`. It is already instantiated for you.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="114.8148193359375">Input</th><th width="198.703857421875">Key</th><th width="292.66650390625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The URL of the InfluxDB instance (such as <code>http://localhost:8086</code>).</td><td>string</td></tr><tr><td><code>token</code></td><td></td><td>The authentication token with permissions for the target organization and buckets.</td><td>string</td></tr><tr><td><code>org</code></td><td></td><td>The name of the organization in InfluxDB.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>flushInterval</code></td><td>The interval in milliseconds to flush buffered writes. Default 5000.</td><td>integer</td></tr><tr><td></td><td><code>batchSize</code></td><td>The number of points to buffer before writing. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>downsamplingPipeline</code></td><td>Overrides the default downsampling stages.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="114.8148193359375">Input</th><th width="198.703857421875">Key</th><th width="292.66650390625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The URL of the InfluxDB instance (such as <code>http://localhost:8086</code>).</td><td>string</td></tr><tr><td><code>token</code></td><td></td><td>The authentication token with permissions for the target organization and buckets.</td><td>string</td></tr><tr><td><code>org</code></td><td></td><td>The name of the organization in InfluxDB.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>flushInterval</code></td><td>The interval in milliseconds to flush buffered writes. Default 5000.</td><td>integer</td></tr><tr><td></td><td><code>batchSize</code></td><td>The number of points to buffer before writing. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>downsamplingPipeline</code></td><td>Overrides the default downsampling stages.</td><td>array</td></tr><tr><td></td><td><code>tls</code></td><td>TLS settings for an <code>https</code> URL, on top of what the workspace trusts: <code>rejectUnauthorized</code> (false accepts any certificate), <code>ca</code>, <code>cert</code>, <code>key</code>, <code>passphrase</code>.</td><td>object</td></tr></tbody></table>
 
 {% hint style="info" %}
 Right-click the `token` input and mark it as a secret to mask it.

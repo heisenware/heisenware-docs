@@ -11,7 +11,7 @@ When a connector opens a secure connection (`https://`, `mqtts://` and the like)
 GET https://192.168.1.10/api failed: self-signed certificate
 ```
 
-The Trusted certificates functions (`TrustStore`) fix this once for the whole workspace. Every connector that opens a secure connection consults the same list: [HTTP / REST](http-rest.md), the [ctrlX Data Layer](ctrlx-data-layer.md) and the [OPC UA client](opc-ua-client.md) today. No instance is needed, call the functions directly.
+The Trusted certificates functions (`TrustStore`) fix this once for the whole workspace. Every connector that opens a secure connection consults the same list: [HTTP / REST](http-rest.md), the [ctrlX Data Layer](ctrlx-data-layer.md), the [OPC UA client](opc-ua-client.md), [Hydra MIP](hydra-mip.md), the [MQTT client](mqtt-client.md), [Email](email.md), the [relational database](../storage/relational-database.md) and the [timeseries database](../storage/timeseries-database.md). No instance is needed, call the functions directly.
 
 ## Which function do I need?
 
@@ -28,13 +28,19 @@ The Trusted certificates functions (`TrustStore`) fix this once for the whole wo
 
 ### `trustServer`
 
-Looks at the certificate the server shows right now and stores it. From then on every connector accepts this server, also when the certificate is self-made or carries a different name than the address you use.
+Looks at the certificate the server shows right now and stores it. From then on every connector accepts this server, also when the certificate is self-made, comes from an authority the workspace does not trust, or carries a different name than the address you use. Other servers of that authority stay untrusted.
 
 Do this from a network you trust. Then compare the returned `fingerprint` with what the device shows in its own settings, so you know you trusted the right machine. When the server gets a new certificate later, call `trustServer` again: the stored one is replaced.
 
+Databases (`postgres://`, `mysql://`, `mariadb://`) and mail servers (`smtp://`) start a connection unencrypted and switch on request. `trustServer` asks them the way their own clients do. A Microsoft SQL Server shows its certificate only inside its own protocol: add its certificate file with `addServerCertificate`.
+
+{% hint style="info" %}
+On a Native Agent, a server whose certificate an authority issued needs that authority instead (`addCertificateAuthority`). A self-made certificate works with `trustServer` everywhere.
+{% endhint %}
+
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The server's address, for example <code>https://192.168.1.10</code>, <code>192.168.1.10:8443</code> or <code>mqtts://broker.local:8883</code>. The port defaults to 443.</td><td>string</td></tr><tr><td><code>name</code></td><td>A name for the stored certificate. Optional, the server's host name when omitted.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td>The server's address, for example <code>https://192.168.1.10</code>, <code>192.168.1.10:8443</code>, <code>mqtts://broker.local</code>, <code>postgres://db.plant.local</code> or <code>smtp://mail.plant.local</code>. Without a port, the usual one of the kind of server: 8883 for <code>mqtts</code>, 465 for <code>smtps</code>, 587 for <code>smtp</code>, 5432 for <code>postgres</code>, 3306 for <code>mysql</code> and <code>mariadb</code>, 443 for any other.</td><td>string</td></tr><tr><td><code>name</code></td><td>A name for the stored certificate. Optional, the server's host name when omitted.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -145,7 +151,11 @@ Returns `true`. An unknown name is an error that lists the names that exist.
 
 Trusting a server does not switch security off. The connection stays encrypted, and any other certificate is still refused. `trustServer` accepts the server even when its certificate names another host than the address you dial, which is the usual case for a device reached by IP address.
 
-The `tls` setting of a single call or client (HTTP / REST, ctrlX) rides on top of the list. Setting `rejectUnauthorized: false` there accepts any certificate for that call, trusted or not.
+The `tls` setting of a single connector instance or call rides on top of the list, with the same keys everywhere: `rejectUnauthorized`, `ca`, `cert`, `key`, `passphrase`. Setting `rejectUnauthorized: false` there accepts any certificate for that connection, trusted or not. A misspelt key is refused before any connection opens.
+
+### When a change counts
+
+Connectors that open TLS connections read the list each time they open one. A server trusted a moment ago is accepted by the next connection, without restarting or creating anything again. A connection already open stays as it is.
 
 ### Where the list lives
 

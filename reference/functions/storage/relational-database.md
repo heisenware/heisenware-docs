@@ -31,7 +31,7 @@ Skip this step for `internal-postgres`. It is already instantiated for you.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect: <code>postgres</code>, <code>mysql</code>, <code>mariadb</code>, <code>mssql</code>, <code>sqlite</code>, <code>oracle</code>, or <code>snowflake</code>.</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default is the standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Uses SSL for the connection when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Logs all SQL statements when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>Skips the database introspection for instant startup when <code>true</code>. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>dialect</code></td><td>The database dialect: <code>postgres</code>, <code>mysql</code>, <code>mariadb</code>, <code>mssql</code>, <code>sqlite</code>, <code>oracle</code>, or <code>snowflake</code>.</td><td>string</td></tr><tr><td></td><td><code>database</code></td><td>The name of the database.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password for authentication.</td><td>string</td></tr><tr><td></td><td><code>host</code></td><td>The hostname or IP address of the database server.</td><td>string</td></tr><tr><td></td><td><code>port</code></td><td>The port number. Default is the standard port of the dialect.</td><td>integer</td></tr><tr><td></td><td><code>ssl</code></td><td>Encrypts the connection when <code>true</code>, and the server must be trusted (see <a href="#encrypted-connections">Encrypted connections</a>). <code>false</code> connects unencrypted. Omitted, as the database does by default: <code>mssql</code> encrypts and accepts any certificate, the other dialects connect unencrypted.</td><td>boolean</td></tr><tr><td></td><td><code>tls</code></td><td>TLS settings for this database only, on top of what the workspace trusts: <code>rejectUnauthorized</code> (false accepts any certificate), <code>ca</code>, <code>cert</code>, <code>key</code>, <code>passphrase</code>. Given, the connection is encrypted.</td><td>object</td></tr><tr><td></td><td><code>sqlLogging</code></td><td>Logs all SQL statements when <code>true</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>rawOnly</code></td><td>Skips the database introspection for instant startup when <code>true</code>. Use when you only need <code>executeSql</code>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
 Right-click the `options` input and mark it as a secret to mask the password.
@@ -46,12 +46,19 @@ database: 'mydb'
 username: 'user'
 password: 'pass'
 host: 'localhost'
-ssl: true
 ```
 
 #### Output
 
 Returns the name of the created instance.
+
+#### Encrypted connections
+
+With `ssl: true` a database with a self-made or company certificate is refused until it is trusted. Trust it once for the whole workspace with the [Trusted certificates](../connectors/trusted-certificates.md) function `trustServer`, for example `postgres://db.plant.local` (`mysql://` and `mariadb://` alike). The next connection accepts it, the instance needs no restart.
+
+* **MySQL** checks that the certificate comes from a trusted authority, not the name in it. A MySQL server's own generated certificates need that authority: add `ca.pem` from the server's data folder with `addCertificateAuthority`.
+* **SQL Server** shows its certificate only inside its own protocol: add the certificate file with `addServerCertificate`, and use the name the certificate carries as `host`.
+* `dumpDatabase` and `importDatabase` check the server against the same list.
 
 ### `isConnected`
 
