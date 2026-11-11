@@ -8,6 +8,8 @@ Nothing is installed: your AI client reaches the workspace at its **MCP address*
 Connecting AI clients is in **beta**. The page is marked so in the App Manager.
 {% endhint %}
 
+The invited users of an App connect their AI client by the App's own address instead, with a reach of its own - see [Ask](ask.md).
+
 ## The MCP address
 
 Open **AI clients** in the App Manager. The first card shows the workspace's MCP address:

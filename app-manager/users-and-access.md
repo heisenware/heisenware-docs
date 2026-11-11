@@ -45,6 +45,7 @@ You can change these settings at any time, but each change instantly affects all
 * **Option**: _Only previously invited users can log in_
 * **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
 * **Programmatic invite:** With the [`users` class](../reference/functions/utilities/users.md) on the Flowboard, you can also invite users programmatically from another App.
+* **Ask:** Only in this mode can you open the App to [Ask](ask.md): its invited users question the workspace's data with an AI, in the App or from their own AI client.
 
 ## User management
 

@@ -1,0 +1,81 @@
+# Ask
+
+Ask lets the invited users of an App question the workspace's data with an AI, in their own words: _"How long did line 2 stand still last week, and why?"_ They ask in the App itself, or from their own AI client such as ChatGPT, Claude or Microsoft Copilot. Ask answers from the databases, logs and Apps of the workspace, runs the App's endpoints for them and makes reports to download.
+
+{% hint style="info" %}
+Ask is in **beta**. It is marked so in the App Manager, in the App and in the App Builder.
+{% endhint %}
+
+## Switch it on
+
+Ask holds only for an App that invited users alone can open - every user is a person with an account, never an anonymous visitor.
+
+1. In the App Manager, open **Apps** and the App's access settings.
+2. Choose _Only previously invited users can login_.
+3. Switch **Ask** on.
+
+The settings then show the App's [Ask address](#from-your-own-ai). Switching Ask off, or choosing another access mode, ends Ask for every user of the App at once - in the App and in every connected AI client.
+
+## What Ask reaches
+
+Ask works as the user who asks, in one App:
+
+* **Reads, workspace-wide:** every database and InfluxDB a flow of the workspace connected, the logs of its containers and native agents, what each App is made of, and how a released App's executors are doing.
+* **Runs, this App only:** its endpoints, as the user, on the released App - and it looks at the App's pages as the user sees them.
+* **Nothing else.** Ask changes data only through an endpoint. It cannot change an App, a file or a setting; it says so and names who can - a member of the workspace.
+
+Everything Ask reads to answer travels with the conversation to the AI provider: in the App, the provider of the platform's assistant; from the user's own AI client, that client's provider. Tell your users so before you switch Ask on, and connect to a flow only the data they may see.
+
+### Read-only, per database
+
+Ask's reads change nothing. The database itself holds every read to reading, not only the platform:
+
+| Source | How a read stays a read |
+| --- | --- |
+| **PostgreSQL**, **MySQL** | One query in a read-only transaction, with the login the flow's database instance connects with. |
+| **The workspace's own database** | As above, with a login of its own that may only select. |
+| **SQLite** | The file opened read-only, writes switched off. |
+| **InfluxDB** | The platform writes the query from the parameters Ask names; Ask never sends query text. |
+| **SQL Server**, **Snowflake** | Not read: neither has a read-only transaction. |
+| **MariaDB**, **Oracle** | Not read yet: no test proves yet that a read there cannot write. |
+
+A query is a single `SELECT`, `WITH`, `VALUES` or `TABLE` statement; a second statement, `INTO` and locking clauses are refused before anything goes out. A large answer is cut and comes with the true number of rows and a summary of each column.
+
+## In the App
+
+A signed-in user of the App finds **Ask** at the bottom right of every page. It opens a panel beside the page - on a phone, over the whole screen:
+
+* The user asks; Ask shows what it is doing (_Reading the data…_) and answers in the user's language.
+* Before it runs an endpoint that needs the user's go, a card names the endpoint and its values: **Allow** or **Deny**.
+* A report comes as a card with **Download**.
+* **Stop** ends a running question; what was done so far is kept. **New conversation** starts afresh.
+
+The conversation stays with the user and the App - also when the tab closes during a question - until they start a new one. When a user is removed from the App or deleted, their conversation goes with them.
+
+Ask in the App spends the workspace's credits, each run booked to its App. When none are left, Ask says so and a member tops them up. A self-hosted installation without an AI key for the assistant offers only the user's own AI client.
+
+## From your own AI
+
+Every App open to Ask has an address of its own on the workspace's [MCP server](ai-clients.md):
+
+```
+https://<your platform host>/<account>.<workspace>/mcp/app/<app id>
+```
+
+Members copy it in the App's access settings; users find it in the App, in the Ask panel under **Your own AI**. The user adds it to their AI client as a custom connector, as for [any AI client](ai-clients.md#connect-your-ai-client). When the client signs in, the browser opens the App's own page: the user signs in with their account of the App, and a card names the AI client, what it reaches and where the browser returns. **Allow** connects it.
+
+The client then has the user's Ask, with the same reach as in the App. It spends the user's own AI subscription, not the workspace's credits. An endpoint that needs the user's go runs only after they agree in the chat. Not every plan of every AI client can add a custom connector (see [Your AI plan decides](ai-clients.md#your-ai-plan-decides)).
+
+The connections show in **AI clients** in the App Manager for the workspace's owners, as _Ask in app &lt;app id&gt;_; **Disconnect** ends one at once. A connection unused for 90 days ends by itself, and a user holds at most 20.
+
+## Endpoints: ask the user first
+
+Each endpoint says whether Ask needs the user's go before it runs it: **Ask the user first** in the endpoint's dialog (Explorer, **Endpoints**). It is ticked by default. Untick it for an endpoint that changes nothing that matters, such as opening a page.
+
+Where it runs: in the App, an endpoint runs in the user's open App - a page it opens is the one they see. From the user's own AI client no page of theirs is open; a page it opens is seen by nobody, and Ask says so.
+
+## Reports
+
+Asked for a report, Ask writes one: **PDF**, **Word** (DOCX), **Excel** (XLSX) or **CSV**, in the App's look and language. Its tables are read straight from the databases into the file, never retyped by the AI: up to 1000 rows a table in PDF and Word, every row in Excel (a sheet per table, real numbers and dates) and CSV (exactly one table). Around them go headings, text and lists, simple figures Ask draws, and pictures of the App's pages. Charts made from the data are not part of it yet.
+
+A report lands in the workspace's shared files, in `reports/<app id>/`, with who asked and which tables it holds. The user downloads it from the panel's card, or opens the link Ask gives: the App's own page offers the download after sign-in. The link is the key - any user of an App of the workspace that is open to Ask can open it - so pass it only to people who should read the report. Reports stay until a member deletes them in the App Builder's [Files](../app-builder/explorers/files.md) explorer.

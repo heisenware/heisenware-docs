@@ -23,6 +23,7 @@
     * [LXC agent (Insys)](app-manager/agents/lxc-agent.md)
   * [Integrations](app-manager/integrations.md)
   * [AI clients](app-manager/ai-clients.md)
+  * [Ask](app-manager/ask.md)
   * [Members](app-manager/members.md)
   * [Workspaces](app-manager/workspaces.md)
   * [Account](app-manager/account.md)
