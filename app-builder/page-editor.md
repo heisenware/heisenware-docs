@@ -42,7 +42,7 @@ Add an element by selecting it from the toolbar and clicking anywhere on the pag
 * **Open settings**: Double-click the widget, or select it and click the pen icon in the toolbar.
 * **Align with snaplines**: Snaplines appear automatically to help align widgets and other UI elements with each other.
 * **Pixel-perfect positioning**: Hold the Shift key while moving an element to temporarily disable snaplines for precise placement.
-* **Adjust layers and layout**: Right-click any element to adjust the stacking order of overlapping items, stretch it to full width, or toggle tile view.
+* **Adjust layers and layout**: Right-click any element to adjust the stacking order of overlapping items or stretch it to full width. To frame a widget, place a [Card](../reference/widgets/display/card.md) behind it.
 
 <figure><img src="../.gitbook/assets/Widgets.gif" alt="" width="563"><figcaption><p>Page editor basics</p></figcaption></figure>
 
@@ -58,7 +58,6 @@ Right-click any element to open a menu for quick layout actions and layer manage
 
 * _Order_: Adjust the stacking of overlapping elements to control which item appears in the foreground or background.
 * _Full width_: Instantly stretches the element to fill the entire horizontal space of your current screen preview.
-* _Toggle tile view_: Switches the element into a tiled display mode.
 
 ### Screen preview and responsive behavior
 
