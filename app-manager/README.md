@@ -8,8 +8,8 @@ The App Manager is the administrative center of your Heisenware account. Here yo
 
 The App Manager has six main areas:
 
-* [**Apps**](README.md#apps): The default landing page where you create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
-* [**Dashboard**](README.md#dashboard): A real-time summary of account-wide performance and user metrics.
+* [**Dashboard**](README.md#dashboard): Where you land: what needs you in the workspace, and how its Apps run and are used.
+* [**Apps**](README.md#apps): Create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
 * [**Members**](members.md): The interface for inviting and managing your members.
 * [**Agents**](agents/README.md): Build, update, restart and roll out builds to the [agents](../concepts/agents-and-where-code-runs.md) installed on your hosts.
 * [**Integrations**](integrations.md): Monitor and authorize data from MQTT and VRPC clients, local MCP servers and Microsoft 365 Copilot agents.
@@ -97,4 +97,11 @@ To take an App offline, use the action switch on the card to toggle between Run 
 
 ## Dashboard
 
-The Dashboard panel gives you a real-time summary of your account's performance, including usage stats like total App views and unique users across all Apps.
+The Dashboard is where the App Manager opens. It shows what needs you in the workspace, and how its Apps run and are used:
+
+* **Needs you** lists the Apps deployed to run that are not running, the agents that are offline or behind their fleet's build, and outdated local MCP servers, each linked to its page. The same items carry a badge in the menu. When nothing needs you, it says *All clear*.
+* **Active users today** counts the users who signed in to one of the Apps, with the last 14 days and the change against the week before. **Apps running** counts the Apps running of those deployed to run, and **Agents online** the agents connected. An owner of the account sees the **credits**, every other member the number of **App users**. Every figure but the active users opens its page.
+* **Apps** lists every App of the workspace with its status, users, logins, active users per day over the last 14 days, and opens. Click a column header to sort, and a row to open the App.
+* A new workspace sees its **first steps**, ticked from what it already holds, until you put them away. An owner of the account also sees the plan and how many Apps it allows.
+
+The Dashboard reads again when you come back to it, or when you click Refresh.

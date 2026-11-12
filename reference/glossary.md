@@ -35,7 +35,7 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 **App Manager**: where members create and run Apps and manage the account.
 *Also called:* Manager.
 
-**Dashboard**: the App Manager's overview of how the account's Apps are used.
+**Dashboard**: the App Manager's first page: what needs you in the workspace, and how its Apps run and are used.
 
 **App Builder**: where members build one App.
 *Also called:* Builder.
@@ -60,6 +60,8 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 
 **Explorer**: the Builder's left panel, with five tabs: Functions, Pages and actions, Files, Variables, Endpoints.
 
+**App editor**: the Builder's main editor, where an App is built: the Flowboard and the Page editor side by side, with the Explorer and the Console.
+
 **Flowboard**: the Builder surface where you place and wire executors. It holds the logic of the whole App, which runs even when no page is open.
 
 **Page editor**: the Builder surface where you design a page for each screen.
@@ -67,6 +69,11 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 **Console**: the Builder's bottom panel. It holds the assistant.
 
 **Theme editor**, **Template editor**, **Database editor**: the Builder's other editors: for the App's look, for PDF templates, and for looking into and editing the workspace's databases.
+
+**Data model**: the shape of the workspace's own database: its tables, their fields, keys and audit logs, and the relations between them. It is kept inside the database, with a history of who changed what, and shaped in the Database editor's Model tab or by the assistant. An App's versions never touch it.
+*Also called:* model.
+
+**Adopt**: the data model takes what the database holds where the two differ: a table, field or relation made outside it (by SQL, by an import, or before the model was kept), or one dropped outside it. The database stays as it is.
 
 **Trace**: highlights what feeds a node (upstream), what it feeds (downstream), or both.
 
@@ -102,6 +109,12 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 **Handler**: an input that is itself a function the backend calls back. An *event* is called again and again (`onChange`), a *callback* once.
 *Also called:* listener.
 
+**Event function**: a function that calls a handler again and again until it is released, e.g. `onChange`. It declares itself with `@returns {Registration}`; without a declaration, a name of `on` followed by a capital letter makes it one.
+
+**Subscription**: an executor's standing wish to receive the events of one event function, with its inputs, on its targets, in one scope. Triggering declares it; it pauses with the App and ends with its scope.
+
+**Registration**: the one call of an event function on an instance with one set of arguments, shared by every subscription that asks for the same. The agent makes and ends it.
+
 **Trigger**: what makes an executor run. It holds a list of trigger sources; any one of them firing runs the executor. A value arriving at an input never runs it by itself.
 
 **Trigger source**: one reason to run:
@@ -133,7 +146,7 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 - *user*: one per connected user
 - *call*: one per subflow call
 
-Widget events run in the user's scope, while App start, polling and backend events run in the shared scope.
+Widget events run in the user's scope, while App start and polling run in the shared scope. A backend event arrives in the scope of its subscription.
 
 **Variable**: a named value of the App, used as `$name`. A static variable is a constant; a runtime variable is written by an output or extension and keeps its value. Variables never run anything themselves.
 
@@ -165,7 +178,7 @@ Widget events run in the user's scope, while App start, polling and backend even
 
 **Page**: one screen of an App, built from widgets. *Top-level pages* fill the navigation menu; a *subpage* hangs off one of them and is reached by a link.
 
-**Screen**: one device class an App is designed for, such as Phone, Tablet or Desktop. An App enables some of them.
+**Screen**: one device class an App is designed for, such as Phone, Tablet or Desktop. An App enables some of them. The two tablets are the handheld tablet held upright (`__tablet`) and the panel mounted at a machine (`__tabletR`).
 
 **Reference screen**: the screen you design first; the others follow it automatically until you arrange them yourself (*authored*).
 
