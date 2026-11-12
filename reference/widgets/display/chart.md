@@ -80,17 +80,25 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <details>
 
+<summary>General</summary>
+
+* **Animate**: Eases the display to new data in one second; off draws every update at once, for fast live data.
+
+</details>
+
+<details>
+
 <summary>Series</summary>
 
 * **Argument field**: Field whose values run along the argument axis; nested keys join with a hyphen (sensor-temp).
 * **Series data**: Series drawn in the chart, each from one value field.
-  * **Pane**: Pane the series is drawn in. Choices: `Main`.
+  * **Pane**: Pane the series is drawn in.
   * **Name**: Name shown in the legend.
   * **Value field**: Field that gives the series its values.
   * **Type**: Drawing style of the series; range types need two range fields, bubble a size field. Choices: Line, Stacked line, Full stacked line, Spline, Stacked spline, Full stacked spline, Step line, Area, Stacked area, Full stacked area, Spline area, Stacked spline area, Full stacked spline area, Step area, Range area, Bar, Stacked bar, Full stacked bar, Range bar, Scatter, Bubble.
-  * **Value axis**: Value axis the series is scaled by, named pane-number (Main-1). Choices: `Main-1`.
+  * **Value axis**: Value axis the series is scaled by, named pane-number, the number counting within the pane (Main-1, Tracks-1).
   * **Aggregation**: Combines the points in each aggregation interval into one value; none plots every point. Choices: None, Average, Minimum, Maximum, Sum.
-  * **Data points**: Shape of the marker drawn at each data point; none draws no markers. Choices: None, Circle, Cross, Polygon, Square, TriangleUp, TriangleDown.
+  * **Data points**: Shape of the marker drawn at each data point; none draws no markers. A scatter series always draws its markers: circles when none is chosen. Choices: None, Circle, Cross, Polygon, Square, TriangleUp, TriangleDown.
   * **Custom color**: Color of the series; empty takes the next palette color.
   * **Tag field**: Field whose value replaces the tooltip of a point; empty shows argument and value.
   * **Ignore empty points**: Connects the series across missing values instead of leaving a gap.
@@ -105,7 +113,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 <summary>X-axis</summary>
 
 * **Title**: Title shown along the argument axis; empty shows none.
-* **Argument type**: How argument values are read: numeric as numbers, datetime as dates, string as discrete categories. Choices: `numeric`, `datetime`, `string`.
+* **Argument type**: How argument values are read: numeric as numbers, datetime as dates, string as discrete categories. Choices: Numeric, Date & time, String.
 * **Width**: Thickness of the axis line in px. Range 1 to 8.
 * **Color**: Color of the axis line; auto keeps the theme's.
 * **Visible**: Draws the argument axis line.
@@ -146,7 +154,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Background color**: Background color of the pane behind its series.
   * **Value axes**: Value axes drawn in the pane; a series picks one as pane-1, pane-2 in this order.
     * **Title**: Title shown along the axis; empty shows none.
-    * **position**: Side of the pane the axis is drawn on; top and bottom apply to a rotated plot. Choices: `left`, `right`, `top`, `bottom`.
+    * **Position**: Side of the pane the axis is drawn on; top and bottom apply to a rotated plot. Choices: Left, Right, Top, Bottom.
     * **Width**: Thickness of the axis line in px. Range 1 to 8.
     * **Color**: Color of the axis line; auto keeps the theme's.
     * **Start value**: Lowest value shown on the axis; empty fits the data.
@@ -204,7 +212,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Look &amp; feel</summary>
 
-* **Zoom and pan**: disabled: fixed view; enabled: wheel and pinch zoom, drag pans; selectable: a lock button above the chart turns zoom on and off. Choices: `disabled`, `enabled`, `selectable`. *Set per screen.*
+* **Zoom and pan**: disabled: fixed view; enabled: wheel and pinch zoom, drag pans; selectable: a lock button above the chart turns zoom on and off. Choices: Disabled, Enabled, Selectable. *Set per screen.*
 * **Scale to fit constant lines**: Extends every value axis to include its constant lines, with 8 % padding so labels never clip.
 * **Synchronize value axes**: Twin axes in one pane share tick positions (grid lines coincide); a range may stretch beyond its data to match. Off: each axis keeps its own range and ticks.
 * **Show tooltips**: Shows a value popup when hovering a point.
@@ -217,7 +225,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Bar group padding**: Gap between neighboring bar groups as a fraction of the group width, 0 to 1; ignored when a group width is set.
 * **Bar group width**: Fixed width of a bar group in px; empty sizes groups from the padding.
 * **Inner margin**: Empty space between the plot and the widget edge in px.
-* **Palette**: Colors given to the series in order; empty keeps the default palette.
+* **Palette**: Colors given to the series in order; empty gives shades of the app accent color.
 
 </details>
 

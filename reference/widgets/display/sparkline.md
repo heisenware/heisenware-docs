@@ -77,9 +77,9 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Enabled**: Shows the tooltip.
   * **Interactive**: Lets members select and copy the tooltip text.
   * **Color**: Background color of the tooltip; auto keeps the theme's.
-  * **arrowLength**: Length of the tooltip's arrow in px.
+  * **Arrow length**: Length of the tooltip's arrow in px.
   * **Border radius**: Rounding of the tooltip corners in px.
-  * **opacity**: Opacity of the whole tooltip, 0 (clear) to 1 (solid). Range 0 to 1.
+  * **Opacity**: Opacity of the whole tooltip, 0 (clear) to 1 (solid). Range 0 to 1.
   * **Padding left and right**: Space between the tooltip's left and right borders and its text in px.
   * **Padding top and bottom**: Space between the tooltip's top and bottom borders and its text in px.
   * **Border**: Outline of the tooltip.
@@ -90,7 +90,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
     * **Width**: Thickness of the outline in px.
   * **Font**: Font of the tooltip text.
     * **Color**: Color of the text; auto keeps the theme's.
-    * **Family**: Typeface of the text. Choices: `Arial`, `Roboto`, `Courier New`, `Georgia`, `Impact`, `Lucida Console`, `Tahoma`, `Times New Roman`, `Verdana`.
+    * **Family**: Typeface of the text. Choices: Arial, Roboto, Courier New, Georgia, Impact, Lucida Console, Tahoma, Times New Roman, Verdana.
     * **Opacity**: Opacity of the text, 0 (clear) to 1 (solid). Range 0 to 1.
     * **Size**: Font size of the text in px. Choices: `8`, `10`, `12`, `14`, `18`, `24`, `36`, `48`.
     * **Weight**: Font weight of the text, 100 (thin) to 900 (black). Range 100 to 900.
@@ -103,16 +103,16 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 * **Type**: Drawing style of the sparkline; winloss draws every value as a bar above or below the threshold. Choices: Area, Bar, Line, Spline, Spline area, Step area, Step line, Win-Loss bar.
 * **Apply customized colors**: Applies the colors chosen here; off keeps the theme's colors.
-* ****: Highlight of the first and last points.
+* **First and last points**: Highlight of the first and last points.
   * **Color in first and last entry**: Marks the first and last points with their own color.
   * **First and last color**: Color of the first and last point markers; auto keeps the theme's. Only when Color in first and last entry is on and customizeColors is on.
-* ****: Highlight of the lowest and highest points.
+* **Lowest and highest points**: Highlight of the lowest and highest points.
   * **Color in min and max entry**: Marks the lowest and highest points with their own colors.
   * **Color of maximum**: Color of the highest point's marker; auto keeps the theme's. Only when Color in min and max entry is on.
   * **Color of minimum**: Color of the lowest point's marker; auto keeps the theme's. Only when Color in min and max entry is on.
 * **Point color**: Color of the point markers; auto keeps the theme's. Only when Type is Area, Line, Spline, Spline area, Step area or Step line.
 * **Point size in pixels**: Diameter of the point markers in px. Only when Type is Area, Line, Spline, Spline area, Step area or Step line.
-* **Point symbol**: Shape of the point markers. Choices: `circle`, `cross`, `polygon`, `square`, `triangle`, `triangleDown`, `triangleUp`. Only when Type is Area, Line, Spline, Spline area, Step area or Step line.
+* **Point symbol**: Shape of the point markers. Choices: Circle, Cross, Polygon, Square, Triangle, Triangle down, Triangle up. Only when Type is Area, Line, Spline, Spline area, Step area or Step line.
 * **Negative bar color**: Color of the bars below zero; auto keeps the theme's. Only when Type is Bar.
 * **Positive bar color**: Color of the bars above zero; auto keeps the theme's. Only when Type is Bar.
 * **Line color**: Color of the line; auto keeps the theme's. Only when Type is Area, Line, Spline, Spline area, Step area or Step line.

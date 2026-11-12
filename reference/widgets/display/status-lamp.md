@@ -44,16 +44,14 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 </details>
 
-**`context`** (from an output, `any`): Any context that will be provided back, when clicked.
+**`context`** (from an output, `string | number | boolean | object | array | null`): Any context that will be provided back, when clicked.
 
 <details>
 
 <summary>Example</summary>
 
 ```json
-{
-  "device": "Pump A"
-}
+"Pump A"
 ```
 
 </details>
@@ -73,7 +71,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 {% endtab %}
 
 {% tab title="Emits" %}
-**`onClick`** (into an input): Writes the bound context value when the lamp is clicked.
+**`onClick`** (into an input, `string | number | boolean | object | array | null`): Writes the bound context value when the lamp is clicked.
 
 {% endtab %}
 
@@ -87,7 +85,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Look &amp; feel</summary>
 
-* **Shape**: circle draws round lamps sized to the short side; rectangle splits the long side into rounded bars. Choices: `circle`, `rectangle`.
+* **Shape**: circle draws round lamps sized to the short side; rectangle splits the long side into rounded bars. Choices: Circle, Rectangle.
 * **Status mappings**: Colors by status: a bound value is matched against these entries; no match shows a dim grey lamp.
   * **Value**: Status this entry matches, compared as text; an object is matched by its status field.
   * **Color**: Lamp color for this status; transparent hides the lamp, empty or auto keeps the theme's.

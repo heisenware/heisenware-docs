@@ -37,13 +37,13 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 <summary>Look &amp; feel</summary>
 
 * **Storage type**: File uploads each photo as JPEG to the server and delivers a path; buffer keeps it in the value as base64. Choices: File, Buffer.
-* **button**: The button members press to scan, upload or take a photo.
+* **Button**: The button members press to scan, upload or take a photo.
   * **Button Text**: Label shown on the button; empty shows none.
   * **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-camera; empty shows none.
   * **Text Size**: Font size of the label in px. Range 8 to 40. *Set per screen.*
   * **Icon Size**: Size of the icon in px. Range 20 to 100. *Set per screen.*
-  * **Button Type**: Color scheme: default uses the accent color, normal is neutral, success green, danger red. Choices: `default`, `normal`, `success`, `danger`.
-  * **Styling Mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone. Choices: `text`, `contained`, `outlined`.
+  * **Button Type**: Color scheme: default uses the accent color, normal is neutral, success green, danger red. Choices: Default, Normal, Success, Danger.
+  * **Styling Mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone. Choices: Text, Contained, Outlined.
   * **Hover Text**: Tooltip shown while the pointer rests on the button; empty shows the label or nothing.
   * **Initially Disabled**: Starts the button greyed out and unclickable until a bound button value enables it.
 * **Aspect ratio**: Width-to-height ratio of the crop frame over the camera view; portrait orientation flips it. Choices: 16/9, 4/3, 7/5 (DIN A4).

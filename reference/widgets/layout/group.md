@@ -141,7 +141,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Data binding</summary>
 
-* **null**: Per member (by id), the row fields that feed its properties; set through the binding editor or set_group_bindings.
+* **Member bindings**: Per member (by id), the row fields that feed its properties; set through the binding editor or set_group_bindings.
 
 </details>
 

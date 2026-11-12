@@ -38,11 +38,12 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Look &amp; feel</summary>
 
+* **Icon**: The Font Awesome icon: 'fa-solid fa-square-check' (as a button's icon), 'solid/square-check' or 'square-check'; the icon style picks the weight, a brand icon is 'fa-brands fa-github'.
 * **Icon style**: Font Awesome weight of the icon's strokes, from solid to thin, or the two-tone duotone; brand icons ignore it. Choices: Solid, Regular, Light, Thin, Duotone.
 * **Icon color**: Color of the icon; auto keeps the theme's accent color, empty paints it black.
 * **Enable background**: Draws a colored surface behind the icon and shrinks the icon to the icon size fraction; off, the icon fills its box.
-* **Surface style**: Elevation raises the surface with a shadow (see elevation); outlined draws a border instead (see border). Choices: `elevation`, `outlined`. Only when Enable background is on.
-* **Background color**: Leave empty to auto-calculate from Icon Color. Only when Enable background is on.
+* **Surface style**: Elevation raises the surface with a shadow (see elevation); outlined draws a border instead (see border). Choices: Elevation, Outlined. Only when Enable background is on.
+* **Background color**: Color of the surface, lightened by the background lightening; auto or empty takes the icon color. Only when Enable background is on.
 * **Background lightening**: The fraction (0.1–1) by which to lighten the background color. Range 0.1 to 1. Only when Enable background is on.
 * **Corner radius**: Rounding of the surface's corners, from square to circle; theme keeps the theme's radius. Choices: Theme, Square, Low, Medium, Circle. Only when Enable background is on.
 * **Icon size**: Size of the icon as a fraction of its box, 0.1 to 1. Range 0.1 to 1. Only when Enable background is on.

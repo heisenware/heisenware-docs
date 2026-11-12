@@ -121,7 +121,7 @@
     * [Sankey Chart](reference/widgets/display/sankey-chart.md)
     * [Sparkline](reference/widgets/display/sparkline.md)
     * [Status Lamp](reference/widgets/display/status-lamp.md)
-    * [Text](reference/widgets/display/text.md)
+    * [Text Box](reference/widgets/display/text-box.md)
     * [Timeline](reference/widgets/display/timeline.md)
     * [Toast](reference/widgets/display/toast.md)
     * [Value Box](reference/widgets/display/value-box.md)

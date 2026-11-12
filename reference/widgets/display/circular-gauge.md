@@ -70,8 +70,8 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 ```json
 {
-  "startAngle": 225,
-  "endAngle": 315,
+  "startAngle": -45,
+  "endAngle": 270,
   "ranges": [
     {
       "startValue": 0,
@@ -99,14 +99,22 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <details>
 
+<summary>General</summary>
+
+* **Animate**: Eases the display to new data in one second; off draws every update at once, for fast live data.
+
+</details>
+
+<details>
+
 <summary>Frame</summary>
 
-* **frame**: The ring around the scale: its angles, thickness, background and colored sections.
+* **Frame**: The ring around the scale: its angles, thickness, background and colored sections.
   * **Start angle**: Where the scale starts, in degrees: 0 is 9 o'clock, positive turns the start clockwise (upward), negative counter-clockwise. Range -180 to 180.
   * **Circle size**: Length of the arc in degrees, drawn clockwise from the start angle; 360 closes the circle. Range 0 to 360.
   * **Width**: Thickness of the ring in px. Range 1 to 20.
   * **Background color**: Color of the ring where no colored section covers it; empty or auto keeps the theme's.
-  * **ranges**: Colored sections of the ring, each from a start value to an end value.
+  * **Color sections**: Colored sections of the ring, each from a start value to an end value.
     * **Start value**: Scale value where the section begins.
     * **End value**: Scale value where the section ends.
     * **Color**: Color of the section; empty takes the next color of the gauge's palette.

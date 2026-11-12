@@ -101,7 +101,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Minimum**: Lowest value the editor accepts; empty sets no limit. Only when Editor widget is Number.
   * **Maximum**: Highest value the editor accepts; empty sets no limit. Only when Editor widget is Number.
   * **Precision**: Decimal places shown for the value. Only when Editor widget is Number.
-  * **Currency**: ISO currency code (EUR, USD) that formats the value as money; empty shows a plain number. Only when Editor widget is Number.
+  * **Currency**: Three-letter ISO 4217 code, e.g. EUR, that formats the value as money; empty shows a plain number. Only when Editor widget is Number.
   * **Handle large numbers**: Abbreviates large numbers (12K, 3M). Only when Editor widget is Number.
   * **Date type**: Kind of value the picker edits: a date, a time of day or both. Choices: Date only, Time only, Date & time. Only when Editor widget is Date/Time.
   * **Format description**: How the display format is chosen: preset picks a named format, explicit composes one from its parts. Choices: Use preset, Explicit. Only when Editor widget is Date/Time.
@@ -122,8 +122,8 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Justification**: How a row of tiles is aligned. Tiles fill rows left to right and wrap; left, center and right keep 16 px between tiles, the space variants spread them over the row. Choices: Left, Center, Right, Space between, Space around, Space evenly. *Set per screen.*
   * **Tile width**: Width of one tile in px; empty sizes it to its content. A tile takes this plus 16 px padding plus 16 px spacing, so two 328 px tiles need 720 px or the second wraps. *Set per screen.*
   * **Tile height**: Height of one tile in px; empty sizes it to its content. *Set per screen.*
-  * **Column count**: Columns for the fields inside one tile: 1 stacks them, auto fits as many as the tile width allows. Tiles per row follow from the tile width, not from this. Choices: `auto`, `1`, `2`, `3`, `4`, `5`, `6`. *Set per screen.*
-  * **Label location**: Where a field's label sits: left of, right of or above its value. Choices: `left`, `right`, `top`. *Set per screen.*
+  * **Column count**: Columns for the fields inside one tile: 1 stacks them, auto fits as many as the tile width allows. Tiles per row follow from the tile width, not from this. Choices: Auto, 1, 2, 3, 4, 5, 6. *Set per screen.*
+  * **Label location**: Where a field's label sits: left of, right of or above its value. Choices: Left, Right, Top. *Set per screen.*
   * **Label mode**: Static: label beside the value. Floating: label inside the editor, rising once it holds a value. Hidden: no label. Outside: label outside the editor box. Choices: Static, Floating, Hidden, Outside. *Set per screen.*
   * **Custom content size**: Font size of the values in px; empty keeps the theme's. Range 6 to 50. *Set per screen.*
   * **Custom label size**: Font size of the labels in px; empty keeps the theme's. Range 6 to 50. *Set per screen.*

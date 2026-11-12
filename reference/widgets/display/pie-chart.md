@@ -47,11 +47,24 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 {% endtab %}
 
+{% tab title="Emits" %}
+**`onPointClick`** (into an input, `object`): Writes the clicked point as `{ argument, seriesName, value }`.
+
+{% endtab %}
+
 {% endtabs %}
 
 ## Settings
 
 Double-click the widget in the Page editor to open its settings, grouped in these tabs. Settings marked *set per screen* are pinned by nature: every screen keeps its own value.
+
+<details>
+
+<summary>General</summary>
+
+* **Animate**: Eases the display to new data in one second; off draws every update at once, for fast live data.
+
+</details>
 
 <details>
 
@@ -74,7 +87,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Show labels**: Shows a value label on every slice; slices with value 0 get none. *Set per screen.*
 * **Label position**: Placement of the slice labels: on the slice, aligned in columns beside the pie, or outside next to it. Choices: Inside, Columns, Outside. *Set per screen.*
 * **Inner margin**: Empty space between the pie and the widget edge in px.
-* **Palette**: Colors given to the slices in order; empty keeps the default palette.
+* **Palette**: Colors given to the slices in order; empty gives shades of the app accent color.
 
 </details>
 

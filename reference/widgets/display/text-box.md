@@ -1,9 +1,9 @@
 ---
 description: >-
-  Static rich text - titles, labels, instructions, static tables; htmlText takes markdown (headings, lists, tables, quotes, code, links) or HTML, styled by the app theme
+  Static rich text for titles, labels, instructions and static tables, written as markdown (headings, lists, tables, quotes, code, links) or HTML and styled by the app theme
 ---
 
-# Text
+# Text Box
 
 <figure><img src="../../../.gitbook/assets/widget-text.png" alt="Text box with a changeover instruction: a heading, a numbered list, a table of cap torques and fill levels, and a note" width="688"><figcaption></figcaption></figure>
 

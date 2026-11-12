@@ -88,6 +88,14 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <details>
 
+<summary>General</summary>
+
+* **Animate**: Eases the display to new data in one second; off draws every update at once, for fast live data.
+
+</details>
+
+<details>
+
 <summary>Content</summary>
 
 * **Argument field**: Field whose values are spread around the circle.
@@ -109,7 +117,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Opacity**: Fill opacity of area series (0 to 1). Range 0 to 1.
 * **Start angle**: Rotation in degrees; positive values rotate clockwise. Range -180 to 180.
 * **Show tooltips**: Shows a popup with series, argument and value when hovering a point.
-* **Palette**: Colors given to the series in order; empty keeps the default palette.
+* **Palette**: Colors given to the series in order; empty gives shades of the app accent color.
 
 </details>
 

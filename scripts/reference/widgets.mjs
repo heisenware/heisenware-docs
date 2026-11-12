@@ -8,7 +8,11 @@
  *   example), the settings pinned by nature;
  * - config.js: the settings tabs, folded per tab by the platform's own
  *   compilePropsSchema; value types are written by its schemaTypeText,
- *   so the page says what the App Builder's tooltips say.
+ *   so the page says what the App Builder's tooltips say;
+ * - generalProps.js: the settings every widget that carries them shows
+ *   once, on its General tab (Animate). compilePropsSchema folds them
+ *   into every fold - right for one schema of the whole widget -, so
+ *   they are listed once, under General, and left out of each tab's.
  *
  * A page has one generated block between `<!-- generated -->` and
  * `<!-- /generated -->`. Everything outside it - the GIF, a sentence on
@@ -77,6 +81,7 @@ async function loadWidgets () {
   register(pathToFileURL(path.join(CLOUD, 'scripts', 'lib', 'widgetConfigLoader.mjs')))
   const { compilePropsSchema } = await import(pathToFileURL(path.join(WIDGETS, 'propsSchema.js')))
   const { schemaTypeText } = await import(pathToFileURL(path.join(WIDGETS, 'schemaMeta.js')))
+  const { generalPropsOf } = await import(pathToFileURL(path.join(WIDGETS, 'generalProps.js')))
 
   const folders = fs.readdirSync(WIDGETS, { withFileTypes: true })
     .filter(e => e.isDirectory() && fs.existsSync(path.join(WIDGETS, e.name, 'manifest.json')))
@@ -95,11 +100,16 @@ async function loadWidgets () {
     // members place: its page is written by hand and says where it went
     if (manifest.retiredInto) continue
     const config = path.join(WIDGETS, folder, 'config.js')
+    const general = Object.fromEntries(generalPropsOf(manifest.defaults))
     const tabs = []
+    if (Object.keys(general).length > 0) {
+      tabs.push({ title: 'General', schema: { type: 'object', properties: general } })
+    }
     if (fs.existsSync(config)) {
       const mod = await import(pathToFileURL(config))
       for (const tab of mod.tabs) {
         const schema = compilePropsSchema([tab], manifest.defaults, manifests)
+        for (const key of Object.keys(general)) delete schema.properties[key]
         tabs.push({ title: tab.title, schema })
       }
     }

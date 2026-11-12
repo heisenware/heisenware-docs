@@ -63,7 +63,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 <summary>Example</summary>
 
 ```json
-12
+"8px"
 ```
 
 </details>
@@ -96,16 +96,19 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 </details>
 
-**`style`** (from an output, `object`): Arbitrary CSS key / value instructions.
+**`style`** (from an output, `Array<object>`): Arbitrary CSS key / value instructions.
 
 <details>
 
 <summary>Example</summary>
 
 ```json
-{
-  "padding": "8px"
-}
+[
+  {
+    "key": "padding",
+    "value": "8px"
+  }
+]
 ```
 
 </details>
@@ -137,18 +140,18 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Look &amp; feel</summary>
 
-* **Surface style**: Elevation raises the card with a shadow (see elevation); outlined draws a border instead (see border). Choices: `elevation`, `outlined`.
+* **Surface style**: Elevation raises the card with a shadow (see elevation); outlined draws a border instead (see border). Choices: Elevation, Outlined.
 * **Background color**: Fill color of the card as a CSS color; auto or empty keeps the theme's tile color.
 * **Opacity**: Transparency of the whole card from 0 (invisible) to 1 (solid). Range 0 to 1.
 * **Corner radius**: Rounding of the corners, from square to circle; theme keeps the theme's radius. Choices: Theme, Square, Low, Medium, High, Circle.
 * **Custom CSS overrides**: Raw CSS properties applied to the card.
   * **Property**: CSS property in camelCase, e.g. zIndex or cursor.
   * **Value**: Value of that property, e.g. 100 or pointer.
-* **Elevation**: Shadow depth under the card, from flat (none) to high; theme keeps the theme's shadow. Choices: Theme, Flat, Low, Medium, High. Only when Surface style is `elevation`.
-* **Border**: Line drawn around an outlined card. Only when Surface style is `outlined`.
-  * **Width**: Line width in px. Only when Surface style is `outlined`.
-  * **Color**: Line color; auto or empty keeps the theme's border color. Only when Surface style is `outlined`.
-  * **Style**: Solid, dashed or dotted line. Choices: `solid`, `dashed`, `dotted`. Only when Surface style is `outlined`.
+* **Elevation**: Shadow depth under the card, from flat (none) to high; theme keeps the theme's shadow. Choices: Theme, Flat, Low, Medium, High. Only when Surface style is Elevation.
+* **Border**: Line drawn around an outlined card. Only when Surface style is Outlined.
+  * **Width**: Line width in px. Only when Surface style is Outlined.
+  * **Color**: Line color; auto or empty keeps the theme's border color. Only when Surface style is Outlined.
+  * **Style**: Solid, dashed or dotted line. Choices: Solid, Dashed, Dotted. Only when Surface style is Outlined.
 
 </details>
 

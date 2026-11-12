@@ -20,7 +20,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 {% tabs %}
 {% tab title="Receives" %}
-**`disable`** (from an output, `any`): When truthy, the button gets disabled. Falsy values are ignored.
+**`disable`** (from an output, `boolean`): When truthy, the button gets disabled. Falsy values are ignored.
 
 <details>
 
@@ -32,7 +32,7 @@ true
 
 </details>
 
-**`enable`** (from an output, `any`): When truthy, the button gets enabled. Falsy values are ignored.
+**`enable`** (from an output, `boolean`): When truthy, the button gets enabled. Falsy values are ignored.
 
 <details>
 
@@ -44,7 +44,7 @@ true
 
 </details>
 
-**`toggle`** (from an output, `any`): When truthy, the button is enabled, when falsy it is disabled.
+**`toggle`** (from an output, `boolean`): When truthy, the button is enabled, when falsy it is disabled.
 
 <details>
 
@@ -56,7 +56,7 @@ true
 
 </details>
 
-**`disabled`** (from an output, `any`): When truthy, the button is disabled, when falsy it is enabled.
+**`disabled`** (from an output, `boolean`): When truthy, the button is disabled, when falsy it is enabled.
 
 <details>
 
@@ -68,7 +68,7 @@ true
 
 </details>
 
-**`done`** (from an output, `any`): When linked, the button plays a loading animation until a value update is received.
+**`done`** (from an output, `string | number | boolean | object | array | null`): When linked, the button plays a loading animation until a value update is received.
 
 <details>
 
@@ -179,8 +179,8 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-play; empty shows none.
 * **Font size**: Font size of the label in px. Range 14 to 100. *Set per screen.*
 * **Icon size**: Size of the icon in px. Range 20 to 100. *Set per screen.*
-* **Type**: Color scheme: default accent, normal neutral, success green, danger red; transparent makes it an invisible click area. Choices: `default`, `normal`, `success`, `danger`, `transparent`.
-* **Styling mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone; transparent ignores it. Choices: `text`, `contained`, `outlined`.
+* **Type**: Color scheme: default accent, normal neutral, success green, danger red; transparent makes it an invisible click area. Choices: Default, Normal, Success, Danger, Transparent.
+* **Styling mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone; transparent ignores it. Choices: Text, Contained, Outlined.
 * **Color**: Custom button color; auto keeps the color the type gives.
 * **Hover text**: Tooltip shown while the pointer rests on the button; empty shows none.
 * **Initially disabled**: Starts the button greyed out and unclickable until a bound enable, toggle or disabled value changes it.

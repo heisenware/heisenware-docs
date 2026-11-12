@@ -32,7 +32,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 </details>
 
-**`subValue`** (from an output, `number`): A sub-value visualized next to the value.
+**`subValue`** (from an output, `number | Array<number>`): A sub-value or an array of sub-values to visualize next to the value.
 
 <details>
 
@@ -94,13 +94,21 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <details>
 
+<summary>General</summary>
+
+* **Animate**: Eases the display to new data in one second; off draws every update at once, for fast live data.
+
+</details>
+
+<details>
+
 <summary>Frame</summary>
 
-* **frame**: The bar around the scale: its direction, thickness, background and colored sections.
+* **Frame**: The bar around the scale: its direction, thickness, background and colored sections.
   * **Orientation**: Direction of the gauge: vertical runs bottom to top, horizontal left to right. Choices: Vertical, Horizontal. *Set per screen.*
   * **Width**: Thickness of the bar in px. Range 1 to 20.
   * **Background color**: Color of the bar where no colored section covers it; empty or auto keeps the theme's.
-  * **ranges**: Colored sections of the bar, each from a start value to an end value.
+  * **Color sections**: Colored sections of the bar, each from a start value to an end value.
     * **Start value**: Scale value where the section begins.
     * **End value**: Scale value where the section ends.
     * **Color**: Color of the section; empty takes the next color of the gauge's palette.

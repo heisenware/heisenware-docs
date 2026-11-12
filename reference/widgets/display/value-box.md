@@ -20,7 +20,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 {% tabs %}
 {% tab title="Receives" %}
-**`value`** (from an output, `any`): Accepts various data for display. Handles strings, numbers, objects and images.
+**`value`** (from an output, `string | number | boolean | object | array | null`): Accepts various data for display. Handles strings, numbers, objects and images.
 
 <details>
 
@@ -32,7 +32,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 </details>
 
-**`clear`** (from an output, `any`): Truthy values clear the displayed value.
+**`clear`** (from an output, `boolean`): Truthy values clear the displayed value.
 
 <details>
 
@@ -59,7 +59,7 @@ true
 {% endtab %}
 
 {% tab title="Emits" %}
-**`onClick`** (into an input): Writes the currently displayed value when the box is clicked. Exceptional use only - click semantics belong to buttons; a click that must carry a value is a button firing an executor whose input holds it.
+**`onClick`** (into an input, `string | number | boolean | object | array | null`): Writes the currently displayed value when the box is clicked. Exceptional use only - click semantics belong to buttons; a click that must carry a value is a button firing an executor whose input holds it.
 
 **`onClick`** (fires a trigger): Triggers the linked executor when the box is clicked.
 
@@ -83,7 +83,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Format**: Formats numbers and dates for display, with a number or a date format; empty shows the value as it is. Choices: Fixed point, Decimal, Currency, Percent, Large number, Thousands, Millions, Billions, Trillions, Exponential, Short date, Long date, Short time, Long time, Short date & time, Long date & time, Month & day, Month & year, Quarter & year, Day, Day of week, Month, Year, Quarter, Hour, Minute, Second, Millisecond.
 * **Prefix**: Text put in front of the shown value; objects and images ignore it.
 * **Suffix**: Text put after the shown value; objects and images ignore it.
-* **Placeholder**: Text shown in gray italics while no value has arrived or after clear; an empty string from the backend shows an empty box.
+* **Placeholder**: Text shown in gray italics while no value has arrived or after clear; empty by default. An empty string from the backend shows an empty box.
 
 </details>
 

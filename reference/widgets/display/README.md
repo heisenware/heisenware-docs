@@ -28,7 +28,7 @@ description: >-
 | [Sankey Chart](sankey-chart.md) | Sankey flow diagram of weighted links between nodes, from rows with source, target and weight fields. |
 | [Sparkline](sparkline.md) | Compact inline trend line over data points, with min/max and first/last indicators. |
 | [Status Lamp](status-lamp.md) | LED-style indicator mapping bound values or executor status to colors, as circle or rectangle. |
-| [Text](text.md) | Static rich text - titles, labels, instructions, static tables; htmlText takes markdown (headings, lists, tables, quotes, code, links) or HTML, styled by the app theme. |
+| [Text Box](text-box.md) | Static rich text for titles, labels, instructions and static tables, written as markdown (headings, lists, tables, quotes, code, links) or HTML and styled by the app theme. |
 | [Timeline](timeline.md) | State-over-time bars per field across up to six bound data sources, with category colors. |
 | [Value Box](value-box.md) | Displays a single live value with number/date formatting and JSON tree rendering for objects. |
 

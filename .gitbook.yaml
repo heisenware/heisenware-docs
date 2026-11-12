@@ -109,6 +109,7 @@ redirects:
   app-builder/build-frontend/page-explorer: app-builder/explorers/pages.md
   app-builder/build-frontend/pdf-template-editor: app-builder/template-editor.md
   app-builder/build-frontend/text-icons-and-images: app-builder/page-editor.md
+  reference/widgets/display/text: reference/widgets/display/text-box.md
   app-builder/build-frontend/theme-editor: app-builder/theme-editor.md
   app-builder/deploy-and-maintain: app-builder/test-and-deploy.md
   app-builder/overview: app-builder/README.md

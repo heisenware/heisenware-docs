@@ -198,12 +198,20 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <details>
 
+<summary>General</summary>
+
+* **Animate**: Eases the display to new data in one second; off draws every update at once, for fast live data.
+
+</details>
+
+<details>
+
 <summary>Tracks</summary>
 
 * **Time/Date field**: Field holding the timestamp of each record.
-* **Timeline tracks**: Rows of the timeline, one per value field; fields found in the bound data are added at design time.
+* **Timeline tracks**: Rows of the timeline, one per value field, the first on top (on the left when rotated); fields found in the bound data are added at design time.
   * **Track name (y-axis label)**: Label of the row on the track axis; empty shows the value field.
-  * **Value field**: Field whose runs of equal values form the colored blocks; each distinct value is a category.
+  * **Value field**: Field whose runs of equal values form the colored blocks; each distinct value is a category, and a null or missing value ends the block and leaves a gap.
   * **Show labels**: Prints the category name inside each block of the track.
 
 </details>
@@ -237,7 +245,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 <summary>Look &amp; feel</summary>
 
 * **Timeline end boundary**: Where each track's last block ends: at the current time (live), or 2 % of the data span past the last data point (snapshot). Choices: Current time (live monitoring), Last point (historical snapshot).
-* **Zoom and pan**: none fixes the time axis; selectable adds a lock button that turns wheel zoom and drag pan on; enabled has them always on. Choices: Disabled, Selectable (requires click), Always enabled. *Set per screen.*
+* **Zoom and pan**: disabled: fixed time axis; enabled: wheel zoom and drag pan always on; selectable: a lock button above the timeline turns them on and off. Choices: Disabled, Enabled, Selectable. *Set per screen.*
 * **Rotate plot**: Draws the tracks as columns with time running upward; off, tracks are rows with time running left to right. *Set per screen.*
 * **Show vertical grid lines**: Draws grid lines at the ticks of the time axis.
 * **Show y-axis track labels**: Draws the axis line along the track names; the names themselves always show.

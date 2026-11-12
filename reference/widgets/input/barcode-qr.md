@@ -20,7 +20,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 {% tabs %}
 {% tab title="Receives" %}
-**`clear`** (from an output, `any`): Clears all captured barcodes on truthy values.
+**`clear`** (from an output, `boolean`): Clears all captured barcodes on truthy values.
 
 <details>
 
@@ -66,13 +66,13 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 <summary>Look &amp; feel</summary>
 
 * **Scan mode**: Single writes the first code read and closes the camera; multiple collects codes until the check button writes them as an array. Choices: Single, Multiple.
-* **button**: The button members press to scan, upload or take a photo.
+* **Button**: The button members press to scan, upload or take a photo.
   * **Button Text**: Label shown on the button; empty shows none.
   * **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-camera; empty shows none.
   * **Text Size**: Font size of the label in px. Range 8 to 40. *Set per screen.*
   * **Icon Size**: Size of the icon in px. Range 20 to 100. *Set per screen.*
-  * **Button Type**: Color scheme: default uses the accent color, normal is neutral, success green, danger red. Choices: `default`, `normal`, `success`, `danger`.
-  * **Styling Mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone. Choices: `text`, `contained`, `outlined`.
+  * **Button Type**: Color scheme: default uses the accent color, normal is neutral, success green, danger red. Choices: Default, Normal, Success, Danger.
+  * **Styling Mode**: Contained fills the button with its color, outlined draws only a border, text shows the label alone. Choices: Text, Contained, Outlined.
   * **Hover Text**: Tooltip shown while the pointer rests on the button; empty shows the label or nothing.
   * **Initially Disabled**: Starts the button greyed out and unclickable until a bound button value enables it.
 

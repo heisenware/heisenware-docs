@@ -161,7 +161,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Maximum**: Highest value the editor accepts; empty sets no limit. Only when Editor widget is Number.
   * **Default value**: Value a new row starts with in this column. Only when Editor widget is Number.
   * **Precision**: Decimal places shown in the cell and its editor. Only when Editor widget is Number.
-  * **Currency**: ISO currency code (EUR, USD) that formats the value as money; empty shows a plain number. Only when Editor widget is Number.
+  * **Currency**: Three-letter ISO 4217 code, e.g. EUR, that formats the value as money; empty shows a plain number. Only when Editor widget is Number.
   * **Handle large numbers**: Abbreviates large numbers in the cell (12K, 3M); the editor keeps the full number. Only when Editor widget is Number.
   * **Date type**: Kind of value in the column: a date, a time of day or both; sets the picker and the column type. Choices: Date only, Time only, Date & time. Only when Editor widget is Date/Time.
   * **Format description**: How the display format is chosen: preset picks a named format, explicit composes one from its parts. Choices: Use preset, Explicit. Only when Editor widget is Date/Time.
@@ -169,7 +169,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Options**: Options offered by the dropdown or tag picker, comma separated; label:value shows the label and writes the value. The options output replaces them at runtime. Only when Editor widget is Dropdown.
   * **Switched on text**: Text shown on the switch while it is on. Only when Editor widget is Switch.
   * **Switched off text**: Text shown on the switch while it is off. Only when Editor widget is Switch.
-  * **Media type**: File kind of the cell (png, jpeg, svg, pdf); set, the cell shows a preview and loses sorting, filtering, search and export. Choices: `png`, `jpeg`, `svg`, `pdf`. Only when Editor widget is Media.
+  * **Media type**: File kind of the cell (png, jpeg, svg, pdf); set, the cell shows a preview and loses sorting, filtering, search and export; empty shows no preview. Choices: PNG, JPEG, SVG, PDF, No preview. Only when Editor widget is Media.
   * **Is central element**: Shows the media large and full width in the edit form. Only when Editor widget is Media.
   * **Thumbnail size**: Height of the preview in the cell in px. Range 20 to 400. Only when Editor widget is Media.
 
@@ -182,7 +182,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Appearance**: Layout and styling of the grid.
   * **Paging mode**: virtual loads rows as the member scrolls; standard splits them into pages with a pager below. Choices: Infinite scrolling, Paged view. *Set per screen.*
   * **Detail mode**: How detail columns show under an expanded row: horizontal as a nested table, vertical as a card with labels above values. Choices: Table, Card.
-  * **Detail card columns**: Columns for the fields of the detail card: 1 stacks them, auto fits as many as the width allows. Choices: `auto`, `1`, `2`, `3`, `4`, `5`, `6`. *Set per screen.*
+  * **Detail card columns**: Columns for the fields of the detail card: 1 stacks them, auto fits as many as the width allows. Choices: Auto, 1, 2, 3, 4, 5, 6. *Set per screen.*
   * **Custom content size**: Font size of cell values, filter inputs and editors in px; empty keeps the theme's. Range 6 to 50. *Set per screen.*
   * **Custom label size**: Font size of column headers and popup titles in px; empty keeps the theme's. Range 6 to 50. *Set per screen.*
   * **Show borders**: Draws a border around the grid.

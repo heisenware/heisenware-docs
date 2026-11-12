@@ -36,7 +36,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 </details>
 
-**`clear`** (from an output, `any`): Truthy values clear the displayed medium.
+**`clear`** (from an output, `boolean`): Truthy values clear the displayed medium.
 
 <details>
 

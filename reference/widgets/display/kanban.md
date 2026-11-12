@@ -96,6 +96,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 * **Stages**: Stage names, one column each in this order; dropping a card in a column writes that name to its stage field and emits onCardChange.
 * **Card title is clickable**: Renders the title as a link; a click on it emits onTitleClick with the card instead of onCardClick.
+* **Empty column text**: Text a column without cards shows; empty says it in the app's language (Drag cards here).
 
 </details>
 
