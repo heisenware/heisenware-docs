@@ -34,7 +34,7 @@ Click **Apply** to refresh the UI preview with your new theme.
 {% step %}
 #### Exit
 
-Click the App Editing icon (<i class="fa-mobile">:mobile:</i>) in the top bar to return.
+Click the App editor icon (<i class="fa-mobile">:mobile:</i>) in the top bar to return.
 {% endstep %}
 {% endstepper %}
 

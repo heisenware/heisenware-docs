@@ -126,6 +126,8 @@ Returns `true` upon removal.
 
 Defines a table schema. If the table does not exist, the function creates it. If it exists, the function adds any new fields.
 
+On the workspace's own database every definition is recorded in its [data model](relational-database.md#data-model).
+
 Unless you define a custom primary key, the function automatically adds these fields:
 
 * `id`: The table's primary key. A UUID on PostgreSQL, an auto-incrementing integer on other dialects.
@@ -257,6 +259,97 @@ This permanently deletes duplicate and null rows. You cannot undo this action.
 #### Output
 
 Returns `true` on success. Throws an error on failure and rolls back all changes.
+
+## Data model
+
+The workspace's own database, `internal-postgres`, keeps its **data model**: every table made through Heisenware, with its fields, keys, audit log and relations, and a history of who changed what and when. `defineTable`, the relationship functions, `deleteTable` and `duplicateTable` record into it, and so does the [Database editor](../../../app-builder/database-editor.md), where the model is shown and shaped. The functions below work on the workspace's own database only; an external database answers with a refusal.
+
+{% hint style="info" %}
+Shape the tables of the workspace's own database in the Database editor (or let the assistant do it), not with a function that calls `defineTable`: such a function runs once and leaves no record of why. One that exists keeps working and fills the model as it runs.
+{% endhint %}
+
+Most changes take an `options.actorId`: who made the change, for the model's history.
+
+### `getDataModel`
+
+Returns the data model: per table its fields (in the words of `defineTable`), `auditLog` when on, and its relations, written on the table that has them (`{ mandatorilyHasOne: 'customers' }`). The `id`, `createdAt`, `updatedAt` and the column of a relation come by themselves and are not listed.
+
+#### Output
+
+```yaml
+tables:
+  orders:
+    fields:
+      number: { type: string, unique: true, allowNull: false }
+      total: number
+    auditLog: true
+    relations:
+      - mandatorilyHasOne: customers
+```
+
+### `getDataModelHistory`
+
+Returns the changes of the model, newest first: when, which table, the function that made it, who, and what changed (a table, a field, a relation or the audit log, from what to what).
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>table</code></td><td>Only the changes of this table.</td><td>string</td></tr><tr><td></td><td><code>limit</code></td><td>At most this many changes (default 100).</td><td>integer</td></tr></tbody></table>
+
+### `getDataModelDrift`
+
+Returns where the model and the database differ, per table: a table, field or relation made outside the model (by SQL, an import, or an App built before the model was kept), one dropped outside it, a field the database holds with another type. Compared are tables, fields and their types, relations and the audit log.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>table</code></td><td>Only this table.</td><td>string</td></tr></tbody></table>
+
+### `adoptDrift`
+
+The model takes what the database holds where the two differ. The database stays as it is. Without a table, every table that differs is adopted.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>table</code></td><td>Only this table.</td><td>string</td></tr><tr><td></td><td><code>actorId</code></td><td>Who made the change.</td><td>string</td></tr></tbody></table>
+
+### `previewRemoval`
+
+Tells what removing would lose, without removing anything: a field (the rows holding a value, the unique key it shares), a relation (the rows it links) or the table (its rows, its audit log, the relations of other tables that end).
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>field</code></td><td>A field of the table.</td><td>string</td></tr><tr><td></td><td><code>relation</code></td><td>A relation as the model writes it, such as <code>{ mandatorilyHasOne: 'customers' }</code>.</td><td>object</td></tr></tbody></table>
+
+### `removeField` and `removeRelation`
+
+Remove a field, or a relation as the model writes it, of a table. The primary key stays as long as the table; the column of a relation goes with its relation.
+
+{% hint style="danger" %}
+#### Irreversible action
+
+The values go with the field, the links with the relation. Call `previewRemoval` first.
+{% endhint %}
+
+### `previewTypeChange` and `changeFieldType`
+
+`previewTypeChange` tells what a new type does to a field's values: the values it cannot take, with their rows, and the values it changes on the way, with an example (`12.5` as an integer is `12`). `changeFieldType` changes the type, converting every value; it refuses while a value cannot be taken.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The table.</td><td>string</td></tr><tr><td><code>field</code></td><td>The field.</td><td>string</td></tr><tr><td><code>type</code></td><td>The new type, one of the types of <code>defineTable</code>.</td><td>string</td></tr></tbody></table>
+
+### `mergeDataModel`
+
+Brings a data model into the workspace's own database, adding only: a table, field or relation it lacks, an audit log. Nothing is removed or changed: a field the database holds with another type stays as it is and is reported as a conflict. This is how an App's bundle brings its tables when it is imported.
+
+#### Output
+
+```yaml
+added:
+  - table: orders
+  - { table: lines, field: shift }
+conflicts:
+  - { table: lines, field: qty, has: string, brings: integer }
+```
 
 ## Querying and filtering data
 

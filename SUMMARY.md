@@ -42,6 +42,7 @@
   * [Page editor](app-builder/page-editor.md)
   * [Theme editor](app-builder/theme-editor.md)
   * [Template editor](app-builder/template-editor.md)
+  * [Database editor](app-builder/database-editor.md)
   * [Test and deploy](app-builder/test-and-deploy.md)
 
 ## App Player
