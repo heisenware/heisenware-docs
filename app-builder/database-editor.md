@@ -45,11 +45,11 @@ To make a new table, use **New table** at the head of the Model tab. In a table'
 
 * **Add a field**: enter its name and choose its type. A new field is added to every row, empty.
 * **Change a type**: click the field's type and choose the new one. Before anything changes, the editor tells what the change does to the values: which values the new type cannot take, with the rows that hold them (correct them first), and which values it changes on the way (`12.5` as an integer is `12`).
-* **Relate to another table**: choose the sentence that is true, such as *A row of orders must have one row of customers*. A role (such as `Payer`) names a second relation to the same table.
+* **Relate to another table**: choose the sentence that is true, such as *A row of orders must have one row of customers*. A role (such as `payer`) names a second relation to the same table; a row of orders then carries its customer as `payer`.
 * **Keep an audit log**: every change of a row is kept, with who made it. Once on, it stays on.
 * **Duplicate the table**: a new table with the same fields and every row, under a name you choose. The copy keeps no relations: their columns come along as plain fields.
 * **Used by**: the Apps whose functions name the table.
-* **History**: every change of the table's shape, with who made it and when.
+* **History**: every change of the table's shape, with who made it and when, and the statement when SQL made it.
 
 ## Removing
 
@@ -63,7 +63,7 @@ Confirm only when that is what you want. **Delete the table** in its panel, or s
 
 ## Differences from the database
 
-The model records every change made through Heisenware. A table, field or relation made another way, by SQL (`executeSql`), by an import or by an App built before the model was kept, is not in the model; one dropped by SQL is still in it. The Model tab marks these differences in copper and counts the tables that differ on its switch:
+The model records every change made through Heisenware, SQL included: a statement through `executeSql` that makes, changes or drops a table goes into the model as *by SQL*, with the statement. A table, field or relation made another way, by SQL from elsewhere (another system, a database console), by an import or by an App built before the model was kept, is not in the model; one dropped that way is still in it. The Model tab marks these differences in copper and counts the tables that differ on its switch:
 
 * a dashed copper card: a table the database holds and the model does not know, or one gone from the database;
 * a copper dot: a field that differs.
