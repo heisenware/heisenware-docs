@@ -7,7 +7,7 @@ description: >-
 
 <figure><img src="../../../.gitbook/assets/widget-photo.png" alt="Damage report panel with a Take photo button" width="568"><figcaption></figcaption></figure>
 
-The photo widget takes pictures with the device camera, cropped to a fixed aspect ratio and in the quality you choose. After each picture, the full list of photos goes to your logic, which can store them or attach them to a record. For new Apps, use the upload widget instead: it takes photos as well as files, and it replaces this widget.
+The photo widget takes pictures with the device camera, cropped to a fixed aspect ratio and in the quality you choose. After each picture your logic receives what the widget holds: the photo itself when it holds one, a list of photos when it holds several, ready for a [`file` or `files` field](../../functions/storage/relational-database.md#files-in-a-table). For new Apps, use the upload widget instead: it takes photos as well as files, and it replaces this widget.
 
 **Good for:** damage and quality photos in existing Apps.
 
@@ -20,7 +20,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 {% tabs %}
 {% tab title="Emits" %}
-**`images`** (into an input, `Array<object>`): Writes the full list of captured photos after every capture or delete.
+**`images`** (into an input, `object | Array<object>`): Writes what the widget holds after every photo taken or removed. Holding one photo (`maxPhotos` is 1, the default) it writes that photo's entry, and nothing once it is empty; holding several it writes the list of their entries. Reads either shape.
 
 **`onClick`** (fires a trigger): Triggers the linked executor when a photo is captured.
 
@@ -36,7 +36,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Look &amp; feel</summary>
 
-* **Storage type**: File uploads each photo as JPEG to the server and delivers a path; buffer keeps it in the value as base64. Choices: File, Buffer.
+* **Storage type**: File uploads each photo as JPEG into the workspace's file store and delivers a reference; buffer keeps it in the value as base64, at most 64 kB altogether. Choices: File, Buffer.
 * **Button**: The button members press to scan, upload or take a photo.
   * **Button Text**: Label shown on the button; empty shows none.
   * **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-camera; empty shows none.
@@ -49,7 +49,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 * **Aspect ratio**: Width-to-height ratio of the crop frame over the camera view; portrait orientation flips it. Choices: 16/9, 4/3, 7/5 (DIN A4).
 * **Resolution**: JPEG quality of the saved photo: low 50%, medium 80%, high 100%; the camera stream is always asked for 1920x1080. Choices: Low, Medium, High.
 * **Orientation**: Portrait makes the crop frame taller than wide, landscape wider than tall. Choices: Portrait, Landscape.
-* **Maximum number of photos**: Number of photos the widget holds; the button disables once reached.
+* **Maximum number of photos**: Number of photos the widget holds; the button disables once reached. With 1 the widget delivers that one photo (for a file field), with more a list of photos (for a files field).
 * **Thumbnail size**: Height of the preview thumbnails. Range 40 to 400. *Set per screen.*
 
 </details>

@@ -299,7 +299,7 @@ tls:
 
 ### Uploading files
 
-With `requestType: multipart` every key of `data` becomes a form field. A file is an object with `base64` (as the File connector's `readFileToBuffer` returns it) or `path`, plus an optional `name` and `contentType`. An array of files under one key sends one part per file. Other values become text fields, objects as JSON.
+With `requestType: multipart` every key of `data` becomes a form field. A file is an object with `base64` (as the File connector's `readFileToBuffer` returns it) or `path`, plus an optional `name` and `contentType`. A file a table row keeps is sent as it is: the entry from a [`file` field](../storage/relational-database.md#files-in-a-table) makes one file part, the list from a `files` field one part per file. An array of files under one key sends one part per file. Other values become text fields, objects as JSON.
 
 ```yaml
 # url

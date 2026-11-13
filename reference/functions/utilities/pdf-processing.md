@@ -8,7 +8,7 @@ Merges multiple source documents into a single PDF file. The function accepts PD
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>files</code></td><td>An array where each element is either a base64-encoded file string or an object containing a <code>path</code> property pointing to the file.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>files</code></td><td>An array where each element is a base64-encoded file string, an object containing a <code>path</code> property pointing to the file, or a file a table row keeps: the entry from a <code>file</code> field, or the list from a <code>files</code> field, which gives a document per file.</td><td>array</td></tr></tbody></table>
 
 #### Output
 

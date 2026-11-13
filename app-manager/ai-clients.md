@@ -70,11 +70,17 @@ The table at the bottom of the page lists the connections: the AI client, where 
 
 ## Files
 
-A connected AI client has no access to the files on your computer, and the workspace has none to its. Files travel through the workspace's shared files instead:
+The workspace has no access to the files on your computer, nor to your AI client's. Files travel through the workspace's shared files instead:
 
 * `export_app` keeps the bundle in the workspace; `import_app` takes that bundle, or a `.hwt` file uploaded to the workspace.
-* `fetch_shared_file` shows a picture from the shared files to the client (PNG, JPEG, GIF, WebP). PDFs and Office files cannot travel to it yet.
-* `upload_shared_file` fetches a file from a public https address into the shared files. Addresses in a private network are refused.
+* `fetch_shared_file` hands a file from the shared files to the client: a picture as a picture, a PDF as its text - or one page of it as a picture, for a scan or a drawing -, an Excel (XLSX) or Word (DOCX) file and a text file as their text. Other formats cannot travel to it.
+* `open_file` does the same for a file a table row points to ([Files in a table](../reference/functions/storage/relational-database.md#files-in-a-table)).
+* `upload_shared_file` brings a file into `uploads/` or `project/` of the shared files, in one of three ways:
+  * from a public https address. Addresses in a private network are refused.
+  * as the file's content in the call, up to 15 MB. Your client writes out every byte, so this suits small files only.
+  * by an upload address: the client sends the file there itself, and the file never passes through the AI model. An address takes one file, once, within 15 minutes. This is the way for a client that runs commands on your computer, such as a coding assistant in your terminal.
+
+A file none of these reaches, such as an attachment in a chat in your browser, you upload in the Builder's [Files explorer](../app-builder/explorers/files.md) and tell your AI client its name.
 
 ## The platform law
 

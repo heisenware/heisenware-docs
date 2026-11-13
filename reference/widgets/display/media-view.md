@@ -7,7 +7,7 @@ description: >-
 
 <figure><img src="../../../.gitbook/assets/widget-media-view.png" alt="Media view showing a PDF work instruction for the changeover to orange juice 0.5 l" width="608"><figcaption></figcaption></figure>
 
-A media view shows a document or picture your logic hands it: a PDF, an image or an SVG graphic, from the file server, from an upload or from a web address. Unlike the image widget, it shows whatever arrives while the App runs, so the work instruction can follow the order, and the photo the selected machine.
+A media view shows a document or picture your logic hands it: a PDF, an image or an SVG graphic, from the file server, from an upload or from a web address. Unlike the image widget, it shows whatever arrives while the App runs, so the work instruction can follow the order, and the photo the selected machine. Handed a list of files, it shows the first one with the number of files on its corner.
 
 **Good for:** work instructions and drawings for the current order, photos from uploads, certificates and reports.
 

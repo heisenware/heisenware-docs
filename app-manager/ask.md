@@ -1,6 +1,6 @@
 # Ask
 
-Ask lets the invited users of an App question the workspace's data with an AI, in their own words: _"How long did line 2 stand still last week, and why?"_ They ask in the App itself, or from their own AI client such as ChatGPT, Claude or Microsoft Copilot. Ask answers from the databases, logs and Apps of the workspace, runs the App's endpoints for them and makes reports to download.
+Ask lets the invited users of an App question the workspace's data with an AI, in their own words: _"How long did line 2 stand still last week, and why?"_ They ask in the App itself, or from their own AI client such as ChatGPT, Claude or Microsoft Copilot. Ask answers from the databases, files, logs and Apps of the workspace, runs the App's endpoints for them and makes reports to download.
 
 {% hint style="info" %}
 Ask is in **beta**. It is marked so in the App Manager, in the App and in the App Builder.
@@ -20,7 +20,7 @@ The settings then show the App's [Ask address](#from-your-own-ai). Switching Ask
 
 Ask works as the user who asks, in one App:
 
-* **Reads, workspace-wide:** every database and InfluxDB a flow of the workspace connected, the logs of its containers and native agents, what each App is made of, and how a released App's executors are doing.
+* **Reads, workspace-wide:** every database and InfluxDB a flow of the workspace connected, the [files](#files) their rows point to, the logs of its containers and native agents, what each App is made of, and how a released App's executors are doing.
 * **Runs, this App only:** its endpoints, as the user, on the released App - and it looks at the App's pages as the user sees them.
 * **Nothing else.** Ask changes data only through an endpoint. It cannot change an App, a file or a setting; it says so and names who can - a member of the workspace.
 
@@ -41,6 +41,19 @@ Ask's reads change nothing. The database itself holds every read to reading, not
 
 A query is a single `SELECT`, `WITH`, `VALUES` or `TABLE` statement; a second statement, `INTO` and locking clauses are refused before anything goes out. A large answer is cut and comes with the true number of rows and a summary of each column.
 
+### Files
+
+A table row keeps a file - a photo, a PDF, a signature - as a small entry ([Files in a table](../reference/functions/storage/relational-database.md#files-in-a-table)). Ask opens the file behind it, whichever App of the workspace uploaded it:
+
+| File | What Ask does with it |
+| --- | --- |
+| **Picture** (PNG, JPEG, GIF, WebP, AVIF, BMP, SVG) | Looks at it. |
+| **PDF** | Reads its text. A scan or a drawing has none: Ask looks at it page by page. |
+| **Excel** (XLSX), **Word** (DOCX), **text**, **CSV** | Reads the rows or the text. |
+| **Video**, **sound**, **archives**, other formats | Cannot look at it. It says so, and what the file is: its name, type and size, who uploaded it and from which App. |
+
+Ask opens a file of up to 15 MB. A file it opens travels to the AI provider like everything else it reads, a photo of a person included.
+
 ## In the App
 
 A signed-in user of the App finds **Ask** at the bottom right of every page. It opens a panel beside the page - on a phone, over the whole screen:
@@ -48,6 +61,8 @@ A signed-in user of the App finds **Ask** at the bottom right of every page. It 
 * The user asks; Ask shows what it is doing (_Reading the data…_) and answers in the user's language.
 * Before it runs an endpoint that needs the user's go, a card names the endpoint and its values: **Allow** or **Deny**.
 * A report comes as a card with **Download**.
+* A file Ask speaks of shows in its answer: a picture as a picture, any other file by its name. A click opens it.
+* With the paperclip the user hands Ask files of their own - a photo of a part, a delivery note -, up to five with a question. They go into the workspace's file store like a file from an upload widget; one that no row takes up is removed with the store's clean-up.
 * **Stop** ends a running question; what was done so far is kept. **New conversation** starts afresh.
 
 The conversation stays with the user and the App - also when the tab closes during a question - until they start a new one. When a user is removed from the App or deleted, their conversation goes with them.
@@ -64,7 +79,7 @@ https://<your platform host>/<account>.<workspace>/mcp/app/<app id>
 
 Members copy it in the App's access settings; users find it in the App, in the Ask panel under **Your own AI**. The user adds it to their AI client as a custom connector, as for [any AI client](ai-clients.md#connect-your-ai-client). When the client signs in, the browser opens the App's own page: the user signs in with their account of the App, and a card names the AI client, what it reaches and where the browser returns. **Allow** connects it.
 
-The client then has the user's Ask, with the same reach as in the App. It spends the user's own AI subscription, not the workspace's credits. An endpoint that needs the user's go runs only after they agree in the chat. Not every plan of every AI client can add a custom connector (see [Your AI plan decides](ai-clients.md#your-ai-plan-decides)).
+The client then has the user's Ask, with the same reach as in the App. A file Ask speaks of comes as a link: the App's own page opens it after sign-in. It spends the user's own AI subscription, not the workspace's credits. An endpoint that needs the user's go runs only after they agree in the chat. Not every plan of every AI client can add a custom connector (see [Your AI plan decides](ai-clients.md#your-ai-plan-decides)).
 
 The connections show in **AI clients** in the App Manager for the workspace's owners, as _Ask in app &lt;app id&gt;_; **Disconnect** ends one at once. A connection unused for 90 days ends by itself, and a user holds at most 20.
 
@@ -76,7 +91,7 @@ Where it runs: in the App, an endpoint runs in the user's open App - a page it o
 
 ## Reports
 
-Asked for a report, Ask writes one: **PDF**, **Word** (DOCX), **Excel** (XLSX) or **CSV**, in the App's look and language. Its tables are read straight from the databases into the file, never retyped by the AI: up to 1000 rows a table in PDF and Word, every row in Excel (a sheet per table, real numbers and dates) and CSV (exactly one table). Around them go headings, text and lists, charts, and pictures of the App's pages.
+Asked for a report, Ask writes one: **PDF**, **Word** (DOCX), **Excel** (XLSX) or **CSV**, in the App's look and language. Its tables are read straight from the databases into the file, never retyped by the AI: up to 1000 rows a table in PDF and Word, every row in Excel (a sheet per table, real numbers and dates) and CSV (exactly one table). Around them go headings, text and lists, charts, and pictures: the App's pages, and files from its rows such as an inspection's photos or a signature.
 
 A chart is one of the App's own widgets - Chart, Pie Chart, Polar Chart, Sankey Chart, Sparkline, Timeline, Circular Gauge or Linear Gauge - drawn from a table of the report in the App's theme and language and the user's time zone, so its numbers never pass through the AI either. Settings Ask leaves out the widget picks from the data, as it does in the App Builder. In PDF a chart stays a sharp vector drawing, in Word it is a picture, and Excel carries its table instead. A series too long to draw (more than 5000 points) is aggregated in its table first, and Ask says how. For what no widget covers, Ask can still draw a simple figure.
 

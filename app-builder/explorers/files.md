@@ -20,6 +20,8 @@ Double-click a file to open it in a tab next to the Flowboard. Text and code fil
 
 The platform's own areas, such as your Apps' design records in the `builder-backend` folder, open and download like any other file. They are read-only.
 
+The `files` folder is the workspace's file store: the files your Apps' users upload and your table rows point to. It shows with the number of files it holds. The files in it are named by their content and reached through the row that points to them, see [Files in a table](../../reference/functions/storage/relational-database.md#files-in-a-table). Nobody deletes there: the platform's clean-up removes a file thirty days after the last row let go of it.
+
 ## Managing files
 
 Right-click any file to open the context menu. Here you can:

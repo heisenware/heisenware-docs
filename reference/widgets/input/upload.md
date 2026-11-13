@@ -1,13 +1,13 @@
 ---
 description: >-
-  Uploads files via picker or photo capture — type restrictions, thumbnails, path or base64 delivery
+  Uploads files via picker or photo capture — type restrictions, thumbnails, delivers references into the file store or small files inline
 ---
 
 # Upload
 
 <figure><img src="../../../.gitbook/assets/widget-upload.png" alt="Attach documents panel with an Add files button" width="568"><figcaption></figcaption></figure>
 
-The upload widget lets users add files: from the file picker, or on phones and tablets straight from the camera. You decide which file types it takes and how many, and it can show thumbnails of what was added. After every change, the list of files goes to your logic, as paths on the file server or as the file content itself.
+The upload widget lets users add files: from the file picker, or on phones and tablets straight from the camera. You decide which file types it takes and how many, and it can show thumbnails of what was added. The files go into the workspace's file store, and after every change your logic receives what the widget holds: the file itself when it holds one, a list of files when it holds several. Store that in a [`file` or `files` field](../../functions/storage/relational-database.md#files-in-a-table) as it is.
 
 **Good for:** delivery notes and certificates, photos for damage or quality reports, importing lists and recipes.
 
@@ -35,7 +35,7 @@ true
 {% endtab %}
 
 {% tab title="Emits" %}
-**`files`** (into an input, `Array<object>`): Writes the full list of selected/uploaded files after every add or delete (an empty array when cleared).
+**`files`** (into an input, `object | Array<object>`): Writes what the widget holds after every add or delete. Holding one file (`restrictions.maxFiles` is 1, the default) it writes that file's entry, and nothing once it is empty; holding several it writes the list of their entries (an empty list when cleared). Reads either shape.
 
 {% endtab %}
 
@@ -49,7 +49,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
 
 <summary>Look &amp; feel</summary>
 
-* **Storage type**: File uploads to the server and delivers a path; buffer keeps the content in the value as base64. Choices: File, Buffer.
+* **Storage type**: File uploads into the workspace's file store and delivers a reference; buffer keeps the content in the value as base64, at most 64 kB altogether. Choices: File, Buffer.
 * **Button**: The button members press to scan, upload or take a photo.
   * **Button Text**: Label shown on the button; empty shows none.
   * **Icon**: Font Awesome class of an icon shown left of the label, e.g. fa-light fa-camera; empty shows none.
@@ -61,7 +61,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
   * **Initially Disabled**: Starts the button greyed out and unclickable until a bound button value enables it.
 * **Restrictions**: Limits on the files members may add.
   * **Allowed file types**: File categories the picker allows; empty allows every category. On phones and tablets Photo adds the camera, or alone replaces the picker with it. Choices: Photo, Text, Documents, Spreadsheets, Presentations, Images, Audio, Video, Archives, Web.
-  * **Maximum number of files**: Number of files the widget holds; a larger selection takes the first ones, and the button disables once reached.
+  * **Maximum number of files**: Number of files the widget holds; a larger selection takes the first ones, and the button disables once reached. With 1 the widget delivers that one file (for a file field), with more a list of files (for a files field).
   * **Aspect ratio**: Crops every added image to this width-to-height ratio, centered; original keeps the picture as it is. Choices: Original, 16/9, 4/3, 7/5 (DIN A4).
   * **Resolution**: Shrinks every added image to a longest side of 640 (preview), 1920 (balanced) or 2560 px (high), re-encoded as JPEG; original keeps it. Choices: Original, Preview, Balanced, High.
 * **Allow multi-file upload**: Lets the picker take several files in one go; the camera always takes one.

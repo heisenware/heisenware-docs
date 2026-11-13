@@ -16,6 +16,8 @@ When referencing Windows paths, wrap the YAML input in quotes. Without quotes, `
 
 ## Reading files
 
+Every read function takes the file's path. On the platform it also takes a file a table row keeps: hand over the entry from a [`file` field](../storage/relational-database.md#files-in-a-table) in place of the path, and the function reads that file from the workspace's file store. `read` picks the reader by the entry's name.
+
 ### `read`
 
 Reads a file and automatically parses its content based on the file extension. This function serves as a convenience wrapper that calls the matching specific function (such as `readCsv` or `readXlsx`). Supported extensions include `csv`, `xlsx`, `docx`, `pptx`, `html`, `htm`, `md`, `txt`, `xsl`, `pdf`, and `xml`.

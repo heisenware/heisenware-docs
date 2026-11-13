@@ -1,13 +1,13 @@
 ---
 description: >-
-  Captures a hand-drawn signature on a pad, inline or in a popup, and delivers it as a base64 PNG
+  Captures a hand-drawn signature on a pad, inline or in a popup, and delivers it as a PNG file's entry with its content inline
 ---
 
 # Signature
 
 <figure><img src="../../../.gitbook/assets/widget-signature.png" alt="Shift handover panel with a signed signature pad and Accept and Clear buttons" width="568"><figcaption></figcaption></figure>
 
-The signature widget lets users sign with a finger, a pen or the mouse, right on the page or in a popup. When they accept, the signature goes to your logic as a PNG image, ready to be stored with the record or printed into a report. You choose the pen and pad colors and the button texts.
+The signature widget lets users sign with a finger, a pen or the mouse, right on the page or in a popup. When they accept, the signature goes to your logic as a file with its PNG inside, ready to be stored in a [`file` field](../../functions/storage/relational-database.md#files-in-a-table) of the record or printed into a report (its `base64` is the picture). You choose the pen and pad colors and the button texts.
 
 **Good for:** shift handovers, delivery and acceptance notes, approvals and sign-offs.
 
@@ -20,7 +20,7 @@ The widget's General tab lists these properties under Receives and Emits. Drop a
 
 {% tabs %}
 {% tab title="Emits" %}
-**`signature`** (into an input, `string`): Writes the captured signature as a base64-encoded PNG (no data-URL prefix) when the user accepts it.
+**`signature`** (into an input, `object`): Writes the captured signature when the user accepts it: a file's entry with the PNG inline, `{ name: 'signature.png', type: 'image/png', size, base64 }` (base64 without a data-URL prefix) - what a `file` field takes and a media view shows.
 
 **`onClick`** (fires a trigger): Triggers the linked executor when a signature is accepted.
 

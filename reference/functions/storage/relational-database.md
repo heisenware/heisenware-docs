@@ -140,7 +140,7 @@ When running inside an Agent, the database disables the automatic `createdAt` an
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code> (alias <code>bool</code>), <code>date</code> (a date with a time, stored as an instant), <code>dateonly</code> (a calendar date such as <code>2026-10-01</code>), <code>time</code> (a time of day such as <code>08:30:00</code>), <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code>, <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. See <a href="relational-database.md#audit-logging">Audit logging</a>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code> (alias <code>bool</code>), <code>date</code> (a date with a time, stored as an instant), <code>dateonly</code> (a calendar date such as <code>2026-10-01</code>), <code>time</code> (a time of day such as <code>08:30:00</code>), <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code> (one file), <code>files</code> (a list of files, see <a href="relational-database.md#files-in-a-table">Files in a table</a>), <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. See <a href="relational-database.md#audit-logging">Audit logging</a>.</td><td>boolean</td></tr></tbody></table>
 
 {% hint style="info" %}
 Use English and camelCase for table and field names (such as `firstName` or `dateOfBirth`). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the `jsonb` type for JSON data: it is more efficient and allows nested properties in filter expressions.
@@ -211,6 +211,35 @@ machineId: { unique: timeAndId, type: string }
 timestamp: { unique: timeAndId, type: date }
 data: jsonb
 ```
+
+### Files in a table
+
+A table row never holds a file's content, and it holds no path. The file lies in the workspace's file store, and the row keeps an **entry** that says which file is meant:
+
+```json
+{ "id": "9f2c81d0b7a44e63a1c5d2e8f0b3a6c7d9e1f2a3b4c5d6e7f8a9b0c1d2e3e41a", "name": "pump-leak.jpg", "type": "image/jpeg", "size": 482113 }
+```
+
+The `id` is calculated from the file's content, so the same file is stored once however often it is uploaded. Small content, such as an icon or a signature, may travel inside the entry instead: `{ "name": "ok.png", "type": "image/png", "size": 1312, "base64": "..." }`.
+
+Two field types say how many files a field holds:
+
+| Type | Holds | Comes from |
+| ---- | ----- | ---------- |
+| `file` | one entry, or nothing | an [upload](../../widgets/input/upload.md) or [photo](../../widgets/input/photo.md) widget that holds one file, a [signature](../../widgets/input/signature.md) |
+| `files` | a list of entries, or nothing | an upload or photo widget that holds several files |
+
+Store what the widget delivers as it is. The [media view](../../widgets/display/media-view.md), the [data grid](../../widgets/display/data-grid.md) and the [form](../../widgets/input/form.md) show an entry as one picture and a list as its first picture with the number of files.
+
+* **The fields are strict.** A `file` field takes one entry and a `files` field a list. The other shape is refused, and the error names the other type. A path is refused too.
+* **A cell holds at most 64 kB.** That only matters for content inside the entry. A larger file is uploaded, and the row stores its reference.
+* **Changing the type converts the values.** [`changeFieldType`](relational-database.md#previewtypechange-and-changefieldtype) from `file` to `files` turns each file into a list of one. From `files` to `file` it works where no row holds more than one file, and names the rows that do.
+* **Nobody deletes a file.** A file stays as long as a row points to it. Thirty days after the last row let go, the platform's nightly clean-up removes it. Until then a deleted row can come back, from an undo or a restored backup, and its file is still there. The clean-up starts out reporting only: an installation lets it remove with `HW_FILES_CLEANUP=remove`.
+* **A file your logic produced**, such as a downloaded document or a generated PDF, goes into the store with the `store` function of the `Files` class on the Media Server (a `path` on the file server, or `base64` content). It answers the entry to store.
+
+On the workspace's own database a check on the column holds SQL to the same rules. On any other database both types are plain JSON columns.
+
+A `files` field is a list in one cell. Files that each need a caption, an author or an audit entry of their own belong in a table of their own, with a relation to the row they belong to.
 
 ### `getTableSchema`
 
@@ -331,7 +360,7 @@ The values go with the field, the links with the relation. Call `previewRemoval`
 
 ### `previewTypeChange` and `changeFieldType`
 
-`previewTypeChange` tells what a new type does to a field's values: the values it cannot take, with their rows, and the values it changes on the way, with an example (`12.5` as an integer is `12`). `changeFieldType` changes the type, converting every value; it refuses while a value cannot be taken.
+`previewTypeChange` tells what a new type does to a field's values: the values it cannot take, with their rows, and the values it changes on the way, with an example (`12.5` as an integer is `12`). `changeFieldType` changes the type, converting every value; it refuses while a value cannot be taken. Between `file` and `files` it converts the cells, see [Files in a table](relational-database.md#files-in-a-table).
 
 #### Parameters
 
