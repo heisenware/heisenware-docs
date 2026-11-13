@@ -14,17 +14,19 @@ To add a filter:
 
 A filter evaluates a JavaScript expression that must return a boolean value (`true` or `false`). The value from the preceding output is available as `x`.
 
-Click the filter icon on the left to evaluate the filter manually during development. The last result appears below the expression.
+Click the filter icon on the left to evaluate the filter manually during development.
+
+While a flow runs, the filter shows live what happened to the latest value. The value below the expression is always the one that just arrived. After a pass, the right edge of the filter stands open. After a block, a copper bar closes it: that value stopped here, and a variable on the filter still holds the last value that passed.
 
 ### Logical gate
 
-If the result is `true`, the data passes on to the next node following the filter. If `false`, the flow halts at this point.
+If the result is `true`, the data passes on unchanged: the nodes after the filter, every connection drawn from it, widgets bound to it, and its page and action links all get the data that arrived. If `false`, the flow halts at this point and nothing behind the filter runs. A widget bound to the filter keeps showing the last value that passed.
 
 <div align="center"><figure><img src="../../.gitbook/assets/image (295).png" alt=""><figcaption></figcaption></figure></div>
 
 ### Branching logic
 
-Use the `true` and `false` states of the filter to trigger separate logic paths. For example, use the `true` state to trigger another executor.
+Connect another executor to the filter to run it when the data passes. For a second path, add a second filter with the opposite condition: `x > 90` for one path, `x <= 90` for the other.
 
 <figure><img src="../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
 
@@ -32,6 +34,14 @@ Use the `true` and `false` states of the filter to trigger separate logic paths.
 #### Falsy values halt the flow
 
 A filter condition that evaluates to a falsy value (e.g., `false`, `0`, `null`, `""`) stops the execution of the flow.
+
+This concerns the condition, not the data. With the condition `x === 0`, the value `0` passes, and a page or action link on the filter fires on it.
+{% endhint %}
+
+{% hint style="info" %}
+#### Need a true or false value?
+
+A filter hands on data, not its result, and a block sends nothing. To show or store a value that also turns false, such as a widget's visibility, add a [modifier](modifier.md) with the same expression next to the filter.
 {% endhint %}
 
 ## Filter examples
@@ -55,7 +65,7 @@ Filter content:
 x.temperature > 90
 ```
 
-Return of the filter: `true`
+The data passes.
 
 <figure><img src="../../.gitbook/assets/image (506).png" alt=""><figcaption></figcaption></figure>
 
@@ -75,7 +85,7 @@ Filter content:
 x.includes('Error')
 ```
 
-Return of the filter: `true`
+The data passes.
 
 <figure><img src="../../.gitbook/assets/image (507).png" alt=""><figcaption></figcaption></figure>
 
@@ -95,7 +105,7 @@ Filter content:
 x.length > 0
 ```
 
-Return of the filter: `false`
+The filter blocks, and the flow halts.
 
 <figure><img src="../../.gitbook/assets/image (509).png" alt=""><figcaption></figcaption></figure>
 
