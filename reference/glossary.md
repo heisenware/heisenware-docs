@@ -180,7 +180,7 @@ Widget events run in the user's scope, while App start and polling run in the sh
 
 **Screen**: one device class an App is designed for, such as Phone, Tablet or Desktop. An App enables some of them. The two tablets are the handheld tablet held upright (`__tablet`) and the panel mounted at a machine (`__tabletR`).
 
-**Reference screen**: the screen you design first; the others follow it automatically until you arrange them yourself (*authored*).
+**Reference screen**: the screen a widget is first placed on; its other screens follow it automatically until you arrange them yourself (*authored*). An App's reference screen is the one most of its widgets reference; a new App starts on the widest screen it serves.
 
 **Pin**: gives one screen its own value for one widget setting; unpinned settings are shared by all screens. Some settings are *pinned by nature* because their right value depends on the screen.
 

@@ -53,7 +53,7 @@ Flag: `--read-only` — production-support mode. No mutating tool is offered and
 The tools describe themselves, but building a good App on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The assistant in the App Builder knows these rules by heart. Your AI client gets them from the server as the **platform law**, and the first message of every session should load it. The server offers the law four ways:
 
 * as the **tool** `get_platform_law`, which the server tells every client to call before its first build action - the way clients connected by the MCP address read it,
-* as a **prompt** named `platform-law` (Claude Code turns it into the slash command `/mcp__heisenware__platform-law`, Claude Desktop lists it in the attachment menu),
+* as a **prompt** named `platform-law` (Claude Code turns it into the slash command `/mcp__heisenware__platform-law` - `/mcp__heisenware-<workspace>__platform-law` outside the default workspace -, Claude Desktop lists it in the attachment menu),
 * as the **resource** `heisenware://law/platform-law`, for clients that read resources,
 * as plain text you can paste into your first message, for clients that support neither.
 

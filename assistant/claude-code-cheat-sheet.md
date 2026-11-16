@@ -10,7 +10,9 @@ claude mcp add heisenware -- npx -y --no-audit --prefer-offline -p "<link from t
 
 On Windows: `claude mcp add heisenware -- cmd /c npx …` (the App Manager shows this line too), run in PowerShell or cmd - Git Bash turns `/c` into a path.
 
-Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope), so each project folder can point at its own platform under the same name; `--scope user` registers it for every folder instead. The link carries an access ticket valid for twelve hours; `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine.
+Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope); `--scope user` registers it for every folder instead. The link carries an access ticket valid for twelve hours; `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine.
+
+The server's name is its workspace's: `heisenware` for the default workspace, `heisenware-<workspace>` for any other (`heisenware-assembly`, for a workspace named Assembly). The App Manager's lines carry the right one, so two workspaces can share one folder or one scope. This page writes `heisenware`; in another workspace read its name instead, in the commands, the tool names and the law's prompt (`/mcp__heisenware-assembly__platform-law`).
 
 ## Check
 
