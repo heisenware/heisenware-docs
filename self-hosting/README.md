@@ -23,7 +23,7 @@ Everything runs in the cloud: the Manager, the Builder, the broker, the database
 * **Location**: all servers and all data in Germany (EU).
 * **Compliance**: GDPR (DSGVO).
 
-<figure><img src="../.gitbook/assets/image (487).png" alt="The platform in the cloud, with native and Docker agents in the local network below it, connected by MQTTS"><figcaption><p>A cloud installation: the platform above, your network below, one outbound connection between them.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/deployment-cloud.png" alt="The whole platform in the Heisenware cloud, your network below it with native, Docker and LXC agents and your own code, and one outbound MQTTS connection between them" width="720"><figcaption><p>A cloud installation: the platform above, your network below, one outbound connection between them.</p></figcaption></figure>
 
 ### Your machines need an agent
 
@@ -39,7 +39,7 @@ Code of your own joins the platform as an [add-on](../reference/functions/add-on
 
 The whole platform runs on your hardware: a server in your data centre, a virtual machine, or an industrial PC. It moves every cloud component one level down into your infrastructure.
 
-<figure><img src="../.gitbook/assets/image (488).png" alt="The platform inside the local network, reaching machines directly and optional agents in lower subnets"><figcaption><p>An on-premise installation: the platform sits in your network and reaches your machines itself.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/deployment-on-prem.png" alt="The platform on a server inside your network, reaching machines directly, with an agent only for a segment the host cannot reach, and no assistant" width="720"><figcaption><p>An on-premise installation: the platform sits in your network and reaches your machines itself.</p></figcaption></figure>
 
 * **Direct connectivity**: the platform reaches everything its own host reaches. No agent is needed for that.
 * **Network segmentation**: for machines in a segment the host cannot reach, use [agents](../concepts/agents-and-where-code-runs.md) as in the cloud.

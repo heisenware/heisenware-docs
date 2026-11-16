@@ -17,7 +17,7 @@ The Functions explorer has a puzzle-piece button, **Install Extension**. It open
 
 **Install** pulls the image and starts it. Installing the same image again replaces the running container, which is how you bring a new version in. **Remove** stops it and takes its classes out of the explorer.
 
-<div align="left"><figure><img src="../../../.gitbook/assets/heisenware_extentions_looped.gif" alt="Installing an add-on from the Functions explorer" width="485"><figcaption>Installing an add-on from the Functions explorer</figcaption></figure></div>
+<div align="left"><figure><img src="../../../.gitbook/assets/install-extension.png" alt="The Install Extension form: the add-on to install, its environment variables, and the Install and Remove buttons" width="328"><figcaption>The form behind the puzzle-piece button</figcaption></figure></div>
 
 What you install stays installed: the add-on comes back when the platform restarts, and one you removed stays away. Each add-on signs in to the workspace with a login of its own, listed with the other [integrations](../../../app-manager/integrations.md).
 

@@ -11,7 +11,7 @@ Add it with the **+** on an output and choose **Recorder**.
 
 A recorder has no value of its own: you cannot wire or link from it. It does hand the value on unchanged, so a [modifier](modifier.md) or a [filter](filter.md) may follow it.
 
-<figure><img src="../../.gitbook/assets/image (47).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/recorder-node.png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 If the [Industrial Blockchain](../../reference/functions/add-ons/industrial-blockchain.md) add-on is available in your account, an additional Blockchain (BC) recording type appears. It stores the data in the blockchain instead of InfluxDB.

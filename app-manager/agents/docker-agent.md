@@ -61,7 +61,7 @@ heisenware/docker-agent:v93-slim
 
 Once the connection stands, the container prints which classes it registered and that its persistence layer is up.
 
-<figure><img src="../../.gitbook/assets/image (489).png" alt="The Docker agent's log after a successful start"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/docker-agent-log.png" alt="The Docker agent's log after a successful start"><figcaption></figcaption></figure>
 
 ## Persisting data
 

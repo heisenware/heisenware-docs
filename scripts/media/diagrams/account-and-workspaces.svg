@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="540" viewBox="0 0 720 540" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .ws    { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .card  { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.4; }
+    .h1 { font-size: 18px; font-weight: 700; fill: #22303c; }
+    .hp { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .t  { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .s  { font-size: 13px; fill: #6a7a89; }
+    .n  { font-size: 13px; fill: #4a5b6a; }
+    .mono { font-size: 13px; font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #2e7d63; }
+    .arrow { stroke: #8da0b3; stroke-width: 1.8; fill: none; }
+    .bar   { stroke: #a8b6c4; stroke-width: 1.6; fill: none; stroke-dasharray: 7 5; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+  </defs>
+
+  <rect x="10" y="10" width="700" height="520" rx="12" class="frame"/>
+  <text x="30" y="42" class="h1">Account</text>
+  <text x="124" y="42" class="mono" font-size="14">acme.heisenware.cloud</text>
+
+  <rect x="30" y="56" width="240" height="58" rx="10" class="card"/>
+  <text x="150" y="82" class="t" text-anchor="middle">Members</text>
+  <text x="150" y="102" class="s" text-anchor="middle">owners and editors</text>
+
+  <rect x="282" y="56" width="240" height="58" rx="10" class="card"/>
+  <text x="402" y="82" class="t" text-anchor="middle">Plan &amp; billing</text>
+  <text x="402" y="102" class="s" text-anchor="middle">Apps, workspaces, storage</text>
+
+  <text x="538" y="80" class="n">One account holds</text>
+  <text x="538" y="98" class="n">one or more workspaces.</text>
+
+  <path d="M150,116 L150,146" class="arrow" marker-end="url(#a)"/>
+  <text x="166" y="136" class="n">Owner or Editor, per workspace</text>
+
+  <!-- workspace: default -->
+  <rect x="30" y="150" width="404" height="320" rx="10" class="ws"/>
+  <text x="46" y="176" class="hp">Workspace  Default</text>
+  <text x="46" y="196" class="mono">acme.default</text>
+
+  <rect x="44" y="206" width="118" height="44" rx="8" class="card"/>
+  <text x="103" y="234" class="t" text-anchor="middle">App 1</text>
+  <rect x="172" y="206" width="118" height="44" rx="8" class="card"/>
+  <text x="231" y="234" class="t" text-anchor="middle">App 2</text>
+  <rect x="300" y="206" width="118" height="44" rx="8" class="card"/>
+  <text x="359" y="234" class="t" text-anchor="middle">App n</text>
+
+  <path d="M231,252 L231,284" class="arrow" marker-end="url(#a)"/>
+  <text x="246" y="274" class="n">every App reaches them all</text>
+
+  <rect x="44" y="290" width="183" height="52" rx="8" class="card"/>
+  <text x="135" y="313" class="t" text-anchor="middle">Relational database</text>
+  <text x="135" y="331" class="s" text-anchor="middle">PostgreSQL</text>
+  <rect x="235" y="290" width="183" height="52" rx="8" class="card"/>
+  <text x="326" y="313" class="t" text-anchor="middle">Timeseries database</text>
+  <text x="326" y="331" class="s" text-anchor="middle">InfluxDB</text>
+
+  <rect x="44" y="350" width="183" height="52" rx="8" class="card"/>
+  <text x="135" y="373" class="t" text-anchor="middle">Files</text>
+  <text x="135" y="391" class="s" text-anchor="middle">images, templates</text>
+  <rect x="235" y="350" width="183" height="52" rx="8" class="card"/>
+  <text x="326" y="373" class="t" text-anchor="middle">Agents</text>
+  <text x="326" y="391" class="s" text-anchor="middle">your machines and hosts</text>
+
+  <rect x="44" y="410" width="374" height="46" rx="8" class="card"/>
+  <text x="231" y="430" class="t" text-anchor="middle">Integrations</text>
+  <text x="231" y="447" class="s" text-anchor="middle">MQTT clients · VRPC clients · a local MCP server</text>
+
+  <!-- the barrier -->
+  <path d="M441,160 L441,460" class="bar"/>
+
+  <!-- workspace: another -->
+  <rect x="448" y="150" width="242" height="320" rx="10" class="ws"/>
+  <text x="464" y="176" class="hp">Workspace  Halle Süd</text>
+  <text x="464" y="196" class="mono">acme.halle</text>
+
+  <rect x="462" y="206" width="214" height="124" rx="8" class="card"/>
+  <text x="569" y="236" class="t" text-anchor="middle">Everything of its own</text>
+  <text x="569" y="262" class="s" text-anchor="middle">Apps · databases · files</text>
+  <text x="569" y="282" class="s" text-anchor="middle">agents · integrations</text>
+  <text x="569" y="310" class="s" text-anchor="middle">nothing of it is shared</text>
+
+  <text x="569" y="362" class="n" text-anchor="middle">A member reaches it</text>
+  <text x="569" y="380" class="n" text-anchor="middle">only if they are an</text>
+  <text x="569" y="398" class="n" text-anchor="middle">Owner or Editor here.</text>
+
+  <text x="360" y="498" class="t" text-anchor="middle" font-size="15">Nothing in one workspace reaches another.</text>
+</svg>

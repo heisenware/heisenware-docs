@@ -67,25 +67,21 @@ The agent needs outbound TCP 8883 to the platform host for its data channel and 
 
 A secure OPC UA connection needs the control to trust the client's certificate and the client to trust the control's. The connector does both file transfers for you; you only drive the control's own assistant. Once per machine.
 
-<figure><img src="../.gitbook/assets/Screenshot (16).png" alt=""><figcaption></figcaption></figure>
-
 1. In the Functions explorer, open your agent > **Heidenhain OPC UA** and drag `create` onto the [Flowboard](../app-builder/flowboard/README.md). Name the instance after the machine, `tnc7`, and fill its options:
 
    ```yaml
    # options
-   machineIpAddress: 192.168.10.5
+   machineIpAddress: 192.168.100.200
    machineUser: user
    machinePassword: user
    ```
 
    Right-click the `options` input and choose **Secret Input** so the machine's password is masked everywhere. Click the trigger to create the instance.
 
-<figure><img src="../.gitbook/assets/Screenshot (21).png" alt=""><figcaption></figcaption></figure>
-
 2. Under that instance, drag `prepareOpcUaAssistant` and `finalizeOpcUaAssistant` onto the Flowboard.
 3. Click the trigger of `prepareOpcUaAssistant`. It creates the client's certificates, logs into the control over SSH, makes `TNC:\heisenware\import` and `TNC:\heisenware\export`, and puts `heisenware_opcua_client.der` and `heisenware_opcua_user.der` into the import folder. It answers with those two folder paths.
 
-<figure><img src="../.gitbook/assets/Screenshot (25).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/heidenhain-assistant-prepared.png" alt=""><figcaption><p><code>prepareOpcUaAssistant</code> answers with the two folders it made on the control</p></figcaption></figure>
 
 Then go to the machine.
 {% endstep %}
@@ -140,11 +136,11 @@ Back in the App Builder:
 
 1. Click the trigger of `finalizeOpcUaAssistant`. It fetches the machine's certificates out of the export folder and adds them to what the workspace trusts. It answers with a message saying so.
 
-<figure><img src="../.gitbook/assets/Screenshot (45).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/heidenhain-certificates-fetched.png" alt=""><figcaption><p><code>finalizeOpcUaAssistant</code> has the control's certificates</p></figcaption></figure>
 
 2. Drag `connect` onto the Flowboard and click its trigger. It builds the endpoint itself, `opc.tcp://<machine>:4840/HEIDENHAIN/NC`, and answers `true` once connected. While an automatic reconnect is running it answers `reconnect ongoing`, which is not a failure.
 
-<figure><img src="../.gitbook/assets/Screenshot (46).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/heidenhain-connected.png" alt=""><figcaption><p><code>connect</code> answers <code>true</code>: the control is on the bus</p></figcaption></figure>
 
 Give `connect` a trigger source **App Start** > **once on deploy**. A deployed App only does what its logic says, and an unconnected instance reads nothing.
 {% endstep %}
@@ -162,7 +158,7 @@ The [Heidenhain OPC UA](../reference/functions/connectors/heidenhain-opc-ua.md) 
 
 None of these is an event function: the control is read, not subscribed to. Give the executor the impulse it needs with **App Start** and an interval, for example **every 1s** for the state and **every 10s** for the running hours.
 
-<figure><img src="../.gitbook/assets/Screenshot (48).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/heidenhain-reading-the-machine.png" alt=""><figcaption><p>A TNC7 answering <code>getControlInfo</code> and <code>getOperatingTimeInfo</code></p></figcaption></figure>
 
 For OPC UA nodes outside the Heidenhain namespace, the plain [OPC UA client](../reference/functions/connectors/opc-ua-client.md) on the same agent reaches the same control, and its `monitorVariable` does subscribe: the server then pushes every change.
 

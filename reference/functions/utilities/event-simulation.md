@@ -20,7 +20,7 @@ Returns the name of the created instance.
 
 #### Example
 
-<figure><img src="../../../.gitbook/assets/create_instance.png" alt=""><figcaption><p>Create an event simulation instance</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/events-create-instance.png" alt="A create executor on the Trigger class, naming the instance lineEvents, triggered once when the App starts"><figcaption><p>Create an event simulation instance</p></figcaption></figure>
 
 ### `delete`
 
@@ -41,7 +41,7 @@ Returns `true` upon removal.
 
 #### Example
 
-<figure><img src="../../../.gitbook/assets/delete_instance.png" alt=""><figcaption><p>Delete an event simulation instance</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/events-delete-instance.png" alt="A delete executor on the lineEvents instance, fired by a button"><figcaption><p>Delete an event simulation instance</p></figcaption></figure>
 
 ## Manual impulses
 
@@ -71,7 +71,7 @@ Returns `true` once the executor is listening. The values arrive on the event ou
 
 #### Example
 
-<figure><img src="../../../.gitbook/assets/image (33).png" alt=""><figcaption><p>The listener outputs the timestamp after a manual trigger</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/events-manual-trigger.png" alt="An onManualTrigger executor subscribing when the App starts, with its two event outputs, above a triggerManually executor fired by a button"><figcaption><p>The listener outputs the timestamp after a manual trigger</p></figcaption></figure>
 
 ## Periodic impulses
 
@@ -101,7 +101,7 @@ Returns `true` once the executor is listening. The values arrive on the event ou
 
 #### Example
 
-<figure><img src="../../../.gitbook/assets/image (34).png" alt=""><figcaption><p>React periodically to automatic events</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/events-auto-trigger.png" alt="An onAutoTrigger executor subscribing when the App starts, above a startAutoTrigger executor with an interval of 1000 milliseconds fired by a button"><figcaption><p>React periodically to automatic events</p></figcaption></figure>
 
 ### `stopAutoTrigger`
 
@@ -117,7 +117,7 @@ Returns `true`.
 
 #### Example
 
-<figure><img src="../../../.gitbook/assets/stopautotrigger.png" alt=""><figcaption><p>Stop event generation</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/events-stop-auto-trigger.png" alt="A stopAutoTrigger executor on the lineEvents instance, fired by a button"><figcaption><p>Stop event generation</p></figcaption></figure>
 
 ### `isAutoTriggering`
 
@@ -147,7 +147,7 @@ Returns a string stating when the callback will run, for example `Calling back i
 
 #### Example
 
-<figure><img src="../../../.gitbook/assets/triggerCallback.png" alt=""><figcaption><p>Callback execution after a timeout delay</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/events-trigger-callback.png" alt="A triggerCallback executor with a timeout of 2000 milliseconds, fired by a button, with the callback's event output beside its return"><figcaption><p>Callback execution after a timeout delay</p></figcaption></figure>
 
 ## Debouncing
 

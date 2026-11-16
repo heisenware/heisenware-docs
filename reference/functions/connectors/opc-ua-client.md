@@ -780,8 +780,3 @@ User certificate authentication requires server-side configuration. The server a
 
 OPC UA blocks secure connections if the clocks of the client and server differ substantially (for example, by an hour). When this occurs, the client logs a warning.
 
-## Video demo
-
-Watch the video to learn how to connect to an OPC UA server, read, record, and visualize data.
-
-{% embed url="https://www.youtube.com/watch?t=15s&v=7TNHk2eqRWc" %}

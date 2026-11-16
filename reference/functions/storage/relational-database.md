@@ -8,7 +8,7 @@ Every workspace has a PostgreSQL database of its own, the instance `internal-pos
 
 Its tables have a [data model](relational-database.md#data-model) kept inside the database, which you shape in the [Database editor](../../../app-builder/database-editor.md) or let the assistant shape.
 
-<figure><img src="../../../.gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/explorer-relational-database.png" alt="The Functions explorer with Storage &gt; Relational Database open, showing create, delete and the ready-made internal-postgres instance with its functions" width="300"><figcaption></figcaption></figure>
 
 ## Connecting an external database
 
@@ -1556,4 +1556,4 @@ uniqueKey:
 
 The same syntax applies to [`updateRow`](relational-database.md#updaterow).
 
-<div align="center"><figure><img src="../../../.gitbook/assets/relationdat.png" alt=""><figcaption><p>$USER in combination with the upsertRow function</p></figcaption></figure></div>
+<div align="center"><figure><img src="../../../.gitbook/assets/database-upsert-row-for-user.png" alt="An upsertRow executor on the preferences table, with the data theme: dark and the option uniqueKey: username: $USER, fired by a button"><figcaption><p>$USER in combination with the upsertRow function</p></figcaption></figure></div>

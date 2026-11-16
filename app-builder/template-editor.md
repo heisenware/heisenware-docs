@@ -1,12 +1,12 @@
 # Template editor
 
-The Template editor is where you draw a PDF template: a page layout with named placeholders that your logic fills with values. A delivery note, an acceptance report, a label, a shift protocol. Open it with the template icon in the App Builder's top bar. <img src="../.gitbook/assets/image (86).png" alt="" data-size="line">
+The Template editor is where you draw a PDF template: a page layout with named placeholders that your logic fills with values. A delivery note, an acceptance report, a label, a shift protocol. Open it with the template icon in the App Builder's top bar. <img src="../.gitbook/assets/template-editor-icon.png" alt="" data-size="line">
 
 Each template you draw becomes an instance of the `PdfTemplate` class, under **Utilities** > **PDF Templates** in the [Functions explorer](explorers/functions.md). From a flow you use one function on it, [`fillTemplate`](../reference/functions/utilities/pdf-templates.md).
 
 ## Make a template
 
-The panel on the left lists the templates of the workspace. **Add new template** asks for:
+The template's name, at the editor's top right, opens the list of the workspace's templates. **Add new template** asks for:
 
 * **Template Name**: the instance's name, and what you address from the Flowboard.
 * **Template Type**: `PDF`.
@@ -14,7 +14,7 @@ The panel on the left lists the templates of the workspace. **Add new template**
 
 **Create template** makes it, and the editor opens on an empty page of that size.
 
-<figure><img src="../.gitbook/assets/create_pdf_template_looped.gif" alt="Creating a PDF template" width="563"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/template-create.gif" alt="Creating a PDF template" width="426"><figcaption></figcaption></figure>
 
 ## Pages and backgrounds
 
@@ -38,7 +38,7 @@ To replace a background, select it and press Delete, then drop the new file.
 A placeholder is a box that your logic fills at run time.
 
 * **Add Text Variable** and **Add Image Variable** in the toolbar place one: pick the tool, then click the page.
-* Select a placeholder and click its gear (**Settings**) to give it a **Variable Name**. For text there are also the font, its size, the line height, the text colour and a background colour.
+* Select a placeholder and its **Settings** open beside the page: give it a **Variable Name**. For text there are also the font, its size, the line height, the text colour and a background colour.
 * Resize the box to say how much room the value has.
 
 {% hint style="info" %}
@@ -49,7 +49,7 @@ The variable name is the key your logic hands over: a placeholder named `invoice
 
 **Auto generate variables** appears in the toolbar when you select a PDF background that carries form fields. It places a text variable for every form field of that page, at its place and in its size, named after the field. A fillable PDF becomes a template in one click.
 
-<figure><img src="../.gitbook/assets/Useing_template.png" alt="A template with text placeholders over an uploaded PDF background" width="563"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/template-placeholder-settings.png" alt="A selected text placeholder and its Settings, over an uploaded PDF background" width="563"><figcaption></figcaption></figure>
 
 ## Moving and arranging
 
@@ -68,10 +68,10 @@ See [PDF templates](../reference/functions/utilities/pdf-templates.md) for the f
 
 ## Deleting a template
 
-The trash icon next to a template's name in the left panel removes it, after a question. The pencil renames it.
+Open the list again from the template's name at the editor's top right. The trash icon next to a template removes it, after a question; the pencil renames it.
 
 {% hint style="danger" %}
 Removing a template removes its instance. Every executor on the Flowboard that calls it stops working, so check the Functions explorer for who uses it first.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/deleting_template_looped.gif" alt="Removing a PDF template"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/template-list.png" alt="The workspace's PDF templates, each with a pencil and a trash icon" width="352"><figcaption></figcaption></figure>

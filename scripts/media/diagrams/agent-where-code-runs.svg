@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .plat  { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .net   { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.5; }
+    .card  { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.4; }
+    .node  { fill: #ffffff; stroke: #a8b6c4; stroke-width: 1.6; }
+    .h1 { font-size: 18px; font-weight: 700; fill: #22303c; }
+    .hp { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .hn { font-size: 15px; font-weight: 700; fill: #41628d; }
+    .t  { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .s  { font-size: 13px; fill: #6a7a89; }
+    .n  { font-size: 13px; fill: #4a5b6a; }
+    .g  { font-size: 13px; font-weight: 700; fill: #2e7d63; }
+    .monog { font-size: 13px; font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #2e7d63; }
+    .monob { font-size: 13px; font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #41628d; }
+    .arrow  { stroke: #8da0b3; stroke-width: 1.8; fill: none; }
+    .garrow { stroke: #2e7d63; stroke-width: 2; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#2e7d63"/>
+    </marker>
+  </defs>
+
+  <rect x="10" y="10" width="880" height="450" rx="12" class="frame"/>
+  <text x="30" y="40" class="h1">The address decides in which network a function runs</text>
+
+  <!-- the Flowboard -->
+  <rect x="30" y="58" width="290" height="372" rx="10" class="card"/>
+  <text x="46" y="86" class="t" font-size="15">Flowboard</text>
+  <text x="46" y="106" class="s">one App, two executors</text>
+
+  <rect x="46" y="120" width="258" height="96" rx="9" class="node"/>
+  <text x="62" y="146" class="t">Http.get</text>
+  <text x="62" y="167" class="s">address</text>
+  <text x="62" y="188" class="monog">Connectors / Http</text>
+  <text x="62" y="207" class="s">runs where the platform runs</text>
+
+  <rect x="46" y="240" width="258" height="96" rx="9" class="node"/>
+  <text x="62" y="266" class="t">OpcuaClient.read</text>
+  <text x="62" y="287" class="s">address</text>
+  <text x="62" y="308" class="monob">line-3 / OpcuaClient</text>
+  <text x="62" y="327" class="s">runs on a host in your network</text>
+
+  <text x="46" y="364" class="n">In the Builder you never</text>
+  <text x="46" y="382" class="n">notice which is which.</text>
+  <text x="46" y="406" class="n">Only the address says</text>
+  <text x="46" y="424" class="n">where it runs.</text>
+
+  <!-- where the platform runs -->
+  <path d="M308,168 L346,168" class="arrow" marker-end="url(#a)"/>
+  <rect x="352" y="58" width="528" height="150" rx="10" class="plat"/>
+  <text x="368" y="84" class="hp">Where the platform runs</text>
+  <text x="368" y="104" class="s">internal agents come with Heisenware; add-ons are installed into it</text>
+
+  <rect x="366" y="116" width="160" height="72" rx="8" class="card"/>
+  <text x="446" y="146" class="t" text-anchor="middle">Connectors</text>
+  <text x="446" y="167" class="s" text-anchor="middle">OPC UA, S7, HTTP, …</text>
+  <rect x="536" y="116" width="160" height="72" rx="8" class="card"/>
+  <text x="616" y="146" class="t" text-anchor="middle">Utility Functions</text>
+  <text x="616" y="167" class="s" text-anchor="middle">counters, timers, PDF</text>
+  <rect x="706" y="116" width="160" height="72" rx="8" class="card"/>
+  <text x="786" y="146" class="t" text-anchor="middle">Add-ons</text>
+  <text x="786" y="167" class="s" text-anchor="middle">a container of its own</text>
+
+  <!-- the one connection -->
+  <path d="M450,254 L450,212" class="garrow" marker-end="url(#g)"/>
+  <text x="466" y="228" class="g">MQTTS 8883 — the agent dials out</text>
+  <text x="466" y="246" class="n">nothing is opened inbound</text>
+
+  <!-- your production network -->
+  <path d="M308,288 L346,288" class="arrow" marker-end="url(#a)"/>
+  <rect x="352" y="258" width="528" height="172" rx="10" class="net"/>
+  <text x="368" y="284" class="hn">Your production network</text>
+  <text x="368" y="302" class="s">addresses only this network knows</text>
+
+  <rect x="366" y="306" width="168" height="96" rx="8" class="card"/>
+  <text x="450" y="334" class="t" text-anchor="middle">Native agent</text>
+  <text x="450" y="356" class="monob" text-anchor="middle">line-3</text>
+  <text x="450" y="380" class="s" text-anchor="middle">a host in that hall</text>
+
+  <path d="M534,354 L550,354 L550,332 L562,332" class="arrow" marker-end="url(#a)"/>
+  <path d="M534,354 L550,354 L550,394 L562,394" class="arrow" marker-end="url(#a)"/>
+
+  <rect x="566" y="306" width="150" height="52" rx="8" class="card"/>
+  <text x="641" y="328" class="t" text-anchor="middle">CNC machine</text>
+  <text x="641" y="347" class="monob" text-anchor="middle">192.168.10.5</text>
+  <rect x="566" y="368" width="150" height="52" rx="8" class="card"/>
+  <text x="641" y="390" class="t" text-anchor="middle">OPC UA server</text>
+  <text x="641" y="409" class="monob" text-anchor="middle">opc.tcp://…</text>
+
+  <text x="734" y="334" class="n">Only an agent inside</text>
+  <text x="734" y="352" class="n">that network can</text>
+  <text x="734" y="370" class="n">reach them.</text>
+</svg>

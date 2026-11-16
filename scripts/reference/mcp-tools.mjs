@@ -69,6 +69,14 @@ const GROUPS = [
     ]
   },
   {
+    title: 'Agents you build',
+    lead: 'A native agent is compiled for one machine and installed there. These tools say what can go into one, build it, and hand over the installer.',
+    tools: [
+      'list_buildable', 'list_builds', 'get_build_requirements',
+      'build_agent', 'get_installer'
+    ]
+  },
+  {
     title: 'Apps, versions and releases',
     lead: 'An App as a whole: what it is, what it was, and what its users run.',
     tools: [

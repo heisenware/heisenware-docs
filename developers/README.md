@@ -4,6 +4,8 @@ Heisenware is a set of Node.js services that talk to each other over one MQTT br
 
 This page is for developers and IT. If you build Apps, you need none of it.
 
+<figure><img src="../.gitbook/assets/architecture-bus.png" alt="The MQTT broker in the middle: the services of the installation and of the workspace dial out to it directly, while the frontends, App users, agents and integrations come through the ingress, and every call names domain, agent, class, instance and function" width="760"><figcaption><p>Every part connects out to the one broker, and addresses every other part the same way.</p></figcaption></figure>
+
 ## The services
 
 Some services run once for the whole installation. The rest run once per workspace and are started when the workspace is first used.

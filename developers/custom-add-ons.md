@@ -19,7 +19,7 @@ Your program starts a `VrpcAgent` with them, registers its classes, and serves. 
 
 ## Writing the class
 
-A scaffold to start from: [heisenware-docker-extension-starter-js](https://github.com/heisenware/heisenware-docker-extension-starter-js). [Download it](https://github.com/heisenware/heisenware-docker-extension-starter-js/archive/refs/heads/master.zip), put your code in, and put it under your own version control.
+An add-on is a small Node project of your own: a class, the VRPC agent that puts it on the bus, and a Dockerfile. What it needs from the platform is the four variables below; everything else is yours.
 
 ### The JSDoc is the interface
 
@@ -45,7 +45,7 @@ Your classes are in the Functions explorer as soon as the container is up. Insta
 On the Heisenware cloud only Heisenware's own images may be installed, because those servers are shared. **Custom Extension** works on a dedicated server and on a [self-hosted](../self-hosting/README.md) platform; elsewhere the install is refused with "Own Docker images run on your own server only". Running the same image outside the platform always works.
 {% endhint %}
 
-Instances your classes create persist if your code writes them down, which the scaffold does with VRPC's persistor into `/shared`. They come back when the container restarts, and you find them in the [Files explorer](../app-builder/explorers/files.md).
+Instances your classes create persist only if your code writes them down. The platform mounts the shared volume into your container, so VRPC's persistor writing under `/shared` is the usual way: the instances come back when the container restarts, and you find their files in the [Files explorer](../app-builder/explorers/files.md).
 
 ## Running it outside the platform
 
@@ -65,5 +65,3 @@ docker run -it \
 The connection is outbound only, so nothing has to be opened in your firewall.
 
 Once it connects, the agent is in the App Manager's [Agents panel](../app-manager/agents/README.md) as an unmanaged agent: the platform shows its status and when it was last seen, but its software is yours to update.
-
-<figure><img src="../.gitbook/assets/image (48).png" alt="An add-on's console output after it connected to the workspace"><figcaption></figcaption></figure>

@@ -13,14 +13,6 @@ Download the blank form. You upload it into the [Files explorer](../app-builder/
 
 {% file src="../.gitbook/assets/acceptance_report.pdf" %}
 
-The finished logic is also available as a bundle. Import it with **Tags** > **Import** in the Builder's top bar, click the imported tag and confirm **Switch**. You still have to upload the PDF and point the template at it.
-
-{% file src="../.gitbook/assets/acceptance-report-app.hwt" %}
-
-{% hint style="info" %}
-This bundle was exported by an older platform. Importing it still works: its records are brought up to date on the way in. The App's icon and its language have to be set once more afterwards.
-{% endhint %}
-
 ## Step 1: the table
 
 The table belongs to the workspace, so it is made in the [Database editor](../app-builder/database-editor.md), not by a function on the Flowboard. Open it from the Builder's top bar, choose `internal-postgres`, and in the **Model** tab use **New table** to make `acceptanceReports`:
@@ -57,7 +49,7 @@ Place a [signature](../reference/widgets/input/signature.md) widget below the fo
 {% endstep %}
 {% endstepper %}
 
-<figure><img src="../.gitbook/assets/image (73).png" alt="The page with the form, the signature pad and the submit button" width="377"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/pdf-lab-page.png" alt="The page with the form, the signature pad and the submit button" width="398"><figcaption></figcaption></figure>
 
 ### The flow
 
@@ -106,6 +98,8 @@ Link the output of `addRow` to the form's `clear` property. The form returns to 
 {% endstep %}
 {% endstepper %}
 
+<figure><img src="../.gitbook/assets/pdf-lab-flow-save.png" alt="The first half of the flow: the echo with its modifier, mergeObjects with the submit as its hot input, and addRow"><figcaption>From the submit to the row</figcaption></figure>
+
 ## Step 3: the PDF template
 
 ### Design it
@@ -140,7 +134,7 @@ Resize each box to say how much room the value has, and make sure every placehol
 {% endstep %}
 {% endstepper %}
 
-<figure><img src="../.gitbook/assets/image (82).png" alt="The template with text placeholders and the signature's image placeholder over the uploaded form"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/pdf-lab-template.png" alt="The template with text placeholders and the signature's image placeholder over the uploaded form" width="396"><figcaption></figcaption></figure>
 
 ### Fill it
 
@@ -199,15 +193,15 @@ Add an [error handler](../app-builder/flowboard/error-handler.md) to `send`'s ou
 {% endstep %}
 {% endstepper %}
 
-<figure><img src="../.gitbook/assets/image (83).png" alt="The finished flow: form and signature merged, saved, rendered and sent"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/pdf-lab-flow-render.png" alt="fillTemplate, triggered by addRow, with the attachment modifier under its output"><figcaption>The saved row renders the document</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/pdf-lab-flow-send.png" alt="The send executor with its address, subject and content, the attachment as a hot input, and the error handler carrying the toast"><figcaption>The document leaves as an attachment, and a refusal says so on the screen</figcaption></figure>
 
 ## Step 5: try it and deploy
 
 Click **Test** and fill the form as a user would. Check the row in the Database editor's **Rows** tab, look at the rendered page on `fillTemplate`'s output, and watch for the email.
 
 Then click **Deploy**. The **Distribute Your App** dialog gives you the link and a QR code for the tablet.
-
-<figure><img src="../.gitbook/assets/image (84).png" alt="The email with the filled PDF attached"><figcaption></figcaption></figure>
 
 ## What to change next
 

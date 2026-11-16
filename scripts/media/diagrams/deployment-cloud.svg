@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="600" viewBox="0 0 720 600" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .plat  { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .net   { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.5; }
+    .card  { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.4; }
+    .h1 { font-size: 18px; font-weight: 700; fill: #22303c; }
+    .hp { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .hn { font-size: 15px; font-weight: 700; fill: #41628d; }
+    .t  { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .s  { font-size: 13px; fill: #6a7a89; }
+    .n  { font-size: 13px; fill: #4a5b6a; }
+    .g  { font-size: 13px; font-weight: 700; fill: #2e7d63; }
+    .arrow  { stroke: #8da0b3; stroke-width: 1.8; fill: none; }
+    .garrow { stroke: #2e7d63; stroke-width: 2; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#2e7d63"/>
+    </marker>
+  </defs>
+
+  <rect x="10" y="10" width="700" height="580" rx="12" class="frame"/>
+  <text x="30" y="42" class="h1">Heisenware cloud</text>
+  <text x="690" y="42" class="s" text-anchor="end">Hetzner, Germany (EU)</text>
+
+  <!-- the platform -->
+  <rect x="30" y="58" width="452" height="288" rx="10" class="plat"/>
+  <text x="46" y="82" class="hp">The platform — all of it runs here</text>
+
+  <rect x="44" y="92" width="134" height="44" rx="8" class="card"/>
+  <text x="111" y="120" class="t" text-anchor="middle">App Manager</text>
+  <rect x="188" y="92" width="134" height="44" rx="8" class="card"/>
+  <text x="255" y="120" class="t" text-anchor="middle">App Builder</text>
+  <rect x="332" y="92" width="134" height="44" rx="8" class="card"/>
+  <text x="399" y="120" class="t" text-anchor="middle">Assistant · Ask</text>
+
+  <rect x="44" y="146" width="134" height="44" rx="8" class="card"/>
+  <text x="111" y="174" class="t" text-anchor="middle">App 1</text>
+  <rect x="188" y="146" width="134" height="44" rx="8" class="card"/>
+  <text x="255" y="174" class="t" text-anchor="middle">App 2</text>
+  <rect x="332" y="146" width="134" height="44" rx="8" class="card"/>
+  <text x="399" y="174" class="t" text-anchor="middle">App n</text>
+
+  <rect x="44" y="200" width="422" height="38" rx="8" class="card"/>
+  <text x="255" y="224" class="t" text-anchor="middle">MQTT broker — every part talks over it</text>
+
+  <rect x="44" y="248" width="422" height="38" rx="8" class="card"/>
+  <text x="255" y="272" class="t" text-anchor="middle">Internal agents: Connectors, Utility Functions</text>
+
+  <rect x="44" y="296" width="276" height="44" rx="8" class="card"/>
+  <text x="182" y="316" class="t" text-anchor="middle">Databases and Files</text>
+  <text x="182" y="333" class="s" text-anchor="middle">PostgreSQL · InfluxDB</text>
+  <rect x="330" y="296" width="136" height="44" rx="8" class="card"/>
+  <text x="398" y="316" class="t" text-anchor="middle">Add-ons</text>
+  <text x="398" y="333" class="s" text-anchor="middle">Heisenware's images</text>
+
+  <!-- users -->
+  <path d="M484,112 L502,112" class="arrow" marker-end="url(#a)"/>
+  <rect x="506" y="58" width="186" height="112" rx="10" class="card"/>
+  <text x="599" y="88" class="t" text-anchor="middle" font-size="15">Users</text>
+  <text x="599" y="112" class="s" text-anchor="middle">in a browser or installed</text>
+  <text x="599" y="130" class="s" text-anchor="middle">on a phone</text>
+  <text x="599" y="154" class="s" text-anchor="middle">HTTPS, from anywhere</text>
+
+  <rect x="506" y="186" width="186" height="92" rx="10" class="card"/>
+  <text x="599" y="216" class="t" text-anchor="middle">Heisenware operates it</text>
+  <text x="599" y="240" class="s" text-anchor="middle">updates, patches,</text>
+  <text x="599" y="258" class="s" text-anchor="middle">backups, monitoring</text>
+
+  <!-- the one connection -->
+  <path d="M256,392 L256,352" class="garrow" marker-end="url(#g)"/>
+  <text x="274" y="368" class="g">MQTTS 8883 — the agent dials out</text>
+  <text x="274" y="386" class="n">nothing is opened inbound</text>
+
+  <!-- your network -->
+  <rect x="30" y="396" width="662" height="180" rx="10" class="net"/>
+  <text x="46" y="420" class="hn">Your network</text>
+  <text x="166" y="420" class="s">nothing in it is reachable from outside</text>
+
+  <rect x="44" y="430" width="151" height="58" rx="8" class="card"/>
+  <text x="119" y="454" class="t" text-anchor="middle">Native agent</text>
+  <text x="119" y="474" class="s" text-anchor="middle">Windows · Linux · ARM</text>
+  <rect x="205" y="430" width="151" height="58" rx="8" class="card"/>
+  <text x="280" y="454" class="t" text-anchor="middle">Docker agent</text>
+  <text x="280" y="474" class="s" text-anchor="middle">a container</text>
+  <rect x="366" y="430" width="151" height="58" rx="8" class="card"/>
+  <text x="441" y="454" class="t" text-anchor="middle">LXC agent</text>
+  <text x="441" y="474" class="s" text-anchor="middle">INSYS icom router</text>
+  <rect x="527" y="430" width="151" height="58" rx="8" class="card"/>
+  <text x="602" y="454" class="t" text-anchor="middle">Your own code</text>
+  <text x="602" y="474" class="s" text-anchor="middle">an add-on you run</text>
+
+  <path d="M119,490 L119,508" class="arrow" marker-end="url(#a)"/>
+  <path d="M280,490 L280,508" class="arrow" marker-end="url(#a)"/>
+  <path d="M441,490 L441,508" class="arrow" marker-end="url(#a)"/>
+  <path d="M602,490 L602,508" class="arrow" marker-end="url(#a)"/>
+
+  <rect x="44" y="510" width="634" height="52" rx="8" class="card"/>
+  <text x="361" y="534" class="t" text-anchor="middle">Machines and servers in that network</text>
+  <text x="361" y="552" class="s" text-anchor="middle">192.168.10.5 · opc.tcp://… · a bare host name</text>
+</svg>

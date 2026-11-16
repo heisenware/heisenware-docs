@@ -18,7 +18,7 @@ Reading live values, data, logs and screenshots is one family, and an installati
 <!-- generated -->
 <!-- Generated from heisenware-cloud/mcp (src/catalog.ts, built to dist/). Regenerate with scripts/reference/mcp-tools.mjs; edit outside this block only. -->
 
-The server serves 119 tools. A read-only connection serves the 38 that only read; the others are not offered at all.
+The server serves 124 tools. A read-only connection serves the 41 that only read; the others are not offered at all.
 
 The last column:
 
@@ -45,6 +45,18 @@ What is there to build with, and what the machines are doing.
 | `get_agent_log` | The tail of a native agent's log, parsed: records with level, time, module, message and fields, plain text as it came, a stack folded under its record. The agent answers it, so it must be online. | `ask` |
 | `list_containers` | The containers behind the workspace on its host, as docker knows them: the workspace's own (a released app's backend is app-backend-&lt;appId&gt;-latest, then builder-backend, connectors, databases, media-server, ...) and, except on a host of the shared cloud… | `ask` |
 | `get_container_log` | The tail of a container's log as docker keeps it, parsed like get_agent_log: records with level, time, module, message and fields, plain text as it came, a stack folded under its record. | `ask` |
+
+## Agents you build
+
+A native agent is compiled for one machine and installed there. These tools say what can go into one, build it, and hand over the installer.
+
+| Tool | What it does | Marks |
+| --- | --- | --- |
+| `list_buildable` | What a native agent can be built from: the connectors a build bundles (id, label, what each reaches on the host and in the network, the deps it brings along) and the targets it compiles for, each with its packagings (Debian package, ctrlX OS snap… |  |
+| `list_builds` | Every fleet and single agent this platform has built, with each build's target, packaging, connectors, platform version, size and when it was built, and which build is the fleet's current one. |  |
+| `get_build_requirements` | The Requirements for IT of one build, as the build wrote them: the one outbound connection and its ports, DNS, that no proxy is supported and nothing inbound is opened, the TLS anchor baked in, the host's system, service, paths and disk… |  |
+| `build_agent` | Builds a native agent: issues the account it logs in with and compiles an executable for one machine, bundling the connectors named. | `write` `go` |
+| `get_installer` | How a build reaches its host: a download link, the lines to run in a shell there (wget, tar, dpkg - a .deb), or the sentence for a packaging no shell installs… | `write` |
 
 ## Apps, versions and releases
 

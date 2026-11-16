@@ -40,7 +40,7 @@ The left side holds the base variables, and these are the ones a corporate desig
 
 The right half of the editor previews the widgets as you change them. **Apply** compiles the theme and hands it to the App; the button reads *Generating…* while it works, and the Builder swaps its stylesheet in place when it lands, with no reload. A page you had open keeps its state.
 
-<figure><img src="../.gitbook/assets/theme_editing2_looped.gif" alt="Changing a theme variable and applying it to the App" width="563"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/theme-a-variable.gif" alt="Changing a theme variable and applying it to the App"><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 The theming engine is DevExtreme's. For what a single variable does, see the [DevExtreme theme documentation](https://js.devexpress.com/Documentation/Guide/Themes_and_Styles/Predefined_Themes/).

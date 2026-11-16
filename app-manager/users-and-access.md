@@ -12,7 +12,7 @@ This page is about the users of your Apps. The people who build the Apps are mem
 
 **Access Mode** offers five choices. A change applies at once, to everyone who has the App open, so do not change it more often than your users can follow.
 
-<figure><img src="../.gitbook/assets/image (524).png" alt="The access mode list with its five choices"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/manager-access-mode.png" alt="The Access Settings card of an App, with its Access Mode list"><figcaption></figcaption></figure>
 
 ### Anyone can use the app
 
@@ -62,11 +62,9 @@ The table shows everyone the App holds, 25 at a time:
 
 In an open App or one behind the master password, the rows are devices rather than people: one row per device that ever opened the App, by the name it remembers.
 
-<figure><img src="../.gitbook/assets/image (114).png" alt="The user list of an App anyone can open: one row per device"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/manager-app-users.png" alt="The user list of an App anyone can open: one row per device, each with the name it remembers, its browser and its device"><figcaption></figcaption></figure>
 
-In the sign-up modes and the invite-only mode they are people, and a user who signs in from several devices with the same address stays one row.
-
-<figure><img src="../.gitbook/assets/image (452).png" alt="The user list of an App whose users sign up: one row per person"><figcaption></figcaption></figure>
+In the sign-up modes and the invite-only mode they are people: the **Email/Username** column holds the address, **Name** the name the user gave, and a user who signs in from several devices with the same address stays one row.
 
 The trash icon removes a user, person or device alike: their record goes, their session ends, and their [Ask](ask.md) conversation goes with them.
 

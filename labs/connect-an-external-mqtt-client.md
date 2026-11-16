@@ -88,7 +88,7 @@ Link the payload output straight to a widget to see it, or wire it into the exec
 
 Each message is its own impulse, so a target that should run per message takes the payload on a hot input. See [Triggers and wires](../concepts/triggers-and-wires.md).
 
-<figure><img src="../.gitbook/assets/image (501).png" alt="An onJsonMessage executor with its event outputs carrying the payload and the topic"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/lab-mqtt-event-outputs.png" alt="An onJsonMessage executor with its event outputs carrying the payload and the topic"><figcaption></figcaption></figure>
 {% endstep %}
 {% endstepper %}
 

@@ -481,8 +481,6 @@ Returns the generated base64-encoded string: `SGVsbG8gV29ybGQ=`
 
 Passes its input value to its output on every update of the input. Dragged from the Functions explorer, it becomes a memory executor: it has an input and an output but shows no trigger, and behaves as if its trigger were set to run on every input update.
 
-<figure><img src="../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt="A memory executor passing a form's data from its input to its output"><figcaption></figcaption></figure>
-
 #### Parameters
 
 <table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>Any input argument to pass through.</td><td>any</td></tr></tbody></table>

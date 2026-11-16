@@ -4,7 +4,7 @@ The MQTT client connector connects to an MQTT broker over TCP, TLS or WebSockets
 
 Every workspace comes with a connected instance named `internal-mqtt`, which talks to the platform's own broker. Use it in your flows to publish and listen to the workspace's topics without any connection settings. To talk to a broker of your own, this connector requires [instance creation](README.md#instance-creation): create an instance and use the [connection management](mqtt-client.md#connection-management) functions below.
 
-<p align="center"><br><img src="../../../.gitbook/assets/image (482).png" alt=""></p>
+<p align="center"><br><img src="../../../.gitbook/assets/explorer-mqtt-client.png" alt="The Functions explorer with Connectors &gt; MQTT Client open, showing create, delete and the ready-made internal-mqtt instance" width="300"></p>
 
 ## Two ways to use MQTT
 
@@ -295,8 +295,3 @@ MQTT topic levels are separated by forward slashes (`/`). In `subscribe` and in 
 
 When the connection breaks, the client reconnects by itself (`reconnectPeriod`). Messages you publish meanwhile wait in memory and go out once the connection is back; QoS 0 messages only while `queueQoSZero` is on. An instance that never connected has nowhere to queue: `publishString` and `publishJson` fail until the first `connect` succeeded.
 
-## Video demo
-
-The video shows how to create an MQTT client instance and connect it to an external, third-party broker such as HiveMQ.
-
-{% embed url="https://www.youtube.com/watch?v=QG1Wsac2NbU" %}

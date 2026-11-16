@@ -15,7 +15,7 @@ You can build as many Apps in a workspace as your plan allows. Every App in a wo
 
 The diagram below illustrates this structure:
 
-<figure><img src="../.gitbook/assets/Account Structure (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/account-and-workspaces.png" alt="An account with its members and plan, holding two workspaces; each workspace has its own Apps, databases, files, agents and integrations, and nothing crosses between them" width="720"><figcaption><p>Every App of a workspace reaches that workspace's own resources, and nothing else.</p></figcaption></figure>
 
 ## Switch workspaces
 

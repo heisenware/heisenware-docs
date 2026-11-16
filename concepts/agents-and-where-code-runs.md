@@ -7,11 +7,11 @@ description: >-
 
 An agent is a program that offers classes to the platform. Some come with Heisenware and run where the platform runs; others you install inside your own network, where they reach machines and servers the platform cannot see. The agent named in an executor's [address](executors-and-instances.md#addresses-where-a-call-goes) decides in which network that function runs.
 
-<div data-full-width="true"><figure><img src="../.gitbook/assets/Heisenware Agent.png" alt="An App in the Heisenware cloud, an agent in the production network reaching a machine and a database, and one outbound MQTTS connection between them" width="525"><figcaption></figcaption></figure></div>
+<div data-full-width="true"><figure><img src="../.gitbook/assets/agent-where-code-runs.png" alt="Two executors on one Flowboard: one addressed to the internal agent Connectors runs where the platform runs, one addressed to the native agent line-3 runs in the production network and reaches a machine there" width="900"><figcaption><p>The same board, the same look. The address is what says in which network a function runs.</p></figcaption></figure></div>
 
 ## The kinds
 
-* **Internal agents** come with the platform: Connectors, Utility Functions, Data Analysis. They run where the platform runs and need no installation.
+* **Internal agents** come with the platform: Connectors, Utility Functions, Templates and Media Server. Each workspace gets its own set, they run where the platform runs, and they need no installation.
 * **[Native agents](../app-manager/agents/native-agent.md)** are built in the App Manager for one host and installed there as a service: Windows, macOS, Linux, Alpine, ARM 64 and ctrlX OS.
 * **[Docker agents](../app-manager/agents/docker-agent.md)** and **[LXC agents](../app-manager/agents/lxc-agent.md)** carry the same connectors as a container: a Docker image for a gateway or a server you manage with Docker, an LXC packet for an INSYS icom router.
 * **[Add-ons](../developers/custom-add-ons.md)** are not agents of this kind: they are optional modules that bring new classes of their own, your own code for example, and run as their own container.

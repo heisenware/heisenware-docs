@@ -27,7 +27,7 @@ Logic and pages are built separately and joined by **links**. A button's click f
 * [Widgets and links](../concepts/widgets-and-links.md): the three kinds of link and where each one leads.
 * [Scopes](../concepts/scopes.md): which users see which value.
 
-<figure><img src="../.gitbook/assets/Data Binding Basics.gif" alt="Linking a widget to an executor item"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/widget-link.png" alt="A modifier on the Flowboard whose item reads set value, with the value box it feeds standing in the Page editor beside it"><figcaption><p>A link: the modifier's item on the left, the widget it feeds on the right</p></figcaption></figure>
 
 ## Settings
 

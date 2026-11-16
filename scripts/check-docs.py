@@ -123,7 +123,10 @@ def redirects():
 def scan():
     files = sorted(walk())
     pages = [f for f in files if f.endswith('.md')]
-    assets = [f for f in files if not f.endswith('.md')]
+    # Everything that is not a page is an asset - except the repository's own
+    # configuration, which no page references and --prune would happily delete.
+    assets = [f for f in files
+              if not f.endswith('.md') and not os.path.basename(f).startswith('.')]
 
     refs = collections.defaultdict(list)     # target -> [(page, raw)]
     external = collections.defaultdict(list)  # url -> [page]

@@ -183,7 +183,7 @@ Writes one or more buffer-file objects to a directory. The function creates the 
 
 Returns `true` when all files are successfully written. Throws an error listing every file that failed.
 
-<figure><img src="../../../.gitbook/assets/Foto_upload.png" alt="A flow that takes the files of an upload widget and writes them into a directory"><figcaption><p>What the <a href="../../widgets/input/photo.md">photo</a> and <a href="../../widgets/input/upload.md">upload</a> widgets deliver with <strong>buffer</strong> storage goes straight into this function.</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/file-write-buffers-to-directory.png" alt="A writeBuffersToDirectory executor with a directory path, the files of an upload widget on its bufferData input and a button as its trigger"><figcaption><p>What the <a href="../../widgets/input/photo.md">photo</a> and <a href="../../widgets/input/upload.md">upload</a> widgets deliver with <strong>buffer</strong> storage goes straight into this function.</p></figcaption></figure>
 
 {% hint style="info" %}
 This function takes the inline shape, `{ name, type, size, base64 }`, which the [photo](../../widgets/input/photo.md) and [upload](../../widgets/input/upload.md) widgets deliver with **buffer** storage. With **file** storage they deliver a file reference instead, which carries no content: read it with `readFileToBuffer` and write it with `writeBufferToFile`.
@@ -746,7 +746,7 @@ Output:
 
 Example 3: Combining Excel reading with a file upload
 
-<figure><img src="../../../.gitbook/assets/image (44).png" alt="A flow in which an upload widget's file is turned into base64 and read by readXlsx"><figcaption><p>An uploaded .xlsx file with <strong>buffer</strong> storage: a modifier takes its <code>base64</code> and feeds it to <code>readXlsx</code>.</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/file-read-xlsx-from-upload.png" alt="A memory executor holding the workbook an upload widget delivers, a modifier taking its base64, and a readXlsx executor reading it"><figcaption><p>An uploaded .xlsx file with <strong>buffer</strong> storage: a modifier takes its <code>base64</code> and feeds it to <code>readXlsx</code>.</p></figcaption></figure>
 
 With **file** storage the widget delivers a file reference instead. Wire that straight into `fileInput`: no modifier is needed, and a large workbook never travels through the flow as text.
 

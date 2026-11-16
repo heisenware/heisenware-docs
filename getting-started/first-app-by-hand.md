@@ -1,22 +1,14 @@
 ---
 description: >-
-  Build a small App step by step: two data sources, a combined value, a history, and two pages.
+  Build a small App step by step: two machines, a combined value, a history, and two pages.
 ---
 
 # Your first App by hand
 
-This tutorial builds the same kind of App as the assistant does, click by click, so you see what every piece is. It reads a number from a web API and a value from a public OPC UA server, adds them up, keeps their history, and shows both on two pages.
+This tutorial builds the same kind of App as the assistant does, click by click, so you see what every piece is. It reads the load of two machines, takes the higher of the two, keeps its history, and shows both on two pages.
 
 {% hint style="info" %}
 If you would rather describe the App than build it, see [Your first App with the assistant](first-app-with-the-assistant.md). Come back here to understand what was built.
-{% endhint %}
-
-## Video
-
-{% embed url="https://www.youtube.com/watch?v=ZOWjfi18SVI" fullWidth="false" %}
-
-{% hint style="warning" %}
-The video shows an older App Builder. The steps below are the current ones; where the two differ, follow the text.
 {% endhint %}
 
 ## Create the App
@@ -29,50 +21,42 @@ The video shows an older App Builder. The steps below are the current ones; wher
 
 Everything in this section happens on the [Flowboard](../app-builder/flowboard/README.md), and every function comes from the [Functions explorer](../app-builder/explorers/functions.md) on the left.
 
-### HTTP
+### The filler
 
-1. Drag the [`get`](../reference/functions/connectors/http-rest.md#get) function of **Connectors** > **HTTP / REST** onto the Flowboard. It becomes an [executor](../concepts/executors-and-instances.md): the function's arguments are its inputs.
-2. Fill the inputs:
+Packaging line 2 has two machines. You read both, so take the first one now and the second right after.
 
-   ```yaml
-   # url
-   https://www.randomnumberapi.com/api/v1.0/random
-   # options
-   params:
-     min: 50
-     max: 100
-     count: 5
-   ```
-
-3. Click the trigger button on the executor to run it once. The output shows the five numbers it answered.
-4. Add a [modifier](../app-builder/flowboard/modifier.md) to the output with the **+** on its right, right-click it and choose **Jsonata**, and average the numbers:
-
-   ```jsonata
-   $average($)
-   ```
-
-### OPC UA
-
-1. Drag the [`create`](../reference/functions/connectors/opc-ua-client.md#create) function of **Connectors** > **OPC UA Client** onto the Flowboard, name the instance `demo` and leave the options empty for an unencrypted connection. Click the trigger to create it.
-2. Under that instance, drag [`connect`](../reference/functions/connectors/opc-ua-client.md#connect) onto the Flowboard and give it the server's endpoint:
+1. Drag the [`create`](../reference/functions/utilities/signal-simulation.md#create) function of **Utilities** > **Signal Simulator** onto the Flowboard. It becomes an executor. Name its instance `filler`.
+2. Fill its `options` input:
 
    ```yaml
-   # endpointUrl
-   opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
+   preset: machine
+   timeScale: 30
    ```
 
-3. Click its trigger. It answers `true` once connected. [`isConnected`](../reference/functions/connectors/opc-ua-client.md#isconnected) answers the same question later without reconnecting.
-4. Drag [`readVariable`](../reference/functions/connectors/opc-ua-client.md#readvariable) onto the Flowboard and give it the node to read:
+   The `machine` preset is a generic machine: it runs, goes idle, now and then faults, and its load and temperature follow. `timeScale: 30` lets a simulated minute pass every two seconds, so you see something happen while you build.
 
-   ```yaml
-   # address
-   ns=2;i=10846
+3. Right-click the trigger, open **App Start** and pick *once on deploy*. The instance is then part of the App: it is created when the App starts, and creating one that exists changes nothing.
+4. Under that instance, drag [`getValues`](../reference/functions/utilities/signal-simulation.md#getvalues) onto the Flowboard. Click its trigger button to run it once: it answers the machine's signals as one object.
+
+   ```json
+   { "state": "running", "load": 75.1, "temperature": 47.7, "partCount": 462 }
    ```
 
-`readVariable` answers the value itself. [`readNode`](../reference/functions/connectors/opc-ua-client.md#readnode) answers the whole node instead, with its status code and timestamps, which you then reduce with a modifier.
+5. Add a [modifier](../app-builder/flowboard/modifier.md) to the output with the **+** on its right and pick the machine's load out of it:
+
+   ```javascript
+   x.load
+   ```
+
+### The capper
+
+Do the same once more. One class, a second living object of it: that is what an [instance](../concepts/executors-and-instances.md) is.
+
+1. Drag `create` onto the Flowboard again and name this instance `capper`. Give it the same `options` and the same **App Start** > *once on deploy* trigger.
+2. Drag `getValues` under `capper` onto the Flowboard, and add the same `x.load` modifier to its output.
 
 {% hint style="info" %}
-An OPC UA server inside your own network is not reachable from the cloud, whatever the firewall allows. Such a server needs an [agent](../concepts/agents-and-where-code-runs.md) installed in that network.
+A real machine takes the place of the simulator later, and nothing else about the App changes: a [connector](../reference/functions/connectors/README.md) reads it instead. A machine inside your own network is not reachable from the cloud, whatever the firewall allows; it needs an [agent](../concepts/agents-and-where-code-runs.md) in that network.
 {% endhint %}
 
 ## Let the values meet
@@ -80,15 +64,17 @@ An OPC UA server inside your own network is not reachable from the cloud, whatev
 ### Combine the two
 
 1. Drag [`combine`](../reference/functions/utilities/data-processing.md#combine) of **Utilities** > **Data Processing** onto the Flowboard. It answers the latest value of each of its inputs as one array.
-2. Wire the HTTP modifier to its first input and the `readVariable` output to its second.
+2. Wire the filler's modifier to its first input and the capper's modifier to its second.
 3. Make both inputs run the executor: drag each input onto the executor's trigger. A row appears per source, reading *on input* with a mode button beside it; leave it at *update*, or click it for *change*, *true* or *all updated*. An input that also runs its executor is a hot input. A value arriving at an input never runs an executor by itself. See [Triggers and wires](../concepts/triggers-and-wires.md).
-4. Add a modifier to `combine` and sum the two:
+4. Add a modifier to `combine` and take the higher of the two:
 
    ```jsonata
-   $sum($)
+   $max($)
    ```
 
-5. Give `readVariable` and `get` their own impulse: right-click the trigger, open **App Start** and pick **every 10s**. That is how polling is set.
+   A line is as busy as its busiest machine, so that number is the one worth a gauge.
+
+5. Give both `getValues` executors their own impulse: right-click the trigger, open **App Start** and pick **every 10s**. That is how polling is set.
 6. Click **Test** in the top bar and wait for the first interval. Values appear on the items as they arrive. See [Test and deploy](../app-builder/test-and-deploy.md).
 
 ### Keep the history
@@ -114,7 +100,7 @@ An OPC UA server inside your own network is not reachable from the cloud, whatev
 3. Click its trigger to see the rows it answers.
 4. In the [Pages and actions explorer](../app-builder/explorers/pages.md), right-click the page and choose **New Page**. Rename the pages and give them icons; the navigation menu is configured in the same explorer.
 5. On the new page, place a [chart](../reference/widgets/display/chart.md), select it, and drag the `read` executor's output onto it. Size and configure the chart in its settings.
-6. Place a [button](../reference/widgets/trigger/button.md), set its text, and drag the button onto the trigger of `read` so a click fetches the data again.
+6. Place a [button](../reference/widgets/trigger/button.md) and set its text. Then drag the trigger of `read` onto that button: a click now fetches the data again. The trigger goes to the widget, not the widget to the trigger.
 7. Give `read` a second trigger source, **App Start** > **once on (re-)load**, so the chart is filled when a user opens the App. A deployed App runs on its own backend: nothing your test run produced reaches it.
 8. **Test** the App and try the button.
 

@@ -32,6 +32,8 @@ Both are shared across screen sizes until you pin one: hover the field and click
 
 The navigation menu is how users move between top-level pages. To configure it, click the menu icon next to the **Pages** title at the top of the panel (*Configure the navigation menu*).
 
+<figure><img src="../../.gitbook/assets/builder-menu-settings.png" alt="The menu settings with the Type list open: None, Bottom Tabs, Burger Menu, Fixed Left Menu"><figcaption></figcaption></figure>
+
 ### Menu types
 
 * **None**: no navigation menu. This is what a new App starts with.
@@ -42,8 +44,6 @@ The navigation menu is how users move between top-level pages. To configure it, 
 There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](../../reference/widgets/display/card.md) as the band, an [image](../../reference/widgets/trigger/image.md) for the logo, a text box for the title, and a [button](../../reference/widgets/trigger/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
 
 **Sticky widgets.** Every widget on a page has a *Sticky* switch on its General tab. A sticky widget stays where the screen puts it while the page scrolls: a band at the top is a header, a bar at the bottom of the screen a footer, a small button in a corner a "back to top". Sticky widgets draw above the page's content, and the page scrolls under them. The Page editor marks a sticky widget with a badge and keeps it in place on the page, which is where it will sit on the screen; the test run and the deployed App are where it sticks. Like other settings, *Sticky* is shared across screens until you pin it on one. A widget inside a group follows its group, so the group is what you make sticky.
-
-<figure><img src="../../.gitbook/assets/Screenshot 2026-07-08 212421.png" alt=""><figcaption></figcaption></figure>
 
 ### Per-screen menu type
 
@@ -95,7 +95,7 @@ Toast, Open link and Switch page have one main setting: the message, the URL, th
 
 The other settings (type, position, new tab) still come from the dialog. A value that does not fit, such as a list for a toast or a page that does not exist, opens nothing; the browser console of the App says why. With the switch off, the value only decides that the action runs.
 
-<figure><img src="../../.gitbook/assets/image (32).png" alt=""><figcaption><p>Switch page link</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/switch-page-link.png" alt="A filter on the Flowboard carrying a Switch page chip that takes the page from the live value"><figcaption><p>Switch page link</p></figcaption></figure>
 
 The browser's back and forward buttons, and the back gesture of a phone, walk your App's pages the same way the Back action does. The App's URL never changes.
 

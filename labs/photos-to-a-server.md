@@ -39,7 +39,7 @@ Place a [button](../reference/widgets/trigger/button.md) and set its text to `Sa
 {% endstep %}
 {% endstepper %}
 
-<div align="left"><figure><img src="../.gitbook/assets/image (38).png" alt="The page: the order form, the barcode scanner, the photo thumbnails and the save button" width="284"><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../.gitbook/assets/lab-photos-page.png" alt="The page on a phone: the order form, the scan button, the upload button and the save button" width="284"><figcaption></figcaption></figure></div>
 
 ## The flow
 

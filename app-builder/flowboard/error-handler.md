@@ -4,7 +4,7 @@ An error handler catches a failed call. It stays silent while the function works
 
 Add it with the **+** on an output and choose **Error Handler**. It sits on an output itself, never behind another extension; a modifier, a filter or a recorder may follow it.
 
-<figure><img src="../../.gitbook/assets/image (28).png" alt=""><figcaption><p>Error simulator executor with captured error message and a JSONata modifier</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/error-handler-node.png" alt=""><figcaption><p>Error simulator executor with captured error message and a JSONata modifier</p></figcaption></figure>
 
 ## What happens when a call fails
 

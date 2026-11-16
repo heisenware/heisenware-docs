@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="660" viewBox="0 0 720 660" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .plat  { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .net   { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.5; }
+    .seg   { fill: #e4eaf5; stroke: #5a7fb0; stroke-width: 1.5; stroke-dasharray: 7 5; }
+    .card  { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.4; }
+    .off   { fill: #f1f3f5; stroke: #d7dde3; stroke-width: 1.4; }
+    .out   { fill: #ffffff; stroke: #b9c4cf; stroke-width: 1.4; stroke-dasharray: 6 4; }
+    .h1 { font-size: 18px; font-weight: 700; fill: #22303c; }
+    .hp { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .hn { font-size: 15px; font-weight: 700; fill: #41628d; }
+    .t  { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .tx { font-size: 14px; font-weight: 700; fill: #9aa6b2; }
+    .s  { font-size: 13px; fill: #6a7a89; }
+    .sx { font-size: 13px; fill: #9aa6b2; }
+    .n  { font-size: 13px; fill: #4a5b6a; }
+    .g  { font-size: 13px; font-weight: 700; fill: #2e7d63; }
+    .arrow  { stroke: #8da0b3; stroke-width: 1.8; fill: none; }
+    .barrow { stroke: #41628d; stroke-width: 1.8; fill: none; }
+    .dash   { stroke: #b9c4cf; stroke-width: 1.6; fill: none; stroke-dasharray: 6 4; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+    <marker id="b" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#41628d"/>
+    </marker>
+  </defs>
+
+  <rect x="10" y="10" width="700" height="636" rx="12" class="frame"/>
+  <text x="30" y="42" class="h1">On-premise</text>
+  <text x="160" y="42" class="s">the same platform, one level down</text>
+
+  <!-- the internet, outside -->
+  <rect x="506" y="56" width="186" height="68" rx="10" class="out"/>
+  <text x="599" y="82" class="t" text-anchor="middle">Internet</text>
+  <text x="599" y="104" class="s" text-anchor="middle">only to fetch a release,</text>
+  <text x="599" y="118" class="s" text-anchor="middle">or for remote support</text>
+  <path d="M599,124 L599,140" class="dash"/>
+
+  <!-- your network -->
+  <rect x="24" y="140" width="672" height="496" rx="10" class="net"/>
+  <text x="40" y="164" class="hn">Your network</text>
+  <text x="156" y="164" class="s">the platform lives in it too</text>
+
+  <!-- the platform -->
+  <rect x="40" y="178" width="440" height="288" rx="10" class="plat"/>
+  <text x="56" y="202" class="hp">The platform — on your own server</text>
+
+  <rect x="54" y="212" width="130" height="44" rx="8" class="card"/>
+  <text x="119" y="232" class="t" text-anchor="middle">App Manager</text>
+  <text x="119" y="249" class="s" text-anchor="middle">the account</text>
+  <rect x="194" y="212" width="130" height="44" rx="8" class="card"/>
+  <text x="259" y="232" class="t" text-anchor="middle">App Builder</text>
+  <text x="259" y="249" class="s" text-anchor="middle">one App</text>
+  <rect x="334" y="212" width="130" height="44" rx="8" class="off"/>
+  <text x="399" y="232" class="tx" text-anchor="middle">Assistant · Ask</text>
+  <text x="399" y="249" class="sx" text-anchor="middle">not in v93</text>
+
+  <rect x="54" y="266" width="130" height="40" rx="8" class="card"/>
+  <text x="119" y="291" class="t" text-anchor="middle">App 1</text>
+  <rect x="194" y="266" width="130" height="40" rx="8" class="card"/>
+  <text x="259" y="291" class="t" text-anchor="middle">App 2</text>
+  <rect x="334" y="266" width="130" height="40" rx="8" class="card"/>
+  <text x="399" y="291" class="t" text-anchor="middle">App n</text>
+
+  <rect x="54" y="316" width="410" height="36" rx="8" class="card"/>
+  <text x="259" y="339" class="t" text-anchor="middle">MQTT broker — every part talks over it</text>
+
+  <rect x="54" y="362" width="410" height="36" rx="8" class="card"/>
+  <text x="259" y="385" class="t" text-anchor="middle">Internal agents: Connectors, Utility Functions</text>
+
+  <rect x="54" y="408" width="266" height="44" rx="8" class="card"/>
+  <text x="187" y="428" class="t" text-anchor="middle">Databases and Files</text>
+  <text x="187" y="445" class="s" text-anchor="middle">PostgreSQL · InfluxDB</text>
+  <rect x="330" y="408" width="134" height="44" rx="8" class="card"/>
+  <text x="397" y="428" class="t" text-anchor="middle">Add-ons</text>
+  <text x="397" y="445" class="s" text-anchor="middle">your own image too</text>
+
+  <!-- the right column -->
+  <path d="M482,220 L494,220" class="arrow" marker-end="url(#a)"/>
+  <rect x="496" y="178" width="184" height="104" rx="10" class="card"/>
+  <text x="588" y="208" class="t" text-anchor="middle" font-size="15">Users</text>
+  <text x="588" y="232" class="s" text-anchor="middle">on your network</text>
+  <text x="588" y="250" class="s" text-anchor="middle">no internet needed</text>
+
+  <rect x="496" y="296" width="184" height="86" rx="10" class="card"/>
+  <text x="588" y="324" class="t" text-anchor="middle">You operate it</text>
+  <text x="588" y="348" class="s" text-anchor="middle">updates, backups,</text>
+  <text x="588" y="366" class="s" text-anchor="middle">your own TLS</text>
+
+  <rect x="496" y="396" width="184" height="70" rx="10" class="card"/>
+  <text x="588" y="424" class="t" text-anchor="middle">Licence file</text>
+  <text x="588" y="448" class="s" text-anchor="middle">instead of a plan</text>
+
+  <!-- direct reach -->
+  <path d="M200,468 L200,514" class="barrow" marker-end="url(#b)"/>
+  <text x="216" y="496" class="hn" font-size="14">direct — no agent needed</text>
+  <rect x="40" y="520" width="400" height="56" rx="8" class="card"/>
+  <text x="240" y="544" class="t" text-anchor="middle">Machines the host can reach</text>
+  <text x="240" y="564" class="s" text-anchor="middle">as far as its own network goes</text>
+
+  <!-- a segment it cannot reach -->
+  <path d="M568,496 L568,482 L470,482 L470,470" class="barrow" marker-end="url(#b)"/>
+  <rect x="456" y="496" width="224" height="120" rx="10" class="seg"/>
+  <text x="470" y="520" class="hn" font-size="14">A segment it cannot reach</text>
+  <rect x="470" y="532" width="196" height="44" rx="8" class="card"/>
+  <text x="568" y="552" class="t" text-anchor="middle">Native agent</text>
+  <text x="568" y="569" class="s" text-anchor="middle">MQTTS 8883, dials out</text>
+  <text x="568" y="600" class="s" text-anchor="middle">and the machines in it</text>
+</svg>

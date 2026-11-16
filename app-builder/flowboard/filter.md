@@ -8,7 +8,7 @@ To add one:
 2. Choose **Filter**.
 3. Click the new node (_Click to edit…_) to open the editor and write your condition.
 
-<figure><img src="../../.gitbook/assets/image (53).png" alt=""><figcaption><p>randomInteger executor with filter extension node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/filter-node.png" alt=""><figcaption><p>randomInteger executor with filter extension node</p></figcaption></figure>
 
 ## How filters work
 
@@ -26,7 +26,7 @@ On a pass, everything behind the filter receives that value: the next extensions
 
 This is why a filter feeds an argument, an address part or an instance box exactly like an output does.
 
-<div align="center"><figure><img src="../../.gitbook/assets/image (295).png" alt=""><figcaption></figcaption></figure></div>
+<div align="center"><figure><img src="../../.gitbook/assets/filter-pass-and-block.png" alt=""><figcaption></figcaption></figure></div>
 
 ### Branching logic
 
@@ -34,7 +34,7 @@ Connect another executor to the filter to run it when the data passes. For a sec
 
 A trigger fed from a filter reads what passed, not whether it passed: *true* fires on every pass, *change* only when the value that passed differs from the one before.
 
-<figure><img src="../../.gitbook/assets/image (510).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/filter-runs-an-executor.png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
 #### Falsy values halt the flow
@@ -73,7 +73,7 @@ x.temperature > 90
 
 The data passes.
 
-<figure><img src="../../.gitbook/assets/image (506).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/filter-threshold.png" alt=""><figcaption></figcaption></figure>
 
 ### Example 2: Industrial error detection
 
@@ -93,7 +93,7 @@ x.includes('Error')
 
 The data passes.
 
-<figure><img src="../../.gitbook/assets/image (507).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/filter-keyword.png" alt=""><figcaption></figcaption></figure>
 
 ### Example 3: Validating array data
 
@@ -113,7 +113,7 @@ x.length > 0
 
 The filter blocks, and the flow halts.
 
-<figure><img src="../../.gitbook/assets/image (509).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/filter-empty-array.png" alt=""><figcaption></figcaption></figure>
 
 ## Letting the assistant write it
 

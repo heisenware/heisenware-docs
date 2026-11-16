@@ -17,6 +17,7 @@
  *   login     true when it starts signed in (credentials from .env)
  *   dark      true to open the manager in dark mode
  *   viewport  optional { width, height }, default 1280x800
+ *   scale     optional device pixel ratio, default 1 (2 for small text)
  *   run       async ({ page, m, env }) => { ... }   m is the Recorder, see lib.js
  *
  * More than one frame gives <name>.gif; exactly one frame gives <name>.png;
@@ -59,7 +60,9 @@ async function record (file, opts, env, browser) {
   const context = await browser.newContext({
     ignoreHTTPSErrors: true,
     viewport: story.viewport || lib.DEFAULT_VIEWPORT,
-    deviceScaleFactor: 1
+    // scale 2 renders the page at twice the pixel density: for a storyboard
+    // whose subject is small text (a tree, a panel) the crop stays sharp
+    deviceScaleFactor: story.scale || 1
   })
   await context.addInitScript(lib.CURSOR_INIT)
   // The manager's dark mode is a stored preference it reads at boot

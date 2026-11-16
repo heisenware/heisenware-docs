@@ -12,7 +12,7 @@ Read [Screens and layouts](../concepts/screens-and-layouts.md) and [Widgets and 
 
 ## The toolbar
 
-<figure><img src="../.gitbook/assets/image (27).png" alt="The Page editor toolbar: text box, icon, the three widget menus, the screen, fit to view, page height, configure and delete"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/page-editor-toolbar.png" alt="The Page editor toolbar: text box, icon, the three widget menus, the screen, fit to view, page height, configure and delete"><figcaption></figcaption></figure>
 
 From left to right:
 
@@ -36,7 +36,7 @@ Place an element by picking it in the toolbar and clicking the page. Then:
 
 Geometry belongs to the screen you are editing. Moving a widget on the desktop does not move it on the phone.
 
-<figure><img src="../.gitbook/assets/Widgets.gif" alt="Picking a widget from the Input Widgets menu and placing it on the page" width="563"><figcaption>Placing a widget</figcaption></figure>
+<figure><img src="../.gitbook/assets/place-a-widget.gif" alt="Picking a widget from the Input Widgets menu and clicking the page to place it"><figcaption><p>Placing a widget</p></figcaption></figure>
 
 ## The context menu
 
@@ -57,7 +57,7 @@ Select several widgets and the menu offers **Group**; on a group it offers **Ung
 
 The screen icon in the toolbar is the screen you are editing. Click it to walk to the next enabled screen. The caret opens the picker with all five.
 
-<figure><img src="../.gitbook/assets/image (516).png" alt="The screen picker with the five screens: phone, tablet, tablet rotated, laptop, desktop"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/page-editor-screens.png" alt="The screen picker with the five screens: phone, tablet, tablet rotated, laptop, desktop, and the dots of the selected widget"><figcaption></figcaption></figure>
 
 In the picker, a dot on a screen says how the selected widget stands on it:
 
@@ -69,7 +69,7 @@ A derived screen is not a scaled picture of the reference. Between two screens o
 
 Right-click a screen icon for its settings:
 
-<figure><img src="../.gitbook/assets/image (517).png" alt="The context menu of a screen icon: Disable this view, Left-align app on wide screens"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/page-editor-screen-menu.png" alt="The context menu of a screen icon: Disable this view, Left-align app on wide screens"><figcaption></figcaption></figure>
 
 * **Disable this view** and **Enable this view**: which screens the App serves. A disabled screen is never drawn for a user and cannot be designed. At least one screen has to stay on.
 * **Left-align app on wide screens** and **Center app on wide screens**: on the laptop and the desktop, where the page sits in a window that is wider than the screen it was designed for.
@@ -147,15 +147,15 @@ There is no built-in title bar. A band with a logo, a title and a logout button 
 
 * **Text box**: static text in Markdown, for titles, labels and instructions. Its **Content** tab is the editor, **Look & feel** sets how the text sits in its box. See [Text Box](../reference/widgets/display/text-box.md).
 
-<figure><img src="../.gitbook/assets/image (518).png" alt="The settings of a text box, with the text editor"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/page-editor-text-box-settings.png" alt="TEXT BOX SETTINGS on its Content tab: the Markdown editor with the page title in it"><figcaption></figcaption></figure>
 
 * **Icon**: a symbol from the Font Awesome library, picked when you place it. Drag a page from the Pages and actions explorer onto an icon and a click on it switches to that page. See [Icon](../reference/widgets/trigger/icon.md).
 
-<figure><img src="../.gitbook/assets/image (519).png" alt="The settings of an icon: style, color and background"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/page-editor-icon-settings.png" alt="ICON SETTINGS on its Look &#x26; feel tab: the icon, its style and colour, and the surface behind it"><figcaption></figcaption></figure>
 
 * **Image**: upload the file to the [Files explorer](explorers/files.md), then drag it from there onto the page. See [Image](../reference/widgets/trigger/image.md).
 
-<figure><img src="../.gitbook/assets/Add Image.gif" alt="Dragging an image file from the Files explorer onto a page"><figcaption>Add an image to a page</figcaption></figure>
+<figure><img src="../.gitbook/assets/drag-an-image-to-a-page.gif" alt="Dragging an image file from the Files explorer onto a page, where it becomes an image widget"><figcaption><p>Add an image to a page</p></figcaption></figure>
 
 {% hint style="info" %}
 An uploaded file is not only for the page: your logic can read it too. See [Files, data and dates](../concepts/files-data-and-dates.md).

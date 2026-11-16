@@ -9,7 +9,7 @@ This connector requires [instance creation](README.md#instance-creation) before 
 
 Heisenware ships with an email instance called `internal-email`. It is always available, letting you call `send` directly. Its emails come from `<Account> Notifier <no-reply@heisenware.com>`.
 
-<img src="../../../.gitbook/assets/image (483).png" alt="" data-size="original">
+<img src="../../../.gitbook/assets/explorer-email.png" alt="The Functions explorer with Connectors &gt; Email open, showing create, delete and the ready-made internal-email instance" width="300">
 
 To send through another mailing system (such as Gmail, Office 365, or a private SMTP server), create a new instance with your server's connection and authentication details.
 {% endhint %}
@@ -231,12 +231,9 @@ Returns `true` upon removal.
 
 In the example below, a [form](../../widgets/input/form.md) fills the subject and content, an [upload](../../widgets/input/upload.md) widget set to hold several files provides the attachments, and the recipient address is predefined. A button triggers the `send` function.
 
-<figure><img src="../../../.gitbook/assets/image (418).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/email-send-flow.png" alt="A memory executor holding the form data, two modifiers taking its subject and its content, and the send executor with the recipient, both modifiers, the upload widget's files and a button as its trigger"><figcaption></figcaption></figure>
 
 This is how the email looks:
 
 <figure><img src="../../../.gitbook/assets/image (419).png" alt=""><figcaption></figcaption></figure>
 
-## Video demo
-
-{% embed url="https://www.youtube.com/watch?v=G8L-faWSah4" %}

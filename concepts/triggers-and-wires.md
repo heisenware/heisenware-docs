@@ -22,7 +22,7 @@ A value arriving at an input does not run the executor by itself. Without a trig
 | **App stop** | the App stops | right-click the trigger: **App Stop** |
 | **Browser reload** | a user opens or reloads the App | **App Start** > **once on (re-)load** |
 | **Page load** | a user opens a page | drop the page onto the trigger |
-| **Widget event** | a user clicks a button or submits a form | link the widget's event to the trigger |
+| **Widget event** | a user clicks a button or submits a form | drag the trigger onto the widget in the Page editor |
 | **Manual** | you click the play icon while building | |
 
 App start, App stop and backend events are armed only while the App runs: under **Test** in the App Builder, or deployed.
@@ -36,9 +36,9 @@ A source that reacts to a value has a mode. Click the mode on the trigger to cha
 * **true**: only a value that counts as true. Use it for thresholds: fire when the temperature is too high, not on every reading.
 * **all updated**: fire once when every input in this mode has received a new value. See [When streams meet](when-streams-meet.md).
 
-<figure><img src="../.gitbook/assets/onpage_louade_looped.gif" alt="A page is dragged from the Pages explorer onto an executor's trigger, which then reads on page load" width="563"><figcaption><p>A page dropped on a trigger runs the executor when that page opens</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/trigger-from-a-page.gif" alt="A page is dragged from the Pages explorer onto an executor's trigger, which then reads on page load" width="563"><figcaption><p>A page dropped on a trigger runs the executor when that page opens</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="A button's click event is linked to an executor's trigger, which then reads on button click" width="563"><figcaption><p>A button's click runs the executor</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/trigger-from-a-button.gif" alt="An executor's trigger is dragged onto a button in the Page editor, and the trigger then reads on button click" width="640"><figcaption><p>A button's click runs the executor</p></figcaption></figure>
 
 ### Delay
 

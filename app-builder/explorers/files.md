@@ -4,6 +4,8 @@ The Files explorer is the workspace's shared storage: the files your logic reads
 
 It opens in `uploads`, where what you upload lands. The breadcrumb above the list takes you to the other areas.
 
+<figure><img src="../../.gitbook/assets/builder-files-explorer.png" alt="The Files explorer: the breadcrumb on shared / uploads, then the files and folders with their sizes" width="262"><figcaption></figcaption></figure>
+
 ## The areas
 
 | Folder | What it holds | What you may do |
@@ -39,6 +41,8 @@ Right-click a file or a folder:
 * **New Folder**, **Rename**, **Delete**.
 * **Copy link address**: copies a download link for the file.
 
+<figure><img src="../../.gitbook/assets/files-context-menu.png" alt="The menu a right-click on a file opens: Open, Download, New Folder, Rename, Delete, Copy link address"><figcaption></figcaption></figure>
+
 Drag a file onto a folder to move it there.
 
 {% hint style="warning" %}
@@ -63,5 +67,3 @@ The platform's own areas, such as your Apps' records under `builder-backend`, op
 * **With the assistant**: select the file in the explorer and it becomes the context of your next message. See [The assistant in the Builder](../assistant.md).
 
 A file an App's user uploads does not land here but in the file store, under the row that keeps it. See [Files, data and dates](../../concepts/files-data-and-dates.md).
-
-<figure><img src="../../.gitbook/assets/image (520).png" alt=""><figcaption></figcaption></figure>

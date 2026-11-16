@@ -10,7 +10,7 @@ You build it by dragging functions onto the board, where each becomes an [execut
 * **From the toolbar**: **New Echo Executor**, the first icon, drops an `echo`, the carrier that hands a value on unchanged. The other everyday functions sit in the Functions explorer under *Utilities*: [Data Processing](../../reference/functions/utilities/data-processing.md) holds `combine`, `jsonParse` and the rest, [Event Simulation](../../reference/functions/utilities/event-simulation.md) the impulses.
 * **Duplicate**: select executors or a section and use **Duplicate** in the toolbar.
 
-<figure><img src="../../.gitbook/assets/memory_flow_builder_looped.gif" alt="Dragging a function onto the Flowboard" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/drop-a-function-on-the-board.gif" alt="A function is dragged out of the Functions explorer and dropped on the board, where it becomes an executor"><figcaption><p>A function dropped on the board becomes an executor</p></figcaption></figure>
 
 ## Wiring
 
@@ -46,7 +46,7 @@ A frame can be collapsed, and the toolbar folds or unfolds every section at once
 
 A section can become a reusable executor of its own: **Activate Subflow** on its title bar. **New Subflow** in the toolbar drops an empty one, a section with its blueprint ready. See [Subflows](../../concepts/subflows.md).
 
-<figure><img src="../../.gitbook/assets/gruppieren_functions_2_looped.gif" alt="Framing executors in a section" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/frame-a-section.gif" alt="Two executors are selected with Ctrl and a click, and the group icon draws a titled frame around them"><figcaption><p>Select the executors of one stage, then the group icon</p></figcaption></figure>
 
 ## Annotations
 
@@ -56,7 +56,7 @@ A card holds rich text: headings, lists, tables, quotes, code blocks, links, and
 
 Annotations say what no single node can say. Why one executor is there belongs in its comment.
 
-<figure><img src="../../.gitbook/assets/Annotation_looped.gif" alt="Writing an annotation card" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/flowboard-annotation.png" alt="An annotation card with a heading, a paragraph, a mermaid flowchart and a list, tinted in the colour of its section"><figcaption><p>A card explaining a path that spans several executors, with a <code>mermaid</code> block drawn as a diagram</p></figcaption></figure>
 
 ## Finding your way
 
@@ -83,4 +83,4 @@ Select at least two executors to activate **Replace** in the toolbar, then repla
 The replacement runs over everything the selected executors hold, their cached values included. Search for something distinctive, and look at the result before you build on it.
 {% endhint %}
 
-<figure><img src="../../.gitbook/assets/search_in_function_and_replace_2_looped.gif" alt="Replacing a string across several executors" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/search-and-replace.gif" alt="With two executors selected, Replace asks for the string and its replacement and rewrites both"><figcaption><p>The oven controller moved to another address, in both executors at once</p></figcaption></figure>

@@ -4,12 +4,22 @@
 //
 //   node player-shot.js <appId> <pageId> <out.png> [x y width height [margin]] [--scale 2] [--released]
 //
-// Without --released it opens the CURRENT BUILD of an App running in
-// test mode (test_app), the way the MCP screenshot tool does:
-// /app/<domain>/<appId>?hwPreview=1&page=<pageId>, signed in
-// anonymously. The page renders on the laptop screen (1500x750 design
-// px); the box is in design px, exactly as layout_lint reports it.
+// Without --released it asks for the CURRENT BUILD of an App running in
+// test mode (test_app): /app/<domain>/<appId>?hwPreview=1&page=<pageId>.
+// With --released it opens the deployed App. The page renders on the
+// laptop screen (1500x750 design px); the box is in design px, exactly
+// as layout_lint reports it.
 // Needs HW_BASE_URL (and HW_DOMAIN, default <HW_ACCOUNT>.default) in .env.
+//
+// LIMITATION (v93): a PREVIEW needs a pass the Player keeps in the
+// device's own record (app-frontend/src/auth/accessGate.js: in preview
+// mode a device without an accessToken goes to the sign-in), and nothing
+// here puts one there - signing in to the manager first does not, because
+// the Player's gate is the App's own, not the member's. So this script
+// photographs the App's sign-in form unless the App's accessMode lets a
+// device in anonymously and you pass --released. Until that is solved,
+// shoot a running build with the Heisenware MCP `screenshot` tool, which
+// brings its own pass (its image comes at most 1000 px on the long edge).
 const path = require('path')
 const { loadEnv, launchBrowser } = require('./lib')
 

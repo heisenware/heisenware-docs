@@ -31,7 +31,7 @@ signature: iVBORw0KGgoAAAANSUhEUg...
 showEmptyVariables: true
 ```
 
-<figure><img src="../../../.gitbook/assets/Screenshot 2025-02-20 at 16.10.48.png" alt="A fillTemplate executor with the rendered page shown on its output"><figcaption>The executor previews the document it rendered</figcaption></figure>
+<figure><img src="../../../.gitbook/assets/filltemplate-executor.png" alt="A fillTemplate executor with the values of the example in its first input and showEmptyVariables in its second"><figcaption>Such a call as a node: the <code>values</code> object in the first input, the <code>options</code> in the second</figcaption></figure>
 
 ## Filling a template from a flow
 

@@ -22,7 +22,7 @@ Ask these for any executor with more than one input:
 
 Two sensors report on their own, and a calculation needs both. Make both inputs hot: the executor then runs on every value of either stream, each time with the latest value of the other.
 
-<figure><img src="../.gitbook/assets/image (26).png" alt="Two executors feeding one combine executor, whose trigger carries two sources, each reading on input update" width="563"><figcaption><p>Two streams meeting: each arrival runs the executor with the latest of the other</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/concept-streams-meet.png" alt="Two executors polling two machines feed one mergeObjects executor, whose trigger carries two sources, each reading on input update" width="640"><figcaption><p>Two streams meeting: each arrival runs the executor with the latest of the other</p></figcaption></figure>
 
 This is right for anything that describes a state: a sum, a status, a display. Between two arrivals the result is briefly computed from one new and one old value, and that is fine for a state.
 

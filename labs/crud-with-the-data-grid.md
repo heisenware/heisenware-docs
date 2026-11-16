@@ -30,8 +30,6 @@ Do not build a `defineTable` executor for the internal database. The model then 
 
 Five executors of the [relational database](../reference/functions/storage/relational-database.md) class, on the instance `internal-postgres`, plus one widget.
 
-<figure><img src="../.gitbook/assets/image.png" alt="The data grid's three write properties, each feeding one database function, and the read that fills the grid"><figcaption></figcaption></figure>
-
 {% stepper %}
 {% step %}
 #### Read the rows
@@ -94,32 +92,9 @@ A failing call produces no output, so the success toast never fires on a failure
 
 Click **Test**, then work in the grid as a user would: add a row, edit a cell, delete a row. Check the result in the Database editor's **Rows** tab.
 
-## The shortcut
-
-The wiring is also available as a bundle. Download it, open **Tags** in the Builder's top bar, click **Import** and pick the file, then click the imported tag and confirm **Switch**. Set the `table` input of the four functions to your own table.
-
-{% file src="../.gitbook/assets/data-grid-crud.hwt" %}
-
-{% hint style="info" %}
-This bundle was exported by an older platform. Importing it still works: its records are brought up to date on the way in, and its tables are added to the workspace where they are missing. What an import cannot carry: the App's icon and its language have to be set once more, and a toast that was a widget becomes a Toast action on the output it was linked to.
-{% endhint %}
-
 ## What to change next
 
 * **Fewer columns on the phone**: how many columns a grid shows and its font sizes are pinned per screen. See [Screens and layouts](../concepts/screens-and-layouts.md).
 * **Only the rows that matter**: put a filter into `getTableData`'s `options`, fed by a widget, and make that input hot.
 * **Who changed what**: with an audit log on, [`getAuditLog`](../reference/functions/storage/relational-database.md#getauditlog) answers the history of a row. Pass `$USER` as `actorId` on every write so the log names the person.
 
-## Reference videos
-
-{% hint style="warning" %}
-Both videos show an older App Builder, and the second one builds the toast as a widget, which it no longer is. The steps above are the current ones.
-{% endhint %}
-
-### Part 1: the data grid and the CRUD functions
-
-{% embed url="https://www.youtube.com/watch?v=m76VLWgqNaw" %}
-
-### Part 2: user feedback
-
-{% embed url="https://www.youtube.com/watch?v=2tz0Kj0uNbY" %}

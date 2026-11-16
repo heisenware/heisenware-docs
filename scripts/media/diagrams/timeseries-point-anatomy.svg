@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="360" viewBox="0 0 820 360" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .card { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.5; }
+    .tags { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.5; }
+    .fields { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .title { font-size: 17px; font-weight: 700; fill: #22303c; }
+    .head { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .txt { font-size: 13px; fill: #4a5b6a; }
+    .mono { font-size: 14px; font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #22303c; }
+    .arrow { stroke: #8da0b3; stroke-width: 1.6; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+  </defs>
+
+  <rect x="16" y="16" width="788" height="328" rx="12" class="frame"/>
+  <text x="38" y="46" class="title">One point: measurement, tags, fields, time</text>
+
+  <!-- measurement -->
+  <rect x="38" y="112" width="196" height="76" rx="9" class="card"/>
+  <text x="58" y="140" class="head">Measurement</text>
+  <text x="58" y="166" class="mono">production_line</text>
+  <path d="M234,150 L276,150" class="arrow" marker-end="url(#a)"/>
+
+  <!-- tags -->
+  <rect x="280" y="80" width="236" height="140" rx="9" class="tags"/>
+  <text x="300" y="106" class="head">Tags</text>
+  <text x="300" y="126" class="txt">indexed: they name the series</text>
+  <text x="300" y="158" class="mono">line_id = A1</text>
+  <text x="300" y="188" class="mono">location = warehouse</text>
+
+  <!-- fields -->
+  <rect x="540" y="80" width="226" height="140" rx="9" class="fields"/>
+  <text x="560" y="106" class="head">Fields</text>
+  <text x="560" y="126" class="txt">not indexed: the values</text>
+  <text x="560" y="158" class="mono">cycle_time = 4.2</text>
+  <text x="560" y="188" class="mono">yield = 150</text>
+
+  <!-- time axis -->
+  <path d="M280,266 L766,266" class="arrow" marker-end="url(#a)"/>
+  <path d="M400,258 L400,274" class="arrow"/>
+  <text x="280" y="296" class="txt">Timestamp</text>
+  <text x="358" y="296" class="mono">2026-09-17T10:00:00.250Z</text>
+
+  <text x="38" y="230" class="txt">Write the whole object</text>
+  <text x="38" y="250" class="txt">and each property</text>
+  <text x="38" y="270" class="txt">becomes a field of</text>
+  <text x="38" y="290" class="txt">its own.</text>
+</svg>

@@ -58,7 +58,7 @@ Installed, the App gets its own icon on the home screen or in the taskbar, opens
 
 On a browser that offers it, the App asks by itself a few seconds after the first visit.
 
-<figure><img src="../.gitbook/assets/image (523).png" alt="The install prompt with its three answers: install, not now, never ask again"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/player-install-prompt.png" alt="The install prompt with its three answers: install, not now, never ask again"><figcaption></figcaption></figure>
 
 The three answers are **Install**, **Not now**, which asks again on the next visit, and **Never ask again**, which does not.
 

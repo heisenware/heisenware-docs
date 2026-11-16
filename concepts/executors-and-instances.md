@@ -11,7 +11,7 @@ Many functions belong to an **instance**: a living object such as a connection, 
 
 ## What an executor is made of
 
-<figure><img src="../.gitbook/assets/image (51).png" alt="An executor calling mergeObjects: its name with the status dot, two inputs, the trigger and the output" width="563"><figcaption><p>An executor that merges two objects</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/concept-executor-anatomy.png" alt="An executor calling mergeObjects: its class in the corner, its comment, two inputs, the trigger and the output" width="563"><figcaption><p>An executor that merges two objects</p></figcaption></figure>
 
 * **Address**: where the function lives: its agent, its class and, for an instance function, its instance. See [Addresses](executors-and-instances.md#addresses-where-a-call-goes).
 * **Inputs**: the values the function receives, in the order of its arguments. An input gets a typed-in default, a [wire](triggers-and-wires.md), a [widget link](widgets-and-links.md) or a [`$variable`](variables-and-endpoints.md).
@@ -72,7 +72,7 @@ Right-click an input and choose **Secret Input** to mask its value everywhere. C
 
 Defaults are typed in YAML, a readable format for structured data. Type a value and click away to save it. A value longer than a few lines folds to a one-line preview; click the preview to edit it in a popup editor.
 
-<figure><img src="../.gitbook/assets/image (37).png" alt="An executor calling randomInteger, its input holding the YAML value min: 0 and max: 1000, and its output showing the last result" width="563"><figcaption><p>A static value, typed as YAML</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/concept-yaml-default.png" alt="An executor calling randomInteger, its input holding the YAML value min: 0 and max: 1000, and its output showing the last result" width="563"><figcaption><p>A static value, typed as YAML</p></figcaption></figure>
 
 <details>
 
@@ -133,7 +133,7 @@ description: >
 
 An address has three parts: **agent**, **class** and, for instance functions, **instance**. The agent decides in which network the function runs; see [Agents and where code runs](agents-and-where-code-runs.md).
 
-<figure><img src="../.gitbook/assets/image (25).png" alt="Three executors with their addresses shown: a static function on Utility Functions, and two instance functions whose third box names the instance" width="563"><figcaption><p>A static function needs no instance; an instance function names one</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/concept-addresses.png" alt="Three executors with their addresses in the corner: a static function naming only its class, an instance function naming class and instance, and one on an agent of its own naming all three" width="563"><figcaption><p>A static function needs no instance; an instance function names one, and a function on an agent of your own names the agent too</p></figcaption></figure>
 
 Normally each part is fixed. Right-click the executor's name and choose **Use Dynamic Address** to turn the parts into boxes that take a value at run time:
 

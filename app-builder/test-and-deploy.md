@@ -2,7 +2,7 @@
 
 Building is half the work. The App Builder's top right corner holds the rest: run the App yourself, save versions to go back to, move an App between workspaces as a bundle, and release it to your users.
 
-<div align="center"><figure><img src="../.gitbook/assets/deploy_bottom.png" alt="The top bar's right side: the deployed version, Test and Deploy"><figcaption></figcaption></figure></div>
+<div align="center"><figure><img src="../.gitbook/assets/builder-deploy-bar.png" alt="The top bar's right side: Tags, the deployed version, Test and Deploy"><figcaption></figcaption></figure></div>
 
 ## Test
 
@@ -99,7 +99,7 @@ Deploying does three things: it stops the App's own backend, saves a release ver
 
 After the deploy the **Distribute Your App** dialog shows the App's link and its QR code. The version button in the top bar, `v1`, `v2`, …, opens it again whenever you need it. Before the first deploy it reads `v0` and does nothing.
 
-<figure><img src="../.gitbook/assets/deploy_a_app_looped.gif" alt="Deploying an App and opening its link"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/deploy-an-app.gif" alt="Deploying an App: the version counts up and the Distribute Your App dialog shows the link and its QR code"><figcaption></figcaption></figure>
 
 ### The running App
 

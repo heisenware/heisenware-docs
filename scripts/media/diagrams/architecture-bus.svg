@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="600" viewBox="0 0 760 600" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .card  { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.4; }
+    .hub   { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 2; }
+    .door  { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.6; }
+    .h1 { font-size: 18px; font-weight: 700; fill: #22303c; }
+    .t  { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .hp { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .hn { font-size: 14px; font-weight: 700; fill: #41628d; }
+    .s  { font-size: 13px; fill: #6a7a89; }
+    .mono { font-size: 14px; font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #2e7d63; }
+    .arrow { stroke: #8da0b3; stroke-width: 1.8; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+  </defs>
+
+  <rect x="10" y="10" width="740" height="580" rx="12" class="frame"/>
+  <text x="30" y="42" class="h1">One broker. Every part dials out to it.</text>
+  <text x="736" y="42" class="s" text-anchor="end">no service listens for inbound calls</text>
+
+  <!-- inside the installation -->
+  <rect x="24" y="66" width="346" height="112" rx="10" class="card"/>
+  <text x="197" y="92" class="t" text-anchor="middle">Once per installation</text>
+  <text x="197" y="114" class="s" text-anchor="middle">auth — who may do what, on every message</text>
+  <text x="197" y="132" class="s" text-anchor="middle">docker — starts and watches the containers</text>
+  <text x="197" y="150" class="s" text-anchor="middle">assistant</text>
+  <text x="197" y="168" class="s" text-anchor="middle">… and the broker itself</text>
+
+  <rect x="390" y="66" width="346" height="112" rx="10" class="card"/>
+  <text x="563" y="92" class="t" text-anchor="middle">Once per workspace</text>
+  <text x="563" y="114" class="s" text-anchor="middle">builder-backend, one app-backend per release</text>
+  <text x="563" y="132" class="s" text-anchor="middle">Connectors, Utility Functions, Templates</text>
+  <text x="563" y="150" class="s" text-anchor="middle">Media Server, MCP server, add-ons</text>
+  <text x="563" y="168" class="s" text-anchor="middle">PostgreSQL, InfluxDB</text>
+
+  <path d="M197,180 L197,250 L262,250" class="arrow" marker-end="url(#a)"/>
+  <path d="M563,180 L563,250 L498,250" class="arrow" marker-end="url(#a)"/>
+
+  <!-- the hub -->
+  <rect x="268" y="214" width="224" height="96" rx="10" class="hub"/>
+  <text x="380" y="246" class="hp" text-anchor="middle">MQTT broker</text>
+  <text x="380" y="270" class="s" text-anchor="middle">every VRPC message</text>
+  <text x="380" y="288" class="s" text-anchor="middle">goes through it</text>
+
+  <!-- the one door -->
+  <path d="M380,336 L380,314" class="arrow" marker-end="url(#a)"/>
+  <rect x="90" y="336" width="580" height="48" rx="10" class="door"/>
+  <text x="380" y="358" class="hn" text-anchor="middle">ingress — the one door</text>
+  <text x="380" y="376" class="s" text-anchor="middle">TLS, the three frontends, and MQTT on 1883, 8883, 1884, 8884</text>
+
+  <path d="M136,398 L136,386" class="arrow" marker-end="url(#a)"/>
+  <path d="M380,398 L380,386" class="arrow" marker-end="url(#a)"/>
+  <path d="M624,398 L624,386" class="arrow" marker-end="url(#a)"/>
+
+  <!-- everything that connects from outside -->
+  <rect x="24" y="400" width="224" height="96" rx="10" class="card"/>
+  <text x="136" y="426" class="t" text-anchor="middle">The frontends</text>
+  <text x="136" y="448" class="s" text-anchor="middle">Manager · Builder · Player</text>
+  <text x="136" y="466" class="s" text-anchor="middle">React in the browser,</text>
+  <text x="136" y="484" class="s" text-anchor="middle">each a VRPC client</text>
+
+  <rect x="268" y="400" width="224" height="96" rx="10" class="card"/>
+  <text x="380" y="426" class="t" text-anchor="middle">App users</text>
+  <text x="380" y="448" class="s" text-anchor="middle">a released App, in a</text>
+  <text x="380" y="466" class="s" text-anchor="middle">browser or installed</text>
+  <text x="380" y="484" class="s" text-anchor="middle">on a phone</text>
+
+  <rect x="512" y="400" width="224" height="96" rx="10" class="card"/>
+  <text x="624" y="426" class="t" text-anchor="middle">Agents, integrations</text>
+  <text x="624" y="448" class="s" text-anchor="middle">native, Docker, LXC agents</text>
+  <text x="624" y="466" class="s" text-anchor="middle">MQTT and VRPC clients</text>
+  <text x="624" y="484" class="s" text-anchor="middle">a local MCP server</text>
+
+  <!-- the address -->
+  <rect x="24" y="512" width="712" height="62" rx="10" class="card"/>
+  <text x="380" y="540" class="mono" text-anchor="middle">&lt;domain&gt;/&lt;agent&gt;/&lt;class&gt;/&lt;instance&gt;/&lt;function&gt;</text>
+  <text x="380" y="562" class="s" text-anchor="middle">an executor's address names exactly these four parts under the domain</text>
+</svg>

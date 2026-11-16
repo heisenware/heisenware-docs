@@ -12,7 +12,7 @@ A modifier speaks either [JSONata](modifier.md#jsonata) or [JavaScript](modifier
 
 Click the icon on the left of the node to evaluate the modifier while you build. Its last result shows below the expression. The right-click menu also offers **Make variable…**, **Add Comment** and **Delete**.
 
-<figure><img src="../../.gitbook/assets/image (52).png" alt=""><figcaption><p>A modifier extension node</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-node.png" alt=""><figcaption><p>A modifier extension node</p></figcaption></figure>
 
 ## The expression contract
 
@@ -66,7 +66,7 @@ Return of the modifier:
 77
 ```
 
-<figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-jsonata-path.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -94,7 +94,7 @@ Return of the modifier:
 { "temp_sensor_1": 25.4 }
 ```
 
-<figure><img src="../../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-jsonata-wrap.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -122,7 +122,7 @@ Return of the modifier:
 "MAINTENANCE_REQUIRED"
 ```
 
-<figure><img src="../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-jsonata-uppercase.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -153,7 +153,7 @@ Return of the modifier:
 { "id": "B2", "status": "ERROR" }
 ```
 
-<figure><img src="../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-jsonata-array-filter.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -187,7 +187,7 @@ Return of the modifier:
 "Critical"
 ```
 
-<figure><img src="../../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-ternary.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -220,12 +220,12 @@ Return of the modifier:
 
 ```json
 [
-  { "part": "Bolt", "qty": 10, "available": true, "lastChecked": "2026-02-12" },
-  { "part": "Nut", "qty": 5, "available": true, "lastChecked": "2026-02-12" }
+  { "part": "Bolt", "qty": 10, "available": true, "lastChecked": "2026-11-16" },
+  { "part": "Nut", "qty": 5, "available": true, "lastChecked": "2026-11-16" }
 ]
 ```
 
-<figure><img src="../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-map-enrich.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -258,7 +258,7 @@ Return of the modifier:
 522
 ```
 
-<figure><img src="../../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-iife.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -290,7 +290,7 @@ Return of the modifier:
 [ { "a": 1, "b": 1, "d": "cool" }, { "a": 2, "b": 2, "d": "cool" } ]
 ```
 
-<figure><img src="../../.gitbook/assets/image (24).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-spread.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -331,7 +331,7 @@ Return of the modifier:
 }
 ```
 
-<figure><img src="../../.gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-combine.png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
@@ -372,7 +372,7 @@ Return of the modifier:
 ]
 ```
 
-<figure><img src="../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-luxon-dates.png" alt=""><figcaption></figcaption></figure>
 
 #### 2. Calculating downtime (time differences)
 
@@ -513,7 +513,7 @@ Return of the modifier:
 
 Sometimes you want to extract items of an array in a round-robin fashion. Use a `combine` executor and wire the modifier's output back to its second input:
 
-<figure><img src="../../.gitbook/assets/image (503).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/modifier-round-robin.png" alt=""><figcaption></figcaption></figure>
 
 Data:
 

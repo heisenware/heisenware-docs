@@ -11,7 +11,7 @@ Two things shape how it works:
 
 Every workspace has an InfluxDB of its own, the instance `internal-influx`. It is there from the start, with Heisenware's storage tiers in it. Pick a function from inside `internal-influx` and drag it onto the Flowboard.
 
-<figure><img src="../../../.gitbook/assets/image (55).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/explorer-timeseries-database.png" alt="The Functions explorer with Storage &gt; Timeseries Database open, showing create, delete and the ready-made internal-influx instance with its functions" width="300"><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 #### Direct data recording with the recorder
@@ -51,7 +51,7 @@ Data flows automatically through a series of stages. Write data only to the star
 
 You never see the `+` buckets in the software. They are the internal stages of this pipeline. What you select instead, for example as the recording type of a [recorder](../../../app-builder/flowboard/recorder.md), is either a fixed retention (`H`, `D`, `W`, `M`, or `Y`, keeping raw data for 1 hour up to 1 year, matching the letter) or `DS` (downsampled), which feeds this pipeline for long-term storage without a fixed retention.
 
-![](<../../../.gitbook/assets/image (1).png>)
+<figure><img src="../../../.gitbook/assets/timeseries-storage-tiers.png" alt="The six storage tiers in a chain: a write lands in H+, and a task summarizes each tier into the next, from raw points kept a day to monthly points kept forever" width="1000"><figcaption></figcaption></figure>
 
 <table><thead><tr><th width="102.66650390625">Bucket</th><th width="184.4444580078125">Resolution</th><th width="130.9261474609375">Retention</th><th>Typical use</th></tr></thead><tbody><tr><td><code>H+</code></td><td>Raw (every point)</td><td>1 day</td><td>Real-time monitoring, debugging recent events</td></tr><tr><td><code>D+</code></td><td>5 minutes</td><td>1 week</td><td>Zooming into last week's performance</td></tr><tr><td><code>W+</code></td><td>1 hour</td><td>1 week</td><td>Weekly trends and patterns</td></tr><tr><td><code>M+</code></td><td>1 day</td><td>1 month</td><td>Monthly analysis and seasonal trends</td></tr><tr><td><code>Y+</code></td><td>1 week</td><td>1 year</td><td>Yearly trends and seasonal patterns</td></tr><tr><td><code>F+</code></td><td>1 month</td><td>Forever</td><td>Long-term historical archiving</td></tr></tbody></table>
 
@@ -168,7 +168,7 @@ When you pass an object as data, the engine fans it out into native InfluxDB fie
 
 <table><thead><tr><th width="123.14794921875">Input</th><th width="506.4072265625">Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>bucket</code></td><td>The name of the bucket to write to.</td><td>string</td></tr><tr><td><code>measurement</code></td><td>The name of the measurement (such as <code>temperature</code> or <code>production_line</code>).</td><td>string</td></tr><tr><td><code>data</code></td><td>The value to record. Accepts a number, string, boolean, or object (such as <code>{ temp: 45, status: "ok" }</code>).</td><td>any</td></tr><tr><td><code>tags</code></td><td>Optional key-value pairs to tag the data. To force the object storage behavior, add <code>objectStorageType: 'fields'</code> or <code>objectStorageType: 'json'</code>. The database strips this control flag before saving.</td><td>object</td></tr><tr><td><code>options</code></td><td>Optional. <code>timestamp</code> stores the point at that time instead of the write time: a date string, epoch milliseconds, or a Date. Use it for events that carry their own time, such as a buffered edge device replaying after a connection loss.</td><td>object</td></tr></tbody></table>
 
-<div align="left"><figure><img src="../../../.gitbook/assets/image (4).png" alt="" width="375"><figcaption><p>Measurement vs. tags vs. fields</p></figcaption></figure></div>
+<div align="left"><figure><img src="../../../.gitbook/assets/timeseries-point-anatomy.png" alt="One point of the measurement production_line: the tags line_id and location that name the series, the fields cycle_time and yield that carry the values, and the timestamp" width="640"><figcaption><p>Measurement vs. tags vs. fields</p></figcaption></figure></div>
 
 #### Example
 

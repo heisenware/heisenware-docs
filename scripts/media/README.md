@@ -50,6 +50,10 @@ module.exports = {
   description: 'Drags a button widget from the palette onto the page',
   login: true,                              // start signed in (credentials from .env)
   viewport: { width: 1280, height: 800 },   // optional, this is the default
+  scale: 2,                                 // optional device pixel ratio,
+                                            // default 1; use 2 where the
+                                            // subject's text is ~12px, as an
+                                            // explorer tree's labels are
 
   async run ({ page, m, env }) {
     await page.goto(`${env.baseUrl}/builder/...`, { waitUntil: 'networkidle' })

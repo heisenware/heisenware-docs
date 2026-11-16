@@ -14,7 +14,7 @@ An event function takes a **handler** as an input: the piece that receives the e
 * The **return** only answers the call. For an event function it says that listening has begun.
 * The **event outputs** carry the data. Each one works like any output: it shows the last value, takes wires and widget links, and carries its own [extensions](extensions-branching-and-errors.md).
 
-<figure><img src="../.gitbook/assets/image (104).png" alt="An executor calling onBinaryMessage: its handler input, and below the return an event output carrying each message" width="563"><figcaption><p>The handler's values arrive on event outputs, not on the return</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/concept-event-outputs.png" alt="An executor calling onTick: its handler input, the return holding only true, and below it the three event outputs the handler's documentation names" width="563"><figcaption><p>The handler's values arrive on event outputs, not on the return</p></figcaption></figure>
 
 So wire from the event output, not from the return. To run another executor on every event, drop the event output onto its trigger.
 
