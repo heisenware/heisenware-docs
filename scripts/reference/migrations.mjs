@@ -18,6 +18,20 @@
  *
  * `refs` (issue numbers) is deliberately left out: it is internal.
  *
+ * The division of labour, settled deliberately and meant to stay (2026-11-16):
+ * this page and the release note BOTH speak about what breaks, and neither
+ * absorbs the other.
+ *  - Here belongs what the platform can check: one rule per change, in the
+ *    registry's own words, complete, and applied to an App by
+ *    `check_migration`. Nobody writes an entry here by hand; a missing one
+ *    is a rule missing from the registry.
+ *  - In release-notes/ belongs what a release note is for: the story of the
+ *    release, the items no rule can carry (member roles at a first start,
+ *    environment variables, a connector that changed throughout), and more
+ *    context than a rule's two sentences. It links here for the full list.
+ * So do not delete the note's prose because this page exists, and do not add
+ * a note-only fact to the registry to make it appear here.
+ *
  * Usage:
  *   node scripts/reference/migrations.mjs [--cloud <path>] [--check] [--all]
  * --cloud  the heisenware-cloud checkout (default: ../heisenware-cloud)
