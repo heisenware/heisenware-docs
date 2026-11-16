@@ -162,6 +162,7 @@
     * [Image](reference/widgets/trigger/image.md)
   * [Layout widgets](reference/widgets/layout/README.md)
     * [Group](reference/widgets/layout/group.md)
+* [What older Apps must change](reference/older-apps.md)
 * [Glossary](reference/glossary.md)
 
 ## Self-hosting

@@ -198,7 +198,9 @@ v93 is a new platform under the old name: a new engine, an assistant that builds
 
 ## Breaking changes and what you must do
 
-An App built on v92 keeps running, and the platform converts what it can by itself. What it cannot convert is listed here. The assistant and the MCP server answer `check_migration` for one App: it applies the list below to that App's records and names the executors, modifiers, triggers, inputs and widgets that have to change. Change a place only where it leans on the old behavior.
+An App built on v92 keeps running, and the platform converts what it can by itself. What it cannot convert is below, grouped the way you will meet it.
+
+The complete, checkable list lives in [What older Apps must change](../reference/older-apps.md): the platform keeps it as data, applies it to one App's records with `check_migration`, and that page is rendered from the same registry, so the two can never drift apart. Ask the assistant to check an App and it names the executors, modifiers, triggers, inputs and widgets that have to change. Change a place only where it leans on the old behavior.
 
 ### Before you start
 
@@ -208,13 +210,10 @@ An App built on v92 keeps running, and the platform converts what it can by itse
 
 ### Flows, triggers and values
 
-* **A modifier or filter is one expression.** It was a script with statements and `return`. Put steps into an immediately invoked function: `(() => { const y = ...; return y })()`.
 * **A filter's value is what it lets through**, where it was the verdict `true` or `false`; the verdict is now `passed`. A trigger source on a filter fires on a pass only. An edge that must hear "became false" hangs on a modifier with the same expression.
 * **An error handler's payload is `{ message, cause, originalPayload }`**, with `cause` the reason as text. A modifier that read into the thrown error (`x.cause.code`) reads `x.originalPayload.cause`.
 * **`$USER` in an expression is a binding, not text.** It was spliced into the source, so it was written quoted (`x.owner === "$USER"`). Write the bare `$USER`; the quoted one is now the literal text.
 * **`$USER` in a static value is a token**, `$USER` or `${USER}`, in values only and never in object keys, and it is `null` where no user is in scope. `$USERS` stays text.
-* **`$LOCALE` and `$TIMEZONE` are built-ins**, the App's language and the viewer's time zone, where they were ordinary text.
-* **"All updated" pairs deliveries.** It ran with whatever its sources held once each had delivered; it now pairs the n-th delivery of each source.
 * **`onChange` compares per user.** It compared a user's first value with the shared one; a user's first value is a change now, so the target runs once more per new user.
 * **A user's values are dropped** three hours after their browser left, and at a backend restart. They used to be kept for good.
 * **The Trigger node reaches every tab** of the user, not only the tab that clicked. A page switch or an App action meant for the clicking tab goes on the button itself.
