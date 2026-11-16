@@ -30,7 +30,7 @@ Creates an unconnected OPC UA server instance and maps out its information model
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>objects</code></td><td>An array defining folders, objects, and variables inside the server information model. Each node requires a <code>path</code> and a <code>type</code> (<code>folder</code> or <code>object</code>); parents are declared before their children. An object may carry <code>getters</code>, <code>setters</code> and <code>requestors</code> maps whose values are a type name or an object <code>{ type, nodeId, initialValue }</code>. Objects and folders accept an optional <code>nodeId</code>; objects alternatively an integer <code>offset</code>. See <a href="opc-ua-server.md#node-ids">Node ids</a>.</td><td>array</td></tr><tr><td></td><td><code>port</code></td><td>The TCP port where the server listens for inbound connections. Separate parallel server instances must use distinct port numbers. Default 4840.</td><td>integer</td></tr><tr><td></td><td><code>hostname</code></td><td>The hostname the endpoint is advertised with. Default: the machine's hostname.</td><td>string</td></tr><tr><td></td><td><code>alternateHostname</code></td><td>Additional hostnames or IP addresses the endpoint is advertised with.</td><td>string or array</td></tr><tr><td></td><td><code>namespaceUri</code></td><td>Registers an additional namespace and builds the model there (index 2 on a fresh server). Default: the server's own namespace (index 1).</td><td>string</td></tr><tr><td></td><td><code>allowAnonymous</code></td><td>Controls whether external clients can connect without credentials. When false, <code>users</code> must be declared. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>users</code></td><td>Accepted username/password pairs (<code>{ username, password }</code>). The password token is always encrypted, also on an unencrypted channel.</td><td>array</td></tr><tr><td></td><td><code>securityModes</code></td><td>Security modes the server offers: <code>None</code>, <code>Sign</code>, <code>SignAndEncrypt</code>. Default <code>[None]</code>. See <a href="opc-ua-server.md#protocol-and-encryption">Protocol and encryption</a>.</td><td>array</td></tr><tr><td></td><td><code>securityPolicies</code></td><td>Security policies the server offers, e.g. <code>Basic256Sha256</code>. Default <code>[None]</code>.</td><td>array</td></tr><tr><td></td><td><code>requestTimeout</code></td><td>Milliseconds a requestor read waits for <code>setValue</code> after <code>onRequest</code> fired. Default 1000.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>objects</code></td><td>An array defining folders, objects, and variables inside the server information model. Each node requires a <code>path</code> and a <code>type</code> (<code>folder</code> or <code>object</code>); parents are declared before their children. An object may carry <code>getters</code>, <code>setters</code> and <code>requestors</code> maps whose values are a type name or an object <code>{ type, nodeId, initialValue }</code>. Objects and folders accept an optional <code>nodeId</code>; objects alternatively an integer <code>offset</code>. See <a href="opc-ua-server.md#node-ids">Node ids</a>.</td><td>array</td></tr><tr><td></td><td><code>port</code></td><td>The TCP port where the server listens for inbound connections. Separate parallel server instances must use distinct port numbers. Default 4840.</td><td>integer</td></tr><tr><td></td><td><code>hostname</code></td><td>The hostname the endpoint is advertised with. Default: the machine's hostname.</td><td>string</td></tr><tr><td></td><td><code>alternateHostname</code></td><td>Additional hostnames or IP addresses the endpoint is advertised with.</td><td>string or array</td></tr><tr><td></td><td><code>namespaceUri</code></td><td>Registers an additional namespace and builds the model there (index 2 on a fresh server). Default: the server's own namespace (index 1).</td><td>string</td></tr><tr><td></td><td><code>allowAnonymous</code></td><td>Controls whether external clients can connect without credentials. When false, <code>users</code> must be declared. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>users</code></td><td>Accepted username/password pairs (<code>{ username, password }</code>). The password token is always encrypted, also on an unencrypted channel.</td><td>array</td></tr><tr><td></td><td><code>securityModes</code></td><td>Security modes the server offers: <code>None</code>, <code>Sign</code>, <code>SignAndEncrypt</code>. Default <code>[None]</code>. See <a href="opc-ua-server.md#protocol-and-encryption">Protocol and encryption</a>.</td><td>array</td></tr><tr><td></td><td><code>securityPolicies</code></td><td>Security policies the server offers, e.g. <code>Basic256Sha256</code>. Default <code>[None]</code>.</td><td>array</td></tr><tr><td></td><td><code>requestTimeout</code></td><td>Milliseconds a requestor read waits for <code>setValue</code> after <code>onRequest</code> fired. Default 1000.</td><td>integer</td></tr><tr><td></td><td><code>maxConnections</code></td><td>Clients the server accepts at once. The next connection is refused and logged with its address. Default 100.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
@@ -162,6 +162,8 @@ Returns `true` upon removal.
 
 Wherever a `variablePath` is expected, the variable's node id (`s=…` or `ns=1;s=…`) is accepted as well.
 
+`onSet`, `onRequest` and `onServerUpdate` are event functions. Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The values arrive on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
+
 ### `setValue`
 
 Sets a new data value for a variable of any kind. This function updates getter nodes, answers `onRequest` reads and may correct a value a client wrote to a setter. The value must match the declared type, see [Data type validation](opc-ua-server.md#data-type-validation).
@@ -189,7 +191,7 @@ Sets several variables at once.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>values</code></td><td>A map of <code>variablePath</code> to value.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>values</code></td><td>A map of <code>variablePath</code> to the value, or to <code>{ value, statusCode, sourceTimestamp }</code> to serve a status code and a source timestamp with it. <code>quality</code> and <code>timestamp</code> are accepted for the latter two, the names the <a href="../utilities/signal-simulation.md">signal simulator</a> emits with <code>emitQuality</code>, so its value map feeds this function as it is.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -217,7 +219,7 @@ Registers an event callback executed whenever an external OPC UA client writes a
 
 #### Output
 
-Returns `'subscribed'` when successfully registered.
+Returns the listener's registration, which only says that the executor is listening. The written values arrive on the event outputs.
 
 #### Example
 
@@ -227,18 +229,6 @@ Machine1/Status:targetSpeed
 # listener
 <callback>
 ```
-
-### `offSet`
-
-Removes all callbacks registered with `onSet` for a variable.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variablePath</code></td><td>The path of the setter variable node.</td><td>string</td></tr></tbody></table>
-
-#### Output
-
-Returns `true`.
 
 ### `onRequest`
 
@@ -250,7 +240,7 @@ Registers an event callback executed whenever an external OPC UA client reads a 
 
 #### Output
 
-Returns `'subscribed'` when successfully registered.
+Returns the listener's registration, which only says that the executor is listening. The request timestamps arrive on the event outputs.
 
 #### Example
 
@@ -261,17 +251,7 @@ Machine1/Status:uptime
 <callback>
 ```
 
-### `offRequest`
-
-Removes all callbacks registered with `onRequest` for a variable. Reads then serve the last known value flagged uncertain.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>variablePath</code></td><td>The path of the requestor variable node.</td><td>string</td></tr></tbody></table>
-
-#### Output
-
-Returns `true`.
+When nothing listens on a requestor any more, reads serve its last known value flagged `UncertainLastUsableValue`, or `BadNoDataAvailable` when there is none yet.
 
 ### `onServerUpdate`
 
@@ -283,19 +263,7 @@ Registers a global diagnostic event callback executed whenever variable values c
 
 #### Output
 
-Returns `'subscribed'` when successfully registered.
-
-### `offServerUpdate`
-
-Removes all callbacks registered with `onServerUpdate`.
-
-#### Parameters
-
-None.
-
-#### Output
-
-Returns `true`.
+Returns the listener's registration, which only says that the executor is listening. The timestamp and the changed paths arrive on the event outputs.
 
 ## Complete usage example
 

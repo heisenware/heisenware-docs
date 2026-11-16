@@ -63,7 +63,7 @@ Creates a connection instance for a specific Heidenhain machine. Use the machine
 <table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>machineIpAddress</code></td><td>The IP address or hostname of the Heidenhain machine.</td><td>string</td></tr><tr><td></td><td><code>machineUser</code></td><td>The SSH username for the machine. Default <code>user</code>.</td><td>string</td></tr><tr><td></td><td><code>machinePassword</code></td><td>The SSH password for the machine. Default <code>user</code>.</td><td>string</td></tr><tr><td></td><td><code>mappings</code></td><td>Optional overrides for the default OPC UA mappings.</td><td>object</td></tr></tbody></table>
 
 {% hint style="info" %}
-Right-click the `options` input and mark it as a secret to mask the password.
+Right-click the `options` input and choose **Secret Input** to mask the password.
 {% endhint %}
 
 #### Example
@@ -105,7 +105,7 @@ Returns a confirmation string indicating that the certificate exchange is comple
 
 ### `connect`
 
-Establishes a secure OPC UA connection to the Heidenhain machine using the previously exchanged certificates.
+Establishes a secure OPC UA connection to the Heidenhain machine using the previously exchanged certificates. The endpoint is the control's own: `opc.tcp://<machine>:4840/HEIDENHAIN/NC`.
 
 #### Parameters
 
@@ -113,7 +113,7 @@ None.
 
 #### Output
 
-Returns `true` on a successful connection.
+Returns `true` once connected, or `reconnect ongoing` when the client is already reconnecting by itself. A lost connection is re-established without your doing anything.
 
 ### `disconnect`
 
@@ -183,7 +183,9 @@ Returns `true` upon removal.
 
 ## Machine data
 
-These functions read common Heidenhain data points. None of them take parameters. `showDefaultMappings` reveals which OPC UA nodes they access.
+These functions read common Heidenhain data points. None of them take parameters. `showMappings` tells you which OPC UA nodes they read, and `mappings` in `create` replaces an address for a control that keeps a value elsewhere.
+
+A function that reads several nodes reads them one after the other, a few milliseconds apart, so that the control is not flooded. A node a control does not offer leaves its field in the answer empty instead of failing the whole call: an object with an empty `ncKernel` means that control has no such node, not that the read went wrong.
 
 ### `getOperatingMode`
 
@@ -219,11 +221,11 @@ Returns a number representing the rapid override percentage.
 
 ### `getCutterLocation`
 
-Reads the current X, Y, and Z coordinates of the tool tip.
+Reads the current position of the tool tip.
 
 #### Output
 
-Returns an array of numbers `[X, Y, Z]`.
+Returns the position as the control reports it, on most controls an array of coordinates `[X, Y, Z]`.
 
 ### `getToolInfo`
 
@@ -239,7 +241,7 @@ Provides information about the currently running NC program.
 
 #### Output
 
-Returns an object containing details such as `currentCall`, `executionStack`, `name`, `fileNodeId`, and the program `currentState`.
+Returns an object with `currentCall`, `executionStack`, `name`, `fileNodeId`, `currentState` and `lastTransition`.
 
 ### `getControlInfo`
 
@@ -271,7 +273,7 @@ Retrieves a detailed list of all currently active errors on the machine.
 
 #### Output
 
-Returns an object where each key is an error ID and each value contains detailed information about that error (such as `action`, `cause`, and `text`).
+Returns an object with one entry per active error, keyed by the error's browse name on the control. Each entry holds `action`, `cause`, `channel`, `class`, `group`, `internals`, `location`, `number`, `numberAsText` and `text`. An empty object means no error is active.
 
 ## TNC file system
 
@@ -340,4 +342,110 @@ Returns `true` when the file is successfully deleted, or `false` if the deletion
 
 ## Generic OPC UA functions
 
-These functions pass directly through to the underlying [OPC UA client](opc-ua-client.md) for generic OPC UA operations when the specialized Heidenhain functions are not sufficient. Parameters and outputs are identical to the OPC UA client documentation: `browseObjects`, `callMethod`, `deleteFile`, `readFile`, `readNode`, `readVariable`, `writeFile`, and `writeVariable`. One difference: `readFile` defaults to `utf8` encoding here instead of base64.
+When the Heidenhain functions above are not enough, these reach any address of the control's OPC UA server. They pass through to the underlying [OPC UA client](opc-ua-client.md), so its page holds the longer examples. An address is always a `nodeId` (`ns=1;i=52004`) or a browse path (`/0:Objects/1:HEIDENHAIN NC/...`), as `showMappings` prints them.
+
+{% hint style="info" %}
+This connector does not subscribe: it has no `monitorNode`, `monitorVariable` or `listenToEvents`. Read on a [trigger](../../../concepts/triggers-and-wires.md) at the interval you need, and read many addresses in one call instead of one executor per value.
+{% endhint %}
+
+### `readVariable`
+
+Reads the value of a variable, or of a list of them.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>A <code>nodeId</code> or browse path, or a list of them.</td><td>string or array</td></tr></tbody></table>
+
+#### Output
+
+Returns the value. For a list, one `{ address, nodeId, value }` per address, in the order given. The list goes to the control in as few requests as it allows. An address the control answers with a bad status code fails the whole read, naming that address; use `readNode` to get a status per address instead.
+
+### `writeVariable`
+
+Sets the value of a variable.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the variable to set.</td><td>string</td></tr><tr><td><code>value</code></td><td>The value to write. The connector takes the data type from the node.</td><td>any</td></tr></tbody></table>
+
+#### Output
+
+Returns nothing. Throws an error when the control refuses the write.
+
+### `readNode`
+
+Reads a whole node, or a list of them: the value with its status code and timestamps.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>A <code>nodeId</code> or browse path, or a list of them.</td><td>string or array</td></tr></tbody></table>
+
+#### Output
+
+Returns the node object. For a list, one `{ address, nodeId, value }` per address, where `value` is the node object. A node that cannot be read carries its status code and fails nothing else.
+
+### `browseObjects`
+
+Browses the objects below an address, one level deep. Use it to find the nodes of a control whose paths differ from the defaults.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The browse path to look below, such as <code>/0:Objects/1:HEIDENHAIN NC</code>. Omitted, browsing starts at the server's root.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns one entry per child: `{ browseName, nodeId, nodeClass }`.
+
+### `callMethod`
+
+Calls a method the control's server offers. The connector reads the method's declared argument types from the server and converts the values you pass.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>methodAddress</code></td><td>The <code>nodeId</code> or browse path of the method.</td><td>string</td></tr><tr><td><code>inputValues</code></td><td>The input arguments, in the order the method declares them.</td><td>array</td></tr></tbody></table>
+
+#### Output
+
+Returns the method's output arguments.
+
+### `readFile`
+
+Reads any file the control's OPC UA server offers, addressed directly. For a file under `TNC:` use `readTncFile`, which builds the address for you.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td></td><td>The <code>nodeId</code> or browse path of the file.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>encoding</code></td><td>The encoding of the returned content, such as <code>ascii</code> or <code>base64</code>. Default <code>utf8</code>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the file content as a string in the requested encoding. The default is `utf8` here, where the generic [OPC UA client](opc-ua-client.md#readfile) defaults to base64, because the files of a control are text.
+
+### `writeFile`
+
+Creates a file in a folder of the control's server and uploads content into it.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>folderAddress</code></td><td>The <code>nodeId</code> or browse path of the folder.</td><td>string</td></tr><tr><td><code>newFileName</code></td><td>The name of the file to create.</td><td>string</td></tr><tr><td><code>pathOrBase64</code></td><td>The content: a file path the agent can read, or a base64 encoded string.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the `nodeId` of the written file.
+
+### `deleteFile`
+
+Deletes a file from a folder of the control's server.
+
+{% hint style="danger" %}
+#### Irreversible action
+
+Deleting a file permanently removes it from the machine's control. This action cannot be undone.
+{% endhint %}
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>folderAddress</code></td><td>The <code>nodeId</code> or browse path of the folder.</td><td>string</td></tr><tr><td><code>fileName</code></td><td>The name of the file to delete.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the file is deleted, `false` when it is not.

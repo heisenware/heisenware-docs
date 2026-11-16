@@ -2,7 +2,7 @@
 
 The stopwatch class manages a high-resolution timer to measure time intervals. Start, stop, and reset the timer, or record lap snapshots of the elapsed time without stopping the main timer. Use this class to time operations, track activity, or manage time-based logic.
 
-The class emits events (`start`, `stop`, `reset`, `tick`, and `lap`) to trigger other functions or flows automatically in your Apps. The tick interval is set when you create the instance; `setTickInterval` changes it at runtime. This class requires an instance, but also provides static utility functions. The code class name is `Stopwatch`.
+The class emits events (`start`, `stop`, `reset`, `tick`, and `lap`) to trigger other functions or flows automatically in your Apps. The tick interval is set when you create the instance; `setTickInterval` changes it at runtime. The elapsed time and the laps live in memory only: after a restart of the platform the stopwatch is stopped at 0. This class requires an instance, but also provides static utility functions. The code class name is `Stopwatch`.
 
 ## Static functions
 
@@ -231,7 +231,7 @@ Returns the interval set as an integer.
 
 ## Event listeners
 
-These functions let you subscribe callbacks to the stopwatch instance events. Every `on` function has an `off` twin that removes exactly the listener given to it and answers `true` when it was subscribed, otherwise `false`.
+Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The payload arrives on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
 
 ### `onStart`
 
@@ -243,7 +243,7 @@ Subscribes to the `start` event. The callback runs whenever you start the stopwa
 
 #### Output
 
-Returns the string `subscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ### `onStop`
 
@@ -255,7 +255,7 @@ Subscribes to the `stop` event. The callback runs whenever you stop the stopwatc
 
 #### Output
 
-Returns the string `subscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ### `onReset`
 
@@ -267,7 +267,7 @@ Subscribes to the `reset` event. The callback runs whenever you reset the stopwa
 
 #### Output
 
-Returns the string `subscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ### `onTick`
 
@@ -279,7 +279,7 @@ Subscribes to the `tick` event. The callback runs at every tick interval while t
 
 #### Output
 
-Returns the string `subscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ### `onLap`
 
@@ -291,28 +291,4 @@ Subscribes to the `lap` event. The callback runs whenever you record a lap.
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offStart`, `offStop`, `offReset`, `offTick`, `offLap`
-
-Remove a listener given to the matching `on` function.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
-
-### `removeAllListeners`
-
-Removes every listener from every event of this stopwatch, including those other flows subscribed. Prefer the `off` functions.
-
-#### Parameters
-
-None.
-
-#### Output
-
-Returns the string `unsubscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.

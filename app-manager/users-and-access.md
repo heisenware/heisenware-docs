@@ -1,89 +1,92 @@
 # App users and access
 
-You control who can access your Apps. Each App can have its own security settings, even when several sit in the same workspace.
+Every App decides for itself who may open it, even when several Apps sit in the same workspace. You set that on the App's page in the App Manager, under **Access Settings**, and you see everyone who uses the App under **App users**.
 
 {% hint style="info" %}
 #### Users vs. members
 
-This article covers the users of your Apps. For managing your members, the people who build and manage your Apps, see [Members](members.md).
+This page is about the users of your Apps. The people who build the Apps are members: see [Members](members.md).
 {% endhint %}
 
 ## Access modes
 
-In the Apps panel, choose from five access options to match your security requirements.
+**Access Mode** offers five choices. A change applies at once, to everyone who has the App open, so do not change it more often than your users can follow.
 
-<figure><img src="../.gitbook/assets/image (524).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (524).png" alt="The access mode list with its five choices"><figcaption></figcaption></figure>
 
-{% hint style="warning" %}
-You can change these settings at any time, but each change instantly affects all active sessions. Frequent changes may confuse your users.
-{% endhint %}
+### Anyone can use the app
 
-### Public access
+The App is open. Whoever has the link or scans the QR code is in, with no sign-in. The Player still gives each device an identity of its own, a generated name it remembers, so your logic can tell one terminal from another.
 
-* **Option**: _Anyone can use the app_
-* **Details**: The App is open. Anyone with the URL or QR code can open the App immediately. No login is required.
+### Users must provide a master password
 
-### Shared security
+One password, shared by everyone allowed in. You set it under **Master Password**, in the same card. The browser keeps the answer, so a user types it again only on another device, in a private window, or after clearing the browser's data.
 
-* **Option**: _Users must provide a master password_
-* **Details**: You must define a master password in the settings.
-* **Session**: The browser stores the authentication in local storage. Users re-enter the password only on a different device, in an incognito window, or after clearing their browser data.
+### Users have to sign-up
 
-### Individual registration
+Every user has an account of their own, with an email and a password or their Google account. Heisenware keeps the accounts; you do not have to create them. The browser keeps the sign-in until the user logs out or clears its data. To offer a way out, drop the Logout [App action](../app-builder/explorers/pages.md#app-actions) onto a button, or onto an executor's output.
 
-* **Option**: _Users have to sign up_
-* **Details**: Heisenware manages user accounts automatically. Users can register with an email/password or their Google account.
-* **Session**: Like the master password, the browser keeps the login state in local storage. Users stay logged in until they log out or clear their browser cache. To offer a logout, drop the Logout [App action](../app-builder/explorers/pages.md#app-actions) onto a button, or onto an executor's output to log out from your logic.
+### Users have to sign-up and provide a master password
 
-### Dual authentication
+Both of the above: a personal account and the shared password.
 
-* **Option**: _Users have to sign up and provide a master password_
-* **Details**: Combines the previous two methods. Users must have a personal account and know the shared master password to gain entry.
+### Only previously invited users can login
 
-### Private whitelist
+Only the addresses you invite can get in. The App's page then shows an invite field beside **App users**.
 
-* **Option**: _Only previously invited users can log in_
-* **Details**: This opens an email invite form. Only the specific email addresses you invite can register and access the App.
-* **Programmatic invite:** With the [`users` class](../reference/functions/utilities/users.md) on the Flowboard, you can also invite users programmatically from another App.
-* **Ask:** Only in this mode can you open the App to [Ask](ask.md): its invited users question the workspace's data with an AI, in the App or from their own AI client.
+* **Programmatically**: the [`users` class](../reference/functions/utilities/users.md) makes an access link from a flow, so another App can hand one out.
+* **Ask**: only in this mode can an App be opened to [Ask](ask.md), where its users question the workspace's data with an AI. Switching to another mode ends Ask for the App; the Manager asks before it does.
 
-## User management
+## Inviting users
 
-The Users card in each App gives you a real-time view of who is using your App.
+Type the address and click **Invite**. What happens depends on what the address already has:
 
-{% hint style="info" %}
-#### Managing users programmatically
+* **New to the platform**: an invitation email with a link that sets a password.
+* **Known, but never set up a way in**: a fresh invitation email. The link sent before stops working, except the very first invitation's, which keeps working until one of the two sets a password.
+* **Known, with a password of their own**: no password link. They get an email saying this App is now open to them.
+* **Already a user of this App**: nothing is sent, and the Manager offers to send them a password reset instead. Use it for someone who cannot get in.
 
-You can also manage users from within an App using the [`users` class](../reference/functions/utilities/users.md).
-{% endhint %}
+A row with **Invitation pending** has never been taken up. Its icon sends the invitation again.
 
-### Anonymized sessions
+## App users
 
-For Apps using [Public access](users-and-access.md#public-access) or [Shared security](users-and-access.md#shared-security), the table shows anonymized strings, IP addresses, and session data so you can track unique device usage.
+The table shows everyone the App holds, 25 at a time:
 
-<figure><img src="../.gitbook/assets/image (114).png" alt=""><figcaption></figcaption></figure>
+| Column | What it shows |
+| --- | --- |
+| **Email/Username** | The address of a user with an account, or the name a device remembers for itself. |
+| **Name** | The first and last name, where the user gave one. |
+| **Verified** | Whether the address has been confirmed. |
+| **Last Login** | When they were last in, or **Invitation pending**. |
+| **Browser**, **Device** | What they came with. |
 
-### Registered profiles
+In an open App or one behind the master password, the rows are devices rather than people: one row per device that ever opened the App, by the name it remembers.
 
-For Apps using [Individual registration](users-and-access.md#individual-registration) or [Dual authentication](users-and-access.md#dual-authentication), the table shows names and usernames (email addresses). Heisenware recognizes a user logging in from different devices with the same email as the same person.
+<figure><img src="../.gitbook/assets/image (114).png" alt="The user list of an App anyone can open: one row per device"><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (452).png" alt=""><figcaption></figcaption></figure>
+In the sign-up modes and the invite-only mode they are people, and a user who signs in from several devices with the same address stays one row.
 
-### Deleting users
+<figure><img src="../.gitbook/assets/image (452).png" alt="The user list of an App whose users sign up: one row per person"><figcaption></figcaption></figure>
 
-To remove a user, registered account or anonymous session alike, click the trash icon in the list. Deleting a user removes their record and ends their current session.
+The trash icon removes a user, person or device alike: their record goes, their session ends, and their [Ask](ask.md) conversation goes with them.
 
 {% hint style="info" %}
-#### Leveraging user data in logic
+#### Managing users from a flow
 
-Once a user is authenticated, your logic reads their information from the `$USER` variable. Use it to personalize the UI (e.g. "Welcome, \[Name]"), filter database queries so users see only their own data, or log exactly who performed an action.
+The [`users` class](../reference/functions/utilities/users.md) lists an App's users from the Flowboard and makes an access link for one. Inviting and removing happen here, on this screen.
+{% endhint %}
 
-For example, if a table stores each row's owner in an `email` field, a `getTableData` executor can filter for the logged-in user's own rows:
+## Using who is there
+
+Your logic reads the user of the scope it runs in from the `$USER` [variable](../concepts/variables-and-endpoints.md): the address of a signed-in user, the device's name in the open modes, and empty where no person is involved. Use it to greet by name, to filter a query so each user sees only their own rows, or to record who did something.
+
+If a table keeps each row's owner in an `email` field, a `getTableData` executor filters for the signed-in user's own rows:
 
 ```yaml
 # name
 orders
 # options
-filter: ['email', '=', $USER]
+filter: [email, =, $USER]
 ```
-{% endhint %}
+
+On a kiosk the same mechanism names the terminal: the device's `$USER` becomes the machine it stands at, and every query takes that as an input.

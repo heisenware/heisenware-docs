@@ -1,31 +1,39 @@
 # Hydra MIP
 
-The Hydra MIP connector communicates with the MPDV Hydra Manufacturing Integration Platform (MIP). It abstracts the underlying API into a unified layer, supporting both legacy Hydra 8 dialog transactions and modern MIP 2.0 Shop Floor Connectivity Services (SCS). The connector automatically detects the backend version at runtime and routes requests dynamically.
+The Hydra MIP connector reads and books data in MPDV's MES Hydra over its service interface: orders, operations, workplaces, persons, and the bookings of the shop floor. Two generations of Hydra meet it, Hydra 8 and Hydra X on MIP 2.0. The connector finds out which one it talks to at the first login, and the same functions work on both: bookings travel as Shop Floor Connectivity Services on MIP 2.0 and as dialogs on Hydra 8.
 
-This connector requires [instance creation](README.md#instance-creation) before you can manage sessions or execute transactions against a specific MIP server.
+This connector requires [instance creation](README.md#instance-creation) before you can manage sessions or execute transactions against a specific MIP server. MIP runs inside the plant, so the instance belongs on an [agent](../../../concepts/agents-and-where-code-runs.md) in that network. One instance per MIP server is enough: share it and create it when the App starts.
+
+## Conventions worth knowing
+
+* **Names**: MIP's dotted names come back in camelCase (`operation.act.status` reads as `operationActStatus`). Both spellings are accepted as input.
+* **Ids are text**: order, operation, workplace, person and badge numbers keep leading zeros. Store them as strings.
+* **`fields`**: it replaces the columns in `read`, `getOrder` and `getResources`, and it adds to the default columns in `getOrders`, `getWorkplaces` and `getPersons`.
+* **Filters**: `{ orderId: 'JR150702' }` for equality, `['field', 'in', ['V', 'L']]` for anything else, or a list of conditions joined by `'and'`. Operators are `=` `<>` `>` `>=` `<` `<=` `in` `between` `contains` `startswith` `endswith`, or MIP's own names (`EQUAL`, `GT`, `LIKE`, `EQUAL_OR_NULL`). MIP has no OR: read twice and merge.
+* **Silent gaps**: MIP answers a column it does not know with empty values and ignores a filter on a name that is no filter parameter, both without an error. `getReadableFields` and `getReadParameters` tell you the names that work. The rows a user may see are limited by the responsibility areas of the MIP user, also without an error.
 
 ## Connection and lifecycle
 
 ### `create` (instance)
 
-Creates a client instance configured to communicate with a specific MIP server.
+Creates a client instance configured to communicate with a specific MIP server. Not to be confused with [`create` (record)](hydra-mip.md#create-record), which takes a `serviceName` and `data` and writes a record on the MIP server.
 
 MIP on the plant network usually shows a certificate of the company's own authority. Trust it once for the whole workspace with the [Trusted certificates](trusted-certificates.md) function `trustServer`, for example `https://mip.plant.local:8080`.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>url</code></td><td>The endpoint URL of the target MIP server.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username used for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password used for authentication.</td><td>string</td></tr><tr><td></td><td><code>accessId</code></td><td>An 8-digit ID identifying the client application, left-padded with zeros if necessary.</td><td>string</td></tr><tr><td></td><td><code>rejectUnauthorized</code></td><td>Set to false to temporarily disable rejection of untrusted server certificates. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>tls</code></td><td>TLS settings for this client only, on top of what the workspace trusts: <code>rejectUnauthorized</code> (false accepts any certificate), <code>ca</code>, <code>cert</code>, <code>key</code>, <code>passphrase</code>.</td><td>object</td></tr><tr><td><code>caPath</code></td><td></td><td>An optional absolute path to a root CA <code>.pem</code> file for internal TLS. The older way: trusting the server in the workspace does the same for every connector.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>url</code></td><td>The endpoint URL of the target MIP server.</td><td>string</td></tr><tr><td></td><td><code>username</code></td><td>The username used for authentication.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>The password used for authentication.</td><td>string</td></tr><tr><td></td><td><code>accessId</code></td><td>An 8-digit ID identifying the client application, left-padded with zeros if necessary.</td><td>string</td></tr><tr><td></td><td><code>timeout</code></td><td>Milliseconds a call may take before it gives up. Default 30000.</td><td>integer</td></tr><tr><td></td><td><code>rejectUnauthorized</code></td><td>Set to false to temporarily disable rejection of untrusted server certificates. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>tls</code></td><td>TLS settings for this client only, on top of what the workspace trusts: <code>rejectUnauthorized</code> (false accepts any certificate), <code>ca</code>, <code>cert</code>, <code>key</code>, <code>passphrase</code>.</td><td>object</td></tr><tr><td><code>caPath</code></td><td></td><td>An optional absolute path to a root CA <code>.pem</code> file for internal TLS. The older way: trusting the server in the workspace does the same for every connector.</td><td>string</td></tr></tbody></table>
 
 {% hint style="info" %}
-Right-click the `options` input and mark it as a secret to mask the password.
+Right-click the `options` input and choose **Secret Input** to mask the password.
 {% endhint %}
 
 #### Example
 
 ```yaml
 # options
-url: https://my-mip-server.com:8080
-username: myuser
+url: https://mip.plant.local:8080
+username: heisenware
 password: mysecretpassword
 accessId: '00123456'
 ```
@@ -34,9 +42,19 @@ accessId: '00123456'
 
 Returns the name of the created instance.
 
+{% hint style="warning" %}
+Three things trip up a first connection:
+
+* **The host must be fully qualified.** A short host name breaks the session cookie, and every call then loses its session.
+* **`accessId` is text, not a number.** It is the plant's installation ID padded to eight digits: as a number it loses its leading zeros.
+* **The MIP user needs a right per service** your App calls, and the user name is lower case.
+{% endhint %}
+
+The connector logs in by itself and keeps the session. A session MIP drops after 30 idle minutes is replaced on the next call. A login MIP refuses is not retried for a minute, so that a wrong password does not lock the account: correct the credentials and create the instance anew.
+
 ### `canCommunicate`
 
-Checks whether communication with the MIP server is operational and authenticated.
+Asks MIP whether a session opens and the server answers.
 
 #### Parameters
 
@@ -44,7 +62,31 @@ None.
 
 #### Output
 
-Returns `true` if communication succeeds, or `false` if it fails.
+Returns `true` when MIP answered, `false` when it could not be reached or refused the login. It never says why: the reason stands in the agent's log, and in the error of any call that fails.
+
+### `isConnected`
+
+Tells whether the last contact with MIP succeeded. It asks nothing of the server, so use it to show a connection state cheaply and `canCommunicate` to test the connection.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` when the instance is logged in and MIP answered the last call, `false` otherwise.
+
+### `disconnect`
+
+Logs out. The next call logs in again, which makes this the way to pick up rights or responsibility areas an administrator has just changed.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true`.
 
 ### `getMipVersion`
 
@@ -72,7 +114,7 @@ Returns `true` if the backend supports MIP 2.0, or `false` if it does not.
 
 ### `logout`
 
-Terminates the open session on the MIP server and clears active cookies. Without an explicit logout, open sessions terminate automatically after 30 minutes.
+Ends the open session on the MIP server. Without it, an open session ends by itself after 30 idle minutes. Either way the next call logs in again.
 
 #### Parameters
 
@@ -80,11 +122,11 @@ None.
 
 #### Output
 
-Returns `true` upon successful session termination, or `false` if it fails.
+Returns `true` when the session ended or none was open, `false` when MIP refused the logout. The instance forgets the session either way.
 
 ### `delete` (instance)
 
-Removes the MIP client instance and its connection configuration. Not to be confused with [`delete` (record)](hydra-mip.md#delete-record), which removes a service record on the MIP server.
+Removes the MIP client instance: it logs out and its configuration is gone. Not to be confused with [`delete` (record)](hydra-mip.md#delete-record), which takes a `serviceName` and `data` and removes a record on the MIP server.
 
 {% hint style="danger" %}
 #### Irreversible action
@@ -104,7 +146,7 @@ Returns `true` upon removal.
 
 ### `getAllServices`
 
-Lists all data-layer services registered on the connected server.
+Lists the services the connected server knows. A service in the list may still be unlicensed in that plant: a call then fails with `lkServiceUnavailable`.
 
 #### Parameters
 
@@ -112,7 +154,7 @@ None.
 
 #### Output
 
-Returns an array of service name strings.
+Returns the service names as an array of strings.
 
 ### `create` (record)
 
@@ -139,11 +181,11 @@ Returns `true` on success. Throws an error if the transaction fails.
 
 ### `read`
 
-Queries records from a given service with options for filtering and field selection.
+Queries records from a given service with options for filtering and field selection. `<Service>` reads the service's own list; `<Service>.<method>` reads another of its list methods, such as `MaterialMovement.listStock`.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td></td><td>The service name.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters records based on specific criteria. Accepts a simple array like <code>['field', '=', 'val']</code>, an object like <code>{ field: 'val' }</code>, or nested arrays. MIP does not support OR logic.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>When true, omits null attributes from the return value. Default false.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td></td><td>The service name, or <code>&#x3C;Service>.&#x3C;method></code>.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>Filters records based on specific criteria. Accepts an object like <code>{ field: 'val' }</code>, an array like <code>['field', '=', 'val']</code>, or a list of those joined by <code>'and'</code>. MIP does not support OR logic.</td><td>any</td></tr><tr><td></td><td><code>fields</code></td><td>Restricts the evaluation to specific columns.</td><td>array</td></tr><tr><td></td><td><code>skipNull</code></td><td>When true, omits null attributes from the return value. Default false.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -158,7 +200,7 @@ skipNull: true
 
 #### Output
 
-Returns an array of parsed data objects matching the query.
+Returns the rows, one object per record, with its fields in camelCase.
 
 ### `update`
 
@@ -213,11 +255,23 @@ Returns `true` on a successful deletion. Throws an error if the operation fails.
 
 ### `execute`
 
-Invokes a specific processing action on a target service.
+Runs a booking or another action service. `<Service>` runs that service's own `execute`; `<Service>.<method>` runs any other method of it, such as `Mail.send`. The bookings below are this function with the parameters filled in for you.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name.</td><td>string</td></tr><tr><td><code>data</code></td><td>The parameters required for execution. Keys must match the service definition.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>serviceName</code></td><td>The service name, or <code>&#x3C;Service>.&#x3C;method></code>.</td><td>string</td></tr><tr><td><code>data</code></td><td>The payload. <code>getExecuteParameters</code> tells you which keys the service takes and which are mandatory.</td><td>object</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# serviceName
+ChangeWorkplaceStatus
+# data
+workplaceId: '4560'
+workplaceStatusId: 2
+serviceLoggingTs: '2026-09-29T10:00:00Z'
+serviceExecutionSync: true
+```
 
 #### Output
 
@@ -295,13 +349,17 @@ Lists all column elements explicitly exposed as selectable output fields.
 
 #### Output
 
-Returns an array of objects mapping selectable keys to their lowercase types.
+Returns one `{ <camelCase name>: <type> }` object per field a read can return.
 
 ## Order management (MIP-WO)
 
 ### `getOrders`
 
-Fetches production orders and enriches them with active operations, BOM components, and allocated tools.
+Fetches production orders and enriches them with active operations, BOM components, and allocated tools. The same is possible with `read`, which this function saves you the joins and default fields for.
+
+{% hint style="warning" %}
+Without a `filter` this reads every order of the plant, with its operations, components and tools. Always filter.
+{% endhint %}
 
 #### Parameters
 
@@ -318,15 +376,19 @@ fields: [ordertypeActive]
 
 #### Output
 
-Returns an array of complex order structures.
+Returns one object per order: its own fields, the fields of its order type, and, when included, its `operations`, each with its `components` and `productionResources`.
+
+{% hint style="info" %}
+An order carries no name: its designation is reserved and stays empty. Show the article (`orderArticle`) instead.
+{% endhint %}
 
 ### `getOrder`
 
-Fetches details for an isolated order instance.
+Reads one order by its number.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td></td><td>The unique order ID string.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>Specifies explicit fields to fetch. If empty, all available fields return.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>orderId</code></td><td></td><td>The order number, as text.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>fields</code></td><td>The fields to read. Empty, every field of the order returns.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
@@ -334,49 +396,110 @@ Fetches details for an isolated order instance.
 # orderId
 '4711'
 # options
-fields: [orderId, orderDesignation, orderPlanStartTimestamp]
+fields: [orderId, orderArticle, orderScheduledStartTs]
 ```
 
 #### Output
 
-Returns an order object, or `null` if the order is not found.
+Returns the order object, or `null` when no order has that number. Operations are not joined: use `getOrders` for those.
+
+## Bookings
+
+A booking names the operation, the workplace, the person and the moment. The four operation bookings take the same `options`; `changeWorkplaceStatus` books a machine status instead.
+
+{% hint style="warning" %}
+#### The operation key
+
+`operationId` is the operation's full key: the order number and the operation number together, such as `CIOYM0010040`. Read it from the operation (`BOOperation`), never glue it together yourself. The bare operation number (`0040`) is not a key and the booking fails with it.
+
+`orderId` is accepted here as the older spelling of that same key, on Hydra 8 only. In reads, `orderId` means the order number. Use `operationId` for bookings.
+{% endhint %}
+
+Quantities are deltas: what was produced since the last report, in the operation's primary unit, never a running total. MIP adds them up.
+
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>operationId</code></td><td>The operation's full key. Legacy spelling: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>orderId</code></td><td>Hydra 8 only: the full key, as the connector took it before.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine ID. Legacy spelling: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person ID. Legacy spelling: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The badge number, in place of the person ID. Legacy spelling: <code>knr</code>. <code>startOperation</code> and <code>reportPartialQuantity</code>.</td><td>string</td></tr><tr><td></td><td><code>batchId</code></td><td>Hydra 8 only: the output batch. Legacy spelling: <code>cnr</code>. <code>startOperation</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>Good quantity produced since the last report. Legacy spelling: <code>egrGut</code>. Not on <code>startOperation</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>Scrap quantity produced since the last report. Legacy spelling: <code>egrAus</code>. Not on <code>startOperation</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>The reason code for the scrap, from the plant's reason table. Legacy spelling: <code>eggAus</code>.</td><td>integer</td></tr><tr><td></td><td><code>timestamp</code></td><td>When it happened, as an ISO timestamp. Default: now. Use it to book after the fact, and book in chronological order.</td><td>string</td></tr></tbody></table>
+
+Each of these returns `true` once MIP took the booking, and throws with MIP's own reason when MIP refuses it (on Hydra 8 the dialog's `RET` code and texts).
 
 ### `startOperation`
 
-Registers an operation log-on transaction (Arbeitsgang anmelden).
+Logs an operation on (Arbeitsgang anmelden): work starts.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code> or <code>usr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>batchId</code></td><td>The batch identifier. Legacy acronym fallback: <code>cnr</code>.</td><td>string</td></tr><tr><td></td><td><code>mst</code></td><td>The target machine status code (Legacy specific).</td><td>integer</td></tr></tbody></table>
+The booking `options` above, without quantities: `operationId` (or `orderId` on Hydra 8), `workplaceId`, `personId` or `cardId`, `batchId` and `timestamp`.
 
 #### Example
 
 ```yaml
 # options
-orderId: '0004990701'
-operationId: '10'
+operationId: 'CIOYM0010040'
 workplaceId: '4560'
-personId: '2998'
+personId: 2998
 ```
 
 #### Output
 
-Returns `true` on successful registration. Throws an error if the transaction fails.
+Returns `true` when MIP took the booking.
 
-### `finishOperation`
+### `reportPartialQuantity`
 
-Finishes an operation (Arbeitsgang beenden/abmelden) and optionally posts produced quantities.
+Posts part quantities (Teilrückmeldung) while the work goes on.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>The produced good quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>The produced scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>The reason code for scrap. Legacy acronym fallback: <code>eggAus</code>.</td><td>integer</td></tr></tbody></table>
+The booking `options` above: `operationId` (or `orderId` on Hydra 8), `workplaceId`, `personId` or `cardId`, `yield`, `scrap`, `scrapReason` and `timestamp`.
 
 #### Example
 
 ```yaml
 # options
-orderId: '0004990701'
-operationId: '10'
+operationId: 'AAA2100473100200'
+workplaceId: '60610'
+personId: 11111
+yield: 100
+scrap: 2
+scrapReason: 1
+```
+
+#### Output
+
+Returns `true` when MIP took the booking.
+
+### `interruptOperation`
+
+Interrupts a registered operation (Arbeitsgang unterbrechen): a break or a shift end, with the job not yet complete.
+
+#### Parameters
+
+The booking `options` above: `operationId` (or `orderId` on Hydra 8), `workplaceId`, `personId`, `yield`, `scrap`, `scrapReason` and `timestamp`. Quantities given here are booked first, as a partial report.
+
+#### Example
+
+```yaml
+# options
+operationId: 'CIOYM0010040'
+workplaceId: '4560'
+yield: 50
+```
+
+#### Output
+
+Returns `true` when MIP took the booking.
+
+### `finishOperation`
+
+Logs an operation off (Arbeitsgang abmelden): the normal end of the work on it.
+
+#### Parameters
+
+The booking `options` above: `operationId` (or `orderId` on Hydra 8), `workplaceId`, `personId`, `yield`, `scrap`, `scrapReason` and `timestamp`. Quantities given here are booked first, as a partial report, because MIP 2.0 takes quantities only that way.
+
+#### Example
+
+```yaml
+# options
+operationId: 'CIOYM0010040'
 workplaceId: '4560'
 yield: 100
 scrap: 5
@@ -385,52 +508,32 @@ scrapReason: 1
 
 #### Output
 
-Returns `true` on success. Throws an error if the transaction fails.
+Returns `true` when MIP took the booking.
 
-### `interruptOperation`
+### `changeWorkplaceStatus`
 
-Interrupts a registered operation (Arbeitsgang unterbrechen), for example for breaks or shift ends where the job is not yet complete. Optionally posts partial quantities.
+Sets a workplace's machine status (Maschinenstatus setzen), for example to report a disturbance or a repair.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>The partial yield quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>The partial scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="140">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>workplaceId</code></td><td>The workplace ID. Legacy spelling: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>machineStatus</code></td><td>The new status, a number from that workplace's own status table. Legacy spelling: <code>mst</code>.</td><td>integer</td></tr><tr><td></td><td><code>personId</code></td><td>The person ID. Legacy spelling: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The badge number. Legacy spelling: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>comment</code></td><td>A comment, up to 40 characters. Legacy spelling: <code>bem</code>.</td><td>string</td></tr><tr><td></td><td><code>estimatedDowntime</code></td><td>How long the status is expected to last. Legacy spelling: <code>progndauer</code>.</td><td>integer</td></tr><tr><td></td><td><code>timestamp</code></td><td>When it happened. Default: now.</td><td>string</td></tr></tbody></table>
+
+{% hint style="warning" %}
+Every workplace has its own status table. Offer only the statuses of that workplace, from `getWorkplaces` with `includeStatusAssignments`. Setting a status may interrupt the running operations or log persons off, as the plant configured it.
+{% endhint %}
 
 #### Example
 
 ```yaml
 # options
-orderId: '0004990701'
 workplaceId: '4560'
-yield: 50
+machineStatus: 2
+comment: Spindle replaced
 ```
 
 #### Output
 
-Returns `true` on success. Throws an error if the transaction fails.
-
-### `reportPartialQuantity`
-
-Posts produced part quantities (Teilrückmeldung), including good parts and scrap, for an active operation.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>orderId</code></td><td>The order identifier. Legacy acronym fallback: <code>anr</code>.</td><td>string</td></tr><tr><td></td><td><code>operationId</code></td><td>The operation identifier. Legacy acronym fallback: <code>avnr</code>.</td><td>string</td></tr><tr><td></td><td><code>workplaceId</code></td><td>The workplace or machine identifier. Legacy acronym fallback: <code>mnr</code>.</td><td>string</td></tr><tr><td></td><td><code>personId</code></td><td>The person identifier. Legacy acronym fallback: <code>pnr</code>.</td><td>string</td></tr><tr><td></td><td><code>cardId</code></td><td>The card identifier. Legacy acronym fallback: <code>knr</code>.</td><td>string</td></tr><tr><td></td><td><code>yield</code></td><td>The produced good quantity. Legacy acronym fallback: <code>egrGut</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrap</code></td><td>The produced scrap quantity. Legacy acronym fallback: <code>egrAus</code>.</td><td>integer</td></tr><tr><td></td><td><code>scrapReason</code></td><td>The reason code for scrap. Legacy acronym fallback: <code>eggAus</code>.</td><td>integer</td></tr></tbody></table>
-
-#### Example
-
-```yaml
-# options
-orderId: 'AAA2100473100200'
-workplaceId: '60610'
-personId: '11111'
-yield: 100
-scrap: 2
-scrapReason: 1
-```
-
-#### Output
-
-Returns `true` on success. Throws an error if the transaction fails.
+Returns `true` when MIP took the booking.
 
 ## Workplaces, resources, and personnel
 
@@ -444,7 +547,7 @@ Reads workplaces and machines. This high-level convenience function applies defa
 
 #### Output
 
-Returns an array of workplace objects including identifiers, designations, and current status information.
+Returns one object per workplace, with its `validStatuses` and `assignedGroups` when those are included. The valid statuses carry each status's text and colour, which is what a status board needs.
 
 ### `getResources`
 
@@ -477,29 +580,41 @@ includeAssignments: false
 
 #### Output
 
-Returns an array of person objects, or an empty array if no person matches.
+Returns one object per person, with its `qualifications`, `assignments` and `currentStatus` when those are included. MIP keeps a person once per validity period; this function returns the version valid today, so a person appears once.
 
 ## Dialogs and raw calls
 
+Dialogs are Hydra 8's booking records: `KEY=value|` pairs sent as text. They do not exist on Hydra X. The raw calls below reach services and dialogs the functions above do not cover.
+
 ### `runDialog`
 
-Runs a named dialog with a set of key-value pairs.
+Runs a named dialog with a set of key-value pairs. The fields are upper-cased on the wire, and `|` and `\` in a value are escaped for you.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogName</code></td><td></td><td>The name of the dialog (such as <code>A_AN</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td></td><td>The key-value parameters for the dialog. Add <code>dryRun: true</code> to receive the generated dialog string without sending it.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogName</code></td><td></td><td>The dialog, such as <code>A_TR</code>, <code>M_MST</code> or <code>SCMD;44</code>.</td><td>string</td></tr><tr><td><code>options</code></td><td></td><td>The fields of the dialog. Add <code>dryRun: true</code> to receive the record that would be sent, without sending it.</td><td>object</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# dialogName
+M_MST
+# options
+mnr: '4560'
+mst: 2
+```
 
 #### Output
 
-Returns the raw dialog response of the MIP server, or the generated dialog string when `dryRun` is set.
+Returns Hydra's answer record as text, which starts with `RET=0` when the booking was posted. A dialog Hydra refuses throws with its return code and texts. With `dryRun`, returns the record that would have been sent.
 
 ### `rawServiceCall`
 
-Executes a raw service call for advanced use cases. The parameters map directly to the MIP Service Interface specification.
+Calls any method of any service, with the body sent to MIP as it is. For what the functions above do not cover.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The service URL to call (such as <code>/data/MDUnits/list</code>).</td><td>string</td></tr><tr><td><code>options</code></td><td><code>params</code></td><td>A list of filter parameter objects with <code>acronym</code>, <code>operator</code>, and <code>value</code>.</td><td>array</td></tr><tr><td></td><td><code>columns</code></td><td>The selected columns.</td><td>array</td></tr><tr><td></td><td><code>requestId</code></td><td>The request ID.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The URL to call: <code>/data/&#x3C;Service>/&#x3C;method></code> or <code>/meta/&#x3C;Service>/&#x3C;method></code>.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>params</code></td><td>The filter parameters, each <code>{ acronym, operator, value }</code>, in MIP's own spelling.</td><td>array</td></tr><tr><td></td><td><code>columns</code></td><td>The selected columns.</td><td>array</td></tr><tr><td></td><td><code>requestId</code></td><td>A request ID of your own.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -508,20 +623,28 @@ Executes a raw service call for advanced use cases. The parameters map directly 
 /data/MDUnits/list
 # options
 params: [{ acronym: units.unit, operator: EQUAL, value: C }]
+columns: [units.unit]
 ```
 
 #### Output
 
-Returns the raw response of the MIP server.
+Returns MIP's answer as MIP sends it, with MIP's own names rather than camelCase. The first row of a list (`__rowType: META`) names the columns.
 
 ### `rawDialogCall`
 
-Executes a raw dialog call by sending the complete dialog string.
+Sends a complete dialog record to Hydra 8, unchanged.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogString</code></td><td>The complete dialog string to send.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>dialogString</code></td><td>The record, as <code>KEY=value|</code> pairs.</td><td>string</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# dialogString
+DLG=A_TR|ANR=CIOYM0010040|MNR=4560|EGR:GUT=12|
+```
 
 #### Output
 
-Returns the raw response of the MIP server.
+Returns Hydra's answer record as text. `RET=0` means the record was posted.

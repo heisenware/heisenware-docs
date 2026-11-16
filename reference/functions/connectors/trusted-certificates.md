@@ -35,7 +35,7 @@ Do this from a network you trust. Then compare the returned `fingerprint` with w
 Databases (`postgres://`, `mysql://`, `mariadb://`) and mail servers (`smtp://`) start a connection unencrypted and switch on request. `trustServer` asks them the way their own clients do. A Microsoft SQL Server shows its certificate only inside its own protocol: add its certificate file with `addServerCertificate`.
 
 {% hint style="info" %}
-On a Native Agent, a server whose certificate an authority issued needs that authority instead (`addCertificateAuthority`). A self-made certificate works with `trustServer` everywhere.
+On a native agent, a server whose certificate an authority issued needs that authority instead (`addCertificateAuthority`). A self-made certificate works with `trustServer` everywhere.
 {% endhint %}
 
 #### Parameters
@@ -86,7 +86,7 @@ Trusts one server by its certificate, when you have it as a file or as text, for
 
 #### Example
 
-Upload the file with the File Explorer, drag it to the parameter, and delete it from the uploads folder afterwards.
+Upload the file with the [Files explorer](../../../app-builder/explorers/files.md), drag it to the parameter, and delete it from the uploads folder afterwards.
 
 ```yaml
 # certificate
@@ -160,6 +160,6 @@ Connectors that open TLS connections read the list each time they open one. A se
 ### Where the list lives
 
 * **Platform**: under `/shared/certificates/pki`. Trusted servers sit in `trusted/certs`, authorities in `issuers/certs`, one `.pem` file each. A file placed there by hand counts as well.
-* **Native Agent**: in the `pki` folder next to the executable. Every agent keeps its own list.
+* **Native agent**: in the `pki` folder next to the executable. Every agent keeps its own list.
 
 The [OPC UA client](opc-ua-client.md) uses the same folders for its own certificates, and its `addServerCertificate` writes the same list. OPC UA servers do not speak TLS on `opc.tcp://`, so `trustServer` cannot fetch their certificate: use the certificate file the server offers.

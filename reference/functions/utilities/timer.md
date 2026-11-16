@@ -1,6 +1,6 @@
 # Timer
 
-The timer class introduces countdowns with one-second resolution into your flows, maps countdown progress to a custom range, and reacts to ticks and finished countdowns. The duration and the progress range are set when you create the instance; `setTotalSeconds` changes the duration for the next start. It also provides a static utility function to format human-readable relative time differences. This class requires an instance for countdown features. The code class name is `Timer`.
+The timer class introduces countdowns with one-second resolution into your flows, maps countdown progress to a custom range, and reacts to ticks and finished countdowns. The duration and the progress range are set when you create the instance; `setTotalSeconds` changes the duration for the next start. It also provides a static utility function to format human-readable relative time differences. This class requires an instance for countdown features. A countdown lives in memory only: after a restart of the platform the timer is stopped. The code class name is `Timer`.
 
 ## Static functions
 
@@ -181,7 +181,7 @@ Stops the timer after a five-second delay, unless the timer is started again in 
 
 ## Event listeners
 
-These functions let you subscribe callbacks to the timer instance events.
+Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The payload arrives on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
 
 ### `onTick`
 
@@ -193,19 +193,7 @@ Subscribes to the tick event. The callback runs every second while the countdown
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offTick`
-
-Removes a listener given to `onTick`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ### `onTimeup`
 
@@ -217,16 +205,4 @@ Subscribes to the timeup event. The callback runs once per start, when the count
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offTimeup`
-
-Removes a listener given to `onTimeup`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.

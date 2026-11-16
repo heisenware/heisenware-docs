@@ -1,23 +1,34 @@
 # Functions explorer
 
-The Functions explorer is the panel on the left that holds all functions available to your App. It organizes them into categories and hierarchies (classes and instances) and lets you drag them directly onto the Flowboard.
+The Functions explorer holds every function your App can call. It is the first tab of the Explorer, and what you drag onto the Flowboard comes from here.
 
-<figure><img src="../../.gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/builder-functions-explorer.png" alt="The Functions explorer: the categories Connectors, Storage, Utilities and Custom, and the agents of the workspace under them" width="262"><figcaption></figcaption></figure>
 
-## Categories
+## The tree
 
-* [**Connectors**](../../reference/functions/connectors/README.md): Functions for industrial protocols and external systems. Connectors in this category require the target system to be reachable over the network or internet.
-* [**Storage**](../../reference/functions/storage/README.md): The relational database and timeseries database classes to connect to databases, including the built-in internal PostgreSQL and InfluxDB. Also holds lightweight stores like the data store and circular buffer.
-* [**Utilities**](../../reference/functions/utilities/README.md): Data processing, timers, cron jobs, barcode generation, PDF processing, and more.
-* **Custom**: Your building blocks, including [subflows](../../concepts/subflows.md) and functions loaded via custom add-ons.
+The tree goes agent, class, function. A class that works with instances lists its instances, and the functions that act on one hang under the instance.
 
-In addition to the categories, every installed and started [agent](../../concepts/agents-and-where-code-runs.md) appears as its own entry, listed by its name and holding the connector classes selected when building it.
+* [**Connectors**](../../reference/functions/connectors/README.md): industrial protocols and external systems. These run in the platform, so the target has to be reachable over the network.
+* [**Storage**](../../reference/functions/storage/README.md): the relational database and the timeseries database, with the built-in PostgreSQL and InfluxDB, and the lightweight stores: data store, buffer, accumulator.
+* [**Utilities**](../../reference/functions/utilities/README.md): data processing, timers, cron, counters, barcodes, PDF, simulation.
+* **Custom**: your own building blocks, the [subflows](../../concepts/subflows.md) of this App and the classes an [add-on](../../reference/functions/add-ons/README.md) brings.
 
-## Toolbar
+Every [agent](../../concepts/agents-and-where-code-runs.md) you installed appears as its own entry, under its name, holding the connectors that were chosen when it was built. The same class on two agents means the same functions in two networks.
 
-The icons at the top of the panel extend your function library:
+The platform's own agents and its control classes are not building blocks and stay hidden. Switch **Debug Backend** on in the [App Builder settings](../README.md#settings) to see them.
 
-* **Create Agent** (<i class="fa-cloud-arrow-down">:cloud-arrow-down:</i>): Build and download a new [agent](../../concepts/agents-and-where-code-runs.md).
-* **Install extension** (<i class="fa-puzzle-piece">:puzzle-piece:</i>): Add official or custom [add-ons](../../reference/functions/add-ons/README.md) to your library.
-* **Smart onboarding** (<i class="fa-screencast">:screencast:</i>): Pair external clients, such as IoT devices, with your workspace. See [smart onboarding](../../app-manager/integrations.md#method-2-smart-onboarding).
-* **Collapse** (<i class="fa-chevrons-up">:chevrons-up:</i>): Collapse all open entries.
+## Building a flow from it
+
+* **Drag a function onto the Flowboard**: it becomes an [executor](../../concepts/executors-and-instances.md) there, with its arguments as inputs and its documentation on hover.
+* **A class that needs an instance** lists *create* and *delete* first. Drag *create* onto the board, name the instance, and the instance functions can address it. See [How instances live](../../concepts/executors-and-instances.md#how-instances-live).
+* **Right-click an instance** for **Registrations…**, who is listening to it, and **Remove**.
+* **Right-click an agent** for its host and build, **Restart agent**, **Show log…** and **Open in App Manager**.
+
+## The toolbar
+
+The icons at the top of the panel:
+
+* **Add agent**: agents are built, updated and rolled out in the Manager. The icon opens its [Agents](../../app-manager/agents/README.md) screen in a new tab, ready to build one.
+* **Install Extension**: adds an [add-on](../../reference/functions/add-ons/README.md), an optional module that runs as its own container and brings new classes. It asks for the image and its environment.
+* **Start onboarding new agents**: pairs external clients, such as IoT devices, with your workspace. See [agent onboarding](../../app-manager/integrations.md#agent-onboarding).
+* **Collapse All**: folds every open entry.

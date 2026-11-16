@@ -1,182 +1,162 @@
 ---
 description: >-
-  This page introduces the core concepts, philosophy, and architectural
-  components of the open-source VRPC framework.
+  The open-source RPC framework the whole platform talks over, and how your own
+  code joins it.
 ---
 
 # VRPC
 
-{% hint style="info" %}
-#### The engine behind Heisenware
+VRPC (Variadic Remote Procedure Call) makes the classes of one program callable from another, over a network, without REST routes, schemas or WebSocket plumbing. It is open source under the MIT licence, developed by Heisenware, and it is what every part of the platform speaks: frontend to backend, service to service, and the platform to an agent on a shop floor (see [Architecture](../README.md)).
 
-VRPC (Variadic Remote Procedure Call) is the core communication engine of the Heisenware platform (see [High-level architecture](../README.md)). All interactions – including frontend-to-backend logic, inter-microservice calls, and remote edge device connections – rely on VRPC. Understanding this protocol lets you easily integrate custom code into the Heisenware platform.
-{% endhint %}
+You need it when you bring your own code to the platform. Everything else the platform hides.
 
-VRPC is an asynchronous Remote Procedure Call (RPC) framework that makes your existing code available over a network. We license VRPC under the permissive MIT open-source license.
+The platform runs **VRPC 3.18** for JavaScript. The family:
 
-The framework supports multiple programming languages:
+* **Node.js and the browser**: [vrpc-js](https://github.com/heisenware/vrpc-js)
+* **C++**: [vrpc-hpp](https://github.com/heisenware/vrpc-hpp)
+* **Python**: [vrpc-py](https://github.com/heisenware/vrpc-py)
+* **Arduino and ESP32**: [vrpc-arduino](https://github.com/heisenware/vrpc-arduino)
+* **React hooks**: [vrpc-react](https://github.com/heisenware/vrpc-react)
 
-* **Node.js:** [vrpc-js](https://github.com/heisenware/vrpc-js)
-* **C++:** [vrpc-hpp](https://github.com/heisenware/vrpc-hpp)
-* **Arduino:** [vrpc-arduino](https://github.com/heisenware/vrpc-arduino)
-* **React:** [vrpc-react](https://github.com/heisenware/vrpc-react)
-* **Python:** [vrpc-py](https://github.com/heisenware/vrpc-py)
-* **R:** [vrpc-r](https://github.com/heisenware/vrpc-r)
+The full documentation, including the protocol specification every implementation follows, is at [vrpc.io](https://vrpc.io).
 
-For more details on the libraries, visit the official [VRPC website](https://vrpc.io).
+## The idea
 
-## What is VRPC?
+You write a plain class. No API router, no network loop, no serialization. VRPC reads the class at run time, publishes what it offers, and lets other programs call it. A caller gets a proxy object with the same functions and the same signatures; calling one is a local asynchronous call that happens to run somewhere else.
 
-VRPC lets you expose classes written in Python, Node.js, or C++ to remote clients without modifying their internal business logic. Remote clients interact with these classes as if they were running locally in their own process, even if the code runs on a physical machine elsewhere.
+Three parts do it:
 
-The core philosophy of VRPC is non-intrusive integration. You focus on writing clean, well-defined business logic classes first. VRPC then adapts this code for network communication rather than forcing you to structure your application around network constraints.
+* **`VrpcAdapter`**: reads your classes. It finds the public functions, the constructor and the JSDoc, and builds the network adapter from them. Nothing in your code changes.
+* **`VrpcAgent`**: the program that offers the adapted classes. It connects out to an MQTT broker, announces its classes and instances, takes calls and returns results or errors.
+* **`VrpcClient`**: the program that uses them. It makes the proxy objects and finds by itself which agent hosts a class.
 
-## Core concepts
+<figure><img src="../../.gitbook/assets/image (40).png" alt="The VrpcAdapter reading a class and generating its network adapter"><figcaption></figcaption></figure>
 
-The VRPC architecture consists of a few decoupled, cooperating components:
+### Why a broker
 
-### VrpcAdapter
+Agents and clients never talk to each other. Both connect out to one MQTT broker and stay connected.
 
-The `VrpcAdapter` is the introspection engine. It analyzes your classes using runtime reflection, reads their public methods and JSDoc documentation, and automatically generates the network communication adapter. This layer abstracts away the complexity of wrapping your code for network access.
+* Neither needs to know where the other is, and neither needs an address of its own.
+* Outbound-only connections cross NAT and firewalls: nothing has to be opened inbound, no VPN, no port forwarding.
+* An agent announces its classes; clients pick them up as they appear. Start and stop agents anywhere; as long as they reach the same broker, clients find them.
+* A connection that breaks comes back by itself.
 
-<figure><img src="../../.gitbook/assets/image (40).png" alt="Visual representation of the VRPC Adapter code generation flow"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (41).png" alt="VrpcAdapter, VrpcAgent and VrpcClient around a central MQTT broker"><figcaption></figcaption></figure>
 
-### VrpcAgent
-
-A `VrpcAgent` is a server-side process that hosts your adapted code. You run a `VrpcAgent` on the machine where your code executes (see [Agents](../../concepts/agents-and-where-code-runs.md)). The `VrpcAgent` manages the following tasks:
-
-* Connects to a central MQTT message broker using an outbound-only connection.
-* Advertises its available classes and active instances to the network.
-* Listens for incoming RPC requests from clients.
-* Uses the `VrpcAdapter` to execute the requested methods on the target instances.
-* Returns results or execution errors to the calling client.
-
-### VrpcClient
-
-The `VrpcClient` library connects backend services, frontends, or external systems to the central message broker to interact with your remote code. Its primary job is to generate dynamic proxy objects.
-
-### Proxy objects
-
-When you request a client to instantiate or retrieve a remote class, it returns a local proxy object rather than the actual object. This proxy object exposes the exact same methods and signatures as the underlying class.
-
-Calling a method on the proxy object executes the following sequence:
-
-1. The client packages the method call and arguments into a standard message envelope.
-2. The client transmits the message across the broker to the hosting `VrpcAgent`.
-3. The `VrpcAgent` executes the real method on the target instance.
-4. The broker routes the serialized return value or execution error back to your proxy method.
-
-This makes remote interaction function exactly like a local asynchronous operation.
-
-### The MQTT broker
-
-Heisenware uses MQTT as the core communication backbone for VRPC. The broker acts as a central router for all control and data traffic:
-
-* Agents and clients connect to the broker using outbound-only connections. They do not require knowledge of each other's IP addresses or network locations.
-* Outbound-only connections enable seamless NAT traversal, eliminating the need to open incoming firewall ports or manage complex VPN configurations.
-* Agents publish metadata about their available classes, and clients subscribe to these catalogs dynamically.
-
-This decoupled design ensures high scalability and resilience. You can start or stop Agents anywhere on your network; as long as they register with the same broker, clients discover and use them automatically.
-
-<figure><img src="../../.gitbook/assets/image (41).png" alt="High-level architecture block diagram showing VrpcAdapter, VrpcAgent, and VrpcClient layers"><figcaption></figcaption></figure>
-
-## Typical workflow
-
-Follow this sequence to write, register, and execute custom code over the network:
+## A complete example
 
 {% stepper %}
 {% step %}
-### Write your business logic
-
-Create a standard class using your preferred language (such as Node.js or Python). Do not write any API routers, network loops, or serialization code.
+### Write the class
 
 ```javascript
 // calculator.js
 class Calculator {
-  add(a, b) {
-    return a + b;
+  add (a, b) {
+    return a + b
   }
 }
-module.exports = Calculator;
+module.exports = Calculator
 ```
 {% endstep %}
 
 {% step %}
-### Register with the adapter
+### Offer it
 
-Register your class with the `VrpcAdapter` to automatically analyze its methods and expose its metadata.
+Register the class and serve it under an agent name.
 
 ```javascript
-const { VrpcAdapter } = require('vrpc');
-const Calculator = require('./calculator');
+const { VrpcAdapter, VrpcAgent } = require('vrpc')
 
-VrpcAdapter.register(Calculator);
+VrpcAdapter.register(require('./calculator'))
+
+new VrpcAgent({
+  domain: 'acme.default',
+  agent: 'calculator-agent',
+  broker: 'mqtts://acme.heisenware.cloud:8883',
+  username: 'calculator@acme.default',
+  password: '<the integration password>'
+})
+  .serve()
+  .then(() => console.log('serving'))
+```
+
+The username and password come from a VRPC integration of the workspace: App Manager → [Integrations](../../app-manager/integrations.md) → **Add** → VRPC client.
+{% endstep %}
+
+{% step %}
+### Connect a client
+
+```javascript
+const { VrpcClient } = require('vrpc')
+
+const client = new VrpcClient({
+  domain: 'acme.default',
+  broker: 'mqtts://acme.heisenware.cloud:8883',
+  username: '<integration>',
+  password: '<password>'
+})
+await client.connect()
 ```
 {% endstep %}
 
 {% step %}
-### Run the Agent
-
-Instantiate and start a `VrpcAgent` on the host machine to establish a secure connection to the central broker and advertise your class.
+### Make an instance and call it
 
 ```javascript
-const { VrpcAgent } = require('vrpc');
-
-async function main() {
-  const agent = new VrpcAgent({
-    domain: 'your-domain',
-    agent: 'calculator-agent',
-    broker: 'mqtts://broker.heisenware.cloud'
-  });
-  await agent.start();
-}
-main();
-```
-{% endstep %}
-
-{% step %}
-### Connect the client
-
-Configure a `VrpcClient` in your frontend App or backend service to connect to the same broker and domain.
-
-```javascript
-const { VrpcClient } = require('vrpc');
-
-async function main() {
-  const client = new VrpcClient({
-    domain: 'your-domain',
-    broker: 'mqtts://broker.heisenware.cloud'
-  });
-  await client.connect();
-}
-main();
-```
-{% endstep %}
-
-{% step %}
-### Create the proxy instance
-
-Use the client to instantiate a remote instance. The client automatically resolves which Agent hosts the class and maps its methods dynamically.
-
-```javascript
-const calculatorProxy = await client.create({
+const calculator = await client.create({
+  agent: 'calculator-agent',
   className: 'Calculator',
   instance: 'my-calculator'
-});
+})
+
+console.log(await calculator.add(10, 20)) // 30
 ```
-{% endstep %}
 
-{% step %}
-### Execute remote methods
-
-Call methods on the proxy object exactly like a local object. All network packaging, remote execution, and output serialization occur asynchronously under the hood.
-
-```javascript
-const result = await calculatorProxy.add(10, 20);
-console.log(result); // Outputs: 30
-```
+Name the agent: a client that was not constructed with one has no default. The instance keeps its name and its state until it is deleted, and any other client reaches it by that name with `client.getInstance('my-calculator')`.
 {% endstep %}
 {% endstepper %}
+
+Serve this agent against your workspace and `Calculator` appears in the [Functions explorer](../../app-builder/explorers/functions.md) under `calculator-agent`, with `add` as a two-input executor. That is all an [add-on](../custom-add-ons.md) is.
+
+## Event functions
+
+A function that calls a handler again and again, rather than answering once, returns a **registration**: an object that tells the agent how to undo the call, and optionally how to greet a listener that arrives later.
+
+```javascript
+/**
+ * Calls back with every reading, beginning with the current one
+ *
+ * @param {Function} handler
+ * @returns {Registration}
+ */
+onReading (handler) {
+  this._emitter.on('reading', handler)
+  return {
+    [Symbol.dispose]: () => this._emitter.off('reading', handler),
+    greet: greeting => greeting(this._reading)
+  }
+}
+```
+
+The agent calls such a function once however many clients listen, hands every event to every listener, and releases it when the last one leaves. On the Flowboard that is what makes an executor's event outputs: see [Backend events](../../concepts/backend-events.md).
+
+Two things declare an event function, and nothing else does: `@returns {Registration}`, or a name of `on` followed by a capital letter. The engine, the Builder, the client and the assistant all read the same rule.
+
+## What the platform runs on the bus
+
+Every message under a workspace begins with that workspace's domain, `<account>.<workspace>`. Under it, these agents are always there:
+
+| Agent | What it offers |
+| --- | --- |
+| `builder-backend` | the design version of every App in the workspace |
+| `app-backend-<appId>` | one released App, one agent per App |
+| `Connectors`, `Utility Functions`, `Templates`, `Media Server` | the platform's own classes |
+| the agents you install | your [native, Docker and LXC agents](../../concepts/agents-and-where-code-runs.md) and your [add-ons](../custom-add-ons.md), each under its own name |
+
+An App's own values live on singleton instances. In the Builder they carry the App's id: `variables-<appId>` and `endpoints-<appId>` of the classes `Variables` and `Endpoints` on `builder-backend`. In a release the same records are served under the well-known names `variables` and `endpoints` on `app-backend-<appId>`, so that code outside the platform can address them without knowing an id. `themes` works the same way.
+
+Instance names are global per agent and only per agent: the builder backend and a released App hold instances of the same name, and they are different objects. Always name the agent.
 
 ## Declare what changes nothing
 
@@ -186,7 +166,7 @@ A function whose call changes nothing another caller, a device or storage could 
 | --- | --- |
 | JavaScript and TypeScript | the JSDoc tag `@nosideeffects` |
 | Python | a `:nosideeffects:` field in the docstring |
-| C++ | a `const` member function, by the language's own promise |
+| C++ | a function declared `const`, by the language's own promise |
 
 ```javascript
 class Calculator {
@@ -195,8 +175,8 @@ class Calculator {
    *
    * @nosideeffects
    */
-  add(a, b) {
-    return a + b;
+  add (a, b) {
+    return a + b
   }
 }
 ```

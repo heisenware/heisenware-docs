@@ -1,22 +1,28 @@
 # Relational database
 
-The relational database connector communicates with SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, Oracle, and Snowflake) without writing raw SQL. You can define tables, insert and query rows, model relationships, and track changes with a consistent set of functions.
+The relational database connector talks to SQL databases (PostgreSQL, MySQL, MariaDB, MSSQL, SQLite, Oracle and Snowflake) without raw SQL. You define tables, insert and query rows, relate tables to each other and keep a record of who changed what. The code class name is `Database`.
 
 ## Quick start: the internal PostgreSQL instance
 
-Heisenware provides a pre-initialized SQL database called `internal-postgres`. It is globally available and ready for use. Pick functions from inside `internal-postgres` to make use of it.
+Every workspace has a PostgreSQL database of its own, the instance `internal-postgres`. It is there from the start, and its tables belong to the workspace, so every App reads and writes the same ones. In the Functions explorer the class is **Relational Database**; pick a function from inside `internal-postgres` and drag it onto the Flowboard.
+
+Its tables have a [data model](relational-database.md#data-model) kept inside the database, which you shape in the [Database editor](../../../app-builder/database-editor.md) or let the assistant shape.
 
 <figure><img src="../../../.gitbook/assets/image (58).png" alt=""><figcaption></figcaption></figure>
 
 ## Connecting an external database
 
-To connect an external database, use the [`create`](relational-database.md#create) function. How you configure it depends on where the database is located:
+To connect a database of your own, use the [`create`](relational-database.md#create) function. Where you create the instance depends on where the database is:
 
-* **Cloud or public database**: If the database is accessible over the internet, create the instance directly in your App backend.
-* **Local database (via Agent)**: If the database sits inside a private network (such as on a shopfloor server), deploy an [Agent](../../../concepts/agents-and-where-code-runs.md) in that network first and create the database instance within that Agent.
+* **Reachable over the internet**: create the instance on the Connectors agent, beside `internal-postgres`.
+* **Inside a private network**, such as on a shop floor server: install an [agent](../../../concepts/agents-and-where-code-runs.md) in that network first, and create the instance there.
 
 {% hint style="info" %}
-Whether you use the internal database or an external connection, the functions for querying, inserting, and managing data are identical.
+Whether you use the workspace's own database or one of your own, the functions for reading, writing and shaping are the same.
+{% endhint %}
+
+{% hint style="warning" %}
+A database of your own, such as an ERP or a customer's SQL server, belongs to someone else. Read it, and leave its structure to the system that owns it. Only the workspace's own database keeps a data model.
 {% endhint %}
 
 ## Connection and database management
@@ -124,23 +130,22 @@ Returns `true` upon removal.
 
 ### `defineTable`
 
-Defines a table schema. If the table does not exist, the function creates it. If it exists, the function adds any new fields.
+Defines a table schema. If the table does not exist, the function creates it. If it exists, the function adds any new fields. A field that already holds values keeps its type.
 
-On the workspace's own database every definition is recorded in its [data model](relational-database.md#data-model).
+On the workspace's own database every definition is recorded in its [data model](relational-database.md#data-model). Shape that database in the [Database editor](../../../app-builder/database-editor.md) instead of with an executor, see [Data model](relational-database.md#data-model).
 
-Unless you define a custom primary key, the function automatically adds these fields:
+Unless you define a primary key of your own, the function adds these fields:
 
-* `id`: The table's primary key. A UUID on PostgreSQL, an auto-incrementing integer on other dialects.
-* `createdAt`: A timestamp recording when the row was created.
-* `updatedAt`: A timestamp tracking the last modification of the row.
+* `id`: the table's primary key. A UUID on PostgreSQL, an auto-incrementing integer on the other dialects.
+* `createdAt` and `updatedAt`: when the row was created and when it last changed.
 
 {% hint style="info" %}
-When running inside an Agent, the database disables the automatic `createdAt` and `updatedAt` timestamps.
+A connector running outside the platform, on a native agent, adds no `createdAt` and `updatedAt`. A table that has neither, because SQL made it, gets neither from a later definition.
 {% endhint %}
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code> (alias <code>bool</code>), <code>date</code> (a date with a time, stored as an instant), <code>dateonly</code> (a calendar date such as <code>2026-10-01</code>), <code>time</code> (a time of day such as <code>08:30:00</code>), <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code> (one file), <code>files</code> (a list of files, see <a href="relational-database.md#files-in-a-table">Files in a table</a>), <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. See <a href="relational-database.md#audit-logging">Audit logging</a>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>fields</code></td><td></td><td>The table columns. Keys are the field names in camelCase. Values are either a data type string or a configuration object. Supported types: <code>string</code>, <code>text</code>, <code>integer</code>, <code>bigint</code>, <code>float</code>, <code>double</code>, <code>number</code>, <code>boolean</code> (alias <code>bool</code>), <code>date</code> (a date with a time, stored as an instant), <code>dateonly</code> (a calendar date such as <code>2026-10-01</code>), <code>time</code> (a time of day such as <code>08:30:00</code>), <code>uuid</code>, <code>json</code>, <code>jsonb</code>, <code>file</code> (one file), <code>files</code> (a list of files, see <a href="relational-database.md#files-in-a-table">Files in a table</a>), <code>uniquestring</code>, <code>uniqueinteger</code>, <code>uniquebiginteger</code>. Unknown types fall back to <code>string</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>auditLog</code></td><td>Records all changes to this table when <code>true</code>. See <a href="relational-database.md#audit-logging">Audit logging</a>.</td><td>boolean</td></tr><tr><td></td><td><code>actorId</code></td><td>Who made the change, for the <a href="relational-database.md#data-model">data model</a>'s history.</td><td>string</td></tr></tbody></table>
 
 {% hint style="info" %}
 Use English and camelCase for table and field names (such as `firstName` or `dateOfBirth`). Avoid spaces, dashes, and other special characters. When using PostgreSQL, prefer the `jsonb` type for JSON data: it is more efficient and allows nested properties in filter expressions.
@@ -229,17 +234,29 @@ Two field types say how many files a field holds:
 | `file` | one entry, or nothing | an [upload](../../widgets/input/upload.md) or [photo](../../widgets/input/photo.md) widget that holds one file, a [signature](../../widgets/input/signature.md) |
 | `files` | a list of entries, or nothing | an upload or photo widget that holds several files |
 
-Store what the widget delivers as it is. The [media view](../../widgets/display/media-view.md), the [data grid](../../widgets/display/data-grid.md) and the [form](../../widgets/input/form.md) show an entry as one picture and a list as its first picture with the number of files.
+Store what the widget delivers as it is. The [media view](../../widgets/display/media-view.md), the [data grid](../../widgets/display/data-grid.md) and the [form](../../widgets/input/form.md) show an entry as one picture and a list as its first picture with the number of files. The [gallery](../../widgets/display/gallery.md) shows several to look through.
 
 * **The fields are strict.** A `file` field takes one entry and a `files` field a list. The other shape is refused, and the error names the other type. A path is refused too.
-* **A cell holds at most 64 kB.** That only matters for content inside the entry. A larger file is uploaded, and the row stores its reference.
+* **A cell holds at most 64 kB.** That only matters for content inside the entry. A larger file is uploaded, and the row stores its reference. Which of the two a widget delivers is its **Storage type** setting: **File**, the default, uploads into the store and delivers the reference; **Buffer** keeps the content in the value and suits a small picture, such as a signature.
 * **Changing the type converts the values.** [`changeFieldType`](relational-database.md#previewtypechange-and-changefieldtype) from `file` to `files` turns each file into a list of one. From `files` to `file` it works where no row holds more than one file, and names the rows that do.
 * **Nobody deletes a file.** A file stays as long as a row points to it. Thirty days after the last row let go, the platform's nightly clean-up removes it. Until then a deleted row can come back, from an undo or a restored backup, and its file is still there. The clean-up starts out reporting only: an installation lets it remove with `HW_FILES_CLEANUP=remove`.
-* **A file your logic produced**, such as a downloaded document or a generated PDF, goes into the store with the `store` function of the `Files` class on the Media Server (a `path` on the file server, or `base64` content). It answers the entry to store.
+* **A file your logic produced**, such as a downloaded document or a generated PDF, goes into the store with [`Files.store`](files.md#store) on the Media Server (a `path` on the shared volume, or `base64` content). It answers the entry to store.
 
 On the workspace's own database a check on the column holds SQL to the same rules. On any other database both types are plain JSON columns.
 
 A `files` field is a list in one cell. Files that each need a caption, an author or an audit entry of their own belong in a table of their own, with a relation to the row they belong to.
+
+### Dates in a table
+
+A date travels in one of three forms, never as the text a person reads. Each has its own column type:
+
+| Form | Example | Type | Meaning |
+| ---- | ------- | ---- | ------- |
+| A calendar date | `2026-10-01` | `dateonly` | the same day everywhere |
+| An instant | `2026-10-01T06:30:00Z` | `date` | one moment, in UTC |
+| A time of day | `08:30:00` | `time` | a wall clock, no day |
+
+Forms, data grids, data lists and data tiles write these forms, and a read returns them unchanged. Widgets format a date in the viewer's own time zone and the App's language, so never format one in a flow for a widget. Where your logic makes text for people, [`fillTemplate`](relational-database.md#filltemplate) formats with an explicit `locale` and `timeZone`. See [Files, data and dates](../../../concepts/files-data-and-dates.md).
 
 ### `getTableSchema`
 
@@ -255,7 +272,9 @@ Returns an object containing schema details for each field, including `type`, `p
 
 ### `deleteTable`
 
-Deletes an entire table.
+Deletes an entire table. Its `onChange` registrations end, and the links of its many-to-many relations go with it. A relation another table has to this one ends there too, and the column that relation added stays in that table as a plain field.
+
+On the workspace's own database the removal is recorded in the data model. [`previewRemoval`](relational-database.md#previewremoval) tells beforehand what goes.
 
 {% hint style="danger" %}
 #### Irreversible action
@@ -265,11 +284,56 @@ This permanently deletes the table and all its data. You cannot undo this action
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the table to delete.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table to delete.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who made the change, for the data model's history.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
 Returns `true` when deletion succeeds. If the table has an audit log table, the function removes it as well.
+
+### `duplicateTable`
+
+Copies a table: a new table with the same fields and all of its rows, under a name you choose. The copy keeps no relations. The columns the relations added come along as plain fields.
+
+On the workspace's own database the copy is recorded in the data model.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table to copy.</td><td>string</td></tr><tr><td><code>newName</code></td><td></td><td>The name of the new table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who made the change, for the data model's history.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns the schema description of the new table.
+
+### `getPlatformTables`
+
+The tables of this database that the platform keeps itself, each with what it is: a table's [audit log](relational-database.md#audit-logging), and, on the workspace's own database, the [data model](relational-database.md#data-model)'s own record. You read them like any table, but the row and shape functions never change them. An audit log goes with its table.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns one entry per kept table, by its name.
+
+```json
+{
+  "ordersAuditLog": "the audit log of orders",
+  "hwDataModel": "the data model's record"
+}
+```
+
+### `generateFakeRelationalData`
+
+Creates a small demo dataset and fills it with random rows, so that you have related tables to read and chart before the real data arrives: `factories (fake)` (manufacturing sites), `sensors (fake)` (devices of a factory) and `measurements (fake)` (readings of a sensor). The `(fake)` in the name marks them as demo data.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns the demo tables, each with the number of rows written to it.
 
 ### `enforceUniqueField`
 
@@ -293,11 +357,11 @@ Returns `true` on success. Throws an error on failure and rolls back all changes
 
 The workspace's own database, `internal-postgres`, keeps its **data model**: every table made through Heisenware, with its fields, keys, audit log and relations, and a history of who changed what and when. `defineTable`, the relationship functions, `deleteTable`, `duplicateTable` and a statement through [`executeSql`](relational-database.md#executesql) that changes the structure record into it, and so does the [Database editor](../../../app-builder/database-editor.md), where the model is shown and shaped. The functions below work on the workspace's own database only; an external database answers with a refusal.
 
-{% hint style="info" %}
-Shape the tables of the workspace's own database in the Database editor (or let the assistant do it), not with a function that calls `defineTable`: such a function runs once and leaves no record of why. One that exists keeps working and fills the model as it runs.
+{% hint style="warning" %}
+Shape the tables of the workspace's own database in the Database editor's **Model** tab, or let the assistant do it. Do not build an executor that calls `defineTable` for it: the model then records the change with whatever `actorId` the executor passes, not with a login, so its history no longer says who decided the change. An executor that already exists keeps working and fills the model as it runs.
 {% endhint %}
 
-Most changes take an `options.actorId`: who made the change, for the model's history.
+Every function that shapes a table takes an `options.actorId`: who made the change, for the model's history. The Database editor and the assistant fill it with the member's login.
 
 ### `getDataModel`
 
@@ -350,7 +414,7 @@ Tells what removing would lose, without removing anything: a field (the rows hol
 
 ### `removeField` and `removeRelation`
 
-Remove a field, or a relation as the model writes it, of a table. The primary key stays as long as the table; the column of a relation goes with its relation.
+Remove a field, or a relation as the model writes it, of a table. The primary key stays as long as the table; the column of a relation goes with its relation. A unique key the field shares with other fields goes too. A one-to-many relation loses the column it added, a many-to-many its table of links; the rows of both tables stay.
 
 {% hint style="danger" %}
 #### Irreversible action
@@ -358,17 +422,29 @@ Remove a field, or a relation as the model writes it, of a table. The primary ke
 The values go with the field, the links with the relation. Call `previewRemoval` first.
 {% endhint %}
 
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The table. For <code>removeRelation</code>, the table that has the relation (the child).</td><td>string</td></tr><tr><td><code>field</code></td><td></td><td><code>removeField</code>: the field to remove.</td><td>string</td></tr><tr><td><code>relation</code></td><td></td><td><code>removeRelation</code>: the relation as the model writes it, such as <code>{ mandatorilyHasOne: 'customers' }</code> or <code>{ optionallyHasOne: 'users', role: 'owner' }</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who made the change, for the data model's history.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `true` when the field or the relation is removed.
+
 ### `previewTypeChange` and `changeFieldType`
 
 `previewTypeChange` tells what a new type does to a field's values: the values it cannot take, with their rows, and the values it changes on the way, with an example (`12.5` as an integer is `12`). `changeFieldType` changes the type, converting every value; it refuses while a value cannot be taken. Between `file` and `files` it converts the cells, see [Files in a table](relational-database.md#files-in-a-table).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The table.</td><td>string</td></tr><tr><td><code>field</code></td><td>The field.</td><td>string</td></tr><tr><td><code>type</code></td><td>The new type, one of the types of <code>defineTable</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The table.</td><td>string</td></tr><tr><td><code>field</code></td><td></td><td>The field.</td><td>string</td></tr><tr><td><code>type</code></td><td></td><td>The new type, one of the types of <code>defineTable</code>.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td><code>changeFieldType</code> only: who made the change, for the data model's history.</td><td>string</td></tr></tbody></table>
 
 ### `mergeDataModel`
 
-Brings a data model into the workspace's own database, adding only: a table, field or relation it lacks, an audit log. Nothing is removed or changed: a field the database holds with another type stays as it is and is reported as a conflict. This is how an App's bundle brings its tables when it is imported.
+Brings a data model into the workspace's own database, adding only: a table, field or relation it lacks, an audit log. Nothing is removed or changed: a field the database holds with another type stays as it is and is reported as a conflict, and so is what could not be added, such as a relation to a table neither side has, or a mandatory relation on a table that already holds rows. This is how an App's bundle brings its tables when it is imported.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>model</code></td><td></td><td>A data model as <a href="relational-database.md#getdatamodel"><code>getDataModel</code></a> answers it: <code>{ tables }</code>.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who made the change, for the data model's history.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
@@ -536,7 +612,7 @@ Works like `getTableData`, but returns nothing if you do not provide a filter. U
 
 #### Parameters
 
-The same as [`getTableData`](relational-database.md#gettabledata), but `filter` is effectively required.
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>filter</code></td><td>The conditions rows must meet, as for <a href="relational-database.md#gettabledata"><code>getTableData</code></a>. Without it nothing is returned.</td><td>array</td></tr><tr><td></td><td><code>fields</code></td><td>Selects specific columns.</td><td>array</td></tr><tr><td></td><td><code>limit</code></td><td>The maximum number of rows to return.</td><td>integer</td></tr><tr><td></td><td><code>offset</code></td><td>The number of rows to skip, useful for pagination.</td><td>integer</td></tr><tr><td></td><td><code>include</code></td><td>The relations to join besides the rows a row points to, which it always joins: child rows by their relation's name, such as <code>[orders]</code>. <code>false</code> joins nothing. See <a href="relational-database.md#related-rows-in-a-result">Related rows in a result</a>.</td><td>array or boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -590,6 +666,8 @@ Returns the number of rows.
 
 A table made by SQL names its relations from its foreign keys. A column named after the parent (`customer_id` for `customers`) is the plain relation: `order.customer`, `customer.orders`. Any other column acts as a role: `payer_id` gives `order.payer` and `customer.payerOrders`.
 
+A `fields` entry that reaches through a relation, such as `customer.name`, joins that relation alone, and `include` then counts for nothing.
+
 Tables and fields are always called what the database calls them, on the internal database too.
 
 ```yaml
@@ -604,13 +682,15 @@ include: [orders, payerOrders]
 
 ## Data manipulation
 
+Every write takes an `options.actorId`: who makes the change, for the table's [audit log](relational-database.md#audit-logging). In an App, feed it the [`$USER`](relational-database.md#referencing-the-current-user-with-usduser) variable. On a table that keeps an audit log, pass it with every write, `executeSql` included; a change made without one is logged with an empty actor.
+
 ### `addRow`
 
 Adds a single new row to a table.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An object containing the column values to insert.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>An object containing the column values to insert.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who makes the change, for the audit log.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -633,7 +713,7 @@ Adds multiple rows to a table in a single, efficient bulk operation.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td>An array of data objects to insert.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>An array of data objects to insert.</td><td>array</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who makes the change, for the audit log.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -659,7 +739,7 @@ Atomically updates or inserts a row. The function looks for an existing row and 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>data</code></td><td></td><td>The data object to upsert.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>uniqueKey</code></td><td>An optional object identifying the row by a business key instead of the ID. If omitted, any unique field present in <code>data</code> identifies the row automatically. Naming part of a composite unique key, <code>data</code> must carry its other fields.</td><td>object</td></tr><tr><td></td><td><code>actorId</code></td><td>Who makes the change, for the audit log.</td><td>string</td></tr></tbody></table>
 
 #### Examples
 
@@ -765,7 +845,7 @@ This permanently deletes the row. You cannot undo this action.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td>The primary key of the row to delete.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>table</code></td><td></td><td>The name of the table.</td><td>string</td></tr><tr><td><code>id</code></td><td></td><td>The primary key of the row to delete.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>actorId</code></td><td>Who makes the change, for the audit log.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -792,7 +872,7 @@ This permanently deletes all data in the table. You cannot undo this action.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table to clear.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>nullifyLinkedRecords</code></td><td>Sets foreign keys in other tables pointing to this table to <code>NULL</code> before clearing when <code>true</code>. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of the table to clear.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>nullifyLinkedRecords</code></td><td>Sets foreign keys in other tables pointing to this table to <code>NULL</code> before clearing when <code>true</code>. Default <code>false</code>.</td><td>boolean</td></tr><tr><td></td><td><code>actorId</code></td><td>Who makes the change, for the audit log.</td><td>string</td></tr></tbody></table>
 
 #### Example
 
@@ -819,7 +899,7 @@ Creates a one-to-many relationship where the child record can exist without a pa
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>posts</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional role in camelCase (such as <code>owner</code>; <code>Owner</code> is taken as <code>owner</code>) naming a second relationship to the same parent. Its column is <code>ownerId</code>, and a row carries the parent as <code>owner</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>posts</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>users</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional role in camelCase (such as <code>owner</code>; <code>Owner</code> is taken as <code>owner</code>) naming a second relationship to the same parent. Its column is <code>ownerId</code>, and a row carries the parent as <code>owner</code>.</td><td>string</td></tr><tr><td><code>options</code></td><td>Its <code>actorId</code> says who made the change, for the data model's history.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -831,7 +911,7 @@ Creates a one-to-many relationship where the child record cannot exist without a
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>employees</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>companies</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional role in camelCase (such as <code>manager</code>; <code>Manager</code> is taken as <code>manager</code>) naming a second relationship to the same parent. Its column is <code>managerId</code>, and a row carries the parent as <code>manager</code>.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The table that receives the foreign key (such as <code>employees</code>).</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The table being referenced (such as <code>companies</code>).</td><td>string</td></tr><tr><td><code>role</code></td><td>An optional role in camelCase (such as <code>manager</code>; <code>Manager</code> is taken as <code>manager</code>) naming a second relationship to the same parent. Its column is <code>managerId</code>, and a row carries the parent as <code>manager</code>.</td><td>string</td></tr><tr><td><code>options</code></td><td>Its <code>actorId</code> says who made the change, for the data model's history.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -843,7 +923,7 @@ Creates a many-to-many relationship between two tables. This automatically gener
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The first table in the relationship.</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The second table in the relationship.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>childTable</code></td><td>The first table in the relationship.</td><td>string</td></tr><tr><td><code>parentTable</code></td><td>The second table in the relationship.</td><td>string</td></tr><tr><td><code>options</code></td><td>Its <code>actorId</code> says who made the change, for the data model's history.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
@@ -1124,7 +1204,7 @@ editorId: 'u5s6e7r8-b5a6-4a3b-8c2d-1f2e3d4c5b6a'
 
 ## Audit logging
 
-The relational database connector (`RelationalDatabase`) features a built-in audit logging system that creates a secure, detailed, and queryable trail of all data changes. It tracks what changed, when, and who changed it. It automatically calculates the differences (diff) between old and new values for updates, and stores full snapshots for creations and deletions.
+A table can keep an **audit log**: a record of every change of a row, with who made it. An update is recorded as the difference between the old and the new values, a creation and a deletion as the whole row. Once the log is on, it stays on, and the platform alone writes it.
 
 On PostgreSQL, the internal database included, the database itself writes the log: every write is in it, whether it comes from a row function, from [`executeSql`](relational-database.md#executesql), or from another system writing to the table. On the other databases the connector writes the log for the writes of its own row functions.
 
@@ -1143,11 +1223,11 @@ total: number
 auditLog: true
 ```
 
-The database automatically creates a parallel table (such as `ordersAuditLog`) recording all CREATE, UPDATE, and DELETE actions on the main table.
+A table beside the table (such as `ordersAuditLog`) records every `CREATE`, `UPDATE` and `DELETE`. The log is one of the platform's own tables: you read it, with `getAuditLog` or the assistant's data tools, and the row and shape functions never write it. It goes with its table when the table is deleted. In the Database editor the table's panel offers **Keep an audit log**, and an icon on its card says that it does.
 
 ### Tracking the actor
 
-To record who made a change, all data manipulation functions and `executeSql` accept an optional `actorId` within their options. In an App, bind this to the authenticated user via the [`$USER` variable](relational-database.md#referencing-the-current-user-with-usduser) or their user ID. A change made without one is logged with `actorId` empty.
+To record who made a change, every write function and `executeSql` take an `actorId` in their options. In an App, feed it the [`$USER` variable](relational-database.md#referencing-the-current-user-with-usduser). On a table that keeps an audit log, pass it with every write: a change made without one is logged with `actorId` empty, and the log then says that something happened but not who did it.
 
 ```yaml
 # table
@@ -1286,6 +1366,62 @@ minAge: 30
 
 Returns the result of the query. For `SELECT` statements, this is an array of row objects.
 
+### `read`
+
+Reads with one SQL query and changes nothing. The database itself holds the query to reading, in a read-only transaction: a query must begin with `SELECT`, `WITH`, `VALUES` or `TABLE`, and a second statement, `INTO` and the locking clauses are refused before anything goes out. Placeholders work as in `executeSql`. This is what the assistant's data tools read a database with, and the right function for a read a flow must not be able to turn into a write.
+
+The answer names the columns once and gives each row as an array, in the order of the columns. Reads run on a pool of two connections of their own, so they never wait for the instance's other work. On the workspace's own database they connect with a login that may only select. Proven for PostgreSQL, MySQL and SQLite; the other dialects are refused.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>query</code></td><td></td><td>One SQL query in the database's dialect, beginning with <code>SELECT</code>, <code>WITH</code>, <code>VALUES</code> or <code>TABLE</code>. It may hold <code>{{placeholders}}</code>.</td><td>string</td></tr><tr><td><code>parameters</code></td><td></td><td>The values the placeholders name, bound into the query.</td><td>object</td></tr><tr><td><code>options</code></td><td><code>maxBytes</code></td><td>The size the rows of the answer may take. Default 1048576 (1 MB), at most 16777216 (16 MB).</td><td>integer</td></tr><tr><td></td><td><code>timeout</code></td><td>Milliseconds the whole read may take. Default 30000, at most 300000.</td><td>integer</td></tr><tr><td></td><td><code>timeZone</code></td><td>The time zone instants are written in, such as <code>Europe/Berlin</code>. Default <code>UTC</code>.</td><td>string</td></tr><tr><td></td><td><code>fileContent</code></td><td>Leaves the content of a file a row carries in the answer when <code>true</code>. Default <code>false</code>.</td><td>boolean</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# query
+SELECT machine, count(*) AS parts, max(ended) AS last FROM cycles WHERE ended > {{since}} GROUP BY machine
+# parameters
+since: '2026-11-01'
+# options
+timeZone: Europe/Berlin
+```
+
+#### Output
+
+Returns `{ columns, rows, rowsTotal, cut, ms, timeZone }`. The answer stops at `maxBytes`: then `cut` is `true`, `rowsTotal` holds the true number of rows, and `summary` sums up each column over all of them.
+
+Values come in their own forms: a number as a number, but a decimal or a big integer a number cannot hold exactly as text; an instant with its offset; a date as `2026-11-03`, a time of day as `15:11:00`; JSON as JSON; bytes as the text `[binary, 1234 bytes]`. A file a row carries as content comes without it, unless `fileContent` is on: a read answers what a row says, never a file.
+
+```json
+{
+  "columns": ["machine", "parts", "last"],
+  "rows": [
+    ["A", 612, "2026-11-03T15:11:00+01:00"],
+    ["B", 1408, "2026-11-03T15:09:42+01:00"]
+  ],
+  "rowsTotal": 2,
+  "cut": false
+}
+```
+
+### `describe`
+
+Describes the database for whoever is about to query it, in two levels, so that a large schema does not come at once. Every look goes through `read`: the same login, the same read-only transaction, the same forms of values.
+
+* **Without a table**: every table and view the login may read, with its row estimate and its comment.
+* **With a table**: its columns with type, nullability, key, what each references and its comment, which columns of other tables reference it, the values of a column that has at most 20 of them, and the first and the last value of each time column.
+
+Names come as the database has them. Where a name cannot be written bare in a query, because this dialect needs quotes or the table lies outside the default schema, `sql` carries the form to write.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>table</code></td><td>The table or view to describe, by its name or its <code>sql</code> form. Without it the tables are listed.</td><td>string</td></tr><tr><td></td><td><code>timeout</code></td><td>Milliseconds the whole description may take. Default 30000, at most 300000.</td><td>integer</td></tr><tr><td></td><td><code>timeZone</code></td><td>The time zone instants are written in. Default <code>UTC</code>.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Without a table, `{ dialect, database, tables, ms }`. With one, `{ table, columns, referencedBy, timeZone, ms }`. What did not finish within the time limit is named in `notRead`.
+
 ### `fillTemplate`
 
 Fills a template string with data from the first record matching a given condition per table. Placeholders use double curly braces such as `{{table.field}}` or nested keys such as `{{table.jsonField.nestedKey}}`. With a `locale`, dates print for people: a date in the date style, a time of day in the time style, a date with a time in the date and time style in the given `timeZone`. Unresolved placeholders are removed from the result.
@@ -1316,6 +1452,53 @@ Result (example): "Hello Jane Doe! Your order #98765 will ship on 18 August 2025
 
 Returns the template string with all resolved placeholders.
 
+## Import and export
+
+A dump is the whole PostgreSQL database, or the tables you name, as a plain SQL file on the shared volume. The [Database editor](../../../app-builder/database-editor.md) does the same with **Import** and **Export** at the head of the Model tab. These two functions are for PostgreSQL.
+
+### `dumpDatabase`
+
+Writes the database, or selected tables, to an SQL file. Without `tables` the dump holds every table, the audit logs and the data model's record among them.
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>filePath</code></td><td>Where the SQL file is written. Defaults to a file under <code>/shared/runtime-files</code>.</td><td>string</td></tr><tr><td></td><td><code>tables</code></td><td>The tables to dump. Without it the whole database.</td><td>array</td></tr></tbody></table>
+
+#### Example
+
+```yaml
+# options
+filePath: /shared/runtime-files/my-backup.sql
+tables:
+  - orders
+```
+
+#### Output
+
+Returns what was written: `{ path, database, byteSize, createdAt }`.
+
+### `importDatabase`
+
+Reads an SQL dump back into the database.
+
+{% hint style="danger" %}
+#### Irreversible action
+
+This drops everything the database holds before it imports the dump. You cannot undo this action.
+{% endhint %}
+
+#### Parameters
+
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>filePath</code></td><td>The path of the SQL dump, as <code>dumpDatabase</code> wrote it.</td><td>string</td></tr></tbody></table>
+
+#### Output
+
+Returns `{ path, database, importedAt }`.
+
+{% hint style="info" %}
+A table that comes in with an import is not in the [data model](relational-database.md#data-model) yet. The Model tab marks it as a difference, and **Adopt** takes it in.
+{% endhint %}
+
 ## Change notifications
 
 ### `onChange`
@@ -1334,7 +1517,9 @@ The callback receives the affected row as an object, as it is now; a deleted row
 
 #### Output
 
-Returns the registration. Deleting the table ends it.
+Returns `true` once the executor is listening. The rows arrive on the event outputs. Deleting the table ends the subscription.
+
+Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The subscription pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** on the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
 
 ## Removed functions
 

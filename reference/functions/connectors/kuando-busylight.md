@@ -2,7 +2,7 @@
 
 The Kuando Busylight connector controls Kuando Busylight status indicators. It changes the light's color and brightness, makes it blink or pulse, and plays the device's built-in sounds.
 
-This connector requires [instance creation](README.md#instance-creation) before you can control a physical unit, though it includes a static utility for device scanning. Because a Busylight is a physical USB device on your premises, this function typically executes inside an [Agent](../../../concepts/agents-and-where-code-runs.md) installed on the local computer where the light is connected (see the [local connection scenario](README.md#local-connection-via-agent)).
+This connector requires [instance creation](README.md#instance-creation) before you can control a physical unit, though it finds the connected devices without one. A Busylight hangs on a USB port on your premises, so these functions run on an [agent](../../../concepts/agents-and-where-code-runs.md) installed on the computer the light is plugged into (see the [local connection](README.md#local-connection-via-an-agent)).
 
 ## Device management
 
@@ -16,11 +16,11 @@ None.
 
 #### Output
 
-Returns an array of device objects containing details about each connected Busylight.
+Returns one entry per connected Busylight, in the order in which `deviceIndex` counts them. Each entry is the USB descriptor of the device, with keys such as `path`, `product`, `manufacturer` and `serialNumber`.
 
 ### `create`
 
-Creates an instance to control a specific Kuando Busylight and establishes a connection to it. To control multiple lights connected to the same computer, create one instance per device using its respective index.
+Creates an instance to control a specific Kuando Busylight and opens the connection to it. The connection keeps itself alive until the instance is deleted. To control several lights connected to the same computer, create one instance per device, each with its own index.
 
 #### Parameters
 
@@ -37,6 +37,10 @@ Creates an instance to control a specific Kuando Busylight and establishes a con
 
 Returns the name of the created instance.
 
+{% hint style="warning" %}
+An index with no device behind it still creates the instance. Light and sound commands are then accepted and nothing happens. `getName` tells you whether a device was found.
+{% endhint %}
+
 ### `getName`
 
 Retrieves the model name of the connected device.
@@ -47,7 +51,7 @@ None.
 
 #### Output
 
-Returns the device model name as a string (such as `Busylight Omega model 2`).
+Returns the model name as a string: `Busylight Alpha model`, `Busylight Alpha model 2`, `Busylight UC model`, `Busylight Omega model` or `Busylight Omega model 2`. Returns an empty string when no device was found at the instance's index.
 
 ### `getTones`
 
@@ -59,11 +63,11 @@ None.
 
 #### Output
 
-Returns an array of strings containing the names of all playable tones.
+Returns the playable tone names as an array of strings, in the device's own order: eleven tones on most models, twelve on the Busylight Omega model 2. Empty when no device was found.
 
 ### `delete`
 
-Removes the instance and disconnects from the device.
+Removes the instance: switches the light and the tone off, stops the keep-alive and releases the USB device.
 
 {% hint style="danger" %}
 #### Irreversible action
@@ -98,7 +102,7 @@ Turns on the light with a solid, continuous color.
 
 #### Output
 
-Returns the raw result of the underlying device driver. The value is not meant for further processing.
+Returns `true` once the color is sent to the device, `false` when the color cannot be read.
 
 ### `pulse`
 
@@ -117,7 +121,7 @@ orange
 
 #### Output
 
-Returns the raw result of the underlying device driver. The value is not meant for further processing.
+Returns `true` once the pulse is sent to the device, `false` when the color cannot be read.
 
 ### `blink`
 
@@ -140,15 +144,15 @@ red
 
 #### Output
 
-Returns the raw result of the underlying device driver. The value is not meant for further processing.
+Returns `true` once the blink pattern is sent to the device, `false` when the color cannot be read.
 
 ### `setLightIntensity`
 
-Changes the brightness of the light. The new intensity applies immediately to the active light state and overrides the default for subsequent commands.
+Changes the brightness of the light. The device knows no brightness of its own: the connector scales the color it sends. The new intensity takes effect at once, with the color last set, and holds for every command that follows.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The light intensity measured in percent (0 to 100).</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The light intensity in percent. Values below 0 and above 100 are clamped.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -163,11 +167,11 @@ Returns nothing.
 
 ### `playTone`
 
-Plays one of the device's built-in sounds once.
+Plays one of the device's built-in sounds once. The connector stops the tone when it has run its course.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the tone to play, matching an item from the list returned by <code>getTones</code>.</td><td>string</td></tr><tr><td><code>volume</code></td><td>Optional volume level (0 to 10). If provided, this value also sets the new default volume. If omitted, the connector uses the last configured volume. Default 3.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The name of the tone to play, matching an item from the list returned by <code>getTones</code>.</td><td>string</td></tr><tr><td><code>volume</code></td><td>Optional volume level. Given, it becomes the volume for the tones that follow as well. Omitted, the instance's current volume applies, which starts at 3.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -178,15 +182,15 @@ Plays one of the device's built-in sounds once.
 
 #### Output
 
-Returns the raw result of the underlying device driver. The value is not meant for further processing.
+Returns the tone's length in milliseconds, or `-1` when the device does not know that tone name.
 
 ### `setToneVolume`
 
-Sets the default volume for all sounds played by the device.
+Sets the volume for the sounds played after it.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The target volume level (0 to 10).</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>value</code></td><td>The volume level. The device has seven steps, <code>1</code> to <code>7</code>; <code>0</code> plays the tone inaudibly. Higher values wrap around (<code>8</code> acts as <code>0</code>, <code>9</code> as <code>1</code>).</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -201,7 +205,7 @@ Returns `true` once the volume is set.
 
 ### `alert`
 
-Triggers a pre-configured alert sequence, combining a flashing red light and a tone to grab attention. The alert turns itself off automatically after a few seconds.
+Plays a fixed alert: the light blinks red and the device rings with "Telephone Pick Me Up". Both stop by themselves after 4.4 seconds. The alert keeps its own volume and ignores `setToneVolume`.
 
 #### Parameters
 
@@ -221,4 +225,4 @@ None.
 
 #### Output
 
-Returns the raw result of the underlying device driver. The value is not meant for further processing.
+Returns nothing.

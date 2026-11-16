@@ -67,9 +67,10 @@ async function login (page, env) {
     throw new Error('This storyboard logs in; set HW_ACCOUNT, HW_EMAIL and HW_PASSWORD in scripts/media/.env (see .env.example).')
   }
   await page.goto(`${env.baseUrl}/manager/authentication/sign-in`, { waitUntil: 'networkidle' })
-  await page.getByLabel('Account Name').fill(env.account)
-  await page.getByLabel('Email').fill(env.email)
-  await page.getByLabel('Password').fill(env.password)
+  // the front door's fields by id (their labels changed with the v93 sign-in)
+  await page.locator('#account').fill(env.account)
+  await page.locator('#email').fill(env.email)
+  await page.locator('#password').fill(env.password)
   await page.getByRole('button', { name: 'Log in', exact: true }).click()
   await page.waitForURL(url => !url.pathname.includes('/authentication/'), { timeout: 30000 })
   await page.waitForLoadState('networkidle')

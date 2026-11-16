@@ -1,18 +1,73 @@
+---
+description: >-
+  Modifier, filter, recorder and error handler: steps on an output that reshape, gate, record and catch, and how to branch with them.
+---
+
 # Extensions, branching and errors
 
-Extension nodes process data directly within a flow without requiring a full executor. They attach to a function output, to one of a handler's [values](executors-and-instances.md#callbacks), or to another extension node to act on the data passing through. This lets you build processing pipelines by chaining nodes together, such as connecting a filter to a modifier, or a modifier to another modifier.
+An **extension** is a step attached to an output that works on its value. Extensions need no executor of their own. They attach to a return, to an [event output](backend-events.md) or to another extension, and so chain into a pipeline: filter first, then reshape, then record.
 
-Except for recorders, extension nodes operate as their own output. You can wire them to function inputs, triggers, or widgets exactly like a standard function output.
+Except for the recorder, an extension is an output in its own right. Wire it to inputs and triggers, link it to widgets, or publish it into a [variable](variables-and-endpoints.md), exactly like the output it sits on.
 
-To branch a single data source into multiple concurrent paths, attach multiple extension nodes to the same output in parallel.
+## The four kinds
 
-## Types
+| Extension | What it does |
+| --- | --- |
+| [**Modifier**](../app-builder/flowboard/modifier.md) | Reshapes the value with a JavaScript or JSONata expression. |
+| [**Filter**](../app-builder/flowboard/filter.md) | Lets the value through or stops the branch. This is the platform's "if". |
+| [**Recorder**](../app-builder/flowboard/recorder.md) | Keeps the value's history in the timeseries database. |
+| [**Error handler**](../app-builder/flowboard/error-handler.md) | Receives the error when the call fails. |
 
-<table><thead><tr><th width="137.0369873046875">Type</th><th>What it does</th></tr></thead><tbody><tr><td><a href="../app-builder/flowboard/modifier.md"><strong>Modifier</strong></a></td><td>Transforms the structure or value of the data, using JSONata or a JavaScript expression.</td></tr><tr><td><a href="../app-builder/flowboard/filter.md"><strong>Filter</strong></a></td><td>Acts as a conditional gate: halts the flow or branches it based on a JavaScript condition.</td></tr><tr><td><a href="../app-builder/flowboard/recorder.md"><strong>Recorder</strong></a></td><td>Stores the output as timeseries data in the internal InfluxDB database.</td></tr><tr><td><a href="../app-builder/flowboard/error-handler.md"><strong>Error handler</strong></a></td><td>Opens a separate output that activates only when the parent function fails, enabling dedicated error logic. You can only attach an error handler directly to a function, not to other extension nodes.</td></tr></tbody></table>
+* **Add**: click **+** on an output, an event output or an extension and choose the kind. Several extensions on the same output work side by side, each starting its own branch.
+* **Chain**: add an extension to an extension. An error handler sits directly on an output, never behind another extension.
+* **Try**: an extension shows its last result below it. Click the icon of a modifier or filter to evaluate it again while you build.
+* **Delete**: right-click the extension and choose **Delete**.
 
-## Working with extension nodes
+## Expressions
 
-* **Add**: Click the + icon on a function's output, on an event output, or on an existing extension node and select the desired type. You can add multiple parallel extension nodes to the same output.
-* **Chain**: Add an extension node to the output of another extension node to create a multi-step pipeline (e.g., filter data, then modify it).
-* **Test**: Extension nodes show their last result directly below them. Click the icon of a modifier or filter to evaluate it manually during development.
-* **Delete**: Right-click an extension node and select Delete.
+A modifier or a filter holds one **expression** that works on `x`, the value that arrives:
+
+```javascript
+x.temperature > 80
+```
+
+* It is one expression, not a script. For several steps, wrap them in a function that is called at once: `(() => { const rows = x.filter(...); return rows.map(...) })()`.
+* Variables are available by name: `x.machine === $machine`.
+* Luxon's `DateTime`, `Duration` and `Interval` are available for dates, beside JavaScript's own `Date`, `Intl`, `JSON` and `Math`.
+* Write expressions to be read: line breaks, indentation and `//` comments are free.
+* JSONata is the alternative language for pure reshaping.
+
+## What a filter passes on
+
+A filter's value is what it lets through. When the expression is true, everything behind the filter receives the value that arrived. When it is false, nothing behind it receives anything, and the filter keeps the last value it let through.
+
+For a true or false that must also turn false again, such as a widget's `visible`, use a modifier with the same expression beside the filter.
+
+## Branching
+
+* **If and else**: two filters on the same output, one with the condition, one with its opposite. Each feeds its branch.
+* **Several cases**: a modifier that computes the case, and one filter per case behind it.
+
+Nothing else is needed.
+
+{% hint style="warning" %}
+A branch that a filter can stop must not feed an **all updated** join: the join would wait for it forever. See [When streams meet](when-streams-meet.md#joining-branches-of-one-impulse).
+{% endhint %}
+
+## Errors
+
+When a call fails:
+
+* the executor's [status](executors-and-instances.md#status) turns red and shows the message;
+* every error handler on its return receives `{ message, cause, originalPayload }`;
+* the executor produces **no output**. Nothing behind it runs, and the branch ends there.
+
+So an error does not travel down the flow as a strange value. It either reaches an error handler or stops.
+
+* **Prevent** where you can: give inputs defaults, or put a filter in front, where a missing value would make the function fail.
+* **Report** where a person must know: link the error handler to a toast. See [Pages and App actions](pages-and-app-actions.md#on-a-value).
+* **Retry** with a `Timer`, not by wiring an output back to its start.
+
+Inside a [loop](when-streams-meet.md#loops-once-per-element) a failing element becomes its error message in the list of results, and the loop goes on. A failure inside a [subflow](subflows.md) that no error handler took there fails the call, and the caller's error handler receives it.
+
+A released App's failures are written to its log, each with the executor and the message.

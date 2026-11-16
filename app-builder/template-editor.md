@@ -1,122 +1,77 @@
 # Template editor
 
-The Template editor gives you a visual workflow for designing dynamic documents. You build a template by placing dynamic placeholders onto an uploaded PDF background.
+The Template editor is where you draw a PDF template: a page layout with named placeholders that your logic fills with values. A delivery note, an acceptance report, a label, a shift protocol. Open it with the template icon in the App Builder's top bar. <img src="../.gitbook/assets/image (86).png" alt="" data-size="line">
 
-{% hint style="info" %}
-The editor works exclusively with the [PDF Templates class](../reference/functions/utilities/pdf-templates.md). Each template you create becomes an instance of this class, carrying the `fillTemplate` function that populates your document with data.
+Each template you draw becomes an instance of the `PdfTemplate` class, under **Utilities** > **PDF Templates** in the [Functions explorer](explorers/functions.md). From a flow you use one function on it, [`fillTemplate`](../reference/functions/utilities/pdf-templates.md).
 
-To see the complete process in action, follow our [step-by-step guide](../labs/automating-pdf-reports.md).
-{% endhint %}
+## Make a template
 
-## Creating a PDF template
+The panel on the left lists the templates of the workspace. **Add new template** asks for:
 
-{% stepper %}
-{% step %}
-#### Open the editor
+* **Template Name**: the instance's name, and what you address from the Flowboard.
+* **Template Type**: `PDF`.
+* **Page Format**: `A4`, `A5` or `Letter`.
 
-Open the Template editor from the top bar. <img src="../.gitbook/assets/image (86).png" alt="" data-size="line">
-{% endstep %}
+**Create template** makes it, and the editor opens on an empty page of that size.
 
-{% step %}
-#### Define properties
+<figure><img src="../.gitbook/assets/create_pdf_template_looped.gif" alt="Creating a PDF template" width="563"><figcaption></figcaption></figure>
 
-Enter a unique name for your template and choose a standard page size (`A4`, `A5`, or `Letter`).
-{% endstep %}
+## Pages and backgrounds
 
-{% step %}
-#### Generate instance
+The toolbar above the canvas holds **Add page** and **Delete last page**. A template is as long as its pages, one below the other.
 
-Click **Create Template**. Heisenware creates the corresponding instance in the Functions explorer.
-{% endstep %}
-{% endstepper %}
+To build on an existing document, upload it to the [Files explorer](explorers/files.md) and drag it from there onto a page:
 
-<figure><img src="../.gitbook/assets/create_pdf_template_looped.gif" alt="" width="563"><figcaption></figcaption></figure>
+* **a PDF** becomes the page's background, in full page size. Select it to set **Selected Page**, which is the page of the source document to show, and **Opacity**. One multi-page PDF therefore serves every page of your template.
+* **a PNG or JPEG** becomes a picture of its own at the point you drop it, which you then move and resize.
 
-## Designing the layout
-
-Once your template is created, set up the visual background and place your dynamic fields.
-
-### Managing pages and backgrounds
-
-To use an existing document as a layout, first upload its pages as separate PDF files to the [Files explorer](explorers/files.md).
-
-{% stepper %}
-{% step %}
-#### Add blank pages
-
-Add a blank page for each page of your source document using the Add Page icon (<i class="fa-circle-plus">:circle-plus:</i>).
-{% endstep %}
-
-{% step %}
-#### Set background
-
-Drag each page file from the Files explorer onto the corresponding blank page. This sets the file as a static background.
-{% endstep %}
-
-{% step %}
-#### Organize
-
-Right-click a page to open the context menu, where you move pages up or down or manage the layering (**Bring to Front** / **Send to Back**).
-{% endstep %}
-{% endstepper %}
+To replace a background, select it and press Delete, then drop the new file.
 
 {% hint style="danger" %}
-#### Deleting a page is permanent
+#### Deleting a page is for good
 
-It removes the page, its background, and all placeholders on it. You cannot currently replace the background of an existing page.
+**Delete last page** takes the page, its background and every placeholder on it. There is no undo.
 {% endhint %}
 
-### Placing and configuring placeholders
+## Placeholders
 
-Placeholders are the dynamic slots where your logic inserts data.
+A placeholder is a box that your logic fills at run time.
 
-{% stepper %}
-{% step %}
-#### Add placeholder
-
-Click the text or image placeholder icon in the toolbar (<i class="fa-text-size">:text-size:</i>, <i class="fa-image">:image:</i>), then click the page to place it.
-{% endstep %}
-
-{% step %}
-#### Assign variable
-
-Select the placeholder and click the gear icon. Provide a variable name (e.g., `firstName`).
-{% endstep %}
-
-{% step %}
-#### Style
-
-Adjust the font, size, or colors for text, or resize the bounding boxes to define the final content area.
-{% endstep %}
-{% endstepper %}
+* **Add Text Variable** and **Add Image Variable** in the toolbar place one: pick the tool, then click the page.
+* Select a placeholder and click its gear (**Settings**) to give it a **Variable Name**. For text there are also the font, its size, the line height, the text colour and a background colour.
+* Resize the box to say how much room the value has.
 
 {% hint style="info" %}
-#### Data matching
+#### The name is the contract
 
-The variable name you enter (e.g., `invoiceNumber`) must exactly match the key in the data object you provide in your backend logic later. The editor adds the `<>` tags automatically.
+The variable name is the key your logic hands over: a placeholder named `invoiceNumber` takes the `invoiceNumber` of the object you pass to `fillTemplate`. Dots nest, so `customer.city` reaches into a nested object.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/Useing_template.png" alt="" width="563"><figcaption></figcaption></figure>
+**Auto generate variables** appears in the toolbar when you select a PDF background that carries form fields. It places a text variable for every form field of that page, at its place and in its size, named after the field. A fillable PDF becomes a template in one click.
 
-## Populating the template
+<figure><img src="../.gitbook/assets/Useing_template.png" alt="A template with text placeholders over an uploaded PDF background" width="563"><figcaption></figcaption></figure>
 
-To bring your PDF to life, use the [`fillTemplate`](../reference/functions/utilities/pdf-templates.md#filltemplate) function in an executor on your Flowboard. It takes a data object (e.g., a JSON object from a database), merges the values into your placeholders, and outputs the finished PDF. For detailed input and output specifications, see the [PDF Templates class documentation](../reference/functions/utilities/pdf-templates.md).
+## Moving and arranging
 
-To see these concepts in action, follow our step-by-step guide on [automating PDF reports](../labs/automating-pdf-reports.md).
+* Drag an element to move it, use the handles to resize, the arrow keys to nudge it (40 pixels, or 4 with Shift).
+* **Ctrl+C** and **Ctrl+V** copy an element, **Delete** removes it, **Escape** drops the selection.
+* Right-click an element for its stacking: **Bring to front**, **Send to back**, **Move up**, **Move down**. A placeholder has to lie above the background to be seen.
+* **Scaling** in the toolbar zooms the canvas, between 10 and 200 %. Its **auto-scale** fits the page into the panel, and the checkbox next to it keeps it fitted while you work.
+
+## Filling it from a flow
+
+Place an executor for the template's `fillTemplate` on the [Flowboard](flowboard/README.md): **Utilities** > **PDF Templates** > your template > `fillTemplate`. Wire one object into `values`, with a key per placeholder, and trigger it once when the document is due. The executor shows the rendered page on its output, so you see the result while you build.
+
+From there the document travels on as a value: as the attachment of an [email](../reference/functions/connectors/email.md), into a [media view](../reference/widgets/display/media-view.md), or into the workspace's files so a user can download it.
+
+See [PDF templates](../reference/functions/utilities/pdf-templates.md) for the function, and [Automating PDF reports](../labs/automating-pdf-reports.md) for the whole way.
 
 ## Deleting a template
 
-To permanently remove a PDF template and its instance:
-
-1. Open the [Functions explorer](explorers/functions.md).
-2. Open the PDF Templates class.
-3. Right-click the specific template instance.
-4. Select **Remove**.
+The trash icon next to a template's name in the left panel removes it, after a question. The pencil renames it.
 
 {% hint style="danger" %}
-#### This action is irreversible
-
-Deleting an instance removes it completely. Any executor on your Flowboard that uses this template will break.
+Removing a template removes its instance. Every executor on the Flowboard that calls it stops working, so check the Functions explorer for who uses it first.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/deleting_template_looped.gif" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/deleting_template_looped.gif" alt="Removing a PDF template"><figcaption></figcaption></figure>

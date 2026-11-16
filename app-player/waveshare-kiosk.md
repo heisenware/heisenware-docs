@@ -1,116 +1,122 @@
 # Kiosk on a Waveshare HMI
 
-The Waveshare Industrial HMI is an all-in-one touch display designed for industrial environments. You can use it as a dedicated terminal to run your Heisenware [Apps](README.md), for example for worker guidance.
+The Waveshare Industrial HMI is an all-in-one touch display for industrial environments: a Raspberry Pi 5 behind a DSI panel. It makes a good terminal for an [App](README.md) at a machine, for worker guidance or for counting.
 
-This guide explains how to resolve display issues on newer Debian versions and how to configure a resilient 24/7 kiosk terminal.
+This page is field experience: how to get the built-in display working on Debian 13, and how to turn the device into a kiosk that runs for months without a keyboard.
+
+{% hint style="info" %}
+#### There is a script
+
+Heisenware has a provisioning script, `setup-kiosk.sh` with a `kiosk.conf`, that does the whole kiosk part below in one pass: host name, Wi-Fi, time zone, autologin, screen blanking, the kiosk script and the autostart. Ask support for it. The steps below are what it does, and what to fall back on when something goes wrong.
+{% endhint %}
 
 ## Display fix for Debian 13 (Trixie)
 
-If you install or upgrade to Debian 13 (Trixie) 64-bit on a Raspberry Pi 5 inside a Waveshare Industrial HMI enclosure, the built-in screen and touch interface might fail to initialize during boot. The internal display remains blank while the external HDMI ports continue to output a signal.
+If you install or upgrade to Debian 13 (Trixie) 64-bit on a Raspberry Pi 5 inside a Waveshare Industrial HMI enclosure, the built-in screen and touch interface may fail to initialize during boot. The internal display stays blank while the external HDMI ports keep a signal.
 
-This happens because the newer kernel and Wayland graphics stack in Trixie do not automatically detect the internal MIPI DSI connection without a defined hardware overlay in the boot configuration.
+The newer kernel and Wayland stack in Trixie do not detect the internal MIPI DSI connection without a hardware overlay in the boot configuration.
 
 ### Prerequisites
 
-Ensure you have:
-
 * A Raspberry Pi 5 mounted in the Waveshare HMI enclosure.
-* An external HDMI monitor and a keyboard to complete the configuration.
-* Root or `sudo` access to the device.
+* An external HDMI monitor and a keyboard, to do the configuration.
+* Root or `sudo` access on the device.
 
 ### Configure the DSI overlay
 
-The Waveshare display connects to the Raspberry Pi through the internal DSI port. To activate the screen, touch digitizer, and front-facing camera, add the proprietary device tree overlays (`dtoverlay`) to the boot configuration file.
+The display hangs on the internal DSI port. To bring up the screen, the touch digitizer and the front camera, add the vendor's device tree overlays (`dtoverlay`) to the boot configuration.
 
-#### Step 1: Access the boot configuration
+#### Step 1: Open the boot configuration
 
-Connect an external HDMI monitor and boot the device. Open a terminal and edit the firmware configuration file:
+Connect the HDMI monitor, boot the device, open a terminal and edit the firmware configuration:
 
 ```bash
 sudo nano /boot/firmware/config.txt
 ```
 
 {% hint style="info" %}
-#### Legacy configuration path
+#### Older path
 
-Older versions of Raspberry Pi OS located this file at `/boot/config.txt`. Debian Bookworm and Trixie store it strictly in the `/boot/firmware/` directory.
+Older versions of Raspberry Pi OS kept this file at `/boot/config.txt`. Debian Bookworm and Trixie keep it in `/boot/firmware/` only.
 {% endhint %}
 
-#### Step 2: Add the Waveshare overlays
+#### Step 2: Add the overlay for your panel
 
-Scroll to the bottom of the `config.txt` file and append the specific overlay that matches your screen size.
+Append the line that matches your screen size at the end of the file.
 
 For the 8.0-inch display:
 
 ```ini
-# Enable Waveshare 8-inch DSI Panel
 dtoverlay=vc4-kms-dsi-waveshare-panel,8_0_inch,dsi0
 ```
 
 For the 10.1-inch display:
 
 ```ini
-# Enable Waveshare 10.1-inch DSI Panel
 dtoverlay=vc4-kms-dsi-waveshare-panel,10_1_inch,dsi0
 ```
 
 #### Step 3: Enable the internal camera (optional)
 
-If your HMI unit features a built-in 5MP front camera, add the following line directly below your display overlay:
+If your unit has the built-in 5 MP front camera, add this line directly below the display overlay:
 
 ```ini
-# Enable built-in front camera
 dtoverlay=ov5647
 ```
 
 #### Step 4: Save and reboot
 
-Save your changes (`Ctrl+O`, `Enter`) and exit the nano editor (`Ctrl+X`). Reboot the system to apply the new kernel settings:
+Save (`Ctrl+O`, `Enter`), leave nano (`Ctrl+X`) and reboot:
 
 ```bash
 sudo reboot
 ```
 
-### Troubleshoot the display
+### When the screen stays dark
 
-If the screen does not turn on after a reboot, verify that the Trixie image includes the necessary compiled overlay file by running:
+Check that the Trixie image carries the compiled overlay:
 
 ```bash
 ls /boot/firmware/overlays/vc4-kms-dsi-waveshare-panel.dtbo
 ```
 
-If the terminal outputs a "No such file or directory" error, download the `.dtbo` file manually from the Waveshare GitHub repository, place it in the `/boot/firmware/overlays/` directory, and reboot the system.
+On "No such file or directory", download the `.dtbo` from the Waveshare GitHub repository, put it in `/boot/firmware/overlays/` and reboot.
 
 ## Kiosk setup
 
-Configure your Industrial HMI All-in-one Touch Display (featuring a 10-point touch screen and Wayland display server) to run a resilient, 24/7 fullscreen Progressive Web App (PWA). This setup ensures persistent local storage, hides the mouse cursor for touch optimization, and disables system power-saving features.
+A kiosk shows one App full screen, keeps its local storage, hides the cursor, never blanks, and comes back by itself. Five steps, on a device with a 10-point touch screen and a Wayland display server.
 
-### Phase 1: Configure system and power settings
+### Phase 1: System and power
 
-Configure the operating system to log in automatically and prevent the display from turning off.
-
-1.  **Enable desktop autologin and disable screen blanking**: Open the system configuration tool:
+1.  **Autologin and no screen blanking**:
 
     ```bash
     sudo raspi-config
     ```
 
-    * Navigate to **System options** > **Boot / auto login** > **Desktop autologin**.
-    * Navigate to **Display options** > **Screen blanking** > **No**.
-    * Exit the tool without rebooting.
-2.  **Disable hardware console blanking**: Prevent the Linux kernel from turning off the display output by editing the command-line configuration:
+    * **System options** > **Boot / auto login** > **Desktop autologin**.
+    * **Display options** > **Screen blanking** > **No**.
+    * Leave the tool without rebooting.
+
+    Non-interactively, which is what a fleet wants:
+
+    ```bash
+    sudo raspi-config nonint do_boot_behaviour B4
+    sudo raspi-config nonint do_blanking 1
+    ```
+2.  **Stop the kernel blanking the console**:
 
     ```bash
     sudo nano /boot/firmware/cmdline.txt
     ```
 
-    Append a single space followed by `consoleblank=0` to the very end of the existing line of text. Do not create a new line. Save your changes (`Ctrl+O`, `Enter`) and exit (`Ctrl+X`).
+    Append a space and `consoleblank=0` to the end of the existing line. Do not start a new line. Save (`Ctrl+O`, `Enter`) and leave (`Ctrl+X`).
 
-### Phase 2: Optimize the touch interface
+### Phase 2: Hide the cursor
 
-Wayland ignores legacy X11 cursor utilities. To hide the mouse cursor for a touch-only user interface, install a transparent cursor theme.
+Wayland ignores the old X11 cursor utilities. Install a transparent cursor theme instead.
 
-1.  **Download and install the theme**:
+1.  **Install the theme**:
 
     ```bash
     wget "https://github.com/ebe-forks/xcursor-transparent-theme/archive/refs/heads/master.zip"
@@ -119,99 +125,147 @@ Wayland ignores legacy X11 cursor utilities. To hide the mouse cursor for a touc
     mv xcursor-transparent-theme-master/xcursor-transparent ~/.local/share/icons/
     rm -rf master.zip xcursor-transparent-theme-master
     ```
-2.  **Set the theme as default**:
+2.  **Make it the default**:
 
     ```bash
     mkdir -p ~/.local/share/icons/default
     nano ~/.local/share/icons/default/index.theme
     ```
 
-    Add the following lines, then save and exit:
+    Put these lines in, save and leave:
 
     ```ini
     [Icon Theme]
     Inherits=xcursor-transparent
     ```
-3.  **Force Wayland compositor recognition**:
+3.  **Tell the compositor**:
 
     ```bash
     mkdir -p ~/.config/labwc
     echo "XCURSOR_THEME=xcursor-transparent" >> ~/.config/labwc/environment
     ```
 
-    <div data-gb-custom-block data-tag="hint" data-style="info" class="hint hint-info"><h4>Legacy desktop environments</h4><p>If you run older Bookworm builds that use Wayfire, also execute:</p><pre class="language-bash"><code class="lang-bash">echo "export XCURSOR_THEME=xcursor-transparent" >> ~/.profile
+    <div data-gb-custom-block data-tag="hint" data-style="info" class="hint hint-info"><h4>Older desktops</h4><p>On older Bookworm builds, which use Wayfire, also run:</p><pre class="language-bash"><code class="lang-bash">echo "export XCURSOR_THEME=xcursor-transparent" >> ~/.profile
     </code></pre></div>
 
-### Phase 3: Create the self-healing kiosk script
+### Phase 3: The kiosk script
 
-This script launches the browser, prevents crash-recovery popups while preserving local storage, and restarts the browser automatically if the process exits.
+The script waits for the network and the App, launches the browser, keeps the crash-recovery bubble away without throwing the local storage away, and restarts the browser when it exits or when the App never booted.
 
-1.  **Create the script file**:
+1.  **Create the file**:
 
     ```bash
     nano ~/kiosk.sh
     ```
-2.  **Add the execution logic**: Replace `https://your-specific-url.com` with the actual URL of your [App](README.md).
+2.  **Put this in**, with the URL of your [App](README.md) in place of the placeholder. You find it in the Builder's version dialog and on the App's page in the App Manager: `https://<host>/app/<domain>/<appId>`.
 
     ```bash
     #!/bin/bash
 
-    # Give the desktop environment and network time to initialize
+    APP_URL="https://acme.heisenware.cloud/app/acme.default/pkg2-line"
+
+    exec > "$HOME/kiosk-debug.log" 2>&1
+    set -x
+
+    # give the desktop and the network a moment
     sleep 5
 
-    # Infinite loop ensures the browser restarts automatically if it crashes
-    while true; do
-      # Clear crash flags to prevent the Chromium "Restore Session" bubble
-      sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/Default/Preferences
-      sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
+    # rotate the panel inside the Wayland session: normal, 90, 180, 270
+    ROTATION=normal
+    if command -v wlr-randr >/dev/null 2>&1 && [ "$ROTATION" != "normal" ]; then
+      OUTPUT=$(wlr-randr | head -n 1 | awk '{print $1}')
+      [ -n "$OUTPUT" ] && wlr-randr --output "$OUTPUT" --transform "$ROTATION"
+    fi
 
-      # Launch Chromium in touch-kiosk mode
-      chromium-browser \
+    while true; do
+      # the app must answer before the browser opens it: a first load over a
+      # network that is not up yet leaves a white page that never recovers
+      until curl -fsS -o /dev/null --max-time 10 "$APP_URL"; do sleep 3; done
+
+      # clear the crash flags and the lock files, keep the local storage
+      sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/Default/Preferences 2>/dev/null
+      sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences 2>/dev/null
+      rm -f ~/.config/chromium/Singleton* 2>/dev/null
+
+      # the executable is called differently on Bookworm and Trixie
+      if command -v chromium-browser >/dev/null 2>&1; then
+        BROWSER=chromium-browser
+      else
+        BROWSER=chromium
+      fi
+
+      $BROWSER \
         --kiosk \
+        --no-first-run \
         --touch-events=enabled \
         --noerrdialogs \
         --disable-infobars \
-        --disable-features=Translate \
-        "https://your-specific-url.com"
+        --password-store=basic \
+        --disable-sync \
+        --disable-features=Translate,CalculateNativeWinOcclusion \
+        --disable-background-timer-throttling \
+        --disable-renderer-backgrounding \
+        --disable-dev-shm-usage \
+        "$APP_URL"
 
-      # Wait 2 seconds before restarting if Chromium exits
       sleep 2
     done
     ```
-3.  **Make the script executable**:
+3.  **Make it executable**:
 
     ```bash
     chmod +x ~/kiosk.sh
     ```
 
-### Phase 4: Configure autostart
+{% hint style="warning" %}
+#### Changing the URL needs clean storage
 
-Hook the script into the Wayland display manager to launch it automatically on boot.
+A device that pointed at another App or another server keeps that Player's service worker, which serves the old Player out of its cache. When the server then refuses its login, the device reloads forever on a white page. Before you change the URL, stop the browser and clear its storage:
 
-1.  **For labwc (Trixie and newer Bookworm)**:
+```bash
+pkill -f kiosk.sh; pkill -f chromium; sleep 2
+rm -rf ~/.config/chromium/Default/"Service Worker" \
+       ~/.config/chromium/Default/"Local Storage" \
+       ~/.config/chromium/Default/"Session Storage" \
+       ~/.config/chromium/Default/IndexedDB ~/.cache/chromium
+```
+{% endhint %}
+
+### Phase 4: Autostart
+
+Hook the script into the Wayland compositor the device runs.
+
+1.  **labwc (Trixie and newer Bookworm)**:
 
     ```bash
     mkdir -p ~/.config/labwc
-    echo "/home/$(whoami)/kiosk.sh" >> ~/.config/labwc/autostart
+    echo "$HOME/kiosk.sh" >> ~/.config/labwc/autostart
+    chmod +x ~/.config/labwc/autostart
     ```
-2.  **For Wayfire (older Bookworm)**: If your device runs Wayfire, edit its configuration file:
+2.  **Wayfire (older Bookworm)**: edit its configuration file:
 
     ```bash
     nano ~/.config/wayfire.ini
     ```
 
-    Find the `[autostart]` section and append the kiosk script path:
+    Find the `[autostart]` section and append the script:
 
     ```ini
     kiosk = /home/pi/kiosk.sh
     ```
 
-    <div data-gb-custom-block data-tag="hint" data-style="info" class="hint hint-info"><h4>User directory path</h4><p>Ensure <code>/home/pi/</code> matches your actual user directory if you changed the default Raspberry Pi username.</p></div>
+    <div data-gb-custom-block data-tag="hint" data-style="info" class="hint hint-info"><h4>User directory</h4><p>Make <code>/home/pi/</code> match your actual user directory if you changed the default Raspberry Pi user name.</p></div>
 
-### Phase 5: Reboot the system
+Writing both costs nothing and makes one image work on either release.
 
-Reboot the system to apply all changes:
+### Phase 5: Reboot
 
 ```bash
 sudo reboot
 ```
+
+## Who the device is
+
+A kiosk has no person signing in, so give the device an identity instead: a login of its own, named after the machine it stands at. `$USER` then holds that name in every run, and a query can filter by it, so one App serves every terminal and each shows its own machine. See [Users and access](../app-manager/users-and-access.md).
+
+Deploy the App before the first device opens its URL: that URL serves the deployed release and nothing else.

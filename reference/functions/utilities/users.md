@@ -1,10 +1,20 @@
 # Users
 
-The users class manages users and App access programmatically. Use it to list available Apps, look up specific Apps, view registered users, and generate invitation links to onboard users dynamically. This class provides static functions only and does not require an instance. The code class name is `Users`.
+The users class reaches the App users of the workspace from a flow: it lists the Apps, lists who is registered for one, and hands out an access link for an email address. With it one App can onboard the users of another: a supervisor's App invites the operators who open the line App.
+
+This works for the Apps that have users, which are the ones whose access mode asks people to sign in. [App users and access](../../../app-manager/users-and-access.md) explains the modes, and does the same by hand on the App's page in the App Manager.
+
+You find the functions under **Utilities** > **Users** in the Functions explorer. This class provides static functions only and does not require an instance. The code class name is `Users`.
+
+{% hint style="warning" %}
+#### The answers carry secrets
+
+`getApplications` and `getApplication` answer an App's settings as they are stored, the master password among them, and `getUsers` answers each user's authentication token. Pick the fields you need with a [modifier](../../../app-builder/flowboard/modifier.md) before the value goes any further, and never link such an output to a widget.
+{% endhint %}
 
 ### `getApplications`
 
-Retrieves a list of all available Apps. Use this function to get an overview or populate selection lists in your UI.
+Lists the Apps of the workspace.
 
 #### Parameters
 
@@ -12,11 +22,11 @@ None.
 
 #### Output
 
-Returns an array of App objects, each containing `id` and the App's data fields such as `appName` and `appId`. Throws an error if the request fails.
+Returns an array of App objects, one per App of the workspace, each with its `id` and the App's stored settings: `appId`, `appName`, `domain`, `accessMode`, `locale` and the rest. Throws an error when the user directory cannot be reached.
 
 ### `getApplication`
 
-Retrieves details for a specific App.
+Looks up one App of the workspace.
 
 #### Parameters
 
@@ -24,18 +34,18 @@ Retrieves details for a specific App.
 
 #### Output
 
-Returns a single App object, or nothing if not found.
+Returns one App object, shaped as in `getApplications`, or nothing when no App of the workspace carries that name or id.
 
 #### Examples
 
 ```yaml
 # app
-My Dashboard App
+Line 2 Monitor
 ```
 
 ### `getUsers`
 
-Retrieves a list of all users registered for a specific App.
+Lists the users registered for one App.
 
 #### Parameters
 
@@ -48,10 +58,10 @@ Returns an array of user objects containing profile and status details. Returns 
 ```json
 [
   {
-    "email": "jane.doe@company.com",
-    "username": "jdoe",
-    "firstName": "Jane",
-    "lastName": "Doe",
+    "email": "rita.morales@acme.com",
+    "username": "rmorales",
+    "firstName": "Rita",
+    "lastName": "Morales",
     "userId": "a1b2c3...",
     "picture": "https://...",
     "authenticationToken": "kY7x...",
@@ -61,8 +71,8 @@ Returns an array of user objects containing profile and status details. Returns 
     "verified": true
   },
   {
-    "email": "john.smith@company.com",
-    "firstName": "John",
+    "email": "tom.berger@acme.com",
+    "firstName": "Tom",
     "userId": "d4e5f6...",
     "roles": [],
     "active": true,
@@ -75,17 +85,16 @@ Returns an array of user objects containing profile and status details. Returns 
 
 ```yaml
 # app
-Shopfloor Monitor
+Line 2 Monitor
 ```
 
 ### `createAccessLink`
 
-Generates a link for a user to access a specific App. The function automatically handles three scenarios:
-1. **New user:** If the email address does not exist, the function creates the user and generates an invite link.
-2. **Existing user without a password:** If the user exists but has not set a password, the function generates an invite link prompting them to set one.
-3. **Existing active user:** If the user exists and has a valid password, the function generates a standard login link.
+Gives an email address access to an App and answers the link to hand the person. An address without an account gets one, an account not yet registered for the App is registered, and the link that comes back fits the case:
 
-Use this function to build user invitation features in your Apps.
+* **A new account**: an invite link, on which the user sets a password.
+* **An account whose password is still to be set**: the same invite link.
+* **An account that has a password**: the App's own address.
 
 #### Parameters
 
@@ -115,7 +124,7 @@ Returns an object containing the generated link and user status details. Throws 
 
 ```yaml
 # app
-My Dashboard App
+Line 2 Monitor
 # email
-new.employee@company.com
+rita.morales@acme.com
 ```

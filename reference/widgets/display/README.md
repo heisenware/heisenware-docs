@@ -17,6 +17,7 @@ description: >-
 | [Data Grid](data-grid.md) | Full-featured table of rows — editing, selection, grouping, filtering and PDF/Excel/CSV export. |
 | [Data List](data-list.md) | Form-styled list of records with search, inline editing and per-field editor configuration. |
 | [Data Tiles](data-tiles.md) | Renders records as card tiles with configurable fields, a title field and inline editing. |
+| [Gallery](gallery.md) | Shows several files as pictures to look through - one large, thumbnails to pick from - from a list of file entries or a list of rows that each keep a file. |
 | [Iframe](iframe.md) | Embeds an external web page by http(s) URL — presentational, without live value bindings. |
 | [Kanban](kanban.md) | Board of cards grouped into stage columns, with drag-and-drop moves and click events. |
 | [Linear Gauge](linear-gauge.md) | Horizontal or vertical bar gauge for a numeric value with sub-value marker and colored scale ranges. |

@@ -1,104 +1,62 @@
+---
+description: >-
+  How your own AI client gets the platform's tools: the workspace's MCP address, or a
+  local MCP server on your computer.
+---
+
 # MCP server
 
-The Heisenware MCP server lets you drive the platform from **your own AI client** — Claude, ChatGPT, Microsoft Copilot, Claude Code, or any client that speaks the [Model Context Protocol](https://modelcontextprotocol.io). The client gets the same tools the assistant uses: creating Apps, wiring executors, placing widgets, verifying the result. You spend your own AI subscription; nothing runs through Heisenware's models.
+The Heisenware **MCP server** lets you drive the platform from **your own AI client**: Claude, ChatGPT, Microsoft Copilot, Gemini, Claude Code, or any client that speaks the [Model Context Protocol](https://modelcontextprotocol.io). Your client gets the same tools the [assistant](README.md) uses, listed on [MCP tools](mcp-tools.md): creating Apps, wiring executors, placing widgets, verifying the result. You spend your own AI subscription, and nothing runs through Heisenware's models.
 
 ## Two ways in
 
-* **By the MCP address** - nothing to install. Your AI client reaches the workspace at `https://<platform host>/<account>.<workspace>/mcp` and you sign in with your App Manager login; it works as you, with your rights, until you disconnect it. This is the way for AI clients in the cloud (claude.ai, ChatGPT, Microsoft 365 Copilot, Copilot Studio) and works for Claude Code and VS Code too. See [AI clients](../app-manager/ai-clients.md).
-* **As a local MCP server** - a package you run on your own computer, with its own integration credentials. Your AI client reaches your local files through it: bundles exported next to it, screenshots, files to upload. The rest of this page is about this way.
+| | By the MCP address | As a local MCP server |
+| --- | --- | --- |
+| **What it is** | The workspace serves the tools at `https://<platform host>/<account>.<workspace>/mcp`. | A package you run on your own computer, which talks to the workspace over the same encrypted MQTT connection an agent uses. |
+| **To set up** | Nothing to install: paste the address into your client and sign in with your App Manager login. | Add a **Local MCP server** integration, register the package with your client. |
+| **It works as** | you, with your rights, until you disconnect it. | its [integration](../app-manager/integrations.md), with the authority that integration has. |
+| **Your files** | stay out: files travel through the workspace's shared files. | are reachable: bundles land on your disk, screenshots are local files, and a local file goes up as it is. |
+| **Good for** | AI clients in the cloud (claude.ai, ChatGPT, Microsoft 365 Copilot, Le Chat) and for clients on your machine that need no local files. | a client in your terminal or editor that works on your files anyway: Claude Code, Claude Desktop, Cursor. |
 
-## How the local MCP server works
+[AI clients](../app-manager/ai-clients.md) is the page for the first way: the address, the steps per client, signing in, and what a connection may do. The rest of this page is about the second.
 
-* **Bring your own client**: the server runs on your machine and talks to your workspace over the same encrypted MQTT connection an agent uses. Your AI client talks to the server over stdio.
-* **Your integration's authority**: the local MCP server is an [integration](../app-manager/integrations.md) of your workspace and can do exactly what that integration is allowed to do — nothing more. Deactivate or delete it in the App Manager and the local MCP server stops.
-* **Guard rails inside the tools**: the irreversible operations (`delete_entity`, `delete_page`, `deploy_app`) only run with an explicit `confirm: true` that your AI client has to ask you for. `deploy_app` is the App Builder's **Deploy** button: it makes the current version the one users get, and the platform brings it up within about a minute; `test_app` is the **Test** button and changes nothing for users; `stop_app` ends that test run. Apps travel as bundles too: `export_app` writes the App as a `.hwt` bundle next to your AI client and `import_app` adds one to an App as a version that `rollback` applies, so your client derives one App from another without the App Builder. An App in another language is another App: `list_app_texts` reads every text people read in the reference App, your client translates the table, and `translate_app` makes the copy from it or refreshes it later. A `--read-only` mode exposes no mutating tool at all.
-* **Version-locked**: every platform serves the MCP server package that matches its own version, so the tools always match the workspace they talk to. The download link comes from the App Manager (it carries an access ticket valid for twelve hours; `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine). Register the versioned file, never a `latest` alias: `npx` keeps a copy of what it ran once and would not notice a platform upgrade behind an unchanged name.
+## What a local MCP server is
 
-## Getting your connector
+* **Your client starts it.** The package runs on your machine and talks to your AI client over its standard input and output. Nothing listens on a port, and the workspace never reaches your computer.
+* **It has its integration's authority.** A local MCP server is an [integration](../app-manager/integrations.md) of the workspace and can do exactly what that integration may do, nothing more. Deactivate or delete it in the App Manager and the server stops at its next login.
+* **One per member.** The integration is named after you, and it logs in as `<name>@<account>.<workspace>`, for example `burkhard@acme.default`, so one can be removed without touching the others.
+* **Read-only is a choice when you create it.** A read-only integration is the one for production support: the mutating tools are not offered at all, and live values cannot be read. The flag `--read-only` does the same for a server you configure yourself.
+* **It is version-locked.** Every platform serves the package that matches its own version, so the tools always match the workspace they talk to. The server warns when the two majors differ.
 
-Open the [Integrations panel](../app-manager/integrations.md) of the App Manager and add a **Local MCP server**. Name it after yourself — the field offers your first name: one local MCP server per member, so each can be removed without touching the others. It logs in as `<name>@<account>.<workspace>`, e.g. `burkhard@my-company.default`. Tick _read-only_ if it is meant for production support. The platform builds a package with the credentials inside and shows it right away; later, click the package on the integration's row. The view gives you:
+## Get it and register it
 
-* the `claude mcp add` line for Claude Code, and its variant for Windows,
-* the JSON block for Claude Desktop,
-* the download link itself, to copy or to download, for any other client.
+The [Integrations panel](../app-manager/integrations.md) of the App Manager creates the integration, builds the package with the credentials inside, and hands you the lines to paste. The package view gives you the `claude mcp add` line for Claude Code and its Windows variant, the JSON block for Claude Desktop, and the download link itself for any other client.
 
-The link carries an access ticket valid for twelve hours. `--prefer-offline` lets `npx` start the package it installed on the first run without asking the link again, so an expired link only matters on a new machine; open the view again for a fresh one. Changing the integration's password or its name builds the package again; deleting the integration deletes the package and stops the connector at its next login.
+All you need on your side is Node.js 18 or newer. There are no environment variables to set, and no npm registry is involved: the package carries its dependencies, so the first start works on-premise without internet.
 
-Nothing else is needed: no environment variables, no npm registry (the package carries its dependencies), no installation on your side beyond Node.js 18 or newer.
+{% hint style="warning" %}
+#### The link carries a ticket
 
-## Configuration by hand (advanced)
+The download link is valid for twelve hours. `--prefer-offline` lets `npx` start the copy it installed on the first run without asking the link again, so an expired ticket only matters on a new machine: open the package view again for a fresh link. Register the versioned file, never a `latest` alias: `npx` keeps what it ran once and would not notice a platform upgrade behind an unchanged name.
+{% endhint %}
 
-For CI or a checkout of the platform, the server also reads the same four environment variables as the [Docker agent](../app-manager/agents/docker-agent.md); they win over the baked-in configuration:
+### The server's name is its workspace's
 
-| Variable      | Value                                                        |
-| ------------- | ------------------------------------------------------------ |
-| `HW_DOMAIN`   | `<account>.<workspace>`, e.g. `my-company.default`           |
-| `HW_BROKER`   | `mqtts://<account>.heisenware.cloud:8883`                    |
-| `HW_USERNAME` | username of a VRPC integration, `<name>@<account>.<workspace>` |
-| `HW_PASSWORD` | its password                                                 |
+Every line the App Manager hands you registers the server as `heisenware` for the `default` workspace and as `heisenware-<workspace>` for any other. Your client puts that name in front of every tool (`mcp__heisenware__describe_app`) and every prompt, so two workspaces can live in one client without colliding. The examples below use `heisenware`; in another workspace read its name instead.
 
-Optional:
-
-| Variable               | Value                                                                                                            |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `HW_PUBLIC_HOST`       | `https://<account>.heisenware.cloud` — enables the visual tools (`layout_lint`, `screenshot`), see below         |
-| `HW_WORKSPACE`         | directory where fetched files and screenshots are stored (default: a folder in your temp directory)             |
-| `HW_ALLOW_VALUE_READS` | `false` disables `read_value` and `screenshot`, which can reveal live data                                        |
-| `HW_DEPLOY_MODE`       | `onprem` for an on-premise installation (default `server`)                                                       |
-
-Flag: `--read-only` — production-support mode. No mutating tool is offered and live values cannot be read.
-
-## The platform law comes first
-
-The tools describe themselves, but building a good App on Heisenware follows rules that no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. The assistant in the App Builder knows these rules by heart. Your AI client gets them from the server as the **platform law**, and the first message of every session should load it. The server offers the law four ways:
-
-* as the **tool** `get_platform_law`, which the server tells every client to call before its first build action - the way clients connected by the MCP address read it,
-* as a **prompt** named `platform-law` (Claude Code turns it into the slash command `/mcp__heisenware__platform-law` - `/mcp__heisenware-<workspace>__platform-law` outside the default workspace -, Claude Desktop lists it in the attachment menu),
-* as the **resource** `heisenware://law/platform-law`, for clients that read resources,
-* as plain text you can paste into your first message, for clients that support neither.
-
-The server also points every client at the law in its connection instructions, so a capable client reads it by itself. Widget contracts are available the same way, as resources named `heisenware://widgets/<type>/manifest`.
-
-## Claude Code
-
-The terminal commands around the local MCP server - register, check, approve tools, replace, repair - are collected on the [Claude Code cheat sheet](claude-code-cheat-sheet.md).
-
-Register the server once with the line from the executable's view in the App Manager; it looks like this:
-
+{% tabs %}
+{% tab title="Claude Code" %}
 ```bash
-claude mcp add heisenware -- npx -y --no-audit --prefer-offline -p "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>" heisenware-mcp
+claude mcp add heisenware -- npx -y --no-audit --prefer-offline -p "https://acme.heisenware.cloud/acme.default/resources/download/mcp/heisenware-mcp-burkhard-v93.tgz?t=<ticket>" heisenware-mcp
 ```
 
-On Windows, start `npx` through `cmd` - the App Manager shows this line too - and run it in PowerShell or cmd: Git Bash turns `/c` into a path.
+Run it in the project folder you work in: Claude Code registers the server for that folder, its default scope, so each folder can point at its own platform. `--scope user` registers it for every folder instead.
 
-```bash
-claude mcp add heisenware -- cmd /c npx -y --no-audit --prefer-offline -p "<link>" heisenware-mcp
-```
+Then start a **new** session: Claude Code connects its servers when a session starts. The terminal side of all this, including what to do when something is off, is on the [Claude Code cheat sheet](claude-code-cheat-sheet.md).
+{% endtab %}
 
-Run the line in the project folder where you work with this platform. Claude Code registers the server for that folder (its default scope), so each project folder can point at its own platform under the same name. To have the server in every folder instead, add `--scope user`.
-
-Claude Code refuses a name that is already registered (`MCP server heisenware already exists`), for example from an earlier link that has since expired. Remove the old entry and register again:
-
-```bash
-claude mcp remove heisenware
-```
-
-Without a scope, `remove` takes the entry from whichever scope holds it, also one registered with `--scope user` by an earlier line.
-
-`claude mcp list` shows what is registered.
-
-Then start a **new** session: Claude Code connects its servers when a session starts, and the package takes about ten seconds to start the first time. `/mcp` inside the session shows the server as connected; from then on the law is available as the command `/mcp__heisenware__platform-law` (the `/` menu lists it as `/heisenware:platform-law (MCP)`).
-
-The package is self-contained: it carries its dependencies, so the first start needs no access to the npm registry and works on-premise without internet. `--no-audit` keeps npm from asking the public registry for a security report anyway; the first start takes a few seconds, every later one about one.
-
-`claude mcp list` should now show `heisenware` as connected. Then, in every session:
-
-1. Make `/mcp__heisenware__platform-law` your first message. It loads the law.
-2. Ask in your own words, for example: _"List my Apps and describe the one called Line status."_ The tools appear as `mcp__heisenware__<tool>`.
-
-## Claude Desktop
-
-Add the block from the executable's view in the App Manager to `claude_desktop_config.json`:
+{% tab title="Claude Desktop" %}
+Add the block from the package view to `claude_desktop_config.json`:
 
 ```json
 {
@@ -110,7 +68,7 @@ Add the block from the executable's view in the App Manager to `claude_desktop_c
         "--no-audit",
         "--prefer-offline",
         "-p",
-        "https://my-company.heisenware.cloud/my-company.default/resources/download/mcp/heisenware-mcp-agentRunner-v93.tgz?t=<ticket>",
+        "https://acme.heisenware.cloud/acme.default/resources/download/mcp/heisenware-mcp-burkhard-v93.tgz?t=<ticket>",
         "heisenware-mcp"
       ]
     }
@@ -118,34 +76,90 @@ Add the block from the executable's view in the App Manager to `claude_desktop_c
 }
 ```
 
-A read-only connector is its own integration, ticked _read-only_ when created; no flag needed. Then, in every chat: open the attachment menu (**+**), pick the `heisenware` server and its `platform-law` prompt as the first message, and ask.
+Then, in every chat: open the attachment menu (**+**), pick the `heisenware` server and its `platform-law` prompt as the first message, and ask.
+{% endtab %}
 
-## Other MCP clients
+{% tab title="Windows" %}
+Start `npx` through `cmd` and run the line in PowerShell or cmd, not in Git Bash, which turns `/c` into a path. The App Manager shows this line too:
 
-Any other client is configured the same way: `npx -y --no-audit --prefer-offline -p "<download link>" heisenware-mcp` as the command. The package carries two executables (the connector and the support agent of an on-premise installation), so the line names the one to run. Load the law first through the resource `heisenware://law/platform-law`, or paste its text as your first message, then ask.
+```bash
+claude mcp add heisenware -- cmd /c npx -y --no-audit --prefer-offline -p "<link>" heisenware-mcp
+```
+{% endtab %}
+
+{% tab title="Other clients" %}
+Any other client takes the same command: `npx -y --no-audit --prefer-offline -p "<download link>" heisenware-mcp`. The package carries two executables, the local server and the support agent of an on-premise installation ([remote support](../self-hosting/remote-support.md)), so the line has to name the one to run.
+{% endtab %}
+{% endtabs %}
+
+## The platform law comes first
+
+The tools describe themselves, but building a good App follows rules no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. That is the [platform law](README.md#what-it-builds-by), and the server offers it four ways:
+
+* as the **tool** `get_platform_law`, which the server's connection instructions tell every client to call before its first build action: the way a capable client reads it by itself,
+* as a **prompt** named `platform-law`: Claude Code turns it into the command `/mcp__heisenware__platform-law` (`/mcp__heisenware-<workspace>__platform-law` outside the default workspace), Claude Desktop lists it in the attachment menu,
+* as the **resource** `heisenware://law/platform-law`, for clients that read resources,
+* as plain text you paste into your first message, for clients that support neither.
+
+Make it the first thing of every session. A client that skips it makes mistakes the law prevents.
+
+Two more kinds of knowledge come as resources: a widget's binding contract as `heisenware://widgets/<type>/manifest`, and a connector's domain guide as `heisenware://connectors/<class>/guide`. The tools `get_widget_manifest` and `get_connector_guide` answer the same text for clients that read no resources.
+
+## Your files
+
+A local MCP server shares your computer with your AI client, so files move as paths on both sides:
+
+* `export_app` writes the App's `.hwt` bundle next to your client, and `import_app` takes one from disk: that is how your client derives one App from another without the App Builder.
+* `fetch_shared_file` and `open_file` copy a shared file, or a file a table row points to, into a local folder and answer its path, for your client to open and read.
+* `upload_shared_file` takes a local file, up to 15 MB, into the workspace's shared files.
+* `screenshot` hands the picture to your client and writes the PNG into the same local folder, under `screens/`, so your client can open it again later.
+
+By the MCP address the same tools work with the workspace's shared files instead, since the client is somewhere else: [Files](../app-manager/ai-clients.md#files) says how a file gets in and out there.
+
+## Visual verification
+
+`layout_lint` and `screenshot` render your App in a headless browser on your machine, signed in as the integration, so a screenshot shows the widgets with their live values. `use_app` clicks and types in it like a member. A package built by the App Manager knows your platform's address; all that is missing on your machine is a Chromium:
+
+```bash
+npx playwright-core install --with-deps chromium
+```
+
+On Linux `--with-deps` installs system libraries through the package manager and needs root, so run it with `sudo` there; on macOS and Windows nothing more is needed. Without a working Chromium the three tools stay listed and answer with this instruction. Run it yourself rather than letting your AI client improvise around missing libraries.
 
 ## Checking the connection
 
 On startup the server prints one line to its error output, which your client shows in its MCP log:
 
 ```
-heisenware-mcp 93.0.0: connected to my-company.default as agentRunner via mqtts://... - platform v93-server, 60 tools, read-write, law served as prompt + resource
+heisenware-mcp 93.0.0: connected to acme.default as burkhard@acme.default via mqtts://acme.heisenware.cloud:8883 (config.json) - platform v93-server, 119 tools, read-write, law served as prompt + resource
 ```
 
-A version mismatch between the package and the platform is reported as a warning. Download the package your platform serves to resolve it.
+It names, in order: the package version, the workspace, the login, the broker, where the credentials came from, the platform's version, how many tools are served, whether the connection may change anything, and whether the law rode along. `READ-ONLY` there means 38 tools instead of 119. A mismatch between the package's major version and the platform's is reported as a warning: download the package your platform serves to resolve it.
 
-## Visual verification
+## Configuration by hand
 
-`layout_lint` and `screenshot` render your App in a headless browser on your machine, signed in as your connector, so a screenshot shows the widgets with their live values. A package built by the App Manager knows your platform's address; all that is needed on your machine is a Chromium:
+For CI, or for a checkout of the platform, the server reads the same four environment variables as the [Docker agent](../app-manager/agents/docker-agent.md). They win over the configuration baked into the package.
 
-```bash
-npx playwright-core install --with-deps chromium
-```
+| Variable | Value |
+| --- | --- |
+| `HW_DOMAIN` | `<account>.<workspace>`, e.g. `acme.default` |
+| `HW_BROKER` | `mqtts://<account>.heisenware.cloud:8883` |
+| `HW_USERNAME` | username of a VRPC integration, `<name>@<account>.<workspace>` |
+| `HW_PASSWORD` | its password |
 
-On Linux the `--with-deps` part installs system libraries through the package manager and needs root, so run it with `sudo` there; on macOS and Windows it needs nothing more. Without a working Chromium, both tools stay listed and answer with this instruction — run the line yourself rather than letting your AI client improvise around missing libraries.
+Optional:
+
+| Variable | Value |
+| --- | --- |
+| `HW_PUBLIC_HOST` | `https://<account>.heisenware.cloud`: enables the visual tools |
+| `HW_WORKSPACE` | the folder for fetched files and screenshots (default: `heisenware-mcp/<domain>` in your temp directory) |
+| `HW_ALLOW_VALUE_READS` | `false` holds back everything that reads live values, data or pictures |
+| `HW_DEPLOY_MODE` | `onprem` for an on-premise installation (default `server`) |
+
+Flags: `--read-only` for production support, `--version`, `--help`.
 
 {% hint style="info" %}
 #### Which tools are there?
 
-Ask your AI client to list them — every tool carries its own description of what it does and how the platform expects it to be used. The assistant in the App Builder uses exactly the same tools.
+[MCP tools](mcp-tools.md) lists all of them, generated from the code, with what each one changes and what needs your explicit go. Your AI client can list them too: every tool carries its own description.
 {% endhint %}

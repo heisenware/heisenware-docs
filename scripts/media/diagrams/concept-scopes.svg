@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .card { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.5; }
+    .frame { fill: #f3f6f9; stroke: #d7e0e8; stroke-width: 1.5; }
+    .shared { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .user { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.5; }
+    .title { font-size: 17px; font-weight: 700; fill: #22303c; }
+    .label { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .labelu { font-size: 15px; font-weight: 700; fill: #41628d; }
+    .txt { font-size: 14px; fill: #4a5b6a; }
+    .mono { font-size: 13px; font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #22303c; }
+    .arrow { stroke: #8da0b3; stroke-width: 1.6; fill: none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#8da0b3"/>
+    </marker>
+  </defs>
+
+  <rect x="16" y="16" width="868" height="398" rx="12" class="frame"/>
+  <text x="38" y="46" class="title">One App, one set of logic</text>
+
+  <!-- shared scope -->
+  <rect x="38" y="64" width="360" height="106" rx="9" class="shared"/>
+  <text x="58" y="90" class="label">shared scope</text>
+  <text x="58" y="113" class="txt">What the App does by itself</text>
+  <text x="58" y="136" class="mono">line speed = 412</text>
+  <text x="58" y="157" class="txt" font-size="13">polled every 2 s · the same for everyone</text>
+
+  <!-- user scopes -->
+  <rect x="438" y="64" width="212" height="106" rx="9" class="user"/>
+  <text x="458" y="90" class="labelu">Ada's scope</text>
+  <text x="458" y="113" class="txt">What Ada does</text>
+  <text x="458" y="136" class="mono">machine = filler</text>
+
+  <rect x="670" y="64" width="212" height="106" rx="9" class="user"/>
+  <text x="690" y="90" class="labelu">Ben's scope</text>
+  <text x="690" y="113" class="txt">What Ben does</text>
+  <text x="690" y="136" class="mono">machine = capper</text>
+
+  <!-- arrows down to the two screens -->
+  <path d="M218,170 L218,214 L330,214 L330,250" class="arrow" marker-end="url(#a)"/>
+  <path d="M544,170 L544,250" class="arrow" marker-end="url(#a)"/>
+  <path d="M218,170 L218,214 L650,214 L650,250" class="arrow" marker-end="url(#a)"/>
+  <path d="M776,170 L776,250" class="arrow" marker-end="url(#a)"/>
+
+  <!-- what each person sees -->
+  <rect x="330" y="252" width="214" height="136" rx="9" class="card"/>
+  <text x="350" y="278" class="title" font-size="15">Ada sees</text>
+  <text x="350" y="303" class="mono">filler</text>
+  <text x="350" y="326" class="mono">412 b/min</text>
+  <text x="350" y="352" class="txt" font-size="13">their own choice,</text>
+  <text x="350" y="370" class="txt" font-size="13">the common speed</text>
+
+  <rect x="650" y="252" width="214" height="136" rx="9" class="card"/>
+  <text x="670" y="278" class="title" font-size="15">Ben sees</text>
+  <text x="670" y="303" class="mono">capper</text>
+  <text x="670" y="326" class="mono">412 b/min</text>
+  <text x="670" y="352" class="txt" font-size="13">their own choice,</text>
+  <text x="670" y="370" class="txt" font-size="13">the common speed</text>
+
+  <text x="38" y="290" class="txt" font-size="13">Each user's</text>
+  <text x="38" y="309" class="txt" font-size="13">own values stay</text>
+  <text x="38" y="328" class="txt" font-size="13">in their scope.</text>
+  <text x="38" y="356" class="txt" font-size="13">The shared ones</text>
+  <text x="38" y="375" class="txt" font-size="13">reach everyone.</text>
+</svg>

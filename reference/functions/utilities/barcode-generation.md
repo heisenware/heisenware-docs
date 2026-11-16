@@ -1,6 +1,8 @@
 # Barcode generation
 
-With barcode generation, you can create over 100 types of 1D and 2D barcodes and receive them as base64-encoded PNG images. The utility class provides static functions only, meaning you do not need to create an instance before calling them. The code class name is `Barcode`.
+Barcode generation encodes text as a 1D or 2D barcode and answers it as a base64-encoded PNG. Over 100 symbologies are supported, from EAN and Code 128 to QR code, Data Matrix and Aztec. Link the output to a [media view](../../widgets/display/media-view.md) to show it, or hand it to a [label printer](../connectors/label-printer.md) or into a [PDF](pdf-processing.md).
+
+You find the function under **Utilities** > **Barcode Generation** in the Functions explorer. This class provides static functions only and does not require an instance. The code class name is `Barcode`.
 
 ### `generateBarcode`
 
@@ -8,7 +10,7 @@ Creates a barcode image from the specified type, text, and options.
 
 #### Parameters
 
-See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Options-Reference) for a full list of available configuration keys.
+The table lists the options in everyday use. Every other key is passed on to the barcode library in lower case, so any option from the [BWIPP options reference](https://github.com/bwipp/postscriptbarcode/wiki/Options-Reference) works under its own name, for example `paddingwidth` or `textsize`.
 
 <table>
   <thead>
@@ -35,19 +37,7 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
     <tr>
       <td><code>options</code></td>
       <td><code>scale</code></td>
-      <td>Sets both the x-axis and y-axis scaling factors. Must be an integer greater than 0.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>scaleX</code></td>
-      <td>The x-axis scaling factor. Must be an integer greater than 0. Default 2.</td>
-      <td>integer</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>scaleY</code></td>
-      <td>The y-axis scaling factor. Must be an integer greater than 0. Defaults to the value of <code>scaleX</code>.</td>
+      <td>The scaling factor of the image. Must be an integer greater than 0. Default 2.</td>
       <td>integer</td>
     </tr>
     <tr>
@@ -67,12 +57,6 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
       <td><code>includeText</code></td>
       <td>Shows the human-readable text below the barcode. Default false.</td>
       <td>boolean</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><code>textAlign</code></td>
-      <td>Alignment of the human-readable text: <code>left</code>, <code>center</code>, <code>right</code>, or <code>justify</code>. Default center.</td>
-      <td>string</td>
     </tr>
     <tr>
       <td></td>
@@ -110,14 +94,14 @@ See the [options reference](https://github.com/bwipp/postscriptbarcode/wiki/Opti
       <td>Background color as an RGB, RRGGBB, or CCMMYYKK hex value.</td>
       <td>string</td>
     </tr>
-    <tr>
-      <td></td>
-      <td><code>borderColor</code></td>
-      <td>Border color as an RGB, RRGGBB, or CCMMYYKK hex value.</td>
-      <td>string</td>
-    </tr>
   </tbody>
 </table>
+
+{% hint style="warning" %}
+#### Options without effect
+
+The executor also offers `scaleX`, `scaleY`, `textAlign` and `borderColor`, and none of them changes the image in this version. Use `scale` for the size, `textsize` and `textgaps` from the BWIPP reference for the human-readable text, and `padding` with `backgroundColor` instead of a border.
+{% endhint %}
 
 #### Output
 

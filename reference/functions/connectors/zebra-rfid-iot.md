@@ -1,6 +1,6 @@
 # Zebra RFID IoT
 
-The Zebra RFID IoT connector (`ZebraRfidIot`) controls and receives data from Zebra fixed RFID readers (such as the FX7500, FX9600, or ATR7000). Instead of managing direct physical serial wires or proprietary connections, the connector exchanges structured events and commands asynchronously over the platform's internal MQTT broker by communicating with the Zebra IoT Connector (ZIOTC) service running locally on the reader.
+The Zebra RFID IoT connector (`Zebra`) controls and receives data from Zebra fixed RFID readers (such as the FX7500, FX9600, or ATR7000). Instead of managing direct physical serial wires or proprietary connections, the connector exchanges structured events and commands asynchronously over the platform's internal MQTT broker by communicating with the Zebra IoT Connector (ZIOTC) service running locally on the reader.
 
 This connector requires [instance creation](README.md#instance-creation) before you can send commands and receive events.
 
@@ -261,6 +261,8 @@ Returns `true` when the reader confirms the command.
 
 ## Event listeners
 
+`onHeartbeatEvent`, `onErrorEvent` and `onDataEvent` are event functions. Triggering an event executor subscribes it; the events arrive on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
+
 ### `onHeartbeatEvent`
 
 Registers a listener for the periodic heartbeat events of the reader, which indicate that it is still online.
@@ -271,7 +273,7 @@ Registers a listener for the periodic heartbeat events of the reader, which indi
 
 #### Output
 
-Returns the string `subscribed` to confirm listener registration.
+Returns the listener's registration, which only says that the executor is listening. The heartbeats arrive on the event output.
 
 #### Example
 
@@ -290,7 +292,7 @@ Registers a listener for error events reported by the reader.
 
 #### Output
 
-Returns the string `subscribed` to confirm listener registration.
+Returns the listener's registration, which only says that the executor is listening. The error events arrive on the event output.
 
 #### Example
 
@@ -305,11 +307,11 @@ Registers a named handler that receives RFID tag data. This is the primary way o
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>A unique name identifying this data handler.</td><td>string</td></tr><tr><td><code>handler</code></td><td></td><td>The callback receiving the tag data and the message count. With aggregation, it receives an array of unique tag messages; without, the single message. After the <code>clearAfter</code> interval of inactivity it fires again with an empty result and count 0.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>scanDuration</code></td><td>The time in milliseconds to collect unique tags before the callback fires with the batch. Set to 0 to deliver every read instantly. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>clearAfter</code></td><td>The time in milliseconds of inactivity after which the internal list of seen tags clears automatically. Set to 0 to never clear. Default 10000.</td><td>integer</td></tr><tr><td></td><td><code>aggregate</code></td><td>Reports a batch of unique tags seen during <code>scanDuration</code> when <code>true</code>, or every single read immediately when <code>false</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>antenna</code></td><td>If set, only tags read by this antenna port are reported.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td></td><td>The name of this data listener. A second <code>onDataEvent</code> under the same name replaces the first.</td><td>string</td></tr><tr><td><code>listener</code></td><td></td><td>The callback receiving the tag data and the message count. With aggregation, it receives an array of unique tag messages; without, the single message. After the <code>clearAfter</code> interval of inactivity it fires again with an empty result and count 0.</td><td>callback</td></tr><tr><td><code>options</code></td><td><code>scanDuration</code></td><td>The time in milliseconds to collect unique tags before the callback fires with the batch. Set to 0 to deliver every read instantly. Default 0.</td><td>integer</td></tr><tr><td></td><td><code>clearAfter</code></td><td>The time in milliseconds of inactivity after which the internal list of seen tags clears automatically. Set to 0 to never clear. Default 10000.</td><td>integer</td></tr><tr><td></td><td><code>aggregate</code></td><td>Reports a batch of unique tags seen during <code>scanDuration</code> when <code>true</code>, or every single read immediately when <code>false</code>. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>antenna</code></td><td>If set, only tags read by this antenna port are reported.</td><td>integer</td></tr></tbody></table>
 
 #### Output
 
-Returns the string `subscribed` to confirm listener registration.
+Returns the listener's registration, which only says that the executor is listening. The tag data arrives on the event outputs. A later `onDataEvent` of the same name, and `removeDataListener`, end it.
 
 #### Examples
 
@@ -359,7 +361,7 @@ batch_reporter
 
 ### `removeDataListener`
 
-Unregisters a data listener and clears its pending timers.
+Unregisters a data listener and clears its pending timers. The `onDataEvent` registration behind it ends, and the executor that declared it stops listening.
 
 #### Parameters
 

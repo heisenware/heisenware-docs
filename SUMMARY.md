@@ -4,19 +4,35 @@
 
 ## Getting started
 
+* [Sign up and sign in](getting-started/sign-up-and-sign-in.md)
+* [Your first App with the assistant](getting-started/first-app-with-the-assistant.md)
 * [Your first App by hand](getting-started/first-app-by-hand.md)
 
 ## Concepts
 
 * [Executors and instances](concepts/executors-and-instances.md)
-* [Subflows](concepts/subflows.md)
+* [Scopes: where values live](concepts/scopes.md)
+* [Triggers and wires](concepts/triggers-and-wires.md)
+* [Backend events](concepts/backend-events.md)
+* [When streams meet](concepts/when-streams-meet.md)
+* [Variables and endpoints](concepts/variables-and-endpoints.md)
 * [Extensions, branching and errors](concepts/extensions-branching-and-errors.md)
+* [Subflows](concepts/subflows.md)
+* [Widgets and links](concepts/widgets-and-links.md)
+* [Pages and App actions](concepts/pages-and-app-actions.md)
+* [Screens and layouts](concepts/screens-and-layouts.md)
+* [Groups and tiles](concepts/groups-and-tiles.md)
+* [Files, data and dates](concepts/files-data-and-dates.md)
 * [Agents and where code runs](concepts/agents-and-where-code-runs.md)
+* [Suites of Apps](concepts/suites-of-apps.md)
+* [Languages and time zones](concepts/languages-and-time-zones.md)
 
 ## App Manager
 
 * [App Manager tour](app-manager/README.md)
+  * [Apps](app-manager/apps.md)
   * [App users and access](app-manager/users-and-access.md)
+  * [Planning](app-manager/planning.md)
   * [Agents](app-manager/agents/README.md)
     * [Native agent](app-manager/agents/native-agent.md)
     * [Docker agent](app-manager/agents/docker-agent.md)
@@ -26,6 +42,7 @@
   * [Ask](app-manager/ask.md)
   * [Members](app-manager/members.md)
   * [Workspaces](app-manager/workspaces.md)
+  * [Plan & Billing](app-manager/plan-and-billing.md)
   * [Account](app-manager/account.md)
 
 ## App Builder
@@ -37,12 +54,15 @@
     * [Recorder](app-builder/flowboard/recorder.md)
     * [Error handler](app-builder/flowboard/error-handler.md)
   * [Functions explorer](app-builder/explorers/functions.md)
-  * [Pages explorer](app-builder/explorers/pages.md)
+  * [Pages and actions explorer](app-builder/explorers/pages.md)
   * [Files explorer](app-builder/explorers/files.md)
+  * [Variables explorer](app-builder/explorers/variables.md)
+  * [Endpoints explorer](app-builder/explorers/endpoints.md)
   * [Page editor](app-builder/page-editor.md)
   * [Theme editor](app-builder/theme-editor.md)
   * [Template editor](app-builder/template-editor.md)
   * [Database editor](app-builder/database-editor.md)
+  * [Assistant](app-builder/assistant.md)
   * [Test and deploy](app-builder/test-and-deploy.md)
 
 ## App Player
@@ -52,7 +72,9 @@
 
 ## AI assistant
 
+* [The assistant](assistant/README.md)
 * [MCP server](assistant/mcp-server.md)
+* [MCP tools](assistant/mcp-tools.md)
 * [Claude Code cheat sheet](assistant/claude-code-cheat-sheet.md)
 
 ## Reference
@@ -84,6 +106,7 @@
   * [Storage](reference/functions/storage/README.md)
     * [Relational database](reference/functions/storage/relational-database.md)
     * [Timeseries database](reference/functions/storage/timeseries-database.md)
+    * [Files](reference/functions/storage/files.md)
     * [Data store](reference/functions/storage/data-store.md)
     * [Buffer](reference/functions/storage/buffer.md)
     * [Accumulator](reference/functions/storage/accumulator.md)
@@ -111,6 +134,7 @@
     * [Data Grid](reference/widgets/display/data-grid.md)
     * [Data List](reference/widgets/display/data-list.md)
     * [Data Tiles](reference/widgets/display/data-tiles.md)
+    * [Gallery](reference/widgets/display/gallery.md)
     * [Iframe](reference/widgets/display/iframe.md)
     * [Kanban](reference/widgets/display/kanban.md)
     * [Linear Gauge](reference/widgets/display/linear-gauge.md)

@@ -8,15 +8,15 @@ description: Beta Feature
 This connector is a beta feature.
 {% endhint %}
 
-The SAP Digital Manufacturing connector (`SapDigitalManufacturing`) communicates with the SAP Digital Manufacturing Cloud API. It manages the OAuth2 authentication flow and lets you read data from REST endpoints or query Managed Data Objects (MDO) via OData.
+The SAP Digital Manufacturing connector (`SapDigitalManufacturing`) reads from the SAP Digital Manufacturing Cloud API: its REST endpoints, and Managed Data Objects (MDO) through OData. It holds the OAuth2 token and renews it when it expires, so your flows never deal with authentication.
 
-This connector requires [instance creation](README.md#instance-creation) before you can manage connection states and execute data transactions.
+This connector requires [instance creation](README.md#instance-creation): the instance holds the endpoint and the credentials.
 
 ## Connection and lifecycle
 
 ### `create`
 
-Creates an instance configured to communicate with a specific SAP Digital Manufacturing tenant API.
+Creates an instance for one SAP Digital Manufacturing system. Nothing is called yet: the token is fetched with the first read.
 
 #### Parameters
 
@@ -42,7 +42,7 @@ clientSecret: my-very-secret-key-!@#$
 
 ### `canCommunicate`
 
-Checks whether communication with the cloud API is operational and authenticated.
+Fetches a token if needed and calls the endpoint's root. Use it to tell a wrong endpoint or wrong credentials from a wrong path.
 
 #### Parameters
 
@@ -50,7 +50,7 @@ None.
 
 #### Output
 
-Returns `true` if communication succeeds, or `false` if it fails.
+Returns `true` when the API answers with success, `false` on any failure, the token included. It never throws.
 
 ### `delete`
 
@@ -78,11 +78,11 @@ Executes a GET request against standard SAP Digital Manufacturing REST endpoints
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The relative API path of the endpoint, such as <code>/order/v1/orders</code>.</td><td>string</td></tr><tr><td><code>params</code></td><td>Query parameters specified as key-value pairs appended to the URL.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>path</code></td><td>The relative API path of the endpoint, such as <code>/order/v1/orders</code>.</td><td>string</td></tr><tr><td><code>params</code></td><td>Query parameters as key-value pairs, appended to the URL. Give an empty object <code>{}</code> where you need none: the input must carry a value.</td><td>object</td></tr></tbody></table>
 
 #### Output
 
-Returns a parsed JSON object containing the API response. Throws an error on failure.
+Returns the API's answer as a parsed JSON object. Throws on failure, with the status code and the body of the answer in the message.
 
 #### Examples
 
@@ -119,7 +119,7 @@ Queries a Managed Data Object (MDO) via OData to read custom master data tables.
 
 #### Output
 
-Returns a parsed JSON object containing the OData response. Throws an error on failure.
+Returns the OData answer as a parsed JSON object. Throws on failure, with the status code and the body of the answer in the message.
 
 #### Examples
 

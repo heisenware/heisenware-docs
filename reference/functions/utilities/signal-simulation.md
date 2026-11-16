@@ -4,7 +4,7 @@ description: "One class for every simulated source: a seeded, declarative time-s
 
 # Signal simulation
 
-The signal simulation class produces the data of a source that is not connected yet: a machine before its OPC UA server is reachable, a site that a development workspace mirrors, a load test, a history to seed charts and databases. An instance owns a **simulated clock** and a set of **named signals** declared as JSON. On every tick it evaluates all signals in dependency order and emits one map of name to value. The same configuration and `seed` always produce the same series, and `generate` produces a series for a time range without running. Presets provide complete signal sets (silo, tank, pump, conveyor, machine, CNC machine, energy meter, production orders) that you instantiate as they are, with other parameters, or with your own signals added. This class requires an instance. The code class name is `SignalSimulator`.
+The signal simulation class produces the data of a source that is not connected yet: a machine before its OPC UA server is reachable, a site that a development workspace mirrors, a load test, a history to seed charts and databases. An instance owns a **simulated clock** and a set of **named signals** declared as JSON. On every tick it evaluates all signals in dependency order and emits one map of name to value. The same configuration and `seed` always produce the same series, and `generate` produces a series for a time range without running. Presets provide complete signal sets (silo, tank, pump, conveyor, machine, CNC machine, injection moulding machine, energy meter, production orders) that you instantiate as they are, with other parameters, or with your own signals added. This class requires an instance. The code class name is `SignalSimulator`.
 
 {% hint style="info" %}
 #### Feeding a sink
@@ -82,7 +82,7 @@ You must create an instance to use these functions.
 
 ### `create`
 
-Creates a simulation. The configuration given here is what the platform persists, so the instance comes back after a restart as declared.
+Creates a simulation. The configuration given here is what the platform persists, so the instance comes back after a restart as declared. Runtime calls (`set`, `trigger`, `inject`, `addSignal` and the like) act on the running simulation and are not persisted; `describe` returns the current signal set to copy into a configuration.
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Creates a simulation. The configuration given here is what the platform persists
 
 Every signal is `{ kind, ...parameters, ...decorators }`. Durations are milliseconds as a number or strings such as `500ms`, `10s`, `2m`, `1h`, `1d`. Numeric fields also take `${param}` or an expression over params, resolved once at creation.
 
-<table><thead><tr><th width="150">Kind</th><th>Parameters</th><th width="220">Value</th></tr></thead><tbody><tr><td><code>constant</code></td><td><code>value</code>: number, text or boolean.</td><td>The value.</td></tr><tr><td><code>random</code></td><td><code>distribution</code> <code>uniform</code> (<code>low</code>, <code>high</code>) or <code>gaussian</code> (<code>mean</code>, <code>sigma</code>).</td><td>An independent draw per tick.</td></tr><tr><td><code>randomWalk</code></td><td><code>start</code>, <code>step</code> (sigma per tick), <code>mean</code>, <code>reversion</code> (pull toward the mean per second).</td><td>Wanders, reflected at <code>min</code>/<code>max</code>.</td></tr><tr><td><code>sine</code>, <code>triangle</code>, <code>square</code>, <code>sawtooth</code></td><td><code>period</code> (duration), <code>amplitude</code>, <code>center</code>, <code>phase</code> (0-1 of the period), <code>duty</code> (square).</td><td>Periodic in simulated time.</td></tr><tr><td><code>ramp</code></td><td><code>rate</code> per second, <code>start</code>, <code>wrap</code> (between <code>min</code> and <code>max</code>).</td><td>Linear.</td></tr><tr><td><code>integrator</code></td><td><code>input</code> (a signal or expression, a rate per second), <code>gain</code>, <code>initial</code>.</td><td>Accumulates, clamped by <code>min</code>/<code>max</code>.</td></tr><tr><td><code>counter</code></td><td><code>every</code> ticks or <code>onTrigger</code>, <code>increment</code>, <code>start</code>, <code>reset</code> (wrap above <code>max</code>).</td><td>An integer.</td></tr><tr><td><code>lag</code></td><td><code>setpoint</code> (number, signal or expression), <code>timeConstant</code> (duration), <code>initial</code>.</td><td>A first-order response toward the setpoint.</td></tr><tr><td><code>sequence</code></td><td><code>steps: [{ value, duration, jitter }]</code>, <code>loop</code>.</td><td>Each step for its duration.</td></tr><tr><td><code>switch</code></td><td><code>on</code> (a signal), <code>cases: { value of on: value }</code>, <code>default</code>, <code>jitter</code> (re-rolled on every case change).</td><td>A lookup.</td></tr><tr><td><code>stateMachine</code></td><td><code>initial</code>, <code>states: { name: { duration | { min, max }, until, next: name | { name: weight } } }</code>. <code>until</code> is a condition over the previous tick.</td><td>The state name.</td></tr><tr><td><code>pulse</code></td><td><code>rate</code> events per second (Poisson), <code>every</code> ticks, or <code>trigger</code>; <code>width</code> ticks.</td><td>A boolean.</td></tr><tr><td><code>profile</code></td><td><code>points</code> (<code>{ hour: value }</code> or <code>[[hour, value]]</code> over the simulated day, hours 0-24 in UTC), <code>days</code> (<code>{ mon..sun or 0-6: points }</code> for days that differ), <code>interpolate</code> <code>linear</code> or <code>step</code>.</td><td>The value at the clock's hour of the day; follows <code>seek</code>.</td></tr><tr><td><code>replay</code></td><td><code>samples</code> (<code>[value]</code> spaced by <code>interval</code>, or <code>[[time, value]]</code>) or <code>file</code> (a CSV in the <a href="../../../app-builder/explorers/files.md">File Explorer</a> such as <code>uploads/line4.csv</code>, with <code>column</code>, <code>timeColumn</code>, <code>delimiter</code>, <code>header</code>), <code>loop</code>, <code>interpolate</code>.</td><td>The recorded sample at the simulated time; loops over the recording or holds the last sample.</td></tr><tr><td><code>expression</code></td><td><code>expr</code>: a formula over signals, params and clock variables.</td><td>The result.</td></tr></tbody></table>
+<table><thead><tr><th width="150">Kind</th><th>Parameters</th><th width="220">Value</th></tr></thead><tbody><tr><td><code>constant</code></td><td><code>value</code>: number, text or boolean.</td><td>The value.</td></tr><tr><td><code>random</code></td><td><code>distribution</code> <code>uniform</code> (<code>low</code>, <code>high</code>) or <code>gaussian</code> (<code>mean</code>, <code>sigma</code>).</td><td>An independent draw per tick.</td></tr><tr><td><code>randomWalk</code></td><td><code>start</code>, <code>step</code> (sigma per tick), <code>mean</code>, <code>reversion</code> (pull toward the mean per second).</td><td>Wanders, reflected at <code>min</code>/<code>max</code>.</td></tr><tr><td><code>sine</code>, <code>triangle</code>, <code>square</code>, <code>sawtooth</code></td><td><code>period</code> (duration), <code>amplitude</code>, <code>center</code>, <code>phase</code> (0-1 of the period), <code>duty</code> (square).</td><td>Periodic in simulated time.</td></tr><tr><td><code>ramp</code></td><td><code>rate</code> per second, <code>start</code>, <code>wrap</code> (between <code>min</code> and <code>max</code>).</td><td>Linear.</td></tr><tr><td><code>integrator</code></td><td><code>input</code> (a signal or expression, a rate per second), <code>gain</code>, <code>initial</code>.</td><td>Accumulates, clamped by <code>min</code>/<code>max</code>.</td></tr><tr><td><code>counter</code></td><td><code>every</code> ticks or <code>onTrigger</code>, <code>increment</code>, <code>start</code>, <code>reset</code> (wrap above <code>max</code>).</td><td>An integer.</td></tr><tr><td><code>lag</code></td><td><code>setpoint</code> (number, signal or expression), <code>timeConstant</code> (duration), <code>initial</code>.</td><td>A first-order response toward the setpoint.</td></tr><tr><td><code>sequence</code></td><td><code>steps: [{ value, duration, jitter }]</code>, <code>loop</code>.</td><td>Each step for its duration.</td></tr><tr><td><code>switch</code></td><td><code>on</code> (a signal), <code>cases: { value of on: value }</code>, <code>default</code>, <code>jitter</code> (re-rolled on every case change).</td><td>A lookup.</td></tr><tr><td><code>stateMachine</code></td><td><code>initial</code>, <code>states: { name: { duration | { min, max }, until, next: name | { name: weight } } }</code>. <code>until</code> is a condition over the previous tick.</td><td>The state name.</td></tr><tr><td><code>pulse</code></td><td><code>rate</code> events per second (Poisson), <code>every</code> ticks, or <code>trigger</code>; <code>width</code> ticks.</td><td>A boolean.</td></tr><tr><td><code>profile</code></td><td><code>points</code> (<code>{ hour: value }</code> or <code>[[hour, value]]</code> over the simulated day, hours 0-24 in UTC), <code>days</code> (<code>{ mon..sun or 0-6: points }</code> for days that differ), <code>interpolate</code> <code>linear</code> or <code>step</code>.</td><td>The value at the clock's hour of the day; follows <code>seek</code>.</td></tr><tr><td><code>replay</code></td><td><code>samples</code> (<code>[value]</code> spaced by <code>interval</code>, or <code>[[time, value]]</code>) or <code>file</code> (a CSV in the <a href="../../../app-builder/explorers/files.md">Files explorer</a> such as <code>uploads/line4.csv</code>, with <code>column</code>, <code>timeColumn</code>, <code>delimiter</code>, <code>header</code>), <code>loop</code>, <code>interpolate</code>.</td><td>The recorded sample at the simulated time; loops over the recording or holds the last sample.</td></tr><tr><td><code>expression</code></td><td><code>expr</code>: a formula over signals, params and clock variables.</td><td>The result.</td></tr></tbody></table>
 
 #### Decorators
 
@@ -104,7 +104,7 @@ Operators `+ - * / % ^`, comparisons, `and or not`, the ternary `c ? a : b` and 
 
 #### Output
 
-Returns the simulation instance. With `autoStart` the clock is running.
+Returns the name of the created instance. With `autoStart` the clock is running.
 
 #### Examples
 
@@ -164,6 +164,18 @@ scenario:
   - { at: 45s, action: set, signal: gas, value: 0 }
   - { at: 50s, action: release, signal: gas }
 ```
+
+### `delete`
+
+Deletes the simulation: the clock stops and its listeners are dropped.
+
+#### Parameters
+
+None.
+
+#### Output
+
+Returns `true` upon removal.
 
 ### `start`
 
@@ -363,7 +375,7 @@ Returns `true`.
 
 ### `removeSignal`
 
-Removes a signal. Refused while another signal depends on it.
+Removes a signal. Refused while another signal depends on it. Its `onSignal` subscriptions end.
 
 #### Parameters
 
@@ -406,9 +418,13 @@ to: 7d
 step: 15m
 ```
 
+## Event listeners
+
+Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The payload arrives on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
+
 ### `onTick`
 
-Subscribes to the tick event.
+Subscribes to the tick event. The callback runs on every tick.
 
 #### Parameters
 
@@ -416,23 +432,11 @@ Subscribes to the tick event.
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offTick`
-
-Removes a listener given to `onTick`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ### `onSignal`
 
-Subscribes to one signal: every tick, or only when the value moved by more than the signal's `deadband`.
+Subscribes to one signal: every tick, or only when the value moved by more than the signal's `deadband`. Removing the signal ends the subscription.
 
 #### Parameters
 
@@ -440,19 +444,7 @@ Subscribes to one signal: every tick, or only when the value moved by more than 
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offSignal`
-
-Removes a listener given to `onSignal`, from one signal or from every signal it listens to.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>name</code></td><td>The signal name. Optional: without it, the listener leaves every signal.</td><td>string</td></tr><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ## Presets
 

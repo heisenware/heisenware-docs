@@ -1,96 +1,182 @@
+---
+description: >-
+  Photos taken on a phone, kept in the workspace's file store, and handed on to an HTTP endpoint or to a folder on your own computer.
+---
+
 # Photos from the App to a server
 
-The Minimal Photo Upload App lets users scan a barcode as an order number, add a name, attach up to 10 photos, and send them directly to a local computer running a Native Agent.
+A worker scans an order number, types a name, takes a few photos of the part, and taps **Save to server**. This lab builds that App and sends the photos on, either to an HTTP endpoint or into a folder on a computer in your own network.
 
-## Frontend
+## How a photo travels
 
-<div align="left"><figure><img src="../.gitbook/assets/image (38).png" alt="" width="284"><figcaption></figcaption></figure></div>
+A photo never travels as bytes through your flow. The [upload](../reference/widgets/input/upload.md) widget puts each file into the workspace's file store and hands your logic a short **reference**: `{ id, name, type, size }`. One file is an entry, several are a list, at every step. Functions that take a file take that reference where they take a path: an HTTP upload, an email attachment, every File read. See [Files, data and dates](../concepts/files-data-and-dates.md#files-a-row-keeps).
 
-The frontend includes a [form](../reference/widgets/input/form.md) widget to enter an order ID (which users can also scan using the [barcode / QR](../reference/widgets/input/barcode-qr.md) widget) and a name. Users can then [upload](../reference/widgets/input/upload.md) photos from their gallery or file system, or take them directly with the camera. Once all information is available, the Save to server [button](../reference/widgets/trigger/button.md) widget becomes active and transfers the files to a local computer running a [Native Agent](../app-manager/agents/native-agent.md) with the [File I/O](../reference/functions/connectors/file-i-o.md) connector.
+That is why the widget's **Storage type** stays at **File**. The other setting, **Buffer**, keeps the content inside the value as base64 and is capped at 64 kB, which no camera photo fits into.
 
-## Backend
-
-<figure><img src="../.gitbook/assets/image (36).png" alt=""><figcaption></figcaption></figure>
-
-* **Form auto-fill:** The optional barcode scan uses the `autofill` command to populate the form directly.
-* **Form data receipt:** An [`echo`](../reference/functions/utilities/data-processing.md#echo) function receives the form data. This lets the flow trigger [on page load](../concepts/executors-and-instances.md#trigger-sources) to run the connected validation routine, which enables the upload button.
-* **Photo retrieval:** A second [`echo`](../reference/functions/utilities/data-processing.md#echo) function retrieves the uploaded photos. This function uses the `File` storage option because camera images can exceed 5 MB, and buffers perform poorly on large files.
-* **Live validation:** The [`combine`](../reference/functions/utilities/data-processing.md#combine) function performs live validation whenever form or photo inputs change. It uses the `toggle` command to enable or disable the button based on the [modifier](../app-builder/flowboard/modifier.md) extension node logic.
-* **Sequential file processing:** Drag the [`readFileToBuffer`](../reference/functions/connectors/file-i-o.md#readfiletobuffer) function from your [Native Agent](../app-manager/agents/native-agent.md) onto the canvas. It receives an array of file paths from the [upload](../reference/widgets/input/upload.md) widget and [processes them sequentially](../concepts/executors-and-instances.md#sequential-processing-of-arrays-looping) into a base64 buffer on the backend to write them to the `image` directory. When configured this way, the system interprets the path relative to the Native Agent executable.
-* **UI feedback:** To improve the user experience, the button shows a loading animation until the files arrive on the server. Call the `done` event on the [button](../reference/widgets/trigger/button.md) widget to stop this animation and clear the widgets after a successful upload.
-
-## Step-by-step guide
+## The page
 
 {% stepper %}
 {% step %}
-#### Download the template
-Download the `minimal-photo-uploader.hwt` template file to your local computer.
+#### The order number and the name
 
-[Download the template](https://downloads.heisenware.cloud/public/templates%2Fminimal-photo-uploader.hwt)
+Place a [form](../reference/widgets/input/form.md) widget with two fields, `orderNumber` and `name`. Beside it, place a [barcode / QR](../reference/widgets/input/barcode-qr.md) widget so the number can be scanned instead of typed.
 {% endstep %}
 
 {% step %}
-#### Install the Native Agent
-Install a [Native Agent](../app-manager/agents/native-agent.md) on the computer that will receive the uploaded photos. Ensure the [File I/O](../reference/functions/connectors/file-i-o.md) connector is configured and active.
+#### The photos
+
+Place an [upload](../reference/widgets/input/upload.md) widget. In its settings:
+
+* **Allowed file types**: `Photo`. On a phone or a tablet that replaces the file picker with the camera.
+* **Maximum number of files**: `10`. With more than one allowed, the widget writes the list of entries; with the default 1 it writes that one entry.
+* **Show thumbnails**: on, so the worker sees what was taken.
 {% endstep %}
 
 {% step %}
-#### Import the template
-1. Open the **App Builder**.
-2. Click the tags menu in the [top bar](../app-builder/test-and-deploy.md).
-3. Select **Import** and upload the `minimal-photo-uploader.hwt` file.
-4. Select the imported template and confirm the import.
+#### The button
+
+Place a [button](../reference/widgets/trigger/button.md) and set its text to `Save to server`.
 {% endstep %}
 {% endstepper %}
 
-## Write images from App to server
+<div align="left"><figure><img src="../.gitbook/assets/image (38).png" alt="The page: the order form, the barcode scanner, the photo thumbnails and the save button" width="284"><figcaption></figcaption></figure></div>
+
+## The flow
 
 {% stepper %}
 {% step %}
-##### Prepare the file connector agent
+#### Fill the form from the scan
 
-Download an [Agent](../concepts/agents-and-where-code-runs.md) with the [File I/O](../reference/functions/connectors/file-i-o.md) connector and start it on the server or PC where you want to store the images.
+Drag **New Echo Executor** onto the Flowboard, select it, and drag the barcode widget onto its input. Make that input hot by dragging it onto the echo's trigger: a widget write runs nothing by itself, so without that nothing happens when someone scans. Then add a [modifier](../app-builder/flowboard/modifier.md) to the echo's output that names the field:
+
+```javascript
+({ orderNumber: x })
+```
+
+Link that modifier to the form's `autoFill` property. The form merges the object into its data.
 {% endstep %}
 
 {% step %}
-##### Add and configure the photo widget
+#### Pick the entries up
 
-Pick the [photo](../reference/widgets/input/photo.md) widget from the input widgets and place it into the user interface of your App. Switch the storage type of the photo widget from file to buffer.
+Two more echo executors: one fed by the form's `formData`, one fed by the upload widget's `files`. These are the two values the save needs, each held on its own node.
+
+Make both inputs hot as well, so each echo runs when its widget writes and passes the value on.
 {% endstep %}
 
 {% step %}
-##### Prepare the photo data
+#### Put the request together
 
-Use a [memory](../reference/functions/utilities/data-processing.md#memory) function to receive images from the photo widget by connecting the photo widget to the function's input. Add two JSONata [modifier](../app-builder/flowboard/modifier.md) extension nodes to extract the base64 buffer string and to prepare the path and file name.
+Drag [`combine`](../reference/functions/utilities/data-processing.md#combine) onto the Flowboard, wire the two echoes into its inputs and make both hot. It answers the latest value of each as one array.
 
-Use these JSONata snippets in your modifiers. Replace the path from the example with the path on your server where you want to store the images. Double all backslashes to work with the JSONata syntax.
+Add a modifier to its output that shapes the whole request, so every later step reads one object:
 
+```javascript
+(() => {
+  const [form, files] = x
+  // one file is an entry, several are a list: always work with a list
+  const photos = Array.isArray(files) ? files : files ? [files] : []
+  return {
+    orderNumber: form?.orderNumber ?? '',
+    name: form?.name ?? '',
+    photos
+  }
+})()
 ```
-'C:\\Data\\Images' & '\\' & name & '.jpeg'
-```
-
-```
-base64
-```
-
-After taking a photo in test mode, the memory function must look like the screenshot below.
-
-<figure><img src="../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
-##### Configure the writeBufferToFile function
+#### Enable the button only when ready
 
-Find the [`writeBufferToFile`](../reference/functions/connectors/file-i-o.md#writebuffertofile) function inside your file connector agent, which appears in the Function Explorer, and drag it onto the canvas.
+Add a second modifier **after** the first one, with the **+** on the first modifier. Extensions chain, so this one works on the request:
 
-Connect the path modifier to the `filePath` input and the buffer modifier to the `buffer` input.
+```javascript
+Boolean(x.orderNumber && x.name && x.photos.length)
+```
 
-<figure><img src="../.gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
+Link it to the button's `toggle` property: truthy enables the button, falsy disables it.
 {% endstep %}
 
 {% step %}
-##### Configure a trigger
+#### Send it
 
-Configure the trigger of the `writeBufferToFile` function as needed, for example `on input change`.
+This is the one step that differs by destination. Pick a tab below.
+{% endstep %}
+
+{% step %}
+#### Give the worker an answer
+
+* Link the output of the sending executor to the button's `done` property. The button spins from the click until that value arrives.
+* Link the same output to the upload widget's `clear` property, so the next part starts with an empty list.
+* Add an [error handler](../app-builder/flowboard/error-handler.md) to the sending executor's output and drop the **Toast** action on it, with **Take message from the live value** on and the type **Error**. A failing call produces no output, so without the handler the button would spin forever and nobody would learn why.
 {% endstep %}
 {% endstepper %}
+
+## Where the photos go
+
+{% tabs %}
+{% tab title="To an HTTP endpoint" %}
+One executor does it. The HTTP connector runs in the platform, which holds the file store, so it reads the references itself.
+
+Drag [`post`](../reference/functions/connectors/http-rest.md#post) of **Connectors** > **HTTP / REST** onto the Flowboard:
+
+```yaml
+# url
+https://intake.acme.example/parts
+# options
+requestType: multipart
+```
+
+Wire the request modifier into `post`'s `data` input. With `requestType: multipart`, every key of `data` becomes a form field, and a value that is a file reference becomes a file part under its own name and type: `photos` holds the list, so the request carries one part per photo and two text fields.
+
+Link the button's event to `post`'s trigger. Leave the `data` input as plain data: the click is the impulse.
+
+{% hint style="info" %}
+An endpoint with a company or self-made certificate is refused until the workspace trusts it. Trust it once with `trustServer` of [Trusted certificates](../reference/functions/connectors/trusted-certificates.md). Credentials for the endpoint belong in a [secret variable](../concepts/variables-and-endpoints.md#secrets), never in a plain input.
+{% endhint %}
+{% endtab %}
+
+{% tab title="To a folder on your own computer" %}
+A folder on a PC in your network is not reachable from the cloud, so this needs a [native agent](../app-manager/agents/native-agent.md) running on that PC, built with the **File I/O** connector. Build it in the Manager's [Agents](../app-manager/agents/README.md) screen and hand the requirements sheet to whoever installs it.
+
+The agent runs on that PC and does not see the workspace's file store, so the photos are read in the platform and written on the agent: the same **File I/O** class at two addresses, with one reshape between them.
+
+1. **Read them.** From **Connectors** > **File I/O**, the platform's own entry and not your agent's, drag [`readFileToBuffer`](../reference/functions/connectors/file-i-o.md#readfiletobuffer) onto the Flowboard. Wire the upload echo's output into its `filePath` input, which takes a reference as well as a path. Right-click its trigger, **Process One By One** > **On input 1**: the executor then runs once per entry and collects the results into a list, in the same order. See [Loops](../concepts/when-streams-meet.md#loops-once-per-element).
+2. **Name them.** Drag a second `combine` onto the board, wire the request modifier into input 1 and `readFileToBuffer`'s output into input 2, and add a modifier to it:
+
+   ```javascript
+   (() => {
+     const [request, buffers] = x
+     return request.photos.map((photo, i) => ({
+       name: photo.name,
+       base64: buffers[i]
+     }))
+   })()
+   ```
+
+3. **Write them.** From your agent's own entry in the Functions explorer, under **File I/O**, drag [`writeBuffersToDirectory`](../reference/functions/connectors/file-i-o.md#writebufferstodirectory) onto the board. Give it the folder and wire the modifier into `bufferData`:
+
+   ```yaml
+   # dirname
+   C:\Data\Images
+   ```
+
+A relative path is read relative to the agent's own folder on that host.
+
+The click goes to `readFileToBuffer` alone: link the button's event to its trigger. The write follows the read, so make `writeBuffersToDirectory`'s `bufferData` input hot instead of linking the button to it. A click that fired both would start the write before the files were read.
+
+{% hint style="info" %}
+Sort the photos by order number by computing `dirname` instead of fixing it: a modifier on the request that builds `'C:\\Data\\Images\\' + x.orderNumber`, wired into the `dirname` input.
+{% endhint %}
+{% endtab %}
+{% endtabs %}
+
+## Try it
+
+Click **Test**, open the App on a phone with the QR code from the version badge, and take a photo. The App has to be deployed before a phone can use it: a device opens the App's URL, which serves the deployed version alone.
+
+## What to change next
+
+* **Keep the photos with the order**: a `files` field on a table takes the whole list in one cell, a `file` field one entry. Where each photo needs a caption or an author, give it a row of its own, related to the order's row. See [Database editor](../app-builder/database-editor.md).
+* **Show them again**: a [gallery](../reference/widgets/display/gallery.md) shows a list of files, or a list of rows that hold one.
+* **Fewer, smaller files**: the upload widget's **Resolution** and **Aspect ratio** settings scale and crop what the camera delivers before it leaves the device.

@@ -1,8 +1,14 @@
 # Industrial Blockchain
 
-The industrial blockchain extension provides an interface to interact with a SafeUrChain blockchain node. This specialized ledger creates a secure, immutable record for tracking data across manufacturing and supply chain networks.
+The Industrial Blockchain add-on talks to a SafeUrChain node: a ledger whose entries cannot be changed afterwards, for audit trails and proof of origin across a production or supply chain network. You write a value, the ledger timestamps it into a block, and anyone can later show that the value is the one that was written.
 
-Use this class to manage the node lifecycle, execute transaction writes, and query the ledger. This class requires an instance for ledger operations, but provides static functions for node process management. The code class name is `SafeUrChain`.
+Install it from the Functions explorer (see [Add-ons](README.md)); it then appears there as the agent **Industrial Blockchain** with the class `SafeUrChain`. Static functions start and stop the node; writing and reading go through an instance.
+
+## Recording to the ledger without wiring
+
+With the add-on installed, the [recorder](../../../app-builder/flowboard/recorder.md) extension offers one more retention policy: **Blockchain**, shown as `BC` on the recorder. A point recorded under it goes into the ledger as well as into the time-series database, and the platform starts the node and keeps its instance for you. Use the functions below when you need more than that: your own measurement and tags, a query, or a look at the chain itself.
+
+If the badge turns red, the add-on is no longer installed and nothing is written to the ledger.
 
 ## Node management
 
@@ -59,17 +65,21 @@ None.
 
 Returns `true` if the node runs, or `false` if it is stopped.
 
+## Writing and reading data
+
+An instance is the client that talks to one node. Create it once, then wire its functions.
+
 ### `create`
 
-Initializes a new SafeUrChain API client instance connected to a specific node's GraphQL endpoint.
+Creates a client for a node, connected to that node's API.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>apiUrl</code></td><td>The endpoint URL of the SafeUrChain node API. Falls back to internal environment variables if omitted.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>apiUrl</code></td><td>The endpoint URL of the SafeUrChain node API. Without it, the add-on's own environment decides.</td><td>string</td></tr></tbody></table>
 
 #### Output
 
-Returns the API client instance.
+Returns the name of the created instance.
 
 #### Examples
 
@@ -77,10 +87,6 @@ Returns the API client instance.
 # apiUrl
 http://localhost:7878
 ```
-
-## Writing and reading data
-
-Use these instance functions to interact with the ledger.
 
 ### `write`
 

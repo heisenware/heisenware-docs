@@ -51,8 +51,8 @@ Manage this process using `createCertificates` and `addServerCertificate`.
 
 The location of the `pki` folder depends on where the client runs:
 
-* **Agent**: The folder resides in the directory the Agent is started from, which is the directory of the executable when you start it from there.
-* **Platform**: The folder resides under `/shared/certificates`. Click the refresh icon in the File Explorer to view it.
+* **Native agent**: `pki` in the directory the agent is started from, which is the directory of the executable when you start it from there.
+* **Platform**: `/shared/certificates/pki`. Click the refresh icon in the [Files explorer](../../../app-builder/explorers/files.md) to view it.
 {% endhint %}
 
 ## Certificate management
@@ -88,7 +88,7 @@ What is trusted now: `{ name, kind, subject, issuer, selfSigned, validFrom, vali
 **Example 1: Add a certificate from a file**
 
 {% hint style="info" %}
-If the client runs on the platform (not in Agent mode), upload the server certificate using the File Explorer, drag the file to this parameter, and then delete it from the uploads folder.
+If the client runs on the platform and not on an agent, upload the server certificate with the [Files explorer](../../../app-builder/explorers/files.md), drag the file to this parameter, and then delete it from the uploads folder.
 {% endhint %}
 
 ```yaml
@@ -234,7 +234,7 @@ useDefaultUserCertificate: true
 
 ### `disconnect`
 
-Disconnects from the OPC UA server and closes the active session.
+Disconnects from the OPC UA server and closes the active session. Every `monitorNode` and `monitorVariable` registration ends with it: the monitored items live in the session. Connect again and trigger the monitoring executors again.
 
 #### Parameters
 
@@ -354,17 +354,19 @@ Returns an array of objects representing each node found.
 
 ## Reading and writing
 
+`readNode` and `readVariable` take a single address or a list of addresses. A list goes to the server in as few requests as it allows, so a machine's whole parameter set is one read instead of one read per value. The result then holds one object per address, in the order given, carrying the address and the node id next to the value: `{ address, nodeId, value }`.
+
 ### `readNode`
 
-Reads the value of an OPC UA node as a full data value: the value with its data type, the status code, and the timestamps.
+Reads one or many OPC UA nodes as full data values: the value with its data type, the status code, and the timestamps.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the node to read.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the node to read, or a list of them.</td><td>string or array</td></tr></tbody></table>
 
 #### Output
 
-Returns a JSON object containing the node's attributes, status code, and timestamps.
+For a single address, a JSON object containing the node's attributes, status code, and timestamps. For a list, one `{ address, nodeId, value }` per address, `value` being that object. A node the server cannot read, or a browse path it cannot resolve, stands in the result with its status code and fails nothing else.
 
 ```json
 {
@@ -399,15 +401,15 @@ ns=2;s=Demo.Dynamic.Int32
 
 ### `readVariable`
 
-Reads the value of a single variable from the server.
+Reads the value of one or many variables from the server.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the variable to read.</td><td>string</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>address</code></td><td>The <code>nodeId</code> or browse path of the variable to read, or a list of them.</td><td>string or array</td></tr></tbody></table>
 
 #### Output
 
-Returns the raw value of the variable.
+For a single address, the raw value of the variable. For a list, one `{ address, nodeId, value }` per address. A variable the server answers with a bad status code, an unknown node id for one, fails the whole read and the error names every such address with its status. Use `readNode` where you want each node's status instead.
 
 #### Examples
 
@@ -423,6 +425,15 @@ ns=2;s=Demo.Dynamic.Int32
 ```yaml
 # address
 /0:Objects/2:Demo/2:Dynamic/2:Int32
+```
+
+**Example 3: Read a machine's parameter set in one request**
+
+```yaml
+# address
+- ns=2;s=Demo.Dynamic.UInt16
+- ns=2;s=Demo.Dynamic.Int32
+- /0:Objects/2:Demo/2:Dynamic/2:Double
 ```
 
 ### `writeVariable`
@@ -452,7 +463,7 @@ Invokes a method on an OPC UA object.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>methodAddress</code></td><td>The <code>nodeId</code> or browse path of the method to call.</td><td>string</td></tr><tr><td><code>inputValues</code></td><td>An array of input arguments. Default [].</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>methodAddress</code></td><td>The <code>nodeId</code> or browse path of the method to call.</td><td>string</td></tr><tr><td><code>inputValues</code></td><td>An array of input arguments; a single value is taken as the one argument. The client infers each argument's data type from the method's metadata on the server. Default [].</td><td>array or any</td></tr></tbody></table>
 
 #### Output
 
@@ -476,6 +487,8 @@ Monitoring subscribes to changes on the server and delivers them to a callback. 
 Monitoring a node that is already monitored reuses the existing subscription and never registers the callback twice, so you can extend a list and run the block again. Nodes that are already monitored keep their original options.
 {% endhint %}
 
+Both are event functions. Every listener is greeted with the current value of each of its nodes before the first change arrives, also of a node someone else monitors already, so a page shows values without waiting. Monitoring ends when the executor's [subscription](../../../concepts/backend-events.md) ends, when `stopMonitor` takes one of its items away, when the instance disconnects or when the server drops the subscription; the executor's status then says so. **Stop listening** in the menu of its event input ends it until the next trigger.
+
 ### `monitorNode`
 
 Subscribes to changes of one or many OPC UA nodes. Triggers the callback on every change.
@@ -486,7 +499,7 @@ Subscribes to changes of one or many OPC UA nodes. Triggers the callback on ever
 
 #### Output
 
-Returns the resolved `nodeId`, or for a list the `nodeId`s in the order of the list. Use them with `stopMonitor` to terminate monitoring. A list is all-or-nothing: if an address does not resolve or the server refuses a node, nothing is monitored and the error names every failing address.
+The return is the resolved `nodeId`, or for a list the `nodeId`s in the order of the list; use them with `stopMonitor`. It says no more than that the executor is listening: the changes arrive on the event outputs. A list is all-or-nothing: if an address does not resolve or the server refuses a node, nothing is monitored and the error names every failing address.
 
 #### Examples
 
@@ -535,7 +548,7 @@ Subscribes to value changes of one or many variables. Triggers the callback with
 
 #### Output
 
-Returns the resolved `nodeId`, or for a list the `nodeId`s in the order of the list. Use them with `stopMonitor` to terminate monitoring. A list is all-or-nothing: if an address does not resolve or the server refuses a node, nothing is monitored and the error names every failing address.
+The return is the resolved `nodeId`, or for a list the `nodeId`s in the order of the list; use them with `stopMonitor`. It says no more than that the executor is listening: the changes arrive on the event outputs. A list is all-or-nothing: if an address does not resolve or the server refuses a node, nothing is monitored and the error names every failing address.
 
 #### Examples
 
@@ -614,7 +627,7 @@ Recursively browses a directory structure on the server.
 
 #### Output
 
-Returns a nested array of objects representing the directory structure.
+Returns the directory's entries as `{ id, name }`. A folder among them carries its own entries as `children`, so one call describes the whole tree below the node.
 
 ### `readFile`
 
@@ -645,7 +658,7 @@ Creates a file on the server and uploads content to it.
 
 #### Output
 
-Returns the <code>nodeId</code> of the newly created file on the server.
+Returns the `nodeId` of the file written to. A file of that name that exists already is reused, not created a second time.
 
 #### Example
 
@@ -697,7 +710,7 @@ Registers a callback to receive client lifecycle events.
 
 #### Output
 
-Returns `true` on successful registration.
+Returns the listener's registration, which only says that the executor is listening. The event strings arrive on the event output.
 
 ## Deprecated functions
 

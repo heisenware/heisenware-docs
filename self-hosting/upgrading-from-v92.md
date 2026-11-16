@@ -7,7 +7,8 @@ How an on-premise installation moves from v92 to v93, what changes underneath, a
 Up to v92, the `docker-compose.yml` of a release package carried every secret of your installation as a literal value: the database passwords, the FusionAuth API key, the platform's tokens. From v93 on, the compose file carries references only, and the values live in a file named `.env` next to it, readable by its owner. Two things come with that:
 
 * **`start.sh`**, the platform's front door, ships inside every release package. It knows which values the platform needs, generates the internal ones that are missing, refuses to start when a required value is absent, and runs the services. Starting the platform is `./start.sh` from now on.
-* **Members become owners of the account.** At its first start, v93 gives every member of an account the [owner](../app-manager/members.md) role and deletes the v92 roles. Check your members afterwards.
+* **Members become owners of the account.** At its first start, v93 gives every member who held the v92 `admin` role the [owner](../app-manager/members.md) role and deletes the v92 roles. Check your members afterwards.
+* **Google sign-in is gone on-premise.** v92 passed a Google client to an on-premise installation; v93 never does, connected or not. Members who signed in with Google sign in with their email address and a password from now on, setting one through **Forgot password** if they have none. That needs the mail relay in `.env`.
 * **`install.sh` stays the one installer for every version.** It recognizes what it is handed and what is installed, and when it updates a v92 installation it moves the secrets out of the old compose file into `.env` before anything else, so your data keeps the credentials it was created with.
 
 ## Upgrading
@@ -38,7 +39,7 @@ That is all. The platform comes up with your existing data, users, and Apps.
     ./start.sh status
     ```
 
-    Every line should read `ok` or `default`. A line marked `missing` names a value you have to add to `.env` before running `./start.sh` again. On an on-premise installation a missing mail password or Google login secret only warns: the platform starts without them.
+    Every line should read `ok` or `default`. A line marked `missing` names a value you have to add to `.env` before running `./start.sh` again. On an on-premise installation a missing mail password only warns: the platform starts without it, and sends no mail.
 * Sign in with your existing administrator account; your Apps and connected devices are where you left them.
 *   Optionally renew the platform's internal secrets, now that rotating them is a one-liner. The command writes fresh values into `.env` and restarts the affected services:
 

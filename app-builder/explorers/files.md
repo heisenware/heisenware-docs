@@ -1,49 +1,67 @@
 # Files explorer
 
-The Files explorer is the panel on the left that gives access to your workspace's internal file server. It is the central place for the files your App works with: data files your logic reads and writes, images for the UI, or PDFs for template backgrounds.
+The Files explorer is the workspace's shared storage: the files your logic reads and writes, the images and logos your pages show, the PDF masters your templates print on, and what the platform itself keeps. Every App of the workspace sees the same files.
 
-By default, the Files explorer shows the `uploads` folder, where your uploaded files live. You can also navigate to other areas of the file server, such as the `native-agents` folder holding the [agents](../../concepts/agents-and-where-code-runs.md) you built.
+It opens in `uploads`, where what you upload lands. The breadcrumb above the list takes you to the other areas.
+
+## The areas
+
+| Folder | What it holds | What you may do |
+| --- | --- | --- |
+| `uploads` | your own files: data, images, PDF masters | upload, rename, move, delete |
+| `project` | the workspace's [project notes](../../app-manager/planning.md), written by you and the assistant | read, write |
+| `runtime-files` | what a running App writes by name: exports, dumps, reports | read, download, upload |
+| `files` | the file store: the files your table rows point to. One folder with a count; a file in it is reached through the row that points to it, see [Files in a table](../../reference/functions/storage/relational-database.md#files-in-a-table) | read through the row |
+| `native-agents` | the [agents](../../app-manager/agents/README.md) you built, ready to download again | read, download, delete |
+| `themes`, `data-backups`, `reports` | what the platform produces: compiled looks, database backups, the documents [Ask](../../app-manager/ask.md) made | read, download |
+| `builder-backend`, `apps`, `connectors`, `templates` | the platform's own records | read only |
 
 {% hint style="warning" %}
-Leave the advanced areas outside `uploads` untouched unless you know what you are doing.
+Outside `uploads` and `project`, leave things as they are unless you know what you are doing. An App's records and a running App's files are not yours to rename.
 {% endhint %}
 
-## Uploading files
+Nobody deletes in `files`: the platform's clean-up removes a file thirty days after the last row let go of it.
 
-1. Click the upload icon (<i class="fa-cloud-arrow-up">:cloud-arrow-up:</i>) at the top of the Files explorer.
-2. Drag and drop a file or click to select one from your computer.
-3. Click **Upload**. The file is now ready to be used by your executors.
+## Uploading
 
-## Viewing files
+1. Go to `uploads` and click the upload icon (<i class="fa-cloud-arrow-up">:cloud-arrow-up:</i>) at the top of the panel.
+2. Drag files in, or click to pick them from your computer.
+3. Click **Upload**.
 
-Double-click a file to open it in a tab next to the Flowboard. Text and code files (CSV, JSON, YAML, scripts), Markdown (rendered, with a toggle to its source), images and PDFs show right there; any other file type offers a download instead. The view is read-only and follows the file: when an executor or the assistant rewrites it, the tab reloads. Close a tab with its cross, or switch back to the Flowboard with the **Flowboard** tab. The download icon in the tab's header saves the file to your computer.
+Outside `uploads` the icon turns into **Refresh**, which fetches the list again.
 
-The platform's own areas, such as your Apps' design records in the `builder-backend` folder, open and download like any other file. They are read-only.
+## Working with files
 
-The `files` folder is the workspace's file store: the files your Apps' users upload and your table rows point to. It shows with the number of files it holds. The files in it are named by their content and reached through the row that points to them, see [Files in a table](../../reference/functions/storage/relational-database.md#files-in-a-table). Nobody deletes there: the platform's clean-up removes a file thirty days after the last row let go of it.
+Right-click a file or a folder:
 
-## Managing files
+* **Open**: shows it in a tab, what a double-click does.
+* **Download**: saves it to your computer.
+* **New Folder**, **Rename**, **Delete**.
+* **Copy link address**: copies a download link for the file.
 
-Right-click any file to open the context menu. Here you can:
+Drag a file onto a folder to move it there.
 
-* Open the file in a tab (what a double-click does).
-* Download the file.
-* Create a new folder to organize your assets.
-* Rename a file or folder.
-* Delete a file or folder.
-* Copy the file's path to use it directly in executor inputs.
-
-<figure><img src="../../.gitbook/assets/image (520).png" alt=""><figcaption></figcaption></figure>
+{% hint style="warning" %}
+A copied link carries an access ticket and works for anyone who has it, for twelve hours. Treat it as what it is: a key to that file.
+{% endhint %}
 
 {% hint style="danger" %}
-**Irreversible action**
-
-Be careful when renaming or deleting a file. If an executor (like `readCsv`) or a PDF template already uses that file path, your logic breaks.
+Renaming or deleting is for good. An executor, a PDF template or a widget that names the old path stops working, and nothing warns you.
 {% endhint %}
 
-## Common use cases
+## Looking at a file
 
-* **Data ingestion**: Upload `.csv` or `.json` files for your logic to process.
-* **UI assets**: Store images and illustrations to drag into the UI of your App.
-* **Document generation**: Store the PDF master files that serve as backgrounds in the [Template editor](../template-editor.md).
-* **Agent backups**: Every [native agent](../../app-manager/agents/native-agent.md) you build lands in the `native-agents` folder, ready to download again, or to delete when you no longer need it.
+Double-click a file to open it in a tab next to the Flowboard. Text and code files (CSV, JSON, YAML, scripts), Markdown (rendered, with a toggle to its source), images and PDFs show right there; any other type offers a download instead. The view is read-only and follows the file: when an executor or the assistant rewrites it, the tab reloads. Close a tab with its cross, or switch back with the **Flowboard** tab. The download icon in the tab's header saves the file to your computer.
+
+The platform's own areas, such as your Apps' records under `builder-backend`, open and download like any other file.
+
+## Using a file
+
+* **In an executor**: drag the file from the explorer onto an input. The input then holds its path.
+* **On a page**: drag a picture onto the page in the Page editor. An image widget appears, showing it.
+* **In a PDF template**: pick the PDF master in the [Template editor](../template-editor.md).
+* **With the assistant**: select the file in the explorer and it becomes the context of your next message. See [The assistant in the Builder](../assistant.md).
+
+A file an App's user uploads does not land here but in the file store, under the row that keeps it. See [Files, data and dates](../../concepts/files-data-and-dates.md).
+
+<figure><img src="../../.gitbook/assets/image (520).png" alt=""><figcaption></figcaption></figure>

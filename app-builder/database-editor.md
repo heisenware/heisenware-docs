@@ -1,19 +1,29 @@
 # Database editor
 
-The Database editor lets you look into the workspace's databases: the rows of every table and the measurements of the timeseries database. For the workspace's own database, `internal-postgres`, it also shows and shapes the **data model**: the tables, their fields and keys, their audit logs and the relations between them.
+The Database editor lets you look into the workspace's databases: the rows of every table and the measurements of the time-series database. For the workspace's own database, `internal-postgres`, it also shows and shapes the **data model**: the tables, their fields and keys, their audit logs and the relations between them.
 
-Open it from the App Builder's top bar. Choose the database on the left; its tables are listed below it.
+It belongs to the workspace, not to an App. Open it from the App Builder's top bar inside any App, or from the App Manager's **Databases** entry, which opens it in a new browser tab, with no App, a slim bar naming the workspace and a way back to the Manager.
+
+## Choosing a database
+
+The **Databases** panel on the left picks the database, from the top down:
+
+* **Source**: **Storage**, the databases of the platform, or **Native agents**, a database on an agent in your own network.
+* **Storage type**: **Relational database** or **Timeseries database**.
+* **Instance**: which one. `internal-postgres` and `internal-influx` are the workspace's own.
+
+Below the selectors stand the tables, or the measurements of a time-series database. Each carries a menu of its own, for its info, a duplicate, an export, clearing it or deleting it. A table the platform keeps itself, an audit log or the record of the data model, is read only. Drag the panel's edge to widen it.
 
 ## Model and Rows
 
-For the workspace's own database, a switch heads the editor:
+For a database that keeps a data model, a switch heads the editor:
 
 * **Model**: every table as a card, with its fields and their types, and a line for every relation between two tables.
 * **Rows**: the rows of the table selected on the left, to filter, sort, edit and export.
 
 The data model belongs to the workspace, not to an App. Every App of the workspace reads and writes the same tables, so the model is kept inside the database itself, with a history of who changed what and when. Going back to an earlier version of an App never changes a table.
 
-What changes a table's structure happens in the Model tab: making a table, duplicating it, deleting it. The Rows tab works with the rows: **Export** (CSV or SQL) and **Clear table**. Other databases have no Model tab and keep all of it in the list on the left.
+What changes a table's structure happens in the Model tab: making a table, duplicating it, deleting it. The Rows tab works with the rows: **Export data** (CSV or SQL) and **Clear table**. A relational database that keeps no model, such as one on a native agent, has no Model tab and keeps all of it in the list on the left.
 
 {% hint style="info" %}
 An external database (an ERP, a customer's SQL server) belongs to someone else. The Database editor shows its rows; its structure is shaped where it lives.
@@ -72,7 +82,26 @@ The model records every change made through Heisenware, SQL included: a statemen
 
 ## The whole database in and out
 
-At the head of the Model tab, **Import** reads an SQL dump into the database, and **Export** saves every table as CSV or the whole database as an SQL dump.
+The icons beside the **Databases** title work on the database as a whole: **Download all tables as CSV**, **Export SQL dump** and **Import SQL dump**.
+
+## A time-series database
+
+A time-series database has the same two views, with its own content.
+
+**Model** shows the shape of the database, which you do not edit here:
+
+* **How downsampled points are kept**: the storage tiers, one per resolution. A recorder set to *Downsampled* writes every point into the first tier; each tier after it keeps the mean, minimum, maximum and count of a window, and keeps them longer. The other recorder settings keep every point for the time they name. A database that is only read shows **Its buckets** instead, with what each one keeps.
+* **Measurements**: one card per measurement, with how many rows it holds, where it is kept, its fields and its tags, and the Apps that use it. Click a card for the full picture: the field types, the tag values, the span its points cover and who writes it. Nothing there is edited: a field's type is fixed by its first point, and a tag changes only by writing every point again.
+
+**Rows** reads the points of the selected measurement: a **Time range** from the last five minutes to the last year, or a **From** and **To** of your own, and a toggle between the table and a chart of the series. **Write point** adds one by hand, **Edit row** and **Delete row** work on what you selected.
+
+The reads are deliberately small, so that a look into a database never takes the server down: the editor opens on the last hour, stops a query after 30 seconds or 10,000 rows, and thins a chart to about 2,000 points.
+
+The icons beside the **Databases** title export the selected measurement as CSV, back up all time-series data, or restore it.
+
+{% hint style="info" %}
+A database that does not hold Heisenware's storage tiers is read as it is, and nothing is written into it. **Use Heisenware's storage tiers here…** at the head of the Model view creates them, after a question.
+{% endhint %}
 
 ## Tables travel with an App
 

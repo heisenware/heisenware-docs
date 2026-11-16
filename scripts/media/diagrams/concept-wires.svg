@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="605" height="470" viewBox="0 0 605 470" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .node { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.5; }
+    .slot { fill: #eef2fa; stroke: #7c9bc4; stroke-width: 1.4; }
+    .hot { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 2; }
+    .trig { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.4; }
+    .out { fill: #f3eef3; stroke: #9b7fa0; stroke-width: 1.4; }
+    .name { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .slottxt { font-size: 12px; fill: #41628d; }
+    .outtxt { font-size: 12px; fill: #7a5f80; }
+    .hottxt { font-size: 12px; fill: #2e7d63; font-weight: 700; }
+    .head { font-size: 15px; font-weight: 700; fill: #22303c; }
+    .note { font-size: 13px; fill: #4a5b6a; }
+    .wire { stroke: #5a7fb0; stroke-width: 2; fill: none; }
+    .impulse { stroke: #2e7d63; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+  </style>
+  <defs>
+    <marker id="w" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#5a7fb0"/>
+    </marker>
+    <marker id="i" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#2e7d63"/>
+    </marker>
+  </defs>
+
+  <!-- row 1: hot input -->
+  <text x="20" y="34" class="head">Hot input</text>
+  <text x="130" y="34" class="note">every value that arrives runs it</text>
+  <rect x="20" y="46" width="186" height="56" rx="9" class="node"/>
+  <text x="36" y="70" class="name">read</text>
+  <rect x="36" y="78" width="54" height="18" rx="5" class="out"/>
+  <text x="46" y="91" class="outtxt">output</text>
+  <path d="M206,74 L300,74" class="wire" marker-end="url(#w)"/>
+  <rect x="312" y="46" width="230" height="56" rx="9" class="node"/>
+  <text x="328" y="70" class="name">store</text>
+  <rect x="328" y="78" width="60" height="18" rx="5" class="hot"/>
+  <text x="336" y="91" class="hottxt">value</text>
+  <rect x="398" y="78" width="60" height="18" rx="5" class="trig"/>
+  <text x="408" y="91" class="hottxt">trigger</text>
+  <path d="M358,96 L358,112 L428,112 L428,98" class="impulse" marker-end="url(#i)"/>
+
+  <!-- row 2: follow one producer -->
+  <text x="20" y="180" class="head">Follow one producer</text>
+  <text x="206" y="180" class="note">runs when that output produces; the rest is context</text>
+  <rect x="20" y="192" width="186" height="56" rx="9" class="node"/>
+  <text x="36" y="216" class="name">onOrder</text>
+  <rect x="36" y="224" width="54" height="18" rx="5" class="out"/>
+  <text x="46" y="237" class="outtxt">output</text>
+  <rect x="20" y="262" width="186" height="46" rx="9" class="node"/>
+  <text x="36" y="290" class="name">settings</text>
+  <path d="M206,220 L300,220 L300,236 L312,236" class="impulse" marker-end="url(#i)"/>
+  <path d="M206,284 L300,284 L300,262 L312,262" class="wire" marker-end="url(#w)"/>
+  <rect x="312" y="192" width="230" height="86" rx="9" class="node"/>
+  <text x="328" y="216" class="name">print</text>
+  <rect x="328" y="228" width="60" height="18" rx="5" class="trig"/>
+  <text x="338" y="241" class="hottxt">trigger</text>
+  <rect x="328" y="252" width="60" height="18" rx="5" class="slot"/>
+  <text x="338" y="265" class="slottxt">label</text>
+
+  <!-- row 3: impulse only -->
+  <text x="20" y="348" class="head">Impulse only</text>
+  <text x="150" y="348" class="note">nothing travels but the impulse</text>
+  <rect x="20" y="360" width="186" height="56" rx="9" class="node"/>
+  <text x="36" y="384" class="name">onScan</text>
+  <rect x="36" y="392" width="54" height="18" rx="5" class="out"/>
+  <text x="46" y="405" class="outtxt">output</text>
+  <path d="M206,388 L300,388" class="impulse" marker-end="url(#i)"/>
+  <rect x="312" y="360" width="230" height="56" rx="9" class="node"/>
+  <text x="328" y="384" class="name">increment</text>
+  <rect x="328" y="392" width="60" height="18" rx="5" class="trig"/>
+  <text x="338" y="405" class="hottxt">trigger</text>
+  <text x="400" y="405" class="note" font-size="12">no inputs needed</text>
+
+  <!-- legend -->
+  <path d="M20,444 L72,444" class="wire" marker-end="url(#w)"/>
+  <text x="84" y="449" class="note">a wire carries a value</text>
+  <path d="M248,444 L300,444" class="impulse" marker-end="url(#i)"/>
+  <text x="312" y="449" class="note">a trigger source</text>
+  <rect x="446" y="436" width="52" height="17" rx="5" class="hot"/>
+  <text x="510" y="449" class="note">a hot input</text>
+</svg>

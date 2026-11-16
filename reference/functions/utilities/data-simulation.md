@@ -1,10 +1,20 @@
 ---
-description: This article lists and explains all available simulator functions.
+description: >-
+  Random values, random records and fixed demo datasets, for laying out a page
+  before any real data exists.
 ---
 
 # Data simulation
 
-The data simulation class generates random and mock data for testing, prototyping, and creating demonstrations without requiring real information. These functions create numbers, strings, and complex structured datasets such as personal profiles, geographic coordinates, and time-series logs. This class provides static functions only and does not require an instance. The code class name is `Simulator`.
+Data simulation invents values: random numbers and strings, random records such as people and addresses, and a few fixed demo datasets. Use it while you lay out a page, size a table or try an expression, and to provoke an error on purpose.
+
+You find the functions under **Utilities** > **Data Simulation** in the Functions explorer. This class provides static functions only and does not require an instance. The code class name is `Simulator`.
+
+{% hint style="info" %}
+#### Not for simulating a machine
+
+A signal that has to look like a real one over time, and a flow that is to keep working when the machine is connected, belong to the [Signal Simulator](signal-simulation.md): it feeds the real sink (an OPC UA server, a publish, a widget) with the shape of the real signal, so connecting the machine later changes an address, not the logic. Data simulation answers a value per call and knows nothing about the value before it.
+{% endhint %}
 
 ## Basic values
 
@@ -118,7 +128,7 @@ Generates an object with a random number of keys and values of various types.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The minimum number of key-value pairs. Default 3.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The maximum number of key-value pairs. Default 7.</td><td>integer</td></tr><tr><td></td><td><code>allowNesting</code></td><td>Allows values to be other random objects. Default true.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>min</code></td><td>The minimum number of key-value pairs. Default 3.</td><td>integer</td></tr><tr><td></td><td><code>max</code></td><td>The maximum number of key-value pairs. Default 7.</td><td>integer</td></tr><tr><td></td><td><code>allowNesting</code></td><td>Lets a value be another random object or an array of objects. With false, every value is a number, a string, a text or an array of numbers, digits or strings. Default true.</td><td>boolean</td></tr></tbody></table>
 
 #### Output
 
@@ -278,16 +288,21 @@ Generates a random GPS coordinate within a specified radius of a central point.
 
 Returns a coordinate object containing `lat` and `lng` properties.
 
-### Predefined reference datasets
+### `energyData` / `populationDataset` / `marketValueDataset` / `australianMedalsDataset` / `populationVsAgeDataset` / `kanbanData`
 
-These functions require no parameters and return static, predefined JSON datasets to test layout configurations and UI components (such as charts, data grids, or kanban boards) consistently:
+Fixed demo datasets. They take no parameters, never change, and are there to give a chart, a data grid or a kanban board something recognizable to show while you arrange it.
 
-* `kanbanData`: Returns structured columns and cards for a kanban board.
-* `energyData`: Returns data tracking power metrics and energy sources.
-* `populationDataset`: Returns historical demographic population data.
-* `marketValueDataset`: Returns data tracking corporate market valuations.
-* `australianMedalsDataset`: Returns statistics on historical Olympic medals.
-* `populationVsAgeDataset`: Returns data correlating age groups and population distribution.
+#### Parameters
+
+None.
+
+#### Output
+
+<table><thead><tr><th width="250">Function</th><th>Rows</th><th>Fields</th></tr></thead><tbody><tr><td><code>energyData</code></td><td>6</td><td><code>country</code>, <code>hydro</code>, <code>oil</code>, <code>gas</code>, <code>coal</code>, <code>nuclear</code>: energy per source and country.</td></tr><tr><td><code>populationDataset</code></td><td>6</td><td><code>country</code>, <code>y014</code>, <code>y1564</code>, <code>y65</code>: population by age band.</td></tr><tr><td><code>marketValueDataset</code></td><td>6</td><td>The same rows as <code>populationDataset</code>. The market value rows the name promises sit unused in the agent.</td></tr><tr><td><code>australianMedalsDataset</code></td><td>31</td><td><code>year</code>, <code>gold</code>, <code>silver</code>, <code>bronze</code>: Olympic medals from 1896 on.</td></tr><tr><td><code>populationVsAgeDataset</code></td><td>7</td><td><code>total1</code>…<code>total4</code>, <code>older1</code>…<code>older4</code>, <code>perc1</code>…<code>perc4</code>, <code>tag1</code>…<code>tag4</code>: up to four countries per row, for a bubble chart.</td></tr><tr><td><code>kanbanData</code></td><td>-</td><td>Answers nothing: the dataset behind it is missing.</td></tr></tbody></table>
+
+{% hint style="warning" %}
+`kanbanData` currently answers nothing and `marketValueDataset` answers the population rows. To fill a kanban board, write the columns and cards you want as a static value or keep them in a table.
+{% endhint %}
 
 ## Execution control
 

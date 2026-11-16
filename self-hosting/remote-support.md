@@ -47,6 +47,8 @@ HW_SUPPORT_INTEGRATION_PASSWORD=...
 HW_SUPPORT_PUBLIC_HOST=https://heisenware.example.local   # your installation's address
 HW_SUPPORT_EXPIRES_AT=2026-10-01T18:00:00Z        # optional: the agent stops by itself (UTC)
 ```
+
+`HW_SUPPORT_PUBLIC_HOST` is the address a browser reaches your installation at. It switches on the visual tools: without it Heisenware gets no screenshots.
 {% endstep %}
 
 {% step %}
@@ -73,7 +75,7 @@ docker compose logs -f supportAgent
 * **Expiry.** `HW_SUPPORT_EXPIRES_AT` (ISO 8601, UTC): the agent disconnects by itself at that time.
 * **Read-only.** `HW_SUPPORT_READ_ONLY=true`: Heisenware can look (Apps, executors, logs, screenshots) but change nothing.
 * **Live values.** `HW_SUPPORT_VALUE_READS=false`: no values of your running Apps, screenshots without them.
-* **Irreversible operations.** Deleting an entity or a page and deploying an App need an explicit confirmation on Heisenware's side, per call.
+* **Irreversible operations.** Deleting a whole App, deploying one, ending a registration and reshaping the data model need an explicit confirmation on Heisenware's side, per call. Deleting an executor, a widget or a page does not: a rollback brings those back.
 * **Audit.** Every call is one line in the container log: `docker compose logs supportAgent`.
 
 ## Switch it off

@@ -1,51 +1,57 @@
 # Connectors
 
-Connectors are [functions](../../../concepts/executors-and-instances.md) that handle translation between Heisenware and external systems. They let flows communicate natively with third-party systems, industrial protocols, and external databases.
+Connectors are the [functions](../../../concepts/executors-and-instances.md) that speak to the world outside Heisenware: machines, industrial protocols, web APIs, mail servers, databases and devices. They come with the platform, on the agent named **Connectors**.
 
-## Connection scenarios
+## Where a connector runs
 
-The network location of the target system determines where a connector executes.
+Every executor carries an address, and its agent decides which network the call goes out from. So the question is always: can the platform reach that system itself?
 
 ### Direct connection
 
-When the platform can reach the target system directly, execute the connector in the application backend. The platform automatically manages the connection and execution. This scenario applies to:
+When it can, the connector runs on the platform's own Connectors agent and you choose nothing. This holds for:
 
 * The Heisenware Cloud reaching systems on the public internet, such as a cloud API, a web service, or a public MQTT broker.
 * An [on-premise installation](../../../self-hosting/install.md) reaching systems within the same network.
 
-### Local connection (via Agent)
+### Local connection (via an agent)
 
-If the target system resides in an isolated network segment without inbound access (such as a PLC in a machine network), deploy an Agent. Agents are available as a [Native Agent](../../../app-manager/agents/native-agent.md) or a [Docker Agent](../../../app-manager/agents/docker-agent.md).
+If the target system sits in an isolated network segment the platform cannot reach, such as a PLC in a machine network, an agent inside that network runs the connector. It comes as a [native agent](../../../app-manager/agents/native-agent.md), a [Docker agent](../../../app-manager/agents/docker-agent.md) or an [LXC agent](../../../app-manager/agents/lxc-agent.md).
 
 {% stepper %}
 {% step %}
 #### Build
 
-Compile a Native Agent directly inside the [App Builder](../../../app-builder/README.md) and select which connectors to include in the package.
+The App Manager's **Agents** panel builds one. **Build agent** asks for a name, the target platform and the connectors to include, and says what each of them can do on the host. The finished build appears under **Builds**, with the installer to download and the requirements for your IT.
 {% endstep %}
 
 {% step %}
-#### Deploy
+#### Install
 
-Install the binary on a target system within the local network.
+Your IT installs it on a host inside that network. The agent dials out to the platform, so no inbound hole is needed.
 {% endstep %}
 
 {% step %}
 #### Use
 
-Once the Agent comes online, it appears automatically in the [Function Explorer](../../../app-builder/explorers/functions.md). The Agent displays the connectors selected during the build. These functions execute directly at the edge, next to local devices.
+Once the agent is online it appears by its name in the [Functions explorer](../../../app-builder/explorers/functions.md), with the connectors it was built with. An executor on that agent runs next to the devices.
 {% endstep %}
 {% endstepper %}
 
 {% hint style="info" %}
-For a deep dive into the build process and deployment options, see the [Agents](../../../concepts/agents-and-where-code-runs.md) article.
+Which network a function runs in is the executor's address. See [Agents and where code runs](../../../concepts/agents-and-where-code-runs.md).
 {% endhint %}
 
 ## Instance creation
 
-Most connectors require an instance configuration before they can interact with a target system. Create an instance using the `create` function. The instance preserves configuration schemas, tracks credentials, and manages the connection lifecycle.
+Most connectors need an instance before they can reach a target system: a living object inside the agent that holds the connection and its credentials. The `create` function is the constructor; `delete` ends it.
 
-Certain connectors provide purely static utilities (such as [File I/O](file-i-o.md) or the [Operating System (OS)](operating-system-os.md)) and execute calls immediately without an instance configuration.
+An instance has a name, unique on its agent, and every App of the workspace reaches it by that name. It is created once and then outlives deployments and platform restarts: the agent remembers how it was born and re-creates it when it starts. Trigger the constructor with `onAppStart`, and creating an instance that already exists does nothing.
+
+{% hint style="warning" %}
+An instance is constructed, never reconfigured. Changing a `create` executor's inputs and triggering it again does not re-apply them. Use the class's setter functions for what can change at runtime; otherwise delete the instance, set the new inputs and create it again.
+{% endhint %}
+
+Some connectors need no instance and work right away. [File I/O](file-i-o.md), [GraphQL](graphql.md), [Operating system (OS)](operating-system-os.md) and [Trusted certificates](trusted-certificates.md) offer static functions only, and [HTTP / REST](http-rest.md) has both: static functions for a single call, an instance where many calls share a base URL and credentials.
 
 ## Available connectors
 
@@ -59,7 +65,7 @@ The following table lists the available connectors and their required configurat
 | [File I/O](file-i-o.md)                                   | Reads from and writes to files on a connected file system.                          | Static functions only               |
 | [GraphQL](graphql.md)                                     | Interacts with any GraphQL API for flexible data queries.                           | Static functions only               |
 | [GPIO counter](gpio-counter.md)                           | Counts digital pulses on Raspberry Pi GPIO pins, with automatic run/stop detection. | Instance creation required          |
-| [Heidenhain DNC](heidenhain-dnc.md)                       | Connects to Heidenhain DNC systems and requires a local connection scenario.        | Instance creation required          |
+| [Heidenhain DNC](heidenhain-dnc.md)                       | Reaches Heidenhain controls without OPC UA, over Heidenhain's DNC interface.        | On request, as its own agent         |
 | [Heidenhain OPC UA](heidenhain-opc-ua.md)                 | Connects to Heidenhain controllers using the OPC UA protocol.                       | Instance creation required          |
 | [HTTP / REST](http-rest.md)                               | Makes requests to standard web APIs and HTTP endpoints.                             | Mixed (Static and instance options) |
 | [Hydra MIP](hydra-mip.md)                                 | Integrates natively with the Manufacturing Integration Platform (MIP).              | Instance creation required          |

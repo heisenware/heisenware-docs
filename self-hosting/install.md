@@ -1,89 +1,90 @@
 # Install
 
-Set up and run a private, on-premise installation of the Heisenware platform (see [Cloud or on-prem](README.md)).
+How to set up, run, update and back up a private on-premise installation of Heisenware (see [Cloud or on-prem](README.md)).
 
-## Prerequisites: Docker installation
+You work with two files. `install.sh` is the installer: it belongs to no version and handles the life of the installation (install, update, backup, restore, certificates). `start.sh` travels inside every release package and handles the life of the running platform (start, status, rotate); `stop.sh` travels with it.
 
-The Heisenware platform runs inside Docker containers. Before installing Heisenware, you must set up a working Docker environment on your server or local computer.
+## Prerequisites
+
+The host must be **x86-64 (amd64) Linux**: the platform's images are built for that architecture only. It needs Docker Engine with the Compose plugin, `bash` 4.4 or newer, `openssl` and `curl`.
 
 {% tabs fullWidth="false" %}
 {% tab title="Linux" %}
-If you run a Linux distribution (such as Ubuntu, Debian, or CentOS), install Docker Engine, which includes the Docker Compose plugin.
+On a Linux distribution (Ubuntu, Debian, CentOS), install Docker Engine, which includes the Docker Compose plugin.
 
-1. Follow the official Docker guides to install Docker Engine for your specific distribution:
+1. Follow the official Docker guide for your distribution:
    * [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
    * [Install Docker Engine on Debian](https://docs.docker.com/engine/install/debian/)
    * [Install Docker Engine on CentOS](https://docs.docker.com/engine/install/centos/)
-2. Run all subsequent commands inside your standard terminal window.
+2. Run everything below in your normal terminal.
 {% endtab %}
 
 {% tab title="Windows" %}
-Modern Windows systems use the Windows Subsystem for Linux (WSL) to run Docker. This provides a stable Linux environment directly inside Windows.
+Windows runs Docker through the Windows Subsystem for Linux (WSL), which gives you a Linux environment inside Windows. This is good for a trial; a production installation belongs on a Linux server.
 
 #### Step 1: Install WSL and Ubuntu
 
-1. Open **PowerShell** as an administrator (search for PowerShell in the Start menu, right-click, and select **Run as administrator**).
-2.  Run the following command:
+1. Open **PowerShell** as an administrator (search for PowerShell in the Start menu, right-click, select **Run as administrator**).
+2.  Run:
 
     ```powershell
     wsl --install
     ```
-3. This command enables the required Windows features, downloads the Linux kernel, and installs Ubuntu as your default distribution.
-4. Restart your computer when prompted to complete the installation.
+3. The command enables the required Windows features, downloads the Linux kernel and installs Ubuntu as the default distribution.
+4. Restart the computer when prompted.
 
 #### Step 2: Install Docker Desktop for Windows
 
-1. Download Docker Desktop from the official website: [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop).
-2. Run the installer and follow the on-screen instructions. Ensure you check the **Use WSL 2 instead of Hyper-V (recommended)** option during setup.
-3. Open Docker Desktop. It automatically detects and integrates with your WSL Ubuntu environment.
+1. Download [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop).
+2. Run the installer. Check **Use WSL 2 instead of Hyper-V (recommended)** during setup.
+3. Open Docker Desktop. It detects and integrates your WSL Ubuntu environment.
 
 #### Step 3: Work inside the WSL terminal
 
-Run all subsequent installation commands inside your WSL Ubuntu environment.
-
-1. Open the Start menu, search for **Ubuntu**, and launch the terminal.
-2. Use this terminal to copy your installation files and execute the installation script.
+1. Open the Start menu, search for **Ubuntu**, launch the terminal.
+2. Copy the installation files into that environment and run the installer there.
 {% endtab %}
 
 {% tab title="macOS" %}
-1. Download Docker Desktop from the official website: [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop).
-2. Open the downloaded `.dmg` file and drag the Docker icon to your `Applications` folder.
-3. Launch Docker Desktop from your applications and grant any requested system permissions.
+Only an Intel Mac runs the platform's images natively; on Apple Silicon Docker has to emulate them, which is slow and for a look only.
 
-Run all subsequent commands in the native **Terminal** app located in `/Applications/Utilities`.
+1. Download [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop).
+2. Open the `.dmg` and drag the Docker icon to `Applications`.
+3. Launch Docker Desktop and grant the system permissions it asks for.
+4. Run everything below in **Terminal** (`/Applications/Utilities`). macOS ships bash 3.2; install a newer one (`brew install bash`) and make sure it comes first in `PATH`.
 {% endtab %}
 {% endtabs %}
 
-## Installing Heisenware
+## Install
 
-We will provide two files for your installation:
+You get two files:
 
-* `heisenware-onprem-vXX-Y.tar.gz` – The primary application package.
-* `install.sh` – The installation script.
+* `heisenware-onprem-<version>.tar.gz`, the release package: the compose file, `start.sh`, `stop.sh` and every Docker image the installation runs.
+* `install.sh`, the installer.
 
-Place both files in an empty directory on your machine. If you are on Windows, ensure you place these files inside your WSL Ubuntu environment (for example, `/home/<username>/heisenware/`).
+Put both in an empty directory. On Windows, put them inside the WSL environment, for example `/home/<username>/heisenware/`.
 
 <details>
 
-<summary>Optional: Direct download using the terminal</summary>
+<summary>Optional: download them on the server</summary>
 
 <figure><img src="../.gitbook/assets/hetzner-server-downloads.png" alt=""><figcaption></figcaption></figure>
 
-Your server requires outbound internet access to `downloads.heisenware.cloud` (Germany, static IP: `128.140.88.150`) to retrieve the release packages and installation scripts. Ensure your network firewall permits this traffic.
+The server needs outbound access to `downloads.heisenware.cloud` (Germany, static IP `128.140.88.150`) to fetch the package and the installer. Allow that traffic in your firewall.
 
-You can download the files directly to your server terminal using a time-bound download link. Download the package using `wget`:
+The package comes on a time-bound link Heisenware sends you. Download it with `wget`:
 
 {% hint style="warning" %}
-#### Download link quotes
+#### Quote the link
 
-Always enclose the download URL in double quotes (`"`) when running the `wget` command.
+Always put the download URL in double quotes (`"`).
 {% endhint %}
 
 ```bash
 wget -O heisenware.tar.gz "<provided_download_link>"
 ```
 
-You can download the latest `install.sh` script at any time:
+The installer is public and belongs to no version:
 
 ```bash
 wget "https://downloads.heisenware.cloud/public/install.sh"
@@ -93,24 +94,17 @@ wget "https://downloads.heisenware.cloud/public/install.sh"
 
 {% stepper %}
 {% step %}
-#### Open the terminal
-
-Navigate to the directory containing your installation files.
-
-* **Windows:** Open the **Ubuntu** application from your Start menu.
-* **macOS and Linux:** Open your standard system terminal.
-
-Change to your installation directory:
+#### Open a terminal in the directory
 
 ```bash
 cd /home/<username>/heisenware/
 ```
+
+On Windows, open the **Ubuntu** app from the Start menu first.
 {% endstep %}
 
 {% step %}
-#### Make the script executable
-
-Grant execute permissions to the installation script:
+#### Make the installer executable
 
 ```bash
 chmod +x install.sh
@@ -118,142 +112,169 @@ chmod +x install.sh
 {% endstep %}
 
 {% step %}
-#### Run the installer
-
-Run the installer script and pass the application package as an argument:
+#### Run it
 
 ```bash
 ./install.sh heisenware.tar.gz
 ```
 
-The script guides you through the process with a series of prompts. It unpacks the necessary files, imports the Docker images, configures your environment, and starts the platform. On the first install it also generates this machine's own self-signed TLS certificate, which needs `openssl` (present on most Linux distributions, in Ubuntu on Windows and on macOS).
+The installer says where it will install and asks you to confirm. It then unpacks the package, loads the Docker images, writes `start.sh` and `stop.sh` next to the compose file, generates this machine's own self-signed TLS certificate in `certs/` if there is none, and starts the platform through `./start.sh`.
 
-The platform keeps its secrets in a file named `.env` next to `docker-compose.yml`, readable by its owner only. The installer creates and maintains it; you never need to edit it for a standard installation. Keep it: a backup without it cannot be restored on another machine (the installer's own backups include it).
+Loading the images takes a few minutes.
 {% endstep %}
 
 {% step %}
-#### Start the platform
+#### Sign in
 
-The installer starts the platform when it finishes. To start it again later, for example after a reboot, run the platform's front door from your installation directory:
+Open `https://localhost` (or `https://localhost/manager`). Port 80 redirects to 443. Your browser warns about the self-signed certificate; accept it and go on.
+
+The installation has no account yet. Click the registration link on the sign-in page and create the first one with an email address and a password. That member becomes the owner of the account.
+
+{% hint style="info" %}
+#### No Google sign-in on-premise
+
+An on-premise installation never offers Google sign-in, connected or not. The sign-in page shows no Google button, and invites are taken up with a password.
+{% endhint %}
+{% endstep %}
+
+{% step %}
+#### Upload your licence
+
+An on-premise account starts on Free. Open **Plan & Billing** in the App Manager and upload the licence file Heisenware sent you: it carries the number of Apps, the number of workspaces and its end date. See [Plan and billing](../app-manager/plan-and-billing.md).
+{% endstep %}
+{% endstepper %}
+
+### The `.env` file
+
+The platform keeps every secret in a file named `.env` next to `docker-compose.yml`, readable by its owner only. The installer creates it, `start.sh` completes it, and for a standard installation you never edit it.
+
+Keep it. A backup without `.env` cannot be restored on another machine. The installer's own backups include it.
+
+Values you may want to set yourself:
+
+| Key | What it does |
+| --- | --- |
+| `HW_ALLOW_SIGN_UP` | `false` refuses new accounts on this installation. Invited members still join. Unset means sign-up is allowed. |
+| `HW_LOG_DRIVER` | the Docker log driver every container logs through (see [Logs](#logs)). |
+| `HW_FILES_MAX_MB` | the largest file a workspace's file store takes, in MB. Default 250. |
+| `HW_EMAIL_USER`, `HW_EMAIL_HOST`, `HW_EMAIL_PORT`, `HW_EMAIL_PASSWORD` | the SMTP relay invitations and password resets go out through. An installation without one starts anyway, with a warning. |
+| `HW_SUPPORT_*` | a [remote support](remote-support.md) session. |
+
+After editing `.env`, run `./start.sh`: it recreates only the containers whose configuration changed. `docker compose restart` never re-reads `.env`.
+
+### Certificates
+
+The ingress serves exactly two files from the `certs` folder:
+
+```
+certs/heisenware-fullchain.pem
+certs/heisenware-privkey.pem
+```
+
+The first install generates a self-signed pair there, valid ten years, for this machine alone. Every later install keeps whatever pair it finds, yours included.
+
+To install your own certificate, let the installer take it: it checks that both files parse, that the key carries no passphrase and that the two belong together before anything is copied, and restarts the ingress.
+
+```bash
+./install.sh certs fullchain.pem privkey.pem
+```
+
+A wrong pair stops the ingress and with it every port, which is why nothing is copied unproven. If you put the files in place by hand instead, keep the two names above and restart the proxy: `docker restart heisenware-ingress-1`.
+
+## Start and stop
+
+```bash
+./start.sh         # start, or apply changes in .env
+./start.sh status  # what the platform needs and what is set; changes nothing
+./stop.sh          # stop and remove every container; the data stays
+```
+
+`start.sh` checks every value the platform needs, generates the internal secrets that are missing, refuses to start when a required value is absent, and runs the services in the background. The first start takes a few minutes while the services initialize.
+
+`./start.sh status` prints one line per value: `ok` when it is set, `default` when the platform fills it, `would generate` for an internal secret it will mint, and `missing` for a value you have to supply.
+
+`./stop.sh --now` kills the processes instead of stopping them, without a grace period.
+
+{% hint style="warning" %}
+#### Why `docker compose down` is not enough
+
+The platform starts a container at run time for each workspace (its backend, media server, MCP server and databases) so that workspaces stay separated. Those belong to the `heisenware` Compose project as one-off containers, which a plain `docker compose down` skips by Compose's own rules. `./stop.sh` takes the services and the workspace containers down together, including containers a platform before v93 spawned, which carry no project labels yet.
+{% endhint %}
+
+{% hint style="info" %}
+#### Data persistence
+
+Databases, configuration and files live in Docker volumes. Power-cycling the host or restarting a container loses nothing. If the platform stops answering, restarting the containers is the first thing to try.
+{% endhint %}
+
+## Update
+
+Download the new release package, put it in the installation directory, and run the installer again:
+
+```bash
+./install.sh heisenware.tar.gz
+```
+
+It detects the existing installation, stops it, writes a full backup into `backup/`, loads the new images, offers to remove the images no longer used, and starts the new version through `start.sh`. Coming from a version before v93, it also moves your secrets out of the old `docker-compose.yml` into `.env`: see [Upgrading from v92](upgrading-from-v92.md).
+
+{% hint style="info" %}
+Always use the latest `install.sh`. It belongs to no version and works with every release package.
+{% endhint %}
+
+## Back up and restore
+
+Every update makes a backup first. To make one at any time:
+
+```bash
+./install.sh backup
+```
+
+A backup is one timestamped `.tar.gz` in `backup/`, readable by its owner only. It holds every volume of this installation, the platform's own and each workspace's, plus the `docker-compose.yml` and the `.env` of that moment: data, version and secrets roll back together.
+
+To restore one, hand the archive to the installer:
+
+```bash
+./install.sh backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
+```
+
+The installer enters restore mode and asks you to confirm before it stops the platform and overwrites the current data. Volumes in the archive that do not belong to this installation are left alone. Afterwards:
 
 ```bash
 ./start.sh
 ```
 
-It checks every configuration value the platform needs, generates internal secrets that are missing, and then starts the services in the background. `./start.sh status` shows the same report without starting anything. It may take a few minutes for all system services to initialize during the first startup.
+If the restored version's images are no longer on the machine, the installer says so: run its release package once before starting.
 
-{% hint style="info" %}
-#### Platform access and initial setup
+### Send a backup to Heisenware
 
-* **Access:** The platform is available at `http://localhost` (or `http://localhost/manager`). Because the system uses self-signed certificates, your browser will display a security warning. You can safely proceed past this warning.
-* **Certificates:** The installer generates a self-signed certificate for this machine on the first install and never replaces the pair in the `certs` folder afterwards. If you have custom domain certificates, place them in the `certs` folder. Maintain the default filenames, and restart the proxy service to apply them: `docker restart heisenware-ingress-1`.
-* **Account creation:** You must register a new local administrator account on your fresh installation. Click the registration link on the login page to set up your email and password. External providers like Google do not function on local offline servers.
-{% endhint %}
-{% endstep %}
-{% endstepper %}
-
-## Updating your installation
-
-The update process is safe and preserves your existing data. When a new version is released, download the latest application package and run the installer again.
-
-1. Place the new package file in your active installation directory, overwriting the old package.
-2.  Execute the installer script:
-
-    ```bash
-    ./install.sh heisenware.tar.gz
-    ```
-
-The script automatically detects your existing installation and runs in update mode, and starts the new version when it is done. Coming from a version before v93, the update also moves your secrets out of the old `docker-compose.yml` into `.env` — see [Upgrading from v92 to v93](upgrading-from-v92.md).
-
-{% hint style="info" %}
-Always use the latest `install.sh` (it is not tied to a platform version) together with the release package you were given.
-{% endhint %}
-
-#### Automatic backup
-
-Before applying any changes, the script creates a full archive of your platform data and stores it as a timestamped `.tar.gz` file inside the `backup/` directory.
-
-#### Sending a backup to Heisenware
-
-When support asks for a copy of your data, the installer uploads a backup straight from your machine — only `curl` and `openssl` are needed, no client tooling:
+When support asks for a copy of your data, the installer uploads a backup straight from the machine. It needs nothing but `curl` and `openssl`.
 
 ```bash
 ./install.sh upload
 ```
 
-Without a file name the newest archive in `backup/` is sent (one is created first if there is none); name a file to send a specific one. The script asks for one secret — support hands it to you. It is upload-only: it can write into the bucket and nothing else, and the upload lands under a folder named after your machine. To run it unattended, pass the secret as an environment variable:
+Without a file name the newest archive in `backup/` is sent, and one is made first if there is none; name a file to send that one. The script asks for one secret, which support hands you. The key is upload-only: it can write into the bucket and nothing else, and the upload lands in a folder named after your machine.
+
+To run it unattended, pass the secret in the environment:
 
 ```bash
 HW_UPLOAD_SECRET_KEY=... ./install.sh upload backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
 ```
 
-`HW_UPLOAD_PREFIX` (default: the host name), `HW_UPLOAD_ENDPOINT`, `HW_UPLOAD_ACCESS_KEY`, `HW_UPLOAD_BUCKET` and `HW_UPLOAD_REGION` override the folder, server, key name, bucket and region — only needed when support tells you so.
+`HW_UPLOAD_PREFIX` (default: the host name), `HW_UPLOAD_ENDPOINT`, `HW_UPLOAD_ACCESS_KEY`, `HW_UPLOAD_BUCKET` and `HW_UPLOAD_REGION` override the folder, server, key name, bucket and region. You need them only when support says so.
 
-## Rollback and restoring a backup
+## Logs
 
-If an update fails or causes unexpected issues, you can roll back your system to a previous backup state.
+```bash
+docker compose logs -f          # every service
+docker logs -f <container_name> # one container
+```
 
-1. Locate your desired backup archive inside the `backup/` directory.
-2.  Run the installation script and pass the path to your backup archive:
+Every container of the platform, the workspace containers included, keeps its log in rotating files on the host: Docker's `local` driver, at most five compressed files of 20 MB each. A container's log goes with the container, for example on `./stop.sh` or an update.
 
-    ```bash
-    ./install.sh backup/heisenware-backup-YYYY-MM-DD_HH-MM-SS.tar.gz
-    ```
-3. The script enters restore mode. Confirm the prompt to stop the platform and overwrite the current data with the backup contents. The backup carries the `docker-compose.yml` and the `.env` of its time, so data, version and secrets roll back together.
-4.  Restart the platform services:
+To send the logs to your own system instead, name the driver in `.env` and give it its settings in the host's Docker configuration:
 
-    ```bash
-    ./start.sh
-    ```
-
-## Platform management
-
-{% hint style="info" %}
-#### Data persistence
-
-Your databases, configurations, and assets persist inside dedicated Docker volumes. Power-cycling your host machine or restarting individual containers will not cause data loss. If the platform becomes unresponsive, restarting the containers is the recommended troubleshooting step.
-{% endhint %}
-
-{% hint style="warning" %}
-#### Dynamic containers
-
-The platform spawns Docker containers at runtime for each active account (backend, media server, databases) to ensure process and command isolation. They belong to the `heisenware` Compose project as one-off containers, which a plain `docker compose down` skips by Compose's own rules. Stop the platform through `./stop.sh` (below): it takes the services and the account containers down together, including account containers spawned by a platform version before v93, which carry no project labels yet.
-{% endhint %}
-
-Execute these commands from your installation directory to manage your on-premise installation:
-
-*   **Stop the platform:** stops and removes all platform containers, including the account containers spawned at runtime. Data stays in the volumes:
-
-    ```bash
-    ./stop.sh
-    ```
-
-    _`./stop.sh --now` skips the grace period and kills the processes outright._
-*   **Start the platform:**
-
-    ```bash
-    ./start.sh
-    ```
-
-    _`./start.sh status` shows what the platform needs and what is set, without starting anything._
-*   **View live logs for all services:**
-
-    ```bash
-    docker compose logs -f
-    ```
-*   **View live logs for a specific service:**
-
-    ```bash
-    docker logs -f <container_name>
-    ```
-
-#### Logs
-
-Every platform container, including the account containers, keeps its log in rotating files on the host: Docker's `local` log driver, at most five compressed files of 20 MB per container. A container's log is removed together with the container, for example by `./stop.sh` or an update.
-
-To keep the logs in your own log system instead, set the Docker log driver in `.env` and the driver's settings in the host's Docker configuration:
-
-1.  Configure the driver in `/etc/docker/daemon.json` and restart Docker. For example, sending everything to a syslog server:
+1.  Configure the driver in `/etc/docker/daemon.json` and restart Docker. Sending everything to a syslog server, for example:
 
     ```json
     {
@@ -266,10 +287,10 @@ To keep the logs in your own log system instead, set the Docker log driver in `.
     ```
     HW_LOG_DRIVER=syslog
     ```
-3.  Restart the platform with `./stop.sh` and `./start.sh`.
+3. Restart the platform with `./stop.sh` and `./start.sh`.
 
-Any driver Docker supports works (`journald`, `syslog`, `gelf`, `fluentd`, `splunk`, ...); the settings in `daemon.json` apply to every container of the platform. With `journald`, `local` and `json-file`, `docker logs` keeps working; with a remote driver, Docker keeps a local copy for `docker logs` by default.
+Any driver Docker supports works (`journald`, `syslog`, `gelf`, `fluentd`, `splunk`, …), and the options in `daemon.json` apply to every container of the platform. With `journald`, `local` and `json-file`, `docker logs` keeps working; with a remote driver, Docker keeps a local copy for it by default.
 
 ## Remote support
 
-Heisenware can help with your installation remotely, through one outbound connection you switch on and off: see [Remote support](remote-support.md).
+Heisenware can help with your installation through one outbound connection you switch on and off: see [Remote support](remote-support.md).

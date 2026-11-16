@@ -20,7 +20,7 @@ This connector requires [instance creation](README.md#instance-creation) before 
 {% hint style="warning" %}
 #### Hardware requirement
 
-This class requires a Raspberry Pi 4 or 5. If no compatible hardware is detected, the class automatically falls back to a simulation mode, letting you test your logic with the `simulatePulse` function.
+Counting a real pin requires a Raspberry Pi 4 or 5. On a host with no GPIO at all, the counter simulates: everything works, and you feed it with `simulatePulse`. On a host that has GPIO chips the counter cannot reach, because the pin library did not load or the chip did not open, `create` refuses and says why, rather than silently simulating a machine that is really running.
 {% endhint %}
 
 ## State machine
@@ -160,6 +160,8 @@ Returns `true` if the pin was found and released, or `false` if it was not.
 
 Creates a counter instance, initializes the hardware connection or simulation, and configures the counting logic. Providing both `targetInterval` and `targetDeviation` activates target mode; otherwise, the counter runs in pace mode.
 
+A pin belongs to one counter. A pin another counter on the same agent holds is refused, naming that counter, until it is deleted. A refused `create` leaves the pin to the counter that holds it, and changes nothing.
+
 #### Parameters
 
 <table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>gpio</code></td><td>The BCM pin number connected to the sensor, or a list of pin numbers for a machine with several producing units.</td><td>integer or array</td></tr><tr><td></td><td><code>pullUpDown</code></td><td>Resistor configuration: <code>none</code>, <code>pullup</code>, or <code>pulldown</code>. Default <code>none</code>.</td><td>string</td></tr><tr><td></td><td><code>edge</code></td><td>The signal edge to count: <code>rising</code>, <code>falling</code>, or <code>both</code>. Default <code>rising</code>.</td><td>string</td></tr><tr><td></td><td><code>debounceTimeout</code></td><td>Electrical debounce time in milliseconds against contact bounce, applied by the pin driver. Default 10. Not a minimum cycle time: use <code>minPulseInterval</code> against double parts.</td><td>integer</td></tr><tr><td></td><td><code>activeLow</code></td><td>If true, inverts the logic (useful if your sensor outputs 0 when active). Default false.</td><td>boolean</td></tr><tr><td></td><td><code>learnIntervals</code></td><td>How many intervals a pin learns its pace from, after a <code>reset</code> or <code>start</code>, before its own pace watches it; until then <code>expectedInterval</code> does, if set. In target mode: the intervals before the target watches. Default 5.</td><td>integer</td></tr><tr><td></td><td><code>minPulseInterval</code></td><td>Shortest time in seconds between two counted pulses of a pin. A pulse sooner is not counted but recorded as an <code>ignored</code> event. Default 0 (off).</td><td>number</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>If true, the counter automatically resumes counting when a new pulse arrives after a stop; if false, pulses are ignored while stopped. Default true.</td><td>boolean</td></tr><tr><td></td><td><code>minStopInterval</code></td><td>Pace mode only: The time in seconds a pin may stay silent in any case; the limit never falls below it (see <a href="#the-pace-and-the-limit">The pace and the limit</a>). Default 0 (off).</td><td>number</td></tr><tr><td></td><td><code>stopFactor</code></td><td>Pace mode only: The factor of a pin's median, or of <code>expectedInterval</code> while it learns, before which it is never late. At least 1. Default 1.5.</td><td>number</td></tr><tr><td></td><td><code>stopDeviations</code></td><td>Pace mode only: How many median absolute deviations above its median a pin is late: how far its parts may scatter. 0 is off. Default 4.</td><td>number</td></tr><tr><td></td><td><code>paceWindow</code></td><td>Pace mode only: How many of the latest intervals the pace covers. The counter follows a changed pace within about half of them. Default 20.</td><td>integer</td></tr><tr><td></td><td><code>expectedInterval</code></td><td>Pace mode only: The expected time per part in seconds, typically the order's target time. The first guess at a pin's pace until it has learned its own (see <a href="#before-the-pace-is-learned">Before the pace is learned</a>). Default <code>null</code> (off).</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>Target mode only: The expected cycle time in seconds.</td><td>number</td></tr><tr><td></td><td><code>targetDeviation</code></td><td>Target mode only: The allowed deviation in percent (0 to 100) before a pulse counts as too late.</td><td>number</td></tr><tr><td></td><td><code>journalSize</code></td><td>How many of its latest events the counter keeps on disk at least, for <code>getEvents</code>. Default 50000.</td><td>integer</td></tr></tbody></table>
@@ -246,7 +248,7 @@ Resets the counter to its initial state by setting the count to 0, clearing the 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>learnIntervals</code></td><td>New minimum count parameter.</td><td>integer</td></tr><tr><td></td><td><code>minStopInterval</code></td><td>New time in seconds a pin may stay silent in any case (pace mode).</td><td>number</td></tr><tr><td></td><td><code>stopFactor</code></td><td>New factor of the median before which a pin is never late (pace mode).</td><td>number</td></tr><tr><td></td><td><code>stopDeviations</code></td><td>New number of median absolute deviations above the median at which a pin is late (pace mode).</td><td>number</td></tr><tr><td></td><td><code>paceWindow</code></td><td>New number of intervals the pace covers (pace mode).</td><td>integer</td></tr><tr><td></td><td><code>minPulseInterval</code></td><td>New shortest time in seconds between two counted pulses of a pin.</td><td>number</td></tr><tr><td></td><td><code>expectedInterval</code></td><td>New expected time per part in seconds, the order's target time (pace mode); <code>null</code> switches it off.</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>New target interval measured in seconds (target mode).</td><td>number</td></tr><tr><td></td><td><code>targetDeviation</code></td><td>New allowed deviation in percent (target mode).</td><td>number</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>Whether to resume counting automatically when a new pulse arrives after a stop.</td><td>boolean</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>options</code></td><td><code>learnIntervals</code></td><td>New number of intervals a pin learns its pace from before its own pace watches it.</td><td>integer</td></tr><tr><td></td><td><code>minStopInterval</code></td><td>New time in seconds a pin may stay silent in any case (pace mode).</td><td>number</td></tr><tr><td></td><td><code>stopFactor</code></td><td>New factor of the median before which a pin is never late (pace mode).</td><td>number</td></tr><tr><td></td><td><code>stopDeviations</code></td><td>New number of median absolute deviations above the median at which a pin is late (pace mode).</td><td>number</td></tr><tr><td></td><td><code>paceWindow</code></td><td>New number of intervals the pace covers (pace mode).</td><td>integer</td></tr><tr><td></td><td><code>minPulseInterval</code></td><td>New shortest time in seconds between two counted pulses of a pin.</td><td>number</td></tr><tr><td></td><td><code>expectedInterval</code></td><td>New expected time per part in seconds, the order's target time (pace mode); <code>null</code> switches it off.</td><td>number</td></tr><tr><td></td><td><code>targetInterval</code></td><td>New target interval measured in seconds (target mode).</td><td>number</td></tr><tr><td></td><td><code>targetDeviation</code></td><td>New allowed deviation in percent (target mode).</td><td>number</td></tr><tr><td></td><td><code>continueAfterStop</code></td><td>Whether to resume counting automatically when a new pulse arrives after a stop.</td><td>boolean</td></tr></tbody></table>
 
 #### Example
 
@@ -286,7 +288,9 @@ Returns the configuration now, as `getConfiguration` returns it.
 
 ### `dispose`
 
-Releases the hardware resources by freeing the GPIO pins and removes all listeners. Ending an instance is not the machine stopping: no event is recorded. Call this function when the counter is no longer needed to prevent hardware conflicts.
+Lets go of the pins, the watchdogs and the listeners: the `onEvent` registrations end, and the counter counts no more. The instance itself stays, with its state file and its journal. Ending an instance is not the machine stopping: no event is recorded.
+
+Use it to hand a pin to another counter without deleting this one. To remove the instance, use `delete`.
 
 #### Parameters
 
@@ -298,12 +302,10 @@ Returns nothing.
 
 ### `delete`
 
-Removes the counter instance.
+Removes the counter instance: the same as `dispose`, and the instance is gone once its last state write and its last journal entry have landed on the disk.
 
-{% hint style="danger" %}
-#### Irreversible action
-
-Deleting an instance removes its configuration. To count on that pin again, you must trigger `create` anew.
+{% hint style="info" %}
+To count on that pin again, trigger `create` anew. The count and the learned paces are not lost: the new counter finds the state file and the journal of those pins and counts on from them, as it does after a restart.
 {% endhint %}
 
 #### Parameters
@@ -430,7 +432,7 @@ A new run - `start` made every pin forget its pace; `previousPace` is the machin
 
 #### Output
 
-Returns nothing.
+Returns the listener's registration, which only says that the executor is listening. The events arrive on the event output.
 
 ### `getEvents`
 
@@ -452,7 +454,7 @@ limit: 1000
 
 ```json
 {
-  "events": [{ "seq": 4712, "event": "count", "timestamp": 1715605000123, "count": 125, "delta": 1498, "pace": 1500.5 }],
+  "events": [{ "seq": 4712, "event": "count", "timestamp": 1715605000123, "count": 125, "delta": 1498, "pace": 1500.5, "pin": 26 }],
   "firstSeq": 1,
   "lastSeq": 4714,
   "missed": 0,
@@ -464,7 +466,7 @@ limit: 1000
 
 ### `simulatePulse`
 
-Manually simulates an input pulse. Use this to test your application logic away from the physical hardware. This function only works in simulation mode; real hardware ignores the call and logs a warning.
+Manually simulates an input pulse. Use this to test your application logic away from the physical hardware. This function only works in simulation mode; real hardware ignores the call and logs a warning. A `gpio` this counter does not watch is refused.
 
 #### Parameters
 

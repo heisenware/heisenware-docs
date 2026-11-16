@@ -1,24 +1,35 @@
 # Allen-Bradley
 
-The Allen-Bradley connector communicates with Allen-Bradley programmable logic controllers (PLCs) using the EtherNet/IP protocol. After establishing a connection, the connector automatically discovers all tags at both the controller and program scope. You can then read and write tags individually or in groups, or subscribe to them for real-time updates.
+The Allen-Bradley connector communicates with Allen-Bradley programmable logic controllers (PLCs) using the EtherNet/IP protocol. Once connected, you read and write tags by name, individually or in groups, or subscribe to them to receive their values as they change.
 
 This connector requires [instance creation](README.md#instance-creation) before you can interact with a PLC.
 
 ## Tags and user-defined types
 
-A tag is a PLC variable that represents a named piece of memory with a specific data type, such as `DINT` for a 32-bit integer, `REAL` for a floating-point number, or `BOOL` for a boolean. A user-defined type (UDT) is a structured tag that groups related values into a single unit, similar to an object. For example, a `Recipe` UDT can contain the members `Name` and `TempSetPoint`, which you address as `Recipe.Name` and `Recipe.TempSetPoint`. Reading a UDT returns an object with key-value pairs corresponding to its members.
+A tag is a PLC variable that represents a named piece of memory with a specific data type, such as `DINT` for a 32-bit integer, `REAL` for a floating-point number, or `BOOL` for a boolean. A user-defined type (UDT) is a structured tag that groups related values into a single unit, similar to an object. For example, a `Recipe` UDT can contain the members `BatchSize` and `TempSetPoint`, which you address as `Recipe.BatchSize` and `Recipe.TempSetPoint`.
 
-The connector discovers all tags and their types when you call `connect`, letting you address every tag by its name.
+The connector does not browse the PLC's tag list. You address a tag by its name, and the PLC answers its data type with the first read:
+
+| Tag | Name |
+| --- | --- |
+| Controller scope | `MotorSpeed` |
+| Program scope | `Program:MainProgram.MotorSpeed` |
+| Array element | `Values[3]` |
+| UDT member | `Recipe.TempSetPoint` |
+
+{% hint style="info" %}
+The connector reads and writes the atomic data types `BOOL`, `SINT`, `INT`, `DINT` and `REAL`. A tag of another type, such as a `STRING` or a whole UDT, fails with an error: read a UDT member by member.
+{% endhint %}
 
 ## Connection management
 
 ### `create`
 
-Creates a controller instance that represents the connection to a specific PLC. All other functions require this instance.
+Creates a controller instance that represents the connection to a specific PLC. All other functions require this instance. Creating it does not connect yet: call `connect`.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>ipAddress</code></td><td></td><td>The IP address of the target PLC on the network.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>slot</code></td><td>The slot number of the CPU in the PLC chassis. Default 0.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="120">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>ipAddress</code></td><td></td><td>The IP address of the target PLC on the network.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>slot</code></td><td>Optional. The slot number of the CPU in the PLC chassis. Default 0.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -35,7 +46,7 @@ Returns the name of the created instance.
 
 ### `connect`
 
-Connects to the PLC and discovers all controller-scoped and program-scoped tags to make them available for reading, writing, and subscribing. See [Connection recovery](allen-bradley.md#connection-recovery) for the behavior after an unexpected session loss.
+Opens a session with the PLC at the instance's IP address and slot. See [Connection recovery](allen-bradley.md#connection-recovery) for the behavior after an unexpected session loss.
 
 #### Parameters
 
@@ -43,7 +54,7 @@ None.
 
 #### Output
 
-Returns `true` on a successful connection. Throws an error if the connection or tag discovery fails.
+Returns `true` once the session is open, also when the instance is connected already. Throws an error if the PLC cannot be reached or refuses the session.
 
 ### `isConnected`
 
@@ -59,7 +70,7 @@ Returns `true` if connected, or `false` if disconnected.
 
 ### `disconnect`
 
-Disconnects from the PLC and clears all subscriptions and cached tag information.
+Ends the session with the PLC and clears all subscriptions.
 
 #### Parameters
 
@@ -67,11 +78,11 @@ None.
 
 #### Output
 
-Returns `true` on a successful disconnection, including when no active connection exists. Throws an error if the disconnection fails.
+Returns `true` once disconnected, including when no active connection exists.
 
 ### `delete`
 
-Removes the instance and its connection.
+Removes the instance. Its session and subscriptions end with it.
 
 {% hint style="danger" %}
 #### Irreversible action
@@ -91,7 +102,7 @@ Returns `true` upon removal.
 
 ### `readTag`
 
-Reads the current value of a single tag. This function requires an active connection, and the tag must exist in the discovered tag list.
+Reads the current value of a single tag. This function requires an active connection.
 
 #### Parameters
 
@@ -106,11 +117,11 @@ MyTemperature
 
 #### Output
 
-Returns the raw value of the tag matching its PLC data type (such as 72.5 for a `REAL` tag). Throws an error if the tag does not exist or the read fails.
+Returns the raw value of the tag matching its PLC data type (such as 72.5 for a `REAL` tag). Throws an error if the name is not a valid tag name, or if the read fails. A tag the PLC does not have fails with the PLC's CIP status, for example `Failed to read tag "MyTemperature": CIP status 0x05`.
 
 ### `readTagGroup`
 
-Reads multiple tags in a single, optimized network request. This is more efficient than calling `readTag` repeatedly. The connector skips tags that do not exist in the discovered tag list and logs a warning.
+Reads multiple tags in a single, optimized network request. This is more efficient than calling `readTag` repeatedly.
 
 #### Parameters
 
@@ -125,7 +136,7 @@ Reads multiple tags in a single, optimized network request. This is more efficie
 
 #### Output
 
-Returns an object where each key is a tag name and each value is its current value. Returns an empty object if none of the requested tags exist:
+Returns an object where each key is a tag name and each value is its current value. Returns an empty object for an empty list. Throws an error if the read fails:
 
 ```json
 {
@@ -137,7 +148,9 @@ Returns an object where each key is a tag name and each value is its current val
 
 ### `writeTag`
 
-Writes a new value to a tag. The function handles both simple tags (numbers, booleans, strings) and UDTs. For a UDT, provide an object where keys map to the member names. Each member must exist as a discovered tag. A type mismatch throws an error.
+Writes a new value to a tag. The function handles both simple tags (numbers, booleans) and UDTs. For a UDT, provide an object where keys map to the member names: the connector writes each member as its own tag (`Recipe.TempSetPoint`), all in one request. Members can nest.
+
+A write carries the tag's data type. The connector reads a tag first when it does not know the type yet.
 
 #### Parameters
 
@@ -160,17 +173,17 @@ Example 2: UDT
 # tagName
 Recipe
 # value
-Name: "Batch 2A"
+BatchSize: 1200
 TempSetPoint: 95.5
 ```
 
 #### Output
 
-Returns `true` on a successful write. Throws an error if the tag is unknown, a type mismatch occurs, or the write fails.
+Returns `true` on a successful write. Throws an error if the name is not a valid tag name or the write fails.
 
 ### `writeTagGroup`
 
-Writes values to multiple tags in a single, optimized network request. The connector skips tags that do not exist in the discovered tag list and logs a warning.
+Writes values to multiple tags in a single, optimized network request. A value can be an object for a UDT, as in `writeTag`.
 
 #### Parameters
 
@@ -182,16 +195,16 @@ Writes values to multiple tags in a single, optimized network request. The conne
 # tags
 MotorSpeedSP: 1800
 Valve_1_Open: true
-RecipeName: "Batch 3C"
+BatchSize: 1200
 ```
 
 #### Output
 
-Returns `true` when all writes complete. Throws an error if the operation fails.
+Returns `true` when all writes complete, also for an empty object. Throws an error if the operation fails.
 
 ### `getDiscoveredTags`
 
-Returns a list of all tags discovered during the `connect` phase. Use this for debugging or dynamically exploring a PLC.
+Returns the tags this instance knows: every tag it has read, written or subscribed to. The PLC's own tag list is not browsed. Use this for debugging.
 
 #### Parameters
 
@@ -199,22 +212,13 @@ None.
 
 #### Output
 
-Returns an array of tag objects containing detailed schema information for each discovered tag:
+Returns an array of tag objects, sorted by name. `type` is the data type the PLC answered, or `null` before the tag's first read:
 
 ```json
 [
-  {
-    "id": 1234,
-    "name": "MotorSpeed",
-    "type": { "code": 195, "sint": null, "string": "DINT" },
-    "structure": false
-  },
-  {
-    "id": 5678,
-    "name": "Recipe",
-    "type": { "code": 160, "sint": 4321, "string": "MyRecipeUDT" },
-    "structure": true
-  }
+  { "name": "MotorSpeed", "type": "DINT" },
+  { "name": "MyTemperature", "type": "REAL" },
+  { "name": "Recipe.TempSetPoint", "type": null }
 ]
 ```
 
@@ -222,11 +226,13 @@ Returns an array of tag objects containing detailed schema information for each 
 
 ### `subscribe`
 
-Subscribes to one or more tags for real-time updates. When a tag value changes on the PLC, the PLC automatically pushes the new value to the platform. Register a listener using `onData` to handle incoming updates. The connector skips tags that are already subscribed or missing from the discovery list and logs a warning.
+Subscribes to one or more tags. The connector scans the PLC for all subscribed tags at a fixed rate and reports a tag's first value, then every change. Use `onData` to receive the updates. The connector skips tags that are already subscribed and logs a warning.
+
+All subscribed tags share one scan: the rate given last applies to every tag.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tagNames</code></td><td>A single tag name or an array of tag names to subscribe to.</td><td>string or array</td></tr><tr><td><code>rate</code></td><td>How often the PLC sends updates, measured in milliseconds. Default 500.</td><td>integer</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>tagNames</code></td><td>A single tag name or an array of tag names to subscribe to.</td><td>string or array</td></tr><tr><td><code>rate</code></td><td>Optional. How often the connector scans the PLC, in milliseconds. Default 500.</td><td>integer</td></tr></tbody></table>
 
 #### Example
 
@@ -239,52 +245,45 @@ Subscribes to one or more tags for real-time updates. When a tag value changes o
 
 #### Output
 
-Returns nothing. Data arrives through the listener registered with `onData`. Throws an error if the PLC is not connected.
+Returns nothing. Data arrives through `onData`. Throws an error if the PLC is not connected or a name is not a valid tag name.
 
 ### `onData`
 
-Registers a callback that fires whenever new data arrives from a subscribed tag. You must subscribe to at least one tag for this listener to receive data.
+Listens for the values of subscribed tags. This is an event function: trigger it once, for example when the App starts, and it delivers every update on its event output. You must subscribe to at least one tag to receive data.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that fires on new data. Delivers an object containing <code>tagName</code> and <code>value</code>.</td><td>callback</td></tr></tbody></table>
-
-#### Example
-
-```yaml
-# listener
-<callback>
-```
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The handler. The platform fills it in: each update arrives on the executor's event output.</td><td>event</td></tr></tbody></table>
 
 #### Output
 
-Returns the string `subscribed` to confirm listener registration.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
+
+```json
+{
+  "tagName": "Machine_Status",
+  "value": 3
+}
+```
 
 ### `onError`
 
-Registers a callback that fires when a subscription error occurs, such as a lost PLC connection.
+Listens for subscription errors. The event fires when a scan of the subscribed tags fails, for example because a subscribed tag does not exist. The scan resumes after one scan period while the session lasts.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>Callback that handles the subscription error. Delivers the error object.</td><td>callback</td></tr></tbody></table>
-
-#### Example
-
-```yaml
-# listener
-<callback>
-```
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The handler. The platform fills it in: each error arrives on the executor's event output.</td><td>event</td></tr></tbody></table>
 
 #### Output
 
-Returns the string `subscribed` to confirm listener registration.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 ## Tips and tricks
 
 ### Choosing between polling, subscribing, and group operations
 
-Use `readTag` and `writeTag` for on-demand, request-response interactions. Use `subscribe` alongside `onData` for real-time monitoring and dashboards to let the PLC push changes automatically. When handling multiple tags simultaneously, use `readTagGroup` and `writeTagGroup` to bundle requests into a single network packet and reduce network traffic.
+Use `readTag` and `writeTag` for on-demand, request-response interactions. Use `subscribe` alongside `onData` for live monitoring: the connector scans the tags and reports only changes. When handling multiple tags simultaneously, use `readTagGroup` and `writeTagGroup` to bundle requests into a single network packet and reduce network traffic.
 
 ### Connection recovery
 
-If the PLC session closes unexpectedly, the connector clears all discovered tags and active subscriptions while logging a warning. Call `connect` again to re-establish the connection and rediscover the tags, then recreate your subscriptions.
+If the PLC session closes unexpectedly, the connector clears all active subscriptions and logs a warning. It does not reconnect by itself: `isConnected` returns `false`, and reads and writes fail with `PLC is not connected`. Call `connect` again, then `subscribe` again. Executors listening with `onData` and `onError` keep listening.

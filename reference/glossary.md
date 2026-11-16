@@ -56,6 +56,10 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 
 **Inform Heisenware**: the assistant's report card for a platform defect. Nothing is sent unless you click.
 
+**Ask**: lets an App's invited users ask an AI about the workspace's data and run the App's endpoints, in the App's own panel or from their own AI client by the App's Ask address. A member switches it on per App; it holds only on an App that invited users alone can open.
+
+**Report**: a document Ask makes of an analysis for a user: PDF, Word, Excel or CSV, in the App's look. It belongs to the user who asked.
+
 ## Builder: its parts
 
 **Explorer**: the Builder's left panel, with five tabs: Functions, Pages and actions, Files, Variables, Endpoints.
@@ -70,10 +74,18 @@ These are the words Heisenware uses everywhere: in the App Manager, the App Buil
 
 **Theme editor**, **Template editor**, **Database editor**: the Builder's other editors: for the App's look, for PDF templates, and for looking into and editing the workspace's databases.
 
+The Database editor is the workspace's, not an App's: it opens from the Builder's toolbar inside any App, and from the App Manager's "Databases" entry without one. Its left panel is the **Databases explorer**: the database chosen (source, storage type, instance) and what it holds.
+
 **Data model**: the shape of the workspace's own database: its tables, their fields, keys and audit logs, and the relations between them. It is kept inside the database, with a history of who changed what, and shaped in the Database editor's Model tab or by the assistant. An App's versions never touch it.
 *Also called:* model.
 
-**Adopt**: the data model takes what the database holds where the two differ: a table, field or relation made outside it (by SQL, by an import, or before the model was kept), or one dropped outside it. The database stays as it is.
+**Adopt**: the data model takes what the database holds where the two differ: a table, field or relation made outside the platform (by SQL from elsewhere, by a database import, or by an App built before the model was kept), or one dropped outside it. The database stays as it is.
+
+**Drift**: where the workspace's database differs from its data model, because something was made or dropped outside the platform. Adopt ends it.
+
+**Audit log**: a table's record of every change of a row, with who made it. Once on it stays on, and the platform alone writes it.
+
+**Data source**: a database or time-series database a flow of the workspace has connected, as the data tools read it. It is named `agent/instance`.
 
 **Trace**: highlights what feeds a node (upstream), what it feeds (downstream), or both.
 
@@ -224,7 +236,7 @@ Widget events run in the user's scope, while App start and polling run in the sh
 
 **Rollback**: makes a saved version the App's current state again.
 
-**Bundle**: an App exported as a `.hwt` file, carrying its files but no secrets. It can be imported into another App or another platform.
+**Bundle**: an App exported as a `.hwt` file, carrying its files and the shape of its tables, but no rows and no secrets. It can be imported into another App or another platform.
 *Also called:* `.hwt`.
 
 **Suite**: several Apps that work together and share data through named instances and endpoints.

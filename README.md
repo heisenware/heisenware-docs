@@ -33,10 +33,11 @@ Heisenware has three parts:
 
 ## Where to start
 
-* **Your first App**: [build one step by step](getting-started/first-app-by-hand.md).
+* **New here**: [sign up and sign in](getting-started/sign-up-and-sign-in.md), then build [your first App with the assistant](getting-started/first-app-with-the-assistant.md).
+* **Build it yourself**: the same App [step by step by hand](getting-started/first-app-by-hand.md), to see what the pieces are.
 * **How it works**: the concepts explain one idea per page, starting with [executors and instances](concepts/executors-and-instances.md).
 * **Look something up**: every [function](reference/functions/README.md) and [widget](reference/widgets/README.md) in the reference, and the words in the [glossary](reference/glossary.md).
-* **Use your own AI**: connect Claude or another AI client through the [MCP server](assistant/mcp-server.md).
+* **Use your own AI**: [the assistant](assistant/README.md) is built in; your own client connects through the [MCP server](assistant/mcp-server.md).
 
 ## How Heisenware thinks
 

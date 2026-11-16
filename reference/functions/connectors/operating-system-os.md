@@ -1,8 +1,8 @@
 # Operating system (OS)
 
-The operating system connector provides static functions to retrieve live performance metrics and hardware information from the host operating system. Use it to monitor CPU utilization, memory allocation, disk storage, network throughput, and running Docker containers.
+The operating system connector reads live metrics of the machine it runs on: CPU, memory, disk, network, uptime and the Docker containers there. Every function is static, so no instance is needed.
 
-Since all functions in this class are static, they do not manage state. You do not need to create an instance to use them.
+What you measure depends on the executor's address. On an internal agent of the platform you see the platform's own container; on a [native, Docker or LXC agent](../../../concepts/agents-and-where-code-runs.md) you see the machine or container the agent runs on, which is what a dashboard of your own hardware wants.
 
 ## System metrics
 
@@ -57,7 +57,7 @@ Returns an array of three numbers representing the normalized system load averag
 
 ### `driveInfo`
 
-Retrieves capacity and utilization metrics for the primary disk drive.
+Retrieves how full the main drive is.
 
 #### Parameters
 
@@ -65,7 +65,7 @@ None.
 
 #### Output
 
-Returns an object containing disk storage statistics:
+Returns the drive's size in gigabytes and in percent:
 
 ```json
 {
@@ -79,7 +79,7 @@ Returns an object containing disk storage statistics:
 
 ### `memInfo`
 
-Retrieves resource allocation and utilization metrics for the physical memory.
+Retrieves how much of the physical memory is in use.
 
 #### Parameters
 
@@ -87,20 +87,21 @@ None.
 
 #### Output
 
-Returns an object containing physical RAM capacity and allocation statistics:
+Returns the memory in megabytes and in percent:
 
 ```json
 {
   "totalMemMb": 16384,
   "usedMemMb": 8192,
   "freeMemMb": 8192,
+  "usedMemPercentage": 50,
   "freeMemPercentage": 50
 }
 ```
 
 ### `netInfo`
 
-Retrieves network input and output throughput statistics aggregated across active network interfaces.
+Retrieves how much data went in and out over the measurement window, per interface.
 
 #### Parameters
 
@@ -108,7 +109,7 @@ Retrieves network input and output throughput statistics aggregated across activ
 
 #### Output
 
-Returns an object detailing input and output metrics in megabytes for each network interface alongside a combined total:
+Returns one entry per interface, in megabytes, plus their total:
 
 ```json
 {
@@ -132,7 +133,7 @@ Returns an object detailing input and output metrics in megabytes for each netwo
 
 ### `uptime`
 
-Retrieves the total operational uptime of the operating system.
+Retrieves how long the operating system has been running.
 
 #### Parameters
 
@@ -140,7 +141,7 @@ None.
 
 #### Output
 
-Returns an object breaking down system uptime into chronological increments alongside the absolute duration in seconds:
+Returns the uptime broken into years, days, hours, minutes and seconds, and in seconds as `totalSeconds`:
 
 ```json
 {
@@ -155,7 +156,7 @@ Returns an object breaking down system uptime into chronological increments alon
 
 ### `os`
 
-Retrieves the platform name of the underlying operating system.
+Retrieves the name of the host's operating system.
 
 #### Parameters
 
@@ -163,11 +164,11 @@ None.
 
 #### Output
 
-Returns a string containing the operating system identifier (such as `Linux`, `macOS`, or `Windows_NT`).
+Returns the distribution and its version, such as `Ubuntu 22.04` or `macOS 14.4`. Where the system does not say, the answer is what `uname -sr` reports.
 
 ### `hostname`
 
-Retrieves the network hostname of the local system.
+Retrieves the hostname of the machine.
 
 #### Parameters
 
@@ -179,9 +180,11 @@ Returns a string containing the system hostname.
 
 ## Container management
 
+Both functions talk to the Docker daemon of the host through its socket. They work where the agent reaches that socket, which means a native, Docker or LXC agent on a machine that runs Docker; an unreachable socket fails the call.
+
 ### `containerStats`
 
-Retrieves live resource utilization and status metrics for all running Docker containers.
+Retrieves live resource utilization and status metrics for all running Docker containers, as `docker stats` does. Memory is reported with the inactive file cache taken off, so the numbers match the Docker CLI.
 
 #### Parameters
 
@@ -189,7 +192,7 @@ Retrieves live resource utilization and status metrics for all running Docker co
 
 #### Output
 
-Returns an array of objects detailing container execution statistics, processing allocations, and memory usage with inactive file cache overhead removed:
+Returns one object per running container:
 
 ```json
 [
@@ -210,7 +213,7 @@ Returns an array of objects detailing container execution statistics, processing
 
 ### `containerInfo`
 
-Retrieves configuration and state metadata profiles for all running Docker containers.
+Retrieves what `docker inspect` tells about every running container: its configuration and its state.
 
 #### Parameters
 
@@ -218,4 +221,4 @@ Retrieves configuration and state metadata profiles for all running Docker conta
 
 #### Output
 
-Returns an array of detailed inspection objects containing container configuration profiles, layer settings, storage volume bindings, and network maps.
+Returns the `docker inspect` result of every running container: its configuration, image layers, volume bindings and networks.

@@ -6,8 +6,8 @@ The file I/O functions read data from multiple file formats (CSV, Excel, PDF, XM
 
 The file system these functions access depends on their execution environment:
 
-1. Platform: When executed directly on the platform, functions access the file system of the platform installation itself, the same content visible in the [File Explorer](../../../app-builder/explorers/files.md). The root path is `/shared`, meaning a file in the uploads folder uses the path `/shared/uploads/test.csv`.
-2. Local OS: To work with files on your premises, compile, download, and install an [Agent](../../../concepts/agents-and-where-code-runs.md) containing this class. Functions executed via the Agent access the file system where the Agent runs, using standard local paths like `C:\Users\YourUserName\Documents\test.csv`.
+1. **On the platform**: the functions see the workspace's own file system, the same content as the [Files explorer](../../../app-builder/explorers/files.md). Its root is `/shared`, so a file in the uploads folder is `/shared/uploads/test.csv`.
+2. **On your premises**: build an [agent](../../../concepts/agents-and-where-code-runs.md) with this connector and install it on the computer whose files you want. The functions then see that computer's file system, with its own paths, such as `C:\Users\YourUserName\Documents\test.csv`.
 
 {% hint style="warning" %}
 #### Pitfall on Windows
@@ -16,7 +16,13 @@ When referencing Windows paths, wrap the YAML input in quotes. Without quotes, `
 
 ## Reading files
 
-Every read function takes the file's path. On the platform it also takes a file a table row keeps: hand over the entry from a [`file` field](../storage/relational-database.md#files-in-a-table) in place of the path, and the function reads that file from the workspace's file store. `read` picks the reader by the entry's name.
+Every read function takes the file's path. On the platform it also takes a **file reference**, `{ id, name, type, size }`: what an [upload](../../widgets/input/upload.md) widget delivers and a [`file` field](../storage/relational-database.md#files-in-a-table) of a table holds. Hand the reference over in place of the path, and the function reads that file from the workspace's file store. `read` picks the reader by the reference's `name`.
+
+A reference works for `exists`, `read`, `readFileToBuffer`, `readCsv`, `readXlsx`, `readXlsxCells`, `readPdf`, `readXml`, the text reads (`readDocx`, `readPptx`, `readHtml`, `readTxt`, `readMd`) and the `src` of `copyFile`. Everything that writes, moves or deletes takes a path.
+
+{% hint style="info" %}
+One file is one reference. A `files` field holds a list of them: take the element you want, for example with a [modifier](../../../app-builder/flowboard/modifier.md).
+{% endhint %}
 
 ### `read`
 
@@ -35,8 +41,8 @@ Reads a file and automatically parses its content based on the file extension. T
   <tbody>
     <tr>
       <td><code>filename</code></td>
-      <td>The full path to the file.</td>
-      <td>string</td>
+      <td>The full path to the file, or its file reference.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>options</code></td>
@@ -74,8 +80,8 @@ Checks whether a file exists at the specified path.
   <tbody>
     <tr>
       <td><code>filename</code></td>
-      <td>The path of the file to check.</td>
-      <td>string</td>
+      <td>The path of the file to check, or its file reference.</td>
+      <td>string or object</td>
     </tr>
   </tbody>
 </table>
@@ -103,8 +109,8 @@ Reads any file and returns its entire content as a base64 encoded string.
   <tbody>
     <tr>
       <td><code>filePath</code></td>
-      <td>The path of the file to read.</td>
-      <td>string</td>
+      <td>The path of the file to read, or its file reference.</td>
+      <td>string or object</td>
     </tr>
   </tbody>
 </table>
@@ -167,7 +173,7 @@ Writes one or more buffer-file objects to a directory. The function creates the 
     </tr>
     <tr>
       <td><code>bufferData</code></td>
-      <td>A single object or an array of objects, each containing at least the <code>name</code> and <code>base64</code> properties. See the <a href="../../widgets/input/photo.md">file object structure</a>.</td>
+      <td>A single object or an array of objects, each with a <code>name</code> and a <code>base64</code>. An object without both is refused.</td>
       <td>object or array</td>
     </tr>
   </tbody>
@@ -177,11 +183,15 @@ Writes one or more buffer-file objects to a directory. The function creates the 
 
 Returns `true` when all files are successfully written. Throws an error listing every file that failed.
 
-<figure><img src="../../../.gitbook/assets/Foto_upload.png" alt=""><figcaption><p>This function integrates directly with the <a href="../../widgets/input/photo.md">photo</a> or <a href="../../widgets/input/upload.md">upload</a> widget when configured to use <code>Buffer</code> as the storage type.</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Foto_upload.png" alt="A flow that takes the files of an upload widget and writes them into a directory"><figcaption><p>What the <a href="../../widgets/input/photo.md">photo</a> and <a href="../../widgets/input/upload.md">upload</a> widgets deliver with <strong>buffer</strong> storage goes straight into this function.</p></figcaption></figure>
+
+{% hint style="info" %}
+This function takes the inline shape, `{ name, type, size, base64 }`, which the [photo](../../widgets/input/photo.md) and [upload](../../widgets/input/upload.md) widgets deliver with **buffer** storage. With **file** storage they deliver a file reference instead, which carries no content: read it with `readFileToBuffer` and write it with `writeBufferToFile`.
+{% endhint %}
 
 {% hint style="info" %}
 #### Local file sharing
-Using these functions from an Agent establishes a file share between your App and your local OS. For example, you can store pictures taken with the photo widget directly on your own file server.
+Run these functions on an agent and your App writes to a file system of your own: pictures taken with the photo widget land on your file server.
 {% endhint %}
 
 ## Managing files and folders
@@ -235,12 +245,12 @@ Copies a file from a source path to a destination path.
   <tbody>
     <tr>
       <td><code>src</code></td>
-      <td>The path of the file to copy.</td>
-      <td>string</td>
+      <td>The path of the file to copy, or its file reference.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>dest</code></td>
-      <td>The path where the copy is created.</td>
+      <td>The path where the copy is created. An existing file there is overwritten.</td>
       <td>string</td>
     </tr>
   </tbody>
@@ -284,7 +294,7 @@ Returns nothing on success. Throws an error if the file does not exist.
 
 ### `createFolder`
 
-Creates a new folder at the specified path, including any missing parent folders.
+Creates a new folder at the specified path, including any missing parent folders. A folder that already exists is left as it is.
 
 #### Parameters
 
@@ -307,7 +317,7 @@ Creates a new folder at the specified path, including any missing parent folders
 
 #### Output
 
-Returns nothing on success. Throws an error on failure.
+Returns the first folder it created, or nothing when the folder was already there. Throws an error on failure.
 
 ### `deleteFolder`
 
@@ -423,8 +433,8 @@ Reads CSV data and converts it into an array of JSON objects. The function autom
     <tr>
       <td><code>fileInfo</code></td>
       <td></td>
-      <td>The path to the <code>.csv</code> file, a raw CSV string, or a base64 encoded string of the file content.</td>
-      <td>string</td>
+      <td>The path to the <code>.csv</code> file or its file reference, a raw CSV string, or a base64 encoded string of the file content.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>options</code></td>
@@ -560,8 +570,14 @@ Converts an array of JSON objects into a CSV string and writes it to a file.
     </tr>
     <tr>
       <td></td>
-      <td><code>prependHeader</code></td>
+      <td><code>header</code></td>
       <td>If false, the connector omits the header row. Default true.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>prependHeader</code></td>
+      <td>Another name for <code>header</code>. Default true.</td>
       <td>boolean</td>
     </tr>
     <tr>
@@ -606,6 +622,8 @@ keys: ['id', 'name', 'price']
 prependHeader: false
 ```
 
+All other [json-2-csv](https://www.npmjs.com/package/json-2-csv) options pass through directly.
+
 #### Output
 
 Returns `true` on a successful write.
@@ -631,8 +649,8 @@ Reads an Excel file and converts its content into JSON. If the file contains onl
     <tr>
       <td><code>fileInput</code></td>
       <td></td>
-      <td>The path to the <code>.xlsx</code> file or a base64 encoded string of the file content.</td>
-      <td>string</td>
+      <td>The path to the <code>.xlsx</code> file, its file reference, or a base64 encoded string of the file content.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>options</code></td>
@@ -728,7 +746,9 @@ Output:
 
 Example 3: Combining Excel reading with a file upload
 
-<figure><img src="../../../.gitbook/assets/image (44).png" alt=""><figcaption><p>Uploads an .xlsx file, saves it as a base64 buffer, and feeds it to the <code>readXlsx</code> function.</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (44).png" alt="A flow in which an upload widget's file is turned into base64 and read by readXlsx"><figcaption><p>An uploaded .xlsx file with <strong>buffer</strong> storage: a modifier takes its <code>base64</code> and feeds it to <code>readXlsx</code>.</p></figcaption></figure>
+
+With **file** storage the widget delivers a file reference instead. Wire that straight into `fileInput`: no modifier is needed, and a large workbook never travels through the flow as text.
 
 ### `readXlsxCells`
 
@@ -747,8 +767,8 @@ Reads the values of one or more specific cells from an Excel sheet.
   <tbody>
     <tr>
       <td><code>fileInput</code></td>
-      <td>The path to the <code>.xlsx</code> file or a base64 encoded string of the file content.</td>
-      <td>string</td>
+      <td>The path to the <code>.xlsx</code> file, its file reference, or a base64 encoded string of the file content.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>cellAddresses</code></td>
@@ -858,8 +878,13 @@ Reads a PDF file and extracts its text content and metadata.
   <tbody>
     <tr>
       <td><code>filename</code></td>
-      <td>The path to the <code>.pdf</code> file.</td>
-      <td>string</td>
+      <td>The path to the <code>.pdf</code> file, or its file reference.</td>
+      <td>string or object</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td>Accepted so that <code>read</code> can pass its options on, and not used. The PDF is always read whole.</td>
+      <td>object</td>
     </tr>
   </tbody>
 </table>
@@ -904,8 +929,8 @@ Reads an XML file and converts it into a JSON object.
     <tr>
       <td><code>filename</code></td>
       <td></td>
-      <td>The path to the <code>.xml</code> file.</td>
-      <td>string</td>
+      <td>The path to the <code>.xml</code> file, or its file reference.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>options</code></td>
@@ -942,7 +967,7 @@ Returns a JSON representation of the XML content.
 
 ### `readDocx`, `readPptx`, `readHtml`, `readTxt`, `readMd`
 
-These functions read their respective file types and extract the plain text content.
+These functions read their respective file types and extract the plain text content. They take the same `options`, and each picks its extractor by the function you call, not by the file's name: `readTxt` on a `.docx` file reads the Word document's bytes as text. Use `typeOverride` for a file whose ending does not match its content.
 
 #### Parameters
 
@@ -950,7 +975,7 @@ These functions read their respective file types and extract the plain text cont
   <thead>
     <tr>
       <th width="150">Input</th>
-      <th width="120">Key</th>
+      <th width="220">Key</th>
       <th>Description</th>
       <th width="100">Type</th>
     </tr>
@@ -959,8 +984,8 @@ These functions read their respective file types and extract the plain text cont
     <tr>
       <td><code>filename</code></td>
       <td></td>
-      <td>The path to the file.</td>
-      <td>string</td>
+      <td>The path to the file, or its file reference.</td>
+      <td>string or object</td>
     </tr>
     <tr>
       <td><code>options</code></td>
@@ -968,10 +993,28 @@ These functions read their respective file types and extract the plain text cont
       <td>Maintains line breaks from the original document. Default true.</td>
       <td>boolean</td>
     </tr>
+    <tr>
+      <td></td>
+      <td><code>preserveOnlyMultipleLineBreaks</code></td>
+      <td>Removes single line breaks and keeps multiple ones, so paragraphs stay apart and wrapped lines join. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>includeAltText</code></td>
+      <td>Adds the alt text of images, for HTML. Default false.</td>
+      <td>boolean</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><code>typeOverride</code></td>
+      <td>Reads the file as this media type instead of the function's own: <code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code> (Word), <code>application/vnd.openxmlformats-officedocument.presentationml.presentation</code> (Powerpoint), <code>text/html</code>, <code>text/markdown</code>, <code>text/plain</code> or <code>application/xml</code>. Any other type is refused.</td>
+      <td>string</td>
+    </tr>
   </tbody>
 </table>
 
-All other [textract](https://www.npmjs.com/package/textract#configuration) options pass through directly.
+These four are all the options a text read takes. Any other key is refused, naming it (`Refused text read option 'x'`).
 
 #### Output
 

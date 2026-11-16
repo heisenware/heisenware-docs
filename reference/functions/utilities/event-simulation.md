@@ -1,8 +1,10 @@
 # Event simulation
 
-The event simulation class is a source of impulses: manual ones fired by a button or another flow, periodic ones, a one-shot delayed callback, and debounced values. Use it to test and validate flows with mock events, as a placeholder before your App is complete, or as a named instance that turns a button in one App into an event in another. To learn more about event handlers, see [callbacks](../../../concepts/executors-and-instances.md#callbacks).
+The event simulation class is a source of impulses: manual ones fired by a button or another flow, periodic ones, a one-shot delayed callback, and debounced values. Use it to test and validate flows with mock events, as a placeholder before your App is complete, or as a named instance that turns a button in one App into an event in another.
 
-To access the event simulation functions, unfold Utilities > Event Simulation in the Function Explorer. This class requires an instance. The code class name is `Trigger`.
+You find the functions under **Utilities** > **Event Simulation** in the Functions explorer. This class requires an instance. The code class name is `Trigger`.
+
+The `on` functions are event functions. Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The payload arrives on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
 
 ### `create`
 
@@ -65,29 +67,17 @@ Subscribes to manual impulses. The callback runs on every `triggerManually`.
 
 #### Output
 
-Returns the string `subscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 #### Example
 
 <figure><img src="../../../.gitbook/assets/image (33).png" alt=""><figcaption><p>The listener outputs the timestamp after a manual trigger</p></figcaption></figure>
 
-### `offManualTrigger`
-
-Removes a listener given to `onManualTrigger`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
-
 ## Periodic impulses
 
 ### `startAutoTrigger`
 
-Starts firing periodic impulses to every `onAutoTrigger` listener. A running auto trigger is replaced by the new interval.
+Starts firing periodic impulses to every `onAutoTrigger` listener. A running auto trigger is replaced by the new interval. The auto trigger runs in memory only: after a restart of the platform, start it again.
 
 #### Parameters
 
@@ -107,23 +97,11 @@ Subscribes to periodic impulses. The callback runs once per interval while the a
 
 #### Output
 
-Returns the string `subscribed`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.
 
 #### Example
 
 <figure><img src="../../../.gitbook/assets/image (34).png" alt=""><figcaption><p>React periodically to automatic events</p></figcaption></figure>
-
-### `offAutoTrigger`
-
-Removes a listener given to `onAutoTrigger`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
 
 ### `stopAutoTrigger`
 
@@ -195,16 +173,4 @@ Subscribes to debounced values. The callback runs once per burst of `debounce` c
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offDebounced`
-
-Removes a listener given to `onDebounced`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.

@@ -1,91 +1,96 @@
 # LXC agent (Insys)
 
-The LXC agent is a specialized Heisenware agent for edge computing on INSYS icom industrial routers and gateways (such as the MRX, MRO, ECR, and SCR series). It runs as an isolated Linux system container (LXC) directly within the router's icom SmartBox environment.
+The LXC agent is a Heisenware agent for INSYS icom industrial routers and gateways (the MRX, MRO, ECR and SCR series). It runs as a Linux system container (LXC) inside the router's icom firmware, so no extra industrial PC is needed at the machine.
 
-## Key differences
+## How it differs from a native agent
 
-* **Native edge integration**: Runs directly on the router's firmware. No separate industrial PC or Raspberry Pi needed.
-* **Pre-packaged format**: Distributed as a self-contained `.tar` update packet that the INSYS router natively understands.
-* **Resource optimized**: The container caps its memory usage (128 MB heap) automatically so the router's core networking functions are never interrupted.
-* **Automatic persistence**: Maps standard container volumes to the router's internal flash memory, so configurations survive firmware updates.
+* **On the router itself**: it runs on the router's firmware, next to its networking.
+* **A `.tar` update packet**: the router's own container format, uploaded through its web interface.
+* **A small footprint**: the container caps its heap at 128 MB, so the router's networking is never crowded out.
+* **Persistence on the router's flash**: it links its `/shared` directory to the router's `/data` partition, so instances and configuration survive a new packet.
+* **Not built by the platform**: the packet comes from the public download server, so the App Manager neither builds it nor updates it. In the [Agents panel](README.md) it shows under **Unmanaged agents**, with its status and when it was last seen.
+
+It carries the connectors of the slim [Docker agent](docker-agent.md): HTTP, trust store, file, OS, S7, OPC UA client and server, MQTT client and Modbus.
 
 ## Where to get it
 
-The LXC agent is available as a downloadable `.tar` archive from the public release server. Select the correct architecture for your INSYS gateway:
+A `.tar` archive from the public download server, one per architecture:
 
-* **ARMv7** (standard for most MRX/MRO/SCR gateways): `heisenware-insys-<version>-armv7.tar`
-* **ARM64**: `heisenware-insys-<version>-arm64.tar`
-
-For example, download the required file directly with `wget`:
+* **ARMv7** (most MRX, MRO and SCR gateways): `heisenware-insys-v93-armv7.tar`
+* **ARM64**: `heisenware-insys-v93-arm64.tar`
 
 ```bash
-wget "https://downloads.heisenware.cloud/public/heisenware-insys-v92-beta0-armv7.tar"
+wget "https://downloads.heisenware.cloud/public/heisenware-insys-v93-armv7.tar"
 ```
 
 {% hint style="info" %}
-Check your INSYS router's datasheet if you are unsure which architecture it uses.
+Check your INSYS router's datasheet if you are unsure which architecture it uses, and take the file whose version matches the platform you connect to.
 {% endhint %}
 
-## How to use it
+## How to set it up
 
-The LXC agent runs on a hardware appliance, so you configure it through the INSYS icom web interface instead of command-line tools.
+The LXC agent runs on a hardware appliance, so you configure it in the INSYS icom web interface rather than on a command line.
 
 {% stepper %}
 {% step %}
 #### Upload the update packet
 
-Log into your INSYS router's web interface and navigate to the Container menu. Upload the `.tar` file you downloaded. Give the container a name (e.g., `heisenware-agent`).
+Log into the router's web interface, open the Container menu and upload the `.tar` file. Give the container a name, for example `heisenware-agent`.
 {% endstep %}
 
 {% step %}
 #### Configure networking
 
-In the container's network settings, map it to an internal network bridge (e.g., `net2` or `lan`). Assign it a dedicated IPv4 address, subnet mask, and gateway.
+In the container's network settings, map it to an internal network bridge (`net2` or `lan`, for example) and give it an IPv4 address, subnet mask and gateway of its own.
 
 {% hint style="warning" %}
-#### Port 8883 required
+#### Outbound 8883 required
 
-Like every agent, the LXC container needs outbound internet access on port 8883 to connect to the Heisenware platform. Make sure the router's firewall allows this traffic for the container's IP address.
+Like every agent, the container needs outbound internet access on TCP 8883 to reach the platform. Make sure the router's firewall allows that for the container's address. Nothing inbound is needed.
 {% endhint %}
 {% endstep %}
 
 {% step %}
-#### Activate the profile (initial boot)
+#### Activate the profile
 
-Click **Activate Profile** in the INSYS UI. The router boots the LXC container for the first time, extracting the application payload and generating the persistent data directories.
+Click **Activate Profile**. The router boots the container for the first time, unpacks the application payload and creates the persistent directories.
 {% endstep %}
 
 {% step %}
-#### Provide environment variables (`config.env`)
+#### Write `config.env`
 
-INSYS LXC containers behave like full lightweight virtual machines, so environment variables cannot be passed through the router's web interface. Provide them via a configuration file instead:
+An INSYS LXC container behaves like a small virtual machine, so the web interface cannot pass environment variables in. The agent reads them from a file instead.
 
-1. Access the container's file system via SSH or SFTP (using the container's newly assigned IP address).
-2. Create a text file named `config.env` inside the persistent `/data/` folder.
-3. Add the following keys to connect the agent to your workspace:
+1. Reach the container's file system over SSH or SFTP, at the address you gave it.
+2. Create a file `config.env` in the persistent `/data/` folder.
+3. Put the credentials of a **VRPC client** [integration](../integrations.md#integration-types) of your workspace into it:
 
 ```
 HW_DOMAIN=<account>.<workspace>
-HW_BROKER=mqtts://<account>.heisenware.cloud
-HW_USERNAME=<your-vrpc-username>
-HW_PASSWORD=<your-vrpc-password>
-HW_AGENT_ID=<a-unique-id-for-this-gateway>
+HW_BROKER=mqtts://<account>.heisenware.cloud:8883
+HW_USERNAME=<name>@<account>.<workspace>
+HW_PASSWORD=<password>
+HW_AGENT_ID=<a unique id for this gateway>
 ```
 
-Generate the username and password by creating a [VRPC integration](../integrations.md) in the App Manager.
+`HW_AGENT_ID` names this gateway on the platform. Give every router an id of its own; without one the agent takes a random one at every start and shows up as a new agent each time.
 {% endstep %}
 
 {% step %}
 #### Restart the container
 
-Restart the container via the INSYS web interface. On reboot, the agent automatically detects and parses the `/data/config.env` file. Once the connection is established, the agent appears in the App Builder's [Functions explorer](../../app-builder/explorers/functions.md).
+Restart the container in the INSYS web interface. On its next start the agent reads `/data/config.env`, connects, and appears in the Agents panel and in the [Functions explorer](../../app-builder/explorers/functions.md).
 {% endstep %}
 {% endstepper %}
 
+{% hint style="info" %}
+The agent announces itself as `Docker Agent - <HW_AGENT_ID>`: the LXC packet carries the Docker agent's software. That is the name you see in the Agents panel and in the Functions explorer.
+{% endhint %}
+
 ## Persisting data
 
-The LXC agent handles persistence automatically. It symlinks its internal `/shared` directory to the INSYS router's persistent `/data` partition.
+The agent links its internal `/shared` directory to the router's persistent `/data` partition, so nothing has to be mounted by hand.
 
-* The router safely stores configurations and instances in its flash memory.
-* If you update the agent by uploading a newer `.tar` file to the same container, your data stays intact and re-attaches to the new version.
-* Backing up the router's profile via the INSYS web interface includes the agent's configuration state.
+* Configuration and instances lie in the router's flash memory.
+* Uploading a newer `.tar` into the same container keeps that data and re-attaches it to the new version.
+* A backup of the router's profile through the INSYS web interface includes the agent's state.

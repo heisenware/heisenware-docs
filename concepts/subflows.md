@@ -1,43 +1,68 @@
+---
+description: >-
+  A piece of the Flowboard published as a function of your own: when a subflow earns its place, and how its blueprint and callers work.
+---
+
 # Subflows
 
-A subflow bundles multiple functions into a single, reusable custom function. You define which inputs go in and which output comes out. On the canvas, the subflow behaves like any other function: it has inputs, a trigger, and an output, and you wire it into your flows the same way.
+A **subflow** is a piece of your own logic published as a function. On the Flowboard it behaves like any other executor: it has inputs, a trigger and an output, and you wire it into your flows the same way.
 
-Use subflows to:
+## When a subflow earns its place
 
-* Reuse logic you need in several places instead of copying functions.
-* Keep the canvas clean by hiding implementation details behind one block.
-* Share a tested algorithm as a single building block.
+Reach for one when either of these is true, and leave the logic flat otherwise.
 
-### Creating a subflow
+* **The same steps are needed in several flows.** One subflow instead of three copies: fix it once, and every place follows.
+* **Several runs must not get in each other's way.** A wired flow shares one [scope](scopes.md) from end to end, so ten readings travelling through the same chain of executors at once would overwrite each other's intermediate values. **Each call of a subflow runs in a scope of its own.** This is the only isolation of that kind the platform has, and the reason a subflow is sometimes the only correct answer.
+
+Like a function in code, a badly cut subflow costs more than it saves. Never wrap a single executor in one.
+
+## Blueprint and callers
+
+A subflow has two sides, and the difference matters.
+
+* The **blueprint** is the section that holds the logic. It carries the signature: which inputs go in, where a call starts, what comes back. The blueprint exists so you can debug the logic visually, and it runs on the screen you are watching. **Your App's logic never triggers the blueprint.**
+* A **caller** is what your flows use. Each call runs the blueprint's logic in its own call scope.
+
+Edit the blueprint, and every caller follows. That is the point: the logic lives in one place.
+
+## Making one
 
 {% stepper %}
 {% step %}
 **Add a subflow**
 
-Drag a subflow from the toolbar onto the canvas. A named container appears, marked with a subflow label.
+Drag **New Subflow** from the Flowboard's toolbar onto the board. A named frame appears. A section that already holds the right executors can be turned into one instead, with **Activate Subflow** on the section.
 {% endstep %}
 
 {% step %}
-**Add your logic**
+**Put the logic inside**
 
-Add the functions that make up your logic to the container, just like adding functions to a group.
+Add the executors that make up the logic to the frame, exactly as you build anything else.
 {% endstep %}
 
 {% step %}
-**Define the interface**
+**Define what goes in and out**
 
-Connect your logic to the input, trigger, and output of the orange function block inside the container. This block defines the interface of your new custom function.
+Wire your logic to the inputs, the trigger and the output of the signature node inside the frame. That node is the function's interface.
+{% endstep %}
+
+{% step %}
+**Name it**
+
+Edit the frame's title. The name follows into the Functions explorer, under Custom.
 {% endstep %}
 {% endstepper %}
 
-### Naming a subflow
+To use it, drag it from the Functions explorer onto the Flowboard like any other function.
 
-Every subflow gets a default name (e.g. run\_aa7L). Edit the title of the container to rename it. The name updates in the Function Explorer accordingly.
+## Timeouts
 
-### Using a subflow
+A call waits 25 seconds for its answer. Where the logic inside takes longer, give the blueprint a longer timeout, and every caller follows.
 
-Once created, your custom function appears in the Function Explorer under Custom > Subflows. From there, drag it onto the canvas and use it like any built-in function.
+A call that runs out of time fails the flow that called it, while the logic inside runs on. An agent that goes offline inside the subflow fails the call with its own message.
 
-### Subflows vs. grouping
+Under a [loop](when-streams-meet.md#loops-once-per-element), each element gets the full waiting time. Looping over a caller is how each element of a list gets several steps of its own, one after the other.
 
-A group is a visual aid only and has no effect on execution. A subflow is a functional unit with a defined interface. Use groups to tidy up, use subflows to build reusable logic.
+## Subflows and sections
+
+A [section](../app-builder/flowboard/README.md) is a frame around executors: it tidies the Flowboard and nothing more. A subflow is a working unit with an interface that other flows call. Use sections to arrange, subflows to reuse.

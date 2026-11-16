@@ -41,7 +41,7 @@ Sends a query or a mutation to a GraphQL API endpoint.
 </table>
 
 {% hint style="info" %}
-Right-click the `headers` input and mark it as a secret to mask tokens or credentials.
+Right-click the `headers` input and choose **Secret Input** to mask tokens or credentials.
 {% endhint %}
 
 #### Examples

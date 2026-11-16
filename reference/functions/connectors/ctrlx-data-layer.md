@@ -8,7 +8,7 @@ description: >-
 
 The ctrlX Data Layer connector (`CtrlX`) talks to a Bosch Rexroth ctrlX CORE, or a ctrlX COREvirtual, through the REST API of ctrlX OS. It reads and writes nodes of the Data Layer, browses the tree, describes nodes and subscribes to value changes.
 
-This connector requires [instance creation](README.md#instance-creation). The connector runs where it can reach the device over the network: on the platform, or in a [Native or Docker Agent](../../../concepts/agents-and-where-code-runs.md) next to the machine.
+This connector requires [instance creation](README.md#instance-creation). The connector runs where it can reach the device over the network: on the platform, or in a [native or Docker agent](../../../concepts/agents-and-where-code-runs.md) next to the machine.
 
 ## ctrlX in a nutshell
 
@@ -44,17 +44,17 @@ Every app on the device publishes what it has into one shared tree, the **Data L
 * **A ctrlX user.** The connector logs in with a name and password. The user's permissions on the device decide which nodes you may read and write.
 * **Trust the device once.** A ctrlX CORE shows a certificate it made itself, so the first connection is refused. Run `TrustStore.trustServer` with the device's address, see [Trusted certificates](trusted-certificates.md). From then on the connector accepts the device.
 * **Addresses** are Data Layer node paths as the ctrlX Data Layer app shows them, for example `framework/metrics/system/cpu-utilisation-percent` or `plc/app/Application/sym/GVL/counter`.
-* **Where the connector runs.** On the platform or on any host with a [Native Agent](../../../app-manager/agents/native-agent.md) that reaches the device over the network, or on the ctrlX itself: build the Agent as a [ctrlX OS app](../../../app-manager/agents/native-agent.md#running-on-a-ctrlx-core) with this connector on board, then the device's address is `https://localhost`.
+* **Where the connector runs.** On the platform or on any host with a [native agent](../../../app-manager/agents/native-agent.md) that reaches the device over the network, or on the ctrlX itself: build the agent as a [ctrlX OS app](../../../app-manager/agents/native-agent.md#running-on-a-ctrlx-core) with this connector on board, then the device's address is `https://localhost`.
 
 ## Instance creation
 
 ### `create`
 
-Creates a ctrlX Data Layer client for one device. The connector logs in right away and keeps the session: an expired session is renewed on the next call, a lost subscription stream is reopened by itself.
+Creates a ctrlX Data Layer client for one device. The connector logs in right away and keeps the session: an expired session is renewed on the next call, a lost subscription stream is reopened by itself. A device that cannot be reached yet does not fail the creation: the connector logs in with the first call that needs it.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="160">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The device's address, for example <code>https://192.168.1.1</code>. A ctrlX COREvirtual in port-forwarding mode: <code>https://localhost:8443</code>.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>username</code></td><td>The ctrlX user to log in with.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>That user's password.</td><td>string</td></tr><tr><td></td><td><code>timeout</code></td><td>Milliseconds a call may take before it gives up. Default: 30000.</td><td>integer</td></tr><tr><td></td><td><code>tls</code></td><td>TLS settings for this client only, on top of what the workspace trusts: <code>rejectUnauthorized</code> (<code>false</code> accepts any certificate), <code>ca</code>, <code>cert</code>, <code>key</code>, <code>passphrase</code>, as for <a href="http-rest.md#self-signed-and-internal-certificates">HTTP / REST</a>.</td><td>object</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="160">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>url</code></td><td></td><td>The device's address, for example <code>https://192.168.1.1</code>. A ctrlX COREvirtual in port-forwarding mode: <code>https://localhost:8443</code>.</td><td>string</td></tr><tr><td><code>options</code></td><td><code>username</code></td><td>The ctrlX user to log in with.</td><td>string</td></tr><tr><td></td><td><code>password</code></td><td>That user's password.</td><td>string</td></tr><tr><td></td><td><code>timeout</code></td><td>Optional. Milliseconds a call may take before it gives up. Default: 30000.</td><td>integer</td></tr><tr><td></td><td><code>tls</code></td><td>Optional. TLS settings for this client only, on top of what the workspace trusts: <code>rejectUnauthorized</code> (<code>false</code> accepts any certificate), <code>ca</code>, <code>cert</code>, <code>key</code>, <code>passphrase</code>, as for <a href="http-rest.md#self-signed-and-internal-certificates">HTTP / REST</a>.</td><td>object</td></tr></tbody></table>
 
 #### Example
 
@@ -207,11 +207,13 @@ One entry per item, in the same order, as for `bulkRead`. `result` is `DL_OK` wh
 
 ### `subscribe`
 
-Subscribes to one or many nodes. The listener is called with the current value right away and then on every change. The subscription is all or nothing: an address that does not exist fails the call, nothing is left on the device.
+Subscribes to one or many nodes. This is an event function: trigger it once, for example when the App starts, and it delivers the current value right away and then every change on its event output. The subscription is all or nothing: an address that does not exist fails the call, nothing is left on the device.
+
+The subscription lives on the device as long as the executor listens. `unsubscribe`, `disconnect` and deleting the instance end it.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th width="160">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>addresses</code></td><td></td><td>One node or a list of nodes.</td><td>string | string[]</td></tr><tr><td><code>listener</code></td><td></td><td>Receives every change as <code>{ address, value, type, timestamp }</code>.</td><td>function</td></tr><tr><td><code>properties</code></td><td><code>id</code></td><td>A name for the subscription. Optional, generated when omitted, returned either way.</td><td>string</td></tr><tr><td></td><td><code>publishInterval</code></td><td>Milliseconds between deliveries: changes are collected and sent at most this often. Default: 1000.</td><td>integer</td></tr><tr><td></td><td><code>keepaliveInterval</code></td><td>Milliseconds between keep-alive signs of life when nothing changes. Default: 60000.</td><td>integer</td></tr><tr><td></td><td><code>errorInterval</code></td><td>Milliseconds after which a node in error is tried again. Default: 10000.</td><td>integer</td></tr><tr><td></td><td><code>samplingInterval</code></td><td>Milliseconds between two looks at the value on the device. Optional, the device's default when omitted.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>How many changes the device keeps for you between deliveries. Optional, the device's default when omitted.</td><td>integer</td></tr><tr><td></td><td><code>deadBandValue</code></td><td>Changes smaller than this are not reported. Optional, every change when omitted.</td><td>number</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th width="160">Key</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>addresses</code></td><td></td><td>One node or a list of nodes.</td><td>string | string[]</td></tr><tr><td><code>listener</code></td><td></td><td>The handler. The platform fills it in: every change arrives on the executor's event output as <code>{ address, value, type, timestamp }</code>.</td><td>event</td></tr><tr><td><code>properties</code></td><td><code>id</code></td><td>A name for the subscription. Optional, generated when omitted, returned either way. A name that is in use on this instance is refused.</td><td>string</td></tr><tr><td></td><td><code>publishInterval</code></td><td>Milliseconds between deliveries: changes are collected and sent at most this often. Default: 1000.</td><td>integer</td></tr><tr><td></td><td><code>keepaliveInterval</code></td><td>Milliseconds between keep-alive signs of life when nothing changes. Default: 60000.</td><td>integer</td></tr><tr><td></td><td><code>errorInterval</code></td><td>Milliseconds after which a node in error is tried again. Default: 10000.</td><td>integer</td></tr><tr><td></td><td><code>samplingInterval</code></td><td>Milliseconds between two looks at the value on the device. Optional, the device's default when omitted.</td><td>integer</td></tr><tr><td></td><td><code>queueSize</code></td><td>How many changes the device keeps for you between deliveries. Optional, the device's default when omitted.</td><td>integer</td></tr><tr><td></td><td><code>deadBandValue</code></td><td>Changes smaller than this are not reported. Optional, every change when omitted.</td><td>number</td></tr></tbody></table>
 
 #### Example
 
@@ -225,7 +227,7 @@ publishInterval: 500
 
 #### Output
 
-Returns the subscription id, for `unsubscribe`. The listener receives, per change:
+The return is the subscription id, for `unsubscribe`. The event output delivers, per change:
 
 ```yaml
 address: plc/app/Application/sym/GVL/counter
@@ -236,7 +238,9 @@ timestamp: '2026-09-16T08:15:02.117Z'
 
 ### `unsubscribe`
 
-Ends a subscription, or takes nodes out of subscriptions. Give the id `subscribe` returned to end that subscription. Give one or many addresses to stop receiving those nodes; a subscription left without nodes ends.
+Ends subscriptions. Give the id `subscribe` returned to end that subscription. Give one or many addresses to end every subscription that receives one of those nodes, each with all its nodes.
+
+The executor that subscribed stops listening until it is triggered again.
 
 #### Parameters
 
@@ -256,21 +260,26 @@ Returns `true` when logged in and the device answered the last call.
 
 Ends all subscriptions and logs out. Returns `true`.
 
+### `delete`
+
+Removes the instance: ends all its subscriptions and logs out. Returns `true` upon removal.
+
 ## Tips and tricks
 
 ### Value types
 
-The Data Layer names its types like this: `bool8`, `int8`, `uint8`, `int16`, `uint16`, `int32`, `uint32`, `int64`, `uint64`, `float`, `double`, `string`, `timestamp`, `raw`, `object`, and for lists the same with `ar` in front (`arint32`, `ardouble`, `arstring`, ...). `bulkRead` and the listener tell you the type of every node, so you rarely have to look it up.
+The Data Layer names its types like this: `bool8`, `int8`, `uint8`, `int16`, `uint16`, `int32`, `uint32`, `int64`, `uint64`, `float`, `double`, `float32`, `float64`, `string`, `timestamp`, `raw`, `object`, `empty`, and for lists the same with `ar` in front (`arint32`, `ardouble`, `arstring`, ...). `bulkRead` and the event output tell you the type of every node, so you rarely have to look it up.
 
 ### Timestamps
 
-The device counts time in steps of 100 nanoseconds since the year 1601. The connector turns that into ISO time (`2026-09-16T08:15:02.117Z`) everywhere: in `bulkRead`, `bulkWrite` and the listener's changes.
+The device counts time in steps of 100 nanoseconds since the year 1601. The connector turns that into ISO time (`2026-09-16T08:15:02.117Z`) everywhere: in `bulkRead`, `bulkWrite` and the changes a subscription delivers.
 
 ### Subscriptions in practice
 
 * One `subscribe` call is one subscription on the device. Put the nodes that belong together into one call, and tune `publishInterval` to the pace the flow needs: `500` for a live gauge, `5000` for a dashboard that refreshes calmly.
 * The device drops a subscription nobody listens to after a minute. The connector keeps the stream open, and when the network hiccups it recreates the subscription and reopens the stream by itself, backing off from one second up to thirty.
 * `unsubscribe` with the id is the clean end of a subscription. Deleting the instance or calling `disconnect` ends all of them.
+* Several executors that subscribe with the same inputs share one subscription on the device. An executor that joins later receives the last value of every node right away.
 
 ### Errors
 

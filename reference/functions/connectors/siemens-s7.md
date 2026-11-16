@@ -2,7 +2,9 @@
 
 The Siemens S7 connector (`S7`) communicates directly with Siemens S7 programmable logic controllers (PLCs). It lets you read and write PLC memory areas using raw memory addresses or human-readable variable aliases. 
 
-This connector requires [instance creation](README.md#instance-creation) before you can manage connection states and configure variable polling.
+This connector requires [instance creation](README.md#instance-creation): the instance holds the connection, the address dictionary and the polling list.
+
+The connection is not stored with the instance: after a restart of the agent the instance exists but is not connected, and its dictionary and polling list are empty. Trigger `connect`, `setAddressDictionary` and `addItems` when the App starts, in that order.
 
 ## TIA Portal configuration
 
@@ -28,7 +30,7 @@ Configure the controller to permit PUT and GET communication:
 ## Connection management
 
 {% hint style="info" %}
-Typically you first install the Siemens S7 connector within an [Agent](../../../concepts/agents-and-where-code-runs.md). That way you can connect your cloud platform to your on-premises shopfloor PLCs.
+A PLC lives in the machine network, which the platform cannot reach from outside. Run this connector on an [agent](../../../concepts/agents-and-where-code-runs.md) in that network, and the flow reaches the PLC from the cloud.
 {% endhint %}
 
 ### `create`
@@ -185,7 +187,7 @@ Returns `true` on success.
 
 ### `removeItems`
 
-Removes specific variables from the background polling loop.
+Removes specific variables from the background polling loop. Name each one with the same string you added it with: an alias is not the same item as the address behind it.
 
 #### Parameters
 
@@ -230,7 +232,7 @@ Returns an array of all raw memory paths or dictionary aliases in the polling qu
 
 ### `readAllItems`
 
-Reads the current values of all variables in the polling queue.
+Reads the current values of all variables in the polling queue, in one request to the PLC. Two executors reading at the same moment share the read in flight, so polling from several places costs one request.
 
 #### Parameters
 
@@ -238,14 +240,17 @@ None.
 
 #### Output
 
-Returns an object containing the current values of all registered variables. Keys map to the variable names or aliases. Throws an error if reading fails.
+Returns an object with one entry per registered variable, keyed by the alias or the raw address. An item the PLC could not deliver stands in the result as its quality, `BAD 255` for one, beside the values of the others; an array item carries one quality per element.
 
 ```json
 {
   "MOTOR_SPEED": 1499.98,
-  "DB10,X20.4": true
+  "DB10,X20.4": true,
+  "DB99,INT0": "BAD 255"
 }
 ```
+
+Throws when the instance is not connected, and when the read lost the connection.
 
 ### `writeItems`
 
@@ -254,7 +259,7 @@ Writes data updates to one or more variables on the PLC.
 {% hint style="warning" %}
 #### Concurrent write constraint
 
-The connector executes one write operation at a time. Sending concurrent writes while a write is in progress causes a write rejection error.
+The connector writes one request at a time. A write that starts while another is in progress fails with `Write ignored; another write is currently in progress.` Write once with a list instead of several times in parallel.
 {% endhint %}
 
 #### Parameters

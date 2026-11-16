@@ -15,6 +15,7 @@
  * A storyboard is a module exporting
  *   name      basename of the result, e.g. 'drag-function-to-canvas'
  *   login     true when it starts signed in (credentials from .env)
+ *   dark      true to open the manager in dark mode
  *   viewport  optional { width, height }, default 1280x800
  *   run       async ({ page, m, env }) => { ... }   m is the Recorder, see lib.js
  *
@@ -61,6 +62,15 @@ async function record (file, opts, env, browser) {
     deviceScaleFactor: 1
   })
   await context.addInitScript(lib.CURSOR_INIT)
+  // The manager's dark mode is a stored preference it reads at boot
+  // (manager/src/util/darkMode.js). Seeding it before any script runs is the
+  // only way to open a screen already dark; the front door stays light by
+  // design. The builder has no dark mode.
+  if (story.dark) {
+    await context.addInitScript(() => {
+      try { window.localStorage.setItem('darkMode', 'true') } catch {}
+    })
+  }
   const page = await context.newPage()
   const m = new lib.Recorder(page)
   try {

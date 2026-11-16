@@ -1,138 +1,142 @@
 ---
-description: Copy the app from our demo and learn how to build faster with Heisenware.
+description: >-
+  Build a small App step by step: two data sources, a combined value, a history, and two pages.
 ---
 
 # Your first App by hand
+
+This tutorial builds the same kind of App as the assistant does, click by click, so you see what every piece is. It reads a number from a web API and a value from a public OPC UA server, adds them up, keeps their history, and shows both on two pages.
+
+{% hint style="info" %}
+If you would rather describe the App than build it, see [Your first App with the assistant](first-app-with-the-assistant.md). Come back here to understand what was built.
+{% endhint %}
 
 ## Video
 
 {% embed url="https://www.youtube.com/watch?v=ZOWjfi18SVI" fullWidth="false" %}
 
-## Create a new App
+{% hint style="warning" %}
+The video shows an older App Builder. The steps below are the current ones; where the two differ, follow the text.
+{% endhint %}
 
-1. Log in to your account.
-2. Click **Apps** in the sidebar.
-3. Click **+** to add a new App.
-4. Enter a name in the app name field.
-5. Upload an app icon.
-6. Open the **App Builder**.
+## Create the App
 
-## Connect data sources
+1. In the App Manager, open **Apps** and click **New app**, then **Blank app**.
+2. On the App's page, set the **App Name** and the **Language** in the **General Settings** card, and add an icon.
+3. Click **Start App Builder** in the **Development** card.
+
+## Read two data sources
+
+Everything in this section happens on the [Flowboard](../app-builder/flowboard/README.md), and every function comes from the [Functions explorer](../app-builder/explorers/functions.md) on the left.
 
 ### HTTP
 
-1. Drag and drop the `get` function from the [HTTP / REST](../reference/functions/connectors/http-rest.md#get) connector onto the canvas.
-2. Configure the function:
+1. Drag the [`get`](../reference/functions/connectors/http-rest.md#get) function of **Connectors** > **HTTP / REST** onto the Flowboard. It becomes an [executor](../concepts/executors-and-instances.md): the function's arguments are its inputs.
+2. Fill the inputs:
 
-```yaml
-# url
-http://www.randomnumberapi.com/api/v1.0/random
-# parameters
-min: 50
-max: 100
-count: 5
-```
+   ```yaml
+   # url
+   https://www.randomnumberapi.com/api/v1.0/random
+   # options
+   params:
+     min: 50
+     max: 100
+     count: 5
+   ```
 
-3. Trigger the function.
-4. Add a [modifier](../app-builder/flowboard/modifier.md) to the function and enter the following JSONata expression to calculate the average:
+3. Click the trigger button on the executor to run it once. The output shows the five numbers it answered.
+4. Add a [modifier](../app-builder/flowboard/modifier.md) to the output with the **+** on its right, right-click it and choose **Jsonata**, and average the numbers:
 
-```
-$average($)
-```
+   ```jsonata
+   $average($)
+   ```
 
 ### OPC UA
 
-1. Create an OPC UA client instance using the [`create`](../reference/functions/connectors/opc-ua-client.md#create) function from the [OPC UA client](../reference/functions/connectors/opc-ua-client.md) connector.
-2. Enter `Demo` as the client name.
-3. Trigger the function.
-4. Connect to an OPC UA server using the [`connect`](../reference/functions/connectors/opc-ua-client.md#connect) function on your new client. Configure the public server address:
+1. Drag the [`create`](../reference/functions/connectors/opc-ua-client.md#create) function of **Connectors** > **OPC UA Client** onto the Flowboard, name the instance `demo` and leave the options empty for an unencrypted connection. Click the trigger to create it.
+2. Under that instance, drag [`connect`](../reference/functions/connectors/opc-ua-client.md#connect) onto the Flowboard and give it the server's endpoint:
 
-```yaml
-# endpointUrl
-opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
-```
+   ```yaml
+   # endpointUrl
+   opc.tcp://opcua.demo-this.com:51210/UA/SampleServer
+   ```
 
-5. Trigger the `connect` function.
-6. Verify the connection status using the [`isConnected`](../reference/functions/connectors/opc-ua-client.md#isconnected) function.
-7. Use the [`readNode`](../reference/functions/connectors/opc-ua-client.md#readnode) function to read the data node:
+3. Click its trigger. It answers `true` once connected. [`isConnected`](../reference/functions/connectors/opc-ua-client.md#isconnected) answers the same question later without reconnecting.
+4. Drag [`readVariable`](../reference/functions/connectors/opc-ua-client.md#readvariable) onto the Flowboard and give it the node to read:
 
-```yaml
-# nodeId
-ns=2;i=10846
-```
+   ```yaml
+   # address
+   ns=2;i=10846
+   ```
 
-8. Add a [modifier](../app-builder/flowboard/modifier.md) to the function and extract the raw value using:
-
-```
-value.value
-```
+`readVariable` answers the value itself. [`readNode`](../reference/functions/connectors/opc-ua-client.md#readnode) answers the whole node instead, with its status code and timestamps, which you then reduce with a modifier.
 
 {% hint style="info" %}
-As an alternative to steps 7 and 8, use the [`readVariableValue`](../reference/functions/connectors/opc-ua-client.md#readvariable) function to retrieve the value directly.
+An OPC UA server inside your own network is not reachable from the cloud, whatever the firewall allows. Such a server needs an [agent](../concepts/agents-and-where-code-runs.md) installed in that network.
 {% endhint %}
 
-## Configure data flow
+## Let the values meet
 
-### Combine data points
+### Combine the two
 
-1. Drag and drop the [`combine`](../reference/functions/utilities/data-processing.md#combine) function onto the canvas.
-2. Connect the modifier of the `get` function to argument 1 of the `combine` function, and the modifier of the `readNode` function to argument 2.
-3. Trigger the `combine` function.
-4. Add a [modifier](../app-builder/flowboard/modifier.md) to the `combine` function and calculate the sum:
+1. Drag [`combine`](../reference/functions/utilities/data-processing.md#combine) of **Utilities** > **Data Processing** onto the Flowboard. It answers the latest value of each of its inputs as one array.
+2. Wire the HTTP modifier to its first input and the `readVariable` output to its second.
+3. Make both inputs run the executor: drag each input onto the executor's trigger. A row appears per source, reading *on input* with a mode button beside it; leave it at *update*, or click it for *change*, *true* or *all updated*. An input that also runs its executor is a hot input. A value arriving at an input never runs an executor by itself. See [Triggers and wires](../concepts/triggers-and-wires.md).
+4. Add a modifier to `combine` and sum the two:
 
-```
-$sum($)
-```
+   ```jsonata
+   $sum($)
+   ```
 
-5. Set the triggers for both the `readNode` and `get` functions to `every 10s`.
-6. Set the trigger for the `combine` function to `on input change` by dragging its arguments onto the trigger.
-7. Test your logic in [test mode](../app-builder/test-and-deploy.md). Wait at least 10 seconds to view incoming data.
+5. Give `readVariable` and `get` their own impulse: right-click the trigger, open **App Start** and pick **every 10s**. That is how polling is set.
+6. Click **Test** in the top bar and wait for the first interval. Values appear on the items as they arrive. See [Test and deploy](../app-builder/test-and-deploy.md).
 
-### Record historic data
+### Keep the history
 
-1. Add a [recorder](../app-builder/flowboard/recorder.md) to the modifier of the `combine` function.
-2. Name the recorded data point `demo_data` in the configuration.
-3. Run the App in [test mode](../app-builder/test-and-deploy.md) for one minute to record initial data.
+1. Add a [recorder](../app-builder/flowboard/recorder.md) to the modifier of `combine`: **+**, then **Recorder**.
+2. Set its **Data Point Name** to `demo_data`. You need that name to read the data back.
+3. Leave the App in **Test** for a minute, so there is something to chart.
 
-## Build user interface
+## Build the pages
 
-### Visualize live data
+### Show the live value
 
-1. Upload your logo or another image to the [File Explorer](../app-builder/explorers/files.md).
-2. Drag and drop the image onto the page in the **Page editor**.
-3. Select a [circular gauge](../reference/widgets/display/circular-gauge.md) from the display widgets list and click the canvas to place it.
-4. Configure the start value, end value (0 to 500), and color sections of the circular gauge in its configuration panel.
-5. Drag the modifier of the `combine` function onto the circular gauge. Ensure you select the circular gauge first.
-6. Run the App in [test mode](../app-builder/test-and-deploy.md) to view live data.
+1. Upload a logo or another picture in the [Files explorer](../app-builder/explorers/files.md), then drag it onto the page in the [Page editor](../app-builder/page-editor.md).
+2. Place a [circular gauge](../reference/widgets/display/circular-gauge.md) from the display widgets.
+3. In its settings, set the scale's start and end value and the colour ranges of its frame.
+4. Select the gauge, then drag the modifier of `combine` onto it. The gauge now shows every value that modifier produces. See [Widgets and links](../concepts/widgets-and-links.md).
+5. **Test** the App again and watch the needle move.
 
-### Visualize recorded data
+### Show the history
 
-1. Click the database icon on the recorder node to automatically generate the `read` function for the [timeseries database](../reference/functions/storage/timeseries-database.md#read).
-2. Within the newly generated `read` function, change the tail value to 10.
-3. Trigger the `read` function.
-4. Create a [new page](../app-builder/explorers/pages.md#creating-and-deleting-pages) by right-clicking the existing page in the [Page Explorer](../app-builder/explorers/pages.md) and selecting **New Page**.
-5. Configure the App's main menu using the navigation menu settings. You can rename pages and add icons as needed.
-6. Select the new page.
-7. Add a [chart](../reference/widgets/display/chart.md) widget to the page.
-8. Drag and drop the output array of the `read` function onto the chart. Ensure you select the chart first.
-9. Resize and configure the chart in its settings panel.
-10. Add a [button](../reference/widgets/trigger/button.md) widget and customize its label.
-11. Drag and drop the button trigger onto the `read` function to link them.
-12. Run the App in [test mode](../app-builder/test-and-deploy.md) to test the action.
+1. Click the letter icon inside the recorder. It generates the matching [`read`](../reference/functions/storage/timeseries-database.md#read) executor on the Flowboard, already set to `demo_data`.
+2. In that executor's `options`, set `tail: 10` to keep the last ten rows.
+3. Click its trigger to see the rows it answers.
+4. In the [Pages and actions explorer](../app-builder/explorers/pages.md), right-click the page and choose **New Page**. Rename the pages and give them icons; the navigation menu is configured in the same explorer.
+5. On the new page, place a [chart](../reference/widgets/display/chart.md), select it, and drag the `read` executor's output onto it. Size and configure the chart in its settings.
+6. Place a [button](../reference/widgets/trigger/button.md), set its text, and drag the button onto the trigger of `read` so a click fetches the data again.
+7. Give `read` a second trigger source, **App Start** > **once on (re-)load**, so the chart is filled when a user opens the App. A deployed App runs on its own backend: nothing your test run produced reaches it.
+8. **Test** the App and try the button.
 
-### Adjust all screens
+### Design every screen
 
-1. Select a screen size preview (such as rotated phone, tablet, rotated tablet, or desktop) from the top bar.
-2. Adjust the size and position of each widget to optimize the layout for every device.
+A widget's position and size belong to the screen it is on. The screen you first placed a widget on is its reference, and the others follow it until you arrange them yourself.
 
-### Modify App theme
+1. Switch screens with the picker in the top bar.
+2. On each screen your App serves, give the page its own layout: its own reading order, its own sizes, fewer things on the phone. A derived screen is a draft, not a result.
 
-1. Open the [Theme Editor](../app-builder/theme-editor.md).
-2. Select a base theme.
-3. Choose a default theme or configure custom color presets.
+See [Screens and layouts](../concepts/screens-and-layouts.md).
 
-## Publish and open the App
+### Set the look
 
-1. Deploy the App by clicking **Deploy** in the top bar (see [Deploy and maintain](../app-builder/test-and-deploy.md)).
-2. Scan the QR code to launch the App on your mobile device, or click the provided URL to open the desktop version.
-3. Optionally, install the App directly onto your device as a Progressive Web App.
+1. Open the [Theme editor](../app-builder/theme-editor.md).
+2. Pick a base theme, light or dark.
+3. Change the accent, the backgrounds, the border radius and the font. The App's look is one theme, not a stack of overrides.
+
+## Deploy and open the App
+
+1. Click **Deploy** in the top bar. That version is what users get from then on.
+2. The **Distribute Your App** dialog shows the App's link and a QR code. Scan it with a phone, or open the link.
+3. On the device, install the App from the browser's menu to keep it on the home screen.
+
+See [Test and deploy](../app-builder/test-and-deploy.md) for versions, bundles and rollbacks.

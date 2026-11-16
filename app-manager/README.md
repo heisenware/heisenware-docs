@@ -1,107 +1,38 @@
 # App Manager tour
 
-The App Manager is the administrative center of your Heisenware account. Here you create new Apps, monitor account usage, and manage your members.
+The App Manager is where you create Apps, watch them run, and look after the workspace and the account around them. It opens on the Dashboard.
 
-<figure><img src="../.gitbook/assets/image (447).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/manager-dashboard.png" alt="The App Manager on its Dashboard: the menu, the workspace switcher, the band saying what needs you, and the four tiles over the Apps table"><figcaption></figcaption></figure>
 
-## Key features
+## The menu
 
-The App Manager has six main areas:
+Every screen of the Manager hangs in the menu on the left. The arrow on its edge folds it to icons.
 
-* [**Dashboard**](README.md#dashboard): Where you land: what needs you in the workspace, and how its Apps run and are used.
-* [**Apps**](README.md#apps): Create, configure, and deploy Apps. From here, you can also [manage App access and your users](users-and-access.md).
-* [**Members**](members.md): The interface for inviting and managing your members.
-* [**Agents**](agents/README.md): Build, update, restart and roll out builds to the [agents](../concepts/agents-and-where-code-runs.md) installed on your hosts.
-* [**Integrations**](integrations.md): Monitor and authorize data from MQTT and VRPC clients, local MCP servers and Microsoft 365 Copilot agents.
-* [**AI clients**](ai-clients.md): Connect your own AI - Claude, ChatGPT, Microsoft Copilot and more - by the workspace's MCP address, and see or end every connection.
+* [**Dashboard**](README.md#dashboard): what needs you in the workspace, and how its Apps run and are used.
+* [**Apps**](apps.md): the workspace's Apps. Create one, set its name, language and [access](users-and-access.md), run or stop it, and open it in the App Builder.
+* [**Databases**](../app-builder/database-editor.md): opens the workspace's Database editor in a tab of its own. It belongs to the workspace, not to an App.
+* [**Planning**](planning.md): the assistant's planning seat, where you plan a whole set of Apps before building any of them. It is there only where the installation has the assistant.
+* [**Agents**](agents/README.md): build, update, restart and roll out the [agents](../concepts/agents-and-where-code-runs.md) that run on your own hosts.
+* [**Integrations**](integrations.md): logins for things outside that connect to the workspace: MQTT and VRPC clients, local MCP servers, Microsoft 365 Copilot agents.
+* [**AI clients**](ai-clients.md): connect your own AI, such as Claude or ChatGPT, by the workspace's MCP address, and see or end every connection.
+* [**Members**](members.md): the people who build in this account, and what each of them reaches.
+* [**Plan & Billing**](plan-and-billing.md): the plan, the quotas, the credits the assistant spends and the workspaces. Owners of the account see this entry; nobody else does.
 
-The workspace switcher at the top of the menu shows the [workspace](workspaces.md) you are in, and moves you to another.
+An entry carries a badge when its screen wants you: Apps that are not running, agents that are offline or behind their fleet's build, an outdated local MCP server. The Dashboard names the same items.
 
-## Apps
+## Around the menu
 
-Manage Apps, their settings, and users inside the Apps panel.
-
-### Create a new App
-
-{% stepper %}
-{% step %}
-#### Initialize
-
-Click the plus icon in the top bar to create a new App.
-
-<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-
-{% step %}
-#### Configure
-
-Enter a name and description, upload an icon, and define your initial [Users and access](users-and-access.md) settings.
-
-<figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-
-{% step %}
-#### Start building
-
-Click **Start App Builder** on the App card to open the App Builder in a new tab.
-
-<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-{% endstepper %}
-
-{% hint style="info" %}
-The total number of Apps you can create depends on your plan. [Contact us](mailto:support@heisenware.com) if you need additional Apps for your plan.
-
-An App beyond the plan's quota cannot be opened by anyone: the platform refuses to register it for access, and its page says so instead of loading. The App Manager's create button and the AI assistant's `create_app` refuse at the quota, naming the plan and the limit; delete an App or raise the plan under **Plan & Billing**, and the platform registers the waiting App within a minute.
-{% endhint %}
-
-### App settings
-
-* **Name**: The visible title on desktops, home screens, and browser tabs. Keep this under 10 characters for the best mobile display.
-* **Description**: Optional internal notes. These are not visible to users.
-* **Icon**: The logo used for the favicon and home screen icon. Works best as a square image. Leave padding around the logo, since mobile devices often apply a circular cutout.
-* **Language**: The one language the App speaks: the texts of its widgets (grid messages, editors, validation), the App Player's own screens (sign-in, connection notices, the install prompt) and the document language. The browser's language plays no role once the App is known. Every language DevExtreme ships a dictionary for is available; the setting lives here only, the App Builder shows it. To offer an App in several languages, create one App per language: export the reference App as a bundle, import it as a new App with its own URL and translate its texts (the AI assistant can help), then link the Apps to each other.
-
-### App status and control
-
-Each App card shows its current availability:
-
-* <mark style="background-color:green;">**RUNNING**</mark>: The App is live and reachable via its URL.
-* <mark style="background-color:orange;">**EXITED**</mark>: The App has been manually stopped.
-* **CREATED**: The App container exists but has never been deployed.
-* <mark style="background-color:red;">**UNAVAILABLE**</mark>: An error has occurred. Try to redeploy.
-
-### Delete an App
-
-Click the red **Delete App** button to remove an App.
-
-{% hint style="danger" %}
-#### Deleting an App is irreversible
-
-There is no undo. Export the App as a [bundle](../app-builder/test-and-deploy.md#versions-and-checkpoints) (`.hwt` file) from the App Builder before deleting if you want to preserve your work.
-{% endhint %}
-
-<figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
-
-### Distribution
-
-Each App is distributed via a unique URL or QR code, both found directly on the App card in the Apps panel.
-
-<figure><img src="../.gitbook/assets/Distribution.png" alt=""><figcaption></figcaption></figure>
-
-### Maintenance
-
-To take an App offline, use the action switch on the card to toggle between Run and Stop.
-
-<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+* **Workspace switcher**: at the top, showing the [workspace](workspaces.md) you are in. It lists the workspaces you reach with their domains, switches between them, and lets an owner of the account add one.
+* **Documentation**: at the foot, opens these pages beside the screen. The panel reads full width or as a column you can drag wider; the **?** beside a title opens the page about that title. Your choice of light or dark follows into the panel.
+* **Account menu**: the three dots beside your name, with **Dark mode** and **Log out**.
 
 ## Dashboard
 
 The Dashboard is where the App Manager opens. It shows what needs you in the workspace, and how its Apps run and are used:
 
 * **Needs you** lists the Apps deployed to run that are not running, the agents that are offline or behind their fleet's build, and outdated local MCP servers, each linked to its page. The same items carry a badge in the menu. When nothing needs you, it says *All clear*.
-* **Active users today** counts the users who signed in to one of the Apps, with the last 14 days and the change against the week before. **Apps running** counts the Apps running of those deployed to run, and **Agents online** the agents connected. An owner of the account sees the **credits**, every other member the number of **App users**. Every figure but the active users opens its page.
-* **Apps** lists every App of the workspace with its status, users, logins, active users per day over the last 14 days, and opens. Click a column header to sort, and a row to open the App.
+* **Active users today** counts the users who signed in to one of the Apps, with the last 14 days and the change against the week before. **Apps running** counts the Apps running of all the workspace holds, and **Agents online** the agents connected. An owner of the account sees the **credits**, every other member the number of **App users**. Every figure but the active users opens its page.
+* **Apps** lists every App of the workspace with its status, how many users are online now, how many it has, and a bar per day over the last 14 days. Click a column header to sort, and a row to open the App.
 * A new workspace sees its **first steps**, ticked from what it already holds, until you put them away. An owner of the account also sees the plan and how many Apps it allows.
 
 The Dashboard reads again when you come back to it, or when you click Refresh.

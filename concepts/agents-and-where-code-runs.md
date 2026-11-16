@@ -1,85 +1,49 @@
+---
+description: >-
+  Why one part of an App runs in the cloud and another next to the machine: agents, and the address that decides.
+---
+
 # Agents and where code runs
 
-An Agent is a small piece of Heisenware software that you install on a machine inside a separated network, for example on a factory floor. It executes logic, like connectors for S7, Modbus, or OPC UA, directly where the systems and devices are, and exchanges data securely with your account. Agents distribute your App logic: parts of it run in the cloud, parts of it at the edge, next to the machines it talks to.
+An agent is a program that offers classes to the platform. Some come with Heisenware and run where the platform runs; others you install inside your own network, where they reach machines and servers the platform cannot see. The agent named in an executor's [address](executors-and-instances.md#addresses-where-a-call-goes) decides in which network that function runs.
 
-<div data-full-width="true"><figure><img src="../.gitbook/assets/Heisenware Agent.png" alt="" width="525"><figcaption><p>Heisenware Agent</p></figcaption></figure></div>
+<div data-full-width="true"><figure><img src="../.gitbook/assets/Heisenware Agent.png" alt="An App in the Heisenware cloud, an agent in the production network reaching a machine and a database, and one outbound MQTTS connection between them" width="525"><figcaption></figcaption></figure></div>
 
-## How Agents work
+## The kinds
 
-1. Build or download an Agent and install it on a machine inside the target network.
-2. The Agent connects to the Heisenware platform through an outbound-only MQTTS connection on port 8883. No inbound firewall rules or VPNs are required.
-3. Once online, the Agent appears in the [Function Explorer](../app-builder/explorers/functions.md) as its own entry, holding the connectors it carries.
-4. Functions dragged from an Agent entry execute on the Agent's machine, directly at the edge.
+* **Internal agents** come with the platform: Connectors, Utility Functions, Data Analysis. They run where the platform runs and need no installation.
+* **[Native agents](../app-manager/agents/native-agent.md)** are built in the App Manager for one host and installed there as a service: Windows, macOS, Linux, Alpine, ARM 64 and ctrlX OS.
+* **[Docker agents](../app-manager/agents/docker-agent.md)** and **[LXC agents](../app-manager/agents/lxc-agent.md)** carry the same connectors as a container: a Docker image for a gateway or a server you manage with Docker, an LXC packet for an INSYS icom router.
+* **[Add-ons](../developers/custom-add-ons.md)** are not agents of this kind: they are optional modules that bring new classes of their own, your own code for example, and run as their own container.
 
-Agents run as system services or containers. They start automatically after reboots and power cycles and stay available around the clock.
+In the App Builder you never notice which is which. A function from an agent looks and behaves like any other: drag it onto the Flowboard, wire it, configure it. Only its address says where it runs.
+
+## Why an agent is needed
+
+A machine on the shop floor answers at `192.168.10.5`, an OPC UA server at `opc.tcp://...`, a historian at a bare host name. Addresses like these exist only inside that network. An App deployed in the Heisenware cloud cannot reach them, however the firewall is set: there is no route.
+
+An agent installed inside that network is the vantage point. It dials out to the platform over MQTTS on port 8883 and keeps that connection open, so nothing has to be opened inbound: no port forwarding, no VPN, no fixed address for the host. From then on its connectors appear in the [Functions explorer](../app-builder/explorers/functions.md) under the agent's name, and every executor addressed to it runs on that machine, next to the systems it talks to.
+
+## Deciding where a function runs
+
+1. **Where does the platform run?** A Heisenware cloud account, a server installation, or on-premise inside your own network. The assistant reads this with `get_deployment_info`.
+2. **Is the address private or public?** Private: `192.168.x.x`, `10.x`, `172.16.x` to `172.31.x`, `opc.tcp://`, anything `.local`, a bare host name. Public: a name the internet resolves, an API over https.
+3. **A cloud platform and a private address need an agent** inside that network. A public address does not: the platform's own connectors reach it.
+4. **An on-premise platform reaches what its own network reaches.** For another network segment, the answer is an agent again.
+5. **Prove it, do not assume it.** Create the executor and run a read-only call, a connect or a browse, never a write to a PLC. A timeout from the wrong side of the network is a diagnosis, not a reason to try again.
+
+With no agent yet, the App Manager's [Agents panel](../app-manager/agents/README.md) builds one: it takes the connectors, the target platform and a fleet name, and writes a requirements sheet your IT can work from. Your IT installs it, the agent dials out, and it appears in the Builder.
+
+## Fleets
+
+Ten machines that need the same connectors should not need ten builds. A **fleet** is one build installed on many hosts: each installation joins under its own id, and a **rollout** brings a new build to all of them from the App Manager. See [Agents](../app-manager/agents/README.md).
+
+## When one does not answer
+
+An agent that is offline, behind its fleet's current build, or answering errors is diagnosed, not worked around. The Agents panel says why: the agent's own readiness checks, a timeline of what happened to it, and its log. The remedy lives there too, or on the host itself.
 
 {% hint style="info" %}
-#### A function is a function
+#### Agents are not building blocks
 
-In the App Builder, you never notice that you are working on a machine in a different network. A function from an Agent looks and behaves like any other function: drag it onto the canvas, wire it, configure it. It just runs somewhere else. Only its [address](executors-and-instances.md#advanced-addressing) reveals where.
+Restarting, updating and building an agent happen in the App Manager, never from inside a flow. The classes that manage a host do not appear in the Functions explorer and cannot be put on the Flowboard.
 {% endhint %}
-
-## Types of Agents
-
-Choose the Agent that matches your edge hardware:
-
-<table><thead><tr><th width="220">Type</th><th>Choose when</th></tr></thead><tbody><tr><td><a href="../app-manager/agents/native-agent.md"><strong>Native Agent</strong></a></td><td>You have a Windows, macOS, or Linux machine (including ARM64 industrial PCs). Installs as a background service directly on the operating system. Credentials are built into the installer.</td></tr><tr><td><a href="../app-manager/agents/docker-agent.md"><strong>Docker Agent</strong></a></td><td>Your edge infrastructure already runs Docker. Same functionality in an isolated container. Pass credentials as environment variables at startup.</td></tr><tr><td><a href="../app-manager/agents/lxc-agent.md"><strong>LXC Agent (Insys)</strong></a></td><td>Your edge device is an INSYS icom industrial router or gateway (MRX, MRO, ECR, SCR series). Distributed as a <code>.tar</code> update packet and installed via the router's web interface.</td></tr></tbody></table>
-
-Every [Native Agent](../app-manager/agents/native-agent.md) you build is also stored in the [File Explorer](../app-builder/explorers/files.md) in the `native-agents` folder, ready to download again at any time.
-
-## Connectivity setup guide
-
-### Do you need to connect an external data source?
-
-* **No** – If you are building an independent App that relies solely on built-in databases and does not require external connectivity, you can skip this guide and start directly with the [Overview](../app-builder/README.md).
-* **Yes** – If your use case requires reading or writing data to an existing database, machine, IT system, scanner, API, or industrial protocol, continue to [Where does your Heisenware account run?](agents-and-where-code-runs.md#where-does-your-heisenware-account-run).
-
-### Where does your Heisenware account run?
-
-Your connection method depends on where the Heisenware platform runs.
-
-* [Managed Cloud connectivity](agents-and-where-code-runs.md#managed-cloud-connectivity)
-* [Self-hosted connectivity](agents-and-where-code-runs.md#self-hosted-connectivity) (on-premise or private cloud)
-
-### Managed Cloud connectivity
-
-Your account runs in the Heisenware cloud. Is your data source accessible via the public internet (such as via an API)?
-
-* **Yes** – If the data source is reachable via the internet, you can use our standard [connectors](../reference/functions/connectors/README.md) directly.
-* **No** – If the data source resides in an isolated or local network, continue to [Connecting isolated data sources](agents-and-where-code-runs.md#connecting-isolated-data-sources).
-
-### Self-hosted connectivity
-
-Your account runs on your own servers or in your private cloud. Is your data source accessible from the network where the platform is deployed?
-
-* **Yes** – If the data source is in the same network, you can use our standard [connectors](../reference/functions/connectors/README.md) directly.
-* **No** – If the data source is in an isolated network segment, continue to [Connecting isolated data sources](agents-and-where-code-runs.md#connecting-isolated-data-sources).
-
-### Connecting isolated data sources
-
-Does Heisenware offer a standard connector for your specific data source?
-
-* **Yes** – If a standard connector exists, continue to [Choose your Agent setup](agents-and-where-code-runs.md#choose-your-agent-setup).
-* **No** – If you need to connect a custom source, you can use a [Code Adapter](../self-hosting/README.md) or build a [Custom Extension](../developers/custom-add-ons.md). These features let you wrap custom code and expose it as visual function blocks inside the platform. Alternatively, contact our support team to discuss your requirements.
-
-### Choose your Agent setup
-
-To access isolated networks, you must deploy an Agent. The Agent acts as a secure, outbound-only tunnel that maps data and enables remote logic configuration. It runs locally to bridge isolated networks and buffers data via MQTTS.
-
-What infrastructure is available in your local network?
-
-* [Native Agent](agents-and-where-code-runs.md#native-agent)
-* [Docker Agent](agents-and-where-code-runs.md#docker-agent)
-* [LXC Agent](agents-and-where-code-runs.md#lxc-agent)
-
-#### Native Agent
-
-Use the native binary to run the Agent as a highly efficient system service directly on your operating system without requiring Docker. For next steps, see the [Native Agent](../app-manager/agents/native-agent.md) documentation.
-
-#### Docker Agent
-
-Deploy the Docker container for the Agent. This is the recommended approach for containerized environments on OT servers or edge devices. For next steps, see the [Docker Agent](../app-manager/agents/docker-agent.md) documentation.
-
-#### LXC Agent
-
-Deploy the LXC container for the Agent. This setup is suitable for specific edge devices running LXC runtimes, such as INSYS routers. For next steps, see the [LXC Agent (Insys)](../app-manager/agents/lxc-agent.md) documentation.

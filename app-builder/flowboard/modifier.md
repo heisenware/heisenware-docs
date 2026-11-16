@@ -1,23 +1,29 @@
 # Modifier
 
-Modifiers transform data on the fly within a flow. Apply a [JSONata](modifier.md#jsonata) or [JavaScript expression](modifier.md#javascript-expressions) to change the structure or value of an output before it reaches the next executor, a database, the frontend, or a subsequent extension (such as another modifier or a filter).
+A modifier reshapes a value. It sits on an output and turns what arrives into what the next step needs, before it reaches another executor, a database, a widget or the next extension.
 
-To add a modifier:
+To add one:
 
-1. Click the + icon on the right side of an executor's output, filter, or existing modifier.
-2. Select **Modifier** from the list.
-3. Click the new modifier node (Click to edit...) to open the code editor and write your expression.
+1. Click the **+** on the right of an output, an event output or an extension.
+2. Choose **Modifier**.
+3. Click the new node (*Click to edit…*) to open the editor and write your expression.
 
-A modifier uses either JSONata or a JavaScript expression. Switch between types by right-clicking the modifier and selecting JSONata or Expression. Adjust the default type in the [App Builder settings](../README.md#app-builder-settings).
+A modifier speaks either [JSONata](modifier.md#jsonata) or [JavaScript](modifier.md#javascript-expressions). Right-click it and pick **Jsonata** or **Expression** under *Select Modifier Type*; which one a new modifier starts in is an [App Builder setting](../README.md#settings).
 
-Click the modifier icon on the left to evaluate the modifier manually during development. The last result appears below the expression. Right-click also lets you add a comment to the modifier or delete it.
+Click the icon on the left of the node to evaluate the modifier while you build. Its last result shows below the expression. The right-click menu also offers **Make variable…**, **Add Comment** and **Delete**.
 
 <figure><img src="../../.gitbook/assets/image (52).png" alt=""><figcaption><p>A modifier extension node</p></figcaption></figure>
 
-{% hint style="info" %}
-#### Need help writing modifiers?
+## The expression contract
 
-Let the assistant write it: see [using AI for modifiers](modifier.md#using-ai-for-modifiers).
+* **One expression, not a script.** `{ a: x.a }` is an object. A `const`, an `if`, a `for` or a `return` at the top is an error. For several steps, wrap them in a function that runs at once: `(() => { const rows = x.filter(...); return rows.map(...) })()`.
+* **The value arrives as `x`** (`input` works as well).
+* **Variables are values.** `$machine` in an expression is the [variable's](../explorers/variables.md) value, never text that is pasted in: `x.filter(row => row.machine === $machine)`. The **$** button in the editor's header inserts one, with its current value beside the name. The built-ins `$USER`, `$LOCALE` and `$TIMEZONE` work the same way.
+* **What else is there**: Luxon's `DateTime`, `Duration`, `Interval` and `Info`, `crypto`, and JavaScript's own `Date`, `Intl`, `JSON` and `Math`. There is no `require`, no `fetch` and no `new Function`.
+* **Write it for a human.** Line breaks, indentation and `//` comments are free and expected. A long one-liner is a defect, not a style.
+
+{% hint style="info" %}
+Tell the [assistant](../assistant.md) what arrives and what you need, and it writes the modifier onto the output. That helps most with large JSON objects.
 {% endhint %}
 
 ## JSONata
@@ -26,6 +32,7 @@ JSONata is a query and transformation language designed for JSON data. It is the
 
 * **Reference**: Use the `$` sign to refer to the value from the preceding output.
 * **Implicit arguments**: JSONata modifiers automatically process the incoming data if the parentheses are left empty. For example, `$uppercase()` is equivalent to `$uppercase($)`.
+* **Variables**: a variable is available under its own name, `$machine`, exactly as in a JavaScript expression.
 
 ### JSONata examples
 
@@ -332,11 +339,7 @@ Return of the modifier:
 
 <summary><strong>Example 6: Date calculations (using Luxon)</strong></summary>
 
-Heisenware provides built-in support for the [Luxon](https://moment.github.io/luxon/) library via the `DateTime`, `Duration`, and `Interval` objects for complex date and time operations.
-
-{% hint style="warning" %}
-`Duration` and `Interval` are only available from version v91.
-{% endhint %}
+[Luxon](https://moment.github.io/luxon/) is available in every expression through `DateTime`, `Duration`, `Interval` and `Info`.
 
 Here are some common modifier patterns:
 
@@ -580,33 +583,8 @@ Return of the modifier:
 
 </details>
 
-## Using AI for modifiers
+## Letting the assistant write it
 
-The assistant in the App Builder writes modifiers for you. Tell it what data arrives and what you need, and it adds the modifier to the output. This helps most with complex transformations that reshape large JSON objects.
+Tell the [assistant](../assistant.md) what arrives and what the next step needs: it writes the expression, picks the language that fits and puts the modifier on the output. Select the output first, so it knows which one you mean.
 
-Another AI tool needs this page as context: use the Copy button at the top of the page, or the Open in ChatGPT and Open in Claude buttons in the top navigation bar.
-
-#### Recommended AI prompt
-
-Or paste this prompt into the other AI tool, so it knows how modifiers work in Heisenware.
-
-```
-I am working in Heisenware, a node-based visual programming tool for industrial applications. 
-I need a modifier expression that transforms data on the fly between functions.
-
-Full documentation: https://docs.heisenware.com/app-builder/flowboard/modifier.md
-
-Rules:
-* A modifier is a single expression that returns the transformed value. No statements or variable declarations.
-* JSONata: the input data is referenced as $. Functions with empty parentheses () automatically process the incoming data, e.g. $uppercase().
-* JavaScript: the input data is referenced as x. For multi-step logic with temporary variables, use an IIFE: (() => { ... })().
-* JavaScript dates: use the Luxon library via the DateTime, Duration, and Interval objects.
-* Unless I say otherwise, pick the simpler of JSONata or JavaScript for the task and tell me which type to select.
-* Reply with the expression only, no explanation, no markdown fences.
-
-My input data (sample):
-[Paste a sample of the data arriving at the modifier here.]
-
-My task:
-[Describe your transformation, e.g., "Extract temp_c from each object in the array and calculate the average."]
-```
+For an AI outside Heisenware, hand it this page: the Copy button at the top of the page, or **Open in ChatGPT** and **Open in Claude** in the top navigation bar.

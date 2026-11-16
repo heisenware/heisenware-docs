@@ -1,25 +1,31 @@
 # PDF processing
 
-The PDF processing class provides static utility functions that create and manipulate PDF documents. It generates PDFs from structured JSON (`pdfmake` format), converts HTML content into PDFs, and merges multiple documents (PDF, PNG, JPG, and HEIC) into a single PDF file. This class contains static functions only and does not require an instance. The code class name is `Pdf`.
+PDF processing builds PDFs and merges documents. It renders a PDF from a `pdfmake` document definition or from HTML, and it folds PDFs and pictures into one document: a scan, a photo from the shop floor and a generated report become one file.
+
+You find the functions under **Utilities** > **PDF Processing** in the Functions explorer. This class provides static functions only and does not require an instance. The code class name is `Pdf`.
+
+Each generator comes in two flavors. The `…File…` ones write the PDF to the shared volume and answer a file object (`path`, `name`, `type`, `lastModified`); the `…Buffer…` ones write nothing and answer the document as a base64 string. A path travels well inside the platform: the next executor reads the file where it lies. To keep a generated PDF with a table row, or to let a user download it, put it into the workspace's file store and keep the reference; see [Files, data and dates](../../../concepts/files-data-and-dates.md).
 
 ### `mergeDocuments`
 
-Merges multiple source documents into a single PDF file. The function accepts PDFs, PNG images, or JPG images, and automatically converts the images to PDF pages before merging. HEIC images are supported when provided as file objects with a path. Entries that cannot be processed are skipped and logged.
+Merges two or more documents into one PDF. PDFs are taken page by page, pictures become one page each. PNG and JPEG are understood everywhere; HEIC only for a file that lies on the volume or in the file store, because its type is read from the entry. A JPEG is turned upright as its EXIF data says. An encrypted PDF is decrypted once before it is read. An entry that cannot be read is skipped and written to the log, and the merge carries on with the rest.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>files</code></td><td>An array where each element is a base64-encoded file string, an object containing a <code>path</code> property pointing to the file, or a file a table row keeps: the entry from a <code>file</code> field, or the list from a <code>files</code> field, which gives a document per file.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>files</code></td><td>The documents, in the order they are to appear. Each one is a base64 string, a file on the volume (<code>{ name, type, path }</code>, as the other functions here answer), or a file a table row keeps: its reference into the file store (<code>{ id, name, type, size }</code>) or its small content (<code>{ name, type, size, base64 }</code>). A list among the entries is flattened, so the <code>files</code> field of a row can go in as it is and gives a document per file.</td><td>array</td></tr></tbody></table>
 
 #### Output
 
-Returns a file object representing the merged PDF file, including its path, name, size, and type. Returns nothing if the input is not a non-empty array.
+Returns the merged PDF as a file object on the volume: `path`, `name`, `type`, `size` and `lastModified`. Returns nothing when `files` is not a list, or is empty.
 
 #### Example
 
 ```yaml
 # files
-  - path: /shared/documents/report.pdf
-  - path: /shared/documents/scan.png
+  - path: /shared/runtime-files/report.pdf
+    type: application/pdf
+  - path: /shared/runtime-files/scan.png
+    type: image/png
 ```
 
 ### `createPdfFileFromJson`
@@ -32,7 +38,7 @@ Creates a new PDF file from a structured JSON object that follows the `pdfmake` 
 
 #### Output
 
-Returns a file object representing the generated PDF file.
+Returns a file object on the volume: `path`, `name`, `type` and `lastModified`.
 
 #### Example
 
@@ -59,7 +65,7 @@ Creates a PDF from a `pdfmake` JSON object and returns it as a base64-encoded st
 
 #### Output
 
-Returns a base64-encoded string representing the generated PDF document.
+Returns the PDF as a base64-encoded string.
 
 #### Example
 
@@ -81,7 +87,7 @@ Converts an HTML string into a new PDF file.
 
 #### Output
 
-Returns a file object representing the generated PDF file.
+Returns a file object on the volume: `path`, `name`, `type` and `lastModified`.
 
 #### Example
 
@@ -102,7 +108,7 @@ Converts an HTML string into a PDF and returns it as a base64-encoded string.
 
 #### Output
 
-Returns a base64-encoded string representing the generated PDF document.
+Returns the PDF as a base64-encoded string.
 
 #### Example
 

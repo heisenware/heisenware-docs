@@ -2,7 +2,7 @@
 
 A workspace is an isolated area inside your [account](account.md) with its own Apps, databases, files, agents and integrations. Nothing in one workspace reaches another. Use several to separate teams, sites or the clients you build for.
 
-Every account starts with one: `default`. How many it can hold is part of your plan.
+Every account starts with one, named **Default**, whose id is `default`. How many it can hold is part of your [plan](plan-and-billing.md).
 
 ## What a workspace holds
 
@@ -28,7 +28,7 @@ Each workspace in the list shows its domain, for example `acme.halle`, with a bu
 Owners of the account add workspaces:
 
 1. Open the workspace switcher and click **Add workspace**.
-2. Enter a **Name**. It is what people see, and you can change it later.
+2. Enter a **Name**, 1 to 64 characters. It is what people see, no two workspaces of an account share one, and you can change it later.
 3. Optionally enter an **Id**. Left empty, it follows from the name: `Halle Süd` becomes `halle-sued`. The id is part of the workspace's domain and never changes. It takes lower-case letters, digits and dashes inside, 32 characters at most.
 4. Click **Add**.
 
@@ -40,7 +40,7 @@ When your plan is full, the switcher says how many workspaces it holds, with **A
 
 Your plan's Apps count for the whole account, and by default all workspaces share them. Owners of the account can reserve Apps for a workspace, for example for a client you build for:
 
-1. Open **Plan & Billing** and find **Workspaces**.
+1. Open [**Plan & Billing**](plan-and-billing.md) and find **Workspaces**.
 2. Click **Edit** on the workspace.
 3. Enter the number under **Apps reserved**.
 
@@ -64,11 +64,11 @@ See [Members](members.md) for how to give and take access.
 
 Owners of the account delete workspaces. This cannot be undone.
 
-1. Open **Plan & Billing** and find **Workspaces**.
-2. Click **Edit** on the workspace, then **Delete**.
+1. Open [**Plan & Billing**](plan-and-billing.md) and find **Workspaces**.
+2. Click **Edit** on the workspace, then **Delete**. The button is there only while the account has more than one workspace.
 3. Check what the dialog names, type the workspace's name and click **Delete workspace**.
 
-The workspace is gone for everyone at once. If you were inside it, you land in another workspace. The rest follows in the background, and the workspace shows as **Being Deleted** until it is done. Should that row stay, click **Try again**.
+The workspace is gone for everyone at once. If you were inside it, you land in another workspace. The rest follows in the background, and the workspace shows as **Being deleted** until it is done. Should that row stay, click **Try again**.
 
 What goes:
 

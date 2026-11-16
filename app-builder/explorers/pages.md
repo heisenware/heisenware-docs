@@ -1,26 +1,23 @@
-# Pages explorer
+# Pages and actions explorer
 
-Pages are the individual screens that organize your App's functionality. Heisenware uses a hierarchy of pages and subpages to keep your App structured and easy to navigate. The Pages and actions explorer is also where you configure the App's navigation menu.
+A page is one screen of your App, built from widgets. The Pages and actions explorer holds them all, in the order users see them, together with the App's navigation menu and the App actions.
 
-Open the Pages and actions explorer by clicking the navigator icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) on the left panel.
+Open it with the **Pages and actions** icon (<i class="fa-location-arrow-up">:location-arrow-up:</i>) in the Explorer's icon rail.
 
-<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/builder-pages-explorer.png" alt="The Pages and actions explorer: the pages numbered in their order, each with its pencil and its drag handle, and the navigation-menu icon beside the title" width="262"><figcaption></figcaption></figure>
 
-## Managing your App structure
+## Pages and subpages
 
-### Page types
-
-* **Pages**: Your top-level pages. By default, they appear in the App's main navigation menu.
-* **Subpages**: Nested under a page. They do not appear in the main menu automatically, and are typically used for detail views, settings, or pop-up style content that you link to manually.
+* **Pages**: the top-level pages, one row each, numbered. They fill the navigation menu.
+* **Subpages**: they hang off one top-level page, to the right of it in its row, and stay out of the menu. A subpage is reached by a link, so they suit detail views, settings and dialog-like screens. Pages nest one level: a subpage has no subpages of its own.
 
 ### Creating and deleting pages
 
-* **Add/duplicate**: Right-click any page in the panel to create a new page, a subpage, or to duplicate an existing page.
-* **Delete**: Right-click any page and click delete. The first page in your App cannot be deleted.
+Right-click any page for **New Page**, **New Subpage**, **Duplicate Page** and **Delete Page**. The App's first page cannot be deleted. Deleting a page takes its subpages and every widget on them along.
 
 ### Reordering pages
 
-Click a page's number and drag it into a new position. The new order carries over to the App's navigation menu.
+Click a page's number to pick up its row, then drag the row where you want it. A top-level page travels with its subpages, and the new order is the order of the navigation menu.
 
 ### Per-page settings
 
@@ -31,16 +28,16 @@ Click the small pencil icon inside a page's representation to open its settings,
 
 Both are shared across screen sizes until you pin one: hover the field and click the pin to give the selected screen its own value. A page has no title of its own: a page heading is a text box on the page.
 
-## App menu
+## The navigation menu
 
-The App menu is the navigation users see across all pages and subpages. To configure it, click the pencil icon next to the `PAGES` label at the top of the Pages and actions explorer.
+The navigation menu is how users move between top-level pages. To configure it, click the menu icon next to the **Pages** title at the top of the panel (*Configure the navigation menu*).
 
 ### Menu types
 
-* **None**: No navigation menu.
-* **Bottom tabs**: A fixed tab bar at the bottom of the screen, for a standard mobile App feel.
-* **Burger menu**: A burger button in a top corner of every page; the menu slides in over the page and dims it (or pushes the page aside, from the left or the right, as wide as you like). There is no bar: the page keeps its full height, so a title bar is your own band of widgets laid under the burger.
-* **Fixed left menu**: A permanent side menu on the left.
+* **None**: no navigation menu. This is what a new App starts with.
+* **Bottom Tabs**: a fixed tab bar at the bottom of the screen, the usual look on a phone.
+* **Burger Menu**: a burger button in a top corner of every page; the menu slides in over the page and dims it (or pushes the page aside, from the left or the right, as wide as you like). There is no bar: the page keeps its full height, so a title bar is your own band of widgets laid under the burger.
+* **Fixed Left Menu**: a permanent side menu on the left. Its rail and the page share the screen's width, so lay the page out in what is left.
 
 There is no top bar menu type. A title bar of your own, with a logo, a title, or a logout button, is built from widgets on each page: a [card](../../reference/widgets/display/card.md) as the band, an [image](../../reference/widgets/trigger/image.md) for the logo, a text box for the title, and a [button](../../reference/widgets/trigger/button.md) carrying the Logout [App action](#app-actions). Group them to move them as one, switch the group's *Sticky* on (General tab) so the band stays on screen while the page scrolls beneath it, then copy the group to the other pages.
 
@@ -56,6 +53,8 @@ The menu settings are shared across all activated screen sizes until you pin one
 
 Some things a user wants are not pages, functions, or widgets: leave the App, start it over, go back a step, see a short message. Heisenware calls these **App actions**. They act on the App itself in the browser, they take no place on a page, and they are linked exactly like pages: you drag them and drop them.
 
+<figure><img src="../../.gitbook/assets/toast-on-an-output.gif" alt="Dragging the Toast chip onto an executor output, filling in its message, and the chip appearing on the output"><figcaption></figcaption></figure>
+
 The App actions sit in a row at the foot of the Pages and actions explorer:
 
 * **Back**: returns to the page shown before the current one. Does nothing at the start of the visit history.
@@ -66,7 +65,7 @@ The App actions sit in a row at the foot of the Pages and actions explorer:
 
 Switching pages is an App action too. Its chip is the page itself.
 
-An action that needs settings (the URL of Open link, the message of Toast) asks for them in a dialog when you drop it. On the flow board, click the action's chip to open the dialog again; on a page link, click *switch page* to pick another page.
+An action that needs settings (the URL of Open link, the message of Toast) asks for them in a dialog when you drop it. On the Flowboard, click the action's chip to open the dialog again; on a page link, click *switch page* to pick another page.
 
 ### On a widget
 

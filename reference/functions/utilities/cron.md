@@ -241,6 +241,8 @@ Returns `true`.
 
 ## Event listeners
 
+Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The payload arrives on the executor's event outputs, not on its return. A subscription follows the executor's inputs and address, pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** in the menu of the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
+
 ### `onTick`
 
 Subscribes to the scheduled moments. The callback runs at every moment while the schedule runs, and on `execute`.
@@ -251,16 +253,4 @@ Subscribes to the scheduled moments. The callback runs at every moment while the
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offTick`
-
-Removes a listener given to `onTick`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.

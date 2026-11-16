@@ -1,268 +1,216 @@
+---
+description: >-
+  A form and a signature become a row in the database, a filled PDF and an email.
+---
+
 # Automating PDF reports
 
-Learn how to build an App that lets users fill out and sign an acceptance report, save the submission to a relational database, and email it automatically as a PDF.
+A user fills out an acceptance report on a tablet, signs it with a finger, and taps Submit. The App saves the submission, renders it into the company's PDF form, and emails that PDF to the office. This lab builds the whole way.
 
 ## Before you begin
 
-First, download the blank `acceptance_report.pdf` file. You will upload this file to the File Explorer to use as the template background.
-
-You can build the App from scratch by following this guide, or start with the finished App logic by downloading the tag file below and importing it into your account. In that case you still need to link your uploaded PDF to the template.
-
-#### Downloads
+Download the blank form. You upload it into the [Files explorer](../app-builder/explorers/files.md) and use it as the background of the PDF template.
 
 {% file src="../.gitbook/assets/acceptance_report.pdf" %}
 
+The finished logic is also available as a bundle. Import it with **Tags** > **Import** in the Builder's top bar, click the imported tag and confirm **Switch**. You still have to upload the PDF and point the template at it.
+
 {% file src="../.gitbook/assets/acceptance-report-app.hwt" %}
 
-## Step 1: Create the database table
-
-Create a table in the internal [relational database](../reference/functions/storage/relational-database.md) to store the submitted reports.
-
-On the Flowboard, drag the [`defineTable`](../reference/functions/storage/relational-database.md#definetable) function onto the canvas and configure the inputs:
-
-```yaml
-# name
-acceptanceReports
-# fields
-customerName: string
-projectID: string
-acceptanceDate: date
-comments: text
-signature: text
-```
-
 {% hint style="info" %}
-The database automatically adds `id`, `createdAt`, and `updatedAt` fields.
+This bundle was exported by an older platform. Importing it still works: its records are brought up to date on the way in. The App's icon and its language have to be set once more afterwards.
 {% endhint %}
 
-Trigger the function once to execute the logic and create the table in the database.
+## Step 1: the table
 
-<figure><img src="../.gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
+The table belongs to the workspace, so it is made in the [Database editor](../app-builder/database-editor.md), not by a function on the Flowboard. Open it from the Builder's top bar, choose `internal-postgres`, and in the **Model** tab use **New table** to make `acceptanceReports`:
 
-## Step 2: Build the form and submission logic
+| Field | Type | Why |
+| --- | --- | --- |
+| `customerName` | string | |
+| `projectId` | string | |
+| `acceptanceDate` | dateonly | a calendar date is the same day everywhere |
+| `comments` | text | |
+| `signature` | file | a row keeps a file's entry, never its bytes |
 
-Build the user interface for data entry, then configure the backend logic to save the submitted data to your database.
+`id`, `createdAt` and `updatedAt` are added for you.
 
-### Build the user interface
+The `signature` field is a **file** field. The [signature](../reference/widgets/input/signature.md) widget delivers exactly what such a field takes: one file's entry, `{ name: 'signature.png', type: 'image/png', size, base64 }`, with the PNG inline because it is small. See [Files, data and dates](../concepts/files-data-and-dates.md#files-a-row-keeps).
 
-Add the widgets for the form in the Page editor.
+## Step 2: the form and the submission
+
+### The page
 
 {% stepper %}
 {% step %}
-#### Add the form widget
+#### The form
 
-Drag a [form](../reference/widgets/input/form.md) widget onto the canvas. Configure its fields so the field names exactly match your database columns (`customerName`, `projectID`, `acceptanceDate`, `comments`). Define custom, user-friendly labels for each field.
+Place a [form](../reference/widgets/input/form.md) widget. Give it one field per column, with the field names exactly as the columns are called: `customerName`, `projectId`, `acceptanceDate` (a date picker), `comments`. Write the labels in the language your users read.
+
+Switch **Show submit button** on and set its text to `Submit`. The form then writes its data on a valid submit and nothing else, which is the one impulse this flow needs.
 {% endstep %}
 
 {% step %}
-#### Add the signature widget
+#### The signature
 
-Drag a [signature](../reference/widgets/input/signature.md) widget onto the canvas and place it below the form.
-{% endstep %}
-
-{% step %}
-#### Add the submit button
-
-Drag a [button](../reference/widgets/trigger/button.md) widget below the signature widget and change its label setting to Submit.
+Place a [signature](../reference/widgets/input/signature.md) widget below the form.
 {% endstep %}
 {% endstepper %}
 
-<figure><img src="../.gitbook/assets/image (73).png" alt="" width="377"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (73).png" alt="The page with the form, the signature pad and the submit button" width="377"><figcaption></figcaption></figure>
 
-### Configure the submission logic
-
-Switch to the Flowboard to define the flow when a user clicks the Submit button.
+### The flow
 
 {% stepper %}
 {% step %}
-#### Format the signature
+#### Pick the signature up
 
-The signature widget outputs a raw base64 string, but the database expects an object.
+A widget writes an executor's input, so the signature needs a node of its own. Drag **New Echo Executor** from the Flowboard toolbar, select the echo and drag the signature widget onto its input.
 
-1. Drag a [memory](../reference/functions/utilities/data-processing.md#memory) function onto the canvas and connect the output of the signature widget to its input.
-2. Add a [modifier](../app-builder/flowboard/modifier.md) extension node after the memory function. Configure it with the following expression to wrap the signature string in an object whose key matches the database column:
+Add a [modifier](../app-builder/flowboard/modifier.md) to the echo's output that names the entry the way the column is called:
 
 ```javascript
-{signature: x}
+({ signature: x })
+```
+{% endstep %}
+
+{% step %}
+#### Merge it with the form
+
+Drag [`mergeObjects`](../reference/functions/utilities/data-processing.md#mergeobjects) onto the Flowboard.
+
+1. Link the form's `submitted` property to its first input.
+2. Wire the signature modifier to its second input.
+3. Make the **first** input hot: drag it onto the executor's trigger. The submit drives the flow; the signature is read as context, whenever it was drawn.
+
+Only one input is hot on purpose. Two would run the whole chain again the moment someone redraws a signature. See [When streams meet](../concepts/when-streams-meet.md).
+{% endstep %}
+
+{% step %}
+#### Save the row
+
+Drag [`addRow`](../reference/functions/storage/relational-database.md#addrow) onto the Flowboard, on the instance `internal-postgres`:
+
+```yaml
+# table
+acceptanceReports
 ```
 
-<figure><img src="../.gitbook/assets/image (74).png" alt=""><figcaption></figcaption></figure>
+Wire the output of `mergeObjects` to its `data` input and make that input hot.
 {% endstep %}
 
 {% step %}
-#### Combine the form data
+#### Empty the form again
 
-Merge the main form data with the signature object.
-
-1. Drag the [`mergeObjects`](../reference/functions/utilities/data-processing.md#mergeobjects) function onto the canvas.
-2. Connect the form widget to the first input of `mergeObjects`.
-3. Connect the signature modifier to the second input of `mergeObjects`.
-4. Connect both inputs to the trigger of `mergeObjects` to trigger the function `on input update`.
-
-<figure><img src="../.gitbook/assets/image (75).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-
-{% step %}
-#### Save to the database
-
-1. Drag the [`addRow`](../reference/functions/storage/relational-database.md#addrow) function onto the canvas.
-2. Set its `table` input to `acceptanceReports`.
-3. Connect the output of `mergeObjects` to the `data` input of `addRow`.
-4. Connect the Submit button to the trigger of `addRow`. The button now starts the entire save process.
-
-<figure><img src="../.gitbook/assets/image (76).png" alt=""><figcaption></figcaption></figure>
-{% endstep %}
-
-{% step %}
-#### Clear the form after submission
-
-1. Connect the output of `addRow` to the form widget.
-2. Set the command to `call clear`. The form empties for the next entry after the data has been saved.
-
-<figure><img src="../.gitbook/assets/image (77).png" alt=""><figcaption></figcaption></figure>
+Link the output of `addRow` to the form's `clear` property. The form returns to its default values once the row is safely in the database, ready for the next entry.
 {% endstep %}
 {% endstepper %}
 
-## Step 3: Design and configure the PDF template
+## Step 3: the PDF template
 
-With the data submission logic in place, create the visual PDF template and configure the logic to populate it.
-
-### Design the template layout
-
-Create the visual layout in the PDF Template Editor.
+### Design it
 
 {% stepper %}
 {% step %}
-#### Upload the background PDF
+#### Upload the background
 
-Upload the `acceptance_report.pdf` file to the file server via the [File Explorer](../app-builder/explorers/files.md).
+Upload `acceptance_report.pdf` in the [Files explorer](../app-builder/explorers/files.md).
 {% endstep %}
 
 {% step %}
-#### Open the PDF Template Editor
+#### Make the template
 
-Navigate to the [PDF Template Editor](../app-builder/template-editor.md).
-{% endstep %}
-
-{% step %}
-#### Create the template
-
-Create a new template and name it `AcceptanceReport`.
+Open the [Template editor](../app-builder/template-editor.md) from the Builder's top bar and make a new template called `AcceptanceReport`.
 {% endstep %}
 
 {% step %}
 #### Set the background
 
-From the File Explorer, drag the `acceptance_report.pdf` file onto the page canvas. This sets it as the static background.
+Drag the uploaded PDF from the Files explorer onto the page. It becomes the static background.
 {% endstep %}
 
 {% step %}
 #### Place the placeholders
 
-Using the Add text placeholder and Add image placeholder tools, place placeholders on the background for each of your fields (`customerName`, `projectID`, `acceptanceDate`, `comments`, and `signature`).
-{% endstep %}
+With **Add Text Variable**, place one box per value and name it after the key it takes: `customerName`, `projectId`, `acceptanceDate`, `comments`.
 
-{% step %}
-#### Configure the placeholders
+With **Add Image Variable**, place the signature box and name it **`signature.base64`**. A dot reaches into a nested value, and the file's entry carries its PNG under `base64`.
 
-Configure each placeholder with the correct variable name in its settings. Optionally, adjust sizes and colors of your placeholders.
+Resize each box to say how much room the value has, and make sure every placeholder lies above the background.
 {% endstep %}
 {% endstepper %}
 
-<figure><img src="../.gitbook/assets/image (82).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (82).png" alt="The template with text placeholders and the signature's image placeholder over the uploaded form"><figcaption></figcaption></figure>
 
-### Configure the PDF generation logic
+### Fill it
 
-Return to the Flowboard to connect the template to your existing logic.
+1. On the Flowboard, open **Utilities** > **PDF Templates** > **AcceptanceReport** and drag its [`fillTemplate`](../reference/functions/utilities/pdf-templates.md#filltemplate) onto the board. Templates are made in the Template editor, so there is no `create` to run.
+2. Wire the output of `mergeObjects` to its `values` input.
+3. Wire the output of `addRow` to its trigger, so the document is only rendered once the row is saved.
 
-{% stepper %}
-{% step %}
-#### Add the fill function
+`fillTemplate` answers the finished document as a base64 string, and the executor shows the rendered page on its output while you build.
 
-From the Function Explorer, find your `AcceptanceReport` instance (under the [PDF templates](../reference/functions/utilities/pdf-templates.md) class) and drag its `fillTemplate` function onto the canvas.
-{% endstep %}
-
-{% step %}
-#### Provide the data
-
-Connect the output of `mergeObjects` (from Step 2) to the `values` input of `fillTemplate`. This provides the data for the placeholders.
-{% endstep %}
-
-{% step %}
-#### Set the trigger
-
-Connect the output of `addRow` to the trigger of `fillTemplate`. This ensures the PDF is only generated after the data has been successfully saved to the database.
-{% endstep %}
-{% endstepper %}
-
-The flow is now complete up to the point of generating the PDF. The final step is to email this document.
-
-<figure><img src="../.gitbook/assets/image (80).png" alt=""><figcaption></figcaption></figure>
-
-## Step 4: Send the report via email
-
-Automatically email the generated PDF report using the `send` function of the internal [email](../reference/functions/connectors/email.md) connector, triggered whenever a new report is created.
-
-Return to the Flowboard to add the final piece of logic to your flow.
+## Step 4: the email
 
 {% stepper %}
+{% step %}
+#### Build the attachment
+
+Add a modifier to the output of `fillTemplate` that names the document:
+
+```javascript
+[{
+  name: 'Acceptance report.pdf',
+  type: 'application/pdf',
+  base64: x
+}]
+```
+
+`send` takes a list of attachments, and a file as small content like this travels as it is. A file a row already keeps is attached the same way, by its entry: no conversion, no path.
+{% endstep %}
+
 {% step %}
 #### Add the send function
 
-From the Function Explorer, find your internal mailer instance and drag its `send` function onto the canvas.
+Every workspace has a ready-made [email](../reference/functions/connectors/email.md) instance called `internal-email`. Drag its `send` onto the Flowboard. Its emails come from `<Account> Notifier <no-reply@heisenware.com>`, which is fine while you try the flow.
+
+For a report that really goes out, create an instance of your own with your SMTP server's details, and right-click the `auth` input and choose **Secret Input** so the password is masked everywhere. Every credential belongs in a secret, never in a plain input value.
 {% endstep %}
 
 {% step %}
-#### Configure the static inputs
+#### Configure it
 
 ```yaml
 # address
-to: [your email address]
+to: quality@acme.example
 # subject
-New Acceptance Report
+New acceptance report
 # content
-A new report has been submitted for review. Please see attached PDF.
+A new report has been submitted for review. The PDF is attached.
 ```
 {% endstep %}
 
 {% step %}
-#### Format the attachment data
+#### Connect and trigger
 
-The `send` function's `attachment` input requires a specific object format. Create it directly on the output of `fillTemplate`.
+Wire the attachment modifier to the `attachments` input and make that input hot. Every new document then sends one email.
 
-1. Add a JSONata [modifier](../app-builder/flowboard/modifier.md) extension node to the `fillTemplate` function.
-2. Enter the following JSONata expression. It wraps the raw base64 output (`$`) with a filename and encoding:
-
-```
-{
-  "filename": "Acceptance Report.pdf",
-  "content": $,
-  "encoding": "base64"
-}
-```
-{% endstep %}
-
-{% step %}
-#### Connect the PDF and set the trigger
-
-1. Connect the modifier of the `fillTemplate` function to the `attachment` input of the `send` function.
-2. Connect the `attachment` input to the trigger of the `send` function.
-3. Set the trigger to `on input change`.
+Add an [error handler](../app-builder/flowboard/error-handler.md) to `send`'s output and drop the **Toast** action on it, with **Take message from the live value** on and the type **Error**. A mail server that refuses the message then says so on the screen instead of failing silently.
 {% endstep %}
 {% endstepper %}
 
-This creates a data-driven workflow: whenever `fillTemplate` generates a new PDF, its output is passed to the `attachment` input, and this change automatically triggers the `send` function.
+<figure><img src="../.gitbook/assets/image (83).png" alt="The finished flow: form and signature merged, saved, rendered and sent"><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (83).png" alt=""><figcaption></figcaption></figure>
+## Step 5: try it and deploy
 
-## Step 5: Deployment
+Click **Test** and fill the form as a user would. Check the row in the Database editor's **Rows** tab, look at the rendered page on `fillTemplate`'s output, and watch for the email.
 
-Congratulations! 🥳 You have built a complete App that captures user input, saves it to a database, generates a customized PDF, and emails it as an attachment.
+Then click **Deploy**. The **Distribute Your App** dialog gives you the link and a QR code for the tablet.
 
-Click the Deploy button in the App Builder's top bar to publish the latest version and make it live.
+<figure><img src="../.gitbook/assets/image (84).png" alt="The email with the filled PDF attached"><figcaption></figcaption></figure>
 
-Once deployed, open the App and test the full workflow. After you fill out and submit the report, the email address you configured in Step 4 receives an email with the PDF attachment, similar to the image below.
+## What to change next
 
-From here, you can expand the project by adding more fields, using your own report templates, or integrating this logic into a larger App.
-
-<figure><img src="../.gitbook/assets/image (84).png" alt=""><figcaption></figcaption></figure>
+* **Dates and words for people**: `fillTemplate` prints what it is given. Where a date must read as text, format it with `$LOCALE` and `$TIMEZONE` in a modifier, or let [`fillTemplate`](../reference/functions/storage/relational-database.md#filltemplate) of the database build the sentence with its `locale` and `timeZone` options.
+* **A copy for the customer**: a second recipient on `send`, or a [media view](../reference/widgets/display/media-view.md) on the page that shows the document before it leaves.
+* **A fillable PDF**: if your background carries form fields, **Auto generate variables** in the Template editor places a text variable for every one of them, named after the field.

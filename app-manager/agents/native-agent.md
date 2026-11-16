@@ -1,28 +1,28 @@
 # Native agent
 
-The native agent is a fully installable package. It registers itself as a background service (a Windows service or Linux daemon), so it runs around the clock without anyone logged in. Once installed, the platform restarts it and brings new builds to it remotely from the [Agents panel](README.md) of the App Manager.
+The native agent is a package the platform compiles for one host. It installs as a background service, a Windows service or a Linux daemon, so it runs around the clock without anyone logged in, and it carries its own credentials. After the first installation the platform restarts it and brings new builds to it remotely from the [Agents panel](README.md).
 
-## How it works
+## What it is
 
-* **Persistence**: The operating system manages the agent (systemd on Linux, Service Manager on Windows). If the machine reboots, the agent starts automatically.
-* **Security**: The agent connects through an outbound-only MQTTS connection on port 8883, and downloads its updates over HTTPS on port 443 from the same platform host. No inbound firewall rules or VPNs are required. It verifies the platform's certificate, and it takes a build only when the platform signed it.
-* **Compatibility**: Available for Windows, macOS, Linux (standard and Alpine), ARM64 (for industrial PCs), and as an app for ctrlX OS: a snap for a ctrlX CORE or COREvirtual, see [Running on a ctrlX CORE](native-agent.md#running-on-a-ctrlx-core).
+* **A service**: the operating system keeps it alive. It starts with the machine and restarts after a failure.
+* **Outbound only**: it dials the platform over MQTTS on port 8883 and downloads updates over HTTPS on port 443, both to the same host. No inbound rule, no port forwarding, no VPN. It verifies the platform's certificate, and it takes a build only when the platform signed it.
+* **Built for its target**: Windows, macOS, Linux, Alpine and ARM 64 (industrial PCs and the ctrlX CORE). A Linux or ARM 64 build is wrapped either as a Debian package or as an app for ctrlX OS, see [Running on a ctrlX CORE](#running-on-a-ctrlx-core).
 
-## Installing the native agent
+## Installing a native agent
 
 {% stepper %}
 {% step %}
-#### Build
+#### Build it
 
 In the App Manager's [Agents panel](README.md), click **Build agent**.
 
-* **Connectors**: Select the connectors (e.g., S7, SQL) this agent should carry. The dialog says what each one can do on the host.
-* **Target OS**: Choose the operating system of the machine where the agent will run.
-* **Package** (Linux and ARM 64 only): A Debian package for a host with systemd, or a **ctrlX OS app** (`.snap`) to install on a ctrlX CORE, see [Running on a ctrlX CORE](native-agent.md#running-on-a-ctrlx-core).
-* **Fleet name (optional)**: Enter a [fleet name](native-agent.md#fleets-one-build-for-many-hosts) if you plan to install the same build on several hosts (e.g., `milling`). Lowercase letters and digits only. Each installation then joins the fleet under its own ID (e.g., `milling-native-agent-abc12`).
-* **Note**: What this build is for. It shows with the build and in every rollout of it.
+* **Connectors**: what this agent carries, S7 and SQL for example. The dialog says what each one can do on the host.
+* **Target OS**: the operating system of the machine it will run on.
+* **Package** (Linux and ARM 64 only): a Debian package for a host with systemd, or a **ctrlX OS app** (`.snap`) for a ctrlX CORE.
+* **Note**: what this build is for. It shows with the build and in every rollout of it.
+* **Fleet name** (optional): a [fleet name](#fleets-one-build-for-many-hosts) if the same build goes onto several hosts, `milling` for example. Lowercase letters and digits only. Each installation then joins the fleet under its own id, `milling-native-agent-abc12`.
 
-Compiling takes a minute or two. The build then appears under **Builds** with its requirements for IT and the installer to download. The App Builder's Functions explorer has an **Add agent** button that opens the same dialog.
+**Create and build** starts the compilation. It takes a minute or two and goes on when you close the dialog. The build then appears under **Builds** with its requirements for IT and its installer. The App Builder's Functions explorer has an **Add agent** button that opens the same dialog.
 {% endstep %}
 
 {% step %}
@@ -34,46 +34,72 @@ Every build comes with a **Requirements for IT** sheet: host name, ports, servic
 {% step %}
 #### Run the installer
 
-Move the package to the target machine, unzip, and run the installer. This is the one installation by hand; every later build reaches the host remotely.
+**Installer** on the build gives you a download link, valid for twelve hours, and for a Debian package the three lines that fetch, unpack and install it from a shell on the host, which is what a machine without a browser needs. For a fleet the dialog also offers a **Machine name**: fill it in and the lines write that name into the agent's work directory, so the host joins the fleet as `milling-native-agent-m700` instead of under a random id.
 
-* **Windows**: Run the `.exe` installer. It registers the service and starts the agent automatically.
-* **Linux**: Install the package with `sudo dpkg -i` as the archive's README says. It registers the daemon and starts the agent.
-* **ctrlX OS**: Install the `.snap` on the device under **Apps**, see [Running on a ctrlX CORE](native-agent.md#running-on-a-ctrlx-core).
+This is the one installation by hand; every later build reaches the host remotely.
+
+{% tabs %}
+{% tab title="Linux" %}
+Install the Debian package with `sudo dpkg -i`, as the lines in the installer dialog and the archive's README say. It registers the daemon and starts the agent.
+{% endtab %}
+
+{% tab title="Windows" %}
+Unpack the `.zip` and run the `.exe` installer. It registers the service and starts the agent.
+{% endtab %}
+
+{% tab title="ctrlX OS" %}
+Install the `.snap` on the device under **Apps**, see [Running on a ctrlX CORE](#running-on-a-ctrlx-core).
+{% endtab %}
+{% endtabs %}
 {% endstep %}
 
 {% step %}
-#### Automatic discovery
+#### Use it
 
-The service starts immediately after installation. The agent appears in the App Manager's Agents panel and, with its connectors, in the [Functions explorer](../../app-builder/explorers/functions.md). Drag these functions onto the Flowboard. In deployed Apps, they execute locally on the machine running the agent.
+The agent connects as soon as the service starts. It appears in the Agents panel and, with its connectors, in the [Functions explorer](../../app-builder/explorers/functions.md). Drag those functions onto the Flowboard: in a deployed App they run on that machine, inside its network.
 {% endstep %}
 {% endstepper %}
 
 {% hint style="warning" %}
-#### Troubleshooting: check ports 8883 and 443
+#### Troubleshooting: ports 8883 and 443
 
-The agent requires port 8883 to be open for outbound traffic to the platform host, and port 443 to the same host for updates. If the agent runs but does not appear in the Agents panel, ask your IT administrator to check whether a firewall blocks port 8883. If it appears but is reported as not ready for updates, port 443 is the usual reason. Both ports are named in the requirements sheet of the build.
+The agent needs outbound TCP 8883 to the platform host for its data channel and TCP 443 to the same host for updates, with direct egress: an HTTP proxy in the path stops both. If the agent runs but never appears in the Agents panel, ask your IT administrator whether a firewall blocks 8883. If it appears but is reported as not ready for updates, 443 is the usual reason. Both ports are named in the build's requirements sheet.
 {% endhint %}
 
 ## Updating the agent
 
-From the second build on, the agent updates itself when the platform tells it to: select it in the Agents panel and click **Update to current**, or roll the build out to the whole fleet. The agent downloads the build from the platform, verifies its checksum and the platform's signature, swaps its executable, and restarts through the service manager. Counters and connector state survive the restart; they live in the agent's work directory, which an update never touches. If the new build does not connect within five minutes, the host swaps the previous executable back by itself.
+From the second build on, the agent updates itself when the platform tells it to: select it in the Agents panel and click **Update to current**, or roll the build out to the whole fleet. The agent downloads the build from the platform, verifies its size, its checksum and the platform's signature, swaps its executable and restarts through the service manager. Counters and connector state survive that: they live in the agent's work directory, which an update never touches. If the new build does not connect within five minutes, the host swaps the previous executable back by itself.
 
-Agents built before this feature existed are shown as **legacy**: they carry no update channel. Install the current build on their hosts by hand once; from then on they update remotely.
+Agents built before this feature existed show as **legacy**: they carry no update channel. Install the current build on their hosts by hand once; from then on they update remotely.
 
 An agent installed as a ctrlX OS app is the other exception: its executable is read-only inside the app, so it takes no remote update. Install the next build on the device the same way as the first; the Agents panel shows which build every device runs.
 
 ## Managing the agent service
 
-The App Manager restarts the agent and shows its log. On the host itself, the standard OS tools work as well:
+The App Manager restarts the agent and shows its log. On the host itself the standard tools work too. The service is named after the fleet or the agent and the workspace: `heisenware-<fleet>-<account>-<workspace>`, for example `heisenware-milling-acme-default`.
 
-* **Windows**: Open the Services app (`services.msc`), find the Heisenware Agent, and use the Start, Stop, or Restart controls.
-* **Linux**: Manage the daemon on the command line:
-  * `sudo systemctl status heisenware-<agent>`
-  * `sudo systemctl restart heisenware-<agent>`
+{% tabs %}
+{% tab title="Linux" %}
+```bash
+sudo systemctl status heisenware-<fleet>-<account>-<workspace>
+sudo systemctl restart heisenware-<fleet>-<account>-<workspace>
+```
 
-* **ctrlX OS**: The app is managed under **Apps** on the device. Its log is under **Diagnostics**, or on the device's shell: `sudo snap logs ctrlx-heisenware-<fleet> -f`.
+The executable lives in the work directory, `/var/lib/heisenware/<service>/bin/heisenware-agent`, the log under `/var/log/heisenware/<service>.log`.
+{% endtab %}
 
-On Linux the agent's executable lives in its work directory under `/var/lib/heisenware/<service>/bin/`, its log under `/var/log/heisenware/`. On Windows both are in the installation folder.
+{% tab title="Windows" %}
+Open the Services app (`services.msc`) and find `<service>Service`. Start, Stop and Restart work as for any service. The executable and the work directory are the installation folder, by default `Program Files\<service>`; the log is `<install folder>\logs\service.log`.
+{% endtab %}
+
+{% tab title="ctrlX OS" %}
+The app is managed under **Apps** on the device, its log under **Diagnostics** or on the device's shell:
+
+```bash
+sudo snap logs ctrlx-heisenware-<fleet> -f
+```
+{% endtab %}
+{% endtabs %}
 
 ## Running on a ctrlX CORE
 
@@ -94,13 +120,13 @@ The app is named `ctrlx-heisenware-<fleet name>` (or the agent's id without a fl
 
 ## Fleets: one build for many hosts
 
-The fleet name changes how an agent identifies itself. Use it to manage a fleet of similar machines or devices.
+A fleet name changes how an agent identifies itself, so that one build can serve many similar machines.
 
-* **Without a fleet name (default)**: The agent has a built-in, unique ID. You can move the installer to different computers, but they are all recognized as the same single agent.
-* **With a fleet name**: The agent generates a new, unique ID on its first launch in a specific directory and joins the fleet under it. Install the exact same build on several hosts and each one connects as a separate entry, the fleet name first (e.g., `milling-native-agent-abc12`, `milling-native-agent-xyz78`). A fleet has one build line: a rollout brings a build to all of its agents.
+* **Without a fleet name**: the build carries one fixed id. Install it on a second machine and both connect as the same agent.
+* **With a fleet name**: the build carries the fleet's template account. At its first start each installation takes an id of its own and joins the fleet under it, `milling-native-agent-abc12`, `milling-native-agent-xyz78`. Name the machine in the installer dialog instead and it joins as `milling-native-agent-m700`. A fleet has one build line: a rollout brings a build to all of its agents.
 
 {% hint style="danger" %}
-**Irreversible action**
+#### Do not move a fleet agent's folder
 
-Do not move an agent folder that was created with a fleet name after it has run for the first time. It relies on a hidden ID file in its directory to maintain its unique identity.
+An agent of a fleet writes its id into `.hw-agent-id` in its work directory at its first start and reads it at every later one. Copy or move that folder and the platform sees one agent in two places.
 {% endhint %}

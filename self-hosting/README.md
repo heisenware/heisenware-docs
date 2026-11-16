@@ -1,124 +1,80 @@
 # Cloud or on-prem
 
-Heisenware runs in our managed cloud or, for strict data sovereignty, on your own servers. Choose the deployment model that fits your IT strategy.
+Heisenware runs in Heisenware's cloud or on your own servers. It is the same platform either way: the same App Manager, App Builder and App Player, the same functions, the same Apps. What differs is who operates the installation, where the data lies, and what the installation brings with it.
 
-## Managed cloud (SaaS)
+## The short answer
 
-This is the standard, recommended deployment for most customers. You focus entirely on building Apps and optimizing processes, while we handle maintenance like updates, security patching, and backups.
+| | Heisenware cloud | On-premise |
+| --- | --- | --- |
+| **Operated by** | Heisenware: updates, patches, backups, monitoring | you: your IT runs the host, the updates and the backups |
+| **Your address** | `acme.heisenware.cloud` | whatever your network calls the host |
+| **Where the data lies** | Hetzner, Germany (EU), GDPR compliant | on your hardware, and nowhere else |
+| **Reaching machines in your network** | through an [agent](../concepts/agents-and-where-code-runs.md) you install there | directly, as far as the host's own network reaches |
+| **Updates** | Heisenware deploys them | you run the installer when you want the new version |
+| **Plan** | a [plan](../app-manager/plan-and-billing.md) with a monthly bill | a licence file you upload under **Plan & Billing** |
+| **The assistant and Ask** | included | not part of an on-premise installation in v93 |
+| **Internet** | required | not required; the platform runs in a closed network |
 
-* **Provider**: We rely on the cloud provider [Hetzner](https://www.hetzner.com/).
-* **Location**: All data and servers sit exclusively in Germany (EU).
-* **Compliance**: Fully GDPR (DSGVO) compliant.
+## Heisenware cloud
 
-### Cloud architecture
+Everything runs in the cloud: the Manager, the Builder, the broker, the databases and every App you deploy. An App is a Progressive Web App, reachable at its own URL from anywhere and installable on a device.
 
-Here, every essential component of the platform runs in the cloud. Once you build and deploy an App, it becomes reachable from anywhere with an internet connection. The Apps themselves are Progressive Web Apps (PWAs) that run on any operating system and device without feeling different from native apps.
+* **Provider**: [Hetzner](https://www.hetzner.com/).
+* **Location**: all servers and all data in Germany (EU).
+* **Compliance**: GDPR (DSGVO).
 
-<figure><img src="../.gitbook/assets/image (487).png" alt=""><figcaption><p>Simplified architecture of the Heisenware ecosystem in a cloud deployment.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (487).png" alt="The platform in the cloud, with native and Docker agents in the local network below it, connected by MQTTS"><figcaption><p>A cloud installation: the platform above, your network below, one outbound connection between them.</p></figcaption></figure>
 
-### Connectivity (agents)
+### Your machines need an agent
 
-The platform runs in the cloud, but your machines usually sit in a local, protected network (OT). To bridge that gap securely, Heisenware uses agents.
+Your machines answer at addresses that exist only inside your network: `192.168.10.5`, an `opc.tcp://` server, a bare host name. Nothing in the cloud can route there. An [agent](../concepts/agents-and-where-code-runs.md) installed inside that network is the way in: it dials out to the platform over MQTTS on port 8883 and keeps that one connection open, so nothing has to be opened inbound.
 
-An agent is a piece of software that runs on your local hardware and opens a secure tunnel to the cloud platform. Through it, you connect your devices from inside your local network using industrial protocols like S7, Modbus, OPC UA, and MQTT.
+You build an agent in the App Manager's [Agents panel](../app-manager/agents/README.md): you choose the connectors, the target platform and a fleet name, and the platform builds it with the credentials of your workspace inside. It comes as a [native agent](../app-manager/agents/native-agent.md) for Windows, macOS, Linux, Alpine, ARM 64 and ctrlX OS, as a [Docker agent](../app-manager/agents/docker-agent.md) for gateways and servers you run with Docker, or as an [LXC agent](../app-manager/agents/lxc-agent.md) for INSYS icom routers.
 
-#### Native agent
+### Your own code
 
-The native agent is a single binary executable (Linux/macOS) or a Windows `.exe` that starts with one click. It must run on local hardware that can reach the device you want to connect.
+Code of your own joins the platform as an [add-on](../reference/functions/add-ons/README.md): a Docker image whose classes appear in the Functions explorer like any others. On the cloud, where servers are shared, only Heisenware's own images may be installed; your own image runs on a dedicated server or on-premise. It can always run outside the platform, on your hardware, and connect in as an agent. See [Custom add-ons](../developers/custom-add-ons.md).
 
-Security is built in. When you download the agent from your Heisenware account, Heisenware compiles it fresh, just for you, with your own credentials embedded directly in the binary. An agent downloaded from a different account will not work with yours. For details on using the native agent, [see the agents documentation](../concepts/agents-and-where-code-runs.md#native-agent).
+## On-premise
 
-#### Docker agent
+The whole platform runs on your hardware: a server in your data centre, a virtual machine, or an industrial PC. It moves every cloud component one level down into your infrastructure.
 
-The Docker agent works much like the native agent, but packed into a Docker container. Docker is especially useful for vendors that offer edge-connectivity hardware, such as Siemens, WAGO, Hilscher, Welotec, or Weidmüller.
+<figure><img src="../.gitbook/assets/image (488).png" alt="The platform inside the local network, reaching machines directly and optional agents in lower subnets"><figcaption><p>An on-premise installation: the platform sits in your network and reaches your machines itself.</p></figcaption></figure>
 
-We offer the Docker agent for all relevant architectures (amd64, arm64, arm/v7). To get started quickly, pass the necessary credentials as environment variables to the container. For details, [see the agents documentation](../concepts/agents-and-where-code-runs.md#docker-agent).
+* **Direct connectivity**: the platform reaches everything its own host reaches. No agent is needed for that.
+* **Network segmentation**: for machines in a segment the host cannot reach, use [agents](../concepts/agents-and-where-code-runs.md) as in the cloud.
+* **No internet**: the installation runs closed. It needs outbound access only while you download a release package, and while [remote support](remote-support.md) is switched on.
+* **Licence**: an on-premise installation takes a licence file instead of a plan. An account starts on Free until an owner uploads it under **Plan & Billing**; the licence carries the number of Apps, the number of workspaces, the storage and its end date. When a licence ends, the first deployed App keeps running and the others stop. Nothing is deleted.
+* **Sign-in**: email and password. Google sign-in is never offered on-premise, whatever the environment says.
 
-### Code adapters (add-ons)
+### The assistant is not included
 
-Standard agents ship with pre-made code for industrial protocols. Code adapters go further: they wrap your own source code and expose it as [functions](../concepts/executors-and-instances.md) in the cloud platform. Think of a code adapter as a Heisenware-specific wrapper for your algorithms.
+In v93 an on-premise installation runs no assistant service: the App Manager and the App Builder show no assistant, and [Ask](../app-manager/ask.md) is not available. Everything else is there.
 
-Like agents, code adapters come as both a native application and a containerized version, which the platform calls [add-ons](../reference/functions/add-ons/README.md#custom-add-ons).
+Your own AI client still works: every workspace runs its own [MCP server](../assistant/mcp-server.md) with the same platform tools, reached at the workspace's MCP address or through a [local MCP server](../app-manager/integrations.md) on a member's computer. The model and its key are then yours, not the installation's.
 
-#### Native code adapter
+### What you take on
 
-The native code adapter lets you integrate custom code running natively on your OS. It relies on language-specific versions of our [VRPC library](../developers/vrpc/README.md).
+Self-hosting gives you full control and full responsibility. It suits organizations whose IT is comfortable with:
 
-#### Docker code adapter
+* Docker Engine and Docker Compose on a Linux server.
+* Backups, restores and the disk they need.
+* Their own network security: TLS certificates, firewalls, VPNs.
 
-We provide a starter project that builds a Docker image containing your custom code. Once built, the platform treats this image as an [add-on](../reference/functions/add-ons/README.md#custom-add-ons). From there, you have two options for where to run the container:
-
-1. **Inside the platform (cloud)**: You load your image as an add-on. The platform handles its lifecycle (hosting, restarting) and persists files into the central `shared` folder automatically. Your code effectively runs as part of the Heisenware cloud.
-2. **Outside the platform (edge)**: Useful for bridging a private or local network. You run the container on your own hardware and secure the connection with environment variables. Your code can talk to local devices while you still control everything from the cloud platform.
-
-## Self-hosted (on-premises)
-
-For organizations with strict internal compliance requirements or air-gapped networks, you can install Heisenware directly on your infrastructure, whether that's a private cloud or an industrial PC.
-
-### On-premise architecture
-
-In an on-premise installation, the entire platform runs on your local servers. It moves every cloud component one level down into your infrastructure.
-
-* **Direct connectivity**: The platform connects directly to local devices, with no agent required.
-* **Network segmentation**: In large shopfloor setups with segmented networks, you can still use [agents](../concepts/agents-and-where-code-runs.md) (native or Docker) to bridge lower-level subnets securely.
-
-<figure><img src="../.gitbook/assets/image (488).png" alt=""><figcaption></figcaption></figure>
-
-### Requirements and considerations
-
-This option gives you full control over data and infrastructure, but it carries significant responsibility. It suits organizations with expert IT teams comfortable with:
-
-* Server and container orchestration, specifically Docker.
-* Managing application resources, scaling, and database backups.
-* Implementing their own network security (VPNs, firewalls).
-
-{% hint style="info" %}
-When you self-host, you are the platform operator. Improper configuration can lead to data loss or security vulnerabilities. If your team lacks dedicated IT resources, we strongly recommend the managed cloud option.
+{% hint style="warning" %}
+When you self-host, you are the platform operator. A wrong configuration can cost you data or open a hole. If your team has no dedicated IT resources, take the cloud.
 {% endhint %}
 
-#### Getting started
+### Requirements
 
-If you have an Enterprise license and are ready to install, see our [technical guide](install.md).
+* **Host**: x86-64 (amd64) Linux. The platform's images are built for amd64 only; an ARM host cannot run them.
+* **Docker**: Docker Engine with the Compose plugin. On Windows and macOS, Docker Desktop over WSL 2 works for a trial.
+* **Shell tools**: `bash` 4.4 or newer (the installer and the start script need it), `openssl` for the TLS certificate, `curl` for sending a backup to Heisenware.
+* **Size**: 4 cores and 8 GB of memory carry the platform and its first workspace; plan about 1 GB of memory more per workspace. 50 GB of disk is a sensible floor: the release package alone is about 2 GB and the images it loads take several more, and an update holds two versions at once.
+* **Ports**: the platform serves 80 and 443 (HTTP and HTTPS, where 80 redirects to 443) and 1883, 8883, 1884 and 8884 for MQTT.
 
-## Installation modes
+## Install it
 
-Heisenware supports different hosting topologies depending on your infrastructure, security, and scaling requirements.
+[Install](install.md) is the step-by-step guide. Coming from v92, read [Upgrading from v92](upgrading-from-v92.md) first.
 
-### Single-node installation
-
-A single dedicated node runs the entire platform, including user authorization and all accounts.
-
-<figure><img src="../.gitbook/assets/image (42).png" alt=""><figcaption></figcaption></figure>
-
-### Multi-node installation
-
-This setup uses a multi-tier ingress gateway architecture with an Envoy proxy to manage traffic for many accounts. A central master proxy acts as the primary edge gateway, handling initial TLS termination and routing for all account domains. It then forwards traffic to dedicated upstream servers, which route requests to specific containerized backend services.
-
-This design centralizes security and observability while allowing flexible, decoupled deployment of each account's Apps and services.
-
-<figure><img src="../.gitbook/assets/image (493).png" alt=""><figcaption></figcaption></figure>
-
-The architecture uses a classic API gateway and ingress controller pattern with two proxy tiers:
-
-#### Tier 1: Master proxy (edge gateway)
-
-The master proxy is the single public-facing entry point for all platform traffic. A wildcard DNS `A` record (`*.heisenware.cloud`) directs traffic for new or unassigned subdomains to its IP address.
-
-Key responsibilities of the master proxy include:
-* **TLS termination:** Decrypting all incoming HTTPS and other TLS-encrypted connections (such as MQTTS) using a wildcard certificate.
-* **Account routing:** Making initial routing decisions based on the request's domain name (such as `account-1.heisenware.cloud`) and forwarding matched connections to predefined upstream servers.
-* **Default service routing:** Routing unmatched domains (such as non-existent accounts) to shared internal services, including the main authentication portal.
-
-#### Tier 2: Upstream servers (App nodes)
-
-Upstream servers are dedicated hosts (such as `walter-white` or `hank-schrader`) that run the Apps and services of specific accounts. Each upstream server runs an Envoy instance that acts as a local reverse proxy to receive forwarded traffic from the master proxy.
-
-Key responsibilities of upstream servers include:
-* **App-layer routing:** Performing granular, path-based routing to the microservices that make up an account's Apps (such as `/app`, `/connectors`, or `/manager`).
-* **Service abstraction:** Providing a stable target for the master proxy, which abstracts the underlying containerized services (such as `manager` or `app-frontend`).
-
-### On-premise installation
-
-An on-premise installation functions as a single-node setup running on local hardware or a private cloud. This deployment completely isolates the platform from the public internet.
-
-To set up a local server, see the [Install](install.md) guide. For help from Heisenware without a way in, the installation can dial out to Heisenware's support account for the duration of a session: [Remote support](remote-support.md).
+Heisenware can help with an installation it has no way into: the installation dials out to Heisenware's support account for as long as you allow it, and not a moment longer. See [Remote support](remote-support.md).

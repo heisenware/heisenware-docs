@@ -73,6 +73,53 @@ def resolve(page, raw):
     return os.path.normpath(os.path.join(os.path.dirname(page), t))
 
 
+BLOCKS = [('hint', 'endhint'), ('tabs', 'endtabs'), ('tab ', 'endtab'),
+          ('stepper', 'endstepper'), ('step', 'endstep'), ('code', 'endcode')]
+
+
+def unbalanced(txt):
+    """GitBook blocks that are opened and never closed, or closed unopened.
+
+    An unclosed {% hint %} swallows the rest of the page on the site, and
+    nothing else here would notice: the markdown still parses.
+    """
+    tags = re.findall(r'{%\s*(/?\w+ ?)', txt)
+    out = []
+    for open_tag, close_tag in BLOCKS:
+        opened = sum(1 for t in tags if t.strip() == open_tag.strip() and t.strip() != 'endtab')
+        closed = sum(1 for t in tags if t.strip() == close_tag)
+        # 'tab ' and 'tabs' both start with 'tab': count them apart
+        if open_tag == 'tabs':
+            opened = sum(1 for t in tags if t.strip() == 'tabs')
+        if open_tag == 'tab ':
+            opened = sum(1 for t in tags if t.strip() == 'tab')
+        if open_tag == 'step':
+            opened = sum(1 for t in tags if t.strip() == 'step')
+        if opened != closed:
+            out.append(f'{open_tag.strip()}: {opened} opened, {closed} closed')
+    return out
+
+
+def redirects():
+    """GitBook redirects whose target no longer exists.
+
+    A redirect is what keeps an old URL working after a page moved; one that
+    points at nothing is a 404 for everyone who bookmarked the old address.
+    """
+    path = os.path.join(ROOT, '.gitbook.yaml')
+    if not os.path.exists(path):
+        return []
+    txt = open(path, encoding='utf-8').read()
+    out = []
+    for m in re.finditer(r'^\s{2}([^\s:#][^:]*):\s*(\S+)\s*$', txt, re.M):
+        src, dst = m.group(1).strip(), m.group(2).strip()
+        if src in ('root', 'structure', 'summary', 'redirects'):
+            continue
+        if not os.path.exists(os.path.join(ROOT, dst)):
+            out.append({'from': src, 'to': dst})
+    return out
+
+
 def scan():
     files = sorted(walk())
     pages = [f for f in files if f.endswith('.md')]
@@ -95,6 +142,12 @@ def scan():
     exists = lambda t: os.path.exists(os.path.join(ROOT, t))
     referenced = set(refs)
 
+    broken_blocks = []
+    for p in pages:
+        txt = open(os.path.join(ROOT, p), encoding='utf-8', errors='replace').read()
+        for problem in unbalanced(txt):
+            broken_blocks.append({'page': p, 'problem': problem})
+
     hashes = collections.defaultdict(list)
     for a in assets:
         hashes[hashlib.sha256(open(os.path.join(ROOT, a), 'rb').read()).hexdigest()].append(a)
@@ -107,6 +160,8 @@ def scan():
         'broken_refs': [{'target': t, 'pages': sorted({s for s, _ in srcs})}
                         for t, srcs in sorted(refs.items()) if not exists(t) and not os.path.isdir(os.path.join(ROOT, t))],
         'orphan_assets': [a for a in assets if a not in referenced],
+        'broken_blocks': broken_blocks,
+        'broken_redirects': redirects(),
         'duplicate_assets': [v for v in hashes.values() if len(v) > 1],
         'external': {u: sorted(set(ps)) for u, ps in external.items()},
     }
@@ -152,6 +207,8 @@ def main():
     section('Pages missing from SUMMARY.md', r['missing_in_summary'])
     section('SUMMARY.md entries that do not resolve', r['summary_broken'])
     section('Broken references', r['broken_refs'], lambda b: f"{b['target']}  <- {', '.join(b['pages'])}")
+    section('Unbalanced GitBook blocks', r['broken_blocks'], lambda b: f"{b['page']}  {b['problem']}")
+    section('Redirects whose target is gone', r['broken_redirects'], lambda b: f"{b['from']}  ->  {b['to']}")
     section(f'Orphaned assets, {size / 1e6:.1f} MB', r['orphan_assets'])
     section('Duplicate assets (identical content)', r['duplicate_assets'], lambda v: ' == '.join(v))
 

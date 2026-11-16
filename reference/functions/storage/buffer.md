@@ -2,7 +2,7 @@
 
 The buffer class holds a fixed number of values in order, from front to back. Once it is full, every push drops a value at the opposite end, so the buffer always holds the most recent `capacity` values: a sliding window, for example the last 100 data points of a live chart. React to a full buffer with `onFull` and clear it in reaction to get a tumbling window (one batch per `capacity` values), or push at the back and pop at the front to use it as a queue.
 
-Data remains in memory only and does not persist to disk. This class requires an instance. The code class name is `Buffer`.
+The values live in memory only: after a restart of the platform the instance is there again, empty. This class requires an instance. The code class name is `Buffer`.
 
 ### `create`
 
@@ -14,7 +14,7 @@ Creates a new buffer instance with a fixed capacity.
 
 #### Output
 
-Returns the buffer instance.
+Returns the name of the created instance. Creating a name that already exists returns it unchanged, with its original capacity.
 
 #### Example
 
@@ -25,7 +25,7 @@ Returns the buffer instance.
 
 ### `delete`
 
-Removes the buffer instance.
+Removes the buffer instance, for every App that uses it.
 
 #### Parameters
 
@@ -33,7 +33,7 @@ None.
 
 #### Output
 
-Returns nothing.
+Returns `true` when the instance is deleted.
 
 {% hint style="danger" %}
 #### Permanent data loss
@@ -192,28 +192,18 @@ None.
 
 Returns `true`.
 
-## Event listeners
+## Events
+
+Triggering an event executor subscribes it; triggering it again with the same inputs changes nothing. The payload arrives on the executor's event outputs, not on its return. The subscription pauses while the App is stopped and ends with its scope: a user's with the user's last connection, a shared one never by itself. To end it by hand, choose **Stop listening** on the executor's event input; the next trigger subscribes again. See [Backend events](../../../concepts/backend-events.md).
 
 ### `onFull`
 
-Subscribes to the `full` event. The callback runs after every push that leaves the buffer full, which means on every push once the capacity is reached (a sliding window). Clear the buffer in reaction to get one call per `capacity` pushes (a tumbling window).
+Subscribes to the `full` event. The listener is called after every push that leaves the buffer full, which means on every push once the capacity is reached (a sliding window). Clear the buffer in reaction to get one call per `capacity` pushes (a tumbling window).
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The callback function. <br>Payload: <code>values</code>, all values held, from front to back.</td><td>callback</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener. <br>Payload: <code>values</code>, all values held, from front to back.</td><td>callback</td></tr></tbody></table>
 
 #### Output
 
-Returns the string `subscribed`.
-
-### `offFull`
-
-Removes a listener given to `onFull`.
-
-#### Parameters
-
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>listener</code></td><td>The listener to remove.</td><td>callback</td></tr></tbody></table>
-
-#### Output
-
-Returns `true` when the listener was subscribed, otherwise `false`.
+Returns `true` once the executor is listening. The values arrive on the event outputs.

@@ -1,282 +1,169 @@
+---
+description: >-
+  What an executor is made of, the kinds of functions, how instances live, and where a call goes.
+---
+
 # Executors and instances
 
-Functions form the core building blocks of logic in your Apps. They visually represent code that retrieves data, processes information, manages databases, and controls devices.
+An App's logic is built from functions: read a value from a machine, write a row, send an email. A function you drag from the Functions explorer onto the Flowboard becomes an **executor**. The executor calls that one function and manages everything around the call: where it runs, what goes in, when it runs and what comes out.
 
-Every function follows the same anatomy, represented by a colored box with a unique icon.
+Many functions belong to an **instance**: a living object such as a connection, a buffer or a counter. This page explains both.
 
-<figure><img src="../.gitbook/assets/image (51).png" alt=""><figcaption><p>A function merging two or more objects</p></figcaption></figure>
+## What an executor is made of
 
-* [**Inputs**](executors-and-instances.md#inputs-and-data-configuration): Arguments the function requires to operate, such as a number to calculate or a string to send. The platform hides the input box if a function does not require inputs. Some functions let you add extra inputs. Click the pencil icon to modify input data via a form, or use YAML during development.
-* [**Trigger**](executors-and-instances.md#triggers-and-execution-logic): The signal that executes the function, such as a button click or a data change. Click the play icon to run the function manually during development.
-* [**Output**](executors-and-instances.md#outputs-and-chaining): The result of the operation, which passes to the next step in the flow. Click the x icon to clear the output during development.
-* [**Extension nodes**](extensions-branching-and-errors.md): Optional separate nodes that receive data from a function to filter, record, modify, or handle errors in real-time.
+<figure><img src="../.gitbook/assets/image (51).png" alt="An executor calling mergeObjects: its name with the status dot, two inputs, the trigger and the output" width="563"><figcaption><p>An executor that merges two objects</p></figcaption></figure>
 
-## Function categories
+* **Address**: where the function lives: its agent, its class and, for an instance function, its instance. See [Addresses](executors-and-instances.md#addresses-where-a-call-goes).
+* **Inputs**: the values the function receives, in the order of its arguments. An input gets a typed-in default, a [wire](triggers-and-wires.md), a [widget link](widgets-and-links.md) or a [`$variable`](variables-and-endpoints.md).
+* **Trigger**: decides when the executor runs. A value arriving at an input does not run it by itself. See [Triggers and wires](triggers-and-wires.md).
+* **Outputs**: the **return**, and an **event output** for each value an event function delivers. See [Backend events](backend-events.md).
+* **Extensions**: steps attached to an output that reshape, gate, record or catch. See [Extensions, branching and errors](extensions-branching-and-errors.md).
 
-Available functions reside in the Function Explorer on the left side of the canvas. Browse them by category in their respective reference sections:
+Two texts belong to an executor. The **comment** is yours: a short note on the node that says why it is there. The **description**, shown on hover, is the function's own documentation and comes from its code.
 
-* [**Connectors**](../reference/functions/connectors/README.md): Integration functions for industrial protocols and external systems, including MQTT, OPC UA, Siemens S7, and SAP Digital Manufacturing.
-* [**Storage**](../reference/functions/storage/README.md): Relational database and timeseries database classes that connect to databases. Both include a built-in internal database (PostgreSQL and InfluxDB). This category also contains lightweight data stores, such as the data store and circular buffer.
-* [**Utilities**](../reference/functions/utilities/README.md): Classes for data processing, timers, cron jobs, barcode generation, and PDF processing.
-* [**Add-ons**](../reference/functions/add-ons/README.md): Docker images that bring new classes to the platform, such as the Industrial Blockchain.
-* **Custom**: User-defined building blocks, including [subflows](subflows.md) and functions loaded via Custom Extensions.
+## Kinds of functions
 
-## Types of functions
-
-The platform classifies functions into four types based on how they manage state or context.
-
-<table><thead><tr><th width="227.3770751953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Static functions</strong></td><td>Standalone utilities that process data without context (for example, <code>mergeObjects</code>, <code>mapRange</code>, or <code>echo</code>).</td></tr><tr><td><strong>Instance functions</strong></td><td>Actions linked to a specific instance. They use the unique configuration and connection settings stored in that instance (for example, <code>read</code>, <code>write</code>, or <code>publish</code>).</td></tr><tr><td><strong>Constructor functions</strong></td><td>Functions named <code>create</code> that configure and initialize a new instance.</td></tr><tr><td><strong>Destructor functions</strong></td><td>Functions named <code>delete</code> that remove an instance to free system resources.</td></tr></tbody></table>
+| Kind | What it does | Example |
+| --- | --- | --- |
+| **Static function** | Needs no instance. Takes its inputs, gives a result. | `echo`, `mergeObjects`, `mapRange` |
+| **Constructor** | Creates an instance. Always named `create`. | `OpcuaClient.create` |
+| **Instance function** | Acts on one instance. | `read`, `write`, `publish` |
+| **Event function** | Listens to an instance and delivers values again and again. | `onChange`, `onMessage` |
+| **Destructor** | Deletes an instance. Always named `delete`. | `OpcuaClient.delete` |
+| **Subflow** | A section of your own logic, published as a function. See [Subflows](subflows.md). | |
 
 {% hint style="info" %}
-#### Concept example: OPC UA client
-
-* **Class**: The generic blueprint for the OPC UA client.
-* **Create a specific instance**: Use the `create` function to set an instance name and authorization details, which creates an instance such as `myMachine`.
-* **Instance functions**: Use the `connect` function of `myMachine` to establish a connection to a server endpoint URL, then use `read` to retrieve data. All instance functions of `myMachine` share this connection.
+**Example: the OPC UA client.** The class `OpcuaClient` is the blueprint. `create` makes an instance named `opcua-filler` with the filler's address and credentials. `read` and `write` on `opcua-filler` use its connection, and `onChange` on it reports every change of a node.
 {% endhint %}
 
-## Work with functions on the canvas
+## How instances live
 
-* **Add**: Drag a function from the Function Explorer onto the canvas.
-* **Sequence**: Create a flow by drawing a wire between nodes. See [Sequencing functions](../app-builder/flowboard/README.md#sequencing-functions).
-* **Configure**: Click a function to open its configuration panel. Use YAML for static data or data binding for dynamic data from other functions or widgets.
-* **Documentation**: Click the info icon next to a function name to open its documentation panel.
-* **Comment**: Right-click a function and select comment to add your note on the node: what this function does in this flow. The documentation shown when you hover a function is the function's own (its JSDoc or docstring) and is not edited in the builder.
-* **Delete**: Select the function and press the Delete key, or click the trash icon.
+An instance belongs to its agent, not to an App. Its name is unique on that agent, and every App of the workspace reaches it there by that name.
 
-{% hint style="danger" %}
-#### Permanent deletion
+* **Created once, deleted once.** Once created, an instance exists for the App Builder, every App Player and every App alike. It outlives deployments and platform restarts: the agent keeps the inputs it was created with and creates it again when it starts.
+* **Created, never re-configured.** Changing a constructor's inputs and running it again changes nothing: creating a name that already exists does nothing. To change an instance, use the functions its class offers for that. Where only new constructor inputs will do, delete the instance and create it again.
+* **A constructor on the Flowboard is a promise.** Give the constructor the trigger **App Start**, and the instance is part of the App. Instance functions for that name may be built before the instance exists: a call that finds no instance runs the constructor first, then calls.
+* **Names connect Apps.** Two Apps that name the same instance work on the same object. Share state that way instead of copying logic. See [Suites of Apps](suites-of-apps.md).
 
-Deleting a function permanently removes its configuration and all connected wires. This action cannot be undone.
-{% endhint %}
+Instances such as `Counter`, `Buffer` or `Timer` hold their state in memory. What must survive belongs in a database.
 
-### Status indicators
+### One instance per user
 
-A colored status indicator icon appears next to each function name. Hover over the indicator to view status details:
+Sometimes each user needs an own instance, such as a personal timer. Prefix the instance name with `<client>`, for example `<client>session`, on the constructor and on its instance functions. Each user's first call then creates that user's own instance. Such instances are not kept across restarts and need no trigger on the constructor.
 
-* **Green**: Ready or normal operation.
-* **Blue**: Slow execution (greater than two seconds).
-* **Yellow**: The required instance does not exist.
-* **Red**: An error or exception occurred.
-* **Gray**: The function is offline or unavailable.
+### Many instances from one executor
 
-## Inputs and data configuration
+The instance box of a constructor takes a list of names. One constructor then creates every instance in the list, and a new machine is a new row in a table, not a new executor. See [Addresses](executors-and-instances.md#addresses-where-a-call-goes) for lists, patterns and loops.
 
-Inputs determine function behavior. Provide data using three methods:
+## Inputs
 
-1. **Static data**: Fixed values typed directly into the function input using YAML, or configured via a form by clicking the pencil icon.
-2. **Dynamic logic**: Data passed from the output, modifier, or filter of a preceding function.
-3. **UI binding**: Live data mapped from a frontend widget (for example, a text field value).
+An input takes its value from one of four places:
 
-<figure><img src="../.gitbook/assets/image (37).png" alt=""><figcaption><p>Function with input in YAML format</p></figcaption></figure>
+1. **A default**: a fixed value typed into the input.
+2. **A wire**: the output of another executor or of an extension.
+3. **A widget link**: a value a user enters or selects on a page.
+4. **A variable**: `$name` anywhere in the value.
 
-### YAML input
+A default is delivered to the function exactly as typed: a number as a number, an object as an object. An input that expects an object with several keys takes the whole object.
 
-The platform uses YAML for configuration because it provides a human-readable format for complex data structures.
+Right-click an input and choose **Secret Input** to mask its value everywhere. Credentials belong in a secret [variable](variables-and-endpoints.md) when more than one executor needs them.
 
-Type a value and click away to save it. The platform shows every saved value in block style, whatever style you typed: nested keys indent and list items start with a hyphen. A value longer than a few lines collapses to a one-line preview in the input. Click the preview to edit the value in a popup editor, the same one modifiers and filters use. Closing the popup saves the value.
+### YAML
+
+Defaults are typed in YAML, a readable format for structured data. Type a value and click away to save it. A value longer than a few lines folds to a one-line preview; click the preview to edit it in a popup editor.
+
+<figure><img src="../.gitbook/assets/image (37).png" alt="An executor calling randomInteger, its input holding the YAML value min: 0 and max: 1000, and its output showing the last result" width="563"><figcaption><p>A static value, typed as YAML</p></figcaption></figure>
 
 <details>
 
 <summary><strong>YAML cheat sheet</strong></summary>
 
-#### Basic values (scalars)
+#### Simple values
 
-Enter simple data types without quotes.
-
-* **Strings**: `Hello world`. Use quotes if the string resembles a number or boolean (for example, `'123'` or `'true'`).
+* **Text**: `Hello world`. Use quotes when text looks like a number or a boolean: `'123'`, `'true'`.
 * **Numbers**: `101` or `3.14159`.
 * **Booleans**: `true` or `false`.
-* **Null**: `null` represents an empty or non-existent value.
+* **Nothing**: `null`.
 
-#### Lists (arrays)
+#### Lists
 
-A collection of items.
+```yaml
+- filler
+- capper
+- labeler
+```
 
-*   **Block style**: Start each item on a new line with a hyphen.
+or compact: `[filler, capper, labeler]`
 
-    ```yaml
-    - Apple
-    - Orange
-    - Banana
-    ```
-*   **Compact style**: Enclose items in square brackets.
+#### Objects
 
-    ```yaml
-    [Apple, Orange, Banana]
-    ```
+```yaml
+machine:
+  name: filler
+  line: 2
+  limits:
+    min: 0
+    max: 400
+```
 
-#### Objects (key-value maps)
+or compact: `{ name: filler, line: 2 }`
 
-Data grouped under specific keys.
+#### Text over several lines
 
-*   **Block style**: Place each key-value pair on its own line. Use indentation for nested properties.
+`|` keeps every line break, for example for a label printer layout:
 
-    ```yaml
-    user:
-      name: Alex
-      email: alex@example.com
-      permissions:
-        can_read: true
-        can_write: false
-    ```
-*   **Compact style**: Enclose comma-separated key-value pairs in curly braces.
+```yaml
+|
+  ^XA^FO30,80^BQN,2,3^FDLA,{{assetId}}#{{date}}^FS
+  ^FO120,140^A0N,22,22^FD{{assetId}}#{{date}}^FS
+  ^XZ
+```
 
-    ```yaml
-    { name: Alex, email: alex@example.com }
-    ```
+`>` joins the lines into one paragraph; an empty line starts a new one:
 
-#### Multiline strings
-
-Use multiline strings for large text blocks, code scripts, or templates.
-
-*   **Literal style (`|`)**: Preserves all line breaks exactly. Use this style for raw code or printer layouts (for example, ZPL).
-
-    ```yaml
-    |
-      ^XA^FO30,80^BQN,2,3^FDLA,{{assetId}}#{{date}}^FS
-      ^FO120,140^A0N,22,22^FD{{assetId}}#{{date}}^FS
-      ^RFW,A^FD {{assetId}}^FS
-      ^XZ
-    ```
-*   **Folded style (`>`)**: Converts single newlines into spaces, which creates a continuous sentence from multiple lines. Blank lines remain as newlines.
-
-    ```yaml
-    description: >
-      This is a long description written across
-      multiple lines in the editor, but processed
-      as a single, continuous sentence.
-
-      A new paragraph starts after a blank line.
-    ```
+```yaml
+description: >
+  This long description is written across
+  several lines and arrives as one sentence.
+```
 
 </details>
 
-{% hint style="info" %}
-Right-click a function input to switch between the YAML and HTML views, or to mask the value by defining it as a secret.
-{% endhint %}
+## Addresses: where a call goes
 
-### Callbacks
+An address has three parts: **agent**, **class** and, for instance functions, **instance**. The agent decides in which network the function runs; see [Agents and where code runs](agents-and-where-code-runs.md).
 
-Some functions take a function as an argument: a **callback** the function calls once, or an **event listener** it calls again and again. Most functions with a listener have an `on` prefix – such as `onMessage` – and listen continuously for external events, like an incoming MQTT message. Throughout the configuration examples in these docs, this special input argument is named `listener`.
+<figure><img src="../.gitbook/assets/image (25).png" alt="Three executors with their addresses shown: a static function on Utility Functions, and two instance functions whose third box names the instance" width="563"><figcaption><p>A static function needs no instance; an instance function names one</p></figcaption></figure>
 
-The input shows the handler's kind. Everything the function hands the handler arrives as **values**: output pills drawn directly below the function's output, one row per handler, one pill per argument. Each value works like the output: it shows the last value, you wire it to inputs, triggers, or widgets, and you attach extension nodes to it. The function's own output of an `on` function only confirms the subscription; the data comes through the values.
+Normally each part is fixed. Right-click the executor's name and choose **Use Dynamic Address** to turn the parts into boxes that take a value at run time:
 
-If the function's documentation names the handler's arguments, the values carry their names. Otherwise right-click the handler and choose the number of values.
+* **A name or a list of names.**
+* **A pattern**: as agent, `line2-*` is every matching agent that is online; as instance, `*` is every living instance of the class.
+* **A variable**: `$machines` holds the name or the list.
+* **A wire**: drop an output onto the box.
 
-<figure><img src="../.gitbook/assets/image (104).png" alt="" width="563"><figcaption><p>A function with a callback listening for incoming MQTT messages in binary format</p></figcaption></figure>
+What a list does depends on the loop:
 
-## Triggers and execution logic
+* **Without a loop** the call goes to every target at once and returns one result per target.
+* **With the zip loop** (**Process One By One** on all inputs) row 1 of the inputs runs on target 1, row 2 on target 2. This is how one executor serves ten machines: one instance name on ten agents, or ten instances on one agent.
 
-The trigger determines when a function runs.
+A constructor works the same way. With a list it creates every instance in it; with the zip loop, row 1 of the inputs creates instance 1. A name with a pattern, such as `opcua-*`, creates nothing when triggered: it promises that any matching instance is created the moment a function asks for it.
 
-### Trigger sources
-
-* **Data-driven**: Connect a function trigger to an output, modifier, or filter. The default execution mode is update (`on output update`). Click the mode text to switch to change or true.
-* **UI events**: Connect a widget event (such as a button's `on button click`) to the trigger.
-* **App lifecycle**: Right-click the trigger and select App start > once on deploy, or select App stop. The trigger then displays `once when app starts` or `once when app stops`.
-* **Page load and reload**: Right-click the trigger and select App start > once on (re-)load to execute the function whenever a user loads or reloads (refreshes) the App in the browser.
-* **Periodically**: Right-click the trigger and select an interval under App start, from every 0.1s to every 1d.
-* **Page load**: Drag a page from the Page Explorer onto the trigger to execute the function when that page loads.
-* **Manual development**: Click the play icon inside the trigger to run the function manually during development.
-
-<figure><img src="../.gitbook/assets/onpage_louade_looped.gif" alt="" width="563"><figcaption><p>Use page load to execute a function</p></figcaption></figure>
-
-<figure><img src="../.gitbook/assets/onbuttom_click_trigger_looped.gif" alt="" width="563"><figcaption><p>Use a button click to execute a function</p></figcaption></figure>
-
-### Sequential processing of arrays (looping)
-
-To process an array item by item:
-
-1. Right-click the trigger.
-2. Select Process one by one.
-3. Choose the input containing the target array. The trigger wire changes to a dotted line, indicating that the function executes once for each item in the list.
-
-<details>
-
-<summary><strong>Example: Merge an element into an array</strong></summary>
-
-Sequential processing lets you merge a single element into each sub-array of a larger array.
-
-The image below shows a `combine` function with its trigger configured to process one by one on its first input (`On arg 1`). The function executes for each sub-array, merging the singular element from the second input into both sub-arrays.
-
-<figure><img src="../.gitbook/assets/image (26).png" alt=""><figcaption></figcaption></figure>
-
-</details>
-
-### Delayed execution
-
-Add a delay between 0.1 and 2.0 seconds to any trigger to manage execution timing, such as waiting for a UI animation to complete before retrieving data.
-
-## Outputs and chaining
-
-The output returns the result of the function execution to pass data and control logic throughout your App.
-
-### Return data types
-
-Depending on the function, the output delivers:
-
-* **Standard data**: JSON objects, strings, numbers, or arrays.
-* **Binary content**: Files or images, such as generated PDF documents or camera captures.
-* **Success flags**: A boolean value (`true` or `false`) indicating whether an operation, such as a database write, succeeded.
-
-### Backend logic (flows)
-
-Link an output to another function to create a functional flow:
-
-* **Pass data**: Connect an output to an input to use the result of the first function as an argument for the next function.
-* **Control flow**: Connect an output to a trigger so the subsequent function executes only after the first function completes successfully.
-
-### UI interaction
-
-Link an output directly to the frontend to drive user interface components:
-
-* **Visualize data**: Connect the output to a display widget, such as a chart or value box.
-* **Control properties**: Connect the output to a widget and select the property to control, such as dynamically setting a button to disabled.
-* **Navigate screens**: Connect the output to a page switch trigger to change pages automatically based on backend logic.
-
-## Extension nodes
-
-Extension nodes attach to a function output – or to one of a handler's [values](executors-and-instances.md#callbacks) – to process data directly within the flow. Modifiers transform data, filters gate execution, recorders store information, and error handlers catch exceptions.
-
-* **Add**: Click the plus icon (`+`) on an output or a value and select an extension node type. You can attach multiple parallel extension nodes to a single output.
-* **Chain**: Attach an extension node to the output of another extension node to create a multi-step data pipeline.
-* **Delete**: Right-click an extension node and select Delete.
-
-## Data binding (connecting to UI)
-
-Functions communicate bidirectionally with frontend widgets through data binding:
-
-* **Input binding**: Links a widget property, such as `formData`, to a function input.
-* **Trigger binding**: Links a user action, such as `on button click`, to a function trigger.
-* **Output binding**: Links a function result to a widget property, such as `data`, to update the user interface.
-
-## Advanced addressing
-
-Every function targets its underlying backend code using a specific address structure. To view or edit this path, right-click the function name and select _Use dynamic address_.
-
-<figure><img src="../.gitbook/assets/leftclick_on_function.png" alt=""><figcaption><p>Right-click the function name and choose Use Dynamic Address</p></figcaption></figure>
-
-This action reveals the exact path to the code, consisting of up to three boxes:
-
-`<Agent/Service> <Class> [Instance]`
-
-* **Box 1 (Agent/Service)**: The runtime or program executing the function. This can be a generic internal service or a specific Agent running on local infrastructure.
-* **Box 2 (class)**: The code class name, such as `Busylight`, `Barcode`, or `OpcuaClient`.
-* **Box 3 (instance)**: The specific instance name, such as `server1`. This box only appears for instance functions. Static functions do not utilize an instance, so the platform hides this box.
-
-<figure><img src="../.gitbook/assets/image (25).png" alt=""><figcaption><p>Addresses of a static function and an instance function</p></figcaption></figure>
-
-Edit this address directly in the boxes if required. The platform retains your changes if you switch back to the standard view.
-
-Each box is an input like any other: type a `$variable` token to take the name from a variable, or drop a function result onto the box to set it from the flow. The agent and instance boxes also accept a list of names. Combined with the zip loop (see _Sequential processing of arrays_), row _i_ of the arguments then runs on agent _i_ or instance _i_ - one function serving ten machines from a table of names, whether that is one instance name on ten agents or ten instances on one agent. Without a loop, a list calls every named target in parallel and collects one result per target; a glob such as `edge-*` in the agent box addresses every matching live agent, and `*` in the instance box every live instance of the class. A list is always a live value: switching back to the fixed address keeps the last single name a box held, never a list.
-
-A constructor's instance box works the same way: a list of names creates every instance in it - with the zip loop, row _i_ of the parameters creates instance _i_ - and a destructor's list removes them. Creating a name that already exists changes nothing, so a constructor fed from a settings table keeps every instance alive as the table grows, and a new machine is a new row rather than a new node. A name with `*` (`opcua-*`) creates nothing by itself: it promises that any matching instance a function asks for is created on demand.
+An event function on instance `*` also listens to instances that appear later and tells you who sent each event: its first event output is the name of the sending instance.
 
 {% hint style="info" %}
-#### Swap Agents across environments
-
-When moving logic between environments, such as from a test device to a production machine, update the Agent name in box 1 to target the new Agent instead of rewiring the flow.
-
-You can use search and replace to update the Agent name across multiple functions simultaneously. This works for all addresses, even if they do not use the dynamic view.
+**Moving between environments.** To move logic from a test device to the production machine, change the agent name instead of rewiring. Search and replace on the Flowboard changes an agent name in many executors at once.
 {% endhint %}
+
+## Status
+
+The dot beside an executor's name shows how its last call went. Hover over it for details.
+
+| Color | Meaning |
+| --- | --- |
+| Green | Ready, or the last call succeeded. |
+| Blue | The call takes longer than two seconds. |
+| Red | The last call failed. The message says why. |
+| Yellow | The instance does not exist. |
+| Purple | The agent is online but does not offer the class. |
+| Gray | The agent is offline. |

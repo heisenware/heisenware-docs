@@ -1,23 +1,23 @@
 # Protocol details
 
-All VRPC agents and clients technically are MQTT clients to a single logical broker. They use the MQTT 3.11 standard to realize all RPC functionality.
+What VRPC puts on the wire. You need this only to write a VRPC implementation of your own, or to read a broker trace. Writing an agent or a client needs none of it: see [VRPC](README.md).
 
-Instead of being message oriented, VRPC uses a protocol on top of MQTT fixing the topic as well as the payload structure.
+VRPC agents and clients are MQTT clients of one logical broker, speaking MQTT 3.1.1. VRPC is not message oriented: it fixes both the topic and the payload, and does RPC on top. This page describes **protocol version 4**, which VRPC 3.18 speaks. Every message carries it as `v`.
 
-General topic pattern:
+## Topics
 
-```xml
+```
 <domain>/<agent>/<class>/<instance>/<function>
 ```
 
 {% hint style="info" %}
-**NOTE**
-
-* if `<function>` refers to a **static** method `<instance>` must have value `__static__`
-* if `<function>` refers to a **global** method `<class>` must have value `__global__` **and** `<instance>` must have value `__static__`
+* A **static** function has `__static__` in place of `<instance>`.
+* A **global** function has `__global__` in place of `<class>` and `__static__` in place of `<instance>`.
 {% endhint %}
 
-General RPC **request** payload pattern:
+## Payloads
+
+A **request**:
 
 ```json
 {
@@ -26,11 +26,11 @@ General RPC **request** payload pattern:
   "a": ["<arguments>"],
   "i": "<correlationId>",
   "s": "<sender>",
-  "v": "<protocolVersion>"
+  "v": 4
 }
 ```
 
-General RPC **response** payload pattern:
+A **response**:
 
 ```json
 {
@@ -38,216 +38,210 @@ General RPC **response** payload pattern:
   "r": "<return value>",
   "e": "<error message>",
   "i": "<correlationId>",
-  "v": "<protocolVersion>"
+  "v": 4
 }
 ```
 
 {% hint style="info" %}
-**NOTE 1**
+**The context `c`**
 
-* if `<function>` refers to an instance function, `<context>` must reflect the corresponding **instance name**
-* if `<function>` refers to a static function, `<context>` must reflect the corresponding **class name**
-* if `<function>` refers to a global function, `<context>` must have the value `__global__`
+* an instance function: the **instance name**
+* a static function: the **class name**
+* a global function: `__global__`
 {% endhint %}
 
 {% hint style="info" %}
-**NOTE 2**
+**Other rules**
 
-If VRPC is used for language embedding use cases (i.e. not remotely), the last two properties `i` (correlationId) and `s` (sender) are omitted from the call.
+* A successful call MUST NOT carry `e` in its response.
+* Used for language embedding rather than remotely, a call omits `i` (correlationId) and `s` (sender).
+*   In a language with function overloading, the function carries its full signature:
+
+    ```
+    <functionName>[-<typename arg1>:[<typename arg2>:][...]]]
+    ```
+
+    where `typename` is one of `null`, `object`, `array`, `string`, `boolean`, `number`.
 {% endhint %}
 
-{% hint style="info" %}
-**NOTE 3**
+## The agent
 
-For all languages supporting function overloading, `<method>` must carry the full signature in form of:
+### At start
 
-```xml
-<methodName>[-<typename arg1>:[<typename arg2>:][...]]]
-```
+1. The user configures `<domain>` and `<agent>`.
+2.  VRPC generates an MQTT client id:
 
-where `typename` can be one of:
-
-* null
-* object
-* array
-* string
-* boolean
-* number
-{% endhint %}
-
-{% hint style="info" %}
-**NOTE 4**
-
-In case of an successful RPC call the property `e` MUST NOT exist in the response message.
-{% endhint %}
-
-### Agent Details
-
-#### Initialization Time
-
-1. User configures `<domain>` and `<agent>`
-2.  VRPC generates an MQTT client ID like so:
-
-    ```xml
+    ```
     va3<agentInstance>
     ```
 
-    where `<agentInstance>` reflects a 20 characters long hash generated out of domain and agent name.
-3.  VRPC **publishes** the (retained) agent info message:
+    where `<agentInstance>` is a 20-character hash of the domain and the agent name.
+3.  It **publishes** the agent info, retained:
 
-    ```xml
+    ```
     <domain>/<agent>/__agentInfo__
 
-    JSON PAYLOAD {
-      "status": "online"
-      "hostname": <hostname>
-      "version": <userAgentVersion>
-    }
+    { "status": "online", "hostname": "<hostname>", "version": "<userAgentVersion>", "v": 4 }
     ```
-4.  VRPC iterates all registered classes and **subscribes** to their static functions using the following pattern:
+4.  It walks the registered classes and **subscribes** to their static functions:
 
-    ```xml
-    <domain>/<agent>/<class>/__static__/<method>
     ```
-5.  VRPC then **publishes** a class info message for each registered class:
+    <domain>/<agent>/<class>/__static__/<function>
+    ```
 
-    ```xml
+    and, on any class, to the three functions of the subscription protocol: `__unsubscribe__`, `__registrations__` and `__end__`.
+5.  It **publishes** two retained info messages per class. The full one carries the reflected documentation:
+
+    ```
     <domain>/<agent>/<class>/__classInfo__
 
-    JSON PAYLOAD {
-      "className": <className>,
-      "instances": [<instance1>, <instance2>, ...],
-      "staticFunctions": [<function1>, <function2>, ...],
-      "memberFunctions": [<function1>, <function2>, ...],
-      "meta": {
-        <function1>: { description, params, ret }
-        <function2>: { description, params, ret }
-      }
+    {
+      "className": "<className>",
+      "instances": ["<instance1>", "..."],
+      "staticFunctions": ["<function1>", "..."],
+      "memberFunctions": ["<function1>", "..."],
+      "meta": { "<function1>": { "description": "...", "params": [], "ret": {} } },
+      "v": 4
     }
     ```
 
-{% hint style="info" %}
-**NOTE**
+    and the concise one leaves `meta` out:
 
-The `meta` property is optional and only available if meta information could be acquired from the adapted code (e.g. js-doc like comments) When available, not all functions may be listed, those without meta information are skipped.
+    ```
+    <domain>/<agent>/<class>/__classInfoConcise__
+    ```
+
+    A client that does not need the documentation subscribes to the concise topic only.
+
+{% hint style="info" %}
+`memberFunctions` is the wire's name for what the platform calls an **instance function**: a function that acts on one instance. `meta` is optional and exists only where the adapted code carries documentation (JSDoc comments, a Python docstring); functions without any are left out of it.
 {% endhint %}
 
-#### Runtime
+### At run time
 
-*   After **receiving** an RPC message on topic:
+*   Receiving a message on
 
-    ```xml
-    <domain>/<agent>/<class>/__static__/__createIsolated__
+    ```
+    <domain>/<agent>/<class>/__static__/__createShared__
     ```
 
-    VRPC creates and names a new instance, iterates all of its instance functions and **subscribes** to each one using:
+    the agent creates and names an instance that every client may reach, walks its instance functions and **subscribes** to each:
 
-    ```xml
-    <domain>/<agent>/<class>/<instance>/<method>
     ```
-*   After **receiving** an RPC message on topic
-
-    ```xml
-    <domain>/<agent>/<class>/<instance>/<method>
+    <domain>/<agent>/<class>/<instance>/<function>
     ```
 
-    VRPC executes the RPC call and then replies to the sender instance by **publishing** to the topic that was provided in the `<sender>` property.
+    `__createIsolated__` does the same for an instance only its creator knows: no class info lists it.
+*   Receiving a message on
 
-#### Destruction Time
+    ```
+    <domain>/<agent>/<class>/<instance>/<function>
+    ```
 
-Either by explicitly calling the `end()` function or by MQTT last will VRPC **publishes** the (retained) agent info message:
+    the agent runs the call and **publishes** the answer to the topic the request's `s` names.
 
-```xml
+### At the end
+
+By `end()` or by MQTT last will, the agent **publishes** the retained agent info again:
+
+```
 <domain>/<agent>/__agentInfo__
 
-JSON PAYLOAD {
-  status: 'offline'
-  hostname: <hostname>
-  version: <userAgentVersion>
-}
+{ "status": "offline", "hostname": "<hostname>", "version": "<userAgentVersion>", "v": 4 }
 ```
 
-### Client Details
+## The client
 
-#### Initialization time
+### At start
 
-1. User (optionally) configures `<domain>` and `<agent>`, those will be the defaults for later remote instances
-2.  VRPC generates an MQTT client ID like so:
+1. The user optionally configures `<domain>` and `<agent>`; those become the defaults for later remote instances.
+2.  VRPC generates an MQTT client id:
 
-    ```xml
-    vc3<random><processInfo>
+    ```
+    vc3<instance><hostHash>
     ```
 
-    where `<random>` are 8 random characters and `<processInfo>` is a 12 character long string composed of host specific properties (i.e. stays the same on the same host)
-3.  VRPC then listens for available agents and classes by **subscribing** to
+    where `<instance>` is 8 random characters and `<hostHash>` is a 12-character hash of host properties, so it stays the same on the same host. Together: 23 characters, the MQTT maximum.
+3.  It builds its **connection id**, which is what goes into `s`:
 
-    ```xml
+    ```
+    <domain>/<mqttClientId>/<secret>
+    ```
+
+    Always three segments: agents recognize a presence message by `__clientInfo__` arriving as the fourth topic token.
+4.  It listens for agents and classes by **subscribing** to
+
+    ```
     <domain>/<agent>/__agentInfo__
+    <domain>/<agent>/+/__classInfoConcise__
     ```
 
-    and
+    (`__classInfo__` instead, when it needs the documentation; `+` in place of `<agent>` when it was given none).
+5.  It listens for answers and events by **subscribing** to its own two topics:
 
-    ```xml
-    <domain>/<agent>/+/__classInfo__
     ```
-4.  Finally, VRPC listens to RPC responses by **subscribing** to
-
-    ```xml
-    <domain>/<host>/<random>
+    <domain>/<mqttClientId>/<secret>
+    <domain>/<mqttClientId>/<secret>/+
     ```
 
-    which can be regarded as VRPC client ID. This information is packed into the `<sender>` property of the RPC payload.
+    Answers arrive on the first, every event subscription on one topic below it.
 
-#### Runtime
+### At run time
 
-*   VRPC **publishes** a single message per RPC request to
+*   One message per request, to
 
-    ```xml
-    <domain>/<agent>/<class>/<instance>/<method>
+    ```
+    <domain>/<agent>/<class>/<instance>/<function>
     ```
 
-    where `<instance>` is replaced with `__static__` in case of static method calls, and `<class>` is replaced with `__global__` in case of global method calls.
-*   In case an argument of the remotely called method is of _function_ type (i.e. a callback), the corresponding data argument will be a string that reads:
+    with `__static__` in place of `<instance>` for a static call and `__global__` in place of `<class>` for a global one.
+*   An argument of *function* type travels as a string that names where its calls go back to. A one-shot callback:
 
-    ```xml
-    __f__<methodName>-<index>-<event|invokeId>
+    ```
+    __f__<agent>-<class>-<function>-<index>-<invokeId>
     ```
 
-    Depending on the callback type (continuous or re-registered) either the event name or an invoke id is used as last identifier.
+    An event handler instead names the topic its events arrive on, one level below the client's own:
 
-#### Destruction Time
+    ```
+    __e__<domain>/<mqttClientId>/<secret>/s<n>
+    ```
 
-Either by explicitly calling the `end()` function or by MQTT last will VRPC **publishes** the (non-retained) client info message:
+### At the end
 
-```xml
-<domain>/<host>/<random>/__clientInfo__
+By `end()` or by MQTT last will, the client **publishes** its client info, not retained:
 
-JSON PAYLOAD {
-  status: 'offline'
-}
+```
+<domain>/<mqttClientId>/<secret>/__clientInfo__
+
+{ "status": "offline", "clientId": "<domain>/<hostname>/<identity>", "v": 4 }
 ```
 
-### Adapter Details
+## The adapter
 
-With respect to the remote procedure calls the Adapter is a passive component. Besides registering the to-be-remotified functions, the user does not directly interact with this component. It however intercepts the regular RPC traffic in two distinct ways.
+For the calls themselves the adapter is passive: besides registering the functions to be made remote, nothing talks to it directly. It does step into the traffic twice.
 
-#### Resolving all VRPC internal functions
+### The internal functions
 
-Those are the function to manage the lifetime of the remotely created objects:
+The functions that manage the life of remote objects and of subscriptions. All of them carry double underscores as prefix and postfix:
 
-* `__createShared__`
-* `__createIsolated__`
-* `__callAll__`
-* `__delete__`
+| Function | What it does |
+| --- | --- |
+| `__createShared__` | creates an instance every client may reach |
+| `__createIsolated__` | creates an instance only its creator knows |
+| `__callAll__` | calls one function on every instance of a class |
+| `__callMatching__` | calls one function on the instances a selection names |
+| `__delete__` | deletes an instance |
+| `__unsubscribe__` | withdraws an event subscription by its id |
+| `__registrations__` | lists the registrations an agent holds |
+| `__end__` | ends a registration, with every subscription on it |
 
-all of them use double underscores both as prefix and as postfix.
+### Promises
 
-#### Intercepting promises
+The adapter intercepts every remote function that returns a *promise*. The return value becomes a string:
 
-The adapter will intercept all remotified functions that return a _promise_. The original _promise_ return value is changed to a string that reads:
-
-```xml
-__p__<method>-<invokeId>
+```
+__p__<function>-<nonce>-<correlationId>
 ```
 
-At the time of promise resolution the adapter will send another RPC response containing the actual return value and the above mentioned string as `<id>`.
+When the promise settles, the adapter sends a second response carrying the real value, with that string as its `i`.

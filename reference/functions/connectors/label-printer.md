@@ -96,7 +96,11 @@ part_number: HT-5000
 
 #### Output
 
-Returns the generated label string with all placeholders replaced. Throws an error if a template variable has no matching key in `variables`.
+Returns the generated label string with all placeholders replaced. Throws an error if a template variable has no matching key in `variables`, naming the variable it misses.
+
+{% hint style="info" %}
+A placeholder name may hold letters, digits and underscores. `{{part_number}}` and `{{part2}}` are filled; `{{part-number}}` and `{{part number}}` stay in the label as they are.
+{% endhint %}
 
 ### `showBatch`
 
@@ -124,7 +128,7 @@ Returns an integer representing the number of labels in the batch.
 
 ### `removeDuplicates`
 
-Removes duplicated labels from the current batch.
+Removes duplicated labels from the current batch, keeping the first of each. Two labels count as duplicates when their filled text is identical.
 
 #### Parameters
 
@@ -167,4 +171,8 @@ Sends the current batch of labels to a network-connected printer over a raw TCP 
 
 #### Output
 
-Returns `true` when the batch transmits successfully. Throws an error if the batch is empty, the connection fails, or the printer does not respond within 5 seconds.
+Returns `true` once the batch is written to the printer. Throws an error if the batch is empty, if the connection fails, or if the connection stays idle for 5 seconds.
+
+{% hint style="warning" %}
+Printing does not clear the batch. Trigger `clearBatch` after a successful print, or the next print sends these labels again.
+{% endhint %}

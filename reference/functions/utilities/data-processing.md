@@ -1,6 +1,8 @@
 # Data processing
 
-The data processing utility class provides a collection of functions for common data manipulation, transformation, and logical operations. Use these functions to work with arrays and objects, handle JSON payloads, map numerical value ranges, and delay data flows. All functions in this class are static, meaning you do not need to create an instance before using them. The code class name is `Tools`.
+The data processing utility class provides a collection of functions for common data manipulation, transformation, and logical operations. Use these functions to work with arrays and objects, handle JSON payloads, map numerical value ranges, and delay data flows. All functions in this class are static: you do not need to create an instance before using them. You find them under **Utilities** > **Data Processing** in the Functions explorer; **New Echo Executor** on the Flowboard toolbar places an `echo` directly. The code class name is `Tools`.
+
+Several functions take any number of arguments (`combine`, `mergeObjects`, `arrayPush`, `mergeArrays` and others). Each argument is an input of its own: add an input to the executor for every further one.
 
 ### `echo`
 
@@ -80,15 +82,17 @@ Pushes one or more items to the end of an array. If an item is itself an array, 
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>array</code></td><td>The destination input array.</td><td>array</td></tr><tr><td><code>items</code></td><td>Any number of items to push to the end of the array.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>array</code></td><td>The destination input array.</td><td>array</td></tr><tr><td><code>items</code></td><td>Any number of items to push to the end of the array, one input each.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
 # array
 [1, 2]
-# items
-[ 3, 4, [5, 6] ]
+# items (first input)
+3
+# items (second input)
+[4, 5]
 ```
 
 #### Output
@@ -96,7 +100,7 @@ Pushes one or more items to the end of an array. If an item is itself an array, 
 Returns the updated array:
 
 ```json
-[1, 2, 3, 4, 5, 6]
+[1, 2, 3, 4, 5]
 ```
 
 ### `mapRange`
@@ -143,7 +147,7 @@ Applies a logical AND operation. This function checks if the exact number of spe
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nParams</code></td><td>The exact number of arguments that must be provided and evaluate to truthy.</td><td>integer</td></tr><tr><td><code>args</code></td><td>The arguments to evaluate.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>nParams</code></td><td>The exact number of arguments that must be provided and evaluate to truthy.</td><td>integer</td></tr><tr><td><code>args</code></td><td>The arguments to evaluate, one input each.</td><td>any</td></tr></tbody></table>
 
 #### Examples
 
@@ -152,8 +156,12 @@ Applies a logical AND operation. This function checks if the exact number of spe
 ```yaml
 # nParams
 3
-# args
-[true, "hello", 1]
+# args (first input)
+true
+# args (second input)
+"hello"
+# args (third input)
+1
 ```
 
 Output: `true` (3 arguments were provided and all evaluate to truthy)
@@ -163,15 +171,17 @@ Output: `true` (3 arguments were provided and all evaluate to truthy)
 ```yaml
 # nParams
 3
-# args
-[true, ""]
+# args (first input)
+true
+# args (second input)
+"hello"
 ```
 
-Output: `false` (only 2 truthy arguments were provided instead of 3)
+Output: `false` (only 2 arguments were provided instead of 3)
 
 #### Output
 
-Returns `true` if all arguments match `nParams` and evaluate to truthy; otherwise, returns `false`.
+Returns `true` if the number of arguments equals `nParams` and all of them evaluate to truthy; otherwise, returns `false`.
 
 ### `isOneOrMoreParamTrue`
 
@@ -179,18 +189,22 @@ Applies a logical OR operation. This function checks if at least one of the prov
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Any number of input parameters to check.</td><td>any</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Any number of values to check, one input each.</td><td>any</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
-# args
-[false, 0, "hello", null]
+# args (first input)
+false
+# args (second input)
+0
+# args (third input)
+"hello"
 ```
 
 #### Output
 
-Returns `true` if at least one argument evaluates to truthy (because `"hello"` is truthy); otherwise, returns `false`.
+Returns `true` if at least one argument evaluates to truthy (here because `"hello"` is truthy); otherwise, returns `false`.
 
 ### `jsonStringify`
 
@@ -315,16 +329,15 @@ Merges multiple arrays by combining the objects located at corresponding indexes
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Multiple arrays of objects to merge together.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Two or more arrays of objects to merge, one input each.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
-# args
-[
-  [ { "a": 1 }, { "b": 2 } ],
-  [ { "c": 3 }, { "d": 4, "e": 5 } ]
-]
+# args (first input)
+[ { "a": 1 }, { "b": 2 } ]
+# args (second input)
+[ { "c": 3 }, { "d": 4, "e": 5 } ]
 ```
 
 #### Output
@@ -344,16 +357,15 @@ Combines multiple arrays similarly to `mergeArrays`, but appends an underscore `
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Multiple arrays to combine.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>args</code></td><td>Two or more arrays to combine, one input each.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
 ```yaml
-# args
-[
-  [ { "value": 10 }, { "value": 20 } ],
-  [ { "value": 30 }, { "value": 40 } ]
-]
+# args (first input)
+[ { "value": 10 }, { "value": 20 } ]
+# args (second input)
+[ { "value": 30 }, { "value": 40 } ]
 ```
 
 #### Output
@@ -369,24 +381,23 @@ Returns the indexed combination array:
 
 ### `groupArrays`
 
-Groups and merges objects compiled from multiple separate arrays based on a shared property key or an array of designated keys. This utility provides an efficient way to execute client-side joins across distinct data streams.
+Groups and merges objects from several arrays by a shared property key or a list of keys: objects with the same values for these keys become one object. Use it to join two lists, such as orders and their machines.
 
 #### Parameters
 
-<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>keys</code></td><td>The property key string or array of key strings to group target data items by.</td><td>string or array</td></tr><tr><td><code>args</code></td><td>Multiple arrays composed of data objects to group and merge.</td><td>array</td></tr></tbody></table>
+<table><thead><tr><th width="150">Input</th><th>Description</th><th width="100">Type</th></tr></thead><tbody><tr><td><code>keys</code></td><td>The property key string or array of key strings to group target data items by.</td><td>string or array</td></tr><tr><td><code>args</code></td><td>Two or more arrays of objects to group and merge, one input each.</td><td>array</td></tr></tbody></table>
 
 #### Example
 
-Grouping distinct collections using a shared `id` key:
+Joining two lists on their shared `id` key:
 
 ```yaml
 # keys
 id
-# args
-[
-  [ { "id": 1, "name": "Alice" }, { "id": 2, "name": "Bob" } ],
-  [ { "id": 1, "age": 25 }, { "id": 2, "age": 30 } ]
-]
+# args (first input)
+[ { "id": 1, "name": "Alice" }, { "id": 2, "name": "Bob" } ]
+# args (second input)
+[ { "id": 1, "age": 25 }, { "id": 2, "age": 30 } ]
 ```
 
 #### Output
@@ -468,9 +479,9 @@ Returns the generated base64-encoded string: `SGVsbG8gV29ybGQ=`
 
 ### `memory`
 
-Passes its input value directly to its output immediately upon any input update. This function has input and output slots but no visible trigger; it behaves as if its trigger were permanently set to on input update.
+Passes its input value to its output on every update of the input. Dragged from the Functions explorer, it becomes a memory executor: it has an input and an output but shows no trigger, and behaves as if its trigger were set to run on every input update.
 
-<figure><img src="../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Bildschirmaufnahme2025-12-17144813-ezgif.com-video-to-gif-converter.gif" alt="A memory executor passing a form's data from its input to its output"><figcaption></figcaption></figure>
 
 #### Parameters
 
@@ -482,7 +493,7 @@ Returns the unchanged input value.
 
 ### `trigger`
 
-A function without inputs. Use it to start flows manually or on a schedule via its trigger.
+A function without inputs. Use it to start flows by hand or at an interval through its trigger.
 
 #### Parameters
 
@@ -491,9 +502,3 @@ None.
 #### Output
 
 Returns the current Unix timestamp in milliseconds.
-
-{% hint style="info" %}
-#### Toolbar shortcuts
-
-The Flowboard toolbar includes shortcuts to create `memory`, `echo`, `combine`, and `trigger` nodes directly.
-{% endhint %}

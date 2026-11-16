@@ -1,64 +1,78 @@
 # Docker agent
 
-The Docker agent provides the same functionality as the [native agent](native-agent.md) but runs in an isolated Docker container. It is the right choice for edge gateways or servers where you already manage your infrastructure with Docker.
+The Docker agent carries the same connectors as the [native agent](native-agent.md), but runs as a container. It is the right choice for an edge gateway or a server whose software you already manage with Docker.
 
-## Key differences
+## How it differs from a native agent
 
-* **Containerized execution**: Runs in an isolated Docker container instead of directly on the host operating system.
-* **Environment configuration**: Unlike the native agent, the Docker agent does not include built-in credentials. Provide them as environment variables at startup.
-* **Hardware and network access**: To reach local networks, USB devices, or persist data, use standard Docker features like host networking or volume mounting.
-* **Platform independent**: Runs on any platform that supports Docker.
+* **A container, not a service**: Docker starts and restarts it, not systemd or the Windows service manager.
+* **Credentials from outside**: the native agent carries its own credentials; the Docker agent gets them as environment variables at start.
+* **Not built by the platform**: the image comes from Docker Hub, so the App Manager neither builds it nor updates it. In the [Agents panel](README.md) it shows under **Unmanaged agents**, with its status and when it was last seen. A newer version is a newer image tag, pulled and started by you.
+* **Hardware and network access through Docker**: host networking for a local network, a device mapping for a USB device, a volume for data that must survive.
 
 ## Where to get it
 
-The Docker agent is available as a publicly downloadable image:
-
 ```
-heisenware/docker-agent:<version>
+heisenware/docker-agent:v93
+heisenware/docker-agent:v93-slim
 ```
 
-Find all available versions on [Docker Hub](https://hub.docker.com/r/heisenware/docker-agent).
+Both are built for `linux/amd64`, `linux/arm64` and `linux/arm/v7`. The tag is the platform version; use the one your platform runs.
 
-## How to use it
+* **`v93`** carries every connector a container can hold: HTTP, trust store, ctrlX Data Layer, file, OS, InfluxDB, S7, OPC UA client and server, relational database, GraphQL, MQTT client, Zebra, serial, busylight, Heidenhain, MIP, Modbus, label, Allen-Bradley and the GPIO classes.
+* **`v93-slim`** is the small image for a gateway with little room: HTTP, trust store, file, OS, S7, OPC UA client and server, MQTT client and Modbus. It also caps its heap at 128 MB.
 
-Configure the following environment variables when running the container:
+Every version is listed on [Docker Hub](https://hub.docker.com/r/heisenware/docker-agent).
+
+## Credentials
+
+The agent logs in with the credentials of a **VRPC client** [integration](../integrations.md#integration-types) of the workspace. Create one in the App Manager, copy its username and password, and hand them to the container.
+
+## Starting the container
 
 ```bash
 docker run -it \
 -e HW_DOMAIN=<account>.<workspace> \
--e HW_BROKER=mqtts://<account>.heisenware.cloud \
--e HW_USERNAME=<username> \
+-e HW_BROKER=mqtts://<account>.heisenware.cloud:8883 \
+-e HW_USERNAME=<name>@<account>.<workspace> \
 -e HW_PASSWORD=<password> \
 -e HW_AGENT_ID=<unique-id> \
-heisenware/docker-agent:v91-slim
+heisenware/docker-agent:v93-slim
 ```
 
-### Retrieving credentials
+`HW_AGENT_ID` names this container. The agent appears on the bus, in the Agents panel and in the [Functions explorer](../../app-builder/explorers/functions.md) as `Docker Agent - <HW_AGENT_ID>`, so give every container an id of its own. Without one the agent picks a random id at every start and shows up as a new agent each time.
 
-To get `HW_USERNAME` and `HW_PASSWORD`, first add a [VRPC integration](../integrations.md#vrpc-client) in the App Manager.
+<details>
 
-### Example
+<summary>Example</summary>
 
-For an account named `my-company`, an integration named `agentRunner` in its `default` workspace (username `agentRunner@my-company.default`), and the password `secret`:
+For the account `my-company`, an integration named `agentRunner` in its `default` workspace and the password `secret`:
 
 ```bash
 docker run -it \
 -e HW_DOMAIN=my-company.default \
--e HW_BROKER=mqtts://my-company.heisenware.cloud \
+-e HW_BROKER=mqtts://my-company.heisenware.cloud:8883 \
 -e HW_USERNAME=agentRunner@my-company.default \
 -e HW_PASSWORD=secret \
 -e HW_AGENT_ID=my-agent-1 \
-heisenware/docker-agent:v91-slim
+heisenware/docker-agent:v93-slim
 ```
 
-Once the connection is established, the terminal shows a confirmation screen indicating the agent is online and connected to the workspace.
+</details>
 
-<figure><img src="../../.gitbook/assets/image (489).png" alt=""><figcaption></figcaption></figure>
+Once the connection stands, the container prints which classes it registered and that its persistence layer is up.
+
+<figure><img src="../../.gitbook/assets/image (489).png" alt="The Docker agent's log after a successful start"><figcaption></figcaption></figure>
 
 ## Persisting data
 
-To keep your data and configurations (such as created instances) across container restarts or updates, mount the `/shared` volume to a persistent location on your host machine:
+Instances the agent holds, such as a database connection or a counter, are kept under `/shared`. Mount it so they survive a restart or a new image:
 
 ```bash
 -v /path/on/host:/shared
 ```
+
+{% hint style="info" %}
+#### Outbound 8883, nothing inbound
+
+Like every agent, the container needs outbound TCP 8883 to the platform host and no inbound rule at all. If it starts but never appears in the Agents panel, a firewall on that port is the usual reason.
+{% endhint %}
