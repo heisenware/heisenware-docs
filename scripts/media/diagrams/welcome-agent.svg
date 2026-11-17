@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="312" viewBox="0 0 880 312" font-family="Inter, Helvetica, Arial, sans-serif">
+  <style>
+    .net   { fill: #eef2fa; stroke: #5a7fb0; stroke-width: 1.5; }
+    .plat  { fill: #e8f3ee; stroke: #2e7d63; stroke-width: 1.5; }
+    .card  { fill: #ffffff; stroke: #c7d2dd; stroke-width: 1.4; }
+    .hp { font-size: 15px; font-weight: 700; fill: #2e7d63; }
+    .hn { font-size: 15px; font-weight: 700; fill: #41628d; }
+    .t  { font-size: 14px; font-weight: 700; fill: #22303c; }
+    .s  { font-size: 13px; fill: #6a7a89; }
+    .g  { font-size: 13px; font-weight: 700; fill: #2e7d63; }
+    .fw { font-size: 12px; font-weight: 700; fill: #c0544c; }
+    .wire   { stroke: #8da0b3; stroke-width: 1.6; fill: none; }
+    .garrow { stroke: #2e7d63; stroke-width: 2.2; fill: none; }
+  </style>
+  <defs>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+      <path d="M0,0 L7,3.2 L0,6.4 z" fill="#2e7d63"/>
+    </marker>
+  </defs>
+
+  <!-- the network the machines live in -->
+  <rect x="12" y="34" width="406" height="252" rx="12" class="net"/>
+  <text x="30" y="62" class="hn">Your plant network</text>
+
+  <rect x="30" y="80" width="152" height="48" rx="8" class="card"/>
+  <text x="46" y="101" class="t">Filler PLC</text>
+  <text x="46" y="119" class="s">S7</text>
+
+  <rect x="30" y="140" width="152" height="48" rx="8" class="card"/>
+  <text x="46" y="161" class="t">Capper PLC</text>
+  <text x="46" y="179" class="s">OPC UA</text>
+
+  <rect x="30" y="200" width="152" height="48" rx="8" class="card"/>
+  <text x="46" y="221" class="t">Database</text>
+  <text x="46" y="239" class="s">SQL</text>
+
+  <!-- each machine on the same short run to the agent -->
+  <path class="wire" d="M182 104 H206 V164 H230"/>
+  <path class="wire" d="M182 164 H230"/>
+  <path class="wire" d="M182 224 H206 V164"/>
+
+  <rect x="230" y="122" width="172" height="84" rx="10" class="plat"/>
+  <text x="316" y="150" class="hp" text-anchor="middle">agent</text>
+  <text x="316" y="172" class="s" text-anchor="middle">runs the connectors</text>
+  <text x="316" y="190" class="s" text-anchor="middle">next to the machines</text>
+
+  <!-- the firewall it never asks anyone to open -->
+  <line x1="446" y1="26" x2="446" y2="294" stroke="#e8b7b3" stroke-width="7"/>
+  <line x1="446" y1="26" x2="446" y2="294" stroke="#c0544c" stroke-width="1.6" stroke-dasharray="7 6"/>
+  <text x="446" y="308" class="fw" text-anchor="middle">firewall</text>
+
+  <!-- the one connection, and it is outbound -->
+  <path class="garrow" marker-end="url(#g)" d="M402 164 H666"/>
+  <text x="552" y="146" class="g" text-anchor="middle">connects out, encrypted</text>
+  <text x="552" y="192" class="s" text-anchor="middle">no VPN, no open port</text>
+
+  <rect x="680" y="112" width="186" height="104" rx="12" class="plat"/>
+  <text x="773" y="155" class="hp" text-anchor="middle">Heisenware</text>
+  <text x="773" y="179" class="s" text-anchor="middle">cloud or your servers</text>
+</svg>
