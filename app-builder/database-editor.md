@@ -2,7 +2,7 @@
 
 The Database editor lets you look into the workspace's databases: the rows of every table and the measurements of the time-series database. For the workspace's own database, `internal-postgres`, it also shows and shapes the **data model**: the tables, their fields and keys, their audit logs and the relations between them.
 
-It belongs to the workspace, not to an App. Open it from the App Builder's top bar inside any App, or from the App Manager's **Databases** entry, which opens it in a new browser tab, with no App, a slim bar naming the workspace and a way back to the Manager.
+It belongs to the workspace, not to an App. Open it from the App Builder's top bar inside any App, or from the App Manager's **Databases** screen, which lists the workspace's databases and opens the editor on the one you pick - in a new browser tab, with no App, a slim bar naming the workspace and a way back to the Manager.
 
 ## Choosing a database
 
@@ -16,7 +16,7 @@ Below the selectors stand the tables, or the measurements of a time-series datab
 
 ## Model and Rows
 
-For a database that keeps a data model, a switch heads the editor:
+For a database that keeps a data model, a switch heads the editor, which opens on **Model**:
 
 * **Model**: every table as a card, with its fields and their types, and a line for every relation between two tables.
 * **Rows**: the rows of the table selected on the left, to filter, sort, edit and export.
