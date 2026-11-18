@@ -76,7 +76,7 @@ Add the block from the package view to `claude_desktop_config.json`:
 }
 ```
 
-Then, in every chat: open the attachment menu (**+**), pick the `heisenware` server and its `platform-law` prompt as the first message, and ask.
+Then ask. Nothing has to be loaded per chat: the server hands Claude the [platform law](mcp-server.md#the-platform-law-comes-first) by itself.
 {% endtab %}
 
 {% tab title="Windows" %}
@@ -94,14 +94,13 @@ Any other client takes the same command: `npx -y --no-audit --prefer-offline -p 
 
 ## The platform law comes first
 
-The tools describe themselves, but building a good App follows rules no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. That is the [platform law](README.md#what-it-builds-by), and the server offers it four ways:
+The tools describe themselves, but building a good App follows rules no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials. That is the [platform law](README.md#what-it-builds-by). You do not have to load it: the server hands it to your AI client in the law's own sections, where they are needed.
 
-* as the **tool** `get_platform_law`, which the server's connection instructions tell every client to call before its first build action: the way a capable client reads it by itself,
-* as a **prompt** named `platform-law`: Claude Code turns it into the command `/mcp__heisenware__platform-law` (`/mcp__heisenware-<workspace>__platform-law` outside the default workspace), Claude Desktop lists it in the attachment menu,
-* as the **resource** `heisenware://law/platform-law`, for clients that read resources,
-* as plain text you paste into your first message, for clients that support neither.
+* **The tool `get_platform_law`** answers the law's front page: the mental model, the sections, and the tools that build on each. The server's connection instructions tell every client to call it before its first build action. With a section's number it answers that section, with a tool's name everything that tool builds on.
+* **A tool that builds asks for its sections itself.** Until your client has read the sections a tool builds on, the tool does not run. It names them, the client reads them with `get_platform_law` and calls the tool again. You see a first call that is refused and then repeated: that is the law arriving, not an error. A tool that lists, describes or reads values asks for nothing, and neither does one that only takes something away or stops.
+* **The whole text in one piece** is the prompt `platform-law` and the resource `heisenware://law/platform-law`. Claude Code turns the prompt into the command `/mcp__heisenware__platform-law` (`/mcp__heisenware-<workspace>__platform-law` outside the default workspace), Claude Desktop lists it in the attachment menu. A client that took one of them is asked for no section.
 
-Make it the first thing of every session. A client that skips it makes mistakes the law prevents.
+What a client has read counts for its connection: for a local MCP server as long as it runs, for the workspace's MCP address until the connection has rested for ten minutes. After that a tool asks for its sections again.
 
 Two more kinds of knowledge come as resources: a widget's binding contract as `heisenware://widgets/<type>/manifest`, and a connector's domain guide as `heisenware://connectors/<class>/guide`. The tools `get_widget_manifest` and `get_connector_guide` answer the same text for clients that read no resources.
 

@@ -35,7 +35,7 @@ What is there to build with, and what the machines are doing.
 
 | Tool | What it does | Marks |
 | --- | --- | --- |
-| `get_platform_law` | The platform law: the rulebook for building Heisenware apps - wiring and triggers, variables vs wires, verification, files. Read it once per session, before the first build action: it carries the rules the tool descriptions only hint at. | `ask` |
+| `get_platform_law` | The platform law: the rulebook for building Heisenware apps, in sections. | `ask` |
 | `get_deployment_info` | Where the platform runs (SaaS cloud / on-prem) and every agent on the bus - the platform's own services included - with status and class names. The native agents as a fleet: list_agents. |  |
 | `list_capabilities` | Every online agent with its classes, function names and live instances. The catalog of backend functionality available for executors; the platform's control classes (Agent, Agents, Rollouts, Compiler) are left out, list_agents reads them. |  |
 | `describe_class` | Full signatures of one class: functions with parameter names, types and descriptions (from JSDoc); a function-typed parameter carries `payload` - the values the backend hands that function… |  |
@@ -73,7 +73,7 @@ An App as a whole: what it is, what it was, and what its users run.
 | `list_checkpoints` | Lists an app's saved versions (checkpoints + releases) - the targets rollback can return to. |  |
 | `rollback` | Restores the app to a checkpoint created earlier (name + timestamp from checkpoint). | `write` |
 | `export_app` | Packs the app's current build into a portable bundle (.hwt) and writes it to the local workspace - the builder's Export: the records, the uploads/ and project/ files they reference, the shape of the tables its executors name (dataModel.tables… | `write` `files` |
-| `import_app` | Adds a bundle (.hwt from export_app or a builder export) to an app as a version - the builder's Import: the App changes only when rollback(appId, name, timestamp) applies it. | `write` `files` |
+| `import_app` | Adds a bundle (.hwt from export_app or a builder export) to an app as a version - the builder's Import: the App changes only when rollback(appId, name… | `write` `files` |
 | `list_app_texts` | Every text people read in an app, as ONE table to translate: the app's name and description, page labels and titles, and the widget props the manifests declare as text (button labels and hover texts, column captions, form labels and help texts… |  |
 | `translate_app` | Makes an app in another language, or refreshes one (#1667): exports the reference app's current build as a bundle, writes your translations into it by id (from list_app_texts; an unknown id refuses the whole call… | `write` |
 | `deploy_app` | Deploys the app - the builder's Deploy button: tags the current state as a new version and asks the platform to bring the production backend up for it (within about a minute). Returns the version and appUrl, the deployed app. | `write` `go` |
@@ -235,7 +235,7 @@ The two tools whose result is not a change but a message.
 | Tool | What it does | Marks |
 | --- | --- | --- |
 | `show_user` | Points the user's builder UI at something: pulses an executor, widget or page and optionally attaches a note. Pointing only - the member's canvas already follows every page and screen you write to or render. |  |
-| `report_platform_issue` | Reports a suspected platform defect to the member. |  |
+| `report_platform_issue` | Reports a suspected platform defect. |  |
 
 ## The Ask surface
 

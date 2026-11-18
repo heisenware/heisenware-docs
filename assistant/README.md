@@ -23,7 +23,7 @@ A conversation belongs to you and to the App you are in; other members do not re
 
 ## What it builds by
 
-Every tool tells the assistant what it does, but building a good App follows rules no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials, what belongs in one App and what in a suite. Those rules are the **platform law**, one text that ships with the platform and is versioned with it. The assistant reads it before its first build action, and these pages agree with it: where a concept page and the law would disagree, the law decides. Your own AI client gets the same text, see [the platform law](mcp-server.md#the-platform-law-comes-first).
+Every tool tells the assistant what it does, but building a good App follows rules no single tool can carry: how triggers, wires and variables relate, when to verify, how to treat files and credentials, what belongs in one App and what in a suite. Those rules are the **platform law**, one text that ships with the platform and is versioned with it. The assistant reads it before its first build action, and these pages agree with it: where a concept page and the law would disagree, the law decides. Your own AI client gets the same text, section by section, see [the platform law](mcp-server.md#the-platform-law-comes-first).
 
 ## How it works
 
@@ -64,7 +64,7 @@ The platform offers the same tools to the AI you already pay for: Claude, ChatGP
 * **The workspace's MCP address**, with nothing to install: see [AI clients](../app-manager/ai-clients.md).
 * **A local MCP server** on your own computer, for a client that should work with your local files: see [MCP server](mcp-server.md).
 
-What those clients get is listed on [MCP tools](mcp-tools.md), and it is what the built-in assistant works with. They too are told to read the platform law first, and they too need your explicit go for what a rollback cannot undo, as a `confirm: true` on exactly that call.
+What those clients get is listed on [MCP tools](mcp-tools.md), and it is what the built-in assistant works with. They too build by the platform law: a tool that builds runs once the client has read the sections it builds on. And they too need your explicit go for what a rollback cannot undo, as a `confirm: true` on exactly that call.
 
 ## Ask, for an App's users
 

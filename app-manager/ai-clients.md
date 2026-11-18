@@ -92,7 +92,7 @@ A file none of these reaches, such as an attachment in a chat in your browser, y
 
 ## The platform law
 
-Building a good App follows rules no single tool can carry. A connected AI client gets them as the **platform law** through the tool `get_platform_law`, and the server tells every client to read it before its first build action. A client that skips it makes mistakes the law prevents: if yours does, ask it to read the platform law first.
+Building a good App follows rules no single tool can carry. A connected AI client gets them as the **platform law**, in sections: the tool `get_platform_law` answers its front page and each section, and the server tells every client to read the front page before its first build action. A tool that builds does not run before the client has read the sections it builds on. It names them, the client reads them and calls the tool again, so the first call of such a tool is refused once: that is the law arriving, not an error. More on [the platform law](../assistant/mcp-server.md#the-platform-law-comes-first).
 
 ## Reach from outside (on-premise)
 

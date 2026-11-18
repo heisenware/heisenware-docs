@@ -39,7 +39,7 @@ The server's name is its workspace's: `heisenware` for the `default` workspace, 
 ## Use
 
 * **Start a new session after registering.** Claude Code connects its servers when a session starts; a session that was already open never learns about a new server. A local MCP server needs a few seconds on its first start, while `npx` unpacks the package.
-* **Load the law first, every session:** `/mcp__heisenware__platform-law`, which the `/` menu lists as `/heisenware:platform-law (MCP)`. It is the rulebook Claude builds by. A connection by the address has it as the tool `get_platform_law` as well.
+* **The law arrives by itself.** The platform law is the rulebook Claude builds by, and the server hands it over in sections: a tool that builds is refused once, Claude reads the sections it names with `get_platform_law` and calls the tool again. For the whole law in one piece, type `/mcp__heisenware__platform-law`, which the `/` menu lists as `/heisenware:platform-law (MCP)`.
 * **Tools** are named `mcp__heisenware__<tool>`, for example `mcp__heisenware__create_app`; [MCP tools](mcp-tools.md) lists them. Claude Code asks before the first use of each, and _always allow_ remembers it for the project.
 
 ## Approve tools without the prompts
