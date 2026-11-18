@@ -21,9 +21,10 @@ One card with the plan and everything that follows from it:
 * **Your plan**: its name, when it started and how long it is valid. **Upgrade plan** opens the plans side by side and takes you through Stripe's checkout.
 * **Number of apps**: how many Apps of your plan are in use, over the whole account. **Add 1 app** buys one more slot; the dialog shows what it costs now, prorated to the rest of the billing period. Where you bought slots beyond the plan's own and one is free, the same row offers to give one back.
 * **Number of workspaces**: the same for [workspaces](workspaces.md), while a subscription is running.
-* **Active subscription**: the facts at a glance: status, billing interval, included Apps, Apps in use, start and end date, whether it renews, the next invoice amount, and the cancellation date if there is one.
+* **Credits a month**: how much of this month's [credits](#ai-usage-and-credits) the assistant and Ask have used, and the day they renew. **Change credits** books another amount a month, from 10 to 500; the dialog shows what it costs. More is charged at once for the rest of the billing period, and the extra credits arrive with the payment. Fewer costs nothing now and applies from the next month.
+* **Active subscription**: the facts at a glance: status, billing interval, start and end date, whether it renews, the next invoice amount, and the cancellation date if there is one.
 * **Billing**: when the plan renews, and **Stripe customer portal** for invoices, receipts and the card on file.
-* **Payment method**: card or manual invoice. On a manual invoice you cannot change the plan or buy Apps yourself; write to us instead.
+* **Payment method**: card or manual invoice. On a manual invoice you cannot change the plan, its Apps or its credits yourself; write to us instead.
 
 **Cancel your subscription** sits at the foot of the page. A cancelled plan runs to the end of the period it was paid for, then stops; until it ends, **Reactivate** takes the cancellation back.
 
@@ -55,13 +56,7 @@ The same dialog deletes a workspace, which cannot be undone. [Workspaces](worksp
 
 The assistant runs on **credits**: one credit is one euro, and the account pays for every run, whether it was made in the [planning seat](planning.md) or in the Console of the App Builder. Your own AI connected through the [MCP server](ai-clients.md) spends none, because it runs on your own subscription.
 
-**Credits** shows what is left:
-
-* **Balance**: what the assistant can still spend, with what a running assistant is holding back at this moment.
-* **Included**: the credits that came with the plan. They are spent first and end with the billing period.
-* **Packs**: the credits you bought. They last twelve months from the purchase.
-
-The table under them lists the lots the balance is made of, in the order they are spent, with the date each one ends. Choose a **Pack** and **Buy credits** to add more. When nothing is left, the assistant says so and stops.
+In the cloud, Pro brings ten credits a month, on a yearly plan too. They arrive with each calendar month and end with it; unused ones do not carry over. More are booked under **Credits a month** in the **Subscription** card. When nothing is left, the assistant says so and stops.
 
 **AI usage** shows what was spent:
 
