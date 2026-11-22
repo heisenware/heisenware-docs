@@ -211,7 +211,7 @@ Double-click the widget in the Page editor to open its settings, grouped in thes
     * **Show separator**: Groups thousands with a separator (1,234,567). Only when Editor type is Number box.
     * **Precision**: Decimal places allowed in the number; empty shows whole numbers when a prefix, suffix or separator is set, else the number as typed. Only when Editor type is Number box.
     * **Text**: Text shown beside the box; empty shows none. Only when Editor type is Check box.
-    * **Three states**: Adds a third, undetermined state (null) between unchecked and checked. Only when Editor type is Check box.
+    * **Three states**: Adds a third, undetermined state (null) between unchecked and checked; off, a null value shows unchecked and is written as false. Only when Editor type is Check box.
     * **Show reveal button**: Adds a button that shows or hides the typed password. Only when Editor type is Password.
     * **Show check boxes**: Shows a check box per option and a Select All entry. Only when Editor type is Tag box.
     * **Select All takes**: Whether Select All takes the options on the current page or all options. Choices: Current page, All options. Only when Editor type is Tag box.

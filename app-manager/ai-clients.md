@@ -22,23 +22,30 @@ https://<your platform host>/<account>.<workspace>/mcp
 
 For example `https://acme.heisenware.cloud/acme.default/mcp`. Every AI client takes this one address; it finds the sign-in by itself.
 
+Opened in a browser, the address answers `405 Method not allowed`. That is expected: the server is stateless, takes every call as a POST request and has nothing to push, so it offers nothing to a browser's GET.
+
 ## Connect your AI client
 
-The card below lists the clients by their logo. Pick yours and it gives the numbered steps in that client's own words, with the address, or the line to paste, right in the step that takes it. In short:
+The card below lists the vendors by their logo: Anthropic, OpenAI, Microsoft, Google, Mistral Le Chat, and Other for any client. A vendor with several products shows each as a tab with the product's own mark. Pick the vendor, then your product, and the card gives the numbered steps in that product's own words, with the address, or the line to paste, right in the step that takes it. In short:
 
-| AI client | Where the address goes |
-| --- | --- |
-| **Claude** (claude.ai, Claude Desktop) | Settings, Connectors, **Add custom connector**, paste the address, **Connect**. |
-| **Claude Code** | `claude mcp add --transport http heisenware <MCP address>` in a terminal, then `/mcp` and **Authenticate**. |
-| **ChatGPT** (on the web) | Plugins, **+**, **Add custom MCP server**; the address as the server URL, authentication **OAuth**. In a ChatGPT workspace an admin or owner may have to add it. |
-| **Microsoft Copilot Studio** | In your agent: Tools, Add a tool, New tool, **Model Context Protocol**; authentication **OAuth 2.0** with **Dynamic discovery**. Nothing to set up in Heisenware. To use the agent in Microsoft 365 Copilot, publish it from Copilot Studio (Channels, Teams and Microsoft 365 Copilot). |
-| **Microsoft 365 Copilot** | Set up once for your whole organization, see [below](#microsoft-365-copilot). |
-| **GitHub Copilot in VS Code** | `.vscode/mcp.json` in your project, or your user settings: `{ "servers": { "heisenware": { "type": "http", "url": "<MCP address>" } } }` |
-| **Gemini CLI** | `~/.gemini/settings.json`: `{ "mcpServers": { "heisenware": { "httpUrl": "<MCP address>" } } }` |
-| **Mistral Le Chat** | An administrator of your Le Chat organization opens Connectors and adds a custom connector (an MCP server): the address, authentication **OAuth 2.1**. Everyone then signs in with their own account. |
-| **Other** | Any MCP client that connects by an address (streamable HTTP): paste the address and sign in when asked. |
+| Vendor | Product | Where the address goes |
+| --- | --- | --- |
+| **Anthropic** | **claude.ai** | In the sidebar **Customize**, then **Connectors**. **+ Add**, then **Add custom connector**, give it a name and paste the address. **Add**, then **Connect**. |
+| | **Claude Desktop** | The same steps as claude.ai. Its connector calls from Anthropic's cloud, as on claude.ai, not from your computer. |
+| | **Claude Code** | `claude mcp add --transport http heisenware <MCP address>` in a terminal. Then start Claude Code (restart it if it was open), type `/mcp` and choose **Authenticate**. On an on-premise installation it first needs the certificate, see [below](#claude-code-on-premise). |
+| **OpenAI** | **ChatGPT** (on the web) | Plugins, **+**, **Add custom MCP server**; the address as the server URL, authentication **OAuth**. Create it as a plugin and install it. In a ChatGPT workspace an admin or owner may have to add it. |
+| | **Codex** | Two lines in a terminal: `codex mcp add heisenware --url <MCP address>`, then `codex mcp login heisenware`. Sign in when your browser opens; `/mcp` in Codex then shows the server. The Codex IDE extension and the desktop app use the same servers, so it is there in all of them. |
+| **Microsoft** | **Copilot Studio** | In your agent: Tools, Add a tool, New tool, **Model Context Protocol**; authentication **OAuth 2.0** with **Dynamic discovery**. Nothing to set up in Heisenware. To use the agent in Microsoft 365 Copilot, publish it from Copilot Studio (Channels, Teams and Microsoft 365 Copilot). |
+| | **Microsoft 365 Copilot** | Set up once for your whole organization, see [below](#microsoft-365-copilot). |
+| | **GitHub Copilot** (in VS Code) | `.vscode/mcp.json` in your project, or your user settings: `{ "servers": { "heisenware": { "type": "http", "url": "<MCP address>" } } }`. Start the server and sign in. |
+| **Google** | **Gemini** (on the web) | **Settings**, then **Connected Apps**. Under Custom apps, **Add a custom app**, paste the address, **Next**. Google offers custom apps to adults in the US with Keep Activity on; once added, the app is in Gemini on the phone too. |
+| | **Antigravity** (the IDE or the CLI) | `~/.gemini/config/mcp_config.json`: `{ "mcpServers": { "heisenware": { "serverUrl": "<MCP address>" } } }`. In Antigravity, **Customizations**, then **MCP Servers**, and sign in: choose **Build apps** or **Only look**, then **Allow**, and paste the authentication code your browser shows back into Antigravity. |
+| **Mistral Le Chat** | | An administrator of your Le Chat organization opens Connectors and adds a custom connector (an MCP server): the address, authentication **OAuth 2.1**. Everyone then signs in with their own account. |
+| **Other** | | Any MCP client that connects by an address (streamable HTTP): paste the address and sign in when asked. |
 
 A client that cannot sign in at all, a script or an automation tool, cannot connect yet.
+
+On an on-premise installation that is not published, the card leaves out the products their vendor's cloud calls, and Claude Desktop connects through a local MCP server instead: see [Reach from outside](#reach-from-outside-on-premise).
 
 {% hint style="info" %}
 #### The server is named after its workspace
@@ -51,6 +58,16 @@ Every line the page hands you registers the server under the name of the workspa
 
 The AI vendors offer custom MCP servers on some plans only, and they change this often. As of November 2026: Claude's free plan allows one custom connector; ChatGPT's free plans offer no custom MCP server, its Business, Enterprise and Edu plans do. Check your vendor's current terms.
 {% endhint %}
+
+### Claude Code on-premise
+
+An on-premise installation serves the self-signed TLS certificate its installer made, and Claude Code refuses it: the server shows as failed. The Claude Code steps on such an installation say so before step 2. Start Claude Code with the certificate trusted:
+
+```bash
+NODE_EXTRA_CA_CERTS=/opt/heisenware/certs/heisenware-fullchain.pem claude
+```
+
+To keep it, add `export NODE_EXTRA_CA_CERTS=/opt/heisenware/certs/heisenware-fullchain.pem` to your shell profile. The file is `certs/heisenware-fullchain.pem` in the installation's folder: `/opt/heisenware` on Linux and WSL, `/Users/Shared/heisenware` on a Mac, where the path changes accordingly. On another computer, use a copy of it. With a certificate of your own from a publicly trusted authority ([Certificates](../self-hosting/install.md#certificates)), Claude Code needs none of this.
 
 ## Sign in and allow
 
@@ -96,16 +113,24 @@ Building a good App follows rules no single tool can carry. A connected AI clien
 
 ## Reach from outside (on-premise)
 
-AI clients run in their vendor's cloud. A Heisenware cloud account and a server installation answer on public hosts, so nothing more is needed. An **on-premise installation** inside your company network is out of their reach until you publish it:
+Many AI clients are called from their vendor's cloud. A Heisenware cloud account and a server installation answer on public hosts, so nothing more is needed. An **on-premise installation** inside your company network is out of their reach until you publish it:
 
 1. Publish the platform through a door to the internet: Microsoft Entra Application Proxy, or your own reverse proxy. Publishing the path `/<account>.<workspace>/mcp` is enough; you may let through only your AI provider's servers.
 2. Enter the public address the door gives you under **Reach from outside**, at the bottom of the AI clients page (owners of the account).
 
 The page then shows the published MCP address beside the inside one, and hands the published one to every client that calls from a cloud. Signing in stays inside your network: the browser that opens the consent page is yours.
 
+Until the installation is published, the **Connect your AI client** card offers only what reaches it from where it runs: Claude Desktop and Claude Code, Codex, GitHub Copilot, Antigravity and Other. claude.ai, ChatGPT, Copilot Studio, Microsoft 365 Copilot, Gemini and Le Chat are called from their vendor's cloud, which cannot reach the installation, so they are not offered; the card says they show once the installation is published. A vendor left with fewer products names the ones left.
+
+Claude Desktop is offered with a local MCP server on your computer in place of its connector, since its connector too would call from Anthropic's cloud:
+
+1. Create your local MCP server under **Integrations**, **Add Integration**, **Local MCP server**. **Create it** in the step leads there and starts a new one.
+2. Copy its Claude Desktop lines from there into Claude Desktop: **Settings**, **Developer**, **Edit Config**. Claude Desktop starts the server with npx, so your computer needs Node.js.
+3. Quit and reopen Claude Desktop.
+
 ## Microsoft 365 Copilot
 
-Microsoft 365 Copilot is the one AI client that does not connect by the address alone: it does not register itself, so an admin of your Microsoft 365 registers its sign-in once, by hand, for your whole organization. Any member who builds in the workspace sets it up in [Integrations](integrations.md#set-up-microsoft-365-copilot), together with that admin. Picking **Microsoft 365 Copilot** on the AI clients page shows where it stands:
+Microsoft 365 Copilot is the one AI client that does not connect by the address alone: it does not register itself, so an admin of your Microsoft 365 registers its sign-in once, by hand, for your whole organization. Any member who builds in the workspace sets it up in [Integrations](integrations.md#set-up-microsoft-365-copilot), together with that admin. On an on-premise installation it is offered once the installation is published ([Reach from outside](#reach-from-outside-on-premise)). Picking **Microsoft 365 Copilot** under **Microsoft** on the AI clients page shows where it stands:
 
 * **Not set up yet**: the reason, the four steps, and **Set it up**.
 * **Setup not finished**: the registration ID from Microsoft is still missing; **Continue the setup** opens it.

@@ -16,7 +16,7 @@ What the assistant is, what it may do and what it never does is in [The assistan
 Type what you need and press Enter. Shift and Enter make a new line.
 
 {% hint style="info" %}
-The conversation belongs to you and to this App. Another member of the workspace has their own. The bin icon in the Console header starts a fresh one; what you have built stays, only the conversation goes.
+The conversation belongs to you and to this App. Another member of the workspace has their own. The bin icon in the Console header, **Start a fresh conversation**, deletes it: a reload does not bring it back, and your other open tabs of this App start anew too. What you have built stays, and so do the project notes. The bin is grey while a run is on.
 {% endhint %}
 
 ## What it sees
@@ -34,11 +34,13 @@ It also knows the page and the screen you are on. "Make this red" works because 
 
 <figure><img src="../.gitbook/assets/assistant-builds.gif" alt="One sentence typed into the Console; the assistant reads the platform law, looks at the App, places the heading on the page, then tests the App, checks the layout and takes a screenshot of its own work"><figcaption><p>One sentence, and the App changes while you watch. The clip is sped up: the assistant went on to test what it built, look at it and correct the spacing.</p></figcaption></figure>
 
-Every step appears in the feed while it happens: one line per tool call, with a short summary of what it did. The icon separates building your App from reading the platform, and a click on a line shows the arguments. Nothing happens behind your back.
+Every step is in the feed. The tool calls between two messages fold into one line, closed, that counts them: *7 steps*. Open it, and each call is a line with a short summary of what it did. The icon separates building your App from reading the platform, and a click on a line shows the arguments. The assistant's words and every card end a fold, so nothing that needs you is folded away. The steps stay after a reload, with their summaries; their arguments do not. Nothing happens behind your back.
+
+A call that failed is a muted line under it, cut to one line; a click shows the whole message, a second folds it again. Most such failures are working steps the assistant reads and handles itself: a render that came too early, a lookup that found nothing, an argument it corrects on the next call. Red is kept for what stops the conversation and needs you: a run that failed, or an assistant that cannot start or take your message, says why in a red message, in a sentence.
 
 The Builder follows along. When the assistant writes to a page, it moves the canvas to that page and screen, pulses what it just made, and after a build tidies the executors it touched. If you move to another page or screen during a run, it leaves you where you are until your next message.
 
-**Working** with a running clock means it is thinking. The send button turns into a stop button while a run is on: press it and the run ends. A run outlives the tab it started in, so you can close the Builder and find it still going when you come back.
+While a run is on, the line under the feed says what happens now: the kind of step in words, then its summary, for example *Checking the layout · page Start*, with a running clock. **Working** means it is thinking. The send button turns into a stop button while a run is on: press it and the run ends. A run outlives the tab it started in, so you can close the Builder and find it still going when you come back.
 
 ## Checkpoints and rollback
 
@@ -59,7 +61,7 @@ The card names the step and shows what it would do. Nothing runs until you appro
 
 ## Project notes
 
-The first time you open an App that planning prepared, a card offers the workspace's [project notes](../app-manager/planning.md): how many there are, how large, and the choice **Read them** or **Not now**. The assistant reads nothing until you say so, because a note read stays in the conversation's context for every later turn. You can ask for them at any time afterwards.
+The first time you open an App that planning prepared, a card offers the workspace's [project notes](../app-manager/planning.md): how many there are, how large, and the choice **Read them** or **Not now**. The assistant reads nothing until you say so, because a note read stays in the conversation's context for every later turn. You can ask for them at any time afterwards, and a fresh conversation offers the card again.
 
 ## Reporting a platform defect
 

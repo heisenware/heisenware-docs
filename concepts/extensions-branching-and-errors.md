@@ -35,6 +35,7 @@ x.temperature > 80
 * Variables are available by name: `x.machine === $machine`.
 * Luxon's `DateTime`, `Duration` and `Interval` are available for dates, beside JavaScript's own `Date`, `Intl`, `JSON` and `Math`.
 * Write expressions to be read: line breaks, indentation and `//` comments are free.
+* Keep a JavaScript expression quick: its backend waits while it runs. One that runs over 1 second is a warning in the log; one that runs over 30 seconds ends its backend, which restarts, and the log names the executor, the item and the expression.
 * JSONata is the alternative language for pure reshaping.
 
 ## What a filter passes on
@@ -58,7 +59,7 @@ A branch that a filter can stop must not feed an **all updated** join: the join 
 
 When a call fails:
 
-* the executor's [status](executors-and-instances.md#status) turns red and shows the message;
+* the executor's [status](executors-and-instances.md#status) turns red and shows the message, until the executor runs again: a value written to an input does not clear it;
 * every error handler on its return receives `{ message, cause, originalPayload }`;
 * the executor produces **no output**. Nothing behind it runs, and the branch ends there.
 

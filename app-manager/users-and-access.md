@@ -18,6 +18,12 @@ This page is about the users of your Apps. The people who build the Apps are mem
 
 The App is open. Whoever has the link or scans the QR code is in, with no sign-in. The Player still gives each device an identity of its own, a generated name it remembers, so your logic can tell one terminal from another.
 
+{% hint style="info" %}
+#### Up to 10 000 devices
+
+An App open to anyone, or behind a master password, takes up to 10 000 devices. A device not seen for 90 days is let go when a new one needs the room, and at a restart; when it comes back it is written again under the name it remembers. Past the limit a new device is refused, and the Player says *This app takes no more new devices*. A device the App knows still gets in. Removing devices under **App users** makes room.
+{% endhint %}
+
 ### Users must provide a master password
 
 One password, shared by everyone allowed in. You set it under **Master Password**, in the same card. The browser keeps the answer, so a user types it again only on another device, in a private window, or after clearing the browser's data.
@@ -66,7 +72,7 @@ In an open App or one behind the master password, the rows are devices rather th
 
 In the sign-up modes and the invite-only mode they are people: the **Email/Username** column holds the address, **Name** the name the user gave, and a user who signs in from several devices with the same address stays one row.
 
-The trash icon removes a user, person or device alike: their record goes, their session ends, and their [Ask](ask.md) conversation goes with them.
+The trash icon removes a user, person or device alike: their record goes, their session ends, and their [Ask](ask.md) conversation goes with them. A person who holds nothing else in the account, neither another App nor a membership, is deleted altogether.
 
 {% hint style="info" %}
 #### Managing users from a flow

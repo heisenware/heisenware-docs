@@ -10,7 +10,9 @@ The terminal side of the [MCP server](mcp-server.md): what you type to register,
 claude mcp add --transport http heisenware <MCP address>
 ```
 
-The address is on the App Manager's [AI clients](../app-manager/ai-clients.md) page, which also hands you this exact line. Then, in a session, type `/mcp`, choose **Authenticate**, and sign in with your App Manager login. Nothing is installed, and your local files stay out of reach.
+The address is on the App Manager's [AI clients](../app-manager/ai-clients.md) page, which also hands you this exact line. Then start Claude Code (restart it if it was open), type `/mcp`, choose **Authenticate**, and sign in with your App Manager login. Nothing is installed, and your local files stay out of reach.
+
+On an on-premise installation, start Claude Code with its certificate trusted: `NODE_EXTRA_CA_CERTS=<installation folder>/certs/heisenware-fullchain.pem claude`. See [Claude Code on-premise](../app-manager/ai-clients.md#claude-code-on-premise).
 {% endtab %}
 
 {% tab title="As a local MCP server" %}
@@ -89,6 +91,8 @@ and start a new session. Without a scope, `remove` takes the entry from whicheve
 | `Unknown command: /mcp__heisenware__platform-law` | The server is not connected in this session: it was registered after the session started, in another folder, or it is still starting. Start a new session, give it a few seconds, check `/mcp`. |
 | `✘ Failed to connect` in `claude mcp list` | By the address: sign in again with `/mcp`, **Authenticate**: the connection may have been disconnected in the App Manager or have expired after 90 days unused. As a local MCP server: run the stored command yourself (`claude mcp get heisenware` shows it). A `401` means the link's ticket has expired and `npx` asked for it again, from a line registered without `--prefer-offline` or a cleared npm cache: register a fresh line. A login error means the integration was deactivated, deleted, or its password changed: rebuild the package in the App Manager. |
 | It was fine yesterday, dead today | Same as above: the platform was updated or the integration changed. Rebuild the package and register the fresh line. |
+| The server fails with `self signed certificate` | An on-premise installation's own certificate, which Claude Code does not trust. Start it with `NODE_EXTRA_CA_CERTS=<installation folder>/certs/heisenware-fullchain.pem claude`, see [Claude Code on-premise](../app-manager/ai-clients.md#claude-code-on-premise). |
+| `No tool runs on a refused line: …` | The platform refused the local MCP server's login, for example while it restarted. The next call logs in once more and gets through once the platform answers again. A refusal that stays means the integration was deactivated, deleted, or its password changed: rebuild the package and register the fresh line. |
 | `layout_lint` / `screenshot` answer with an install instruction | Your machine lacks a Chromium: `npx playwright-core install --with-deps chromium`, with `sudo` on Linux. Run it yourself; do not let Claude work around missing libraries. |
 | `… is not available on a read-only connection` | The connection may only read: a read-only integration, `--read-only`, or _Only look_ chosen when you signed in. |
 | `… is irreversible and needs confirm: true` | Claude asked for a deploy, a deletion of a whole App, an end of a registration or a reshape of the data model. Tell it to go ahead on exactly that call, or do it in the UI yourself. |

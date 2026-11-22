@@ -135,6 +135,8 @@ heisenware-mcp 93.0.0: connected to acme.default as burkhard@acme.default via mq
 
 It names, in order: the package version, the workspace, the login, the broker, where the credentials came from, the platform's version, how many tools are served, whether the connection may change anything, and whether the law rode along. `READ-ONLY` there means 38 tools instead of 119. A mismatch between the package's major version and the platform's is reported as a warning: download the package your platform serves to resolve it.
 
+When the platform refuses the server's login, for example while it restarts, the server stays up: its next tool call logs in once more, one login per call. A call that meets the refusal answers why and what to do; a refusal that stays needs the integration's current credentials.
+
 ## Configuration by hand
 
 For CI, or for a checkout of the platform, the server reads the same four environment variables as the [Docker agent](../app-manager/agents/docker-agent.md). They win over the configuration baked into the package.

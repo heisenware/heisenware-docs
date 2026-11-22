@@ -8,7 +8,7 @@ Add it with the **+** on an output and choose **Error Handler**. It sits on an o
 
 ## What happens when a call fails
 
-* The executor's status turns red and shows the message.
+* The executor's status turns red and shows the message. It stays red until the executor runs again: a value written to one of its inputs does not clear it.
 * Every error handler on its return receives the failure.
 * The executor produces **no output**. Nothing behind it runs, and the branch ends there.
 
@@ -43,7 +43,8 @@ A failure that no handler takes does not vanish, but who notices depends on what
 * a run started by a trigger source swallows it: only the status and the log hold it;
 * a run that someone called, an [endpoint](../explorers/endpoints.md) among them, gives the error back to the caller;
 * a [subflow](../../concepts/subflows.md) call fails its caller at once, with the first failure no error handler took inside it;
-* inside a loop, a failing element becomes its error message in the list of results and the loop goes on.
+* inside a loop, a failing element becomes its error message in the list of results and the loop goes on;
+* a circle the engine halts runs no error handler, since its output would carry the circle on: the executor shows *runs in a circle*, and a [subflow](../../concepts/subflows.md) call waiting for it fails. See [Circles](../../concepts/triggers-and-wires.md#circles).
 
 A deployed App writes every failed call to its own log, with the executor and the message.
 

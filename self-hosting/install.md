@@ -8,6 +8,8 @@ You work with two files. `install.sh` is the installer: it belongs to no version
 
 The host must be **x86-64 (amd64) Linux**: the platform's images are built for that architecture only. It needs Docker Engine with the Compose plugin, `bash` 4.4 or newer, `openssl` and `curl`.
 
+Docker needs 8 GB of memory for the platform. With less, its services stall and restart when memory runs short. The installer warns when Docker has less, and says where to give it more: in Docker Desktop under **Settings** > **Resources** (Memory limit), under WSL 2 with `memory=8GB` under `[wsl2]` in `.wslconfig` in your Windows user folder, followed by `wsl --shutdown`. It is a warning, never a refusal.
+
 {% tabs fullWidth="false" %}
 {% tab title="Linux" %}
 On a Linux distribution (Ubuntu, Debian, CentOS), install Docker Engine, which includes the Docker Compose plugin.
@@ -118,7 +120,7 @@ chmod +x install.sh
 ./install.sh heisenware.tar.gz
 ```
 
-The installer says where it will install and asks you to confirm. It then unpacks the package, loads the Docker images, writes `start.sh` and `stop.sh` next to the compose file, generates this machine's own self-signed TLS certificate in `certs/` if there is none, and starts the platform through `./start.sh`.
+The installer says where it will install and asks you to confirm. It then unpacks the package, loads the Docker images, writes `start.sh` and `stop.sh` next to the compose file, generates this machine's own self-signed TLS certificate in `certs/` if there is none (see [Certificates](#certificates)), and starts the platform through `./start.sh`.
 
 Loading the images takes a few minutes.
 {% endstep %}
@@ -126,7 +128,7 @@ Loading the images takes a few minutes.
 {% step %}
 #### Sign in
 
-Open `https://localhost` (or `https://localhost/manager`). Port 80 redirects to 443. Your browser warns about the self-signed certificate; accept it and go on.
+Open `https://localhost` (or `https://localhost/manager`), from another machine `https://<name or address of this machine>`. Port 80 redirects to 443. Your browser warns about the self-signed certificate; accept it and go on.
 
 The installation has no account yet. Click the registration link on the sign-in page and create the first one with an email address and a password. That member becomes the owner of the account.
 
@@ -140,7 +142,7 @@ An on-premise installation never offers Google sign-in, connected or not. The si
 {% step %}
 #### Upload your licence
 
-An on-premise account starts on Free. Open **Plan & Billing** in the App Manager and upload the licence file Heisenware sent you: it carries the number of Apps, the number of workspaces and its end date. See [Plan and billing](../app-manager/plan-and-billing.md).
+An on-premise account starts on Free. Open **Plan & License** in the App Manager and upload the licence file Heisenware sent you: it carries the number of Apps, the number of workspaces and its end date. See [Plan and billing](../app-manager/plan-and-billing.md).
 {% endstep %}
 {% endstepper %}
 
@@ -171,7 +173,9 @@ certs/heisenware-fullchain.pem
 certs/heisenware-privkey.pem
 ```
 
-The first install generates a self-signed pair there, valid ten years, for this machine alone. Every later install keeps whatever pair it finds, yours included.
+The first install generates a self-signed pair there, valid ten years, for this machine alone. It names `localhost`, `127.0.0.1`, `::1`, `heisenware.local`, the machine's host names (with its domain and without) and the IPv4 addresses it has at the install; Docker's own bridges and link-local addresses are left out. A browser still warns, since no authority signed it, but a client that checks names accepts it once it trusts the file, as Claude Code does with `NODE_EXTRA_CA_CERTS` (see [AI clients](../app-manager/ai-clients.md#claude-code-on-premise)).
+
+A later install or update keeps the pair it finds, with one exception: a pair an earlier installer made for `heisenware.local` alone is made anew with the names above, and the installer says so in one line. If the new pair cannot be made, the old one stays. A certificate of your own, installed with `./install.sh certs`, is never touched.
 
 To install your own certificate, let the installer take it: it checks that both files parse, that the key carries no passphrase and that the two belong together before anything is copied, and restarts the ingress.
 
@@ -207,6 +211,12 @@ The platform starts a container at run time for each workspace (its backend, med
 Databases, configuration and files live in Docker volumes. Power-cycling the host or restarting a container loses nothing. If the platform stops answering, restarting the containers is the first thing to try.
 {% endhint %}
 
+{% hint style="info" %}
+#### Services that stop answering
+
+The platform restarts some of its services by itself. A workspace's backend, and the backend of each deployed App, that does not answer its health check for a minute is restarted. The broker is restarted only after three failed health probes in a row, about three minutes, so a short stall of the machine costs no MQTT session.
+{% endhint %}
+
 ## Update
 
 Download the new release package, put it in the installation directory, and run the installer again:
@@ -215,7 +225,14 @@ Download the new release package, put it in the installation directory, and run 
 ./install.sh heisenware.tar.gz
 ```
 
-It detects the existing installation, stops it, writes a full backup into `backup/`, loads the new images, offers to remove the images no longer used, and starts the new version through `start.sh`. Coming from a version before v93, it also moves your secrets out of the old `docker-compose.yml` into `.env`: see [Upgrading from v92](upgrading-from-v92.md).
+It detects the existing installation, checks the package and the disk, stops it, writes a full backup into `backup/`, loads the new images, offers to remove the images no longer used, and starts the new version through `start.sh`. Coming from a version before v93, it also moves your secrets out of the old `docker-compose.yml` into `.env`: see [Upgrading from v92](upgrading-from-v92.md).
+
+Before it stops anything, the update asks the disk for the room it will take, per file system:
+
+* **Docker's data root**: twice what the new images take unpacked, since loading them holds them twice at its peak. The images of the version before stay for a rollback.
+* **The installation's folder**: the backup, as large as the volumes it archives.
+
+On top comes a margin of a tenth, at least 2 GB. With too little room the update says where, how much it needs, how much is free and what for, and the platform keeps running. Nothing is downloaded for the check: Docker Desktop keeps its data root in a virtual machine, where an image already on the machine measures it; where nothing can measure, a warning names the room needed and the update goes on.
 
 {% hint style="info" %}
 Always use the latest `install.sh`. It belongs to no version and works with every release package.
@@ -244,6 +261,8 @@ The installer enters restore mode and asks you to confirm before it stops the pl
 ```
 
 If the restored version's images are no longer on the machine, the installer says so: run its release package once before starting.
+
+Backups and restores, the one an update makes included, run in a small helper image that every release package carries, and pull nothing from the internet while they run. If the helper is missing from the machine, the installer pulls it before it stops anything. Where that fails, for example without internet, it says how to load it from any release package, `docker load -i <the unpacked package>/docker-images.tar.gz`, and ends with nothing stopped or changed.
 
 ### Send a backup to Heisenware
 

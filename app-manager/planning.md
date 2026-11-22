@@ -60,7 +60,9 @@ The conversation runs down the middle of the screen. It shows what the assistant
 * **Platform issue**: the assistant suspects a defect in the platform. The card shows the whole report it would send. **Inform Heisenware** files it and shows you the link; the tick **Include this conversation (credentials redacted)** decides whether the conversation rides along, and **Dismiss** folds the card and sends nothing. On a self-hosted installation nothing is sent home: the button copies the report for you to mail.
 * **Notes**: where the assistant would point at something on a canvas in the Builder, here it writes a note instead.
 
-**Stop** ends a run; what was done is kept. The trash icon starts a fresh conversation.
+The assistant's tool calls fold as in the Builder: the calls between two messages are one closed line that counts them, a failed call is a muted line under its call, and while a run is on, the line under the feed says what happens now. See [It works in the open](../app-builder/assistant.md#it-works-in-the-open).
+
+**Stop** ends a run; what was done is kept. The trash icon, **Start a fresh conversation**, deletes the conversation: a reload does not bring it back, and your other open tabs of the planning seat start anew too. The project notes stay. The icon is grey while a run is on.
 
 A conversation belongs to you and the workspace you are in. Other members do not read it, and it survives closing the tab: a run started in one tab shows in another.
 

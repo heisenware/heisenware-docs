@@ -74,6 +74,18 @@ A deployed App runs on its own. Nothing you ran while building carries over, so 
 
 Everything else that depends on time is an instance with an event: a `Timer` counts down, a `Cron` follows a calendar, a `Trigger` debounces. See [When streams meet](when-streams-meet.md#building-blocks-with-memory-and-time).
 
+## Circles
+
+Executors that run each other run in a circle: A's output runs B and B's output runs A, a longer ring, or a ring through a [variable](variables-and-endpoints.md). So does an executor run by its own output. An executor may feed its own input, for a round robin or a running total, as long as its own output does not also run it.
+
+The engine counts the runs that follow from one impulse. A widget write, a click, a poll, an App start, an endpoint call and a backend event each start a count of their own. More than 1000 runs of one count within 10 seconds halt it:
+
+* the executor where it halts turns red with *runs in a circle*, and the log names the executors of the circle;
+* no [error handler](../app-builder/flowboard/error-handler.md) runs, since its output would carry the circle on;
+* the rest of the App runs on, and the next impulse runs again.
+
+A circle slower than that, such as a heartbeat through a delay, runs on.
+
 ## From a widget
 
 A widget reaches your logic in two ways, and your logic reaches a widget in one:

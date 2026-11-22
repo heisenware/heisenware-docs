@@ -24,7 +24,7 @@ An App is born in the workspace and registered for its users in the same step. I
 A workspace with no Apps yet shows the same two ways side by side, and takes a `.hwt` file dropped straight onto the card.
 
 {% hint style="info" %}
-How many Apps you may have is part of your [plan](plan-and-billing.md), counted over the whole account. When the workspace is full, **New app** is disabled and says so, and the assistant's `create_app` refuses, naming the plan and the limit. An App beyond the quota cannot be opened by anyone: the platform refuses to register it for access, and its page says so instead of loading. Delete an App or raise the plan under **Plan & Billing**, and the waiting App is registered within a minute.
+How many Apps you may have is part of your [plan](plan-and-billing.md), counted over the whole account. When the workspace is full, **New app** is disabled and says so, and the assistant's `create_app` refuses, naming the plan and the limit. An App beyond the quota cannot be opened by anyone: the platform refuses to register it for access, and its page says so instead of loading. Delete an App or raise the plan under **Plan & Billing** (**Plan & License** on your own server), and the waiting App is registered within a minute.
 {% endhint %}
 
 ## What a card tells you
@@ -47,11 +47,17 @@ An App is said to be one of six things, in the same word and the same colour eve
 | **Unknown** | Its backend could not be asked. It may well be running. |
 | **Not deployed** | It has never been deployed, so there is no backend to speak of. |
 
+## When the Apps cannot be listed
+
+The Apps come from the workspace's engine, the backend that holds them. When the engine is not reachable, the screen says *The workspace's engine is not reachable* in place of the cards, with **Try again**, and goes on by itself once the engine is back. The **Apps** entry in the menu and **Needs you** on the Dashboard name it too.
+
+When the engine is reachable but does not answer, the screen says *The apps of this workspace could not be loaded*, and **Try again** asks it afresh. A screen that already shows its Apps keeps them.
+
 ## The App's page
 
 ### Development
 
-The version the App runs, when it was created, its state, and a switch that runs or stops it. Stopping takes the App offline for its users; starting brings it back. A switch is only there once the App has been deployed. **Start App Builder** opens the App in the [App Builder](../app-builder/README.md).
+The version the App runs, when it was created, its state, and a switch that runs or stops it. Stopping takes the App offline for its users; starting brings it back. A switch is only there once the App has been deployed. When the platform refuses a start or a stop, a message names the App and says why, for example that the plan has expired or that the Free plan runs one App, and stays until you close it; the switch stays as it was. **Start App Builder** opens the App in the [App Builder](../app-builder/README.md).
 
 ### Distribution
 
@@ -63,7 +69,7 @@ The link users open, and the same link as a QR code to scan with a phone. The li
 * **Language**: the one language the App speaks, including the texts of its widgets, the Player's own screens (sign-in, connection notices, the install prompt) and the documents it makes. The browser's language plays no role once the App is known. This is the only place it is set; the App Builder and the assistant read it.
 * **Description**: one line, at most 120 characters. It travels in the App's web manifest, so it is what a user reads when they install the App.
 * **Icon**: the favicon and home-screen icon. A square image works best, with padding around the logo, since phones often cut it to a circle.
-* **Delete app**: removes the App and everything in it.
+* **Delete app**: removes the App and everything in it. When the platform cannot remove the App's deployed backend, nothing is deleted: a message says *The app could not be deleted* and why, and you can try again.
 
 {% hint style="danger" %}
 #### Deleting an App cannot be undone

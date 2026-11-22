@@ -54,10 +54,10 @@ The color picker offers, in this order:
 
 * **Automatic / Reset**: back to the theme's color.
 * **Transparent**: no fill at all.
-* **Theme**: the nine colors of the App's current theme, named accent, text, background, temperate, border, success, info, warning and error. A widget set from this row stays in the design, but keeps the value it had when you picked it.
+* **Theme**: the ten colors of the App's current theme, named accent, text, background, surface, temperate, border, success, info, warning and error. *Background* is the component background, *surface* a card's default fill, and the theme's danger color is *error*. A widget set from this row keeps the color's name, so it follows the theme when the theme changes. Its field shows the name, *Accent* for example, with the theme's swatch, and the hover says *Follows the theme (currently #…)*.
 * **Standard** and **Pick a custom color**: a fixed color that no theme change touches.
 
-A chart or a custom HTML widget that carries explicit colors in its settings does not follow the theme. That is the place to set the colors by hand.
+The names work wherever a widget takes a color, a chart's palette included, and as a value your logic sends: a status lamp that receives `error`, or a value box whose text color receives `warning`, paints the theme's color. A hex value does not follow the theme; a name does. Colors inside a custom HTML widget never follow it.
 
 ## The theme travels with the App
 

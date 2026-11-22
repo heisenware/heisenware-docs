@@ -43,11 +43,17 @@ Go to your account's address, `acme.heisenware.cloud`, or to [heisenware.cloud](
 
 Forgotten your password? Fill in the account name and the email, then click **Forgot password?**. The email that arrives leads to a screen where you choose a new password.
 
+The screen answers the same whether or not the address belongs to a member of the account. One address gets at most one such email a minute and five an hour per account; a request beyond that gets the same answer and sends nothing.
+
+When Heisenware is still starting up or briefly unavailable, the screens say so: *Heisenware is still starting up or briefly unavailable. Please try again in a minute.*
+
 ## Accept an invitation
 
-A member of an account invites you by email. The link opens **Accept the invite**, which asks for your first and last name and a password, or for Google. Google works only under the address you were invited as.
+A member of an account invites you by email. The link opens **You're invited**, which asks for your first and last name and a password, or for Google. Google works only under the address you were invited as. The email's button works once; the line under it, *Already set up? Log in at … with the account name …*, is your way back afterwards.
 
-Taking up the invitation puts you straight into the App Manager, in the workspaces the invitation granted. A link that was replaced by a newer invitation, or that someone already used, says so: ask for a fresh one, or log in if you set a password with it.
+Taking up the invitation ends on **You're in**: it shows the **Log-in address** and the **Account name** to keep for next time, and stays until you press the button with your account's name, **Go to acme** for example, which takes you into the App Manager, in the workspaces the invitation granted. Pressed after a minute, the button leads to the log-in with the account filled in. A link that was replaced by a newer invitation, or that someone already used, says so: ask for a fresh one, or log in if you set a password with it.
+
+A password the installation's rules refuse leaves the link as it is: the screen says *This password was not accepted. Please choose another one.* and keeps the form. Where the password is set but the log-in after it fails, the screen says so and leads to the log-in.
 
 {% hint style="info" %}
 An invitation to use an App is something else: it makes you an App user, not a member, and it leads into the App rather than into the App Manager. See [App users and access](../app-manager/users-and-access.md).

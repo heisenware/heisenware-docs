@@ -102,7 +102,7 @@ Gives an email address access to an App and answers the link to hand the person.
 
 #### Output
 
-Returns an object containing the generated link and user status details. Throws an error if the App is not found.
+Returns an object containing the generated link and user status details. Throws an error if the App is not found, and when the App refuses the registration: an account this call created is then deleted again, an account that existed before stays as it was.
 
 * `link`: The invite or standard login link to send to the user depending on their scenario.
 * `login`: The standard login link for the App.

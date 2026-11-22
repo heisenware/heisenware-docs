@@ -38,9 +38,9 @@ When your plan is full, the switcher says how many workspaces it holds, with **A
 
 ## Divide your plan's Apps
 
-Your plan's Apps count for the whole account, and by default all workspaces share them. Owners of the account can reserve Apps for a workspace, for example for a client you build for:
+Your plan's Apps count for the whole account, and by default all workspaces share them. Where the plan holds more than one workspace, owners of the account can reserve Apps for a workspace, for example for a client you build for:
 
-1. Open [**Plan & Billing**](plan-and-billing.md) and find **Workspaces**.
+1. Open [**Plan & Billing**](plan-and-billing.md) (**Plan & License** on your own server) and find **Workspaces**.
 2. Click **Edit** on the workspace.
 3. Enter the number under **Apps reserved**.
 
@@ -64,7 +64,7 @@ See [Members](members.md) for how to give and take access.
 
 Owners of the account delete workspaces. This cannot be undone.
 
-1. Open [**Plan & Billing**](plan-and-billing.md) and find **Workspaces**.
+1. Open [**Plan & Billing**](plan-and-billing.md) (**Plan & License** on your own server) and find **Workspaces**.
 2. Click **Edit** on the workspace, then **Delete**. The button is there only while the account has more than one workspace.
 3. Check what the dialog names, type the workspace's name and click **Delete workspace**.
 

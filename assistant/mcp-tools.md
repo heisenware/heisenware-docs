@@ -76,7 +76,7 @@ An App as a whole: what it is, what it was, and what its users run.
 | `import_app` | Adds a bundle (.hwt from export_app or a builder export) to an app as a version - the builder's Import: the App changes only when rollback(appId, name… | `write` `files` |
 | `list_app_texts` | Every text people read in an app, as ONE table to translate: the app's name and description, page labels and titles, and the widget props the manifests declare as text (button labels and hover texts, column captions, form labels and help texts… |  |
 | `translate_app` | Makes an app in another language, or refreshes one (#1667): exports the reference app's current build as a bundle, writes your translations into it by id (from list_app_texts; an unknown id refuses the whole call… | `write` |
-| `deploy_app` | Deploys the app - the builder's Deploy button: tags the current state as a new version and asks the platform to bring the production backend up for it (within about a minute). Returns the version and appUrl, the deployed app. | `write` `go` |
+| `deploy_app` | Deploys the app - the builder's Deploy button: tags the current state as a new version, asks the platform to bring the production backend up for it and waits for it, up to 45 s. | `write` `go` |
 | `delete_entity` | Deletes an executor, widget or whole App. A rollback restores an executor or widget. A whole App takes its versions along - irreversible, it needs the user's explicit go. | `write` `go`\* |
 
 ## The flow
@@ -221,9 +221,9 @@ Starting the App, probing one node, and the eyes.
 | --- | --- | --- |
 | `test_app` | Starts the app inside the builder for testing - the builder's Test button pressed on a stopped app: arms lifecycle triggers (onAppStart, polls) and declared event subscriptions for every executor, so read_value, layout_lint and screenshot see live values… | `write` |
 | `stop_app` | Stops the app running inside the builder - the builder's Test button pressed on a running app: onAppStop sources fire, polls stop, event subscriptions pause, reactive wiring stays (linked values keep flowing into the stopped app). | `write` |
-| `invoke_executor` | Runs an executor and returns the real result, or the real backend error. Answers for this node alone: the executors its outputs trigger have started and may still run - get_executor_status and read_value say running while they do. | `write` |
+| `invoke_executor` | Runs an executor and returns the real result, or the real backend error. | `write` |
 | `get_executor_status` | Reachability/health of an executor: online, agent-offline, function-offline, error (with message), busy (a run longer than 2 s). running: true while a run of it is in flight, from its trigger to its last output written - its values are not final yet. | `ask` |
-| `read_value` | Reads a live cached value from an executor item. A filter answers { value, passed, arrived }: value is the last payload it let through, arrived the latest one that reached it, passed whether that one got through (null: it has not run). |  |
+| `read_value` | Reads a live cached value from an executor item: null while it has none, a refusal for an itemId the executor does not have. |  |
 | `layout_lint` | Renders a page of a STARTED app headlessly and returns geometric FACTS as JSON: widget boxes (each with its widget id, type and zIndex; a box without an id is the player's own chrome - the drawer's burger, the bottom tabs bar - keep clear of it… | `write` |
 | `screenshot` | Renders a page of a STARTED app to a PNG. By default the first viewport only; covers { y, height, of } says which content rows the image shows (of = the whole page height). | `write` `ask` |
 | `use_app` | Uses a STARTED app the way a member does, in one headless player session: runs the steps in order - click a widget by id, type into a widget or pick in it (or in one named field of it), answer the open dialog, wait ms… | `write` |

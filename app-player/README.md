@@ -36,6 +36,9 @@ What a user has to do depends on the App's access mode, which you set in the App
 
 The sign-in screens speak the App's language from the first paint, and an email link, such as a password reset or an invitation, lands on the App.
 
+* **Forgot password?** answers the same whether or not the address has an account. One address gets at most one reset email a minute and five an hour per App; a request beyond that gets the same answer and sends nothing.
+* **An invitation** whose password the installation's rules refuse asks for another password and keeps the link working. Only a link that was used, replaced or ran out says it has expired.
+
 **Logging out** forgets the device's credentials, ends the session and starts the App afresh: a sign-in App lands on its sign-in screen, a master-password App asks again, an open App mints a new anonymous identity. There is no logout button unless you place one: drop the logout [App action](../concepts/pages-and-app-actions.md) onto a button.
 
 ## Which screen a device gets
@@ -79,7 +82,7 @@ You do not need them, but an App can be packaged for the Apple App Store or Goog
 The Player says what is the matter instead of loading for ever, in the App's own language:
 
 * **Under maintenance**: a member has stopped the App in the App Manager. Starting it brings the Player on.
-* **This app is not available**, with the reason: it has not been released yet, the account's plan has expired, or the platform holds no entry for it. The Player keeps asking in the background and comes on by itself when the reason is gone.
+* **This app is not available**, with the reason: it has not been released yet, the account's plan has expired, the platform holds no entry for it, or it takes no more new devices (see [App users and access](../app-manager/users-and-access.md#anyone-can-use-the-app)). The Player keeps asking in the background and comes on by itself when the reason is gone.
 * **This address does not lead to an app**: the workspace in the link does not exist. Check the link.
 
 ## When the connection goes

@@ -167,3 +167,5 @@ The dot beside an executor's name shows how its last call went. Hover over it fo
 | Yellow | The instance does not exist. |
 | Purple | The agent is online but does not offer the class. |
 | Gray | The agent is offline. |
+
+Red stays until the executor runs again: a value written to one of its inputs does not clear it. While the agent is offline, gray shows over it, and the red comes back with the agent.

@@ -21,6 +21,7 @@ Click the icon on the left of the node to evaluate the modifier while you build.
 * **Variables are values.** `$machine` in an expression is the [variable's](../explorers/variables.md) value, never text that is pasted in: `x.filter(row => row.machine === $machine)`. The **$** button in the editor's header inserts one, with its current value beside the name. The built-ins `$USER`, `$LOCALE` and `$TIMEZONE` work the same way.
 * **What else is there**: Luxon's `DateTime`, `Duration`, `Interval` and `Info`, `crypto`, and JavaScript's own `Date`, `Intl`, `JSON` and `Math`. There is no `require`, no `fetch` and no `new Function`.
 * **Write it for a human.** Line breaks, indentation and `//` comments are free and expected. A long one-liner is a defect, not a style.
+* **Keep it quick.** A JavaScript expression holds its backend while it runs: every other executor of that backend waits meanwhile. One that runs over 1 second is a warning in the log. One that runs over 30 seconds ends its backend, which restarts by itself; the log names the executor, the item and the expression.
 
 {% hint style="info" %}
 Tell the [assistant](../assistant.md) what arrives and what you need, and it writes the modifier onto the output. That helps most with large JSON objects.

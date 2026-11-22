@@ -11,7 +11,7 @@ Heisenware runs in Heisenware's cloud or on your own servers. It is the same pla
 | **Where the data lies** | Hetzner, Germany (EU), GDPR compliant | on your hardware, and nowhere else |
 | **Reaching machines in your network** | through an [agent](../concepts/agents-and-where-code-runs.md) you install there | directly, as far as the host's own network reaches |
 | **Updates** | Heisenware deploys them | you run the installer when you want the new version |
-| **Plan** | a [plan](../app-manager/plan-and-billing.md) with a monthly bill | a licence file you upload under **Plan & Billing** |
+| **Plan** | a [plan](../app-manager/plan-and-billing.md) with a monthly bill | a licence file you upload under **Plan & License** |
 | **The assistant and Ask** | included | not part of an on-premise installation in v93 |
 | **Internet** | required | not required; the platform runs in a closed network |
 
@@ -44,7 +44,7 @@ The whole platform runs on your hardware: a server in your data centre, a virtua
 * **Direct connectivity**: the platform reaches everything its own host reaches. No agent is needed for that.
 * **Network segmentation**: for machines in a segment the host cannot reach, use [agents](../concepts/agents-and-where-code-runs.md) as in the cloud.
 * **No internet**: the installation runs closed. It needs outbound access only while you download a release package, and while [remote support](remote-support.md) is switched on.
-* **Licence**: an on-premise installation takes a licence file instead of a plan. An account starts on Free until an owner uploads it under **Plan & Billing**; the licence carries the number of Apps, the number of workspaces, the storage and its end date. When a licence ends, the first deployed App keeps running and the others stop. Nothing is deleted.
+* **Licence**: an on-premise installation takes a licence file instead of a plan. An account starts on Free until an owner uploads it under **Plan & License**; the licence carries the number of Apps, the number of workspaces, the storage and its end date. When a licence ends, the first deployed App keeps running and the others stop. Nothing is deleted.
 * **Sign-in**: email and password. Google sign-in is never offered on-premise, whatever the environment says.
 
 ### The assistant is not included

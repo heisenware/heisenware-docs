@@ -125,6 +125,9 @@ The platform side of an upgrade, the installation itself, is in [Upgrading from 
   **Now:** Each names a column, else `Unknown field`.
   *The records cannot show this one: check it yourself.*
 
+* **Was:** The workspace's database was Postgres 11: `EXTRACT(field FROM ...)` answered a floating-point number.
+  **Now:** It is Postgres 18: `EXTRACT` answers an exact numeric, which `executeSql` answers as text and `read` as a number up to 15 digits. `date_part('field', ...)` answers the number.
+
 * **Was:** `onChange` heard the writes of the platform's row functions.
   **Now:** On PostgreSQL it calls once per row, for every write: a bulk insert and SQL included.
 
@@ -198,6 +201,9 @@ The platform side of an upgrade, the installation itself, is in [Upgrading from 
 
 * **Was:** `readVariable` answered nothing for an unknown node.
   **Now:** It fails on an unknown node; a list of addresses answers `[{ address, nodeId, value }]`.
+
+* **Was:** Email `send` answered nothing when the email did not go out - login refused, server not reachable, recipient refused - and its output fired as if sent.
+  **Now:** It fails naming why, so its error handler runs and its output does not fire; with one recipient of several refused it fails too, the others got the email. `canCommunicate` checks the login without sending.
 
 * **Was:** `readAllItems` asked the PLC without looking at the connection.
   **Now:** It needs a connection first; a bad item stands as `'BAD 255'`.
