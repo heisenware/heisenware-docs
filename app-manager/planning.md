@@ -13,7 +13,7 @@ Planning produces identity, not wiring. You bring what you have: requirement doc
 For what the assistant is and how it works everywhere, see [The assistant](../assistant/README.md).
 
 {% hint style="info" %}
-**Planning** appears only where the installation has the assistant: the platform is given an AI key, and the screens are told that it is there. A self-hosted installation without one has no planning seat and no assistant in the Builder, and works through [your own AI client](ai-clients.md) instead.
+**Planning** appears only where the installation has the assistant: the platform is given an AI key, and the screens are told that it is there. The Heisenware cloud has one. A self-hosted installation has the assistant once you give it your own Anthropic key ([Install](../self-hosting/install.md#the-env-file)); without one it has no planning seat and no assistant in the Builder, and works through [your own AI client](ai-clients.md) instead.
 {% endhint %}
 
 ## The ritual

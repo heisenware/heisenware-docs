@@ -20,7 +20,7 @@ Some services run once for the whole installation. The rest run once per workspa
 | **docker** | Starts, stops and watches the containers a workspace needs. It is itself an agent on the bus, so the Manager asks it for a workspace's containers and their logs. |
 | **manager**, **builder-frontend**, **app-frontend** | The three frontends: the [App Manager](../app-manager/README.md), the [App Builder](../app-builder/README.md), the [App Player](../app-player/README.md). React, served as static builds, each a VRPC client in the browser. |
 | **theme-builder** | The theme editor's own UI, served into the Builder. The CSS it produces is compiled by the workspace's media server, so no design leaves the installation. |
-| **assistant** | The AI that plans in the Manager and builds in the Builder, and answers [Ask](../app-manager/ask.md). It is not part of an [on-premise installation](../self-hosting/README.md). |
+| **assistant** | The AI that plans in the Manager and builds in the Builder, and answers [Ask](../app-manager/ask.md). On an [installation of your own](../self-hosting/README.md) it runs once you give it your own Anthropic key, and idles without one. |
 
 ### Once per workspace
 

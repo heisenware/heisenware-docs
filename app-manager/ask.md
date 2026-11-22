@@ -70,7 +70,7 @@ A signed-in user of the App finds **Ask** at the bottom right of every page. It 
 
 The conversation stays with the user and the App, also when the tab closes during a question, until they start a new one. When a user is removed from the App or deleted, their conversation goes with them.
 
-Ask in the App spends the workspace's credits, each run booked to its App. When none are left, Ask says so and a member tops them up. A self-hosted installation without an AI key for the assistant offers only the user's own AI client.
+Ask in the App spends the workspace's credits, each run booked to its App. When none are left, Ask says so and a member tops them up. A self-hosted installation counts no credits: with your own Anthropic key for the assistant, Ask's runs cost what Anthropic charges on that key; without one it offers only the user's own AI client.
 
 ## From your own AI
 

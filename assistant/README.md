@@ -11,7 +11,7 @@ The **assistant** is the AI built into Heisenware. It builds Apps with you: it r
 It works in your workspace as you, with your rights, and never more: every call it makes goes through your own login. It is how most of the platform is driven. You say what the App has to do, the assistant builds it while you watch, and you correct it in words.
 
 {% hint style="info" %}
-The assistant is there where the installation runs it. In the Heisenware cloud it does, with an AI key of its own; an [on-premise installation](#what-leaves-the-platform) has no assistant, and [your own AI client](mcp-server.md) works there all the same.
+The assistant is there where the installation runs it. In the Heisenware cloud it always does. On [your own server](#what-leaves-the-platform) it runs once you give the installation your own Anthropic key, and without one there is no assistant. [Your own AI client](mcp-server.md) works everywhere.
 {% endhint %}
 
 ## Two seats
@@ -51,11 +51,13 @@ Every tool tells the assistant what it does, but building a good App follows rul
 
 What you write, what the assistant answers, and everything it reads to get there travels to the AI provider the installation calls. The service calls **Anthropic**: the model is `claude-opus-5-5` unless the installation names another, and the installation holds one API key for it. Tell your team what that means before you point the assistant at production data, and remember that a screenshot of a page carries the values on it.
 
-On an **on-premise installation** nothing of this happens: the assistant is not part of its package, so there is no planning seat and no assistant in the Builder, and no conversation leaves your network. Drive such an installation with [your own AI client](mcp-server.md) instead, which spends your own AI subscription and leaves the choice of provider to you; a local MCP server needs no internet at all.
+On **your own server** the package carries the assistant, and the key is yours: the assistant runs once `.env` holds your Anthropic API key as `HW_ANTHROPIC_API_KEY` (see [Install](../self-hosting/install.md#the-env-file)). Its conversations then go from your installation to Anthropic (`api.anthropic.com`) over outbound HTTPS, under your own agreement with Anthropic, and nothing goes to Heisenware: a platform defect is copied for you to mail, never sent. Without a key there is no planning seat and no assistant in the Builder, and no conversation leaves your network. Such an installation is driven with [your own AI client](mcp-server.md), which spends your own AI subscription and leaves the choice of provider to you; a local MCP server needs no internet at all.
 
 ## What it costs
 
 Every run of the assistant spends the account's **credits**, in the planning seat and in the Console alike. [Plan & Billing](../app-manager/plan-and-billing.md#ai-usage-and-credits) shows the balance, what was spent this month and by whom, and sells more. When nothing is left, the assistant says so and stops. Your own AI client spends none.
+
+On your own server the assistant counts no credits: a run costs what Anthropic charges on your key, and **Plan & License** shows that in euros.
 
 ## Your own AI client instead
 

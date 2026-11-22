@@ -36,7 +36,7 @@ Your installation runs a **support agent**. Switched on, it opens one outbound T
 {% step %}
 #### Fill in the session
 
-Open `.env` in your installation directory and set:
+Open `.env` in the installation's folder (`/opt/heisenware`, on a Mac `/Users/Shared/heisenware`) and set:
 
 ```bash
 HW_SUPPORT_AGENT=plant-a                          # from the ticket
