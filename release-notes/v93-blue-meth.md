@@ -190,7 +190,7 @@ v93 is a new platform under the old name: a new engine, an assistant that builds
 * **App Manager reloads**: a service of a workspace restarting no longer fills the screen with **Lost connection** messages and reloads the page. A real loss is told once, after five seconds, until the connection is back.
 * **Member invitations**: someone who is already a user of an App now gets the email when you invite them as a member, and a member whose invitation went missing is invited again instead of deleted.
 * **Sign-in and invitation forms**: they say what is missing instead of doing nothing, and browsers fill a saved email into **Email**, not into **Account name**.
-* **Multiple tabs**: closing or reloading one browser tab no longer silences live data in another tab of the same user. Every tab holds its own connection and its own session, and a tab whose backend lost its session starts a new one.
+* **Multiple windows**: every browser window of an App is a client of its own. What a user opens, types or selects in one window stays in that window, and a button acts on the record its own window shows; a page switched by a value switches the window that clicked. Closing or reloading one window no longer silences live data in another. A reload keeps a window's values, a duplicated window starts empty, a window whose backend lost its session starts a new one, and a logout ends every window of the App in that browser.
 * **Deployed App integrity**: deleting a page in the App Builder no longer removes widgets of the deployed twin, a redeploy releases exactly the version it names, and a version switch leaves the released App alone.
 * **Connector instances**: instances created in the Functions explorer survive a restart of the connector service, and a table made by `defineTable` takes rows after one.
 * **Boot and first load**: clicking a widget while an App is still loading no longer crashes it, grids show current data instead of the snapshot taken at deploy time, a value box fetches on mount, and an App that was never released says so instead of loading for ever.
@@ -231,7 +231,7 @@ The complete, checkable list lives in [What older Apps must change](../reference
 * **`$USER` in a static value is a token**, `$USER` or `${USER}`, in values only and never in object keys, and it is `null` where no user is in scope. `$USERS` stays text.
 * **`onChange` compares per user.** It compared a user's first value with the shared one; a user's first value is a change now, so the target runs once more per new user.
 * **A user's values are dropped** three hours after their browser left, and at a backend restart. They used to be kept for good.
-* **The Trigger node reaches every tab** of the user, not only the tab that clicked. A page switch or an App action meant for the clicking tab goes on the button itself.
+* **A browser window has its own values.** In v92 the tabs of one user shared the values they wrote and the variables they set. Now each window keeps its own, see [Scopes](../concepts/scopes.md). What a user's windows must share lives in an instance named with `<client>`, which stays one per user, or in a table keyed by `$USER`.
 * **`off…` functions are gone**, with `removeListener` and `removeAllListeners`. Listening ends at the executor: **Stop listening**, or **End** on the registration.
 
 ### Databases

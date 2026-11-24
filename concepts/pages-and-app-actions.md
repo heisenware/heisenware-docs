@@ -67,7 +67,7 @@ Two ways to use the value:
 
 A value-driven action reaches the clients the value reaches, and that follows the [scope](scopes.md) of the run:
 
-* A user started the chain: it happens for that user, in every tab they have open. A timer that user started also ticks in their scope, so "log out after ten minutes" is per user, with nothing to configure.
+* A user started the chain: it happens in the window where the user clicked, and in no other window of that user. A timer the user started there also ticks in that window's scope, so "log out after ten minutes" needs nothing configured.
 * Nobody started it, as with a poll or a machine event: it happens on every connected screen. That is how one signal switches every panel in the hall to the alarm page, or logs everyone out.
 
 ### Routing by a poll
@@ -77,5 +77,5 @@ Where a poll decides which page belongs on screen, let it act only when that dec
 Keep page links in one place: one executor that says "go to this page", fed by every source of navigation, with one page link per page behind a filter.
 
 {% hint style="info" %}
-**Logging out** forgets the credentials on the device, ends the session and restarts the App. An App with a login lands on its sign-in screen, an App with a master password asks again, and an App open to everyone gets a new anonymous user.
+**Logging out** forgets the credentials on the device, ends the session and restarts the App in every window of that browser. An App with a login lands on its sign-in screen, an App with a master password asks again, and an App open to everyone gets a new anonymous user.
 {% endhint %}

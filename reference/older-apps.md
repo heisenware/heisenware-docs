@@ -51,8 +51,9 @@ The platform side of an upgrade, the installation itself, is in [Upgrading from 
   **Now:** An import drops it: set the delay on the trigger source that should wait.
   *The records cannot show this one: check it yourself.*
 
-* **Was:** The Trigger node's value reached only the tab that clicked.
-  **Now:** It reaches every tab of the user. A page or action meant for the clicking tab goes on the button itself.
+* **Was:** The tabs of one user were one client: a value one tab wrote and a `$variable` it set were every tab's of that user.
+  **Now:** A browser window is a client of its own: its values, its variables and a page or action switched by a value are that window's. What a user's windows share lives in a `<client>` instance, which stays one per user, or in a backend instance keyed by `$USER`.
+  *The records cannot show this one: check it yourself.*
 
 * **Was:** An error handler's payload was `{ message, cause }`, `cause` as the function threw it.
   **Now:** It is `{ message, cause, originalPayload }`, `cause` the reason as text: a modifier that read into it (`x.cause.code`) reads `x.originalPayload.cause`.

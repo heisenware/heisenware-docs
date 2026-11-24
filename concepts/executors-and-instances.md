@@ -49,7 +49,7 @@ Instances such as `Counter`, `Buffer` or `Timer` hold their state in memory. Wha
 
 ### One instance per user
 
-Sometimes each user needs an own instance, such as a personal timer. Prefix the instance name with `<client>`, for example `<client>session`, on the constructor and on its instance functions. Each user's first call then creates that user's own instance. Such instances are not kept across restarts and need no trigger on the constructor.
+Sometimes each user needs an own instance, such as a personal timer. Prefix the instance name with `<client>`, for example `<client>session`, on the constructor and on its instance functions. Each user's first call then creates that user's own instance. It is one per user: every window in which that user has the App open reaches the same instance, which makes it the place for what a user's windows share. Such instances are not kept across restarts and need no trigger on the constructor.
 
 ### Many instances from one executor
 
