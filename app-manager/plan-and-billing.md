@@ -58,7 +58,7 @@ The same dialog deletes a workspace, which cannot be undone. [Workspaces](worksp
 
 The assistant runs on **credits**: one credit is one euro, and the account pays for every run, whether it was made in the [planning seat](planning.md) or in the Console of the App Builder. Your own AI connected through the [MCP server](ai-clients.md) spends none, because it runs on your own subscription.
 
-In the cloud, Pro brings ten credits a month, on a yearly plan too. They arrive with each calendar month and end with it; unused ones do not carry over. More are booked under **Credits a month** in the **Subscription** card. When nothing is left, the assistant says so and stops.
+In the cloud, Pro brings ten credits a month, on a yearly plan too. They arrive month by month, counted from the day the plan started, and end with that month; unused ones do not carry over. The free trial brings its credits once. More are booked under **Credits a month** in the **Subscription** card. When nothing is left, the assistant says so and stops.
 
 **AI usage** shows what was spent:
 
