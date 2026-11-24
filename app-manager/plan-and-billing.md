@@ -62,9 +62,9 @@ In the cloud, Pro brings ten credits a month, on a yearly plan too. They arrive 
 
 **AI usage** shows what was spent:
 
-* The **charge**, the **tokens** and the number of **runs** of the current month.
+* The **charge** and the number of **runs** of the current month.
 * The monthly charge over the last six months.
-* **By member**: who spent it, with their runs, tokens and charge.
+* **By member**: who spent it, with their runs and charge.
 
 The figures are the account's own, in euros. The card shows only where the installation runs the assistant. A self-hosted installation that runs it does so on its own Anthropic key and counts no credits: there the card shows what the assistant and Ask cost on that key, in euros at the provider's price, with **Cost** where the cloud says **Credits**. Your own AI clients through the MCP server are not counted.
 
